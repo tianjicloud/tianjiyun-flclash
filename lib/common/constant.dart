@@ -9,7 +9,13 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/widgets.dart';
 
-const appName = 'FlClash';
+const appName = '天机云';
+// File names, backup folders and release assets stay ASCII, and must not
+// follow [appName]: installed builds find their update by this prefix.
+const appSlug = 'TianjiCloud';
+// Xboard picks the subscription format and the protocols a client may get
+// from this token and its version, so it keeps the upstream name.
+const subscriptionUaName = 'FlClash';
 const appHelperService = 'FlClashHelperService';
 const coreManifestName = 'manifest.json';
 const browserUa =
@@ -129,7 +135,7 @@ const systemDnsRecordKey = 'system_dns_record';
 const bootRecordKey = 'boot_record';
 const appliedConfigMd5Key = 'applied_config_md5';
 const defaultSystemDnsFallback = '223.5.5.5';
-const repository = 'chen08209/FlClash';
+const repository = 'tianjicloud/tianjiyun-flclash';
 const maxMobileWidth = 600;
 const maxLaptopWidth = 840;
 const defaultTestUrl = 'https://www.gstatic.com/generate_204';
@@ -172,7 +178,8 @@ const proxiesListStoreKey = PageStorageKey<String>('proxies_list');
 const toolsStoreKey = PageStorageKey<String>('tools');
 const profilesStoreKey = PageStorageKey<String>('profiles');
 
-const defaultPrimaryColor = 0xFF007AFF;
+// The tianjiyun.org brand blue.
+const defaultPrimaryColor = 0xFF0A55F5;
 
 const maxLogsLength = 5000;
 const maxRequestsLength = 2000;

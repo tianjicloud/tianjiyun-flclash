@@ -173,7 +173,7 @@ String mitmHar(
   return const JsonEncoder.withIndent('  ').convert({
     'log': {
       'version': '1.2',
-      'creator': {'name': appName, 'version': version},
+      'creator': {'name': appSlug, 'version': version},
       'entries': [entry],
     },
   });

@@ -241,7 +241,7 @@ Future<void> _exportHar(WidgetRef ref, MitmExchange exchange) async {
     ));
     final host = Uri.tryParse(exchange.url)?.host ?? '';
     final saved = await picker.saveFile(
-      '${host.isEmpty ? appName : host}-${exchange.id}.har',
+      '${host.isEmpty ? appSlug : host}-${exchange.id}.har',
       utf8.encode(har),
     );
     if (saved != null) {
