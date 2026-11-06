@@ -1,0 +1,176 @@
+name: tianjiyun-release
+
+# A `vX.Y.Z` tag builds the signed Android APKs and publishes them, with
+# SHA256SUMS, as a release of this repository: installed builds look for their
+# update there. A manual run builds the same APKs as a `pre` build and only
+# keeps them as workflow artifacts.
+#
+# Desktop packages are not built yet: they still share upstream FlClash's
+# identity (installer id, data directories, helper service) and would replace
+# an installed FlClash.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  FLUTTER_VERSION: '3.47.6'
+  GO_VERSION: '1.27.1'
+  NDK_VERSION: r28c
+  APPLICATION_ID: org.tianjiyun.app
+  # The release certificate kept in ~/.config/tianji/credentials/android-signing.
+  # Gradle signs with the debug key when the secrets are missing, and that
+  # build would still succeed, so the APKs are checked against this.
+  RELEASE_CERT_SHA256: 5686539cc5d636a9312f8391b94e4fb3cd38801f1c30831aa2d995f421d8fe1c
+
+jobs:
+  android:
+    if: github.repository == 'tianjicloud/tianjiyun-flclash'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # The app compares the release tag with its own version to offer updates.
+      - name: Check the tag matches pubspec.yaml
+        if: github.ref_type == 'tag'
+        run: |
+          version=$(sed -n 's/^version: *\([^+]*\).*/\1/p' pubspec.yaml)
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match pubspec.yaml version $version"
+            exit 1
+          fi
+
+      - name: Setup Android signing
+        env:
+          KEYSTORE: ${{ secrets.KEYSTORE }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          for name in KEYSTORE KEY_ALIAS STORE_PASSWORD KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::secret $name is not set"
+              exit 1
+            fi
+          done
+          echo "$KEYSTORE" | base64 --decode > android/app/keystore.jks
+          {
+            echo "keyAlias=$KEY_ALIAS"
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyPassword=$KEY_PASSWORD"
+          } >> android/local.properties
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: core/go.sum
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Setup NDK
+        uses: nttld/setup-ndk@v1
+        id: build-ndk
+        with:
+          ndk-version: ${{ env.NDK_VERSION }}
+          add-to-path: true
+          link-to-sdk: true
+
+      - name: Get Flutter dependencies
+        run: |
+          flutter --version
+          flutter pub get
+
+      # Same pinned bundle as build.yaml.
+      - name: Fetch CA certificates
+        env:
+          CA_BUNDLE: cacert-2026-09-25.pem
+          CA_BUNDLE_SHA256: a41b5d356aea97a529fe27e0f7316d2f9d946d75927476cf9cf1b90637d00505
+        run: |
+          bundle=core/Clash.Meta/component/ca/ca-certificates.crt
+          curl -fsSL --retry 3 -o "$bundle" "https://curl.se/ca/$CA_BUNDLE"
+          echo "$CA_BUNDLE_SHA256  $bundle" | sha256sum -c -
+
+      - name: Build
+        env:
+          ANDROID_NDK_HOME: ${{ steps.build-ndk.outputs.ndk-path }}
+        run: dart setup.dart android ${{ github.ref_type == 'tag' && '--env stable' || '' }} -v
+
+      - name: Verify package id and signature
+        run: |
+          build_tools=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          shopt -s nullglob
+          apks=(dist/*.apk)
+          if [ ${#apks[@]} -eq 0 ]; then
+            echo "::error::no APK in dist/"
+            exit 1
+          fi
+          for apk in "${apks[@]}"; do
+            package=$("$build_tools/aapt2" dump packagename "$apk")
+            if [ "$package" != "$APPLICATION_ID" ]; then
+              echo "::error::$apk is $package, expected $APPLICATION_ID"
+              exit 1
+            fi
+            cert=$("$build_tools/apksigner" verify --print-certs "$apk" \
+              | sed -n 's/^Signer #1 certificate SHA-256 digest: //p')
+            if [ "$cert" != "$RELEASE_CERT_SHA256" ]; then
+              echo "::error::$apk is signed by $cert, not the release key"
+              exit 1
+            fi
+            echo "$apk: $package, release key"
+          done
+
+      - name: Generate SHA256SUMS
+        run: |
+          cd dist
+          sha256sum *.apk > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: |
+            dist/*.apk
+            dist/SHA256SUMS
+          if-no-files-found: error
+
+  release:
+    needs: android
+    # Tags with a suffix (v1.0.0-rc.1) cannot be compared as versions by the app.
+    if: github.ref_type == 'tag' && !contains(github.ref_name, '-')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: android
+          path: dist
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          fail_on_unmatched_files: true

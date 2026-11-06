@@ -30,7 +30,9 @@ Android、Windows、macOS 共用业务逻辑，各自验收系统网络行为。
 - 子模块 URL 使用公开 HTTPS，保留固定提交与原版权。
 
 这不等于事务回滚或系统 kill switch：磁盘配置、Flutter UI、首次启动、重启恢复仍需端到端回归。
-品牌界面、应用标识、登录/续费、平台网络阻断和独立更新源尚未实现。不能直接将上游构建脚本产物作为天机云正式版分发。
+Android 已有独立身份：包名 `org.tianjiyun.app`、显示名「天机云」、品牌主色 `#0A55F5`、天机云图标、独立签名密钥，
+更新检查与下载指向本仓库的 Release。订阅 UA 仍为 `FlClash/v版本`，Xboard 依此选择订阅格式。
+桌面端仍沿用上游标识（安装器 ID、数据目录、helper 服务、Bundle ID），登录/续费与平台网络阻断尚未实现。
 
 ## 验证
 
@@ -41,9 +43,16 @@ cd core
 go test . -run '^(TestApplyConfigTellsARejectedProfileFromAFailedCall|TestInvalidProfilePreservesPreviousConfig|TestHandleSetupConfigKeepsTheListenerWhenTheProfileFails|TestHandleSetupConfigLeavesTheListenerAloneOnSuccess)$' -count=1
 ```
 
-本机未安装 Flutter/Dart，`flutter pub get`、`flutter analyze --no-fatal-infos`、Flutter 测试及三平台安装包构建均未执行。
+Linux 开发机（Flutter 3.47.6、Rust 1.99.0）上 `flutter analyze --no-fatal-infos` 无问题，`flutter test` 全部通过。
 未完成 Android 真机、Windows、macOS 系统网络验证。没有发布安装包或正式版本。
-仓库同步不代表满足上述发布门槛；首次推送阶段不启用自动打包、发布和 Pages 工作流。
+仓库同步不代表满足上述发布门槛。
+
+## 发布
+
+`.github/workflows/tianjiyun-release.yaml`：推 `vX.Y.Z` tag（必须等于 `pubspec.yaml` 的版本，不带后缀）构建签名 APK 与 `SHA256SUMS`，
+发布到本仓库 Release；手动运行只构建 `pre` 包并留作工作流产物。构建会核对包名与发布证书指纹，签名密钥缺失时直接失败，
+不会退回调试签名。桌面安装包在桌面端标识独立之前不发布。上游的 Pages 工作流已删除；`build.yaml` 的检查照常运行，
+其中打包与上传任务只在上游仓库执行。
 
 ## 平台发布门槛
 

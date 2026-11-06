@@ -42,7 +42,7 @@ String? Function() resolveSelfUpdateSuffix = () => selfUpdateAssetSuffix(
 
 String? get selfUpdateSuffix => resolveSelfUpdateSuffix();
 
-// The names follow the release matrix in .github/workflows/build.yaml.
+// The names follow the APKs .github/workflows/tianjiyun-release.yaml publishes.
 String? selfUpdateAssetSuffix(Abi abi, {required bool windowsInstalled}) {
   return switch (abi) {
     Abi.androidArm64 => 'android-arm64-v8a.apk',
