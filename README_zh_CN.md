@@ -1,3 +1,15 @@
+# 天机云 FlClash 定制版（开发中）
+
+面向天机云客户的 Android、Windows、macOS 客户端，基于开源 FlClash 维护。
+
+**当前是源码开发候选，没有天机云正式安装包。** 下方保留的截图、下载链接和版本说明属于上游，不能视为本定制版的交付或测试结果。
+
+- [产品方向、已实现范围与验证边界](TIANJIYUN.md)
+- [上游 FlClash](https://github.com/chen08209/FlClash)
+- [开源许可证](LICENSE)
+
+---
+
 <div align="center">
 
 <img src="assets/images/icon.png" alt="FlClash" width="88">

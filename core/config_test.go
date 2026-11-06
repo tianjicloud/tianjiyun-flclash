@@ -782,9 +782,6 @@ func withSetupConfig(t *testing.T, apply func(*SetupParams) error) {
 	})
 }
 
-// applyConfig rolls back to the default config when the profile fails to parse.
-// That rollback is the whole recovery: the error reaches the host and the
-// listeners keep serving while the user picks another profile.
 func TestHandleSetupConfigKeepsTheListenerWhenTheProfileFails(t *testing.T) {
 	withSetupConfig(t, func(*SetupParams) error { return errors.New("bad profile") })
 
@@ -812,11 +809,11 @@ func TestApplyConfigTellsARejectedProfileFromAFailedCall(t *testing.T) {
 	err := applyConfig(&SetupParams{})
 
 	var methodErr *MethodError
-	if !errors.As(err, &methodErr) || methodErr.Code != "config_rejected" {
-		t.Fatalf("applyConfig = %v, want a config_rejected error", err)
+	if !errors.As(err, &methodErr) || methodErr.Code != "config_preserved" {
+		t.Fatalf("applyConfig = %v, want a config_preserved error", err)
 	}
-	if currentConfig == nil {
-		t.Error("the default config did not take the rejected one's place")
+	if currentConfig != nil {
+		t.Error("a first-start rejection installed a fallback config")
 	}
 }
 
@@ -1062,5 +1059,23 @@ func TestTestDelayStopsQueueingOnceTheTimeoutIsSpent(t *testing.T) {
 		}
 	case <-time.After(time.Second):
 		t.Fatal("handleTestDelay outlived the timeout it was given, waiting for a slot")
+	}
+}
+
+func TestInvalidProfilePreservesPreviousConfig(t *testing.T) {
+	home := t.TempDir()
+	previous := constant.Path.HomeDir()
+	constant.SetHomeDir(home)
+	t.Cleanup(func() { constant.SetHomeDir(previous) })
+	existing := &config.Config{General: &config.General{}}
+	withCurrentConfig(t, existing)
+	if err := os.WriteFile(filepath.Join(home, "config.yaml"), []byte("proxies: [unterminated\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := applyConfig(&SetupParams{}); err == nil {
+		t.Fatal("invalid config accepted")
+	}
+	if currentConfig != existing {
+		t.Fatal("previous config replaced")
 	}
 }

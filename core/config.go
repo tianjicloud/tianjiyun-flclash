@@ -141,24 +141,12 @@ func applyConfig(params *SetupParams) error {
 	configMu.Lock()
 	defer configMu.Unlock()
 
-	applyOptions(params.Options)
 	cfg, err := loadSetupConfig(params)
 	if err != nil {
-		// The fallback is what keeps the listeners serving while the host
-		// reports the error, but it applies a config with no proxies in it.
-		// From the UI that is indistinguishable from a subscription that went
-		// dead: the profile still lists every node, every delay test answers
-		// Timeout, and nothing routes. Name the real cause in the log.
-		logError(
-			"config apply failed, falling back to the built-in default - no proxies will be available: %v",
-			err,
-		)
-		fallback, fallbackErr := config.ParseRawConfig(config.DefaultRawConfig())
-		if fallbackErr != nil {
-			return err
-		}
-		cfg = fallback
+		logError("config apply rejected; previous config retained: %v", err)
+		return &MethodError{Code: "config_preserved", Message: err.Error()}
 	}
+	applyOptions(params.Options)
 
 	currentConfig = cfg
 	hub.ApplyConfig(cfg)
@@ -167,10 +155,7 @@ func applyConfig(params *SetupParams) error {
 	updateListeners(cfg)
 	reconcileGeoUpdater()
 	scheduleLoadMemoryRelease()
-	if err != nil {
-		// The host tells this apart from a call that failed: the default config runs.
-		return &MethodError{Code: "config_rejected", Message: err.Error()}
-	}
+
 	return nil
 }
 
