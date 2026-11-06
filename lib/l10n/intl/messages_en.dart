@@ -33,7 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m4(detail) => "Couldn\'t clear the data: ${detail}";
 
   static String m5(code) =>
-      "Windows refused to run FlClashCore.exe (error ${code}). An app control policy such as Smart App Control or AppLocker blocks unsigned programs; allow 天机云 in that policy or turn it off, then try again.";
+      "Windows refused to run TianjiCloudCore.exe (error ${code}). An app control policy such as Smart App Control or AppLocker blocks unsigned programs; allow 天机云 in that policy or turn it off, then try again.";
 
   static String m6(name) =>
       "The app failed to finish launching twice in a row. To break the loop, the profile ${name} has been deselected and automatic setup was skipped. You can select it again at any time.";
@@ -176,7 +176,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "The old certificate, ${name}, could not be removed. Remove it from the trusted roots yourself.";
 
   static String m62(name) =>
-      "The old certificate, ${name}, is still among the system\'s trusted CAs. Allow 天机云 root access in your root manager and regenerate, or remove the FlClash MITM CA module there and restart.";
+      "The old certificate, ${name}, is still among the system\'s trusted CAs. Allow 天机云 root access in your root manager and regenerate, or remove the TianjiCloud MITM CA module there and restart.";
 
   static String m63(name) =>
       "Remove the old certificate, ${name}, in Settings under Security › Encryption & credentials › Trusted credentials › User, then install the new one.";
@@ -558,7 +558,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "core": MessageLookupByLibrary.simpleMessage("Core"),
     "coreBlockedByPolicyTip": m5,
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
-      "Windows Smart App Control blocked FlClashCore.exe because it is not signed. Open Windows Security → App & browser control → Smart App Control settings, choose Off, then start 天机云 again. Smart App Control cannot be turned back on without reinstalling Windows.",
+      "Windows Smart App Control blocked TianjiCloudCore.exe because it is not signed. Open Windows Security → App & browser control → Smart App Control settings, choose Off, then start 天机云 again. Smart App Control cannot be turned back on without reinstalling Windows.",
     ),
     "coreStatus": MessageLookupByLibrary.simpleMessage("Core status"),
     "country": MessageLookupByLibrary.simpleMessage("Region"),
@@ -1048,10 +1048,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificate installed",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -1305,7 +1304,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "mitmIgnoredLines": MessageLookupByLibrary.simpleMessage("Ignored lines"),
     "mitmInstallSystemCaTip": MessageLookupByLibrary.simpleMessage(
-      "Root was found, so the certificate goes into the system\'s trusted certificates as a FlClash MITM CA module for Magisk, KernelSU or APatch. Every app on this device will then trust it, and anyone holding its private key could decrypt this device\'s HTTPS traffic. To undo it, regenerate the certificate or remove the module in the root manager and restart. If root is denied, it is installed as a user certificate instead.",
+      "Root was found, so the certificate goes into the system\'s trusted certificates as a TianjiCloud MITM CA module for Magisk, KernelSU or APatch. Every app on this device will then trust it, and anyone holding its private key could decrypt this device\'s HTTPS traffic. To undo it, regenerate the certificate or remove the module in the root manager and restart. If root is denied, it is installed as a user certificate instead.",
     ),
     "mitmInstallUserCaTip": MessageLookupByLibrary.simpleMessage(
       "No root was found, so the certificate can only be installed as a user certificate. Only apps that trust user certificates, mostly browsers, are decrypted; other apps fail on the hosts you list, so leave those hosts out. On Android 11 and later you finish the install yourself in system settings.",

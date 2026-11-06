@@ -31,7 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m4(detail) => "清除数据失败：${detail}";
 
   static String m5(code) =>
-      "Windows 拒绝运行 FlClashCore.exe（错误 ${code}）。智能应用控制、AppLocker 等应用控制策略会拦截未签名程序，请在该策略中放行天机云或关闭策略后重试。";
+      "Windows 拒绝运行 TianjiCloudCore.exe（错误 ${code}）。智能应用控制、AppLocker 等应用控制策略会拦截未签名程序，请在该策略中放行天机云或关闭策略后重试。";
 
   static String m6(name) =>
       "应用连续两次未能完成启动。为打断崩溃循环，已取消选中配置 ${name}，并跳过本次自动配置，你可以随时重新选中它。";
@@ -154,7 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(name) => "无法移除旧证书 ${name}，请自行从信任的根证书中移除。";
 
   static String m62(name) =>
-      "旧证书 ${name} 仍在系统信任的证书中。请在 root 管理器中允许天机云使用 root 后重新生成，或在其中移除“FlClash MITM CA”模块并重启。";
+      "旧证书 ${name} 仍在系统信任的证书中。请在 root 管理器中允许天机云使用 root 后重新生成，或在其中移除“TianjiCloud MITM CA”模块并重启。";
 
   static String m63(name) =>
       "请在系统设置的“安全 › 加密与凭据 › 信任的凭据 › 用户”中移除旧证书 ${name}，再安装新证书。";
@@ -443,7 +443,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "core": MessageLookupByLibrary.simpleMessage("内核"),
     "coreBlockedByPolicyTip": m5,
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
-      "Windows 智能应用控制拦截了未签名的 FlClashCore.exe。请打开 Windows 安全中心 → 应用和浏览器控制 → 智能应用控制设置，选择「关闭」后重新启动天机云。智能应用控制关闭后无法再开启，除非重装 Windows。",
+      "Windows 智能应用控制拦截了未签名的 TianjiCloudCore.exe。请打开 Windows 安全中心 → 应用和浏览器控制 → 智能应用控制设置，选择「关闭」后重新启动天机云。智能应用控制关闭后无法再开启，除非重装 Windows。",
     ),
     "coreStatus": MessageLookupByLibrary.simpleMessage("核心状态"),
     "country": MessageLookupByLibrary.simpleMessage("区域"),
@@ -1016,7 +1016,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "mitmIgnoredLines": MessageLookupByLibrary.simpleMessage("忽略的行"),
     "mitmInstallSystemCaTip": MessageLookupByLibrary.simpleMessage(
-      "检测到 root，证书将以 Magisk、KernelSU 或 APatch 模块“FlClash MITM CA”加入系统信任的根证书。之后本机所有应用都会信任它，持有其私钥的人可以解密本机的 HTTPS 流量。如需撤销，可重新生成证书，或在 root 管理器中移除该模块并重启。若拒绝 root 授权，将改为安装用户证书。",
+      "检测到 root，证书将以 Magisk、KernelSU 或 APatch 模块“TianjiCloud MITM CA”加入系统信任的根证书。之后本机所有应用都会信任它，持有其私钥的人可以解密本机的 HTTPS 流量。如需撤销，可重新生成证书，或在 root 管理器中移除该模块并重启。若拒绝 root 授权，将改为安装用户证书。",
     ),
     "mitmInstallUserCaTip": MessageLookupByLibrary.simpleMessage(
       "未检测到 root，证书只能安装为用户证书。只有信任用户证书的应用（多为浏览器）会被解密，其他应用访问列出的主机会失败，请不要列出它们的主机。Android 11 起需在系统设置中手动完成安装。",

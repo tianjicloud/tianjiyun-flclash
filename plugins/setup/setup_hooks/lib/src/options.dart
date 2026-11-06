@@ -32,10 +32,10 @@ class BuildConfig {
     goLdflags: '-w -s',
     coreVersion: '',
     coreDir: 'core',
-    coreName: 'FlClashCore',
+    coreName: 'TianjiCloudCore',
     outputDir: 'libclash',
     helperDir: 'services/helper',
-    helperName: 'FlClashHelperService',
+    helperName: 'TianjiCloudHelperService',
   );
 
   static BuildConfig load({required String rootDir}) {

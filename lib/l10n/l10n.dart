@@ -4676,20 +4676,20 @@ class AppLocalizations {
     );
   }
 
-  /// `Windows refused to run FlClashCore.exe (error {code}). An app control policy such as Smart App Control or AppLocker blocks unsigned programs; allow 天机云 in that policy or turn it off, then try again.`
+  /// `Windows refused to run TianjiCloudCore.exe (error {code}). An app control policy such as Smart App Control or AppLocker blocks unsigned programs; allow 天机云 in that policy or turn it off, then try again.`
   String coreBlockedByPolicyTip(Object code) {
     return Intl.message(
-      'Windows refused to run FlClashCore.exe (error $code). An app control policy such as Smart App Control or AppLocker blocks unsigned programs; allow 天机云 in that policy or turn it off, then try again.',
+      'Windows refused to run TianjiCloudCore.exe (error $code). An app control policy such as Smart App Control or AppLocker blocks unsigned programs; allow 天机云 in that policy or turn it off, then try again.',
       name: 'coreBlockedByPolicyTip',
       desc: '',
       args: [code],
     );
   }
 
-  /// `Windows Smart App Control blocked FlClashCore.exe because it is not signed. Open Windows Security → App & browser control → Smart App Control settings, choose Off, then start 天机云 again. Smart App Control cannot be turned back on without reinstalling Windows.`
+  /// `Windows Smart App Control blocked TianjiCloudCore.exe because it is not signed. Open Windows Security → App & browser control → Smart App Control settings, choose Off, then start 天机云 again. Smart App Control cannot be turned back on without reinstalling Windows.`
   String get coreBlockedBySmartAppControlTip {
     return Intl.message(
-      'Windows Smart App Control blocked FlClashCore.exe because it is not signed. Open Windows Security → App & browser control → Smart App Control settings, choose Off, then start 天机云 again. Smart App Control cannot be turned back on without reinstalling Windows.',
+      'Windows Smart App Control blocked TianjiCloudCore.exe because it is not signed. Open Windows Security → App & browser control → Smart App Control settings, choose Off, then start 天机云 again. Smart App Control cannot be turned back on without reinstalling Windows.',
       name: 'coreBlockedBySmartAppControlTip',
       desc: '',
       args: [],
@@ -7663,7 +7663,8 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one:
+          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -8342,10 +8343,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Root was found, so the certificate goes into the system's trusted certificates as a FlClash MITM CA module for Magisk, KernelSU or APatch. Every app on this device will then trust it, and anyone holding its private key could decrypt this device's HTTPS traffic. To undo it, regenerate the certificate or remove the module in the root manager and restart. If root is denied, it is installed as a user certificate instead.`
+  /// `Root was found, so the certificate goes into the system's trusted certificates as a TianjiCloud MITM CA module for Magisk, KernelSU or APatch. Every app on this device will then trust it, and anyone holding its private key could decrypt this device's HTTPS traffic. To undo it, regenerate the certificate or remove the module in the root manager and restart. If root is denied, it is installed as a user certificate instead.`
   String get mitmInstallSystemCaTip {
     return Intl.message(
-      'Root was found, so the certificate goes into the system\'s trusted certificates as a FlClash MITM CA module for Magisk, KernelSU or APatch. Every app on this device will then trust it, and anyone holding its private key could decrypt this device\'s HTTPS traffic. To undo it, regenerate the certificate or remove the module in the root manager and restart. If root is denied, it is installed as a user certificate instead.',
+      'Root was found, so the certificate goes into the system\'s trusted certificates as a TianjiCloud MITM CA module for Magisk, KernelSU or APatch. Every app on this device will then trust it, and anyone holding its private key could decrypt this device\'s HTTPS traffic. To undo it, regenerate the certificate or remove the module in the root manager and restart. If root is denied, it is installed as a user certificate instead.',
       name: 'mitmInstallSystemCaTip',
       desc: '',
       args: [],
@@ -8402,10 +8403,10 @@ class AppLocalizations {
     );
   }
 
-  /// `The old certificate, {name}, is still among the system's trusted CAs. Allow 天机云 root access in your root manager and regenerate, or remove the FlClash MITM CA module there and restart.`
+  /// `The old certificate, {name}, is still among the system's trusted CAs. Allow 天机云 root access in your root manager and regenerate, or remove the TianjiCloud MITM CA module there and restart.`
   String mitmOldSystemCertificateLeftTip(Object name) {
     return Intl.message(
-      'The old certificate, $name, is still among the system\'s trusted CAs. Allow 天机云 root access in your root manager and regenerate, or remove the FlClash MITM CA module there and restart.',
+      'The old certificate, $name, is still among the system\'s trusted CAs. Allow 天机云 root access in your root manager and regenerate, or remove the TianjiCloud MITM CA module there and restart.',
       name: 'mitmOldSystemCertificateLeftTip',
       desc: '',
       args: [name],

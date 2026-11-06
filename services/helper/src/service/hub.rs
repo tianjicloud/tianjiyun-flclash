@@ -41,7 +41,7 @@ use windows_sys::Win32::System::JobObjects::{
     all(feature = "windows-service", target_os = "windows"),
     target_os = "linux"
 )))]
-const LISTEN_PORT: u16 = 47890;
+const LISTEN_PORT: u16 = 47990;
 #[cfg(not(target_os = "linux"))]
 const CORE_PIPE_PREFIX: &str = r"\\.\pipe\FlClashCore_";
 #[cfg(target_os = "linux")]
@@ -771,7 +771,7 @@ pub(super) fn routes() -> impl Filter<Extract = (impl Reply,), Error = Infallibl
             let local_host = host.is_none_or(|host| {
                 host.parse::<warp::http::uri::Authority>()
                     .is_ok_and(|authority| {
-                        ["127.0.0.1", "localhost", "FlClashHelperService"]
+                        ["127.0.0.1", "localhost", "TianjiCloudHelperService"]
                             .iter()
                             .any(|host| authority.host().eq_ignore_ascii_case(host))
                     })
@@ -944,7 +944,7 @@ mod tests {
 
     #[tokio::test]
     async fn ping_returns_running_helper_path_for_verified_core() {
-        let response = ping_response(Ok(PathBuf::from("FlClashHelperService.exe")));
+        let response = ping_response(Ok(PathBuf::from("TianjiCloudHelperService.exe")));
 
         assert_eq!(response.status(), StatusCode::OK);
         assert_eq!(
@@ -955,7 +955,7 @@ mod tests {
             warp::hyper::body::to_bytes(response.into_body())
                 .await
                 .unwrap(),
-            "FlClashHelperService.exe"
+            "TianjiCloudHelperService.exe"
         );
     }
 
@@ -1425,7 +1425,7 @@ mod tests {
             for (header, value) in [
                 ("origin", "https://attacker.test"),
                 ("origin", "null"),
-                ("host", "attacker.test:47890"),
+                ("host", "attacker.test:47990"),
             ] {
                 let response = warp::test::request()
                     .method(method)
@@ -1440,7 +1440,11 @@ mod tests {
                     .is_none());
             }
         }
-        for host in ["127.0.0.1:47890", "localhost:47890", "FlClashHelperService"] {
+        for host in [
+            "127.0.0.1:47990",
+            "localhost:47990",
+            "TianjiCloudHelperService",
+        ] {
             let response = warp::test::request()
                 .path("/logs")
                 .header("host", host)

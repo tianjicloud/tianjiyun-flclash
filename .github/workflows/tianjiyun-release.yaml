@@ -5,9 +5,7 @@ name: tianjiyun-release
 # update there. A manual run builds the same APKs as a `pre` build and only
 # keeps them as workflow artifacts.
 #
-# Desktop packages are not built yet: they still share upstream FlClash's
-# identity (installer id, data directories, helper service) and would replace
-# an installed FlClash.
+# Desktop packages are not part of the release yet.
 
 on:
   push:

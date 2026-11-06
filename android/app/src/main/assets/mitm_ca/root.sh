@@ -23,7 +23,7 @@ if [ -z "$FLCLASH_ROOT_STAGE" ]; then
 fi
 
 dir=${0%/*}
-id=flclash_mitm_ca
+id=tianjicloud_mitm_ca
 module=/data/adb/modules/$id
 pending=/data/adb/modules_update/$id
 

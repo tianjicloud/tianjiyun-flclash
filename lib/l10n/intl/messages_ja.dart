@@ -31,7 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m4(detail) => "データを消去できませんでした：${detail}";
 
   static String m5(code) =>
-      "Windows が FlClashCore.exe の実行を拒否しました（エラー ${code}）。スマート アプリ コントロールや AppLocker などのアプリ制御ポリシーは未署名のプログラムをブロックします。ポリシーで天机云を許可するか、ポリシーを無効にしてから再試行してください。";
+      "Windows が TianjiCloudCore.exe の実行を拒否しました（エラー ${code}）。スマート アプリ コントロールや AppLocker などのアプリ制御ポリシーは未署名のプログラムをブロックします。ポリシーで天机云を許可するか、ポリシーを無効にしてから再試行してください。";
 
   static String m6(name) =>
       "アプリの起動が2回連続で完了しませんでした。クラッシュループを断ち切るため、プロファイル ${name} の選択を解除し、今回の自動セットアップをスキップしました。いつでも選択し直せます。";
@@ -156,7 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(name) => "古い証明書 ${name} を削除できませんでした。信頼されたルートから手動で削除してください。";
 
   static String m62(name) =>
-      "古い証明書 ${name} はシステムの信頼された証明書に残っています。root マネージャーで天机云に root を許可してから再生成するか、そこで「FlClash MITM CA」モジュールを削除して再起動してください。";
+      "古い証明書 ${name} はシステムの信頼された証明書に残っています。root マネージャーで天机云に root を許可してから再生成するか、そこで「TianjiCloud MITM CA」モジュールを削除して再起動してください。";
 
   static String m63(name) =>
       "設定の「セキュリティ › 暗号化と認証情報 › 信頼できる認証情報 › ユーザー」で古い証明書 ${name} を削除してから、新しい証明書をインストールしてください。";
@@ -475,7 +475,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "core": MessageLookupByLibrary.simpleMessage("コア"),
     "coreBlockedByPolicyTip": m5,
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
-      "Windows のスマート アプリ コントロールが、署名されていない FlClashCore.exe をブロックしました。Windows セキュリティ → アプリとブラウザーの制御 → スマート アプリ コントロールの設定で「オフ」を選び、天机云を再起動してください。一度オフにすると、Windows を再インストールしない限り再度オンにはできません。",
+      "Windows のスマート アプリ コントロールが、署名されていない TianjiCloudCore.exe をブロックしました。Windows セキュリティ → アプリとブラウザーの制御 → スマート アプリ コントロールの設定で「オフ」を選び、天机云を再起動してください。一度オフにすると、Windows を再インストールしない限り再度オンにはできません。",
     ),
     "coreStatus": MessageLookupByLibrary.simpleMessage("コアの状態"),
     "country": MessageLookupByLibrary.simpleMessage("地域"),
@@ -1116,7 +1116,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "mitmIgnoredLines": MessageLookupByLibrary.simpleMessage("無視された行"),
     "mitmInstallSystemCaTip": MessageLookupByLibrary.simpleMessage(
-      "root が見つかったため、証明書は Magisk、KernelSU または APatch のモジュール「FlClash MITM CA」としてシステムの信頼できる証明書に追加されます。以後この端末のすべてのアプリが信頼し、秘密鍵を持つ人はこの端末の HTTPS 通信を復号できます。元に戻すには証明書を再生成するか、root マネージャーでモジュールを削除して再起動してください。root が拒否された場合はユーザー証明書としてインストールします。",
+      "root が見つかったため、証明書は Magisk、KernelSU または APatch のモジュール「TianjiCloud MITM CA」としてシステムの信頼できる証明書に追加されます。以後この端末のすべてのアプリが信頼し、秘密鍵を持つ人はこの端末の HTTPS 通信を復号できます。元に戻すには証明書を再生成するか、root マネージャーでモジュールを削除して再起動してください。root が拒否された場合はユーザー証明書としてインストールします。",
     ),
     "mitmInstallUserCaTip": MessageLookupByLibrary.simpleMessage(
       "root が見つからないため、ユーザー証明書としてのみインストールできます。復号されるのはユーザー証明書を信頼するアプリ（主にブラウザ）だけで、他のアプリは記載したホストへの接続に失敗するため、それらのホストは記載しないでください。Android 11 以降はシステム設定で手動でインストールを完了します。",

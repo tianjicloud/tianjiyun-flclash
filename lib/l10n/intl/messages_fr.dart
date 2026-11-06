@@ -33,7 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m4(detail) => "Impossible d’effacer les données : ${detail}";
 
   static String m5(code) =>
-      "Windows a refusé d’exécuter FlClashCore.exe (erreur ${code}). Une stratégie de contrôle des applications, telle que Smart App Control ou AppLocker, bloque les programmes non signés ; autorisez 天机云 dans cette stratégie ou désactivez-la, puis réessayez.";
+      "Windows a refusé d’exécuter TianjiCloudCore.exe (erreur ${code}). Une stratégie de contrôle des applications, telle que Smart App Control ou AppLocker, bloque les programmes non signés ; autorisez 天机云 dans cette stratégie ou désactivez-la, puis réessayez.";
 
   static String m6(name) =>
       "L’app n’a pas réussi à finir de démarrer deux fois de suite. Pour sortir de cette boucle, le profil ${name} a été désélectionné et la configuration automatique a été ignorée. Vous pouvez le sélectionner de nouveau à tout moment.";
@@ -186,7 +186,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Impossible de supprimer l’ancien certificat, ${name}. Retirez-le vous-même des racines de confiance.";
 
   static String m62(name) =>
-      "L’ancien certificat, ${name}, figure toujours parmi les certificats de confiance du système. Autorisez l’accès root à 天机云 dans votre gestionnaire root puis régénérez-le, ou supprimez-y le module « FlClash MITM CA » et redémarrez.";
+      "L’ancien certificat, ${name}, figure toujours parmi les certificats de confiance du système. Autorisez l’accès root à 天机云 dans votre gestionnaire root puis régénérez-le, ou supprimez-y le module « TianjiCloud MITM CA » et redémarrez.";
 
   static String m63(name) =>
       "Supprimez l’ancien certificat, ${name}, dans Paramètres › Sécurité › Chiffrement et identifiants › Identifiants de confiance › Utilisateur, puis installez le nouveau.";
@@ -605,7 +605,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "core": MessageLookupByLibrary.simpleMessage("Cœur"),
     "coreBlockedByPolicyTip": m5,
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
-      "Windows Smart App Control a bloqué FlClashCore.exe car il n’est pas signé. Ouvrez Sécurité Windows → Contrôle des applications et du navigateur → Paramètres de Smart App Control, choisissez Désactivé, puis relancez 天机云. Smart App Control ne peut pas être réactivé sans réinstaller Windows.",
+      "Windows Smart App Control a bloqué TianjiCloudCore.exe car il n’est pas signé. Ouvrez Sécurité Windows → Contrôle des applications et du navigateur → Paramètres de Smart App Control, choisissez Désactivé, puis relancez 天机云. Smart App Control ne peut pas être réactivé sans réinstaller Windows.",
     ),
     "coreStatus": MessageLookupByLibrary.simpleMessage("État du cœur"),
     "country": MessageLookupByLibrary.simpleMessage("Région"),
@@ -1127,10 +1127,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificat installé",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Ce système masque la liste des apps installées tant que l’autorisation n’est pas accordée. Accordez-la pour configurer le proxy par app.",
     ),
@@ -1406,7 +1405,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "mitmIgnoredLines": MessageLookupByLibrary.simpleMessage("Lignes ignorées"),
     "mitmInstallSystemCaTip": MessageLookupByLibrary.simpleMessage(
-      "Root a été détecté : le certificat sera ajouté aux certificats de confiance du système sous forme de module Magisk, KernelSU ou APatch « FlClash MITM CA ». Toutes les applications de l’appareil lui feront alors confiance, et quiconque détient sa clé privée pourra déchiffrer le trafic HTTPS de l’appareil. Pour annuler, régénérez le certificat ou supprimez le module dans le gestionnaire root, puis redémarrez. Si root est refusé, il sera installé comme certificat utilisateur.",
+      "Root a été détecté : le certificat sera ajouté aux certificats de confiance du système sous forme de module Magisk, KernelSU ou APatch « TianjiCloud MITM CA ». Toutes les applications de l’appareil lui feront alors confiance, et quiconque détient sa clé privée pourra déchiffrer le trafic HTTPS de l’appareil. Pour annuler, régénérez le certificat ou supprimez le module dans le gestionnaire root, puis redémarrez. Si root est refusé, il sera installé comme certificat utilisateur.",
     ),
     "mitmInstallUserCaTip": MessageLookupByLibrary.simpleMessage(
       "Root n’a pas été détecté : le certificat ne peut être installé que comme certificat utilisateur. Seules les applications qui font confiance aux certificats utilisateur, surtout les navigateurs, sont déchiffrées ; les autres échouent sur les hôtes listés, ne listez donc pas leurs hôtes. À partir d’Android 11, vous terminez l’installation vous-même dans les paramètres système.",

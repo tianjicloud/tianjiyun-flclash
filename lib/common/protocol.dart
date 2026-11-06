@@ -4,7 +4,8 @@ import 'package:win32_registry/win32_registry.dart';
 
 import 'print.dart';
 
-const protocolSchemes = ['clash', 'clashmeta', 'flclash'];
+// `tianji` keeps the import links written for the earlier 天机 app working.
+const protocolSchemes = ['clash', 'clashmeta', 'tianji'];
 
 class ProtocolRegistrationPlan {
   final String scheme;
@@ -40,7 +41,7 @@ class LinuxProtocolRegistrationPlan {
     required this.applicationsDir,
   });
 
-  String get desktopId => 'flclash-url-handler.desktop';
+  String get desktopId => 'tianjicloud-url-handler.desktop';
 
   String get desktopPath => '$applicationsDir/$desktopId';
 
@@ -52,7 +53,7 @@ class LinuxProtocolRegistrationPlan {
   String get desktopEntry => [
     '[Desktop Entry]',
     'Type=Application',
-    'Name=FlClash',
+    'Name=天机云',
     'NoDisplay=true',
     'Exec=$exec',
     'MimeType=${mimeTypes.join(';')};',

@@ -1,25 +1,26 @@
-display_name: FlClash
+display_name: 天机云
 
 icon: ./assets/images/icon.png
 
 supported_mime_type:
   - x-scheme-handler/clash
   - x-scheme-handler/clashmeta
-  - x-scheme-handler/flclash
+  - x-scheme-handler/tianji
 
 keywords:
-  - FlClash
+  - 天机云
+  - TianjiCloud
   - Clash
   - ClashMeta
   - Proxy
 
-generic_name: FlClash
+generic_name: 天机云
 
 categories:
   - Network
 
 startup_notify: true
 
-startup_wm_class: com.follow.clash
+startup_wm_class: org.tianjiyun.app
 
 include: []

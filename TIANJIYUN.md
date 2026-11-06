@@ -32,7 +32,11 @@ Android、Windows、macOS 共用业务逻辑，各自验收系统网络行为。
 这不等于事务回滚或系统 kill switch：磁盘配置、Flutter UI、首次启动、重启恢复仍需端到端回归。
 Android 已有独立身份：包名 `org.tianjiyun.app`、显示名「天机云」、品牌主色 `#0A55F5`、天机云图标、独立签名密钥，
 更新检查与下载指向本仓库的 Release。订阅 UA 仍为 `FlClash/v版本`，Xboard 依此选择订阅格式。
-桌面端仍沿用上游标识（安装器 ID、数据目录、helper 服务、Bundle ID），登录/续费与平台网络阻断尚未实现。
+桌面端同样独立：程序 `TianjiCloud` / `TianjiCloudCore` / `TianjiCloudHelperService`，helper 端口 47990，
+Windows 安装器 ID 与数据目录 `%APPDATA%\org.tianjiyun\TianjiCloud`，macOS/Linux 应用 ID `org.tianjiyun.app`，
+Linux helper `tianjicloud-helper.service`，URL scheme `tianji`（另保留 `clash`、`clashmeta`），MITM 证书 `TianjiCloud MITM CA`，
+可与上游 FlClash 同机安装。桌面端照上游做法不购买代码签名证书：macOS 为本机自签（ad-hoc）、不公证，Windows 不签名。
+登录/续费与平台网络阻断尚未实现。
 
 ## 验证
 
@@ -51,7 +55,7 @@ Linux 开发机（Flutter 3.47.6、Rust 1.99.0）上 `flutter analyze --no-fatal
 
 `.github/workflows/tianjiyun-release.yaml`：推 `vX.Y.Z` tag（必须等于 `pubspec.yaml` 的版本，不带后缀）构建签名 APK 与 `SHA256SUMS`，
 发布到本仓库 Release；手动运行只构建 `pre` 包并留作工作流产物。构建会核对包名与发布证书指纹，签名密钥缺失时直接失败，
-不会退回调试签名。桌面安装包在桌面端标识独立之前不发布。上游的 Pages 工作流已删除；`build.yaml` 的检查照常运行，
+不会退回调试签名。桌面安装包尚未加入发布流程。上游的 Pages 工作流已删除；`build.yaml` 的检查照常运行，
 其中打包与上传任务只在上游仓库执行。
 
 ## 平台发布门槛

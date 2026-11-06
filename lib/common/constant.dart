@@ -16,19 +16,20 @@ const appSlug = 'TianjiCloud';
 // Xboard picks the subscription format and the protocols a client may get
 // from this token and its version, so it keeps the upstream name.
 const subscriptionUaName = 'FlClash';
-const appHelperService = 'FlClashHelperService';
+const appCoreName = 'TianjiCloudCore';
+const appHelperService = 'TianjiCloudHelperService';
 const coreManifestName = 'manifest.json';
 const browserUa =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const packageName = 'com.follow.clash';
 final unixSocketPath = '/tmp/FlClashSocket_${Random().nextInt(10000)}.sock';
 final windowsPipeName = '\\\\.\\pipe\\FlClashCore_${_randomPipeId()}';
-const helperPort = 47890;
+const helperPort = 47990;
 const helperPortKey =
     'SYSTEM\\CurrentControlSet\\Services\\$appHelperService\\Runtime';
 const helperPortValue = 'Port';
-const helperSocketPath = '/run/flclash/helper.sock';
-const helperUnitPath = '/etc/systemd/system/flclash-helper.service';
+const helperSocketPath = '/run/tianjicloud/helper.sock';
+const helperUnitPath = '/etc/systemd/system/tianjicloud-helper.service';
 const helperProtocolVersionHeader = 'x-flclash-helper-protocol';
 final helperProtocolVersion = Platform.isWindows ? '8' : '6';
 const maxTextScale = 1.4;

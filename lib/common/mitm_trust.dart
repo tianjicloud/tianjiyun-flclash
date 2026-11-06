@@ -16,7 +16,7 @@ import 'package:path/path.dart';
 /// The name of the leaf the Core signs for a trust store to verify.
 const mitmCheckHost = 'mitm-check.flclash.invalid';
 
-const mitmCertificateFileName = 'FlClash CA.crt';
+const mitmCertificateFileName = 'TianjiCloud CA.crt';
 
 /// Named by the CA, so that a renewed one saved beside it is told apart.
 String mitmSavedFileName(MitmCertificate ca) => '${ca.subject}.crt';
@@ -366,7 +366,7 @@ class LinuxMitmTrustStore implements MitmTrustStore {
   final Future<String?> Function(String path) readFile;
   final Future<List<String>> Function(String path) listDirectory;
 
-  static const nickname = 'FlClash MITM CA';
+  static const nickname = 'TianjiCloud MITM CA';
 
   /// Where Go's crypto/x509 looks, which covers what most programs read.
   static const bundles = [
@@ -384,7 +384,7 @@ class LinuxMitmTrustStore implements MitmTrustStore {
   /// Debian layout is tried last.
   static const installScript = r'''
 set -e
-name=flclash-mitm-ca.crt
+name=tianjicloud-mitm-ca.crt
 if [ -d /etc/pki/ca-trust/source/anchors ] && command -v update-ca-trust >/dev/null; then
   install -m 0644 "$1" "/etc/pki/ca-trust/source/anchors/$name"
   update-ca-trust extract
@@ -406,7 +406,7 @@ fi
   /// Undoes [installScript], choosing the trust tool the same way.
   static const removeScript = r'''
 set -e
-name=flclash-mitm-ca.crt
+name=tianjicloud-mitm-ca.crt
 if [ -d /etc/pki/ca-trust/source/anchors ] && command -v update-ca-trust >/dev/null; then
   rm -f "/etc/pki/ca-trust/source/anchors/$name"
   update-ca-trust extract
