@@ -1,0 +1,149 @@
+"""Generate the Android launcher, TV, notification and in-app icons from the
+天机云 brand mark.
+
+The mark is a raster with gradients and a soft glow, so unlike upstream's
+vector glyph it is rendered to bitmaps per density. Run from the repository
+root with Pillow installed:
+
+    python3 tool/generate_brand_icons.py
+"""
+
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
+
+ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT / 'assets_source/images/icon/tianjiyun-mark.png'
+APP_RES = ROOT / 'android/app/src/main/res'
+SERVICE_RES = ROOT / 'android/service/src/main/res'
+
+# Matches @color/ic_launcher_background, which the splash screen shares.
+BACKGROUND = (0xF7, 0xF9, 0xFB, 255)
+TEXT = (0x0F, 0x17, 0x2A, 255)
+BANNER_FONT = '/usr/share/fonts/noto-cjk/NotoSansCJK-Medium.ttc'
+# Face 2 of the Noto Sans CJK collection is Simplified Chinese.
+BANNER_FONT_INDEX = 2
+
+DENSITIES = {'mdpi': 1, 'hdpi': 1.5, 'xhdpi': 2, 'xxhdpi': 3, 'xxxhdpi': 4}
+# The glow is drawn below this alpha; masks keep only the solid shape.
+SILHOUETTE_ALPHA = 220
+
+# Widths of the mark as a share of its canvas.
+ADAPTIVE_WIDTH = 0.50  # fits the 66dp circle of a 108dp adaptive layer
+TV_WIDTH = 0.50
+LEGACY_WIDTH = 0.66
+SMALL_ICON_WIDTH = 0.92
+
+
+def load_mark():
+    image = Image.open(SOURCE).convert('RGBA')
+    visible = image.getchannel('A').point(lambda v: 255 if v > 8 else 0)
+    return image.crop(visible.getbbox())
+
+
+def silhouette(mark):
+    alpha = mark.getchannel('A').point(
+        lambda v: 255 if v >= SILHOUETTE_ALPHA else 0
+    )
+    solid = Image.new('RGBA', mark.size, (255, 255, 255, 255))
+    solid.putalpha(alpha)
+    return solid.crop(alpha.getbbox())
+
+
+def place(mark, size, width_share, background=(0, 0, 0, 0)):
+    canvas = Image.new('RGBA', (size, size), background)
+    width = round(size * width_share)
+    height = round(width * mark.height / mark.width)
+    scaled = mark.resize((width, height), Image.LANCZOS)
+    canvas.alpha_composite(scaled, ((size - width) // 2, (size - height) // 2))
+    return canvas
+
+
+def clip(image, shape):
+    mask = Image.new('L', image.size, 0)
+    draw = ImageDraw.Draw(mask)
+    box = [0, 0, image.width - 1, image.height - 1]
+    if shape == 'circle':
+        draw.ellipse(box, fill=255)
+    else:
+        draw.rounded_rectangle(box, radius=image.width // 6, fill=255)
+    clipped = Image.new('RGBA', image.size, (0, 0, 0, 0))
+    clipped.paste(image, (0, 0), mask)
+    return clipped
+
+
+def save(image, path, **options):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.suffix == '.webp':
+        image.save(path, 'WEBP', lossless=True, **options)
+    else:
+        image.save(path, optimize=True, **options)
+
+
+def banner(mark):
+    # TV banners are 320x180 at xhdpi.
+    canvas = Image.new('RGBA', (320, 180), BACKGROUND)
+    height = 78
+    width = round(height * mark.width / mark.height)
+    scaled = mark.resize((width, height), Image.LANCZOS)
+    font = ImageFont.truetype(BANNER_FONT, 46, index=BANNER_FONT_INDEX)
+    text = '天机云'
+    left, top, right, bottom = font.getbbox(text)
+    gap = 18
+    total = width + gap + (right - left)
+    x = (320 - total) // 2
+    canvas.alpha_composite(scaled, (x, (180 - height) // 2))
+    draw = ImageDraw.Draw(canvas)
+    draw.text(
+        (x + width + gap - left, (180 - (bottom - top)) // 2 - top),
+        text,
+        font=font,
+        fill=TEXT,
+    )
+    return canvas.convert('RGB')
+
+
+def main():
+    mark = load_mark()
+    shape = silhouette(mark)
+
+    for density, scale in DENSITIES.items():
+        adaptive = round(108 * scale)
+        save(
+            place(mark, adaptive, ADAPTIVE_WIDTH),
+            APP_RES / f'drawable-{density}/ic_launcher_foreground.png',
+        )
+        save(
+            place(shape, adaptive, ADAPTIVE_WIDTH),
+            APP_RES / f'drawable-{density}/ic_launcher_monochrome.png',
+        )
+        save(
+            place(mark, adaptive, TV_WIDTH),
+            APP_RES / f'drawable-{density}/ic_launcher_foreground_tv.png',
+        )
+
+        legacy = round(48 * scale)
+        full = place(mark, legacy, LEGACY_WIDTH, BACKGROUND)
+        save(clip(full, 'square'), APP_RES / f'mipmap-{density}/ic_launcher.webp')
+        save(
+            clip(full, 'circle'),
+            APP_RES / f'mipmap-{density}/ic_launcher_round.webp',
+        )
+
+        tv = round(80 * scale)
+        save(
+            place(mark, tv, LEGACY_WIDTH, BACKGROUND).convert('RGB'),
+            APP_RES / f'mipmap-television-{density}/ic_launcher.webp',
+        )
+
+        small = round(24 * scale)
+        small_icon = place(shape, small, SMALL_ICON_WIDTH)
+        save(small_icon, SERVICE_RES / f'drawable-{density}/ic.png')
+        save(small_icon, SERVICE_RES / f'drawable-{density}/ic_service.png')
+
+    save(banner(mark), APP_RES / 'mipmap-xhdpi/ic_banner.png')
+    save(place(mark, 550, 0.96), ROOT / 'assets/images/icon.png')
+
+
+if __name__ == '__main__':
+    main()
