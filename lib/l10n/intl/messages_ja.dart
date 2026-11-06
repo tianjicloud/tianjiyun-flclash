@@ -185,66 +185,68 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m74(label) => "${label}は数値である必要があります";
 
-  static String m75(label) => "${label} は 1024〜49151 の範囲で指定してください";
+  static String m75(count) => "インポート済み · ${count} 個のノード";
 
-  static String m76(port) => "ポート ${port}";
+  static String m76(label) => "${label} は 1024〜49151 の範囲で指定してください";
 
-  static String m77(days) => "残り ${days} 日";
+  static String m77(port) => "ポート ${port}";
 
-  static String m78(date, days) => "${date} に期限切れ、残り ${days} 日";
+  static String m78(days) => "残り ${days} 日";
 
-  static String m79(time) => "${time}に更新";
+  static String m79(date, days) => "${date} に期限切れ、残り ${days} 日";
 
-  static String m80(label, profiles) =>
+  static String m80(time) => "${time}に更新";
+
+  static String m81(label, profiles) =>
       "${label} は ${profiles} でまだ使用されており、削除するとそれらが正常に動作しなくなります。削除してもよろしいですか？";
 
-  static String m81(count, label) =>
+  static String m82(count, label) =>
       "${Intl.plural(count, other: 'プロキシ ${label} 件')}";
 
-  static String m82(name, count) => "${name} など${count}件のプロキシ";
+  static String m83(name, count) => "${name} など${count}件のプロキシ";
 
-  static String m83(removed) =>
+  static String m84(removed) =>
       "次のプロキシが削除されます：${removed}。名前を変えた行は新しいプロキシとして扱われ、削除されたプロキシを参照するカスタムプロファイルでは見つからないと表示されます。適用しますか？";
 
-  static String m84(removed, added) =>
+  static String m85(removed, added) =>
       "次のプロキシが削除されます：${removed}。次のプロキシが追加されます：${added}。名前を変えた行は新しいプロキシとして扱われ、削除されたプロキシを参照するカスタムプロファイルでは見つからないと表示されます。適用しますか？";
 
-  static String m85(label) =>
+  static String m86(label) =>
       "${label} はこのプロファイルのルール、プロキシグループ、ダイヤラープロキシ、DNS または NTP からまだ参照されており、削除するとそれらの参照は無効になります。削除してもよろしいですか？";
 
-  static String m86(count, label) =>
+  static String m87(count, label) =>
       "${Intl.plural(count, other: 'プロキシグループ ${label} 件')}";
 
-  static String m87(count, label) =>
+  static String m88(count, label) =>
       "${Intl.plural(count, other: 'ルール ${label} 件')}";
 
-  static String m88(appName) => "${appName}（セーフモード）";
+  static String m89(appName) => "${appName}（セーフモード）";
 
-  static String m89(count) => "${count} 秒";
+  static String m90(count) => "${count} 秒";
 
-  static String m90(count) => "${count} 件が有効";
+  static String m91(count) => "${count} 件が有効";
 
-  static String m91(count) => "${count} 件に問題";
+  static String m92(count) => "${count} 件に問題";
 
-  static String m92(count) => "設定 ${count} 件";
+  static String m93(count) => "設定 ${count} 件";
 
-  static String m93(link) => "${link} からプロキシを読み取れませんでした";
+  static String m94(link) => "${link} からプロキシを読み取れませんでした";
 
-  static String m94(label) => "${label}は1項目のみ指定できます";
+  static String m95(label) => "${label}は1項目のみ指定できます";
 
-  static String m95(value) => "ピーク ${value}";
+  static String m96(value) => "ピーク ${value}";
 
-  static String m96(value) => "累計 ${value}";
+  static String m97(value) => "累計 ${value}";
 
-  static String m97(transport) => "${transport} リクエストヘッダー";
+  static String m98(transport) => "${transport} リクエストヘッダー";
 
-  static String m98(label) => "${label}はURLである必要があります";
+  static String m99(label) => "${label}はURLである必要があります";
 
-  static String m99(date) => "有効期限 ${date}";
-
-  static String m100(count) => "${count} 年前";
+  static String m100(date) => "有効期限 ${date}";
 
   static String m101(count) => "${count} 年前";
+
+  static String m102(count) => "${count} 年前";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1267,6 +1269,105 @@ class MessageLookup extends MessageLookupByLibrary {
     "obfsParam": MessageLookupByLibrary.simpleMessage("難読化パラメータ"),
     "obfsPassword": MessageLookupByLibrary.simpleMessage("難読化パスワード"),
     "onDemand": MessageLookupByLibrary.simpleMessage("オンデマンド"),
+    "onboardingCheckingInternet": MessageLookupByLibrary.simpleMessage(
+      "インターネットアクセスを確認しています…",
+    ),
+    "onboardingClipboardEmpty": MessageLookupByLibrary.simpleMessage(
+      "クリップボードに内容がありません",
+    ),
+    "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
+      "リンクにはサブスクリプションの認証情報が含まれるため、一部だけを表示しています。",
+    ),
+    "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage(
+      "Tianji Cloud のサブスクリプション",
+    ),
+    "onboardingConnect": MessageLookupByLibrary.simpleMessage("接続"),
+    "onboardingConnectFailed": MessageLookupByLibrary.simpleMessage(
+      "接続できませんでした。後でもう一度お試しください。",
+    ),
+    "onboardingConnected": MessageLookupByLibrary.simpleMessage("接続済み"),
+    "onboardingConnectedNoInternet": MessageLookupByLibrary.simpleMessage(
+      "接続済みですが、インターネットにアクセスできません",
+    ),
+    "onboardingConnecting": MessageLookupByLibrary.simpleMessage("接続しています…"),
+    "onboardingConnectingDescription": MessageLookupByLibrary.simpleMessage(
+      "接続後、実際に一度インターネットへアクセスして確認します。",
+    ),
+    "onboardingContinue": MessageLookupByLibrary.simpleMessage("続ける"),
+    "onboardingDescription": MessageLookupByLibrary.simpleMessage(
+      "パネルのサブスクリプションリンクを貼り付けるかスキャンして、数ステップで接続できます。",
+    ),
+    "onboardingExit": MessageLookupByLibrary.simpleMessage("出口"),
+    "onboardingExpireDate": MessageLookupByLibrary.simpleMessage("有効期限"),
+    "onboardingFailureEmptyDescription": MessageLookupByLibrary.simpleMessage(
+      "プランの期限が切れているか、今月の通信量を使い切った可能性があります。更新または通信量のリセット後、「再試行」を押してください。",
+    ),
+    "onboardingFailureEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "このサブスクリプションに利用可能なノードがありません",
+    ),
+    "onboardingFailureExpiredDescription": MessageLookupByLibrary.simpleMessage(
+      "パネルでサブスクリプションをリセットした可能性があります。ユーザーパネルからサブスクリプションアドレスをコピーし直して、ここに貼り付けてください。",
+    ),
+    "onboardingFailureExpiredTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションリンクの有効期限が切れています",
+    ),
+    "onboardingFailureNotSubscriptionDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "ユーザーパネルで「サブスクリプションアドレスをコピー」を押し、ここに貼り付けてください。",
+        ),
+    "onboardingFailureNotSubscriptionTitle":
+        MessageLookupByLibrary.simpleMessage("これはサブスクリプションリンクではありません"),
+    "onboardingFailureUnknownDescription": MessageLookupByLibrary.simpleMessage(
+      "ネットワークを確認して再試行してください。",
+    ),
+    "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
+      "インポートに失敗しました",
+    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "現在のネットワークがこのドメインを制限している可能性があります。ステータスページに予備アドレスがあります。後でもう一度お試しください。",
+        ),
+    "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションアドレスに接続できません",
+    ),
+    "onboardingImported": m75,
+    "onboardingImporting": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションを取得しています…",
+    ),
+    "onboardingImportingDescription": MessageLookupByLibrary.simpleMessage(
+      "ノード一覧とプラン情報を読み込んでいます",
+    ),
+    "onboardingInternetVerified": MessageLookupByLibrary.simpleMessage(
+      "インターネットアクセス · 確認済み",
+    ),
+    "onboardingNoSubscription": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションのアドレスがまだありませんか？ユーザーパネルを開いてコピー ›",
+    ),
+    "onboardingNodeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "現在のノードが一時的に利用できない可能性があります。ノードを切り替えると解決することがほとんどです。",
+    ),
+    "onboardingNotNow": MessageLookupByLibrary.simpleMessage("今はしない"),
+    "onboardingOpenPanel": MessageLookupByLibrary.simpleMessage("ユーザーパネルを開く"),
+    "onboardingPasteAgain": MessageLookupByLibrary.simpleMessage("もう一度貼り付ける"),
+    "onboardingPasteFromClipboard": MessageLookupByLibrary.simpleMessage(
+      "クリップボードからサブスクリプションリンクを貼り付け",
+    ),
+    "onboardingPrivacyNote": MessageLookupByLibrary.simpleMessage(
+      "クリップボードを読み取るのはボタンを押したときだけです。サブスクリプションリンクはこの端末にのみ保存されます。",
+    ),
+    "onboardingRemainingTraffic": MessageLookupByLibrary.simpleMessage("残り通信量"),
+    "onboardingScanQr": MessageLookupByLibrary.simpleMessage(
+      "パネルの QR コードをスキャン",
+    ),
+    "onboardingSwitchNode": MessageLookupByLibrary.simpleMessage("ノードを切り替える"),
+    "onboardingTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションをインポートして開始",
+    ),
+    "onboardingViewStatus": MessageLookupByLibrary.simpleMessage("予備アドレスを見る"),
+    "onboardingVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "次に、Tianji Cloud が VPN 接続を作成してよいかシステムが確認します。「OK」を押してください。許可が必要なのは今回だけです。",
+    ),
+    "onboardingVpnTitle": MessageLookupByLibrary.simpleMessage("システムの許可が必要です"),
     "onlyStatisticsProxy": MessageLookupByLibrary.simpleMessage(
       "プロキシトラフィックのみ集計",
     ),
@@ -1306,8 +1407,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "port": MessageLookupByLibrary.simpleMessage("ポート"),
     "portConflictTip": MessageLookupByLibrary.simpleMessage("別のポートを入力してください"),
     "portHopping": MessageLookupByLibrary.simpleMessage("ポートホッピング"),
-    "portTip": m75,
-    "portValue": m76,
+    "portTip": m76,
+    "portValue": m77,
     "ports": MessageLookupByLibrary.simpleMessage("ポート"),
     "preSharedKey": MessageLookupByLibrary.simpleMessage("事前共有鍵"),
     "preferred": MessageLookupByLibrary.simpleMessage("優先"),
@@ -1323,8 +1424,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("有効な間隔を入力してください"),
     "profileAutoUpdateIntervalNullValidationDesc":
         MessageLookupByLibrary.simpleMessage("自動更新間隔を入力してください"),
-    "profileDaysLeft": m77,
-    "profileExpiresIn": m78,
+    "profileDaysLeft": m78,
+    "profileExpiresIn": m79,
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "プロファイルが変更されています。自動更新を無効にしますか？",
     ),
@@ -1337,7 +1438,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "このプロファイルにのみ適用され、ネットワーク設定の TUN 上書き項目より優先されます。",
     ),
-    "profileUpdatedAt": m79,
+    "profileUpdatedAt": m80,
     "profileUrlInvalidValidationDesc": MessageLookupByLibrary.simpleMessage(
       "有効なプロファイルURLを入力してください",
     ),
@@ -1350,22 +1451,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocol": MessageLookupByLibrary.simpleMessage("プロトコル"),
     "protocolParam": MessageLookupByLibrary.simpleMessage("プロトコルパラメータ"),
     "protocolVersion": MessageLookupByLibrary.simpleMessage("プロトコルバージョン"),
-    "providerInUse": m80,
+    "providerInUse": m81,
     "providerUrlTip": MessageLookupByLibrary.simpleMessage("リモートリソースのみ対応しています"),
     "providers": MessageLookupByLibrary.simpleMessage("外部リソース"),
     "proxies": MessageLookupByLibrary.simpleMessage("プロキシ"),
-    "proxiesCount": m81,
-    "proxiesProfileLabel": m82,
-    "proxiesRemovedTip": m83,
-    "proxiesReplacedTip": m84,
+    "proxiesCount": m82,
+    "proxiesProfileLabel": m83,
+    "proxiesRemovedTip": m84,
+    "proxiesReplacedTip": m85,
     "proxyChains": MessageLookupByLibrary.simpleMessage("プロキシチェーン"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("プロキシグループ"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage("プロキシグループが空です"),
-    "proxyGroupInUse": m85,
+    "proxyGroupInUse": m86,
     "proxyGroupsAfterStart": MessageLookupByLibrary.simpleMessage(
       "起動するとここにグループが表示されます",
     ),
-    "proxyGroupsCount": m86,
+    "proxyGroupsCount": m87,
     "proxyProviders": MessageLookupByLibrary.simpleMessage("プロキシプロバイダー"),
     "proxyServerNameserverDesc": MessageLookupByLibrary.simpleMessage(
       "プロキシサーバーのドメイン名の解決にのみ使います。",
@@ -1583,12 +1684,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "ルールは対応する種類で始めてください。例：DOMAIN,example.com,DIRECT",
     ),
     "rules": MessageLookupByLibrary.simpleMessage("ルール"),
-    "rulesCount": m87,
+    "rulesCount": m88,
     "runTime": MessageLookupByLibrary.simpleMessage("稼働時間"),
     "running": MessageLookupByLibrary.simpleMessage("実行中"),
     "runtimeConfig": MessageLookupByLibrary.simpleMessage("ランタイム設定"),
     "safeMode": MessageLookupByLibrary.simpleMessage("セーフモード"),
-    "safeModeAppTitle": m88,
+    "safeModeAppTitle": m89,
     "saturation": MessageLookupByLibrary.simpleMessage("彩度"),
     "save": MessageLookupByLibrary.simpleMessage("保存"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("変更を保存しますか？"),
@@ -1599,9 +1700,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "scrollToSelected": MessageLookupByLibrary.simpleMessage("選択項目へスクロール"),
     "search": MessageLookupByLibrary.simpleMessage("検索"),
     "seconds": MessageLookupByLibrary.simpleMessage("秒"),
-    "secondsCount": m89,
+    "secondsCount": m90,
     "secretKey": MessageLookupByLibrary.simpleMessage("キー"),
-    "sectionsInEffect": m90,
+    "sectionsInEffect": m91,
     "select": MessageLookupByLibrary.simpleMessage("選択"),
     "selectAll": MessageLookupByLibrary.simpleMessage("すべて選択"),
     "selectRuleSet": MessageLookupByLibrary.simpleMessage("ルールセットを選択してください"),
@@ -1632,7 +1733,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "スマートフォンのカメラでコードをスキャンし、開いたページにリンクを貼り付けてください。両方のデバイスを同じネットワークに接続する必要があります。",
     ),
     "server": MessageLookupByLibrary.simpleMessage("サーバー"),
-    "serviceAbnormalCount": m91,
+    "serviceAbnormalCount": m92,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage("すべて利用可能"),
     "serviceAvailable": MessageLookupByLibrary.simpleMessage("利用可能"),
     "serviceBlocked": MessageLookupByLibrary.simpleMessage("ブロック済み"),
@@ -1654,8 +1755,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage("対象外の地域"),
     "settingEntries": MessageLookupByLibrary.simpleMessage("設定項目"),
     "settings": MessageLookupByLibrary.simpleMessage("設定"),
-    "settingsCount": m92,
-    "shareLinkUnreadable": m93,
+    "settingsCount": m93,
+    "shareLinkUnreadable": m94,
     "shareLinksInvalid": MessageLookupByLibrary.simpleMessage(
       "リンクからプロキシを読み取れませんでした",
     ),
@@ -1675,7 +1776,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "singleShareLinkOnly": MessageLookupByLibrary.simpleMessage(
       "ここにはリンクを 1 つだけ入力してください。複数の場合は一覧のクイック編集を使ってください",
     ),
-    "singleValueTip": m94,
+    "singleValueTip": m95,
     "size": MessageLookupByLibrary.simpleMessage("サイズ"),
     "skipCertVerify": MessageLookupByLibrary.simpleMessage("証明書の検証をスキップ"),
     "skipDomain": MessageLookupByLibrary.simpleMessage("スキップするドメイン"),
@@ -1768,11 +1869,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalUpload": MessageLookupByLibrary.simpleMessage("アップロード量"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxyポート"),
     "traffic": MessageLookupByLibrary.simpleMessage("通信量"),
-    "trafficPeak": m95,
-    "trafficTotal": m96,
+    "trafficPeak": m96,
+    "trafficTotal": m97,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("トラフィック統計"),
     "transport": MessageLookupByLibrary.simpleMessage("トランスポート"),
-    "transportHeaders": m97,
+    "transportHeaders": m98,
     "trustCertificate": MessageLookupByLibrary.simpleMessage("証明書を信頼"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(
@@ -1825,14 +1926,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBandwidth": MessageLookupByLibrary.simpleMessage("アップロード帯域幅"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("URL 書き換え"),
-    "urlTip": m98,
+    "urlTip": m99,
     "useHosts": MessageLookupByLibrary.simpleMessage("Hostsを使用"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("システムのHostsを使用"),
     "usedShort": MessageLookupByLibrary.simpleMessage("使用済み"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("使用済みトラフィック"),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("ユーザー名"),
-    "validUntil": m99,
+    "validUntil": m100,
     "value": MessageLookupByLibrary.simpleMessage("値"),
     "view": MessageLookupByLibrary.simpleMessage("表示"),
     "viewAll": MessageLookupByLibrary.simpleMessage("すべて表示"),
@@ -1847,8 +1948,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "システムに書き込むを有効にするとシステムクロックも設定します。Android では無視されます。",
     ),
-    "yearsAgo": m100,
-    "yearsAgoShort": m101,
+    "yearsAgo": m101,
+    "yearsAgoShort": m102,
     "yes": MessageLookupByLibrary.simpleMessage("はい"),
     "zhCN": MessageLookupByLibrary.simpleMessage("簡体字中国語"),
   };

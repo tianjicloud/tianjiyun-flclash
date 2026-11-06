@@ -1,0 +1,722 @@
+import 'dart:math' as math;
+
+import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/service_probe.dart';
+import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/pages/scan.dart';
+import 'package:fl_clash/providers/outbound_ip.dart';
+import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/providers/routed_probe.dart';
+import 'package:fl_clash/state.dart';
+import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/probe_start_hold.dart';
+import 'package:fl_clash/widgets/widgets.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'plan_card.dart';
+
+class OnboardingView extends ConsumerWidget {
+  const OnboardingView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(onboardingProvider);
+    return Surface(
+      color: SurfaceLevel.page.colorOf(context.colorScheme),
+      child: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: math.max(0, constraints.maxHeight - 48),
+                ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: switch (state) {
+                      OnboardingWelcome() ||
+                      OnboardingDone() => const _WelcomeView(),
+                      OnboardingConfirm(:final url) => _ConfirmView(url: url),
+                      OnboardingImporting() => const _ProgressView(
+                        titleKey: _ProgressTitle.importing,
+                      ),
+                      OnboardingImported(:final profileId, :final proxyCount) =>
+                        _ImportedView(
+                          profileId: profileId,
+                          proxyCount: proxyCount,
+                        ),
+                      OnboardingFailed(:final failure, :final url) =>
+                        _FailedView(failure: failure, url: url),
+                      OnboardingConnecting() ||
+                      OnboardingConnected() => const _ConnectView(),
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> _importUrl(WidgetRef ref, String url) async {
+  final onboarding = ref.read(onboardingProvider.notifier);
+  onboarding.importing();
+  final profiles = ref.read(profilesActionProvider.notifier);
+  Profile? saved;
+  try {
+    saved = await profiles.importForOnboarding(url);
+    final config = await ref.read(coreHandlerProvider).readConfig(saved.id);
+    final proxies = config['proxies'];
+    final proxyCount = proxies is List ? proxies.length : 0;
+    if (proxyCount == 0) {
+      await profiles.deleteProfile(saved.id);
+      onboarding.failed(ImportFailure.empty, url: url);
+      return;
+    }
+    onboarding.imported(profileId: saved.id, proxyCount: proxyCount);
+  } catch (error) {
+    // A profile saved before the failure would surface as a stray entry once
+    // the user leaves the flow.
+    if (saved != null) {
+      await profiles.deleteProfile(saved.id);
+    }
+    onboarding.failed(classifyImportError(error), url: url);
+  }
+}
+
+void _finishTo(WidgetRef ref, PageLabel page) {
+  ref.read(onboardingProvider.notifier).finish();
+  ref.read(currentPageLabelProvider.notifier).toPage(page);
+}
+
+class _WelcomeView extends ConsumerWidget {
+  const _WelcomeView();
+
+  Future<void> _paste(BuildContext context, WidgetRef ref) async {
+    final emptyMessage = context.appLocalizations.onboardingClipboardEmpty;
+    String? text;
+    try {
+      text = (await Clipboard.getData('text/plain'))?.text?.trim();
+    } catch (_) {
+      text = null;
+    }
+    if (text == null || text.isEmpty) {
+      dialogs.showBanner(emptyMessage);
+      return;
+    }
+    final url = subscriptionUrlFromText(text);
+    if (url == null) {
+      ref
+          .read(onboardingProvider.notifier)
+          .failed(ImportFailure.notSubscription);
+      return;
+    }
+    ref.read(onboardingProvider.notifier).confirm(url);
+  }
+
+  Future<void> _scan(BuildContext context, WidgetRef ref) async {
+    String? text;
+    if (system.isDesktop) {
+      text = await globalState.safeRun<String?>(picker.pickerConfigQRCode);
+    } else {
+      text = await BaseNavigator.push<String>(context, const ScanPage());
+      if (text != null && context.mounted) {
+        await whenRouteUncovered(context);
+      }
+    }
+    if (text == null) return;
+    final url = subscriptionUrlFromText(text);
+    if (url == null) {
+      ref
+          .read(onboardingProvider.notifier)
+          .failed(ImportFailure.notSubscription);
+      return;
+    }
+    ref.read(onboardingProvider.notifier).confirm(url);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: DecoratedBox(
+            decoration: ShapeDecoration(
+              color: SurfaceLevel.card.colorOf(colorScheme),
+              shape: AppShape.all(AppCorner.fit(96)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Image.asset(
+                'assets/images/icon.png',
+                width: 68,
+                height: 68,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 28),
+        Text(
+          appLocalizations.onboardingTitle,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.title1.of(context, emphasized: true),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          appLocalizations.onboardingDescription,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.body
+              .of(context)
+              .copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 32),
+        FilledButton(
+          style: const ButtonStyle(minimumSize: Size.fromHeight(52)),
+          onPressed: () => _paste(context, ref),
+          child: Text(appLocalizations.onboardingPasteFromClipboard),
+        ),
+        const SizedBox(height: 12),
+        OutlinedButton.icon(
+          style: const ButtonStyle(minimumSize: Size.fromHeight(52)),
+          onPressed: () => _scan(context, ref),
+          icon: const GlyphIcon(AppGlyphs.qrCode),
+          label: Text(appLocalizations.onboardingScanQr),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          appLocalizations.onboardingPrivacyNote,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.footnote
+              .of(context)
+              .copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 16),
+        TextButton(
+          onPressed: () => dialogs.openUrl(userPanelUrl),
+          child: Text(appLocalizations.onboardingNoSubscription),
+        ),
+      ],
+    );
+  }
+}
+
+class _ConfirmView extends ConsumerWidget {
+  const _ConfirmView({required this.url});
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          appLocalizations.onboardingConfirmTitle,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.title2.of(context, emphasized: true),
+        ),
+        const SizedBox(height: 20),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: ShapeDecoration(
+            color: SurfaceLevel.inset.colorOf(colorScheme),
+            shape: AppShape.md,
+          ),
+          child: Text(
+            maskSubscriptionUrl(url),
+            textAlign: TextAlign.center,
+            style: AppTextStyle.callout
+                .of(context)
+                .copyWith(color: colorScheme.onSurface),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          appLocalizations.onboardingConfirmNote,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.footnote
+              .of(context)
+              .copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 32),
+        FilledButton(
+          style: const ButtonStyle(minimumSize: Size.fromHeight(52)),
+          onPressed: () => _importUrl(ref, url),
+          child: Text(appLocalizations.import),
+        ),
+        const SizedBox(height: 12),
+        TextButton(
+          onPressed: () => ref.read(onboardingProvider.notifier).welcome(),
+          child: Text(appLocalizations.cancel),
+        ),
+      ],
+    );
+  }
+}
+
+enum _ProgressTitle { importing, connecting, checking }
+
+class _ProgressView extends StatelessWidget {
+  const _ProgressView({required this.titleKey});
+
+  final _ProgressTitle titleKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final (title, description) = switch (titleKey) {
+      _ProgressTitle.importing => (
+        appLocalizations.onboardingImporting,
+        appLocalizations.onboardingImportingDescription,
+      ),
+      _ProgressTitle.connecting => (
+        appLocalizations.onboardingConnecting,
+        appLocalizations.onboardingConnectingDescription,
+      ),
+      _ProgressTitle.checking => (
+        appLocalizations.onboardingCheckingInternet,
+        appLocalizations.onboardingConnectingDescription,
+      ),
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Center(child: ActivityIndicator(size: 44)),
+        const SizedBox(height: 28),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.title2.of(context, emphasized: true),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          description,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.body
+              .of(context)
+              .copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+}
+
+class _ImportedView extends ConsumerWidget {
+  const _ImportedView({required this.profileId, required this.proxyCount});
+
+  final int profileId;
+  final int proxyCount;
+
+  Future<void> _connect(BuildContext context, WidgetRef ref) async {
+    if (system.isAndroid) {
+      final proceed = await showSheet<bool>(
+        context: context,
+        builder: (_) => const _VpnAuthorizationSheet(),
+      );
+      if (proceed != true) return;
+    }
+    ref.read(onboardingProvider.notifier).connecting();
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final profile = ref.watch(
+      profilesProvider.select((profiles) => profiles.getProfile(profileId)),
+    );
+    final colorScheme = context.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          appLocalizations.onboardingImported(proxyCount),
+          textAlign: TextAlign.center,
+          style: AppTextStyle.title2.of(context, emphasized: true),
+        ),
+        const SizedBox(height: 20),
+        OnboardingPlanCard(info: profile?.subscriptionInfo),
+        const SizedBox(height: 32),
+        FilledButton(
+          style: const ButtonStyle(minimumSize: Size.fromHeight(52)),
+          onPressed: () => _connect(context, ref),
+          child: Text(appLocalizations.onboardingConnect),
+        ),
+        const SizedBox(height: 12),
+        TextButton(
+          onPressed: () => _finishTo(ref, PageLabel.dashboard),
+          child: Text(appLocalizations.onboardingNotNow),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          appLocalizations.onboardingPrivacyNote,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.footnote
+              .of(context)
+              .copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+}
+
+class _VpnAuthorizationSheet extends StatelessWidget {
+  const _VpnAuthorizationSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (context.isMobileView) const SheetDragHandle(),
+            const SizedBox(height: 20),
+            Text(
+              appLocalizations.onboardingVpnTitle,
+              textAlign: TextAlign.center,
+              style: AppTextStyle.title3.of(context, emphasized: true),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              appLocalizations.onboardingVpnDescription,
+              textAlign: TextAlign.center,
+              style: AppTextStyle.body
+                  .of(context)
+                  .copyWith(color: colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 28),
+            FilledButton(
+              style: const ButtonStyle(minimumSize: Size.fromHeight(48)),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(appLocalizations.onboardingContinue),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(appLocalizations.onboardingNotNow),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FailedView extends ConsumerWidget {
+  const _FailedView({required this.failure, this.url});
+
+  final ImportFailure failure;
+  final String? url;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final (title, description) = switch (failure) {
+      ImportFailure.expired => (
+        appLocalizations.onboardingFailureExpiredTitle,
+        appLocalizations.onboardingFailureExpiredDescription,
+      ),
+      ImportFailure.unreachable => (
+        appLocalizations.onboardingFailureUnreachableTitle,
+        appLocalizations.onboardingFailureUnreachableDescription,
+      ),
+      ImportFailure.empty => (
+        appLocalizations.onboardingFailureEmptyTitle,
+        appLocalizations.onboardingFailureEmptyDescription,
+      ),
+      ImportFailure.notSubscription => (
+        appLocalizations.onboardingFailureNotSubscriptionTitle,
+        appLocalizations.onboardingFailureNotSubscriptionDescription,
+      ),
+      ImportFailure.unknown => (
+        appLocalizations.onboardingFailureUnknownTitle,
+        appLocalizations.onboardingFailureUnknownDescription,
+      ),
+    };
+    void retry() {
+      final url = this.url;
+      if (url == null) {
+        ref.read(onboardingProvider.notifier).welcome();
+      } else {
+        _importUrl(ref, url);
+      }
+    }
+
+    void pasteAgain() => ref.read(onboardingProvider.notifier).welcome();
+
+    final (primaryLabel, primaryAction) = switch (failure) {
+      ImportFailure.expired ||
+      ImportFailure.empty ||
+      ImportFailure.notSubscription => (
+        appLocalizations.onboardingOpenPanel,
+        () => dialogs.openUrl(userPanelUrl),
+      ),
+      ImportFailure.unreachable => (
+        appLocalizations.onboardingViewStatus,
+        () => dialogs.openUrl(statusPageUrl),
+      ),
+      ImportFailure.unknown => (appLocalizations.retry, retry),
+    };
+    final (secondaryLabel, secondaryAction) = switch (failure) {
+      ImportFailure.expired || ImportFailure.notSubscription => (
+        appLocalizations.onboardingPasteAgain,
+        pasteAgain,
+      ),
+      ImportFailure.unreachable ||
+      ImportFailure.empty => (appLocalizations.retry, retry),
+      ImportFailure.unknown => (
+        appLocalizations.onboardingPasteAgain,
+        pasteAgain,
+      ),
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: GlyphIcon(
+            AppGlyphs.warning,
+            size: 56,
+            color: colorScheme.error,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.title2.of(context, emphasized: true),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          description,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.body
+              .of(context)
+              .copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 32),
+        FilledButton(
+          style: const ButtonStyle(minimumSize: Size.fromHeight(52)),
+          onPressed: primaryAction,
+          child: Text(primaryLabel),
+        ),
+        const SizedBox(height: 12),
+        TextButton(onPressed: secondaryAction, child: Text(secondaryLabel)),
+      ],
+    );
+  }
+}
+
+class _ConnectView extends ConsumerStatefulWidget {
+  const _ConnectView();
+
+  @override
+  ConsumerState<_ConnectView> createState() => _ConnectViewState();
+}
+
+class _ConnectViewState extends ConsumerState<_ConnectView>
+    with ProbeStartHold<_ConnectView> {
+  late final OutboundIpProbe _probe;
+  var _started = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _probe = ref.read(outboundIpProbeProvider.notifier)..watch(routedOutbound);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && ref.read(onboardingProvider) is OnboardingConnecting) {
+        _start();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _probe.unwatch(routedOutbound);
+    super.dispose();
+  }
+
+  Future<void> _start() async {
+    if (_started) return;
+    _started = true;
+    final onboarding = ref.read(onboardingProvider.notifier);
+    try {
+      final applied = await ref
+          .read(setupActionProvider.notifier)
+          .setRunning(true);
+      if (!mounted) return;
+      if (applied) {
+        onboarding.connected();
+      } else {
+        onboarding.connectFailed();
+        dialogs.showBanner(
+          context.appLocalizations.onboardingConnectFailed,
+          level: BannerLevel.error,
+        );
+      }
+    } catch (error) {
+      if (!mounted) return;
+      onboarding.connectFailed();
+      dialogs.showBanner(
+        userFacingErrorMessage(error, currentAppLocalizations),
+        level: BannerLevel.error,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(onboardingProvider);
+    final entry = ref.watch(
+      outboundIpProbeProvider.select(
+        (probes) => probes.entryOf(routedOutbound),
+      ),
+    );
+    if (state is OnboardingConnecting) {
+      return const _ProgressView(titleKey: _ProgressTitle.connecting);
+    }
+    final ipInfo = entry.value;
+    final phase = shownPhase(entry);
+    if (phase == ProbePhase.failed && ipInfo == null) {
+      return const _ConnectFailedView();
+    }
+    if (phase == ProbePhase.fresh && ipInfo != null) {
+      return _ConnectSuccessView(ipInfo: ipInfo);
+    }
+    return const _ProgressView(titleKey: _ProgressTitle.checking);
+  }
+}
+
+class _ConnectSuccessView extends ConsumerWidget {
+  const _ConnectSuccessView({required this.ipInfo});
+
+  final IpInfo ipInfo;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final countryCode = ipInfo.countryCode.toUpperCase();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: GlyphIcon(
+            AppGlyphs.checkCircle,
+            size: 60,
+            color: colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          appLocalizations.onboardingConnected,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.title2.of(context, emphasized: true),
+        ),
+        if (countryCode.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: ShapeDecoration(
+              color: SurfaceLevel.card.colorOf(colorScheme),
+              shape: AppShape.md,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    appLocalizations.onboardingExit,
+                    style: AppTextStyle.subheadline
+                        .of(context)
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ),
+                Text(
+                  '${countryCode.countryFlagEmoji} $countryCode',
+                  style: AppTextStyle.subheadline
+                      .of(context, emphasized: true)
+                      .copyWith(color: colorScheme.onSurface),
+                ),
+              ],
+            ),
+          ),
+        ],
+        const SizedBox(height: 16),
+        Text(
+          appLocalizations.onboardingInternetVerified,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.body
+              .of(context)
+              .copyWith(color: colorScheme.primary),
+        ),
+        const SizedBox(height: 32),
+        FilledButton(
+          style: const ButtonStyle(minimumSize: Size.fromHeight(52)),
+          onPressed: () => _finishTo(ref, PageLabel.dashboard),
+          child: Text(appLocalizations.done),
+        ),
+      ],
+    );
+  }
+}
+
+class _ConnectFailedView extends ConsumerWidget {
+  const _ConnectFailedView();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: GlyphIcon(
+            AppGlyphs.warning,
+            size: 60,
+            color: colorScheme.error,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          appLocalizations.onboardingConnectedNoInternet,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.title2.of(context, emphasized: true),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          appLocalizations.onboardingNodeUnavailable,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.body
+              .of(context)
+              .copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 32),
+        FilledButton(
+          style: const ButtonStyle(minimumSize: Size.fromHeight(52)),
+          onPressed: () => _finishTo(ref, PageLabel.proxies),
+          child: Text(appLocalizations.onboardingSwitchNode),
+        ),
+      ],
+    );
+  }
+}

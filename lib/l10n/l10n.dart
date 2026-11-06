@@ -9072,6 +9072,421 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Import a subscription to get started`
+  String get onboardingTitle {
+    return Intl.message(
+      'Import a subscription to get started',
+      name: 'onboardingTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paste or scan your subscription link from the panel, then connect in a few steps.`
+  String get onboardingDescription {
+    return Intl.message(
+      'Paste or scan your subscription link from the panel, then connect in a few steps.',
+      name: 'onboardingDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paste subscription link from clipboard`
+  String get onboardingPasteFromClipboard {
+    return Intl.message(
+      'Paste subscription link from clipboard',
+      name: 'onboardingPasteFromClipboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan the QR code on your panel`
+  String get onboardingScanQr {
+    return Intl.message(
+      'Scan the QR code on your panel',
+      name: 'onboardingScanQr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The clipboard is read only when you tap the button. Your subscription link stays on this device.`
+  String get onboardingPrivacyNote {
+    return Intl.message(
+      'The clipboard is read only when you tap the button. Your subscription link stays on this device.',
+      name: 'onboardingPrivacyNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subscription address yet? Open your user panel to copy it ›`
+  String get onboardingNoSubscription {
+    return Intl.message(
+      'No subscription address yet? Open your user panel to copy it ›',
+      name: 'onboardingNoSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is nothing in the clipboard`
+  String get onboardingClipboardEmpty {
+    return Intl.message(
+      'There is nothing in the clipboard',
+      name: 'onboardingClipboardEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tianji Cloud subscription`
+  String get onboardingConfirmTitle {
+    return Intl.message(
+      'Tianji Cloud subscription',
+      name: 'onboardingConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The link contains your subscription credentials, so only part of it is shown.`
+  String get onboardingConfirmNote {
+    return Intl.message(
+      'The link contains your subscription credentials, so only part of it is shown.',
+      name: 'onboardingConfirmNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fetching subscription…`
+  String get onboardingImporting {
+    return Intl.message(
+      'Fetching subscription…',
+      name: 'onboardingImporting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reading the node list and plan details`
+  String get onboardingImportingDescription {
+    return Intl.message(
+      'Reading the node list and plan details',
+      name: 'onboardingImportingDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Imported · {count} nodes`
+  String onboardingImported(Object count) {
+    return Intl.message(
+      'Imported · $count nodes',
+      name: 'onboardingImported',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Remaining traffic`
+  String get onboardingRemainingTraffic {
+    return Intl.message(
+      'Remaining traffic',
+      name: 'onboardingRemainingTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expires`
+  String get onboardingExpireDate {
+    return Intl.message(
+      'Expires',
+      name: 'onboardingExpireDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect`
+  String get onboardingConnect {
+    return Intl.message(
+      'Connect',
+      name: 'onboardingConnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not now`
+  String get onboardingNotNow {
+    return Intl.message(
+      'Not now',
+      name: 'onboardingNotNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `One system permission needed`
+  String get onboardingVpnTitle {
+    return Intl.message(
+      'One system permission needed',
+      name: 'onboardingVpnTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The system will ask whether to allow Tianji Cloud to create a VPN connection. Tap “OK”. You only need to allow it once.`
+  String get onboardingVpnDescription {
+    return Intl.message(
+      'The system will ask whether to allow Tianji Cloud to create a VPN connection. Tap “OK”. You only need to allow it once.',
+      name: 'onboardingVpnDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue`
+  String get onboardingContinue {
+    return Intl.message(
+      'Continue',
+      name: 'onboardingContinue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connecting…`
+  String get onboardingConnecting {
+    return Intl.message(
+      'Connecting…',
+      name: 'onboardingConnecting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Once connected, the app will make one real request to the internet to confirm.`
+  String get onboardingConnectingDescription {
+    return Intl.message(
+      'Once connected, the app will make one real request to the internet to confirm.',
+      name: 'onboardingConnectingDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected`
+  String get onboardingConnected {
+    return Intl.message(
+      'Connected',
+      name: 'onboardingConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit`
+  String get onboardingExit {
+    return Intl.message('Exit', name: 'onboardingExit', desc: '', args: []);
+  }
+
+  /// `Internet access · verified`
+  String get onboardingInternetVerified {
+    return Intl.message(
+      'Internet access · verified',
+      name: 'onboardingInternetVerified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected, but the internet is unreachable`
+  String get onboardingConnectedNoInternet {
+    return Intl.message(
+      'Connected, but the internet is unreachable',
+      name: 'onboardingConnectedNoInternet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The current node may be temporarily unavailable. Switching nodes usually fixes this.`
+  String get onboardingNodeUnavailable {
+    return Intl.message(
+      'The current node may be temporarily unavailable. Switching nodes usually fixes this.',
+      name: 'onboardingNodeUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch node`
+  String get onboardingSwitchNode {
+    return Intl.message(
+      'Switch node',
+      name: 'onboardingSwitchNode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checking internet access…`
+  String get onboardingCheckingInternet {
+    return Intl.message(
+      'Checking internet access…',
+      name: 'onboardingCheckingInternet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open user panel`
+  String get onboardingOpenPanel {
+    return Intl.message(
+      'Open user panel',
+      name: 'onboardingOpenPanel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View backup address`
+  String get onboardingViewStatus {
+    return Intl.message(
+      'View backup address',
+      name: 'onboardingViewStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paste again`
+  String get onboardingPasteAgain {
+    return Intl.message(
+      'Paste again',
+      name: 'onboardingPasteAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription link expired`
+  String get onboardingFailureExpiredTitle {
+    return Intl.message(
+      'Subscription link expired',
+      name: 'onboardingFailureExpiredTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The subscription may have been reset in the panel. Copy the subscription address again from your user panel, then paste it here.`
+  String get onboardingFailureExpiredDescription {
+    return Intl.message(
+      'The subscription may have been reset in the panel. Copy the subscription address again from your user panel, then paste it here.',
+      name: 'onboardingFailureExpiredDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Can’t reach the subscription address`
+  String get onboardingFailureUnreachableTitle {
+    return Intl.message(
+      'Can’t reach the subscription address',
+      name: 'onboardingFailureUnreachableTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your current network may be blocking this domain. The status page has backup addresses, or try again later.`
+  String get onboardingFailureUnreachableDescription {
+    return Intl.message(
+      'Your current network may be blocking this domain. The status page has backup addresses, or try again later.',
+      name: 'onboardingFailureUnreachableDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No usable nodes in this subscription`
+  String get onboardingFailureEmptyTitle {
+    return Intl.message(
+      'No usable nodes in this subscription',
+      name: 'onboardingFailureEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The plan may have expired, or this month’s traffic is used up. Renew or reset your traffic, then tap “Retry”.`
+  String get onboardingFailureEmptyDescription {
+    return Intl.message(
+      'The plan may have expired, or this month’s traffic is used up. Renew or reset your traffic, then tap “Retry”.',
+      name: 'onboardingFailureEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is not a subscription link`
+  String get onboardingFailureNotSubscriptionTitle {
+    return Intl.message(
+      'This is not a subscription link',
+      name: 'onboardingFailureNotSubscriptionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap “Copy subscription address” in your user panel, then paste it here.`
+  String get onboardingFailureNotSubscriptionDescription {
+    return Intl.message(
+      'Tap “Copy subscription address” in your user panel, then paste it here.',
+      name: 'onboardingFailureNotSubscriptionDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import failed`
+  String get onboardingFailureUnknownTitle {
+    return Intl.message(
+      'Import failed',
+      name: 'onboardingFailureUnknownTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your network and try again.`
+  String get onboardingFailureUnknownDescription {
+    return Intl.message(
+      'Check your network and try again.',
+      name: 'onboardingFailureUnknownDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Couldn’t connect. Try again later.`
+  String get onboardingConnectFailed {
+    return Intl.message(
+      'Couldn’t connect. Try again later.',
+      name: 'onboardingConnectFailed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -400,6 +400,14 @@ class ProfilesAction extends _$ProfilesAction {
     );
   }
 
+  /// Downloads and selects a subscription without showing progress, errors or
+  /// the profile list, so the onboarding flow owns the whole interaction.
+  Future<Profile> importForOnboarding(String url) async {
+    final profile = await _download(Profile.normal(url: url));
+    putProfile(profile);
+    return profile;
+  }
+
   Future<Profile> _download(Profile profile) {
     return profile.update(
       validate: (path, key) => _core.validateProfile(path, key),

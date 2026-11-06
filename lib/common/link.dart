@@ -20,7 +20,7 @@ String? profileUrlFromQrCodes(Iterable<String?> values) {
     if (uri == null || !protocolSchemes.contains(uri.scheme)) {
       continue;
     }
-    final url = _installConfigUrl(uri);
+    final url = installConfigUrl(uri);
     if (url != null && url.isUrl) {
       return url;
     }
@@ -28,13 +28,32 @@ String? profileUrlFromQrCodes(Iterable<String?> values) {
   return null;
 }
 
-String? _installConfigUrl(Uri uri) {
+/// The URL an install-config link carries, or null for any other link.
+String? installConfigUrl(Uri uri) {
   if (uri.host != 'install-config') {
     return null;
   }
   final url = uri.queryParameters['url']?.trim();
   return url == null || url.isEmpty ? null : url;
 }
+
+/// A pasted subscription URL, or null when the text is neither one nor an
+/// install-config link to one.
+String? subscriptionUrlFromText(String text) {
+  final trimmed = text.trim();
+  if (trimmed.isEmpty) return null;
+  final uri = Uri.tryParse(trimmed);
+  if (uri == null) return null;
+  if (_isHttpUrl(uri)) return trimmed;
+  if (!protocolSchemes.contains(uri.scheme)) return null;
+  final url = installConfigUrl(uri);
+  if (url == null) return null;
+  final target = Uri.tryParse(url);
+  return target != null && _isHttpUrl(target) ? url : null;
+}
+
+bool _isHttpUrl(Uri uri) =>
+    (uri.scheme == 'http' || uri.scheme == 'https') && uri.host.isNotEmpty;
 
 class LinkManager {
   static LinkManager? _instance;
@@ -72,8 +91,10 @@ class LinkManager {
   }
 
   void _handle(Uri uri, Function(String url) installConfigCallBack) {
-    commonPrint.log('onAppLink: $uri');
-    final url = _installConfigUrl(uri);
+    // The query carries the subscription URL, a credential: log where it
+    // points, never the link itself.
+    commonPrint.log('onAppLink: ${uri.scheme}://${uri.host}');
+    final url = installConfigUrl(uri);
     if (url != null) {
       installConfigCallBack(url);
     }

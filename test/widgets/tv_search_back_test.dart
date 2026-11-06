@@ -20,7 +20,13 @@ void main() {
     tester,
   ) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        profilesProvider.overrideWithValue([
+          const Profile(id: 1, autoUpdateDuration: Duration.zero),
+        ]),
+      ],
+    );
     addTearDown(container.dispose);
     globalState.container = container;
 
@@ -84,6 +90,9 @@ void main() {
     var closeCount = 0;
     final container = ProviderContainer(
       overrides: [
+        profilesProvider.overrideWithValue([
+          const Profile(id: 1, autoUpdateDuration: Duration.zero),
+        ]),
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [

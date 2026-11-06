@@ -4,6 +4,7 @@ import 'package:fl_clash/manager/app_manager.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/onboarding/onboarding.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -22,6 +23,13 @@ class HomePage extends ConsumerWidget {
     // material an unpainted body shows black until the next frame lands.
     if (!hasViewSize) {
       return ColoredBox(color: SurfaceLevel.page.colorOf(context.colorScheme));
+    }
+    final hasProfiles = ref.watch(
+      profilesProvider.select((state) => state.isNotEmpty),
+    );
+    final onboarding = ref.watch(onboardingProvider);
+    if (!hasProfiles || onboarding.isInProgress) {
+      return const OnboardingView();
     }
     return HomeBackScopeContainer(
       child: AppSidebarContainer(

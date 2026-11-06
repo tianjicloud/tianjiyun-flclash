@@ -26,6 +26,10 @@ import '../helpers/host_scaffold.dart';
 
 Finder _glyph(Glyph glyph) => find.byGlyph(glyph);
 
+final _dashboardProfileOverride = profilesProvider.overrideWith(
+  () => _HomeTestProfiles([Profile.normal()]),
+);
+
 void main() {
   setUp(() {
     navigationPort = navigation;
@@ -42,6 +46,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -89,7 +94,7 @@ void main() {
   testWidgets('the frame before the view size is known paints the page', (
     tester,
   ) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(overrides: [_dashboardProfileOverride]);
     addTearDown(container.dispose);
     globalState.container = container;
 
@@ -120,6 +125,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
               value: [
@@ -236,6 +242,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -305,6 +312,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
               value: [
@@ -354,6 +362,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
               value: [
@@ -481,7 +490,9 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
-      final container = ProviderContainer();
+      final container = ProviderContainer(
+        overrides: [_dashboardProfileOverride],
+      );
       addTearDown(container.dispose);
       globalState.container = container;
       container.read(viewSizeProvider.notifier).value = const Size(1400, 1000);
@@ -536,6 +547,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
               value: [
@@ -667,6 +679,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -782,6 +795,7 @@ void main() {
     final profiles = item(AppGlyphs.profiles, PageLabel.profiles);
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWith(
           (ref) =>
               NavigationItemsState(value: ref.watch(_navigationItemsProvider)),
@@ -844,6 +858,7 @@ void main() {
     final tools = item(AppGlyphs.tools, PageLabel.tools);
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWith(
           (ref) =>
               NavigationItemsState(value: ref.watch(_navigationItemsProvider)),
@@ -903,6 +918,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -970,6 +986,7 @@ void main() {
     double? inset;
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -1028,6 +1045,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -1095,6 +1113,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
               value: [
@@ -1165,6 +1184,7 @@ void main() {
     final inits = <PageLabel>[];
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -1224,6 +1244,7 @@ void main() {
     var query = '';
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -1287,6 +1308,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -1345,6 +1367,7 @@ void main() {
     var query = '';
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -1416,6 +1439,7 @@ void main() {
     final results = <String?>[];
     final container = ProviderContainer(
       overrides: [
+        _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
@@ -1493,6 +1517,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
               value: [

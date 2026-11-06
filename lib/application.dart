@@ -88,6 +88,10 @@ class ApplicationState extends ConsumerState<Application> {
   void _initLink() {
     linkManager.initAppLinksListen((url) async {
       unawaited(window?.show());
+      if (ref.read(profilesProvider).isEmpty) {
+        ref.read(onboardingProvider.notifier).confirm(url);
+        return;
+      }
       final message = currentAppLocalizations.createProfileFromUrlTip(url);
       final parts = message.split(url);
       final res = await dialogs.showMessage(

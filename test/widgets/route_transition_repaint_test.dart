@@ -49,6 +49,9 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     final container = ProviderContainer(
       overrides: [
+        profilesProvider.overrideWithValue([
+          const Profile(id: 1, autoUpdateDuration: Duration.zero),
+        ]),
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
             value: [
