@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:"Noto Sans CJK SC","PingFang SC",sans-serif; }
+  body { width:1440px; height:950px; overflow:hidden; color:#EDF0FF;
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(124,77,255,.28), transparent 60%),
+      radial-gradient(700px 500px at -10% 110%, rgba(61,90,254,.22), transparent 60%),
+      linear-gradient(160deg, #0A0F2B 0%, #070B1F 55%, #05081A 100%);
+    position:relative; }
+  /* stars */
+  .stars { position:absolute; inset:0; background-image:
+    radial-gradient(1.5px 1.5px at 120px 80px, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px 1px at 340px 200px, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 620px 60px, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 900px 150px, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.5px 1.5px at 1180px 90px, rgba(255,255,255,.55), transparent),
+    radial-gradient(1px 1px at 1330px 300px, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 480px 420px, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 1080px 520px, rgba(255,255,255,.3), transparent); }
+  .app { position:relative; display:flex; height:100%; }
+
+  /* ---------- sidebar ---------- */
+  .sidebar { width:228px; padding:26px 16px 20px; display:flex; flex-direction:column;
+    background:rgba(255,255,255,.025); border-right:1px solid rgba(255,255,255,.06); }
+  .logo { display:flex; align-items:center; gap:12px; padding:2px 10px 26px; }
+  .logo-mark { width:42px; height:42px; border-radius:13px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#3D5AFE,#7C4DFF); box-shadow:0 8px 24px rgba(61,90,254,.45); font-size:22px; }
+  .logo-name { font-size:19px; font-weight:700; letter-spacing:2px; }
+  .logo-sub { font-size:9px; letter-spacing:3.5px; color:#7E88B3; margin-top:2px; }
+  .nav-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px;
+    color:#98A2C8; font-size:15px; margin-bottom:4px; }
+  .nav-item .ic { font-size:17px; width:22px; text-align:center; }
+  .nav-item.active { color:#fff; background:linear-gradient(90deg, rgba(61,90,254,.28), rgba(124,77,255,.14));
+    box-shadow:inset 0 0 0 1px rgba(124,140,255,.35); }
+  .nav-item.active .ic { color:#8FA2FF; }
+  .side-spacer { flex:1; }
+  .diag-card { border-radius:16px; padding:14px; background:rgba(61,90,254,.10);
+    box-shadow:inset 0 0 0 1px rgba(124,140,255,.22); }
+  .diag-card b { font-size:14px; display:block; margin-bottom:4px; }
+  .diag-card p { font-size:11.5px; color:#98A2C8; line-height:1.55; }
+  .diag-btn { margin-top:10px; text-align:center; font-size:13px; padding:8px 0; border-radius:10px;
+    background:linear-gradient(90deg,#3D5AFE,#6A5CFF); color:#fff; font-weight:600; }
+  .ver { text-align:center; font-size:11px; color:#5E6790; margin-top:14px; }
+
+  /* ---------- main ---------- */
+  .main { flex:1; padding:24px 30px 26px; display:flex; flex-direction:column; gap:16px; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; }
+  .topbar h1 { font-size:23px; font-weight:700; letter-spacing:1px; }
+  .top-right { display:flex; align-items:center; gap:12px; }
+  .pill { display:flex; align-items:center; gap:8px; font-size:13px; padding:8px 14px; border-radius:999px;
+    background:rgba(52,224,176,.10); color:#4CE8BC; box-shadow:inset 0 0 0 1px rgba(52,224,176,.30); }
+  .pill .dot { width:8px; height:8px; border-radius:50%; background:#34E0B0; box-shadow:0 0 10px #34E0B0; }
+  .pill.gray { background:rgba(255,255,255,.05); color:#98A2C8; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+
+  .panel { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.075); border-radius:22px; }
+
+  /* hero */
+  .hero { display:flex; padding:26px 30px; gap:20px; position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; right:-80px; top:-120px; width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, rgba(61,90,254,.30), transparent 65%); }
+  .hero-left { flex:1; position:relative; }
+  .status-row { display:flex; align-items:center; gap:10px; color:#98A2C8; font-size:14px; }
+  .status-row .live { color:#4CE8BC; font-weight:600; }
+  .ip { font-size:47px; font-weight:800; letter-spacing:.5px; margin:12px 0 14px; font-variant-numeric:tabular-nums; }
+  .chips { display:flex; gap:8px; }
+  .chip { font-size:12.5px; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,.06);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.09); color:#C6CDF2; }
+  .chip.good { background:rgba(52,224,176,.12); color:#4CE8BC; box-shadow:inset 0 0 0 1px rgba(52,224,176,.30); }
+  .chip.home { background:rgba(124,77,255,.14); color:#B79CFF; box-shadow:inset 0 0 0 1px rgba(124,77,255,.35); }
+  .hero-meta { display:flex; gap:34px; margin-top:22px; }
+  .meta label { display:block; font-size:11.5px; color:#7E88B3; margin-bottom:5px; letter-spacing:1px; }
+  .meta b { font-size:16.5px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .meta b .u { font-size:12px; color:#98A2C8; font-weight:400; }
+  .hero-right { width:230px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
+  .orbit { width:172px; height:172px; border-radius:50%; position:relative;
+    background:radial-gradient(circle at 35% 30%, #5B78FF, #3D5AFE 45%, #2A3FBF 100%);
+    box-shadow:0 0 0 10px rgba(61,90,254,.12), 0 0 60px rgba(61,90,254,.55), inset 0 -14px 30px rgba(10,10,60,.45);
+    display:flex; align-items:center; justify-content:center; }
+  .orbit::before { content:""; position:absolute; inset:-24px; border-radius:50%;
+    border:1.5px dashed rgba(124,140,255,.35); }
+  .orbit::after { content:""; position:absolute; inset:-24px; border-radius:50%;
+    background:radial-gradient(4px 4px at 88% 30%, #9DB1FF, transparent); }
+  .orbit .power { font-size:56px; color:#fff; text-shadow:0 2px 14px rgba(0,0,40,.4); line-height:1; }
+  .orbit-label { margin-top:34px; font-size:14px; color:#C6CDF2; }
+  .orbit-label b { color:#4CE8BC; }
+
+  /* scene bar */
+  .scene-bar { display:flex; align-items:center; padding:14px 18px; gap:18px; }
+  .scene-label { font-size:13px; color:#7E88B3; letter-spacing:1px; white-space:nowrap; }
+  .seg { display:flex; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.07); border-radius:14px; padding:4px; gap:4px; }
+  .seg div { padding:9px 26px; border-radius:11px; font-size:14.5px; color:#98A2C8; }
+  .seg div.on { color:#fff; font-weight:600; background:linear-gradient(90deg,#3D5AFE,#6A5CFF);
+    box-shadow:0 6px 18px rgba(61,90,254,.40); }
+  .scene-desc { font-size:12.5px; color:#7E88B3; flex:1; line-height:1.5; }
+  .mode-switch { display:flex; align-items:center; gap:10px; font-size:13.5px; color:#98A2C8; white-space:nowrap; }
+  .mode-switch b { color:#fff; }
+  .seg.small div { padding:7px 16px; font-size:13px; }
+
+  /* grid */
+  .grid { display:grid; grid-template-columns:1.55fr 1fr 1fr; gap:16px; flex:1; }
+  .card { padding:20px 22px; display:flex; flex-direction:column; }
+  .card-head { display:flex; align-items:center; gap:9px; font-size:14.5px; font-weight:600; margin-bottom:14px; }
+  .card-head .tag { margin-left:auto; }
+  .tag { font-size:11.5px; padding:4px 10px; border-radius:999px; background:rgba(52,224,176,.12); color:#4CE8BC; }
+  .home-card { background:linear-gradient(160deg, rgba(124,77,255,.13), rgba(61,90,254,.05) 55%, rgba(255,255,255,.03));
+    border:1px solid rgba(140,120,255,.35); border-radius:22px; }
+  .home-name { font-size:27px; font-weight:800; margin-bottom:6px; }
+  .home-sub { font-size:13px; color:#B9C1E4; line-height:1.6; }
+  .home-exit { display:flex; gap:26px; margin:16px 0 18px; }
+  .home-btns { display:flex; gap:12px; margin-top:auto; }
+  .btn { padding:11px 24px; border-radius:12px; font-size:14px; font-weight:600;
+    background:linear-gradient(90deg,#3D5AFE,#6A5CFF); box-shadow:0 8px 20px rgba(61,90,254,.35); }
+  .btn.ghost { background:rgba(255,255,255,.06); box-shadow:inset 0 0 0 1px rgba(255,255,255,.12); color:#C6CDF2; font-weight:500; }
+  .ring-wrap { display:flex; align-items:center; gap:18px; }
+  .ring { width:104px; height:104px; border-radius:50%; flex:none;
+    background:conic-gradient(#5B78FF 0 5%, rgba(255,255,255,.08) 5% 100%);
+    display:flex; align-items:center; justify-content:center; }
+  .ring-in { width:82px; height:82px; border-radius:50%; background:#0C1130; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; }
+  .ring-in b { font-size:21px; } .ring-in span { font-size:10.5px; color:#7E88B3; }
+  .stat-rows { flex:1; }
+  .stat-row { display:flex; justify-content:space-between; font-size:13px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+  .stat-row:last-child { border-bottom:none; }
+  .stat-row span { color:#98A2C8; } .stat-row b { font-variant-numeric:tabular-nums; }
+  .sub-name { font-size:17px; font-weight:700; }
+  .sub-meta { font-size:12.5px; color:#98A2C8; margin:6px 0 14px; }
+  .bar { height:8px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
+  .bar i { display:block; height:100%; width:82%; border-radius:99px; background:linear-gradient(90deg,#3D5AFE,#9D6BFF); }
+  .sub-foot { display:flex; justify-content:space-between; margin-top:10px; font-size:12.5px; color:#98A2C8; }
+  .sub-foot b { color:#FFC24D; font-size:13.5px; }
+
+  /* bottom toggles */
+  .toggles { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .tog { display:flex; align-items:center; padding:16px 20px; gap:13px; }
+  .tog .tic { width:40px; height:40px; border-radius:12px; background:rgba(61,90,254,.16); display:flex;
+    align-items:center; justify-content:center; font-size:18px; }
+  .tog b { font-size:15px; display:block; } .tog span { font-size:12px; color:#7E88B3; }
+  .switch { margin-left:auto; width:50px; height:29px; border-radius:99px; background:linear-gradient(90deg,#3D5AFE,#6A5CFF); position:relative; flex:none; }
+  .switch::after { content:""; position:absolute; right:3px; top:3px; width:23px; height:23px; border-radius:50%; background:#fff; }
+  .tog-link { margin-left:auto; color:#8FA2FF; font-size:20px; }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="app">
+  <!-- sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">☁</div>
+      <div><div class="logo-name">天机云</div><div class="logo-sub">TIANJI CLOUD</div></div>
+    </div>
+    <div class="nav-item active"><span class="ic">▦</span>仪表盘</div>
+    <div class="nav-item"><span class="ic">◎</span>代理</div>
+    <div class="nav-item"><span class="ic">▤</span>配置</div>
+    <div class="nav-item"><span class="ic">◷</span>请求</div>
+    <div class="nav-item"><span class="ic">⚒</span>工具</div>
+    <div class="side-spacer"></div>
+    <div class="diag-card">
+      <b>🩺 连接有问题？</b>
+      <p>一键诊断自动检查 DNS、出口与线路状态，生成可发给客服的脱敏报告。</p>
+      <div class="diag-btn">一键诊断</div>
+    </div>
+    <div class="ver">天机云 v2.0 · 内核运行正常</div>
+  </div>
+
+  <!-- main -->
+  <div class="main">
+    <div class="topbar">
+      <h1>仪表盘</h1>
+      <div class="top-right">
+        <div class="pill gray">订阅更新于 19 分钟前</div>
+        <div class="pill"><span class="dot"></span>已连接 · 隧道安全</div>
+      </div>
+    </div>
+
+    <!-- hero -->
+    <div class="panel hero">
+      <div class="hero-left">
+        <div class="status-row">⛨ 当前出口 <span class="live">● 已连接</span></div>
+        <div class="ip">126.51.252.247</div>
+        <div class="chips">
+          <span class="chip">🇯🇵 日本 · 东京</span>
+          <span class="chip home">🏠 住宅 IP</span>
+          <span class="chip good">质量 优</span>
+          <span class="chip">SOFTBANK Corp.</span>
+        </div>
+        <div class="hero-meta">
+          <div class="meta"><label>运行时长</label><b>02:14:36</b></div>
+          <div class="meta"><label>延迟</label><b>38 <span class="u">ms</span></b></div>
+          <div class="meta"><label>实时速率</label><b>↓ 12.4 <span class="u">MB/s</span> · ↑ 1.8 <span class="u">MB/s</span></b></div>
+          <div class="meta"><label>DNS 出口</label><b>与 IP 出口一致</b></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="orbit"><span class="power">⏻</span></div>
+        <div class="orbit-label">点击断开 · <b>连接中</b></div>
+      </div>
+    </div>
+
+    <!-- scene bar -->
+    <div class="panel scene-bar">
+      <span class="scene-label">场景模式</span>
+      <div class="seg"><div class="on">☀ 日常</div><div>🤖 AI</div><div>🎬 观影</div></div>
+      <span class="scene-desc">日常场景：全局智能分流，大陆直连、海外加速，家宽线路跟随所选出口。</span>
+      <div class="mode-switch">模式
+        <div class="seg small"><div class="on">标准 · 自动</div><div>进阶 · 手动</div></div>
+      </div>
+    </div>
+
+    <!-- grid -->
+    <div class="grid">
+      <div class="card home-card">
+        <div class="card-head">🛡 家宽线路 <span class="tag">已选择 · 跟随中</span></div>
+        <div class="home-name">🇺🇸 美国家宽</div>
+        <div class="home-sub">连接后，需要代理的分组都会自动跟随这条线路；大陆与直连流量仍按订阅分流。</div>
+        <div class="home-exit">
+          <div class="meta"><label>出口城市 / 运营商</label><b>洛杉矶 · Spectrum</b></div>
+          <div class="meta"><label>线路延迟</label><b>142 <span class="u">ms</span></b></div>
+          <div class="meta"><label>本月家宽流量</label><b>3.6 <span class="u">GB</span></b></div>
+        </div>
+        <div class="home-btns"><div class="btn">更换线路</div><div class="btn ghost">按订阅分流</div></div>
+      </div>
+
+      <div class="panel card">
+        <div class="card-head">◔ 流量统计</div>
+        <div class="ring-wrap">
+          <div class="ring"><div class="ring-in"><b>5%</b><span>本月已用</span></div></div>
+          <div class="stat-rows">
+            <div class="stat-row"><span>套餐流量</span><b>10.2 / 200 GB</b></div>
+            <div class="stat-row"><span>VPN 流量</span><b>4.2 MB</b></div>
+            <div class="stat-row"><span>内地直连</span><b>51.9 KB</b></div>
+            <div class="stat-row"><span>本月节省</span><b>51.9 KB</b></div>
+          </div>
+        </div>
+        <div class="home-sub" style="margin-top:14px;">仅本设备统计，包含应用捕获的流量。</div>
+      </div>
+
+      <div class="panel card">
+        <div class="card-head">▤ 订阅信息 <span class="tag" style="background:rgba(255,255,255,.07);color:#98A2C8;">自动更新 ✓</span></div>
+        <div class="sub-name">天机 TIANJI(1)</div>
+        <div class="sub-meta">更新于 19 分钟前 · 节点 42 个</div>
+        <label style="font-size:11.5px;color:#7E88B3;letter-spacing:1px;">服务剩余</label>
+        <div class="bar" style="margin-top:8px;"><i></i></div>
+        <div class="sub-foot"><span>到期 2026-12-05</span><b>剩余 28 天</b></div>
+        <div class="home-btns" style="margin-top:auto;"><div class="btn ghost" style="flex:1;text-align:center;">立即刷新</div><div class="btn ghost" style="flex:1;text-align:center;">管理订阅</div></div>
+      </div>
+    </div>
+
+    <!-- toggles -->
+    <div class="toggles">
+      <div class="panel tog"><div class="tic">🔀</div><div><b>系统代理</b><span>端口 7890</span></div><div class="switch"></div></div>
+      <div class="panel tog"><div class="tic">🛡</div><div><b>虚拟网卡</b><span>TUN 已开启 · 全应用接管</span></div><div class="switch"></div></div>
+      <div class="panel tog"><div class="tic">🩺</div><div><b>一键诊断</b><span>上次诊断：一切正常</span></div><div class="tog-link">›</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
