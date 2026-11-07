@@ -1173,5 +1173,9 @@
   "backgroundSolid": "単色",
   "backgroundOrbit": "軌道",
   "backgroundMountains": "山々",
+  "backgroundPlanet": "惑星",
+  "backgroundAurora": "オーロラ",
+  "backgroundNebula": "星雲",
+  "backgroundGlobe": "グローブ",
   "trafficOtherDirect": "その他の直接接続"
 }

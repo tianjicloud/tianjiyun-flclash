@@ -423,8 +423,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundBlur": MessageLookupByLibrary.simpleMessage(
       "Desenfoque de fondo",
     ),
+    "backgroundAurora": MessageLookupByLibrary.simpleMessage("Aurora"),
+    "backgroundGlobe": MessageLookupByLibrary.simpleMessage("Globo"),
     "backgroundMountains": MessageLookupByLibrary.simpleMessage("Montañas"),
+    "backgroundNebula": MessageLookupByLibrary.simpleMessage("Nebulosa"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Órbita"),
+    "backgroundPlanet": MessageLookupByLibrary.simpleMessage("Planeta"),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("Color sólido"),
     "backup": MessageLookupByLibrary.simpleMessage("Copia de seguridad"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(

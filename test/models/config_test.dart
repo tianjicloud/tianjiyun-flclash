@@ -905,14 +905,15 @@ void main() {
       const props = ThemeProps();
       expect(props.primaryColor, null);
       expect(props.primaryColors, defaultPrimaryColors);
-      expect(props.themeMode, ThemeMode.system);
+      expect(props.themeMode, ThemeMode.dark);
+      expect(props.background, 'orbit');
       expect(props.pureBlack, false);
       expect(props.textScale.scale, 1.0);
     });
 
     test('safeFromJson returns default on null', () {
       final result = ThemeProps.safeFromJson(null);
-      expect(result.themeMode, ThemeMode.system);
+      expect(result.themeMode, ThemeMode.dark);
     });
 
     test('round-trip with custom values', () {

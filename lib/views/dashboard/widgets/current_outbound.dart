@@ -829,7 +829,7 @@ class _StartToggle extends ConsumerStatefulWidget {
 }
 
 class _StartToggleState extends ConsumerState<_StartToggle>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: _morphDuration,
@@ -840,9 +840,14 @@ class _StartToggleState extends ConsumerState<_StartToggle>
     curve: Curves.easeOutBack,
     reverseCurve: Curves.easeInCubic,
   );
+  late final AnimationController _pulseController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 2400),
+  );
   var _hovered = false;
   var _pressed = false;
   var _focused = false;
+  var oldConnecting = false;
 
   /// The M3 state layer, painted inside the shape: the card's decoration
   /// covers the button, so ink on the card would never show.
@@ -855,6 +860,26 @@ class _StartToggleState extends ConsumerState<_StartToggle>
       : 0;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncPulse();
+  }
+
+  void _syncPulse() {
+    final idle = BusinessTheme.of(context) &&
+        widget.enabled &&
+        !widget.running &&
+        !widget.suspended &&
+        ref.read(coreStatusProvider) != CoreStatus.connecting;
+    if (idle && !context.disableAnimations) {
+      if (!_pulseController.isAnimating) _pulseController.repeat();
+    } else {
+      _pulseController.stop();
+      _pulseController.value = 0;
+    }
+  }
+
+  @override
   void didUpdateWidget(_StartToggle oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.running != widget.running) {
@@ -864,12 +889,14 @@ class _StartToggleState extends ConsumerState<_StartToggle>
         widget.running ? _controller.forward() : _controller.reverse();
       }
     }
+    _syncPulse();
   }
 
   @override
   void dispose() {
     _progress.dispose();
     _controller.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -895,13 +922,15 @@ class _StartToggleState extends ConsumerState<_StartToggle>
         : appLocalizations.start;
     if (BusinessTheme.of(context)) {
       final connecting = ref.watch(coreStatusProvider) == CoreStatus.connecting;
+      if (!connecting && (oldConnecting)) _syncPulse();
+      oldConnecting = connecting;
       final color = !enabled
           ? BusinessPalette.secondary
           : connecting || widget.suspended
           ? BusinessPalette.warning
           : widget.running
           ? BusinessPalette.blue
-          : BusinessPalette.secondary;
+          : BusinessPalette.accent;
       final label = connecting ? appLocalizations.connecting : tooltip;
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -922,24 +951,30 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                     tween: ColorTween(end: color),
                     duration: context.motionDuration(_morphDuration),
                     builder: (context, animatedColor, _) => AnimatedBuilder(
-                      animation: _progress,
-                      builder: (context, _) => CustomPaint(
-                        painter: OrbitPainter(
-                          color: animatedColor ?? color,
-                          focused: _focused,
-                        ),
-                        child: SizedBox.square(
-                          dimension: size,
-                          child: Center(
-                            child: GlyphIcon(
-                              widget.suspended
-                                  ? AppGlyphs.wifiOff
-                                  : AppGlyphs.playPause(
-                                      _progress.value.clamp(0, 1),
-                                    ),
-                              size: size * 0.26,
-                              color: Colors.white,
-                              fill: 1,
+                      animation: _pulseController,
+                      builder: (context, _) => AnimatedBuilder(
+                        animation: _progress,
+                        builder: (context, _) => CustomPaint(
+                          painter: OrbitPainter(
+                            color: animatedColor ?? color,
+                            focused: _focused,
+                            pulse: _pulseController.isAnimating
+                                ? _pulseController.value
+                                : null,
+                          ),
+                          child: SizedBox.square(
+                            dimension: size,
+                            child: Center(
+                              child: GlyphIcon(
+                                widget.suspended
+                                    ? AppGlyphs.wifiOff
+                                    : AppGlyphs.playPause(
+                                        _progress.value.clamp(0, 1),
+                                      ),
+                                size: size * 0.26,
+                                color: Colors.white,
+                                fill: 1,
+                              ),
                             ),
                           ),
                         ),

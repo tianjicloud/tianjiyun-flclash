@@ -41,7 +41,7 @@ void main() {
       expect(restored.background, preset);
       expect(restored.primaryColor, props.primaryColor);
     }
-    expect(ThemeProps.fromJson({}).background, 'solid');
+    expect(ThemeProps.fromJson({}).background, 'orbit');
   });
 
   for (final brightness in Brightness.values) {
@@ -52,6 +52,10 @@ void main() {
         'solid',
         'orbit',
         'mountains',
+        'planet',
+        'aurora',
+        'nebula',
+        'globe',
         'unknown',
         'solid',
       ]) {
@@ -74,6 +78,12 @@ void main() {
         expect(
           find.byType(SvgPicture),
           ['orbit', 'mountains'].contains(preset)
+              ? findsOneWidget
+              : findsNothing,
+        );
+        expect(
+          find.byType(Image),
+          ['planet', 'aurora', 'nebula', 'globe'].contains(preset)
               ? findsOneWidget
               : findsNothing,
         );

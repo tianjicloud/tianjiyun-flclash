@@ -1173,5 +1173,9 @@
   "backgroundSolid": "단색",
   "backgroundOrbit": "궤도",
   "backgroundMountains": "산",
+  "backgroundPlanet": "행성",
+  "backgroundAurora": "오로라",
+  "backgroundNebula": "성운",
+  "backgroundGlobe": "글로브",
   "trafficOtherDirect": "기타 직접 연결"
 }

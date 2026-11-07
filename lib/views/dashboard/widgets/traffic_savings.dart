@@ -81,11 +81,8 @@ class TrafficSavingsCard extends ConsumerWidget {
                   Row(
                     spacing: 8,
                     children: [
-                      DecoratedBox(
-                        decoration: ShapeDecoration(
-                          color: color,
-                          shape: AppShape.circle,
-                        ),
+                      CustomPaint(
+                        painter: _LegendDotPainter(color),
                         child: const SizedBox.square(dimension: 8),
                       ),
                       Expanded(
@@ -228,6 +225,20 @@ class _TrafficStat extends StatelessWidget {
       ],
     );
   }
+}
+
+class _LegendDotPainter extends CustomPainter {
+  const _LegendDotPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawCircle(size.center(Offset.zero), size.width / 2, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(_LegendDotPainter oldDelegate) => color != oldDelegate.color;
 }
 
 class _SavingsRing extends CustomPainter {

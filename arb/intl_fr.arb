@@ -1173,5 +1173,9 @@
   "backgroundSolid": "Couleur unie",
   "backgroundOrbit": "Orbite",
   "backgroundMountains": "Montagnes",
+  "backgroundPlanet": "Planète",
+  "backgroundAurora": "Aurore",
+  "backgroundNebula": "Nébuleuse",
+  "backgroundGlobe": "Globe",
   "trafficOtherDirect": "Autre trafic direct"
 }

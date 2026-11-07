@@ -43,15 +43,35 @@ class BusinessAppearance extends StatelessWidget {
 }
 
 class OrbitPainter extends CustomPainter {
-  const OrbitPainter({required this.color, required this.focused});
+  const OrbitPainter({required this.color, required this.focused, this.pulse});
 
   final Color color;
   final bool focused;
+  final double? pulse;
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2;
+    if (pulse case final pulse?) {
+      final spread = radius * (0.78 + 0.2 * pulse);
+      canvas.drawCircle(
+        center,
+        spread,
+        Paint()
+          ..color = color.withValues(alpha: 0.35 * (1 - pulse))
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2,
+      );
+      canvas.drawCircle(
+        center,
+        radius * 0.97,
+        Paint()
+          ..color = color.withValues(alpha: 0.12 + 0.1 * math.sin(pulse * math.pi))
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5,
+      );
+    }
     canvas.drawCircle(
       center,
       radius,
@@ -97,5 +117,7 @@ class OrbitPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(OrbitPainter oldDelegate) =>
-      color != oldDelegate.color || focused != oldDelegate.focused;
+      color != oldDelegate.color ||
+      focused != oldDelegate.focused ||
+      pulse != oldDelegate.pulse;
 }

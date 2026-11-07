@@ -1173,5 +1173,9 @@
   "backgroundSolid": "纯色",
   "backgroundOrbit": "深空轨道",
   "backgroundMountains": "远山",
+  "backgroundPlanet": "星球",
+  "backgroundAurora": "极光",
+  "backgroundNebula": "星云",
+  "backgroundGlobe": "星网",
   "trafficOtherDirect": "其他直连"
 }
