@@ -865,6 +865,8 @@ class _StartToggleState extends ConsumerState<_StartToggle>
     _syncPulse();
   }
 
+  bool get _settled => !_controller.isAnimating && !_progress.isAnimating;
+
   void _syncPulse() {
     final idle =
         BusinessTheme.of(context) &&
@@ -872,8 +874,10 @@ class _StartToggleState extends ConsumerState<_StartToggle>
         !widget.running &&
         !widget.suspended &&
         ref.read(coreStatusProvider) != CoreStatus.connecting;
-    if (idle && !context.disableAnimations) {
-      if (!_pulseController.isAnimating) _pulseController.repeat();
+    if (idle && !context.disableAnimations && _settled) {
+      if (!_pulseController.isAnimating) {
+        _pulseController.repeat(period: const Duration(milliseconds: 8000));
+      }
     } else {
       _pulseController.stop();
       _pulseController.value = 0;
@@ -902,6 +906,8 @@ class _StartToggleState extends ConsumerState<_StartToggle>
   }
 
   void _toggle() {
+    _pulseController.stop();
+    _pulseController.value = 0;
     ref.read(commonActionProvider.notifier).toggleRunning();
   }
 
