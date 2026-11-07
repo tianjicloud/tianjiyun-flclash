@@ -112,6 +112,84 @@ abstract class _$ResidentialAction extends $Notifier<ResidentialApplyState> {
   }
 }
 
+/// Persists a scene pick and re-applies the profile, following the
+/// residential action's discipline: the pick lands first, the apply is
+/// forced and silent, and a superseded attempt never reports over a newer
+/// one. The pivot group's live selection is moved through the ordinary
+/// proxy action afterwards, so what the UI shows and what the core runs
+/// stay the same selection.
+
+@ProviderFor(SceneAction)
+final sceneActionProvider = SceneActionProvider._();
+
+/// Persists a scene pick and re-applies the profile, following the
+/// residential action's discipline: the pick lands first, the apply is
+/// forced and silent, and a superseded attempt never reports over a newer
+/// one. The pivot group's live selection is moved through the ordinary
+/// proxy action afterwards, so what the UI shows and what the core runs
+/// stay the same selection.
+final class SceneActionProvider
+    extends $NotifierProvider<SceneAction, SceneApplyState> {
+  /// Persists a scene pick and re-applies the profile, following the
+  /// residential action's discipline: the pick lands first, the apply is
+  /// forced and silent, and a superseded attempt never reports over a newer
+  /// one. The pivot group's live selection is moved through the ordinary
+  /// proxy action afterwards, so what the UI shows and what the core runs
+  /// stay the same selection.
+  SceneActionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sceneActionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sceneActionHash();
+
+  @$internal
+  @override
+  SceneAction create() => SceneAction();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SceneApplyState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SceneApplyState>(value),
+    );
+  }
+}
+
+String _$sceneActionHash() => r'9912c0d53f112d0f0213e7a926fa0bb61db34d13';
+
+/// Persists a scene pick and re-applies the profile, following the
+/// residential action's discipline: the pick lands first, the apply is
+/// forced and silent, and a superseded attempt never reports over a newer
+/// one. The pivot group's live selection is moved through the ordinary
+/// proxy action afterwards, so what the UI shows and what the core runs
+/// stay the same selection.
+
+abstract class _$SceneAction extends $Notifier<SceneApplyState> {
+  SceneApplyState build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<SceneApplyState, SceneApplyState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<SceneApplyState, SceneApplyState>,
+              SceneApplyState,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(SetupAction)
 final setupActionProvider = SetupActionProvider._();
 
@@ -143,7 +221,7 @@ final class SetupActionProvider extends $NotifierProvider<SetupAction, void> {
   }
 }
 
-String _$setupActionHash() => r'cf10f522b95795454751278f4344e4f82f2b0550';
+String _$setupActionHash() => r'6a216bffc20e024ead5eb23f32fd20116959e696';
 
 abstract class _$SetupAction extends $Notifier<void> {
   void build();

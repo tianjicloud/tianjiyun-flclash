@@ -1687,6 +1687,7 @@ abstract class ProfileOverrides with _$ProfileOverrides {
     @JsonKey(name: 'residential-exit') String? residentialExit,
     @JsonKey(name: 'residential-subscription-fingerprint')
     String? residentialSubscriptionFingerprint,
+    @JsonKey(name: 'scene') String? scene,
     @Default({}) Map<String, ManualSelection> manualSelections,
   }) = _ProfileOverrides;
 

@@ -20,6 +20,8 @@ import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:fl_clash/views/dashboard/widgets/profile_detail.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
 import 'package:fl_clash/views/dashboard/widgets/proxy_groups.dart';
+import 'package:fl_clash/views/dashboard/widgets/quick_lines.dart';
+import 'package:fl_clash/views/dashboard/widgets/scene_bar.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -113,6 +115,11 @@ class _BusinessBody extends ConsumerWidget {
                 ],
               ),
               const RepaintBoundary(child: CurrentOutboundCard()),
+              if (ref.watch(scenePolicyProvider).available)
+                const SceneBar()
+              else
+                const SceneUnavailableCard(),
+              const QuickLines(),
               if (density.isDesktop) ...[
                 if (needsTakeover)
                   Text(
@@ -135,20 +142,8 @@ class _BusinessBody extends ConsumerWidget {
                     ),
                   ],
                 ),
-                Row(
-                  spacing: gap,
-                  children: [
-                    const Expanded(
-                      child: SizedBox(height: 56, child: OutboundModeBar()),
-                    ),
-                    Expanded(
-                      child: _TakeoverRow(platform: platform, density: density),
-                    ),
-                  ],
-                ),
+                _ControlBar(platform: platform),
               ] else ...[
-                const OutboundModeCard(),
-
                 if (needsTakeover)
                   Text(
                     context.appLocalizations.residentialCaptureOff,
@@ -221,6 +216,51 @@ class _TakeoverRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 16,
         children: [for (final tile in tiles) Expanded(child: tile)],
+      ),
+    );
+  }
+}
+
+/// The desktop home's bottom strip: outbound mode on the left and the
+/// takeover switches on the right, inside one card, so the page ends with
+/// a single control surface instead of two rows of separate cards.
+class _ControlBar extends StatelessWidget {
+  const _ControlBar({required this.platform});
+
+  final SupportPlatform platform;
+
+  @override
+  Widget build(BuildContext context) {
+    final density = DashboardDensityScope.of(context);
+    final tiles = DashboardWidget.networkTakeover.platforms.contains(platform)
+        ? const [
+            NetworkTakeoverTile(TakeoverSwitch.systemProxy),
+            NetworkTakeoverTile(TakeoverSwitch.tun),
+          ]
+        : const [VpnTile()];
+    return DashboardCard(
+      semanticLabel: context.appLocalizations.outboundMode,
+      padding: EdgeInsets.symmetric(
+        horizontal: dashboardCardPadding(density).left,
+        vertical: 10,
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final tileWidth = constraints.maxWidth >= 900 ? 230.0 : 190.0;
+          return Row(
+            spacing: 16,
+            children: [
+              Text(
+                context.appLocalizations.outboundMode,
+                style: DashboardText.cardTitle(context),
+              ),
+              const OutboundModeInline(),
+              const Spacer(),
+              for (final tile in tiles)
+                SizedBox(width: tileWidth, height: 56, child: tile),
+            ],
+          );
+        },
       ),
     );
   }

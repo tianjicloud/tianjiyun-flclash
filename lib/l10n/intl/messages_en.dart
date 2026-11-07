@@ -2075,12 +2075,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save the changes?"),
     "scene": MessageLookupByLibrary.simpleMessage("Scene"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
-      "Scene switching is coming soon. Your current routing stays unchanged.",
-    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Daily"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "Heavy traffic auto-routes to big-bandwidth nodes · Mainland traffic goes direct",
+      "Large traffic bypasses residential automatically · mainland traffic stays direct · scenes pause while a residential exit is active",
+    ),
+    "sceneUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Scenes unavailable",
+    ),
+    "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
+      "This subscription has no scene groups yet. Ask support to enable scenes, or route from the Proxies page.",
     ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
     "script": MessageLookupByLibrary.simpleMessage("Script"),

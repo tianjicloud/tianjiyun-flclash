@@ -2236,12 +2236,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "scene": MessageLookupByLibrary.simpleMessage("Escena"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("IA"),
-    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
-      "El cambio de escena llegará pronto. Tu enrutamiento actual no cambia.",
-    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Diario"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "El tráfico pesado se desvía automáticamente a nodos de gran ancho de banda · El tráfico a China continental va directo",
+      "El tráfico pesado evita automáticamente la salida residencial · El tráfico a China continental va directo · Las escenas se pausan mientras una salida residencial está activa",
+    ),
+    "sceneUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Escenas no disponibles",
+    ),
+    "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
+      "Esta suscripción aún no tiene grupos de escena. Contacta con soporte o gestiona el enrutamiento desde la página Proxies.",
     ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
     "script": MessageLookupByLibrary.simpleMessage("Script"),

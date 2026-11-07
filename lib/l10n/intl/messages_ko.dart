@@ -1762,12 +1762,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("변경 사항을 저장하시겠습니까?"),
     "scene": MessageLookupByLibrary.simpleMessage("장면"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
-      "장면 전환은 곧 제공됩니다. 현재 라우팅은 그대로 유지됩니다.",
-    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("일상"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "대용량 트래픽은 대역폭이 큰 노드로 자동 우회 · 중국 본토 트래픽은 직접 연결",
+      "대용량 트래픽은 주거용 출구를 자동으로 우회 · 중국 본토 트래픽은 직접 연결 · 주거용 출구 적용 중에는 장면이 일시 중지됩니다",
+    ),
+    "sceneUnavailable": MessageLookupByLibrary.simpleMessage("장면을 사용할 수 없음"),
+    "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
+      "이 구독에는 아직 장면 그룹이 없습니다. 지원팀에 문의하거나 프록시 페이지에서 라우팅을 관리하세요.",
     ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("시청"),
     "script": MessageLookupByLibrary.simpleMessage("스크립트"),

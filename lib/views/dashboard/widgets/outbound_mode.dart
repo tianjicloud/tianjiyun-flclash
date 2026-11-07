@@ -90,6 +90,58 @@ class OutboundModeCard extends ConsumerWidget {
   }
 }
 
+/// The mode switch without its card, for rows that already live inside one
+/// (the scene bar, the bottom control bar).
+class OutboundModeInline extends ConsumerWidget {
+  const OutboundModeInline({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(
+      patchClashConfigProvider.select((state) => state.mode),
+    );
+    final style = AppTextStyle.subheadline.of(context, emphasized: true);
+    return DashboardConnectedGroup(
+      children: [
+        for (final (index, item) in Mode.values.indexed)
+          DashboardConnectedButton(
+            selected: item == mode,
+            first: index == 0,
+            last: index == Mode.values.length - 1,
+            outer: BusinessPalette.buttonRadius,
+            inner: 10,
+            background: DashboardColors.of(context).tone,
+            semanticLabel: item.label,
+            onTap: () => _changeMode(ref, item),
+            builder: (foreground) => SizedBox(
+              height: 40 * DashboardDensityScope.scaleOf(context),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 6,
+                    children: [
+                      GlyphIcon(_glyphOf(item), size: 16, color: foreground),
+                      Flexible(
+                        child: Text(
+                          item.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: style.copyWith(color: foreground),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 /// The desktop control row's mode switch; its buttons sit as far in from the
 /// card's ends as from its edges so their corners stay concentric.
 class OutboundModeBar extends ConsumerWidget {

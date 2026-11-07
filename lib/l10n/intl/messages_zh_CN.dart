@@ -1624,12 +1624,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("是否保存更改？"),
     "scene": MessageLookupByLibrary.simpleMessage("场景"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
-      "场景切换即将上线，当前分流保持不变。",
-    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("日常"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "大流量自动绕行大带宽节点 · 大陆流量本地直连",
+      "大流量自动绕行大带宽节点 · 大陆流量本地直连 · 家宽接管期间场景暂停",
+    ),
+    "sceneUnavailable": MessageLookupByLibrary.simpleMessage("场景暂不可用"),
+    "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
+      "当前订阅还没有场景分组，联系客服开通，或在代理页手动分流。",
     ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("观影"),
     "script": MessageLookupByLibrary.simpleMessage("脚本"),

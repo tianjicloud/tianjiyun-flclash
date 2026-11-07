@@ -9642,11 +9642,21 @@ class AppLocalizations {
     return Intl.message('Streaming', name: 'sceneWatch', desc: '', args: []);
   }
 
-  /// `Scene switching is coming soon. Your current routing stays unchanged.`
-  String get sceneComingSoon {
+  /// `Scenes unavailable`
+  String get sceneUnavailable {
     return Intl.message(
-      'Scene switching is coming soon. Your current routing stays unchanged.',
-      name: 'sceneComingSoon',
+      'Scenes unavailable',
+      name: 'sceneUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This subscription has no scene groups yet. Ask support to enable scenes, or route from the Proxies page.`
+  String get sceneUnavailableDesc {
+    return Intl.message(
+      'This subscription has no scene groups yet. Ask support to enable scenes, or route from the Proxies page.',
+      name: 'sceneUnavailableDesc',
       desc: '',
       args: [],
     );
@@ -9657,10 +9667,10 @@ class AppLocalizations {
     return Intl.message('Quick lines', name: 'quickLines', desc: '', args: []);
   }
 
-  /// `Heavy traffic auto-routes to big-bandwidth nodes · Mainland traffic goes direct`
+  /// `Large traffic bypasses residential automatically · mainland traffic stays direct · scenes pause while a residential exit is active`
   String get sceneNote {
     return Intl.message(
-      'Heavy traffic auto-routes to big-bandwidth nodes · Mainland traffic goes direct',
+      'Large traffic bypasses residential automatically · mainland traffic stays direct · scenes pause while a residential exit is active',
       name: 'sceneNote',
       desc: '',
       args: [],

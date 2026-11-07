@@ -7,6 +7,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/mitm_module.dart';
 import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/core/residential_bulk.dart';
+import 'package:fl_clash/core/scene.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart';
@@ -384,6 +385,13 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
   }
   rawConfig['rules'] = [...mitm.rules, ...rules];
   if (data.residentialExit == null) {
+    final sceneName = data.scene;
+    final sceneKind = sceneName == null
+        ? null
+        : sceneKindOfSelection(sceneName);
+    if (sceneKind != null) {
+      rawConfig = applyScene(config: rawConfig, scene: sceneKind).config;
+    }
     rawConfig = applyManualSelections(rawConfig, data.manualSelections);
   }
   if (data.residentialExit case final exit? when exit.isNotEmpty) {

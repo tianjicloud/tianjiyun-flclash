@@ -216,6 +216,7 @@ abstract class MakeRealProfileState with _$MakeRealProfileState {
     @Default(false) bool safeMode,
     @Default([]) List<MitmModuleSource> mitmModules,
     String? residentialExit,
+    String? scene,
     @Default({}) Map<String, ManualSelection> manualSelections,
   }) = _MakeRealProfileState;
 }
@@ -266,6 +267,7 @@ abstract class SetupState with _$SetupState {
     @Default([]) List<MitmModuleSource> mitmModules,
     @Default(false) bool residentialActive,
     String? residentialExit,
+    String? scene,
     @Default({}) Map<String, ManualSelection> manualSelections,
   }) = _SetupState;
 }

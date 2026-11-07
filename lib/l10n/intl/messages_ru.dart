@@ -2179,12 +2179,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("Сохранить изменения?"),
     "scene": MessageLookupByLibrary.simpleMessage("Сценарий"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
-      "Переключение сценариев скоро появится. Текущая маршрутизация не изменится.",
-    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Обычный"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "Тяжёлый трафик автоматически идёт через широкополосные узлы · Трафик в материковый Китай — напрямую",
+      "Тяжёлый трафик автоматически идёт через широкополосные узлы · Трафик в материковый Китай — напрямую · Сценарии на паузе, пока активен жилой выход",
+    ),
+    "sceneUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Сценарии недоступны",
+    ),
+    "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
+      "В этой подписке пока нет групп сценариев. Обратитесь в поддержку или настройте маршрутизацию на странице прокси.",
     ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("Видео"),
     "script": MessageLookupByLibrary.simpleMessage("Скрипт"),

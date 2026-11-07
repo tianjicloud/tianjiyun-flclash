@@ -606,6 +606,7 @@ class SetupAction extends _$SetupAction {
         safeMode: ref.read(safeModeProvider),
         mitmModules: setupState.mitmModules,
         residentialExit: selectedResidentialExit,
+        scene: setupState.scene,
         manualSelections: setupState.manualSelections,
       ),
     );

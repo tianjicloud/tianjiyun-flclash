@@ -1796,12 +1796,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("変更を保存しますか？"),
     "scene": MessageLookupByLibrary.simpleMessage("シーン"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
-      "シーン切り替えは近日対応予定です。現在のルーティングは変わりません。",
-    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("日常"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "大容量通信は広帯域ノードへ自動迂回 · 中国本土向けは直接接続",
+      "大容量通信は広帯域ノードへ自動迂回 · 中国本土向けは直接接続 · 住宅回線の適用中はシーンが一時停止します",
+    ),
+    "sceneUnavailable": MessageLookupByLibrary.simpleMessage("シーンは利用できません"),
+    "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
+      "このサブスクリプションにはシーングループがまだありません。サポートへお問い合わせいただくか、プロキシページで切り替えてください。",
     ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("視聴"),
     "script": MessageLookupByLibrary.simpleMessage("スクリプト"),

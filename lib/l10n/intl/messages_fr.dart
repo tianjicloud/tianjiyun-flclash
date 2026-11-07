@@ -2240,12 +2240,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "scene": MessageLookupByLibrary.simpleMessage("Scène"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("IA"),
-    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
-      "Le changement de scène arrive bientôt. Votre routage actuel reste inchangé.",
-    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Quotidien"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "Le gros trafic passe automatiquement par les nœuds à large bande · Le trafic vers la Chine continentale reste direct",
+      "Le gros trafic contourne automatiquement la sortie résidentielle · Le trafic vers la Chine continentale reste direct · Les scènes sont en pause tant qu’une sortie résidentielle est active",
+    ),
+    "sceneUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Scènes indisponibles",
+    ),
+    "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
+      "Cet abonnement n’a pas encore de groupes de scènes. Contactez le support ou gérez le routage depuis la page Proxies.",
     ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
     "script": MessageLookupByLibrary.simpleMessage("Script"),

@@ -106,12 +106,14 @@ Future<SetupState> setupState(Ref ref, int? profileId) async {
     }
   }
   final residentialActive = isResidentialPolicyActive(profile);
+  final scene = profile?.overrides.scene;
   return SetupState(
     manualSelections: profile?.overrides.manualSelections ?? const {},
     residentialActive: residentialActive,
     residentialExit: residentialActive
         ? profile?.overrides.residentialExit
         : null,
+    scene: scene == null || scene.isEmpty ? null : scene,
     mitmModules: mitmModules == null
         ? const []
         : await mitmModuleSources(await mitmModules),
