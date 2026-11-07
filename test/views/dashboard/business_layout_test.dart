@@ -1,6 +1,7 @@
 import 'package:prism_ui/prism_ui.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/common/residential.dart';
+import 'package:fl_clash/common/app_update.dart';
 import 'package:fl_clash/core/traffic/model.dart';
 import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/core/traffic/service.dart';
@@ -11,9 +12,12 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
+import 'package:fl_clash/views/about.dart';
+import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../helpers/preferences.dart';
 import '../../helpers/test_app.dart';
@@ -31,14 +35,31 @@ class _IdleIpProbe extends OutboundIpProbe {
   void unwatch(String target) {}
 }
 
+class _UpdateAction extends CommonAction {
+  int installs = 0;
+
+  @override
+  Future<void> installUpdate() async {
+    installs++;
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late ProviderContainer container;
   late TrafficAccountingService stats;
+  late _UpdateAction updateAction;
 
   setUp(() async {
     await mockPreferences();
+    globalState.packageInfo = PackageInfo(
+      appName: 'TianjiCloud',
+      packageName: 'org.tianjiyun.app',
+      version: '0.9.10',
+      buildNumber: '1',
+    );
+    updateAction = _UpdateAction();
     stats = TrafficAccountingService(
       store: MemoryTrafficStatsStore(),
       readSnapshot: () async => const TrafficSnapshot(
@@ -51,6 +72,7 @@ void main() {
     );
     container = ProviderContainer(
       overrides: [
+        commonActionProvider.overrideWith(() => updateAction),
         profilesProvider.overrideWith(
           () => TestProfiles(const [
             Profile(
@@ -102,6 +124,59 @@ void main() {
     container.dispose();
     stats.dispose();
   });
+
+  for (final about in [false, true]) {
+    testWidgets(
+      'update stays visible on ${about ? 'about' : 'business home'}',
+      (tester) async {
+        container.read(viewSizeProvider.notifier).value = const Size(1200, 900);
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: TestApp(
+              locale: const Locale('en'),
+              child: about
+                  ? const AboutView()
+                  : const BusinessDashboardView(
+                      platform: SupportPlatform.Windows,
+                    ),
+            ),
+          ),
+        );
+        await tester.pump();
+        expect(find.text('Update ready'), findsNothing);
+        final download = container.read(updateDownloadStateProvider.notifier);
+        download.value = const UpdateDownloading(
+          'v0.9.10',
+          received: 1,
+          total: 4,
+        );
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.text('25%'), findsOneWidget);
+        download.value = const UpdateReady('v0.9.10', '/test/update.exe');
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.text('Update ready'), findsWidgets);
+        if (!about) {
+          await tester.tap(
+            find.descendant(
+              of: find.byType(UpdateStatusSlot),
+              matching: find.text('Update ready'),
+            ),
+          );
+          expect(updateAction.installs, 1);
+        }
+        download.value = null;
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.text('Update ready'), findsNothing);
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+      },
+    );
+  }
 
   for (final brightness in Brightness.values) {
     for (final (width, scale, captureOff, residential) in [

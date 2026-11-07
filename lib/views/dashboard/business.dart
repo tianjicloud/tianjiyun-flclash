@@ -21,6 +21,7 @@ import 'package:fl_clash/views/dashboard/widgets/profile_detail.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
 import 'package:fl_clash/views/dashboard/widgets/proxy_groups.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
+import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,7 +41,10 @@ class BusinessDashboardView extends ConsumerWidget {
         builder: (context) => Scaffold(
           backgroundColor: DashboardColors.of(context).page,
           title: appLocalizations.dashboard,
-          actions: [if (coreLib == null) const CoreStatusButton()],
+          actions: [
+            const UpdateStatusButton(),
+            if (coreLib == null) const CoreStatusButton(),
+          ],
           body: BusinessBackdrop(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -103,7 +107,13 @@ class _BusinessBody extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: gap,
             children: [
-              const BusinessSubscriptionStatus(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  UpdateStatusSlot(gap: gap),
+                  const BusinessSubscriptionStatus(),
+                ],
+              ),
               const RepaintBoundary(child: CurrentOutboundCard()),
               const OutboundModeCard(),
               if (needsTakeover)
