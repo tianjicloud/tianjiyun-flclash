@@ -176,7 +176,7 @@ Codex 你好。本文件是天机云定制客户端（FlClash 分叉，仓库 `t
 | `lib/providers/outbound_ip.dart` `OutboundIpProbe.probe(target, route)` → `lookupOutboundIp(coreHandler, proxyName)` | 探针返回里除 IP 信息外还有 `chains`（`result.chains.firstOrNull` 即该探针实际经过的出站链首跳）、`coreEpoch`、`routeVersion`、`hits`——这是「按节点校验实际出口」的现成原料，但**节点名 → 期望出口 IP 的映射不存在**（见判定口径） |
 | `lib/providers/routed_probe.dart` `RoutedProbe` | 探针调度基类：`watch/unwatch`、settle/throttle 时长；`CurrentOutboundCard` 已用它 watch `routedOutbound`（仪表盘当前实际路径出口） |
 | `lib/views/dashboard/probe_start_hold.dart` | 启动初期探针失败有 5 秒宽限保持 probing 态的做法（`ProbePhase`）——WP2 的「正在确认」态应对齐这一既有口径，不另造计时 |
-| `lib/providers/actions/setup.dart:343` `SetupAction.updateConfig()`（328 行有 debounce 版） | 配置重组装下发内核的路径：363/449/512 行附近已按 `isResidentialPolicyActive(profile)` 分支处理家宽——WP2 若需在配置层注入「手动优先」覆写，这是预期接入点，未核实其内部分支细节，Codex 动手前先核查 |
+| `lib/providers/actions/setup.dart:343` `SetupAction.updateConfig()`（328 行有 debounce 版） | 配置重组装下发内核的路径：363/449/512 行附近已按 `isResidentialPolicyActive(profile)` 分支处理家宽——WP2 若需在配置层注入「手动优先」覆写，这是预期接入点。【2026-11-07 更正，依 WP2 核查】配置组装的实际链路是 `getProfile → makeRealProfileTask`（setup.dart 约 508/560 行），本条与 WP3 锚点表中对 updateConfig 的定位均以该链路为准；updateConfig 只是上层入口。 |
 | `lib/views/dashboard/widgets/network_takeover.dart` | 接管状态读数：`networkSettingProvider.systemProxy`、`patchClashConfigProvider.tun.enable`——「未接管」归因的状态来源 |
 | `lib/providers/residential.dart:36` `residentialPolicyProvider` | 家宽策略状态（active / catalogReady / hasPlan）的 UI 侧来源，`BusinessLineCard` 与 actions 共用 |
 | 文案（l10n 实测） | `residentialExplanation` 已向用户声明「部分目标可能由服务端使用替代出口」；`residentialMissingDesc` 为「选择其他出口前，代理流量会被阻断；大陆直连不受影响」——WP2 的白话文案风格与事实口径对齐这两条 |
@@ -185,7 +185,7 @@ Codex 你好。本文件是天机云定制客户端（FlClash 分叉，仓库 `t
 
 校验对象是**默认代理路径**（仪表盘 `routedOutbound` 探针所代表的实际路径），不是某个网站的个别结果：
 
-1. **选择事实**：用户最后一次手动选择的（组, 节点），以 `selectedProxyNameProvider` / 已选映射的现值为准；用户从未手动选过（纯自动状态）时不做「不一致」判定，只显示当前出口。
+1. **选择事实**：用户最后一次手动选择的（组, 节点）。【2026-11-07 裁定，依 WP2 核查】现有状态只存「当前选择」、不区分手动/自动来源（Codex 已核查确认），故必须新增**手动选择记录**（组, 节点, 时间/序号）：切换动作（changeProxy 的手动入口）发生时写入，自动组内部换节点不写；以此记录为准做判定。用户从未手动选过（记录为空）时不做「不一致」判定，只显示当前出口。校验范围只限**默认路径经过的组**：组不在默认代理路径上时，其选择不参与首页校验、更不许据此报「不一致」（各组自身的手动选择照常保留生效）。
 2. **期望链**：所选节点经其所在组解析后，默认路径探针的首跳（`chains.firstOrNull`）应等于所选节点名（或其所属锁定组语义下的等价值）。探针结果的 `coreEpoch` / `routeVersion` 必须与切换后的当前值一致，旧 epoch 的结果一律作废，不参与判定。
 3. **一致**：首跳 == 所选节点 → 仪表盘出口卡正常呈现，不加任何标记。
 4. **不一致（可归因）**：首跳 != 所选节点，且能命中下表原因枚举之一 → 红字白话显示对应原因。
@@ -204,7 +204,7 @@ Codex 你好。本文件是天机云定制客户端（FlClash 分叉，仓库 `t
 
 ### 具体改动点
 
-1. **手动优先（配置层）**：用户在普通分组手动选定节点后，该选择不被 URL-Test/自动机制静默覆盖。预期实现路径（未核实，Codex 动手前先核查 `setup.dart` 的 `updateConfig` 组装细节后定案）：在配置组装阶段，对「用户有手动选择的组」做与 `applyResidentialEgress` 同思路的覆写——把该组收敛为只含所选节点的 select 语义（或等价的内核原生机制，如组类型降级 + `now` 固定，二选一由 Codex 在第 0 步核查后提出、写入交付说明再实现）；用户改回自动时（若 UI 有此入口）恢复订阅原组定义。覆写只作用于有手动选择的组，其余组与规则一字不动。
+1. **手动优先（配置层）**：用户在普通分组手动选定节点后，该选择不被 URL-Test/自动机制静默覆盖。预期实现路径（未核实，Codex 动手前先核查 `setup.dart` 的 `updateConfig` 组装细节后定案）：在配置组装阶段（实际链路 `getProfile → makeRealProfileTask`），对「用户有手动选择的组」做与 `applyResidentialEgress` 同思路的覆写——把该组收敛为只含所选节点的 select 语义（或等价的内核原生机制，如组类型降级 + `now` 固定，二选一由 Codex 在第 0 步核查后提出、写入交付说明再实现）；用户改回自动时（若 UI 有此入口）恢复订阅原组定义。覆写只作用于有手动选择的组，其余组与规则一字不动。
 2. **不许改内核**：上述覆写只在 Dart 侧配置组装层完成（B1）；找不到不改内核的实现路径时，按总则第 2 条停工报告，不许硬上。
 3. **切换后校验触发**：`changeProxy` 成功（`result.changed`）后，触发对默认路径的一次重新探针（复用 `routed_probe` 的 watch/节流机制，不新开轮询）；校验状态机按判定口径六态走：未手动选 / 一致 / 不一致（四枚举） / 未定。
 4. **呈现**：校验结果落在出口主卡（`CurrentOutboundCard`）：一致时无额外标记；未定时一行弱态「正在确认出口…」；不一致时红字白话（上表文案）+ 一个「重新检测」动作（复用出口卡既有的点徽章重探交互模式）。文案全部进 ARB。
