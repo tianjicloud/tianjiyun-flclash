@@ -45,22 +45,20 @@ class BusinessDashboardView extends ConsumerWidget {
             const UpdateStatusButton(),
             if (coreLib == null) const CoreStatusButton(),
           ],
-          body: BusinessBackdrop(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final scale = math.max(
-                  1.0,
-                  MediaQuery.textScalerOf(context).scale(1),
-                );
-                final room = constraints.biggest / scale;
-                final density = DashboardDensity.of(room);
-                return DashboardDensityScope(
-                  density: density,
-                  scale: scale,
-                  child: _BusinessBody(density: density, platform: platform),
-                );
-              },
-            ),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              final scale = math.max(
+                1.0,
+                MediaQuery.textScalerOf(context).scale(1),
+              );
+              final room = constraints.biggest / scale;
+              final density = DashboardDensity.of(room);
+              return DashboardDensityScope(
+                density: density,
+                scale: scale,
+                child: _BusinessBody(density: density, platform: platform),
+              );
+            },
           ),
         ),
       ),
@@ -115,40 +113,79 @@ class _BusinessBody extends ConsumerWidget {
                 ],
               ),
               const RepaintBoundary(child: CurrentOutboundCard()),
-              const OutboundModeCard(),
-              if (needsTakeover)
-                Text(
-                  context.appLocalizations.residentialCaptureOff,
-                  style: DashboardText.label(
-                    context,
-                  ).copyWith(color: DashboardColors.of(context).warn),
-                ),
-              const RepaintBoundary(child: BusinessLineCard()),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final cards = [
-                    const RepaintBoundary(child: TrafficSavingsCard()),
-                    RepaintBoundary(
+              if (density.isDesktop) ...[
+                if (needsTakeover)
+                  Text(
+                    context.appLocalizations.residentialCaptureOff,
+                    style: DashboardText.label(
+                      context,
+                    ).copyWith(color: DashboardColors.of(context).warn),
+                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: gap,
+                  children: [
+                    const Expanded(flex: 4, child: BusinessLineCard()),
+                    const Expanded(flex: 3, child: TrafficSavingsCard()),
+                    Expanded(
+                      flex: 3,
                       child: ProfilesCard(
                         title: context.appLocalizations.subscriptionInfo,
                       ),
                     ),
-                  ];
-                  if (constraints.maxWidth / scale < 350) {
-                    return Column(
+                  ],
+                ),
+                Row(
+                  spacing: gap,
+                  children: [
+                    const Expanded(
+                      child: SizedBox(height: 56, child: OutboundModeBar()),
+                    ),
+                    Expanded(
+                      child: _TakeoverRow(platform: platform, density: density),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                const OutboundModeCard(),
+
+                if (needsTakeover)
+                  Text(
+                    context.appLocalizations.residentialCaptureOff,
+                    style: DashboardText.label(
+                      context,
+                    ).copyWith(color: DashboardColors.of(context).warn),
+                  ),
+                const RepaintBoundary(child: BusinessLineCard()),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final cards = [
+                      const RepaintBoundary(child: TrafficSavingsCard()),
+                      RepaintBoundary(
+                        child: ProfilesCard(
+                          title: context.appLocalizations.subscriptionInfo,
+                        ),
+                      ),
+                    ];
+                    if (constraints.maxWidth / scale < 350) {
+                      return Column(
+                        spacing: gap,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: cards,
+                      );
+                    }
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: gap,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: cards,
+                      children: [
+                        for (final card in cards) Expanded(child: card),
+                      ],
                     );
-                  }
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: gap,
-                    children: [for (final card in cards) Expanded(child: card)],
-                  );
-                },
-              ),
-              _TakeoverRow(platform: platform, density: density),
+                  },
+                ),
+              ],
+              if (!density.isDesktop)
+                _TakeoverRow(platform: platform, density: density),
             ],
           ),
         ),

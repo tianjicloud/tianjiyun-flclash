@@ -165,13 +165,18 @@ class ProfilesCard extends ConsumerWidget {
             ],
             if (usage != null)
               _UsageMeter(usage: usage, figure: figure, gap: 8),
-            TextButton(
-              onPressed: () => _openProfile(context, profile),
-              child: Text(appLocalizations.details(cardTitle)),
-            ),
-            TextButton(
-              onPressed: () => dialogs.openUrl(userPanelUrl),
-              child: Text(appLocalizations.residentialManageSubscription),
+            Wrap(
+              spacing: 8,
+              children: [
+                TextButton(
+                  onPressed: () => _openProfile(context, profile),
+                  child: Text(appLocalizations.details(cardTitle)),
+                ),
+                TextButton(
+                  onPressed: () => dialogs.openUrl(userPanelUrl),
+                  child: Text(appLocalizations.residentialManageSubscription),
+                ),
+              ],
             ),
           ],
         ),

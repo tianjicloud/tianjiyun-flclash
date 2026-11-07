@@ -108,15 +108,16 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
       final details = Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 20,
+        spacing: density.isDesktop ? 10 : 20,
         children: [
-          DashboardCardHeader(
-            glyph: AppGlyphs.status,
-            title: appLocalizations.status,
-            leading: [
-              DashboardChip(label: chipLabel, tone: chipTone, dot: isStart),
-            ],
-          ),
+          if (!density.isDesktop)
+            DashboardCardHeader(
+              glyph: AppGlyphs.status,
+              title: appLocalizations.status,
+              leading: [
+                DashboardChip(label: chipLabel, tone: chipTone, dot: isStart),
+              ],
+            ),
           _ExitRow(
             info: ipInfo,
             failed: failed,
@@ -128,23 +129,48 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
             metrics: metrics,
             large: true,
           ),
-          _Cells(
-            quality: quality,
-            loading: loading,
-            active: isStart && !suspended,
-            gap: metrics.cellGap,
-          ),
           if (showSelection) const SelectionNotice(),
-          _BusinessMetrics(
-            active: isStart && !suspended,
-            exit: phase == ProbePhase.fresh
-                ? entry.stamp?.hits.firstOrNull?.exit
-                : null,
-          ),
+          if (density.isDesktop)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 20,
+              children: [
+                Expanded(
+                  child: _Cells(
+                    quality: quality,
+                    loading: loading,
+                    active: isStart && !suspended,
+                    gap: metrics.cellGap,
+                  ),
+                ),
+                Expanded(
+                  child: _BusinessMetrics(
+                    active: isStart && !suspended,
+                    exit: phase == ProbePhase.fresh
+                        ? entry.stamp?.hits.firstOrNull?.exit
+                        : null,
+                  ),
+                ),
+              ],
+            )
+          else ...[
+            _Cells(
+              quality: quality,
+              loading: loading,
+              active: isStart && !suspended,
+              gap: metrics.cellGap,
+            ),
+            _BusinessMetrics(
+              active: isStart && !suspended,
+              exit: phase == ProbePhase.fresh
+                  ? entry.stamp?.hits.firstOrNull?.exit
+                  : null,
+            ),
+          ],
         ],
       );
       final toggle = _StartToggle(
-        size: 208,
+        size: density.isDesktop ? 140 : 208,
         enabled: hasProfile,
         running: isStart,
         suspended: suspended,
@@ -832,7 +858,11 @@ class _StartToggleState extends ConsumerState<_StartToggle>
   void didUpdateWidget(_StartToggle oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.running != widget.running) {
-      widget.running ? _controller.forward() : _controller.reverse();
+      if (context.disableAnimations) {
+        _controller.value = widget.running ? 1 : 0;
+      } else {
+        widget.running ? _controller.forward() : _controller.reverse();
+      }
     }
   }
 
@@ -888,18 +918,30 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                 overlay: PressRegion.hoverOverlay,
                 onFocusChange: (value) => setState(() => _focused = value),
                 child: RepaintBoundary(
-                  child: CustomPaint(
-                    painter: OrbitPainter(color: color, focused: _focused),
-                    child: SizedBox.square(
-                      dimension: size,
-                      child: Center(
-                        child: GlyphIcon(
-                          widget.suspended
-                              ? AppGlyphs.wifiOff
-                              : AppGlyphs.playPause(widget.running ? 1 : 0),
-                          size: size * 0.26,
-                          color: Colors.white,
-                          fill: 1,
+                  child: TweenAnimationBuilder<Color?>(
+                    tween: ColorTween(end: color),
+                    duration: context.motionDuration(_morphDuration),
+                    builder: (context, animatedColor, _) => AnimatedBuilder(
+                      animation: _progress,
+                      builder: (context, _) => CustomPaint(
+                        painter: OrbitPainter(
+                          color: animatedColor ?? color,
+                          focused: _focused,
+                        ),
+                        child: SizedBox.square(
+                          dimension: size,
+                          child: Center(
+                            child: GlyphIcon(
+                              widget.suspended
+                                  ? AppGlyphs.wifiOff
+                                  : AppGlyphs.playPause(
+                                      _progress.value.clamp(0, 1),
+                                    ),
+                              size: size * 0.26,
+                              color: Colors.white,
+                              fill: 1,
+                            ),
+                          ),
                         ),
                       ),
                     ),

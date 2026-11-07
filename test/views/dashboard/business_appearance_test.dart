@@ -9,7 +9,9 @@ import 'package:prism_ui/prism_ui.dart';
 import '../../helpers/test_app.dart';
 
 void main() {
-  testWidgets('business colors remain local to the dashboard', (tester) async {
+  testWidgets('business dashboard inherits the application palette', (
+    tester,
+  ) async {
     final colors = <Color>[];
     final markers = <bool>[];
     Widget sample() => Builder(
@@ -35,7 +37,7 @@ void main() {
         ),
       ),
     );
-    expect(colors, [scheme.surface, BusinessPalette.page, scheme.surface]);
+    expect(colors, [scheme.surface, scheme.surface, scheme.surface]);
     expect(markers, [false, true, false]);
   });
 

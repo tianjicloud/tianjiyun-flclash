@@ -646,6 +646,10 @@ void main() {
       final action =
           container.read(setupActionProvider.notifier) as _RecordingSetupAction;
       await tester.tap(find.byTooltip('Stop'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 80));
+      expect(painter().color, isNot(BusinessPalette.secondary));
+      expect(painter().color, isNot(BusinessPalette.blue));
       await tester.pumpAndSettle();
       expect(action.requests, [false]);
       expect(painter().color, BusinessPalette.secondary);

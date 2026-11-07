@@ -61,17 +61,7 @@ class DashboardCard extends StatelessWidget {
     final shape = AppShape.all(
       business ? BusinessPalette.cardRadius : dashboardCardRadius(density),
     );
-    final border = side != BorderSide.none
-        ? side
-        : business
-        ? BorderSide(
-            color:
-                (Theme.brightnessOf(context) == Brightness.dark
-                        ? Colors.white
-                        : BusinessPalette.blue)
-                    .withValues(alpha: 0.075),
-          )
-        : BorderSide.none;
+    final border = side;
     final content = Padding(
       padding: padding ?? dashboardCardPadding(density),
       child: child,
@@ -80,9 +70,7 @@ class DashboardCard extends StatelessWidget {
     final card = Container(
       clipBehavior: clipBehavior,
       decoration: ShapeDecoration(
-        color: business && Theme.brightnessOf(context) == Brightness.dark
-            ? Colors.white.withValues(alpha: 0.04)
-            : DashboardColors.of(context).card,
+        color: DashboardColors.of(context).card,
         shape: shape,
         shadows: business ? const [] : DashboardShadows.e1(context),
       ),

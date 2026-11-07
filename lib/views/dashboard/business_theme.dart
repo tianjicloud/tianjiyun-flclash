@@ -9,8 +9,6 @@ abstract final class BusinessPalette {
   static const accent = Color(0xFF6A5CFF);
   static const page = Color(0xFF0A0F2B);
   static const deep = Color(0xFF070B1F);
-  static const paper = Color(0xFFF2F4FF);
-  static const text = Color(0xFFEDF0FF);
   static const secondary = Color(0xFF98A2C8);
   static const purple = Color(0xFF8C78FF);
   static const connected = Color(0xFF34E0B0);
@@ -41,129 +39,7 @@ class BusinessAppearance extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final dark = theme.brightness == Brightness.dark;
-    final page = dark ? BusinessPalette.page : BusinessPalette.paper;
-    final panel = Color.alphaBlend(
-      Colors.white.withValues(alpha: dark ? 0.04 : 0.7),
-      page,
-    );
-    final scheme = theme.colorScheme.copyWith(
-      surface: page,
-      surfaceContainer: dark ? panel : page,
-      surfaceBright: panel,
-      surfaceContainerHigh: Color.alphaBlend(
-        Colors.white.withValues(alpha: dark ? 0.08 : 0.4),
-        page,
-      ),
-      surfaceContainerHighest: Color.alphaBlend(
-        BusinessPalette.secondary.withValues(alpha: 0.18),
-        page,
-      ),
-      onSurface: dark ? BusinessPalette.text : BusinessPalette.page,
-      onSurfaceVariant: dark
-          ? BusinessPalette.secondary
-          : Color.lerp(BusinessPalette.secondary, BusinessPalette.page, 0.55),
-      error: dark ? BusinessPalette.error : theme.colorScheme.error,
-    );
-    return BusinessTheme(
-      child: Theme(
-        data: theme.copyWith(colorScheme: scheme, elevatedColorScheme: scheme),
-        child: ButtonTheme.merge(
-          data: ButtonThemeData(
-            filled: ButtonStyle.from(
-              shape: AppShape.all(BusinessPalette.buttonRadius),
-            ),
-            text: ButtonStyle.from(
-              shape: AppShape.all(BusinessPalette.buttonRadius),
-            ),
-          ),
-          child: child,
-        ),
-      ),
-    );
-  }
-}
-
-class BusinessBackdrop extends StatelessWidget {
-  const BusinessBackdrop({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) => Stack(
-    children: [
-      Positioned.fill(
-        child: IgnorePointer(
-          child: RepaintBoundary(
-            child: CustomPaint(
-              painter: _SpacePainter(Theme.brightnessOf(context)),
-            ),
-          ),
-        ),
-      ),
-      child,
-    ],
-  );
-}
-
-class _SpacePainter extends CustomPainter {
-  const _SpacePainter(this.brightness);
-
-  final Brightness brightness;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final dark = brightness == Brightness.dark;
-    final rect = Offset.zero & size;
-    canvas.drawRect(
-      rect,
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: dark
-              ? [BusinessPalette.page, BusinessPalette.deep]
-              : [BusinessPalette.paper, Colors.white],
-        ).createShader(rect),
-    );
-    for (final (center, color) in [
-      (const Alignment(0.9, -1), BusinessPalette.violet),
-      (const Alignment(-1, 1), BusinessPalette.blue),
-    ]) {
-      canvas.drawRect(
-        rect,
-        Paint()
-          ..shader = RadialGradient(
-            center: center,
-            radius: 0.9,
-            colors: [
-              color.withValues(alpha: dark ? 0.16 : 0.06),
-              color.withValues(alpha: 0),
-            ],
-          ).createShader(rect),
-      );
-    }
-    if (dark) {
-      final paint = Paint()
-        ..color = BusinessPalette.text.withValues(alpha: 0.3);
-      for (var i = 0; i < 20; i++) {
-        canvas.drawCircle(
-          Offset(
-            ((i * 137 + 51) % 997) / 997 * size.width,
-            ((i * 233 + 97) % 991) / 991 * size.height,
-          ),
-          i.isEven ? 0.8 : 0.5,
-          paint,
-        );
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_SpacePainter oldDelegate) =>
-      brightness != oldDelegate.brightness;
+  Widget build(BuildContext context) => BusinessTheme(child: child);
 }
 
 class OrbitPainter extends CustomPainter {

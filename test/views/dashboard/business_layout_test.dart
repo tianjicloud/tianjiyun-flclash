@@ -12,6 +12,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
+import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
 import 'package:fl_clash/views/about.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:flutter/widgets.dart';
@@ -192,13 +193,13 @@ void main() {
       testWidgets(
         'business home fits $brightness $width at scale $scale, capture off $captureOff, residential $residential',
         (tester) async {
-          tester.view.physicalSize = Size(width, 900);
+          tester.view.physicalSize = Size(width, 700);
           tester.view.devicePixelRatio = 1;
           tester.platformDispatcher.textScaleFactorTestValue = scale;
           addTearDown(tester.view.resetPhysicalSize);
           addTearDown(tester.view.resetDevicePixelRatio);
           addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-          container.read(viewSizeProvider.notifier).value = Size(width, 900);
+          container.read(viewSizeProvider.notifier).value = Size(width, 700);
           if (!residential) {
             final profile = container.read(currentProfileProvider)!;
             container
@@ -245,6 +246,12 @@ void main() {
             find.byType(ResidentialExitCard),
             residential ? findsOneWidget : findsNothing,
           );
+          if (width >= 1200 && scale == 1 && !captureOff) {
+            expect(
+              tester.getBottomRight(find.byType(NetworkTakeoverTile).last).dy,
+              lessThanOrEqualTo(700),
+            );
+          }
           if (!residential) expect(find.text('默认线路'), findsOneWidget);
           expect(
             find.text('尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。'),
