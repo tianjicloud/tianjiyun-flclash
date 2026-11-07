@@ -10,6 +10,8 @@ import 'package:fl_clash/pages/home.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/app_background.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fl_clash/views/config/general.dart';
 import 'package:fl_clash/views/navigation.dart';
 import 'package:fl_clash/views/tools.dart';
@@ -35,6 +37,104 @@ void main() {
     navigationPort = navigation;
     addTearDown(() => navigationPort = null);
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'wallpaper spans sidebar and page without restarting content $brightness',
+      (tester) async {
+        tester.view.physicalSize = const Size(1200, 800);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final container = ProviderContainer(
+          overrides: [
+            _dashboardProfileOverride,
+            navigationItemsStateProvider.overrideWithValue(
+              NavigationItemsState(
+                value: [
+                  NavigationItem(
+                    glyph: AppGlyphs.dashboard,
+                    label: PageLabel.dashboard,
+                    builder: (_) =>
+                        const Scaffold(title: 'Page', body: _StatefulContent()),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+        globalState.container = container;
+        container.read(viewSizeProvider.notifier).value = const Size(1200, 800);
+        for (final preset in ['solid', 'mountains', 'orbit', 'solid']) {
+          await tester.pumpWidget(
+            UncontrolledProviderScope(
+              container: container,
+              child: TestApp(
+                includeNavigatorKey: false,
+                theme: ThemeData(
+                  colorScheme: seededColorScheme(
+                    seedColor: const Color(0xFF3D5AFE),
+                    brightness: brightness,
+                  ),
+                ),
+                child: AppBackgroundScope(
+                  preset: preset,
+                  child: const HomePage(),
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final image = preset != 'solid';
+          expect(
+            find.byType(SvgPicture),
+            image ? findsOneWidget : findsNothing,
+          );
+          final sidebarSurface = tester.widget<Surface>(
+            find
+                .ancestor(
+                  of: find.byType(NavigationSidebar),
+                  matching: find.byType(Surface),
+                )
+                .first,
+          );
+          final pageSurface = tester.widget<Surface>(
+            find
+                .ancestor(
+                  of: find.byType(Scaffold),
+                  matching: find.byType(Surface),
+                )
+                .first,
+          );
+          final scheme = tester
+              .element(find.byType(NavigationSidebar))
+              .colorScheme;
+          expect(
+            sidebarSurface.color,
+            image ? Colors.transparent : scheme.chromeSurface,
+          );
+          expect(
+            pageSurface.color,
+            image ? Colors.transparent : SurfaceLevel.page.colorOf(scheme),
+          );
+          if (image) {
+            expect(
+              tester.getRect(find.byType(SvgPicture)),
+              const Rect.fromLTWH(0, 0, 1200, 800),
+            );
+            expect(find.text('count: 1'), findsOneWidget);
+          } else if (find.text('count: 0').evaluate().isNotEmpty) {
+            await tester.tap(find.text('count: 0'));
+            await tester.pump();
+          } else {
+            expect(find.text('count: 1'), findsOneWidget);
+          }
+          expect(tester.takeException(), isNull);
+        }
+      },
+    );
+  }
 
   testWidgets('initial desktop layout does not animate mobile navigation out', (
     tester,

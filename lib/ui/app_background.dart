@@ -35,12 +35,18 @@ class AppBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final inherited =
+        context
+            .dependOnInheritedWidgetOfExactType<_PaintedBackground>()
+            ?.visible ??
+        false;
+    final visible = enabled && AppBackgroundScope.hasImage(context);
     return Stack(
       children: [
         Positioned.fill(
           child: IgnorePointer(
             child: RepaintBoundary(
-              child: !enabled || !AppBackgroundScope.hasImage(context)
+              child: !visible || inherited
                   ? const SizedBox.shrink()
                   : Stack(
                       fit: StackFit.expand,
@@ -64,8 +70,18 @@ class AppBackground extends StatelessWidget {
             ),
           ),
         ),
-        child,
+        _PaintedBackground(visible: visible, child: child),
       ],
     );
   }
+}
+
+class _PaintedBackground extends InheritedWidget {
+  const _PaintedBackground({required this.visible, required super.child});
+
+  final bool visible;
+
+  @override
+  bool updateShouldNotify(_PaintedBackground oldWidget) =>
+      visible != oldWidget.visible;
 }

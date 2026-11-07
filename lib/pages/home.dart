@@ -4,6 +4,7 @@ import 'package:fl_clash/manager/app_manager.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/views/onboarding/onboarding.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
@@ -78,7 +79,9 @@ class _HomeShell extends ConsumerWidget {
       appSettingProvider.select((state) => state.floatingNavigationBar),
     );
     return Surface(
-      color: SurfaceLevel.page.colorOf(context.colorScheme),
+      color: AppBackgroundScope.hasImage(context)
+          ? Colors.transparent
+          : SurfaceLevel.page.colorOf(context.colorScheme),
       child: Column(
         children: [
           Expanded(
