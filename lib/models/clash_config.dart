@@ -1672,6 +1672,9 @@ abstract class ProfileOverrides with _$ProfileOverrides {
     @Default({})
     @JsonKey(name: 'proxy-providers')
     Map<String, ProxyProviderOptions> proxyProviders,
+    @JsonKey(name: 'residential-exit') String? residentialExit,
+    @JsonKey(name: 'residential-subscription-fingerprint')
+    String? residentialSubscriptionFingerprint,
   }) = _ProfileOverrides;
 
   factory ProfileOverrides.fromJson(Map<String, Object?> json) =>

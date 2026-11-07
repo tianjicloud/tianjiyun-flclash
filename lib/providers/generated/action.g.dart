@@ -60,6 +60,58 @@ abstract class _$CommonAction extends $Notifier<void> {
   }
 }
 
+@ProviderFor(ResidentialAction)
+final residentialActionProvider = ResidentialActionProvider._();
+
+final class ResidentialActionProvider
+    extends $NotifierProvider<ResidentialAction, ResidentialApplyState> {
+  ResidentialActionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'residentialActionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$residentialActionHash();
+
+  @$internal
+  @override
+  ResidentialAction create() => ResidentialAction();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ResidentialApplyState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ResidentialApplyState>(value),
+    );
+  }
+}
+
+String _$residentialActionHash() => r'6e51d9c1f2423dfa0d553ed1ab523e8eb8a031ff';
+
+abstract class _$ResidentialAction extends $Notifier<ResidentialApplyState> {
+  ResidentialApplyState build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<ResidentialApplyState, ResidentialApplyState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ResidentialApplyState, ResidentialApplyState>,
+              ResidentialApplyState,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(SetupAction)
 final setupActionProvider = SetupActionProvider._();
 
@@ -91,7 +143,7 @@ final class SetupActionProvider extends $NotifierProvider<SetupAction, void> {
   }
 }
 
-String _$setupActionHash() => r'ee90d607ba84130b6ec2e112f8bd18598e2410aa';
+String _$setupActionHash() => r'5f93f9764076dfdf5d76224e8fd357fd9f8ac146';
 
 abstract class _$SetupAction extends $Notifier<void> {
   void build();
@@ -398,7 +450,7 @@ final class ProxiesActionProvider
   }
 }
 
-String _$proxiesActionHash() => r'09ba0ec4e7776a78aebca8ed2c54579bfdc59f8c';
+String _$proxiesActionHash() => r'75635f8e2cc8a68b005c4157e746d3b912571e25';
 
 abstract class _$ProxiesAction extends $Notifier<void> {
   void build();

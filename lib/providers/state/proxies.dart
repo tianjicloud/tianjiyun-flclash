@@ -5,8 +5,18 @@ GroupsState currentGroupsState(Ref ref) {
   final mode = ref.watch(
     patchClashConfigProvider.select((state) => state.mode),
   );
-  final groups = ref.watch(groupsProvider);
-  final shown = switch (mode) {
+  final residentialActive = isResidentialPolicyActive(
+    ref.watch(currentProfileProvider),
+  );
+  final groups = ref
+      .watch(groupsProvider)
+      .where(
+        (group) =>
+            !residentialActive ||
+            group.name != tianjiResidentialLockedGroupName,
+      )
+      .toList();
+  final shown = switch (residentialActive ? Mode.rule : mode) {
     Mode.direct => const <Group>[],
     Mode.global => groups,
     Mode.rule => groups.where((item) => item.hidden == false),

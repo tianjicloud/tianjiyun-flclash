@@ -7663,8 +7663,7 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one:
-          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -9538,6 +9537,246 @@ class AppLocalizations {
     return Intl.message(
       'Saved this month',
       name: 'trafficSavedThisMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Residential exit`
+  String get residentialTitle {
+    return Intl.message(
+      'Residential exit',
+      name: 'residentialTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selected`
+  String get residentialSelected {
+    return Intl.message(
+      'Selected',
+      name: 'residentialSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unavailable`
+  String get residentialUnavailable {
+    return Intl.message(
+      'Unavailable',
+      name: 'residentialUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Applying…`
+  String get residentialApplying {
+    return Intl.message(
+      'Applying…',
+      name: 'residentialApplying',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switching lines. Please wait.`
+  String get residentialPending {
+    return Intl.message(
+      'Switching lines. Please wait.',
+      name: 'residentialPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose exit`
+  String get residentialChoose {
+    return Intl.message(
+      'Choose exit',
+      name: 'residentialChoose',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change exit`
+  String get residentialChange {
+    return Intl.message(
+      'Change exit',
+      name: 'residentialChange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use subscription policy`
+  String get residentialUseSubscription {
+    return Intl.message(
+      'Use subscription policy',
+      name: 'residentialUseSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription policy`
+  String get residentialSubscriptionPolicy {
+    return Intl.message(
+      'Subscription policy',
+      name: 'residentialSubscriptionPolicy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No residential exit is selected. Proxied traffic follows this subscription’s own policy.`
+  String get residentialUsingSubscription {
+    return Intl.message(
+      'No residential exit is selected. Proxied traffic follows this subscription’s own policy.',
+      name: 'residentialUsingSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Once connected, traffic that needs a proxy follows this line.`
+  String get residentialActiveDesc {
+    return Intl.message(
+      'Once connected, traffic that needs a proxy follows this line.',
+      name: 'residentialActiveDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This line could not be applied. Retry or choose another line.`
+  String get residentialApplyFailed {
+    return Intl.message(
+      'This line could not be applied. Retry or choose another line.',
+      name: 'residentialApplyFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The new exit is active, but existing connections could not be closed. They may keep the previous exit until they reconnect.`
+  String get residentialResetFailed {
+    return Intl.message(
+      'The new exit is active, but existing connections could not be closed. They may keep the previous exit until they reconnect.',
+      name: 'residentialResetFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected residential exit is no longer in this subscription.`
+  String get residentialMissing {
+    return Intl.message(
+      'The selected residential exit is no longer in this subscription.',
+      name: 'residentialMissing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy traffic is blocked until you choose another exit. Mainland direct traffic is unchanged.`
+  String get residentialMissingDesc {
+    return Intl.message(
+      'Proxy traffic is blocked until you choose another exit. Mainland direct traffic is unchanged.',
+      name: 'residentialMissingDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No residential lines available`
+  String get residentialNoPlan {
+    return Intl.message(
+      'No residential lines available',
+      name: 'residentialNoPlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This subscription has no usable residential exit right now. Keep using the subscription policy, or check the subscription panel.`
+  String get residentialNoPlanDesc {
+    return Intl.message(
+      'This subscription has no usable residential exit right now. Keep using the subscription policy, or check the subscription panel.',
+      name: 'residentialNoPlanDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage subscription`
+  String get residentialManageSubscription {
+    return Intl.message(
+      'Manage subscription',
+      name: 'residentialManageSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All traffic that requires the proxy uses the selected residential line. Mainland and direct traffic still follows the subscription. Some destinations may use a service-side alternative exit.`
+  String get residentialExplanation {
+    return Intl.message(
+      'All traffic that requires the proxy uses the selected residential line. Mainland and direct traffic still follows the subscription. Some destinations may use a service-side alternative exit.',
+      name: 'residentialExplanation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The IP card shows the exit for its current check destination, not one universal exit.`
+  String get residentialRouteNote {
+    return Intl.message(
+      'The IP card shows the exit for its current check destination, not one universal exit.',
+      name: 'residentialRouteNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose the residential exit from the dashboard. Other groups cannot change it while residential routing is active.`
+  String get residentialExitLocked {
+    return Intl.message(
+      'Choose the residential exit from the dashboard. Other groups cannot change it while residential routing is active.',
+      name: 'residentialExitLocked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading residential lines…`
+  String get residentialLoadingCatalog {
+    return Intl.message(
+      'Loading residential lines…',
+      name: 'residentialLoadingCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reading the available lines in your subscription.`
+  String get residentialLoadingCatalogDesc {
+    return Intl.message(
+      'Reading the available lines in your subscription.',
+      name: 'residentialLoadingCatalogDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Computer traffic is not being captured. Enable System proxy or TUN below.`
+  String get residentialCaptureOff {
+    return Intl.message(
+      'Computer traffic is not being captured. Enable System proxy or TUN below.',
+      name: 'residentialCaptureOff',
       desc: '',
       args: [],
     );

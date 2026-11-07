@@ -588,6 +588,9 @@ _ProfileOverrides _$ProfileOverridesFromJson(Map<String, dynamic> json) =>
             ),
           ) ??
           const {},
+      residentialExit: json['residential-exit'] as String?,
+      residentialSubscriptionFingerprint:
+          json['residential-subscription-fingerprint'] as String?,
     );
 
 Map<String, dynamic> _$ProfileOverridesToJson(_ProfileOverrides instance) =>
@@ -609,6 +612,9 @@ Map<String, dynamic> _$ProfileOverridesToJson(_ProfileOverrides instance) =>
           .map((e) => _$TunOverrideKeyEnumMap[e]!)
           .toList(),
       'proxy-providers': instance.proxyProviders,
+      'residential-exit': instance.residentialExit,
+      'residential-subscription-fingerprint':
+          instance.residentialSubscriptionFingerprint,
     };
 
 const _$DnsOverrideKeyEnumMap = {

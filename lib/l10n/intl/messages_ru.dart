@@ -1098,9 +1098,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Сертификат установлен",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -1612,9 +1613,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Не удалось импортировать",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Не удаётся подключиться к адресу подписки",
     ),
@@ -1857,6 +1859,68 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "resetTip": MessageLookupByLibrary.simpleMessage(
       "Вы уверены, что хотите выполнить сброс?",
+    ),
+    "residentialActiveDesc": MessageLookupByLibrary.simpleMessage(
+      "После подключения трафик, которому нужен прокси, использует эту линию.",
+    ),
+    "residentialApplyFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось применить линию. Повторите попытку или выберите другую.",
+    ),
+    "residentialApplying": MessageLookupByLibrary.simpleMessage("Применение…"),
+    "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
+      "Трафик компьютера не перехватывается. Включите системный прокси или TUN ниже.",
+    ),
+    "residentialChange": MessageLookupByLibrary.simpleMessage("Изменить выход"),
+    "residentialChoose": MessageLookupByLibrary.simpleMessage("Выбрать выход"),
+    "residentialExitLocked": MessageLookupByLibrary.simpleMessage(
+      "Выберите домашний выход на панели. Пока домашняя маршрутизация активна, другие группы не могут её изменить.",
+    ),
+    "residentialExplanation": MessageLookupByLibrary.simpleMessage(
+      "Весь проксируемый трафик использует выбранную домашнюю линию. Трафик материкового Китая и прямой трафик по-прежнему идёт по подписке. Для некоторых назначений сервис может использовать альтернативный выход.",
+    ),
+    "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
+      "Загрузка домашних линий…",
+    ),
+    "residentialLoadingCatalogDesc": MessageLookupByLibrary.simpleMessage(
+      "Загрузка доступных линий из подписки.",
+    ),
+    "residentialManageSubscription": MessageLookupByLibrary.simpleMessage(
+      "Управлять подпиской",
+    ),
+    "residentialMissing": MessageLookupByLibrary.simpleMessage(
+      "Выбранного домашнего выхода больше нет в этой подписке.",
+    ),
+    "residentialMissingDesc": MessageLookupByLibrary.simpleMessage(
+      "Проксируемый трафик блокируется, пока вы не выберете другой выход. Прямой трафик материкового Китая не меняется.",
+    ),
+    "residentialNoPlan": MessageLookupByLibrary.simpleMessage(
+      "Нет доступных домашних линий",
+    ),
+    "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
+      "В этой подписке сейчас нет доступного домашнего выхода. Продолжайте использовать политику подписки или проверьте панель подписки.",
+    ),
+    "residentialPending": MessageLookupByLibrary.simpleMessage(
+      "Переключение линии. Подождите.",
+    ),
+    "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
+      "Новый выход активен, но существующие подключения не удалось закрыть. До переподключения они могут использовать прежний выход.",
+    ),
+    "residentialRouteNote": MessageLookupByLibrary.simpleMessage(
+      "Карточка IP показывает выход только для текущей цели проверки, а не единый выход для всех сайтов.",
+    ),
+    "residentialSelected": MessageLookupByLibrary.simpleMessage("Выбран"),
+    "residentialSubscriptionPolicy": MessageLookupByLibrary.simpleMessage(
+      "Политика подписки",
+    ),
+    "residentialTitle": MessageLookupByLibrary.simpleMessage("Домашний выход"),
+    "residentialUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Недоступен",
+    ),
+    "residentialUseSubscription": MessageLookupByLibrary.simpleMessage(
+      "Использовать политику подписки",
+    ),
+    "residentialUsingSubscription": MessageLookupByLibrary.simpleMessage(
+      "Домашний выход не выбран. Проксируемый трафик идёт по политике подписки.",
     ),
     "resourceUpdateInterval": MessageLookupByLibrary.simpleMessage(
       "Интервал автообновления",

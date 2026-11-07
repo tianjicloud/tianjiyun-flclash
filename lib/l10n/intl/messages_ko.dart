@@ -1495,6 +1495,66 @@ class MessageLookup extends MessageLookupByLibrary {
       "이 페이지에 변경 사항이 있습니다. 초기화하시겠습니까?",
     ),
     "resetTip": MessageLookupByLibrary.simpleMessage("초기화하시겠습니까?"),
+    "residentialActiveDesc": MessageLookupByLibrary.simpleMessage(
+      "연결 후 프록시가 필요한 트래픽은 이 회선을 사용합니다.",
+    ),
+    "residentialApplyFailed": MessageLookupByLibrary.simpleMessage(
+      "회선을 적용하지 못했습니다. 다시 시도하거나 다른 회선을 선택하세요.",
+    ),
+    "residentialApplying": MessageLookupByLibrary.simpleMessage("적용 중…"),
+    "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
+      "컴퓨터 트래픽을 처리하고 있지 않습니다. 아래에서 시스템 프록시 또는 TUN을 켜세요.",
+    ),
+    "residentialChange": MessageLookupByLibrary.simpleMessage("출구 변경"),
+    "residentialChoose": MessageLookupByLibrary.simpleMessage("출구 선택"),
+    "residentialExitLocked": MessageLookupByLibrary.simpleMessage(
+      "대시보드에서 주거용 출구를 선택하세요. 주거용 라우팅이 활성화된 동안 다른 그룹에서는 변경할 수 없습니다.",
+    ),
+    "residentialExplanation": MessageLookupByLibrary.simpleMessage(
+      "프록시가 필요한 모든 트래픽은 선택한 주거용 회선을 사용합니다. 중국 본토 및 직접 연결 트래픽은 구독을 따릅니다. 일부 대상은 서비스 측에서 대체 출구를 사용할 수 있습니다.",
+    ),
+    "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
+      "주거용 회선을 불러오는 중…",
+    ),
+    "residentialLoadingCatalogDesc": MessageLookupByLibrary.simpleMessage(
+      "구독에서 사용 가능한 회선을 불러오는 중입니다.",
+    ),
+    "residentialManageSubscription": MessageLookupByLibrary.simpleMessage(
+      "구독 관리",
+    ),
+    "residentialMissing": MessageLookupByLibrary.simpleMessage(
+      "선택한 주거용 출구가 이 구독에 더 이상 없습니다.",
+    ),
+    "residentialMissingDesc": MessageLookupByLibrary.simpleMessage(
+      "다른 출구를 선택할 때까지 프록시 트래픽이 차단됩니다. 중국 본토 직접 연결 트래픽은 그대로입니다.",
+    ),
+    "residentialNoPlan": MessageLookupByLibrary.simpleMessage(
+      "사용 가능한 주거용 회선 없음",
+    ),
+    "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
+      "이 구독에는 현재 사용할 수 있는 주거용 출구가 없습니다. 구독 정책을 계속 사용하거나 구독 패널을 확인하세요.",
+    ),
+    "residentialPending": MessageLookupByLibrary.simpleMessage(
+      "회선을 전환하는 중입니다. 잠시 기다려 주세요.",
+    ),
+    "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
+      "새 출구는 활성화되었지만 기존 연결을 닫지 못했습니다. 다시 연결하기 전까지 이전 출구를 사용할 수 있습니다.",
+    ),
+    "residentialRouteNote": MessageLookupByLibrary.simpleMessage(
+      "IP 카드는 현재 확인 대상의 출구만 표시하며 모든 사이트가 같은 출구를 쓰는 것은 아닙니다.",
+    ),
+    "residentialSelected": MessageLookupByLibrary.simpleMessage("선택됨"),
+    "residentialSubscriptionPolicy": MessageLookupByLibrary.simpleMessage(
+      "구독 정책",
+    ),
+    "residentialTitle": MessageLookupByLibrary.simpleMessage("주거용 출구"),
+    "residentialUnavailable": MessageLookupByLibrary.simpleMessage("사용할 수 없음"),
+    "residentialUseSubscription": MessageLookupByLibrary.simpleMessage(
+      "구독 정책 사용",
+    ),
+    "residentialUsingSubscription": MessageLookupByLibrary.simpleMessage(
+      "주거용 출구가 선택되지 않았습니다. 프록시가 필요한 트래픽은 구독 정책을 따릅니다.",
+    ),
     "resourceUpdateInterval": MessageLookupByLibrary.simpleMessage(
       "자동 업데이트 간격",
     ),

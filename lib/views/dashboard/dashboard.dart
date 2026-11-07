@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/widgets.dart';
 
+import 'business.dart';
 import 'edit.dart';
 import 'layout.dart';
 import 'style.dart';
@@ -47,6 +49,10 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final platform = widget.platform ?? SupportPlatform.currentPlatform;
+    final profile = ref.watch(currentProfileProvider);
+    if (isTianjiSubscriptionProfile(profile)) {
+      return BusinessDashboardView(platform: platform);
+    }
     final viewSize = ref.watch(viewSizeProvider);
     final sideWidth = ref.watch(sideWidthProvider);
     final scale = math.max(1.0, MediaQuery.textScalerOf(context).scale(1));

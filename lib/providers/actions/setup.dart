@@ -16,6 +16,17 @@ typedef BuiltProfile = ({
   SetupBase? base,
 });
 
+(int?, ProfileType?, String?, DateTime?, String?, String?) _profileBuildKey(
+  Profile? profile,
+) => (
+  profile?.id,
+  profile?.type,
+  profile?.url,
+  profile?.lastUpdateDate,
+  profile?.overrides.residentialExit,
+  profile?.overrides.residentialSubscriptionFingerprint,
+);
+
 class _RunRequest {
   final bool running;
   final bool initialize;
@@ -331,15 +342,26 @@ class SetupAction extends _$SetupAction {
   @visibleForTesting
   Future<void> updateConfig() async {
     await globalState.safeRun(() async {
+      final profile = ref.read(currentProfileProvider);
+      final profileId = profile?.id;
+      final identity = resolveTianjiProfile(profile)?.fingerprint;
       final patchConfig = ref.read(patchClashConfigProvider);
       final shouldContinueSetup = await requestAdmin(patchConfig.tun.enable);
       if (!shouldContinueSetup) {
         await _restartCoreAfterAuthorization();
         return;
       }
+      final latest = ref.read(currentProfileProvider);
+      if (latest?.id != profileId ||
+          resolveTianjiProfile(latest)?.fingerprint != identity) {
+        return;
+      }
       final networkSetting = ref.read(networkSettingProvider);
       await _core.updateConfig(
-        _effectivePatchConfig(patchConfig).toUpdateParams(
+        _effectivePatchConfig(
+          patchConfig,
+          residentialActive: isResidentialPolicyActive(latest),
+        ).toUpdateParams(
           authentication: networkSetting.authentication.credentials,
           options: ref.read(coreOptionsProvider),
         ),
@@ -412,6 +434,7 @@ class SetupAction extends _$SetupAction {
       return false;
     }
     final profileId = ref.read(currentProfileIdProvider);
+    final profile = ref.read(currentProfileProvider);
     final SetupState setupState;
     try {
       setupState = await ref.read(setupStateProvider(profileId).future);
@@ -421,7 +444,10 @@ class SetupAction extends _$SetupAction {
     return applied ==
         (
           setupState,
-          _effectivePatchConfig(ref.read(patchClashConfigProvider)),
+          _effectivePatchConfig(
+            ref.read(patchClashConfigProvider),
+            residentialActive: isResidentialPolicyActive(profile),
+          ),
           ref.read(networkSettingProvider),
           _appliedParams,
         );
@@ -483,6 +509,10 @@ class SetupAction extends _$SetupAction {
     required SetupState setupState,
     required PatchClashConfig patchConfig,
   }) async {
+    final residentialEnabled = setupState.residentialActive;
+    final selectedResidentialExit = residentialEnabled
+        ? setupState.residentialExit
+        : null;
     final profileId = setupState.profileId;
     if (profileId == null) {
       return (yaml: '', md5: '', counts: configCountsOf(const {}), base: null);
@@ -504,7 +534,7 @@ class SetupAction extends _$SetupAction {
         ? await setupState.script?.content
         : null;
     final hasScript = scriptContent?.isNotEmpty == true;
-    final profileBase = !isCustom && !hasScript
+    final profileBase = !isCustom && !hasScript && !residentialEnabled
         ? await _core.getProfileBase(profileId)
         : null;
     Map<String, dynamic> rawConfig = isCustom
@@ -551,6 +581,7 @@ class SetupAction extends _$SetupAction {
             : lastMatchTarget(profileBase.base.matchRules),
         safeMode: ref.read(safeModeProvider),
         mitmModules: setupState.mitmModules,
+        residentialExit: selectedResidentialExit,
       ),
     );
     if (profileBase == null) {
@@ -637,24 +668,42 @@ class SetupAction extends _$SetupAction {
     return '';
   }
 
-  PatchClashConfig _effectivePatchConfig(PatchClashConfig patchConfig) {
+  PatchClashConfig _effectivePatchConfig(
+    PatchClashConfig patchConfig, {
+    bool residentialActive = false,
+  }) {
+    final PatchClashConfig effective;
     if (ref.read(safeModeProvider)) {
-      return patchConfig.copyWith(
+      effective = patchConfig.copyWith(
         tun: patchConfig.tun.copyWith(enable: false),
         externalController: ExternalControllerStatus.close,
       );
+    } else {
+      final authorized =
+          ref.read(authorizedTunEnableProvider) ==
+          TunAuthorizationState.authorized;
+      effective = patchConfig.copyWith(
+        tun: patchConfig.tun.copyWith(
+          enable: patchConfig.tun.enable && authorized,
+        ),
+        externalController: patchConfig.secret.isEmpty
+            ? ExternalControllerStatus.close
+            : patchConfig.externalController,
+      );
     }
-    final authorized =
-        ref.read(authorizedTunEnableProvider) ==
-        TunAuthorizationState.authorized;
-    return patchConfig.copyWith(
-      tun: patchConfig.tun.copyWith(
-        enable: patchConfig.tun.enable && authorized,
-      ),
-      externalController: patchConfig.secret.isEmpty
-          ? ExternalControllerStatus.close
-          : patchConfig.externalController,
-    );
+    return residentialActive ? effective.copyWith(mode: Mode.rule) : effective;
+  }
+
+  /// A business policy that cannot be built must not leave the previous
+  /// config serving traffic, and the Core's default config is direct.
+  Future<void> _failClosedResidential() async {
+    _appliedInputs = null;
+    globalState.lastConfigMd5 = null;
+    globalState.lastConfigCounts = null;
+    if (system.isAndroid) {
+      await preferences.saveAppliedConfigMd5(null);
+    }
+    await setRunning(false);
   }
 
   @protected
@@ -722,17 +771,36 @@ class SetupAction extends _$SetupAction {
     Future<void> Function()? preloadInvoke,
     FutureOr Function()? onUpdated,
   }) async {
+    Future<_SetupTaskResult> rebuildLatest() => _setupConfig(
+      force: force,
+      silence: silence,
+      preloadInvoke: preloadInvoke,
+      onUpdated: onUpdated,
+    );
     var profile = ref.read(currentProfileProvider) ?? recoverMissingProfile();
+    final refreshKey = _profileBuildKey(profile);
     // A refresh failure is surfaced by safeRun; setup keeps the old profile.
     final nextProfile = await globalState.safeRun(
       () => profile?.checkAndUpdateAndCopy(
         validate: (path, key) => _core.validateProfile(path, key),
       ),
     );
-    if (nextProfile != null) {
-      profile = nextProfile;
-      ref.read(profilesProvider.notifier).put(nextProfile);
+    if (!ref.mounted) return _SetupTaskResult.failed;
+    final refreshedProfile = ref.read(currentProfileProvider);
+    if (_profileBuildKey(refreshedProfile) != refreshKey) {
+      return rebuildLatest();
     }
+    if (nextProfile != null) {
+      profile = (refreshedProfile ?? nextProfile).copyWith(
+        label:
+            refreshedProfile?.label.takeFirstValid([nextProfile.label]) ??
+            nextProfile.label,
+        subscriptionInfo: nextProfile.subscriptionInfo,
+        lastUpdateDate: nextProfile.lastUpdateDate,
+      );
+      ref.read(profilesProvider.notifier).put(profile);
+    }
+    final buildKey = _profileBuildKey(profile);
     commonPrint.log('setup ===> ${profile?.realLabel}');
     final patchConfig = ref.read(patchClashConfigProvider);
     final shouldContinueSetup = await requestAdmin(patchConfig.tun.enable);
@@ -740,7 +808,11 @@ class SetupAction extends _$SetupAction {
       return _SetupTaskResult.handoffToCoreRestart;
     }
     final pushWatch = Stopwatch()..start();
-    final realPatchConfig = _effectivePatchConfig(patchConfig);
+    final residentialActive = isResidentialPolicyActive(profile);
+    final realPatchConfig = _effectivePatchConfig(
+      patchConfig,
+      residentialActive: residentialActive,
+    );
     final networkSetting = ref.read(networkSettingProvider);
     SetupState? setupState;
     final realProfile = await globalState.safeRun(() async {
@@ -748,7 +820,15 @@ class SetupAction extends _$SetupAction {
       setupState = state;
       return getProfile(setupState: state, patchConfig: realPatchConfig);
     }, title: 'build profile');
+    if (!ref.mounted) return _SetupTaskResult.failed;
+    if (_profileBuildKey(ref.read(currentProfileProvider)) != buildKey) {
+      return rebuildLatest();
+    }
     final profileFailed = realProfile == null;
+    if (profileFailed && residentialActive) {
+      await _failClosedResidential();
+      return _SetupTaskResult.failed;
+    }
     final setupParams = _setupParams.copyWith(base: realProfile?.base);
     final inputs = switch (setupState) {
       final state? when !profileFailed => (
@@ -833,8 +913,15 @@ class SetupAction extends _$SetupAction {
       tag: !silence ? LoadingTag.proxies : null,
     );
     _lastPushDuration = pushWatch.elapsed;
+    if (!ref.mounted) return _SetupTaskResult.failed;
+    if (_profileBuildKey(ref.read(currentProfileProvider)) != buildKey) {
+      return rebuildLatest();
+    }
     if (handoffFailure != null) {
       Error.throwWithStackTrace(handoffFailure!.$1, handoffFailure!.$2);
+    }
+    if (setupFailed && residentialActive) {
+      await _failClosedResidential();
     }
     if (setupFailed || profileFailed) {
       return _SetupTaskResult.failed;

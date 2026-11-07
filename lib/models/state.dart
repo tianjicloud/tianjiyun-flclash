@@ -215,6 +215,7 @@ abstract class MakeRealProfileState with _$MakeRealProfileState {
     String? matchTarget,
     @Default(false) bool safeMode,
     @Default([]) List<MitmModuleSource> mitmModules,
+    String? residentialExit,
   }) = _MakeRealProfileState;
 }
 
@@ -262,5 +263,7 @@ abstract class SetupState with _$SetupState {
     @Default({}) Map<int, String> proxyDialers,
     String? matchTarget,
     @Default([]) List<MitmModuleSource> mitmModules,
+    @Default(false) bool residentialActive,
+    String? residentialExit,
   }) = _SetupState;
 }

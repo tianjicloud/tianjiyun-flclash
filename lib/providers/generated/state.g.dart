@@ -48,7 +48,7 @@ final class UpdateParamsProvider
   }
 }
 
-String _$updateParamsHash() => r'1613b6a3bfcd12d659c60d1fa8289ea257d662b4';
+String _$updateParamsHash() => r'86163bff974cd0dafbb4927bee3303b6e2e5dcc3';
 
 @ProviderFor(coreOptions)
 final coreOptionsProvider = CoreOptionsProvider._();
@@ -101,16 +101,19 @@ final class SetupPatchProvider
             bool appendSystemDns,
             bool bypassPrivateRoute,
             PatchClashConfig patchConfig,
+            ({String? exit, String? identity}) residential,
           }),
           ({
             bool appendSystemDns,
             bool bypassPrivateRoute,
             PatchClashConfig patchConfig,
+            ({String? exit, String? identity}) residential,
           }),
           ({
             bool appendSystemDns,
             bool bypassPrivateRoute,
             PatchClashConfig patchConfig,
+            ({String? exit, String? identity}) residential,
           })
         >
     with
@@ -119,6 +122,7 @@ final class SetupPatchProvider
             bool appendSystemDns,
             bool bypassPrivateRoute,
             PatchClashConfig patchConfig,
+            ({String? exit, String? identity}) residential,
           })
         > {
   SetupPatchProvider._()
@@ -142,6 +146,7 @@ final class SetupPatchProvider
       bool appendSystemDns,
       bool bypassPrivateRoute,
       PatchClashConfig patchConfig,
+      ({String? exit, String? identity}) residential,
     })
   >
   $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
@@ -151,6 +156,7 @@ final class SetupPatchProvider
     bool appendSystemDns,
     bool bypassPrivateRoute,
     PatchClashConfig patchConfig,
+    ({String? exit, String? identity}) residential,
   })
   create(Ref ref) {
     return setupPatch(ref);
@@ -162,6 +168,7 @@ final class SetupPatchProvider
       bool appendSystemDns,
       bool bypassPrivateRoute,
       PatchClashConfig patchConfig,
+      ({String? exit, String? identity}) residential,
     })
     value,
   ) {
@@ -173,13 +180,14 @@ final class SetupPatchProvider
               bool appendSystemDns,
               bool bypassPrivateRoute,
               PatchClashConfig patchConfig,
+              ({String? exit, String? identity}) residential,
             })
           >(value),
     );
   }
 }
 
-String _$setupPatchHash() => r'd09fb41d40ced4cd47c9131fe55e983e35128724';
+String _$setupPatchHash() => r'767436e2ac7c9ada4a147557f4912657b002a466';
 
 @ProviderFor(trayState)
 final trayStateProvider = TrayStateProvider._();
@@ -1913,7 +1921,7 @@ final class CurrentGroupsStateProvider
 }
 
 String _$currentGroupsStateHash() =>
-    r'd4ea3c3271a77d8bd791f94c697cc94a41fff38f';
+    r'7b068b16e580aafc0cbd410fbe0599454c6995ae';
 
 @ProviderFor(proxyState)
 final proxyStateProvider = ProxyStateProvider._();
@@ -3659,7 +3667,7 @@ final class SetupStateProvider
   }
 }
 
-String _$setupStateHash() => r'e8c7cc4742b6e4cf4227071dc01ec6a943334dd0';
+String _$setupStateHash() => r'675eb1a92f3d0f60df85c846d371974c00f4b57f';
 
 final class SetupStateFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<SetupState>, int?> {

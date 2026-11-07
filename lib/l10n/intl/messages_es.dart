@@ -1127,9 +1127,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificado instalado",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Este sistema oculta la lista de apps instaladas hasta que se concede el permiso. Autorízalo para configurar el proxy por app.",
     ),
@@ -1653,9 +1654,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "No se pudo importar",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "No se puede acceder a la dirección de suscripción",
     ),
@@ -1906,6 +1908,70 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "resetTip": MessageLookupByLibrary.simpleMessage(
       "¿Seguro que quieres restablecer?",
+    ),
+    "residentialActiveDesc": MessageLookupByLibrary.simpleMessage(
+      "Una vez conectado, el tráfico que necesita un proxy utiliza esta línea.",
+    ),
+    "residentialApplyFailed": MessageLookupByLibrary.simpleMessage(
+      "No se pudo aplicar esta línea. Reintenta o elige otra línea.",
+    ),
+    "residentialApplying": MessageLookupByLibrary.simpleMessage("Aplicando…"),
+    "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
+      "No se está capturando el tráfico del equipo. Activa el proxy del sistema o TUN abajo.",
+    ),
+    "residentialChange": MessageLookupByLibrary.simpleMessage("Cambiar salida"),
+    "residentialChoose": MessageLookupByLibrary.simpleMessage("Elegir salida"),
+    "residentialExitLocked": MessageLookupByLibrary.simpleMessage(
+      "Elige la salida residencial desde el panel. Otros grupos no pueden cambiarla mientras el enrutamiento residencial esté activo.",
+    ),
+    "residentialExplanation": MessageLookupByLibrary.simpleMessage(
+      "Todo el tráfico que necesita el proxy usa la línea residencial seleccionada. El tráfico directo y de China continental sigue la suscripción. Algunos destinos pueden usar una salida alternativa del servicio.",
+    ),
+    "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
+      "Cargando líneas residenciales…",
+    ),
+    "residentialLoadingCatalogDesc": MessageLookupByLibrary.simpleMessage(
+      "Leyendo las líneas disponibles en tu suscripción.",
+    ),
+    "residentialManageSubscription": MessageLookupByLibrary.simpleMessage(
+      "Gestionar suscripción",
+    ),
+    "residentialMissing": MessageLookupByLibrary.simpleMessage(
+      "La salida residencial seleccionada ya no está en esta suscripción.",
+    ),
+    "residentialMissingDesc": MessageLookupByLibrary.simpleMessage(
+      "El tráfico con proxy se bloquea hasta que elijas otra salida. El tráfico directo de China continental no cambia.",
+    ),
+    "residentialNoPlan": MessageLookupByLibrary.simpleMessage(
+      "No hay líneas residenciales disponibles",
+    ),
+    "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
+      "Esta suscripción no tiene ninguna salida residencial utilizable ahora mismo. Sigue usando la política de la suscripción o revisa el panel de suscripción.",
+    ),
+    "residentialPending": MessageLookupByLibrary.simpleMessage(
+      "Cambiando de línea. Espera un momento.",
+    ),
+    "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
+      "La nueva salida está activa, pero no se pudieron cerrar las conexiones existentes. Pueden seguir usando la salida anterior hasta que se reconecten.",
+    ),
+    "residentialRouteNote": MessageLookupByLibrary.simpleMessage(
+      "La tarjeta de IP muestra la salida de su destino de comprobación actual, no una salida única para todos los sitios.",
+    ),
+    "residentialSelected": MessageLookupByLibrary.simpleMessage("Seleccionada"),
+    "residentialSubscriptionPolicy": MessageLookupByLibrary.simpleMessage(
+      "Política de la suscripción",
+    ),
+    "residentialTitle": MessageLookupByLibrary.simpleMessage(
+      "Salida residencial",
+    ),
+    "residentialUnavailable": MessageLookupByLibrary.simpleMessage(
+      "No disponible",
+    ),
+    "residentialUseSubscription": MessageLookupByLibrary.simpleMessage(
+      "Usar la política de la suscripción",
+    ),
+    "residentialUsingSubscription": MessageLookupByLibrary.simpleMessage(
+      "No hay una salida residencial seleccionada. El tráfico con proxy sigue la política de la suscripción.",
     ),
     "resourceUpdateInterval": MessageLookupByLibrary.simpleMessage(
       "Intervalo de actualización automática",

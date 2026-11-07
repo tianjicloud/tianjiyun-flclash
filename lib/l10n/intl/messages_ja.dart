@@ -1521,6 +1521,66 @@ class MessageLookup extends MessageLookupByLibrary {
       "このページには変更があります。リセットしてもよろしいですか？",
     ),
     "resetTip": MessageLookupByLibrary.simpleMessage("リセットしてもよろしいですか？"),
+    "residentialActiveDesc": MessageLookupByLibrary.simpleMessage(
+      "接続後、プロキシが必要な通信はこの回線を使用します。",
+    ),
+    "residentialApplyFailed": MessageLookupByLibrary.simpleMessage(
+      "この回線を適用できませんでした。再試行するか、別の回線を選んでください。",
+    ),
+    "residentialApplying": MessageLookupByLibrary.simpleMessage("適用中…"),
+    "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
+      "パソコンの通信はまだ取り込まれていません。下のシステムプロキシまたは TUN を有効にしてください。",
+    ),
+    "residentialChange": MessageLookupByLibrary.simpleMessage("出口を変更"),
+    "residentialChoose": MessageLookupByLibrary.simpleMessage("出口を選択"),
+    "residentialExitLocked": MessageLookupByLibrary.simpleMessage(
+      "住宅出口はダッシュボードで選択してください。住宅ルーティング有効中は他のグループから変更できません。",
+    ),
+    "residentialExplanation": MessageLookupByLibrary.simpleMessage(
+      "プロキシが必要な通信はすべて選択した住宅回線を使用します。中国本土と直接通信はサブスクリプションの分流に従います。一部の宛先はサービス側で別の出口が使われる場合があります。",
+    ),
+    "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
+      "住宅回線を読み込み中…",
+    ),
+    "residentialLoadingCatalogDesc": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションの利用可能な回線を読み込んでいます。",
+    ),
+    "residentialManageSubscription": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションを管理",
+    ),
+    "residentialMissing": MessageLookupByLibrary.simpleMessage(
+      "選択した住宅出口はこのサブスクリプションに存在しません。",
+    ),
+    "residentialMissingDesc": MessageLookupByLibrary.simpleMessage(
+      "別の出口を選ぶまでプロキシ通信はブロックされます。中国本土への直結通信は変わりません。",
+    ),
+    "residentialNoPlan": MessageLookupByLibrary.simpleMessage(
+      "利用可能な住宅回線がありません",
+    ),
+    "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
+      "このサブスクリプションには現在利用できる住宅出口がありません。サブスクリプションのポリシーを使うか、サブスクリプションパネルを確認してください。",
+    ),
+    "residentialPending": MessageLookupByLibrary.simpleMessage(
+      "回線を切り替えています。しばらくお待ちください。",
+    ),
+    "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
+      "新しい出口は有効ですが、既存の接続を閉じられませんでした。再接続するまで以前の出口を使う場合があります。",
+    ),
+    "residentialRouteNote": MessageLookupByLibrary.simpleMessage(
+      "IP カードは現在の確認先に対する出口を表示するだけで、すべてのサイトが同じ出口とは限りません。",
+    ),
+    "residentialSelected": MessageLookupByLibrary.simpleMessage("選択中"),
+    "residentialSubscriptionPolicy": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションのポリシー",
+    ),
+    "residentialTitle": MessageLookupByLibrary.simpleMessage("住宅回線"),
+    "residentialUnavailable": MessageLookupByLibrary.simpleMessage("利用不可"),
+    "residentialUseSubscription": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションのポリシーを使用",
+    ),
+    "residentialUsingSubscription": MessageLookupByLibrary.simpleMessage(
+      "住宅出口は未選択です。プロキシが必要な通信はサブスクリプションのポリシーに従います。",
+    ),
     "resourceUpdateInterval": MessageLookupByLibrary.simpleMessage("自動更新間隔"),
     "resourceUpdateIntervalTip": MessageLookupByLibrary.simpleMessage(
       "自動更新間隔は0より大きくしてください",

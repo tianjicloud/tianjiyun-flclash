@@ -1383,6 +1383,60 @@ class MessageLookup extends MessageLookupByLibrary {
       "当前页面存在更改，确定重置吗？",
     ),
     "resetTip": MessageLookupByLibrary.simpleMessage("确定要重置吗？"),
+    "residentialActiveDesc": MessageLookupByLibrary.simpleMessage(
+      "连接后，需要代理的分组都会自动跟随这条线路。",
+    ),
+    "residentialApplyFailed": MessageLookupByLibrary.simpleMessage(
+      "线路未能生效，请重试或选择其他线路。",
+    ),
+    "residentialApplying": MessageLookupByLibrary.simpleMessage("正在应用…"),
+    "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
+      "尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。",
+    ),
+    "residentialChange": MessageLookupByLibrary.simpleMessage("更换线路"),
+    "residentialChoose": MessageLookupByLibrary.simpleMessage("选择家宽"),
+    "residentialExitLocked": MessageLookupByLibrary.simpleMessage(
+      "请在仪表盘选择家宽出口。家宽分流生效期间，其他分组无法更改它。",
+    ),
+    "residentialExplanation": MessageLookupByLibrary.simpleMessage(
+      "需要代理的流量都会使用所选家宽线路；大陆与直连流量仍按订阅分流。部分目标可能由服务端使用替代出口。",
+    ),
+    "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
+      "正在加载家宽线路…",
+    ),
+    "residentialLoadingCatalogDesc": MessageLookupByLibrary.simpleMessage(
+      "正在读取订阅中的可用线路。",
+    ),
+    "residentialManageSubscription": MessageLookupByLibrary.simpleMessage(
+      "管理订阅",
+    ),
+    "residentialMissing": MessageLookupByLibrary.simpleMessage(
+      "所选家宽出口已不在当前订阅中。",
+    ),
+    "residentialMissingDesc": MessageLookupByLibrary.simpleMessage(
+      "选择其他出口前，代理流量会被阻断；大陆直连不受影响。",
+    ),
+    "residentialNoPlan": MessageLookupByLibrary.simpleMessage("暂无可用家宽线路"),
+    "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
+      "当前订阅没有可用的家宽出口。可继续使用订阅策略，或前往订阅面板查看。",
+    ),
+    "residentialPending": MessageLookupByLibrary.simpleMessage("正在切换线路，请稍候。"),
+    "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
+      "新出口已生效，但旧连接未能关闭，重连前可能仍走旧出口。",
+    ),
+    "residentialRouteNote": MessageLookupByLibrary.simpleMessage(
+      "IP 卡片只显示当前检测目标对应的出口，不代表所有网站都使用同一个出口。",
+    ),
+    "residentialSelected": MessageLookupByLibrary.simpleMessage("已选择"),
+    "residentialSubscriptionPolicy": MessageLookupByLibrary.simpleMessage(
+      "按订阅分流",
+    ),
+    "residentialTitle": MessageLookupByLibrary.simpleMessage("家宽线路"),
+    "residentialUnavailable": MessageLookupByLibrary.simpleMessage("不可用"),
+    "residentialUseSubscription": MessageLookupByLibrary.simpleMessage("按订阅分流"),
+    "residentialUsingSubscription": MessageLookupByLibrary.simpleMessage(
+      "尚未选择家宽出口，需要代理的流量按订阅自身策略分流。",
+    ),
     "resourceUpdateInterval": MessageLookupByLibrary.simpleMessage("自动更新间隔"),
     "resourceUpdateIntervalTip": MessageLookupByLibrary.simpleMessage(
       "自动更新间隔必须大于0",

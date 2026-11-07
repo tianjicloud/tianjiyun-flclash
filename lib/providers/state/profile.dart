@@ -105,7 +105,12 @@ Future<SetupState> setupState(Ref ref, int? profileId) async {
           : await database.scriptsDao.get(scriptId).getSingleOrNull();
     }
   }
+  final residentialActive = isResidentialPolicyActive(profile);
   return SetupState(
+    residentialActive: residentialActive,
+    residentialExit: residentialActive
+        ? profile?.overrides.residentialExit
+        : null,
     mitmModules: mitmModules == null
         ? const []
         : await mitmModuleSources(await mitmModules),

@@ -6,7 +6,10 @@ UpdateParams updateParams(Ref ref) {
     networkSettingProvider.select((state) => state.authentication),
   );
   final options = ref.watch(coreOptionsProvider);
-  return ref.watch(
+  final residentialActive = isResidentialPolicyActive(
+    ref.watch(currentProfileProvider),
+  );
+  final params = ref.watch(
     patchClashConfigProvider.select(
       (state) => state.toUpdateParams(
         authentication: authentication.credentials,
@@ -14,6 +17,7 @@ UpdateParams updateParams(Ref ref) {
       ),
     ),
   );
+  return residentialActive ? params.copyWith(mode: Mode.rule) : params;
 }
 
 @riverpod
@@ -40,8 +44,22 @@ CoreOptions coreOptions(Ref ref) {
 }
 
 @riverpod
-({PatchClashConfig patchConfig, bool appendSystemDns, bool bypassPrivateRoute})
+({
+  PatchClashConfig patchConfig,
+  bool appendSystemDns,
+  bool bypassPrivateRoute,
+  ({String? identity, String? exit}) residential,
+})
 setupPatch(Ref ref) {
+  final residential = ref.watch(
+    currentProfileProvider.select((profile) {
+      final active = isResidentialPolicyActive(profile);
+      return (
+        identity: active ? resolveTianjiProfile(profile)?.identityKey : null,
+        exit: active ? profile?.overrides.residentialExit : null,
+      );
+    }),
+  );
   return (
     patchConfig: ref.watch(
       patchClashConfigProvider.select((state) => state.setupOnly),
@@ -55,6 +73,7 @@ setupPatch(Ref ref) {
         ref.watch(
           networkSettingProvider.select((state) => state.bypassPrivateRoute),
         ),
+    residential: residential,
   );
 }
 

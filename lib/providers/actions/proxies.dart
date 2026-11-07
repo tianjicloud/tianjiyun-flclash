@@ -49,6 +49,14 @@ class ProxiesAction extends _$ProxiesAction {
         cancelDelayTests();
       }
     });
+    ref.listen(
+      currentProfileProvider.select((profile) => (profile?.id, profile?.url)),
+      (prev, next) {
+        if (prev != next) {
+          ref.read(groupsSourceProfileProvider.notifier).clear();
+        }
+      },
+    );
   }
 
   void cancelDelayTests() {
@@ -92,6 +100,7 @@ class ProxiesAction extends _$ProxiesAction {
   }
 
   void changeProxyDebounce(String groupName, String proxyName) {
+    if (_rejectResidentialGroupChange(groupName)) return;
     _pendingSelectedRollback.putIfAbsent(
       groupName,
       () => _currentSelectedName(groupName),
@@ -113,8 +122,10 @@ class ProxiesAction extends _$ProxiesAction {
   }
 
   Future<void> updateGroups() async {
+    final profileId = ref.read(currentProfileIdProvider);
+    final profileUrl = ref.read(currentProfileProvider)?.url;
     try {
-      ref.read(groupsProvider.notifier).value = await retry(
+      final groups = await retry<List<Group>>(
         task: () async {
           final sortType = ref.read(
             proxiesStyleSettingProvider.select((state) => state.sortType),
@@ -138,11 +149,23 @@ class ProxiesAction extends _$ProxiesAction {
               'updateGroups error: $e',
               logLevel: coreFailureLogLevel(e),
             );
-            return [];
+            return <Group>[];
           }
         },
         retryIf: (res) => res.isEmpty,
       );
+      if (profileId == null || profileUrl == null) {
+        ref.read(groupsProvider.notifier).value = groups;
+        return;
+      }
+      if (ref.read(currentProfileIdProvider) != profileId ||
+          ref.read(currentProfileProvider)?.url != profileUrl) {
+        return;
+      }
+      ref
+          .read(groupsSourceProfileProvider.notifier)
+          .set(profileId: profileId, url: profileUrl);
+      ref.read(groupsProvider.notifier).value = groups;
     } catch (e) {
       // The Core failure path already runs inside the retry task above; a
       // throw here only means ref.read hit a disposed container or the
@@ -179,6 +202,7 @@ class ProxiesAction extends _$ProxiesAction {
     required String groupName,
     required String proxyName,
   }) async {
+    if (_rejectResidentialGroupChange(groupName)) return;
     final profilesAction = ref.read(profilesActionProvider.notifier);
     final rollbackName =
         _pendingSelectedRollback.remove(groupName) ??
@@ -219,6 +243,19 @@ class ProxiesAction extends _$ProxiesAction {
         logLevel: coreFailureLogLevel(error),
       );
     }
+  }
+
+  bool _rejectResidentialGroupChange(String groupName) {
+    if (isResidentialPolicyActive(ref.read(currentProfileProvider)) &&
+        (groupName == tianjiResidentialRootName ||
+            groupName == tianjiResidentialLockedGroupName)) {
+      dialogs.showBanner(
+        currentAppLocalizations.residentialExitLocked,
+        level: BannerLevel.warning,
+      );
+      return true;
+    }
+    return false;
   }
 
   Future<void> updateProvider(

@@ -1050,9 +1050,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificate installed",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -1538,9 +1539,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Import failed",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Can’t reach the subscription address",
     ),
@@ -1769,6 +1771,70 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "resetTip": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to reset?",
+    ),
+    "residentialActiveDesc": MessageLookupByLibrary.simpleMessage(
+      "Once connected, traffic that needs a proxy follows this line.",
+    ),
+    "residentialApplyFailed": MessageLookupByLibrary.simpleMessage(
+      "This line could not be applied. Retry or choose another line.",
+    ),
+    "residentialApplying": MessageLookupByLibrary.simpleMessage("Applying…"),
+    "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
+      "Computer traffic is not being captured. Enable System proxy or TUN below.",
+    ),
+    "residentialChange": MessageLookupByLibrary.simpleMessage("Change exit"),
+    "residentialChoose": MessageLookupByLibrary.simpleMessage("Choose exit"),
+    "residentialExitLocked": MessageLookupByLibrary.simpleMessage(
+      "Choose the residential exit from the dashboard. Other groups cannot change it while residential routing is active.",
+    ),
+    "residentialExplanation": MessageLookupByLibrary.simpleMessage(
+      "All traffic that requires the proxy uses the selected residential line. Mainland and direct traffic still follows the subscription. Some destinations may use a service-side alternative exit.",
+    ),
+    "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
+      "Loading residential lines…",
+    ),
+    "residentialLoadingCatalogDesc": MessageLookupByLibrary.simpleMessage(
+      "Reading the available lines in your subscription.",
+    ),
+    "residentialManageSubscription": MessageLookupByLibrary.simpleMessage(
+      "Manage subscription",
+    ),
+    "residentialMissing": MessageLookupByLibrary.simpleMessage(
+      "The selected residential exit is no longer in this subscription.",
+    ),
+    "residentialMissingDesc": MessageLookupByLibrary.simpleMessage(
+      "Proxy traffic is blocked until you choose another exit. Mainland direct traffic is unchanged.",
+    ),
+    "residentialNoPlan": MessageLookupByLibrary.simpleMessage(
+      "No residential lines available",
+    ),
+    "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
+      "This subscription has no usable residential exit right now. Keep using the subscription policy, or check the subscription panel.",
+    ),
+    "residentialPending": MessageLookupByLibrary.simpleMessage(
+      "Switching lines. Please wait.",
+    ),
+    "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
+      "The new exit is active, but existing connections could not be closed. They may keep the previous exit until they reconnect.",
+    ),
+    "residentialRouteNote": MessageLookupByLibrary.simpleMessage(
+      "The IP card shows the exit for its current check destination, not one universal exit.",
+    ),
+    "residentialSelected": MessageLookupByLibrary.simpleMessage("Selected"),
+    "residentialSubscriptionPolicy": MessageLookupByLibrary.simpleMessage(
+      "Subscription policy",
+    ),
+    "residentialTitle": MessageLookupByLibrary.simpleMessage(
+      "Residential exit",
+    ),
+    "residentialUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Unavailable",
+    ),
+    "residentialUseSubscription": MessageLookupByLibrary.simpleMessage(
+      "Use subscription policy",
+    ),
+    "residentialUsingSubscription": MessageLookupByLibrary.simpleMessage(
+      "No residential exit is selected. Proxied traffic follows this subscription’s own policy.",
     ),
     "resourceUpdateInterval": MessageLookupByLibrary.simpleMessage(
       "Auto-update interval",

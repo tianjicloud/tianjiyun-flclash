@@ -65,7 +65,9 @@ String _sourceOf(BuildContext context, ProfileType type) => switch (type) {
 };
 
 class ProfilesCard extends ConsumerWidget {
-  const ProfilesCard({super.key});
+  const ProfilesCard({super.key, this.title});
+
+  final String? title;
 
   static const _soonDays = 7;
 
@@ -75,6 +77,7 @@ class ProfilesCard extends ConsumerWidget {
     final mobile = !density.isDesktop;
     final compact = density.isCompact;
     final appLocalizations = context.appLocalizations;
+    final cardTitle = title ?? appLocalizations.profile;
     final profile = ref.watch(currentProfileProvider);
     final switchable = ref.watch(
       profilesProvider.select((profiles) => profiles.length > 1),
@@ -133,7 +136,7 @@ class ProfilesCard extends ConsumerWidget {
       ],
     );
     return DashboardCard(
-      semanticLabel: appLocalizations.profile,
+      semanticLabel: cardTitle,
       onTap: mobile || profile == null
           ? () => _openProfile(context, profile)
           : null,
@@ -143,7 +146,7 @@ class ProfilesCard extends ConsumerWidget {
         children: [
           DashboardCardHeader(
             glyph: AppGlyphs.profiles,
-            title: appLocalizations.profile,
+            title: cardTitle,
             chevron: mobile,
             trailing: [
               if (mobile)
@@ -157,9 +160,7 @@ class ProfilesCard extends ConsumerWidget {
                       ?sync,
                       DashboardIconButton(
                         glyph: AppGlyphs.chevronForward,
-                        tooltip: appLocalizations.details(
-                          appLocalizations.profile,
-                        ),
+                        tooltip: appLocalizations.details(cardTitle),
                         onPressed: () => _openProfile(context, profile),
                       ),
                     ],
