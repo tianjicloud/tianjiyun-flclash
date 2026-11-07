@@ -9153,10 +9153,10 @@ class AppLocalizations {
     );
   }
 
-  /// `The link contains your subscription credentials, so only part of it is shown.`
+  /// `Check the full subscription link above before importing.`
   String get onboardingConfirmNote {
     return Intl.message(
-      'The link contains your subscription credentials, so only part of it is shown.',
+      'Check the full subscription link above before importing.',
       name: 'onboardingConfirmNote',
       desc: '',
       args: [],

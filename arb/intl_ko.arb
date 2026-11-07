@@ -1085,7 +1085,7 @@
   "onboardingNoSubscription": "아직 구독 주소가 없나요? 사용자 패널을 열어 복사하세요 ›",
   "onboardingClipboardEmpty": "클립보드에 내용이 없습니다",
   "onboardingConfirmTitle": "Tianji Cloud 구독",
-  "onboardingConfirmNote": "링크에 구독 자격 증명이 포함되어 있어 일부만 표시합니다.",
+  "onboardingConfirmNote": "가져오기 전에 위의 전체 구독 링크가 올바른지 확인하세요.",
   "onboardingImporting": "구독을 가져오는 중…",
   "onboardingImportingDescription": "노드 목록과 요금제 정보를 읽는 중",
   "onboardingImported": "가져옴 · 노드 {count}개",

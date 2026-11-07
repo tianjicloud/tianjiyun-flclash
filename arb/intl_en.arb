@@ -1085,7 +1085,7 @@
   "onboardingNoSubscription": "No subscription address yet? Open your user panel to copy it ›",
   "onboardingClipboardEmpty": "There is nothing in the clipboard",
   "onboardingConfirmTitle": "Tianji Cloud subscription",
-  "onboardingConfirmNote": "The link contains your subscription credentials, so only part of it is shown.",
+  "onboardingConfirmNote": "Check the full subscription link above before importing.",
   "onboardingImporting": "Fetching subscription…",
   "onboardingImportingDescription": "Reading the node list and plan details",
   "onboardingImported": "Imported · {count} nodes",

@@ -41,33 +41,6 @@ ImportFailure classifyImportError(Object error) {
   return ImportFailure.unknown;
 }
 
-const _mask = '••••••';
-const _maskedPath = '••••••••';
-
-String maskSubscriptionUrl(String url) {
-  final text = url.trim();
-  final uri = Uri.tryParse(text);
-  final scheme = uri?.scheme ?? _schemeOf(text);
-  if (scheme.isEmpty) return _mask;
-  final host = uri?.host ?? '';
-  final segments = [
-    if (uri != null)
-      for (final segment in uri.pathSegments)
-        if (segment.isNotEmpty) segment,
-  ];
-  final visiblePath = segments.length >= 2
-      ? '/${segments.first}/$_maskedPath'
-      : segments.isEmpty
-      ? ''
-      : '/$_maskedPath';
-  return '$scheme://${host.isEmpty ? '' : _mask}$visiblePath';
-}
-
-String _schemeOf(String url) {
-  final index = url.indexOf('://');
-  return index > 0 ? url.substring(0, index) : '';
-}
-
 class SubscriptionSummary {
   const SubscriptionSummary({this.remaining, this.expire});
 

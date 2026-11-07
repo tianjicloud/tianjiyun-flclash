@@ -1085,7 +1085,7 @@
   "onboardingNoSubscription": "Ещё нет адреса подписки? Откройте панель пользователя, чтобы скопировать его ›",
   "onboardingClipboardEmpty": "В буфере обмена ничего нет",
   "onboardingConfirmTitle": "Подписка Tianji Cloud",
-  "onboardingConfirmNote": "Ссылка содержит данные вашей подписки, поэтому показана только её часть.",
+  "onboardingConfirmNote": "Перед импортом проверьте полную ссылку на подписку выше.",
   "onboardingImporting": "Получаем подписку…",
   "onboardingImportingDescription": "Читаем список узлов и сведения о тарифе",
   "onboardingImported": "Импортировано · {count} узлов",

@@ -90,28 +90,6 @@ void main() {
     });
   });
 
-  group('maskSubscriptionUrl', () {
-    test('keeps the scheme and the first path segment only', () {
-      final masked = maskSubscriptionUrl(
-        'https://example.com/s/secret-token?token=example',
-      );
-      expect(masked, 'https://••••••/s/••••••••');
-      expect(masked, isNot(contains('example.com')));
-      expect(masked, isNot(contains('secret-token')));
-    });
-
-    test('masks a single path segment', () {
-      expect(
-        maskSubscriptionUrl('https://example.com/secret-token'),
-        'https://••••••/••••••••',
-      );
-    });
-
-    test('falls back to a mask for text that is not a url', () {
-      expect(maskSubscriptionUrl('not a link'), '••••••');
-    });
-  });
-
   group('subscriptionSummaryOf', () {
     test('hides traffic and expiry when both are zero', () {
       final summary = subscriptionSummaryOf(

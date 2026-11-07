@@ -1601,7 +1601,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "El portapapeles está vacío",
     ),
     "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
-      "El enlace contiene tus credenciales de suscripción, por eso solo se muestra una parte.",
+      "Comprueba el enlace de suscripción completo de arriba antes de importarlo.",
     ),
     "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage(
       "Suscripción de Tianji Cloud",

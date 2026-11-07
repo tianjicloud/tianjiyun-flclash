@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:fl_clash/common/app_ports.dart';
 import 'package:fl_clash/common/onboarding.dart';
+import 'package:fl_clash/core/controller.dart';
+import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/home.dart';
@@ -8,12 +13,35 @@ import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/navigation.dart';
 import 'package:fl_clash/views/onboarding/onboarding.dart';
 import 'package:fl_clash/views/onboarding/plan_card.dart';
+import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
+import '../helpers/app_paths.dart';
 import '../helpers/test_app.dart';
 import '../helpers/test_profiles.dart';
+
+class _MockCore extends Mock implements CoreHandlerInterface {}
+
+class _PendingProfileImport extends ProfilesAction {
+  final result = Completer<Profile>();
+  final deleted = <int>[];
+
+  @override
+  Future<Profile> importForOnboarding(String url) async {
+    final profile = await result.future;
+    ref.read(profilesProvider.notifier).put(profile);
+    return profile;
+  }
+
+  @override
+  Future<void> deleteProfile(int id) async {
+    deleted.add(id);
+    await ref.read(profilesProvider.notifier).del(id);
+  }
+}
 
 void main() {
   setUp(() {
@@ -21,9 +49,19 @@ void main() {
     addTearDown(() => navigationPort = null);
   });
 
-  ProviderContainer homeContainer({List<Profile> profiles = const []}) {
+  ProviderContainer homeContainer({
+    List<Profile> profiles = const [],
+    ProfilesAction? importer,
+    CoreHandlerInterface? core,
+  }) {
     final container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(() => TestProfiles(profiles))],
+      overrides: [
+        profilesProvider.overrideWith(() => TestProfiles(profiles)),
+        if (importer != null)
+          profilesActionProvider.overrideWith(() => importer),
+        if (core != null)
+          coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
+      ],
     );
     addTearDown(container.dispose);
     globalState.container = container;
@@ -98,6 +136,71 @@ void main() {
     expect(state, isA<OnboardingFailed>());
     expect((state as OnboardingFailed).failure, ImportFailure.notSubscription);
     expect(find.byType(OnboardingView), findsOneWidget);
+  });
+
+  testWidgets('confirmation shows the complete selectable subscription URL', (
+    tester,
+  ) async {
+    const url = 'https://example.com/s/secret-token?token=example';
+    final container = homeContainer();
+    container.read(onboardingProvider.notifier).confirm(url);
+    await pumpHome(tester, container);
+
+    expect(find.text(url), findsOneWidget);
+    expect(find.byType(SelectableText), findsOneWidget);
+  });
+
+  group('asynchronous import', () {
+    setUp(() async {
+      await useAppPaths(Directory.systemTemp);
+    });
+
+    for (final proxyCount in [0, 2]) {
+      testWidgets(
+        'completes with $proxyCount nodes after confirmation unmounts',
+        (tester) async {
+          final importer = _PendingProfileImport();
+          final core = _MockCore();
+          when(() => core.readConfig(any())).thenAnswer(
+            (_) async => {
+              'proxies': List.generate(proxyCount, (i) => {'name': 'Node $i'}),
+            },
+          );
+          final container = homeContainer(importer: importer, core: core);
+          final profile = Profile.normal(url: 'https://example.com/s/example');
+          container.read(onboardingProvider.notifier).confirm(profile.url);
+          await pumpHome(tester, container);
+
+          await tester.tap(find.text(AppLocalizations.current.import));
+          await tester.pump();
+          expect(
+            container.read(onboardingProvider),
+            isA<OnboardingImporting>(),
+          );
+          expect(find.byType(SelectableText), findsNothing);
+
+          importer.result.complete(profile);
+          await tester.pump();
+          await tester.pump();
+
+          final state = container.read(onboardingProvider);
+          if (proxyCount == 0) {
+            expect(state, isA<OnboardingFailed>());
+            expect((state as OnboardingFailed).failure, ImportFailure.empty);
+            expect(importer.deleted, [profile.id]);
+            expect(container.read(profilesProvider), isEmpty);
+          } else {
+            expect(state, isA<OnboardingImported>());
+            expect((state as OnboardingImported).proxyCount, proxyCount);
+            expect(state.profileId, profile.id);
+            expect(importer.deleted, isEmpty);
+            expect(container.read(profilesProvider), [profile]);
+          }
+          verify(() => core.readConfig(any())).called(1);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
   });
 
   group('OnboardingPlanCard', () {

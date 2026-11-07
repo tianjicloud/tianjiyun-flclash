@@ -1599,7 +1599,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Le presse-papiers est vide",
     ),
     "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
-      "Le lien contient vos identifiants d’abonnement, une partie seulement est affichée.",
+      "Vérifiez le lien d’abonnement complet ci-dessus avant de l’importer.",
     ),
     "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage(
       "Abonnement Tianji Cloud",

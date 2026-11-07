@@ -1258,7 +1258,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "클립보드에 내용이 없습니다",
     ),
     "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
-      "링크에 구독 자격 증명이 포함되어 있어 일부만 표시합니다.",
+      "가져오기 전에 위의 전체 구독 링크가 올바른지 확인하세요.",
     ),
     "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage(
       "Tianji Cloud 구독",

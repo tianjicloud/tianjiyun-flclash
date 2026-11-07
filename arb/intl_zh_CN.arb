@@ -1085,7 +1085,7 @@
   "onboardingNoSubscription": "还没有订阅地址？打开用户面板复制 ›",
   "onboardingClipboardEmpty": "剪贴板里没有内容",
   "onboardingConfirmTitle": "天机云订阅",
-  "onboardingConfirmNote": "链接里含有你的订阅凭证，这里只显示一部分。",
+  "onboardingConfirmNote": "请核对上方完整订阅链接，确认无误后导入。",
   "onboardingImporting": "正在获取订阅…",
   "onboardingImportingDescription": "读取节点列表和套餐信息",
   "onboardingImported": "已导入 · {count} 个节点",

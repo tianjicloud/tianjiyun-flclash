@@ -1085,7 +1085,7 @@
   "onboardingNoSubscription": "¿Aún no tienes dirección de suscripción? Abre tu panel de usuario para copiarla ›",
   "onboardingClipboardEmpty": "El portapapeles está vacío",
   "onboardingConfirmTitle": "Suscripción de Tianji Cloud",
-  "onboardingConfirmNote": "El enlace contiene tus credenciales de suscripción, por eso solo se muestra una parte.",
+  "onboardingConfirmNote": "Comprueba el enlace de suscripción completo de arriba antes de importarlo.",
   "onboardingImporting": "Obteniendo suscripción…",
   "onboardingImportingDescription": "Leyendo la lista de nodos y los datos del plan",
   "onboardingImported": "Importado · {count} nodos",

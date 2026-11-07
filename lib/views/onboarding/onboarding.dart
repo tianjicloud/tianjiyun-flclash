@@ -26,54 +26,112 @@ class OnboardingView extends ConsumerWidget {
     final state = ref.watch(onboardingProvider);
     return Surface(
       color: SurfaceLevel.page.colorOf(context.colorScheme),
-      child: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: math.max(0, constraints.maxHeight - 48),
+      child: _OnboardingBackdrop(
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 24,
                 ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 420),
-                    child: switch (state) {
-                      OnboardingWelcome() ||
-                      OnboardingDone() => const _WelcomeView(),
-                      OnboardingConfirm(:final url) => _ConfirmView(url: url),
-                      OnboardingImporting() => const _ProgressView(
-                        titleKey: _ProgressTitle.importing,
-                      ),
-                      OnboardingImported(:final profileId, :final proxyCount) =>
-                        _ImportedView(
-                          profileId: profileId,
-                          proxyCount: proxyCount,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: math.max(0, constraints.maxHeight - 48),
+                  ),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 420),
+                      child: switch (state) {
+                        OnboardingWelcome() ||
+                        OnboardingDone() => const _WelcomeView(),
+                        OnboardingConfirm(:final url) => _ConfirmView(url: url),
+                        OnboardingImporting() => const _ProgressView(
+                          titleKey: _ProgressTitle.importing,
                         ),
-                      OnboardingFailed(:final failure, :final url) =>
-                        _FailedView(failure: failure, url: url),
-                      OnboardingConnecting() ||
-                      OnboardingConnected() => const _ConnectView(),
-                    },
+                        OnboardingImported(
+                          :final profileId,
+                          :final proxyCount,
+                        ) =>
+                          _ImportedView(
+                            profileId: profileId,
+                            proxyCount: proxyCount,
+                          ),
+                        OnboardingFailed(:final failure, :final url) =>
+                          _FailedView(failure: failure, url: url),
+                        OnboardingConnecting() ||
+                        OnboardingConnected() => const _ConnectView(),
+                      },
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
   }
 }
 
+class _OnboardingBackdrop extends StatelessWidget {
+  const _OnboardingBackdrop({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = context.colorScheme.brightness == Brightness.dark;
+    const blue = Color(defaultPrimaryColor);
+    const cyan = Color(0xFF00C9E8);
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned.fill(
+          child: IgnorePointer(
+            child: RepaintBoundary(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: const Alignment(-0.9, -0.85),
+                    radius: 1.05,
+                    colors: [
+                      blue.withValues(alpha: isDark ? 0.22 : 0.13),
+                      blue.withValues(alpha: 0),
+                    ],
+                  ),
+                ),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: const Alignment(0.95, 0.7),
+                      radius: 0.95,
+                      colors: [
+                        cyan.withValues(alpha: isDark ? 0.14 : 0.10),
+                        cyan.withValues(alpha: 0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        child,
+      ],
+    );
+  }
+}
+
 Future<void> _importUrl(WidgetRef ref, String url) async {
   final onboarding = ref.read(onboardingProvider.notifier);
-  onboarding.importing();
   final profiles = ref.read(profilesActionProvider.notifier);
+  final core = ref.read(coreHandlerProvider);
+  onboarding.importing();
   Profile? saved;
   try {
     saved = await profiles.importForOnboarding(url);
-    final config = await ref.read(coreHandlerProvider).readConfig(saved.id);
+    final config = await core.readConfig(saved.id);
     final proxies = config['proxies'];
     final proxyCount = proxies is List ? proxies.length : 0;
     if (proxyCount == 0) {
@@ -235,8 +293,8 @@ class _ConfirmView extends ConsumerWidget {
             color: SurfaceLevel.inset.colorOf(colorScheme),
             shape: AppShape.md,
           ),
-          child: Text(
-            maskSubscriptionUrl(url),
+          child: SelectableText(
+            url,
             textAlign: TextAlign.center,
             style: AppTextStyle.callout
                 .of(context)

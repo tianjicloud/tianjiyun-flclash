@@ -1490,7 +1490,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "There is nothing in the clipboard",
     ),
     "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
-      "The link contains your subscription credentials, so only part of it is shown.",
+      "Check the full subscription link above before importing.",
     ),
     "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage(
       "Tianji Cloud subscription",

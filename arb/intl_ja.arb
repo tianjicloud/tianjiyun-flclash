@@ -1085,7 +1085,7 @@
   "onboardingNoSubscription": "サブスクリプションのアドレスがまだありませんか？ユーザーパネルを開いてコピー ›",
   "onboardingClipboardEmpty": "クリップボードに内容がありません",
   "onboardingConfirmTitle": "Tianji Cloud のサブスクリプション",
-  "onboardingConfirmNote": "リンクにはサブスクリプションの認証情報が含まれるため、一部だけを表示しています。",
+  "onboardingConfirmNote": "上のサブスクリプションリンク全体を確認してからインポートしてください。",
   "onboardingImporting": "サブスクリプションを取得しています…",
   "onboardingImportingDescription": "ノード一覧とプラン情報を読み込んでいます",
   "onboardingImported": "インポート済み · {count} 個のノード",

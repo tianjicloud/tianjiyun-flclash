@@ -1560,7 +1560,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "В буфере обмена ничего нет",
     ),
     "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
-      "Ссылка содержит данные вашей подписки, поэтому показана только её часть.",
+      "Перед импортом проверьте полную ссылку на подписку выше.",
     ),
     "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage(
       "Подписка Tianji Cloud",

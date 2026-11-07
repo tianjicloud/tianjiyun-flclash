@@ -1276,7 +1276,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "クリップボードに内容がありません",
     ),
     "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
-      "リンクにはサブスクリプションの認証情報が含まれるため、一部だけを表示しています。",
+      "上のサブスクリプションリンク全体を確認してからインポートしてください。",
     ),
     "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage(
       "Tianji Cloud のサブスクリプション",

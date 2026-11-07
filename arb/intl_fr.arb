@@ -1085,7 +1085,7 @@
   "onboardingNoSubscription": "Pas encore d’adresse d’abonnement ? Ouvrez votre panneau utilisateur pour la copier ›",
   "onboardingClipboardEmpty": "Le presse-papiers est vide",
   "onboardingConfirmTitle": "Abonnement Tianji Cloud",
-  "onboardingConfirmNote": "Le lien contient vos identifiants d’abonnement, une partie seulement est affichée.",
+  "onboardingConfirmNote": "Vérifiez le lien d’abonnement complet ci-dessus avant de l’importer.",
   "onboardingImporting": "Récupération de l’abonnement…",
   "onboardingImportingDescription": "Lecture de la liste des nœuds et des informations du forfait",
   "onboardingImported": "Importé · {count} nœuds",

@@ -1156,7 +1156,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "剪贴板里没有内容",
     ),
     "onboardingConfirmNote": MessageLookupByLibrary.simpleMessage(
-      "链接里含有你的订阅凭证，这里只显示一部分。",
+      "请核对上方完整订阅链接，确认无误后导入。",
     ),
     "onboardingConfirmTitle": MessageLookupByLibrary.simpleMessage("天机云订阅"),
     "onboardingConnect": MessageLookupByLibrary.simpleMessage("连接"),
