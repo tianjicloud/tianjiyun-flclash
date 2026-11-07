@@ -349,6 +349,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "blockQuic": MessageLookupByLibrary.simpleMessage("阻止 QUIC"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body 重写"),
     "brightness": MessageLookupByLibrary.simpleMessage("亮度"),
+    "businessChooseLine": MessageLookupByLibrary.simpleMessage("更换线路"),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage("连接线路"),
+    "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
+      "暂未读取到可用线路，请检查订阅。",
+    ),
+    "businessLinesLoading": MessageLookupByLibrary.simpleMessage("正在读取可用线路…"),
+    "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
+      "国内访问优先直连，其他访问按订阅规则选择代理线路。",
+    ),
+    "businessSmartRouting": MessageLookupByLibrary.simpleMessage("智能分流"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("排除域名"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "排除域名仅在系统代理启用时生效。",

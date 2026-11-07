@@ -9782,6 +9782,66 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Connection line`
+  String get businessLineTitle {
+    return Intl.message(
+      'Connection line',
+      name: 'businessLineTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading available lines…`
+  String get businessLinesLoading {
+    return Intl.message(
+      'Loading available lines…',
+      name: 'businessLinesLoading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No lines loaded yet. Check your subscription.`
+  String get businessLinesEmpty {
+    return Intl.message(
+      'No lines loaded yet. Check your subscription.',
+      name: 'businessLinesEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smart routing`
+  String get businessSmartRouting {
+    return Intl.message(
+      'Smart routing',
+      name: 'businessSmartRouting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.`
+  String get businessRoutingDesc {
+    return Intl.message(
+      'Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.',
+      name: 'businessRoutingDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change line`
+  String get businessChooseLine {
+    return Intl.message(
+      'Change line',
+      name: 'businessChooseLine',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

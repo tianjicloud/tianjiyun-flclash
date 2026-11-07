@@ -363,6 +363,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "blockQuic": MessageLookupByLibrary.simpleMessage("QUIC をブロック"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("ボディ書き換え"),
     "brightness": MessageLookupByLibrary.simpleMessage("明度"),
+    "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage("接続回線"),
+    "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
+      "回線が読み込まれていません。サブスクリプションを確認してください。",
+    ),
+    "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
+      "利用可能な回線を読み込み中…",
+    ),
+    "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
+      "国内通信は直接接続を優先し、その他の通信はサブスクリプションのルールで回線を選択します。",
+    ),
+    "businessSmartRouting": MessageLookupByLibrary.simpleMessage("スマートルーティング"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("除外ドメイン"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "除外ドメインはシステムプロキシが有効な場合のみ適用されます。",

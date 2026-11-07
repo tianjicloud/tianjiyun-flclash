@@ -455,6 +455,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "Reescritura del cuerpo",
     ),
     "brightness": MessageLookupByLibrary.simpleMessage("Brillo"),
+    "businessChooseLine": MessageLookupByLibrary.simpleMessage("Cambiar línea"),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage(
+      "Línea de conexión",
+    ),
+    "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
+      "No se han cargado líneas. Revisa tu suscripción.",
+    ),
+    "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
+      "Cargando líneas disponibles…",
+    ),
+    "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
+      "El tráfico local prefiere la conexión directa. Las reglas de la suscripción eligen líneas proxy para el resto.",
+    ),
+    "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
+      "Enrutamiento inteligente",
+    ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Dominios excluidos"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Los dominios excluidos solo se aplican mientras el proxy del sistema esté activado.",

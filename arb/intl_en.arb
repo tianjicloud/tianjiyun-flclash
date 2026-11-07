@@ -1148,5 +1148,11 @@
   "residentialExitLocked": "Choose the residential exit from the dashboard. Other groups cannot change it while residential routing is active.",
   "residentialLoadingCatalog": "Loading residential lines…",
   "residentialLoadingCatalogDesc": "Reading the available lines in your subscription.",
-  "residentialCaptureOff": "Computer traffic is not being captured. Enable System proxy or TUN below."
+  "residentialCaptureOff": "Computer traffic is not being captured. Enable System proxy or TUN below.",
+  "businessLineTitle": "Connection line",
+  "businessLinesLoading": "Loading available lines…",
+  "businessLinesEmpty": "No lines loaded yet. Check your subscription.",
+  "businessSmartRouting": "Smart routing",
+  "businessRoutingDesc": "Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.",
+  "businessChooseLine": "Change line"
 }

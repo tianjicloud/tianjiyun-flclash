@@ -1148,5 +1148,11 @@
   "residentialExitLocked": "Elige la salida residencial desde el panel. Otros grupos no pueden cambiarla mientras el enrutamiento residencial esté activo.",
   "residentialLoadingCatalog": "Cargando líneas residenciales…",
   "residentialLoadingCatalogDesc": "Leyendo las líneas disponibles en tu suscripción.",
-  "residentialCaptureOff": "No se está capturando el tráfico del equipo. Activa el proxy del sistema o TUN abajo."
+  "residentialCaptureOff": "No se está capturando el tráfico del equipo. Activa el proxy del sistema o TUN abajo.",
+  "businessLineTitle": "Línea de conexión",
+  "businessLinesLoading": "Cargando líneas disponibles…",
+  "businessLinesEmpty": "No se han cargado líneas. Revisa tu suscripción.",
+  "businessSmartRouting": "Enrutamiento inteligente",
+  "businessRoutingDesc": "El tráfico local prefiere la conexión directa. Las reglas de la suscripción eligen líneas proxy para el resto.",
+  "businessChooseLine": "Cambiar línea"
 }

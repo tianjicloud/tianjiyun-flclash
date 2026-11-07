@@ -451,6 +451,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "blockQuic": MessageLookupByLibrary.simpleMessage("Bloquer QUIC"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Réécriture du corps"),
     "brightness": MessageLookupByLibrary.simpleMessage("Luminosité"),
+    "businessChooseLine": MessageLookupByLibrary.simpleMessage(
+      "Changer de ligne",
+    ),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage(
+      "Ligne de connexion",
+    ),
+    "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
+      "Aucune ligne chargée. Vérifiez votre abonnement.",
+    ),
+    "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
+      "Chargement des lignes disponibles…",
+    ),
+    "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
+      "Le trafic local privilégie une connexion directe. Les règles de l’abonnement choisissent les lignes proxy pour le reste.",
+    ),
+    "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
+      "Routage intelligent",
+    ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Domaines contournés"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Les domaines contournés ne s’appliquent que si le proxy système est activé.",

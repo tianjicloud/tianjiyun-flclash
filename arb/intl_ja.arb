@@ -1148,5 +1148,11 @@
   "residentialExitLocked": "住宅出口はダッシュボードで選択してください。住宅ルーティング有効中は他のグループから変更できません。",
   "residentialLoadingCatalog": "住宅回線を読み込み中…",
   "residentialLoadingCatalogDesc": "サブスクリプションの利用可能な回線を読み込んでいます。",
-  "residentialCaptureOff": "パソコンの通信はまだ取り込まれていません。下のシステムプロキシまたは TUN を有効にしてください。"
+  "residentialCaptureOff": "パソコンの通信はまだ取り込まれていません。下のシステムプロキシまたは TUN を有効にしてください。",
+  "businessLineTitle": "接続回線",
+  "businessLinesLoading": "利用可能な回線を読み込み中…",
+  "businessLinesEmpty": "回線が読み込まれていません。サブスクリプションを確認してください。",
+  "businessSmartRouting": "スマートルーティング",
+  "businessRoutingDesc": "国内通信は直接接続を優先し、その他の通信はサブスクリプションのルールで回線を選択します。",
+  "businessChooseLine": "回線を変更"
 }

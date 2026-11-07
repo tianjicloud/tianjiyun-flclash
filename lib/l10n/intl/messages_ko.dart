@@ -359,6 +359,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "blockQuic": MessageLookupByLibrary.simpleMessage("QUIC 차단"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("본문 재작성"),
     "brightness": MessageLookupByLibrary.simpleMessage("밝기"),
+    "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage("연결 회선"),
+    "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
+      "회선을 불러오지 못했습니다. 구독을 확인하세요.",
+    ),
+    "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
+      "사용 가능한 회선을 불러오는 중…",
+    ),
+    "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
+      "국내 트래픽은 직접 연결을 우선하며, 나머지는 구독 규칙에 따라 프록시 회선을 선택합니다.",
+    ),
+    "businessSmartRouting": MessageLookupByLibrary.simpleMessage("스마트 라우팅"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("우회 도메인"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "우회 도메인은 시스템 프록시가 켜져 있을 때만 적용됩니다.",

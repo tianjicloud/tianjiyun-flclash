@@ -1224,6 +1224,27 @@ void main() {
       expect(result.appSettingProps.onlyStatisticsProxy, false);
     });
 
+    test(
+      'fresh desktop installs enable TUN without changing saved choices',
+      () {
+        final fresh = Config.realFromJson(null);
+        expect(
+          fresh.patchClashConfig.tun.enable,
+          Platform.isWindows || Platform.isLinux || Platform.isMacOS,
+        );
+        for (final enabled in [true, false]) {
+          final saved = Config.realFromJson({
+            'themeProps': <String, Object?>{},
+            'patchClashConfig': {
+              'tun': {'enable': enabled},
+            },
+          });
+          expect(saved.patchClashConfig.tun.enable, enabled);
+        }
+        expect(Config.realFromJson({}).patchClashConfig.tun.enable, false);
+      },
+    );
+
     test('a fresh config ships valid, distinct default hotkeys', () {
       final defaults = Config.realFromJson(null).hotKeyActions;
 

@@ -1148,5 +1148,11 @@
   "residentialExitLocked": "대시보드에서 주거용 출구를 선택하세요. 주거용 라우팅이 활성화된 동안 다른 그룹에서는 변경할 수 없습니다.",
   "residentialLoadingCatalog": "주거용 회선을 불러오는 중…",
   "residentialLoadingCatalogDesc": "구독에서 사용 가능한 회선을 불러오는 중입니다.",
-  "residentialCaptureOff": "컴퓨터 트래픽을 처리하고 있지 않습니다. 아래에서 시스템 프록시 또는 TUN을 켜세요."
+  "residentialCaptureOff": "컴퓨터 트래픽을 처리하고 있지 않습니다. 아래에서 시스템 프록시 또는 TUN을 켜세요.",
+  "businessLineTitle": "연결 회선",
+  "businessLinesLoading": "사용 가능한 회선을 불러오는 중…",
+  "businessLinesEmpty": "회선을 불러오지 못했습니다. 구독을 확인하세요.",
+  "businessSmartRouting": "스마트 라우팅",
+  "businessRoutingDesc": "국내 트래픽은 직접 연결을 우선하며, 나머지는 구독 규칙에 따라 프록시 회선을 선택합니다.",
+  "businessChooseLine": "회선 변경"
 }

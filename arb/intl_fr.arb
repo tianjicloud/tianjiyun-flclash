@@ -1148,5 +1148,11 @@
   "residentialExitLocked": "Choisissez la sortie résidentielle depuis le tableau de bord. Les autres groupes ne peuvent pas la modifier tant que le routage résidentiel est actif.",
   "residentialLoadingCatalog": "Chargement des lignes résidentielles…",
   "residentialLoadingCatalogDesc": "Lecture des lignes disponibles dans votre abonnement.",
-  "residentialCaptureOff": "Le trafic de l’ordinateur n’est pas pris en charge. Activez le proxy système ou TUN ci-dessous."
+  "residentialCaptureOff": "Le trafic de l’ordinateur n’est pas pris en charge. Activez le proxy système ou TUN ci-dessous.",
+  "businessLineTitle": "Ligne de connexion",
+  "businessLinesLoading": "Chargement des lignes disponibles…",
+  "businessLinesEmpty": "Aucune ligne chargée. Vérifiez votre abonnement.",
+  "businessSmartRouting": "Routage intelligent",
+  "businessRoutingDesc": "Le trafic local privilégie une connexion directe. Les règles de l’abonnement choisissent les lignes proxy pour le reste.",
+  "businessChooseLine": "Changer de ligne"
 }

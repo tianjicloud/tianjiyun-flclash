@@ -5,6 +5,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
@@ -15,6 +16,7 @@ import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
 import 'package:fl_clash/views/dashboard/widgets/profile_detail.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
+import 'package:fl_clash/views/dashboard/widgets/proxy_groups.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -105,7 +107,7 @@ class _BusinessBody extends ConsumerWidget {
                     context,
                   ).copyWith(color: DashboardColors.of(context).warn),
                 ),
-              const RepaintBoundary(child: ResidentialExitCard()),
+              const RepaintBoundary(child: BusinessLineCard()),
               if (density.isDesktop)
                 SizedBox(
                   height: (density.isCompact ? 152 : 176) * scale,
@@ -166,6 +168,72 @@ class _TakeoverRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 16,
         children: [for (final tile in tiles) Expanded(child: tile)],
+      ),
+    );
+  }
+}
+
+class BusinessLineCard extends ConsumerWidget {
+  const BusinessLineCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final policy = ref.watch(residentialPolicyProvider);
+    if (policy.active || (policy.catalogReady && policy.hasPlan)) {
+      return const ResidentialExitCard();
+    }
+    final strings = context.appLocalizations;
+    final groups = policy.catalogReady
+        ? ref.watch(groupsProvider)
+        : const <Group>[];
+    final root = groups.where((group) => group.name == appName).firstOrNull;
+    final selected = root == null
+        ? null
+        : ref.watch(selectedProxyNameProvider(root.name));
+    return DashboardCard(
+      semanticLabel: strings.businessLineTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        spacing: 12,
+        children: [
+          DashboardCardHeader(
+            glyph: AppGlyphs.shuffle,
+            title: strings.businessLineTitle,
+          ),
+          if (!policy.catalogReady)
+            Text(
+              strings.businessLinesLoading,
+              style: DashboardText.label(context),
+            )
+          else if (groups.isEmpty) ...[
+            Text(
+              strings.businessLinesEmpty,
+              style: DashboardText.rowTitle(context),
+            ),
+            FilledButton(
+              onPressed: () => showProfilesSheet(context),
+              child: Text(strings.residentialManageSubscription),
+            ),
+          ] else ...[
+            EmojiText(
+              selected?.isNotEmpty == true
+                  ? selected!
+                  : strings.businessSmartRouting,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: DashboardText.figure(context, AppTextStyle.title2),
+            ),
+            Text(
+              strings.businessRoutingDesc,
+              style: DashboardText.label(context),
+            ),
+            FilledButton(
+              onPressed: () => showProxiesSheet(context, groupName: root?.name),
+              child: Text(strings.businessChooseLine),
+            ),
+          ],
+        ],
       ),
     );
   }

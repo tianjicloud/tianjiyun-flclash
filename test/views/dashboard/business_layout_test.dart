@@ -101,15 +101,18 @@ void main() {
     stats.dispose();
   });
 
-  for (final (width, scale, captureOff) in [
-    (1200.0, 1.0, false),
-    (800.0, 1.0, false),
-    (800.0, 2.0, false),
-    (390.0, 1.6, false),
-    (1200.0, 1.0, true),
+  for (final (width, scale, captureOff, residential) in [
+    (1200.0, 1.0, false, true),
+    (800.0, 1.0, false, true),
+    (800.0, 2.0, false, true),
+    (390.0, 1.6, false, true),
+    (1200.0, 1.0, true, true),
+    (1200.0, 1.0, false, false),
+    (800.0, 2.0, false, false),
+    (390.0, 1.6, false, false),
   ]) {
     testWidgets(
-      'business home fits $width at scale $scale, capture off $captureOff',
+      'business home fits $width at scale $scale, capture off $captureOff, residential $residential',
       (tester) async {
         tester.view.physicalSize = Size(width, 900);
         tester.view.devicePixelRatio = 1;
@@ -118,6 +121,19 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
         container.read(viewSizeProvider.notifier).value = Size(width, 900);
+        if (!residential) {
+          final profile = container.read(currentProfileProvider)!;
+          container
+              .read(profilesProvider.notifier)
+              .put(profile.copyWith(overrides: const ProfileOverrides()));
+          container.read(groupsProvider.notifier).value = const [
+            Group(
+              name: '天机云',
+              type: GroupType.Selector,
+              all: [Proxy(name: '⚡ 自动选择', type: 'URLTest')],
+            ),
+          ];
+        }
         if (captureOff) {
           container.read(runTimeProvider.notifier).value = 1;
           container
@@ -139,7 +155,11 @@ void main() {
         );
         await tester.pump();
 
-        expect(find.byType(ResidentialExitCard), findsOneWidget);
+        expect(
+          find.byType(ResidentialExitCard),
+          residential ? findsOneWidget : findsNothing,
+        );
+        if (!residential) expect(find.text('连接线路'), findsOneWidget);
         expect(
           find.text('尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。'),
           captureOff ? findsOneWidget : findsNothing,

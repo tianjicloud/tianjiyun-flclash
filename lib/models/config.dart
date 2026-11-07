@@ -567,6 +567,9 @@ abstract class Config with _$Config {
     if (json == null) {
       return Config(
         themeProps: defaultThemeProps,
+        patchClashConfig: system.isDesktop
+            ? defaultClashConfig.copyWith.tun(enable: true)
+            : defaultClashConfig,
         hotKeyActions: defaultHotKeyActions,
         appSettingProps: AppSettingProps(
           dashboardWidgets: platformDefaultDashboardWidgets,

@@ -1,4 +1,7 @@
 import 'package:fl_clash/common/residential.dart';
+import 'package:fl_clash/common/constant.dart';
+import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
@@ -43,11 +46,15 @@ Widget _app(
     fingerprint: 'fingerprint',
   ),
   double width = 380,
+  bool adaptive = false,
+  List<Group> groups = const [],
 }) {
   return TestApp(
     locale: const Locale('en'),
     overrides: [
       residentialPolicyProvider.overrideWithValue(policy),
+      groupsProvider.overrideWithBuild((_, _) => groups),
+      selectedProxyNameProvider(appName).overrideWith((_) => 'Auto'),
       residentialActionProvider.overrideWith(
         () => _TestResidentialAction(action),
       ),
@@ -56,10 +63,12 @@ Widget _app(
       body: SingleChildScrollView(
         child: SizedBox(
           width: width,
-          child: const DashboardDensityScope(
+          child: DashboardDensityScope(
             density: DashboardDensity.mobile,
             scale: 1,
-            child: ResidentialExitCard(),
+            child: adaptive
+                ? const BusinessLineCard()
+                : const ResidentialExitCard(),
           ),
         ),
       ),
@@ -68,6 +77,71 @@ Widget _app(
 }
 
 void main() {
+  testWidgets(
+    'ordinary subscriptions get line controls without residential prompts',
+    (tester) async {
+      await tester.pumpWidget(
+        _app(
+          _policy(rootAvailable: false, choices: const []),
+          adaptive: true,
+          groups: const [
+            Group(
+              name: appName,
+              type: GroupType.Selector,
+              all: [Proxy(name: 'Auto', type: 'URLTest')],
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+      expect(find.text('Connection line'), findsOneWidget);
+      expect(find.text('Auto'), findsOneWidget);
+      expect(find.text('Change line'), findsOneWidget);
+      expect(find.text('No residential lines available'), findsNothing);
+      expect(
+        find.textContaining('service-side alternative exit'),
+        findsNothing,
+      );
+    },
+  );
+
+  testWidgets('unknown subscription capability uses neutral loading copy', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_app(_policy(catalogReady: false), adaptive: true));
+    expect(find.text('Loading available lines…'), findsOneWidget);
+    expect(find.text('Loading residential lines…'), findsNothing);
+  });
+
+  testWidgets(
+    'ordinary empty catalog points to subscription without an upsell',
+    (tester) async {
+      await tester.pumpWidget(
+        _app(_policy(rootAvailable: false, choices: const []), adaptive: true),
+      );
+      expect(
+        find.text('No lines loaded yet. Check your subscription.'),
+        findsOneWidget,
+      );
+      expect(find.text('Manage subscription'), findsOneWidget);
+      expect(find.text('Change line'), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'an unavailable selected residential exit keeps recovery controls',
+    (tester) async {
+      await tester.pumpWidget(
+        _app(
+          _policy(active: true, rootAvailable: false, choices: const []),
+          adaptive: true,
+        ),
+      );
+      expect(find.textContaining('Proxy traffic is blocked'), findsOneWidget);
+      expect(find.text('Use subscription policy'), findsOneWidget);
+    },
+  );
+
   testWidgets('loading is not mistaken for an empty plan', (tester) async {
     await tester.pumpWidget(_app(_policy(catalogReady: false)));
     await tester.pump();

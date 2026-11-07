@@ -422,6 +422,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "blockQuic": MessageLookupByLibrary.simpleMessage("Block QUIC"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body rewrite"),
     "brightness": MessageLookupByLibrary.simpleMessage("Brightness"),
+    "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage(
+      "Connection line",
+    ),
+    "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
+      "No lines loaded yet. Check your subscription.",
+    ),
+    "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
+      "Loading available lines…",
+    ),
+    "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
+      "Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.",
+    ),
+    "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
+      "Smart routing",
+    ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Bypass domains"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Bypass domains apply only while the system proxy is on.",

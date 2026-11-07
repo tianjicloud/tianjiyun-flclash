@@ -440,6 +440,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "blockQuic": MessageLookupByLibrary.simpleMessage("Блокировать QUIC"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Перезапись тела"),
     "brightness": MessageLookupByLibrary.simpleMessage("Яркость"),
+    "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage(
+      "Линия подключения",
+    ),
+    "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
+      "Линии ещё не загружены. Проверьте подписку.",
+    ),
+    "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
+      "Загрузка доступных линий…",
+    ),
+    "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
+      "Для местного трафика предпочтительно прямое соединение. Для остального правила подписки выбирают прокси-линии.",
+    ),
+    "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
+      "Умная маршрутизация",
+    ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Исключённые домены"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Исключённые домены действуют только при включённом системном прокси.",
