@@ -1159,5 +1159,12 @@
   "businessRuleModeRequired": "Smart routing is not active. This default line is not currently in effect.",
   "businessEnableRules": "Enable smart routing",
   "businessLineFailed": "Could not finish switching lines. Retry.",
-  "businessSelectionStale": "The subscription or mode changed. Reopen line selection."
+  "businessSelectionStale": "The subscription or mode changed. Reopen line selection.",
+  "selectionConfirming": "Confirming the exit…",
+  "selectionNotCaptured": "Traffic is not captured yet. Enable system proxy or TUN below to use your selected node.",
+  "selectionResidentialLocked": "Your residential line controls proxy traffic. Change it in the residential card or return to subscription routing.",
+  "selectionGroupOverridden": "This automatic group chose a different node. Select a node manually to keep a fixed choice.",
+  "selectionUnknownPending": "The exit differs from your selection. Checking the reason…",
+  "selectionUnknown": "The exit differs from your selection. The reason could not be confirmed. Try checking again.",
+  "selectionRecheck": "Check again"
 }

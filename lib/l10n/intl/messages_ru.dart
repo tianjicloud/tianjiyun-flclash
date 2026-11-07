@@ -2180,6 +2180,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage(
       "Выберите стратегию распределения",
     ),
+    "selectionConfirming": MessageLookupByLibrary.simpleMessage(
+      "Проверка выхода…",
+    ),
+    "selectionGroupOverridden": MessageLookupByLibrary.simpleMessage(
+      "Автоматическая группа выбрала другой узел. Выберите узел вручную, чтобы закрепить его.",
+    ),
+    "selectionNotCaptured": MessageLookupByLibrary.simpleMessage(
+      "Трафик устройства пока не перехватывается. Включите системный прокси или TUN ниже.",
+    ),
+    "selectionRecheck": MessageLookupByLibrary.simpleMessage("Проверить снова"),
+    "selectionResidentialLocked": MessageLookupByLibrary.simpleMessage(
+      "Домашняя линия управляет прокси-трафиком. Смените её в карточке или вернитесь к маршрутизации подписки.",
+    ),
+    "selectionUnknown": MessageLookupByLibrary.simpleMessage(
+      "Выход отличается от выбранного. Причину подтвердить не удалось. Повторите проверку.",
+    ),
+    "selectionUnknownPending": MessageLookupByLibrary.simpleMessage(
+      "Выход отличается от выбранного. Проверяем причину…",
+    ),
     "send": MessageLookupByLibrary.simpleMessage("Отправить"),
     "sendFromPhone": MessageLookupByLibrary.simpleMessage(
       "Отправить с телефона",

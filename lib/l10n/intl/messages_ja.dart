@@ -1795,6 +1795,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage(
       "振り分け戦略を選択してください",
     ),
+    "selectionConfirming": MessageLookupByLibrary.simpleMessage("出口を確認しています…"),
+    "selectionGroupOverridden": MessageLookupByLibrary.simpleMessage(
+      "自動グループが別のノードを選びました。固定するにはノードを手動で選択してください。",
+    ),
+    "selectionNotCaptured": MessageLookupByLibrary.simpleMessage(
+      "端末の通信はまだ取り込まれていません。下のシステムプロキシまたは TUN を有効にしてください。",
+    ),
+    "selectionRecheck": MessageLookupByLibrary.simpleMessage("再確認"),
+    "selectionResidentialLocked": MessageLookupByLibrary.simpleMessage(
+      "住宅回線がプロキシ通信を制御しています。住宅回線カードで回線を変更するか、サブスクリプションのルーティングに戻してください。",
+    ),
+    "selectionUnknown": MessageLookupByLibrary.simpleMessage(
+      "出口が選択と異なります。原因を確認できませんでした。もう一度確認してください。",
+    ),
+    "selectionUnknownPending": MessageLookupByLibrary.simpleMessage(
+      "出口が選択と異なります。原因を確認しています…",
+    ),
     "send": MessageLookupByLibrary.simpleMessage("送信"),
     "sendFromPhone": MessageLookupByLibrary.simpleMessage("スマートフォンから送信"),
     "sendFromPhoneConfirmTitle": MessageLookupByLibrary.simpleMessage(

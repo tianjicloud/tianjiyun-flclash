@@ -1159,5 +1159,12 @@
   "businessRuleModeRequired": "当前未使用智能分流，这里的默认线路暂不生效。",
   "businessEnableRules": "启用智能分流",
   "businessLineFailed": "未能完成线路切换，请重试",
-  "businessSelectionStale": "订阅或模式已变化，请重新打开线路选择。"
+  "businessSelectionStale": "订阅或模式已变化，请重新打开线路选择。",
+  "selectionConfirming": "正在确认出口…",
+  "selectionNotCaptured": "还没接管这台设备的流量：请在下方开启系统代理或虚拟网卡，选好的节点才会生效。",
+  "selectionResidentialLocked": "家宽线路正在接管代理流量。请在家宽卡里更换线路，或切回按订阅分流。",
+  "selectionGroupOverridden": "这个分组正在自动选择节点，实际节点与所选不同。请手动选择节点来固定线路。",
+  "selectionUnknownPending": "出口与所选不一致，原因正在确认…",
+  "selectionUnknown": "出口与所选不一致，暂时无法确认原因。可以重新检测一次。",
+  "selectionRecheck": "重新检测"
 }

@@ -1159,5 +1159,12 @@
   "businessRuleModeRequired": "Le routage intelligent est désactivé. Cette ligne par défaut n’est pas utilisée actuellement.",
   "businessEnableRules": "Activer le routage intelligent",
   "businessLineFailed": "Le changement de ligne a échoué. Réessayez.",
-  "businessSelectionStale": "L’abonnement ou le mode a changé. Rouvrez la sélection."
+  "businessSelectionStale": "L’abonnement ou le mode a changé. Rouvrez la sélection.",
+  "selectionConfirming": "Vérification de la sortie…",
+  "selectionNotCaptured": "Le trafic de cet appareil n’est pas encore pris en charge. Activez le proxy système ou TUN ci-dessous.",
+  "selectionResidentialLocked": "La ligne résidentielle contrôle le trafic proxy. Changez-la dans sa carte ou revenez au routage de l’abonnement.",
+  "selectionGroupOverridden": "Ce groupe automatique a choisi un autre nœud. Sélectionnez un nœud manuellement pour le fixer.",
+  "selectionUnknownPending": "La sortie diffère de votre choix. Vérification de la cause…",
+  "selectionUnknown": "La sortie diffère de votre choix. La cause n’a pas pu être confirmée. Réessayez.",
+  "selectionRecheck": "Vérifier à nouveau"
 }

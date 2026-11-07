@@ -1159,5 +1159,12 @@
   "businessRuleModeRequired": "El enrutamiento inteligente no está activo. Esta línea predeterminada no se está usando.",
   "businessEnableRules": "Activar enrutamiento inteligente",
   "businessLineFailed": "No se pudo completar el cambio. Reinténtalo.",
-  "businessSelectionStale": "La suscripción o el modo cambió. Abre de nuevo la selección."
+  "businessSelectionStale": "La suscripción o el modo cambió. Abre de nuevo la selección.",
+  "selectionConfirming": "Confirmando la salida…",
+  "selectionNotCaptured": "Aún no se captura el tráfico del dispositivo. Activa el proxy del sistema o TUN abajo.",
+  "selectionResidentialLocked": "La línea residencial controla el tráfico proxy. Cámbiala en su tarjeta o vuelve al enrutamiento de la suscripción.",
+  "selectionGroupOverridden": "El grupo automático eligió otro nodo. Selecciona un nodo manualmente para fijarlo.",
+  "selectionUnknownPending": "La salida difiere de tu selección. Comprobando el motivo…",
+  "selectionUnknown": "La salida difiere de tu selección. No se pudo confirmar el motivo. Comprueba de nuevo.",
+  "selectionRecheck": "Comprobar de nuevo"
 }

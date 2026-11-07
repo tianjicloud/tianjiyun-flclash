@@ -1759,6 +1759,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectAll": MessageLookupByLibrary.simpleMessage("모두 선택"),
     "selectRuleSet": MessageLookupByLibrary.simpleMessage("규칙 세트를 선택하세요"),
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage("분할 전략을 선택하세요"),
+    "selectionConfirming": MessageLookupByLibrary.simpleMessage("출구를 확인하는 중…"),
+    "selectionGroupOverridden": MessageLookupByLibrary.simpleMessage(
+      "자동 그룹이 다른 노드를 선택했습니다. 고정하려면 노드를 수동으로 선택하세요.",
+    ),
+    "selectionNotCaptured": MessageLookupByLibrary.simpleMessage(
+      "기기의 트래픽이 아직 연결되지 않았습니다. 아래에서 시스템 프록시 또는 TUN을 켜세요.",
+    ),
+    "selectionRecheck": MessageLookupByLibrary.simpleMessage("다시 확인"),
+    "selectionResidentialLocked": MessageLookupByLibrary.simpleMessage(
+      "가정용 회선이 프록시 트래픽을 제어합니다. 가정용 회선 카드에서 회선을 변경하거나 구독 라우팅으로 돌아가세요.",
+    ),
+    "selectionUnknown": MessageLookupByLibrary.simpleMessage(
+      "출구가 선택한 항목과 다릅니다. 원인을 확인할 수 없습니다. 다시 확인해 보세요.",
+    ),
+    "selectionUnknownPending": MessageLookupByLibrary.simpleMessage(
+      "출구가 선택한 항목과 다릅니다. 원인을 확인하는 중…",
+    ),
     "send": MessageLookupByLibrary.simpleMessage("보내기"),
     "sendFromPhone": MessageLookupByLibrary.simpleMessage("휴대폰에서 보내기"),
     "sendFromPhoneConfirmTitle": MessageLookupByLibrary.simpleMessage(

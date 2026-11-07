@@ -2076,6 +2076,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage(
       "Please select a split strategy",
     ),
+    "selectionConfirming": MessageLookupByLibrary.simpleMessage(
+      "Confirming the exit…",
+    ),
+    "selectionGroupOverridden": MessageLookupByLibrary.simpleMessage(
+      "This automatic group chose a different node. Select a node manually to keep a fixed choice.",
+    ),
+    "selectionNotCaptured": MessageLookupByLibrary.simpleMessage(
+      "Traffic is not captured yet. Enable system proxy or TUN below to use your selected node.",
+    ),
+    "selectionRecheck": MessageLookupByLibrary.simpleMessage("Check again"),
+    "selectionResidentialLocked": MessageLookupByLibrary.simpleMessage(
+      "Your residential line controls proxy traffic. Change it in the residential card or return to subscription routing.",
+    ),
+    "selectionUnknown": MessageLookupByLibrary.simpleMessage(
+      "The exit differs from your selection. The reason could not be confirmed. Try checking again.",
+    ),
+    "selectionUnknownPending": MessageLookupByLibrary.simpleMessage(
+      "The exit differs from your selection. Checking the reason…",
+    ),
     "send": MessageLookupByLibrary.simpleMessage("Send"),
     "sendFromPhone": MessageLookupByLibrary.simpleMessage("Send from phone"),
     "sendFromPhoneConfirmTitle": MessageLookupByLibrary.simpleMessage(

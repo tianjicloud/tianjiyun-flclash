@@ -1,3 +1,5 @@
+import 'package:fl_clash/providers/selection_check.dart';
+import 'package:fl_clash/providers/selection_verification.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/ip_quality.dart';
 import 'package:fl_clash/common/service_probe.dart'
@@ -99,10 +101,13 @@ Widget _app(
   Future<IpQuality> Function(Ref ref, String ip) quality, {
   DashboardDensity density = DashboardDensity.standard,
   bool root = false,
+  SelectionVerdict? selection,
 }) {
   return TestApp(
     locale: const Locale('en'),
     overrides: [
+      if (selection != null)
+        selectionCheckProvider.overrideWithBuild((_, _) => selection),
       profilesProvider.overrideWithValue(const [_profile]),
       suspendProvider.overrideWithValue(false),
       rootAccessProvider.overrideWith((_) async => root),
@@ -169,6 +174,27 @@ DashboardChip _chip(WidgetTester tester, String label) =>
     );
 
 void main() {
+  testWidgets(
+    'selection errors fit the existing desktop and mobile exit cards',
+    (tester) async {
+      for (final density in [
+        DashboardDensity.standard,
+        DashboardDensity.mobile,
+      ]) {
+        await tester.pumpWidget(
+          _app(
+            (_, _) async => _residential,
+            density: density,
+            selection: SelectionVerdict.notCaptured,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        expect(find.textContaining('Traffic is not captured'), findsOneWidget);
+      }
+    },
+  );
+
   setUp(() {
     mitmFeature = true;
     addTearDown(() => mitmFeature = false);

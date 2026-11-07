@@ -2237,6 +2237,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage(
       "Selecciona una estrategia de división",
     ),
+    "selectionConfirming": MessageLookupByLibrary.simpleMessage(
+      "Confirmando la salida…",
+    ),
+    "selectionGroupOverridden": MessageLookupByLibrary.simpleMessage(
+      "El grupo automático eligió otro nodo. Selecciona un nodo manualmente para fijarlo.",
+    ),
+    "selectionNotCaptured": MessageLookupByLibrary.simpleMessage(
+      "Aún no se captura el tráfico del dispositivo. Activa el proxy del sistema o TUN abajo.",
+    ),
+    "selectionRecheck": MessageLookupByLibrary.simpleMessage(
+      "Comprobar de nuevo",
+    ),
+    "selectionResidentialLocked": MessageLookupByLibrary.simpleMessage(
+      "La línea residencial controla el tráfico proxy. Cámbiala en su tarjeta o vuelve al enrutamiento de la suscripción.",
+    ),
+    "selectionUnknown": MessageLookupByLibrary.simpleMessage(
+      "La salida difiere de tu selección. No se pudo confirmar el motivo. Comprueba de nuevo.",
+    ),
+    "selectionUnknownPending": MessageLookupByLibrary.simpleMessage(
+      "La salida difiere de tu selección. Comprobando el motivo…",
+    ),
     "send": MessageLookupByLibrary.simpleMessage("Enviar"),
     "sendFromPhone": MessageLookupByLibrary.simpleMessage(
       "Enviar desde el teléfono",

@@ -1619,6 +1619,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectAll": MessageLookupByLibrary.simpleMessage("全选"),
     "selectRuleSet": MessageLookupByLibrary.simpleMessage("请选择规则集"),
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage("请选择分流策略"),
+    "selectionConfirming": MessageLookupByLibrary.simpleMessage("正在确认出口…"),
+    "selectionGroupOverridden": MessageLookupByLibrary.simpleMessage(
+      "这个分组正在自动选择节点，实际节点与所选不同。请手动选择节点来固定线路。",
+    ),
+    "selectionNotCaptured": MessageLookupByLibrary.simpleMessage(
+      "还没接管这台设备的流量：请在下方开启系统代理或虚拟网卡，选好的节点才会生效。",
+    ),
+    "selectionRecheck": MessageLookupByLibrary.simpleMessage("重新检测"),
+    "selectionResidentialLocked": MessageLookupByLibrary.simpleMessage(
+      "家宽线路正在接管代理流量。请在家宽卡里更换线路，或切回按订阅分流。",
+    ),
+    "selectionUnknown": MessageLookupByLibrary.simpleMessage(
+      "出口与所选不一致，暂时无法确认原因。可以重新检测一次。",
+    ),
+    "selectionUnknownPending": MessageLookupByLibrary.simpleMessage(
+      "出口与所选不一致，原因正在确认…",
+    ),
     "send": MessageLookupByLibrary.simpleMessage("发送"),
     "sendFromPhone": MessageLookupByLibrary.simpleMessage("从手机发送"),
     "sendFromPhoneConfirmTitle": MessageLookupByLibrary.simpleMessage(

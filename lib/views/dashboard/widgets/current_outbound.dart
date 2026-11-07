@@ -21,6 +21,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prism_ui/shapes/shapes.dart';
 
 import 'card.dart';
+import 'selection_notice.dart';
+import 'package:fl_clash/providers/selection_check.dart';
+import 'package:fl_clash/providers/selection_verification.dart';
 import 'package:prism_ui/prism_ui.dart';
 
 const _builtinOutbounds = {'DIRECT', 'REJECT', 'REJECT-DROP', 'PASS'};
@@ -97,6 +100,10 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         : isStart
         ? (appLocalizations.running, DashboardChipTone.ok)
         : (appLocalizations.notRunning, DashboardChipTone.idle);
+    final verdict = ref.watch(selectionCheckProvider);
+    final showSelection =
+        verdict != SelectionVerdict.untouched &&
+        verdict != SelectionVerdict.consistent;
     if (BusinessTheme.of(context)) {
       final details = Column(
         mainAxisSize: MainAxisSize.min,
@@ -127,6 +134,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
             active: isStart && !suspended,
             gap: metrics.cellGap,
           ),
+          if (showSelection) const SelectionNotice(),
           _BusinessMetrics(
             active: isStart && !suspended,
             exit: phase == ProbePhase.fresh
@@ -253,12 +261,20 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                         const Spacer()
                       else
                         const SizedBox(height: 16),
-                      _Cells(
-                        quality: quality,
-                        loading: loading,
-                        active: isStart && !suspended,
-                        gap: metrics.cellGap,
-                      ),
+                      if (showSelection)
+                        const SizedBox(
+                          height: 44,
+                          child: SingleChildScrollView(
+                            child: SelectionNotice(),
+                          ),
+                        )
+                      else
+                        _Cells(
+                          quality: quality,
+                          loading: loading,
+                          active: isStart && !suspended,
+                          gap: metrics.cellGap,
+                        ),
                     ],
                   ),
                 ),

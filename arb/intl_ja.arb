@@ -1159,5 +1159,12 @@
   "businessRuleModeRequired": "スマートルーティングが無効のため、この既定の回線は現在適用されていません。",
   "businessEnableRules": "スマートルーティングを有効化",
   "businessLineFailed": "回線の切り替えを完了できませんでした。再試行してください。",
-  "businessSelectionStale": "サブスクリプションまたはモードが変わりました。回線選択を開き直してください。"
+  "businessSelectionStale": "サブスクリプションまたはモードが変わりました。回線選択を開き直してください。",
+  "selectionConfirming": "出口を確認しています…",
+  "selectionNotCaptured": "端末の通信はまだ取り込まれていません。下のシステムプロキシまたは TUN を有効にしてください。",
+  "selectionResidentialLocked": "住宅回線がプロキシ通信を制御しています。住宅回線カードで回線を変更するか、サブスクリプションのルーティングに戻してください。",
+  "selectionGroupOverridden": "自動グループが別のノードを選びました。固定するにはノードを手動で選択してください。",
+  "selectionUnknownPending": "出口が選択と異なります。原因を確認しています…",
+  "selectionUnknown": "出口が選択と異なります。原因を確認できませんでした。もう一度確認してください。",
+  "selectionRecheck": "再確認"
 }

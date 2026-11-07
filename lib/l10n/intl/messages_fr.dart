@@ -2241,6 +2241,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage(
       "Veuillez sélectionner une stratégie de répartition",
     ),
+    "selectionConfirming": MessageLookupByLibrary.simpleMessage(
+      "Vérification de la sortie…",
+    ),
+    "selectionGroupOverridden": MessageLookupByLibrary.simpleMessage(
+      "Ce groupe automatique a choisi un autre nœud. Sélectionnez un nœud manuellement pour le fixer.",
+    ),
+    "selectionNotCaptured": MessageLookupByLibrary.simpleMessage(
+      "Le trafic de cet appareil n’est pas encore pris en charge. Activez le proxy système ou TUN ci-dessous.",
+    ),
+    "selectionRecheck": MessageLookupByLibrary.simpleMessage(
+      "Vérifier à nouveau",
+    ),
+    "selectionResidentialLocked": MessageLookupByLibrary.simpleMessage(
+      "La ligne résidentielle contrôle le trafic proxy. Changez-la dans sa carte ou revenez au routage de l’abonnement.",
+    ),
+    "selectionUnknown": MessageLookupByLibrary.simpleMessage(
+      "La sortie diffère de votre choix. La cause n’a pas pu être confirmée. Réessayez.",
+    ),
+    "selectionUnknownPending": MessageLookupByLibrary.simpleMessage(
+      "La sortie diffère de votre choix. Vérification de la cause…",
+    ),
     "send": MessageLookupByLibrary.simpleMessage("Envoyer"),
     "sendFromPhone": MessageLookupByLibrary.simpleMessage(
       "Envoyer depuis le téléphone",

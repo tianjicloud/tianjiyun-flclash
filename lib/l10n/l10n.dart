@@ -9892,6 +9892,76 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Confirming the exit…`
+  String get selectionConfirming {
+    return Intl.message(
+      'Confirming the exit…',
+      name: 'selectionConfirming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic is not captured yet. Enable system proxy or TUN below to use your selected node.`
+  String get selectionNotCaptured {
+    return Intl.message(
+      'Traffic is not captured yet. Enable system proxy or TUN below to use your selected node.',
+      name: 'selectionNotCaptured',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your residential line controls proxy traffic. Change it in the residential card or return to subscription routing.`
+  String get selectionResidentialLocked {
+    return Intl.message(
+      'Your residential line controls proxy traffic. Change it in the residential card or return to subscription routing.',
+      name: 'selectionResidentialLocked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This automatic group chose a different node. Select a node manually to keep a fixed choice.`
+  String get selectionGroupOverridden {
+    return Intl.message(
+      'This automatic group chose a different node. Select a node manually to keep a fixed choice.',
+      name: 'selectionGroupOverridden',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The exit differs from your selection. Checking the reason…`
+  String get selectionUnknownPending {
+    return Intl.message(
+      'The exit differs from your selection. Checking the reason…',
+      name: 'selectionUnknownPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The exit differs from your selection. The reason could not be confirmed. Try checking again.`
+  String get selectionUnknown {
+    return Intl.message(
+      'The exit differs from your selection. The reason could not be confirmed. Try checking again.',
+      name: 'selectionUnknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check again`
+  String get selectionRecheck {
+    return Intl.message(
+      'Check again',
+      name: 'selectionRecheck',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
