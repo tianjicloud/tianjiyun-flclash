@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:"Noto Sans CJK SC","PingFang SC",sans-serif; }
+  body { width:1440px; height:950px; overflow:hidden; color:#EDF0FF; position:relative;
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(124,77,255,.28), transparent 60%),
+      radial-gradient(700px 500px at -10% 110%, rgba(61,90,254,.22), transparent 60%),
+      linear-gradient(160deg, #0A0F2B 0%, #070B1F 55%, #05081A 100%); }
+  .stars { position:absolute; inset:0; background-image:
+    radial-gradient(1.5px 1.5px at 200px 120px, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 700px 70px, rgba(255,255,255,.45), transparent),
+    radial-gradient(1.5px 1.5px at 1200px 160px, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 420px 700px, rgba(255,255,255,.3), transparent); }
+  .app { position:relative; display:flex; height:100%; }
+  .sidebar { width:228px; padding:26px 16px 20px; display:flex; flex-direction:column;
+    background:rgba(255,255,255,.025); border-right:1px solid rgba(255,255,255,.06); }
+  .logo { display:flex; align-items:center; gap:12px; padding:2px 10px 26px; }
+  .logo-mark { width:42px; height:42px; border-radius:13px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#3D5AFE,#7C4DFF); box-shadow:0 8px 24px rgba(61,90,254,.45); font-size:22px; }
+  .logo-name { font-size:19px; font-weight:700; letter-spacing:2px; }
+  .logo-sub { font-size:9px; letter-spacing:3.5px; color:#7E88B3; margin-top:2px; }
+  .nav-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px; color:#98A2C8; font-size:15px; margin-bottom:4px; }
+  .nav-item .ic { font-size:17px; width:22px; text-align:center; }
+  .nav-item.active { color:#fff; background:linear-gradient(90deg, rgba(61,90,254,.28), rgba(124,77,255,.14));
+    box-shadow:inset 0 0 0 1px rgba(124,140,255,.35); }
+  .side-spacer { flex:1; }
+  .ver { text-align:center; font-size:11px; color:#5E6790; }
+
+  .main { flex:1; padding:24px 30px 26px; display:flex; flex-direction:column; gap:16px; }
+  .topbar { display:flex; align-items:center; gap:16px; }
+  .back { width:38px; height:38px; border-radius:12px; background:rgba(255,255,255,.05);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; font-size:17px; }
+  .topbar h1 { font-size:23px; font-weight:700; letter-spacing:1px; }
+  .topbar p { font-size:12.5px; color:#98A2C8; margin-top:3px; }
+  .seg { display:flex; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.07); border-radius:13px; padding:4px; gap:4px; margin-left:auto; }
+  .seg div { padding:8px 18px; border-radius:10px; font-size:13.5px; color:#98A2C8; }
+  .seg div.on { color:#fff; font-weight:600; background:linear-gradient(90deg,#3D5AFE,#6A5CFF); box-shadow:0 6px 16px rgba(61,90,254,.40); }
+
+  .panel { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.075); border-radius:20px; }
+  .current { display:flex; align-items:center; padding:18px 24px; gap:18px;
+    background:linear-gradient(120deg, rgba(124,77,255,.16), rgba(61,90,254,.06) 60%, rgba(255,255,255,.03));
+    border:1px solid rgba(140,120,255,.38); border-radius:20px; }
+  .current .flag { font-size:34px; }
+  .current b { font-size:19px; }
+  .current p { font-size:12.5px; color:#B9C1E4; margin-top:3px; }
+  .tag { font-size:11.5px; padding:4px 11px; border-radius:999px; background:rgba(52,224,176,.12); color:#4CE8BC; }
+  .current .exit { margin-left:auto; text-align:right; }
+  .current .exit label { font-size:11px; color:#7E88B3; letter-spacing:1px; display:block; margin-bottom:4px; }
+  .current .exit b { font-size:17px; font-variant-numeric:tabular-nums; }
+
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .line { padding:18px 22px; display:flex; align-items:center; gap:16px; border-radius:20px;
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); }
+  .line .flag { font-size:30px; }
+  .line .info { flex:1; }
+  .line .name { font-size:17px; font-weight:700; display:flex; align-items:center; gap:9px; }
+  .mini-tag { font-size:10.5px; padding:2.5px 8px; border-radius:999px; background:rgba(255,255,255,.07); color:#98A2C8; font-weight:400; }
+  .mini-tag.vip { background:rgba(255,194,77,.13); color:#FFC24D; }
+  .line .sub { font-size:12.5px; color:#98A2C8; margin-top:4px; }
+  .line .metrics { text-align:right; margin-right:6px; }
+  .line .metrics b { font-size:15px; font-variant-numeric:tabular-nums; }
+  .line .metrics span { display:block; font-size:11px; color:#7E88B3; margin-top:3px; }
+  .q { font-size:11px; padding:3px 9px; border-radius:999px; }
+  .q.good { background:rgba(52,224,176,.12); color:#4CE8BC; }
+  .q.mid { background:rgba(255,194,77,.12); color:#FFC24D; }
+  .radio { width:24px; height:24px; border-radius:50%; border:2px solid rgba(255,255,255,.25); flex:none; position:relative; }
+  .line.selected { background:linear-gradient(140deg, rgba(124,77,255,.14), rgba(61,90,254,.05));
+    border:1px solid rgba(140,120,255,.45); box-shadow:0 10px 30px rgba(61,90,254,.18); }
+  .line.selected .radio { border-color:#5B78FF; background:#3D5AFE; }
+  .line.selected .radio::after { content:""; position:absolute; inset:5px; border-radius:50%; background:#fff; }
+  .line.locked { opacity:.55; }
+
+  .foot { display:flex; gap:14px; align-items:flex-start; padding:16px 20px; }
+  .foot .ic { font-size:17px; }
+  .foot p { font-size:12.5px; color:#98A2C8; line-height:1.65; }
+  .foot b { color:#C6CDF2; }
+  .actions { display:flex; gap:12px; justify-content:flex-end; }
+  .btn { padding:12px 30px; border-radius:12px; font-size:14.5px; font-weight:600;
+    background:linear-gradient(90deg,#3D5AFE,#6A5CFF); box-shadow:0 8px 20px rgba(61,90,254,.35); }
+  .btn.ghost { background:rgba(255,255,255,.06); box-shadow:inset 0 0 0 1px rgba(255,255,255,.12); color:#C6CDF2; font-weight:500; }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo"><div class="logo-mark">☁</div><div><div class="logo-name">天机云</div><div class="logo-sub">TIANJI CLOUD</div></div></div>
+    <div class="nav-item active"><span class="ic">▦</span>仪表盘</div>
+    <div class="nav-item"><span class="ic">◎</span>代理</div>
+    <div class="nav-item"><span class="ic">▤</span>配置</div>
+    <div class="nav-item"><span class="ic">◷</span>请求</div>
+    <div class="nav-item"><span class="ic">⚒</span>工具</div>
+    <div class="side-spacer"></div>
+    <div class="ver">天机云 v2.0 · 内核运行正常</div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="back">‹</div>
+      <div><h1>家宽线路</h1><p>仅展示你套餐内可用的住宅线路 · 切换即时生效，不中断当前连接</p></div>
+      <div class="seg"><div class="on">跟随所选线路</div><div>按订阅分流</div></div>
+    </div>
+
+    <div class="current">
+      <span class="flag">🇺🇸</span>
+      <div><b>美国家宽 · 当前使用中</b><p>洛杉矶 · Spectrum 住宅宽带 · 独享出口 · 已稳定连接 02:14:36</p></div>
+      <span class="tag">质量 优</span>
+      <div class="exit"><label>当前出口 IP</label><b>76.168.42.105</b></div>
+    </div>
+
+    <div class="grid">
+      <div class="line selected">
+        <span class="flag">🇺🇸</span>
+        <div class="info"><div class="name">美国家宽 · 洛杉矶 <span class="mini-tag vip">独享</span></div><div class="sub">Spectrum 住宅宽带 · 加利福尼亚</div></div>
+        <div class="metrics"><b>142 ms</b><span><span class="q good">质量 优</span></span></div>
+        <div class="radio"></div>
+      </div>
+      <div class="line">
+        <span class="flag">🇺🇸</span>
+        <div class="info"><div class="name">美国家宽 · 纽约 <span class="mini-tag vip">独享</span></div><div class="sub">Verizon Fios 住宅光纤 · 纽约州</div></div>
+        <div class="metrics"><b>168 ms</b><span><span class="q good">质量 优</span></span></div>
+        <div class="radio"></div>
+      </div>
+      <div class="line">
+        <span class="flag">🇯🇵</span>
+        <div class="info"><div class="name">日本家宽 · 东京 <span class="mini-tag vip">独享</span></div><div class="sub">SOFTBANK 住宅宽带 · 东京都</div></div>
+        <div class="metrics"><b>38 ms</b><span><span class="q good">质量 优</span></span></div>
+        <div class="radio"></div>
+      </div>
+      <div class="line">
+        <span class="flag">🇯🇵</span>
+        <div class="info"><div class="name">日本家宽 · 大阪 <span class="mini-tag">共享</span></div><div class="sub">KDDI 住宅光纤 · 大阪府</div></div>
+        <div class="metrics"><b>46 ms</b><span><span class="q good">质量 优</span></span></div>
+        <div class="radio"></div>
+      </div>
+      <div class="line">
+        <span class="flag">🇬🇧</span>
+        <div class="info"><div class="name">英国家宽 · 伦敦 <span class="mini-tag vip">独享</span></div><div class="sub">BT 住宅宽带 · 伦敦</div></div>
+        <div class="metrics"><b>212 ms</b><span><span class="q mid">质量 良</span></span></div>
+        <div class="radio"></div>
+      </div>
+      <div class="line locked">
+        <span class="flag">🇩🇪</span>
+        <div class="info"><div class="name">德国家宽 · 法兰克福 🔒</div><div class="sub">当前套餐未包含 · 升级套餐后可用</div></div>
+        <div class="metrics"><b>— ms</b><span><span class="q mid">未开通</span></span></div>
+        <div class="radio"></div>
+      </div>
+    </div>
+
+    <div class="panel foot">
+      <span class="ic">ⓘ</span>
+      <p><b>切换说明：</b>切换线路只改变需要代理的流量的出口，大陆与直连流量不受影响。频繁切换出口地区可能触发部分网站的风控，选定后建议保持稳定；如遇当前线路故障，系统会先提示再切换，不会静默更换地区。</p>
+    </div>
+
+    <div class="actions"><div class="btn ghost">取消</div><div class="btn">确认切换</div></div>
+  </div>
+</div>
+</body>
+</html>
