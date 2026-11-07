@@ -247,7 +247,10 @@ void main() {
             residential ? findsOneWidget : findsNothing,
           );
           if (width >= 1200 && scale == 1 && !captureOff) {
-            await tester.scrollUntilVisible(find.byType(NetworkTakeoverTile).last, 200);
+            await tester.scrollUntilVisible(
+              find.byType(NetworkTakeoverTile).last,
+              200,
+            );
             expect(
               tester.getBottomRight(find.byType(NetworkTakeoverTile).last).dy,
               lessThanOrEqualTo(700),
