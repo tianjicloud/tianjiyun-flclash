@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.9.10 (2026-11-07)
+
+**Features**
+
+- **dashboard** Explain bulk routing on residential cards and line selection sheets (3346651)
+- **residential** Route listed video and downloads through ordinary lines while preserving direct traffic (a258c72)
+- **dashboard** Explain manual exit verification states (b709c66)
+- **proxies** Preserve manual choices and verify default-route exits (d9383e9)
+- **dashboard** Add the deep-space dashboard, orbital connection control, traffic savings ring and subscription expiry reminder. (52ea7a2)
+- **theme** Use the new TianjiCloud brand color for new installations and preserve saved theme colors during upgrades. (ee87b08)
+
+**Bug Fixes**
+
+- **dashboard** Show available default lines and the current node while preserving subscription routing rules. (4c2f5ae)
+
 ## v0.9.9 (2026-11-07)
 
 **Features**

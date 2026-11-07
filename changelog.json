@@ -2,6 +2,59 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.10",
+      "tag": "v0.9.10",
+      "date": "2026-11-07",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "3346651",
+              "scope": "dashboard",
+              "text": "Explain bulk routing on residential cards and line selection sheets"
+            },
+            {
+              "id": "a258c72",
+              "scope": "residential",
+              "text": "Route listed video and downloads through ordinary lines while preserving direct traffic"
+            },
+            {
+              "id": "b709c66",
+              "scope": "dashboard",
+              "text": "Explain manual exit verification states"
+            },
+            {
+              "id": "d9383e9",
+              "scope": "proxies",
+              "text": "Preserve manual choices and verify default-route exits"
+            },
+            {
+              "id": "52ea7a2",
+              "scope": "dashboard",
+              "text": "Add the deep-space dashboard, orbital connection control, traffic savings ring and subscription expiry reminder."
+            },
+            {
+              "id": "ee87b08",
+              "scope": "theme",
+              "text": "Use the new TianjiCloud brand color for new installations and preserve saved theme colors during upgrades."
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "4c2f5ae",
+              "scope": "dashboard",
+              "text": "Show available default lines and the current node while preserving subscription routing rules."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.9",
       "tag": "v0.9.9",
       "date": "2026-11-07",
