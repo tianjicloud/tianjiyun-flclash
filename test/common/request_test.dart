@@ -131,6 +131,51 @@ void main() {
       },
     );
 
+    test('reports no update when there is no stable release', () async {
+      final request = requestAnswering({
+        'api.github.com': () => ResponseBody.fromString('{}', 404),
+      });
+
+      expect(await request.latestRelease(), isNull);
+      expect(await request.checkForUpdate(), isNull);
+    });
+
+    for (final location in [
+      'https://github.com/$repository/releases',
+      '/$repository/releases/',
+    ]) {
+      test('accepts the release-list redirect $location', () async {
+        final request = requestAnswering({
+          'api.github.com': () => ResponseBody.fromString('{}', 403),
+          'github.com': () => ResponseBody.fromString(
+            '',
+            302,
+            headers: {
+              HttpHeaders.locationHeader: [location],
+            },
+          ),
+        });
+
+        expect(await request.latestRelease(), isNull);
+        expect(await request.checkForUpdate(), isNull);
+      });
+    }
+
+    test('still rejects an unexpected redirect', () async {
+      final request = requestAnswering({
+        'api.github.com': () => ResponseBody.fromString('{}', 403),
+        'github.com': () => ResponseBody.fromString(
+          '',
+          302,
+          headers: {
+            HttpHeaders.locationHeader: ['https://github.com/login'],
+          },
+        ),
+      });
+
+      await expectLater(request.latestRelease(), throwsFormatException);
+    });
+
     test('fails instead of answering when neither endpoint does', () async {
       final request = requestAnswering({
         'api.github.com': () => ResponseBody.fromString('{}', 403),

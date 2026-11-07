@@ -104,9 +104,10 @@ class Request {
     }
   }
 
-  /// Null when this build is current; throws when GitHub cannot be asked.
+  /// Null when no newer stable release exists; throws when GitHub cannot be asked.
   Future<Map<String, dynamic>?> checkForUpdate() async {
     final release = await latestRelease();
+    if (release == null) return null;
     final remoteVersion = release['tag_name'] as String;
     final version = globalState.packageInfo.version;
     final hasUpdate =
@@ -114,8 +115,8 @@ class Request {
     return hasUpdate ? release : null;
   }
 
-  /// The release page redirect still answers once the hourly API quota is spent.
-  Future<Map<String, dynamic>> latestRelease() async {
+  /// Null without a stable release; the page redirect handles exhausted API quotas.
+  Future<Map<String, dynamic>?> latestRelease() async {
     try {
       final response = await dio.get<Map<String, dynamic>>(
         'https://api.github.com/repos/$repository/releases/latest',
@@ -123,6 +124,7 @@ class Request {
       );
       return response.data!;
     } on DioException catch (error) {
+      if (error.response?.statusCode == HttpStatus.notFound) return null;
       commonPrint.log(
         'latest release API failed: ${compactError(error)}',
         logLevel: LogLevel.warning,
@@ -137,6 +139,10 @@ class Request {
     );
     final location = response.headers.value(HttpHeaders.locationHeader);
     final segments = Uri.tryParse(location ?? '')?.pathSegments ?? const [];
+    if (segments.where((segment) => segment.isNotEmpty).join('/') ==
+        '$repository/releases') {
+      return null;
+    }
     final tagIndex = segments.indexOf('tag') + 1;
     if (tagIndex == 0 || tagIndex >= segments.length) {
       throw FormatException('No release tag in the redirect', location);
