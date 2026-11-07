@@ -1,12 +1,17 @@
 name: tianjiyun-release
 
-# Tags publish stable packages; manual runs keep preview packages in Actions artifacts.
+# Tags publish stable packages; manual runs can publish a preview release.
 
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      publish_preview:
+        description: Publish preview packages to GitHub Releases
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -257,7 +262,7 @@ jobs:
   release:
     needs: [android, desktop]
     # Tags with a suffix (v1.0.0-rc.1) cannot be compared as versions by the app.
-    if: github.ref_type == 'tag' && !contains(github.ref_name, '-')
+    if: (github.ref_type == 'tag' && !contains(github.ref_name, '-')) || (github.event_name == 'workflow_dispatch' && inputs.publish_preview)
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -284,5 +289,10 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('preview-{0}', github.run_id) || github.ref_name }}
+          target_commitish: ${{ github.sha }}
+          name: ${{ github.event_name == 'workflow_dispatch' && format('天机云预览版 {0}', github.run_number) || github.ref_name }}
+          prerelease: ${{ github.event_name == 'workflow_dispatch' }}
+          make_latest: ${{ github.event_name == 'workflow_dispatch' && 'false' || 'legacy' }}
           files: dist/*
           fail_on_unmatched_files: true
