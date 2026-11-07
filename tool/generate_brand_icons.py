@@ -1,4 +1,4 @@
-"""Generate the Android launcher, TV, notification and in-app icons from the
+"""Generate installation, Android notification and in-app icons from the
 天机云 brand mark.
 
 The mark is a raster with gradients and a soft glow, so unlike upstream's
@@ -8,6 +8,7 @@ root with Pillow installed:
     python3 tool/generate_brand_icons.py
 """
 
+import json
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -142,7 +143,21 @@ def main():
         save(small_icon, SERVICE_RES / f'drawable-{density}/ic_service.png')
 
     save(banner(mark), APP_RES / 'mipmap-xhdpi/ic_banner.png')
-    save(place(mark, 550, 0.96), ROOT / 'assets/images/icon.png')
+    app_icon = place(mark, 550, 0.96)
+    save(app_icon, ROOT / 'assets/images/icon.png')
+    save(
+        place(mark, 512, LEGACY_WIDTH, BACKGROUND),
+        ROOT / 'android/app/src/main/ic_launcher-playstore.png',
+    )
+    ico_sizes = [(size, size) for size in [16, 20, 24, 32, 40, 48, 64, 96, 128, 256]]
+    for path in ['assets/images/icon.ico', 'windows/runner/resources/app_icon.ico']:
+        save(app_icon, ROOT / path, sizes=ico_sizes)
+
+    iconset = ROOT / 'macos/Runner/Assets.xcassets/AppIcon.appiconset'
+    entries = json.loads((iconset / 'Contents.json').read_text())['images']
+    for filename in sorted({entry['filename'] for entry in entries}):
+        size = int(Path(filename).stem.removeprefix('app_icon_'))
+        save(place(mark, size, 0.80), iconset / filename)
 
 
 if __name__ == '__main__':
