@@ -1118,5 +1118,11 @@
   "onboardingFailureNotSubscriptionDescription": "请在用户面板点「复制订阅地址」，再回来粘贴。",
   "onboardingFailureUnknownTitle": "导入没有成功",
   "onboardingFailureUnknownDescription": "请检查网络后重试。",
-  "onboardingConnectFailed": "连接没有成功，请稍后再试。"
+  "onboardingConnectFailed": "连接没有成功，请稍后再试。",
+  "trafficStats": "流量统计",
+  "trafficStatsDesc": "本设备本月的内地直连流量、VPN 流量和节省的代理流量。",
+  "trafficStatsScope": "仅本设备本月统计，包含应用捕获的流量。",
+  "mainlandDirect": "内地直连",
+  "vpnTraffic": "VPN",
+  "trafficSavedThisMonth": "本月节省"
 }

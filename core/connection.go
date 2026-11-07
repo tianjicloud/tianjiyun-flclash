@@ -16,6 +16,13 @@ func handleGetTotalTraffic(params TrafficParams) Traffic {
 	return Traffic{Up: up, Down: down}
 }
 
+func handleGetTrafficStats() TrafficStats {
+	return currentTrafficAccounting.snapshot()
+}
+
+// traffic.reset clears the UI's speed and request totals only. The client
+// accounting snapshot stays cumulative for the Core process, so stopping and
+// starting a run cannot discard savings the host has not persisted yet.
 func handleResetTraffic() {
 	statistic.DefaultManager.ResetStatistic()
 }

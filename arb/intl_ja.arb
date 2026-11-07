@@ -1118,5 +1118,11 @@
   "onboardingFailureNotSubscriptionDescription": "ユーザーパネルで「サブスクリプションアドレスをコピー」を押し、ここに貼り付けてください。",
   "onboardingFailureUnknownTitle": "インポートに失敗しました",
   "onboardingFailureUnknownDescription": "ネットワークを確認して再試行してください。",
-  "onboardingConnectFailed": "接続できませんでした。後でもう一度お試しください。"
+  "onboardingConnectFailed": "接続できませんでした。後でもう一度お試しください。",
+  "trafficStats": "通信統計",
+  "trafficStatsDesc": "この端末の今月の中国本土直結通信、VPN 通信、節約したプロキシ通信です。",
+  "trafficStatsScope": "この端末の今月分のみを集計します。アプリが取得した通信が対象です。",
+  "mainlandDirect": "中国本土直結",
+  "vpnTraffic": "VPN",
+  "trafficSavedThisMonth": "今月の節約"
 }

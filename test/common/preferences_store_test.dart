@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fl_clash/common/constant.dart';
+import 'package:fl_clash/common/preferences.dart' as app_preferences;
 import 'package:fl_clash/common/preferences_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
@@ -137,6 +139,26 @@ void main() {
       isFalse,
     );
     expect(dirEntries(), ['shared_preferences.json']);
+  });
+
+  test('traffic accounting rejects a failed persistent write', () async {
+    final previousPlatform = SharedPreferencesStorePlatform.instance;
+    SharedPreferences.resetStatic();
+    SharedPreferencesStorePlatform.instance = openStore();
+    await app_preferences.preferences.rebind();
+    addTearDown(() async {
+      SharedPreferences.resetStatic();
+      SharedPreferencesStorePlatform.instance = previousPlatform;
+      await app_preferences.preferences.rebind();
+    });
+    await app_preferences.preferences.saveTrafficAccounting('old');
+    Directory('$path.$pid.tmp').createSync();
+
+    await expectLater(
+      app_preferences.preferences.saveTrafficAccounting('new'),
+      throwsStateError,
+    );
+    expect(readFile(), {'flutter.$trafficAccountingKey': 'old'});
   });
 
   test('backs SharedPreferences', () async {

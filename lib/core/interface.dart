@@ -6,6 +6,7 @@ import 'package:fl_clash/models/models.dart';
 
 import 'desktop/model.dart';
 import 'method.dart';
+import 'traffic/model.dart';
 
 /// A method answers its result or throws: a [CoreMethodException] for what the
 /// Core reports or a Core out of reach, a [TimeoutException] for no answer.
@@ -295,6 +296,13 @@ abstract class CoreHandlerInterface {
       CoreMethod.trafficTotal,
       _model(Traffic.fromJson),
       arguments: {'only-proxy': onlyProxy},
+    );
+  }
+
+  Future<TrafficSnapshot> getTrafficStats() {
+    return _query(
+      CoreMethod.trafficStats,
+      (data) => TrafficSnapshot.fromJson(_json(data)),
     );
   }
 

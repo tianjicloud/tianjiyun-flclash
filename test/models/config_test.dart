@@ -1135,6 +1135,35 @@ void main() {
       expect(props.hideIp, true);
     });
 
+    test('adds the traffic card to an untouched pre-feature default', () {
+      final restored = dashboardWidgetsFromJson([
+        'currentOutbound',
+        'networkSpeed',
+        'outboundMode',
+        'vpnButton',
+        'networkTakeover',
+        'intranetIp',
+        'serviceStatus',
+        'profiles',
+        'proxyGroups',
+        'connectionStats',
+      ]);
+
+      expect(restored, platformDefaultDashboardWidgets);
+      expect(restored, contains(DashboardWidget.trafficSavings));
+    });
+
+    test('leaves a customized dashboard without the traffic card', () {
+      final restored = dashboardWidgetsFromJson([
+        'currentOutbound',
+        'networkSpeed',
+        'outboundMode',
+        'profiles',
+      ]);
+
+      expect(restored, isNot(contains(DashboardWidget.trafficSavings)));
+    });
+
     test('drops the dashboard cards of the retired override toggles', () {
       expect(
         dashboardWidgetsFromJson([

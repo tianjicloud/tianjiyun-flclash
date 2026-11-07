@@ -1118,5 +1118,11 @@
   "onboardingFailureNotSubscriptionDescription": "Pulsa «Copiar dirección de suscripción» en tu panel de usuario y pégala aquí.",
   "onboardingFailureUnknownTitle": "No se pudo importar",
   "onboardingFailureUnknownDescription": "Comprueba tu red e inténtalo de nuevo.",
-  "onboardingConnectFailed": "No se pudo conectar. Inténtalo más tarde."
+  "onboardingConnectFailed": "No se pudo conectar. Inténtalo más tarde.",
+  "trafficStats": "Estadísticas de tráfico",
+  "trafficStatsDesc": "Tráfico directo en China continental, tráfico VPN y tráfico de proxy ahorrado este mes en este dispositivo.",
+  "trafficStatsScope": "Solo este dispositivo, este mes. Se cuenta el tráfico capturado por la aplicación.",
+  "mainlandDirect": "Directo continental",
+  "vpnTraffic": "VPN",
+  "trafficSavedThisMonth": "Ahorrado este mes"
 }

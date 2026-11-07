@@ -8,6 +8,7 @@ extension DashboardWidgetView on DashboardWidget {
   Widget get card => switch (this) {
     DashboardWidget.currentOutbound => const CurrentOutboundCard(),
     DashboardWidget.networkSpeed => const NetworkSpeedCard(),
+    DashboardWidget.trafficSavings => const TrafficSavingsCard(),
     DashboardWidget.outboundMode => const OutboundModeCard(),
     DashboardWidget.vpnButton => const VpnCard(),
     DashboardWidget.networkTakeover => const NetworkTakeoverCard(),
@@ -22,6 +23,7 @@ extension DashboardWidgetView on DashboardWidget {
   Glyph get glyph => switch (this) {
     DashboardWidget.currentOutbound => AppGlyphs.status,
     DashboardWidget.networkSpeed => AppGlyphs.speed,
+    DashboardWidget.trafficSavings => AppGlyphs.dataUsage,
     DashboardWidget.outboundMode => AppGlyphs.split,
     DashboardWidget.vpnButton => AppGlyphs.vpn,
     DashboardWidget.networkTakeover => AppGlyphs.shuffle,
@@ -38,6 +40,7 @@ extension DashboardWidgetView on DashboardWidget {
     return switch (this) {
       DashboardWidget.currentOutbound => appLocalizations.status,
       DashboardWidget.networkSpeed => appLocalizations.networkSpeed,
+      DashboardWidget.trafficSavings => appLocalizations.trafficStats,
       DashboardWidget.outboundMode => appLocalizations.outboundMode,
       DashboardWidget.vpnButton => 'VPN',
       DashboardWidget.networkTakeover => appLocalizations.networkTakeover,
@@ -55,6 +58,7 @@ extension DashboardWidgetView on DashboardWidget {
     return switch (this) {
       DashboardWidget.currentOutbound => appLocalizations.currentOutboundDesc,
       DashboardWidget.connectionStats => appLocalizations.connectionStatsDesc,
+      DashboardWidget.trafficSavings => appLocalizations.trafficStatsDesc,
       DashboardWidget.memoryInfo => appLocalizations.memoryInfoDesc,
       _ => null,
     };

@@ -1313,6 +1313,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Exemption de bouclage UWP",
     ),
     "loose": MessageLookupByLibrary.simpleMessage("Aérée"),
+    "mainlandDirect": MessageLookupByLibrary.simpleMessage("Direct continent"),
     "mapLocal": MessageLookupByLibrary.simpleMessage("Mappage local"),
     "matchCase": MessageLookupByLibrary.simpleMessage("Respecter la casse"),
     "matchSourceIp": MessageLookupByLibrary.simpleMessage(
@@ -2346,6 +2347,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Port TProxy"),
     "traffic": MessageLookupByLibrary.simpleMessage("Trafic"),
     "trafficPeak": m96,
+    "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(
+      "Économisé ce mois",
+    ),
+    "trafficStats": MessageLookupByLibrary.simpleMessage(
+      "Statistiques de trafic",
+    ),
+    "trafficStatsDesc": MessageLookupByLibrary.simpleMessage(
+      "Trafic direct en Chine continentale, trafic VPN et trafic proxy économisé ce mois-ci sur cet appareil.",
+    ),
+    "trafficStatsScope": MessageLookupByLibrary.simpleMessage(
+      "Cet appareil uniquement, ce mois-ci. Seul le trafic capturé par l\'application est compté.",
+    ),
     "trafficTotal": m97,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Trafic utilisé"),
     "transport": MessageLookupByLibrary.simpleMessage("Transport"),
@@ -2432,6 +2445,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnConfigChangeDetected": MessageLookupByLibrary.simpleMessage(
       "La configuration liée au VPN a changé. Appuyez pour redémarrer",
     ),
+    "vpnTraffic": MessageLookupByLibrary.simpleMessage("VPN"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage(
       "Configuration WebDAV",
     ),

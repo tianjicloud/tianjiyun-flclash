@@ -1272,6 +1272,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Снятие ограничения loopback для UWP",
     ),
     "loose": MessageLookupByLibrary.simpleMessage("Свободный"),
+    "mainlandDirect": MessageLookupByLibrary.simpleMessage(
+      "Прямое соединение (материк)",
+    ),
     "mapLocal": MessageLookupByLibrary.simpleMessage("Локальная подмена"),
     "matchCase": MessageLookupByLibrary.simpleMessage("Учитывать регистр"),
     "matchSourceIp": MessageLookupByLibrary.simpleMessage(
@@ -2285,6 +2288,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Порт TProxy"),
     "traffic": MessageLookupByLibrary.simpleMessage("Трафик"),
     "trafficPeak": m96,
+    "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(
+      "Сэкономлено за месяц",
+    ),
+    "trafficStats": MessageLookupByLibrary.simpleMessage("Статистика трафика"),
+    "trafficStatsDesc": MessageLookupByLibrary.simpleMessage(
+      "Прямой трафик материкового Китая, трафик VPN и сэкономленный прокси-трафик за этот месяц на этом устройстве.",
+    ),
+    "trafficStatsScope": MessageLookupByLibrary.simpleMessage(
+      "Только этот устройство, за этот месяц. Учитывается трафик, перехваченный приложением.",
+    ),
     "trafficTotal": m97,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Статистика трафика"),
     "transport": MessageLookupByLibrary.simpleMessage("Транспорт"),
@@ -2369,6 +2382,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnConfigChangeDetected": MessageLookupByLibrary.simpleMessage(
       "Настройки VPN изменены. Нажмите, чтобы перезапустить",
     ),
+    "vpnTraffic": MessageLookupByLibrary.simpleMessage("VPN"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage(
       "Настройка WebDAV",
     ),

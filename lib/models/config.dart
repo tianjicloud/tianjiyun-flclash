@@ -112,6 +112,7 @@ final List<HotKeyAction> defaultHotKeyActions = system.isWindows
 const List<DashboardWidget> defaultDashboardWidgets = [
   DashboardWidget.currentOutbound,
   DashboardWidget.networkSpeed,
+  DashboardWidget.trafficSavings,
   DashboardWidget.outboundMode,
   DashboardWidget.vpnButton,
   DashboardWidget.networkTakeover,
@@ -128,11 +129,33 @@ final List<DashboardWidget> platformDefaultDashboardWidgets = system.isAndroid
     ? const [
         DashboardWidget.currentOutbound,
         DashboardWidget.networkSpeed,
+        DashboardWidget.trafficSavings,
         DashboardWidget.outboundMode,
         DashboardWidget.profiles,
         DashboardWidget.proxyGroups,
       ]
     : defaultDashboardWidgets;
+
+const _preTrafficDesktopDefaultDashboardWidgets = {
+  'currentOutbound',
+  'networkSpeed',
+  'outboundMode',
+  'vpnButton',
+  'networkTakeover',
+  'intranetIp',
+  'serviceStatus',
+  'profiles',
+  'proxyGroups',
+  'connectionStats',
+};
+
+const _preTrafficAndroidDefaultDashboardWidgets = {
+  'currentOutbound',
+  'networkSpeed',
+  'outboundMode',
+  'profiles',
+  'proxyGroups',
+};
 
 const _legacyDefaultDashboardWidgets = {
   'networkSpeed',
@@ -171,12 +194,19 @@ List<DashboardWidget> dashboardWidgetsFromJson(
     return platformDefaultDashboardWidgets;
   }
   final byName = DashboardWidget.values.asNameMap();
+  final oldDefaults = system.isAndroid
+      ? _preTrafficAndroidDefaultDashboardWidgets
+      : _preTrafficDesktopDefaultDashboardWidgets;
   if (dashboardWidgets.contains(DashboardWidget.currentOutbound.name)) {
-    return dashboardWidgets
+    final mapped = dashboardWidgets
         .map((e) => _legacyDashboardWidgets[e] ?? byName[e])
         .nonNulls
-        .toSet()
-        .toList();
+        .toSet();
+    if (mapped.length == oldDefaults.length &&
+        mapped.every((widget) => oldDefaults.contains(widget.name))) {
+      return platformDefaultDashboardWidgets;
+    }
+    return mapped.toList();
   }
   final names = {
     for (final name in dashboardWidgets)
@@ -184,6 +214,9 @@ List<DashboardWidget> dashboardWidgetsFromJson(
   };
   if (names.length == _legacyDefaultDashboardWidgets.length &&
       names.containsAll(_legacyDefaultDashboardWidgets)) {
+    return platformDefaultDashboardWidgets;
+  }
+  if (names.length == oldDefaults.length && names.containsAll(oldDefaults)) {
     return platformDefaultDashboardWidgets;
   }
   final kept = dashboardWidgets

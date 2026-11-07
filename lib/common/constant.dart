@@ -191,6 +191,12 @@ const pausedMaxDnsQueriesLength = maxDnsQueriesLength * 2;
 
 const trafficSampleLength = 30;
 
+const trafficAccountingKey = 'trafficAccounting';
+const trafficAccountingRetentionDays = 90;
+const trafficAccountingSampleInterval = Duration(seconds: 10);
+const trafficAccountingFlushInterval = Duration(seconds: 60);
+const trafficReportInterval = Duration(minutes: 5);
+
 // iOS 27's system colors but the deeper blue of earlier iOS, in the order of the
 // macOS accent colors.
 const defaultPrimaryColors = [

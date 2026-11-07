@@ -163,6 +163,7 @@ class Bootstrap {
     }
     await _handleFailedPreference();
     await _showCrashRecoveryTip();
+    _container.read(trafficStatsProvider);
     await _container.read(coreActionProvider.notifier).startCore();
     if (!_bootDecision.isDegraded) {
       await _container.read(setupActionProvider.notifier).initStatus();

@@ -53,6 +53,7 @@ const (
 
 	trafficCurrentMethod     CoreMethod = "traffic.current"
 	trafficTotalMethod       CoreMethod = "traffic.total"
+	trafficStatsMethod       CoreMethod = "traffic.stats"
 	trafficResetMethod       CoreMethod = "traffic.reset"
 	connectionListMethod     CoreMethod = "connection.list"
 	connectionCountMethod    CoreMethod = "connection.count"
@@ -271,6 +272,17 @@ type Delay struct {
 type Traffic struct {
 	Up   int64 `json:"up"`
 	Down int64 `json:"down"`
+}
+
+// TrafficStats is a consistent cumulative snapshot of the current Core
+// process. Epoch changes whenever the counters start over, so the host never
+// turns a restart or reset into a negative or doubled delta.
+type TrafficStats struct {
+	Version        int     `json:"version"`
+	Epoch          int64   `json:"epoch"`
+	MainlandDirect Traffic `json:"mainland-direct"`
+	Proxy          Traffic `json:"proxy"`
+	OtherDirect    Traffic `json:"other-direct"`
 }
 
 type MemoryStats struct {

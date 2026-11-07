@@ -187,6 +187,27 @@ class Preferences {
     await sharedPreferencesIns?.setString(bootRecordKey, json.encode(record));
   }
 
+  Future<String?> getTrafficAccounting() async {
+    final sharedPreferencesIns = await _store.value;
+    if (sharedPreferencesIns == null) {
+      throw StateError('Traffic accounting store is unavailable');
+    }
+    return sharedPreferencesIns.getString(trafficAccountingKey);
+  }
+
+  Future<void> saveTrafficAccounting(String? value) async {
+    final sharedPreferencesIns = await _store.value;
+    if (sharedPreferencesIns == null) {
+      throw StateError('Traffic accounting store is unavailable');
+    }
+    final saved = value == null
+        ? await sharedPreferencesIns.remove(trafficAccountingKey)
+        : await sharedPreferencesIns.setString(trafficAccountingKey, value);
+    if (!saved) {
+      throw StateError('Traffic accounting could not be persisted');
+    }
+  }
+
   Future<void> clearPreferences() async {
     final sharedPreferencesIns = await _store.value;
     await sharedPreferencesIns?.clear();

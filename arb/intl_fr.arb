@@ -1118,5 +1118,11 @@
   "onboardingFailureNotSubscriptionDescription": "Appuyez sur « Copier l’adresse d’abonnement » dans votre panneau utilisateur, puis collez-la ici.",
   "onboardingFailureUnknownTitle": "L’importation a échoué",
   "onboardingFailureUnknownDescription": "Vérifiez votre réseau et réessayez.",
-  "onboardingConnectFailed": "La connexion a échoué. Réessayez plus tard."
+  "onboardingConnectFailed": "La connexion a échoué. Réessayez plus tard.",
+  "trafficStats": "Statistiques de trafic",
+  "trafficStatsDesc": "Trafic direct en Chine continentale, trafic VPN et trafic proxy économisé ce mois-ci sur cet appareil.",
+  "trafficStatsScope": "Cet appareil uniquement, ce mois-ci. Seul le trafic capturé par l'application est compté.",
+  "mainlandDirect": "Direct continent",
+  "vpnTraffic": "VPN",
+  "trafficSavedThisMonth": "Économisé ce mois"
 }

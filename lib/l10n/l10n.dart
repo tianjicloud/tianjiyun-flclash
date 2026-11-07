@@ -9487,6 +9487,61 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Traffic statistics`
+  String get trafficStats {
+    return Intl.message(
+      'Traffic statistics',
+      name: 'trafficStats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This device's mainland direct, VPN and saved proxy traffic this month.`
+  String get trafficStatsDesc {
+    return Intl.message(
+      'This device\'s mainland direct, VPN and saved proxy traffic this month.',
+      name: 'trafficStatsDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This device only, this month. Counts traffic captured by the app.`
+  String get trafficStatsScope {
+    return Intl.message(
+      'This device only, this month. Counts traffic captured by the app.',
+      name: 'trafficStatsScope',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mainland direct`
+  String get mainlandDirect {
+    return Intl.message(
+      'Mainland direct',
+      name: 'mainlandDirect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `VPN`
+  String get vpnTraffic {
+    return Intl.message('VPN', name: 'vpnTraffic', desc: '', args: []);
+  }
+
+  /// `Saved this month`
+  String get trafficSavedThisMonth {
+    return Intl.message(
+      'Saved this month',
+      name: 'trafficSavedThisMonth',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

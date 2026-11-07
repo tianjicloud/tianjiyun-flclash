@@ -1118,5 +1118,11 @@
   "onboardingFailureNotSubscriptionDescription": "Нажмите «Копировать адрес подписки» в панели пользователя и вставьте его сюда.",
   "onboardingFailureUnknownTitle": "Не удалось импортировать",
   "onboardingFailureUnknownDescription": "Проверьте сеть и попробуйте снова.",
-  "onboardingConnectFailed": "Не удалось подключиться. Попробуйте позже."
+  "onboardingConnectFailed": "Не удалось подключиться. Попробуйте позже.",
+  "trafficStats": "Статистика трафика",
+  "trafficStatsDesc": "Прямой трафик материкового Китая, трафик VPN и сэкономленный прокси-трафик за этот месяц на этом устройстве.",
+  "trafficStatsScope": "Только этот устройство, за этот месяц. Учитывается трафик, перехваченный приложением.",
+  "mainlandDirect": "Прямое соединение (материк)",
+  "vpnTraffic": "VPN",
+  "trafficSavedThisMonth": "Сэкономлено за месяц"
 }

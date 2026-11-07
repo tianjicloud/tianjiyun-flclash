@@ -950,6 +950,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsTest": MessageLookupByLibrary.simpleMessage("日志测试"),
     "loopback": MessageLookupByLibrary.simpleMessage("UWP 回环解锁"),
     "loose": MessageLookupByLibrary.simpleMessage("宽松"),
+    "mainlandDirect": MessageLookupByLibrary.simpleMessage("内地直连"),
     "mapLocal": MessageLookupByLibrary.simpleMessage("本地映射"),
     "matchCase": MessageLookupByLibrary.simpleMessage("区分大小写"),
     "matchSourceIp": MessageLookupByLibrary.simpleMessage("匹配来源IP"),
@@ -1688,6 +1689,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Tproxy端口"),
     "traffic": MessageLookupByLibrary.simpleMessage("流量"),
     "trafficPeak": m96,
+    "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage("本月节省"),
+    "trafficStats": MessageLookupByLibrary.simpleMessage("流量统计"),
+    "trafficStatsDesc": MessageLookupByLibrary.simpleMessage(
+      "本设备本月的内地直连流量、VPN 流量和节省的代理流量。",
+    ),
+    "trafficStatsScope": MessageLookupByLibrary.simpleMessage(
+      "仅本设备本月统计，包含应用捕获的流量。",
+    ),
     "trafficTotal": m97,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("流量统计"),
     "transport": MessageLookupByLibrary.simpleMessage("传输协议"),
@@ -1752,6 +1761,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnConfigChangeDetected": MessageLookupByLibrary.simpleMessage(
       "VPN 相关配置已改动，点击重启",
     ),
+    "vpnTraffic": MessageLookupByLibrary.simpleMessage("VPN"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV配置"),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("白名单模式"),
     "writeToSystem": MessageLookupByLibrary.simpleMessage("写入系统"),

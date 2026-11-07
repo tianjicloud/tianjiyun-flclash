@@ -1046,6 +1046,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsTest": MessageLookupByLibrary.simpleMessage("ログテスト"),
     "loopback": MessageLookupByLibrary.simpleMessage("UWP ループバック解除"),
     "loose": MessageLookupByLibrary.simpleMessage("ゆったり"),
+    "mainlandDirect": MessageLookupByLibrary.simpleMessage("中国本土直結"),
     "mapLocal": MessageLookupByLibrary.simpleMessage("ローカルマップ"),
     "matchCase": MessageLookupByLibrary.simpleMessage("大文字と小文字を区別"),
     "matchSourceIp": MessageLookupByLibrary.simpleMessage("送信元IPにマッチ"),
@@ -1870,6 +1871,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxyポート"),
     "traffic": MessageLookupByLibrary.simpleMessage("通信量"),
     "trafficPeak": m96,
+    "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage("今月の節約"),
+    "trafficStats": MessageLookupByLibrary.simpleMessage("通信統計"),
+    "trafficStatsDesc": MessageLookupByLibrary.simpleMessage(
+      "この端末の今月の中国本土直結通信、VPN 通信、節約したプロキシ通信です。",
+    ),
+    "trafficStatsScope": MessageLookupByLibrary.simpleMessage(
+      "この端末の今月分のみを集計します。アプリが取得した通信が対象です。",
+    ),
     "trafficTotal": m97,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("トラフィック統計"),
     "transport": MessageLookupByLibrary.simpleMessage("トランスポート"),
@@ -1942,6 +1951,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnConfigChangeDetected": MessageLookupByLibrary.simpleMessage(
       "VPN関連の設定が変更されました。タップして再起動",
     ),
+    "vpnTraffic": MessageLookupByLibrary.simpleMessage("VPN"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV設定"),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("ホワイトリストモード"),
     "writeToSystem": MessageLookupByLibrary.simpleMessage("システムに書き込む"),

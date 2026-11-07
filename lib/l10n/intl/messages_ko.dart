@@ -1030,6 +1030,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsTest": MessageLookupByLibrary.simpleMessage("로그 테스트"),
     "loopback": MessageLookupByLibrary.simpleMessage("UWP 루프백 예외"),
     "loose": MessageLookupByLibrary.simpleMessage("넓게"),
+    "mainlandDirect": MessageLookupByLibrary.simpleMessage("중국 본토 직결"),
     "mapLocal": MessageLookupByLibrary.simpleMessage("로컬 매핑"),
     "matchCase": MessageLookupByLibrary.simpleMessage("대/소문자 구분"),
     "matchSourceIp": MessageLookupByLibrary.simpleMessage("출발지 IP 일치"),
@@ -1838,6 +1839,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxy 포트"),
     "traffic": MessageLookupByLibrary.simpleMessage("트래픽"),
     "trafficPeak": m96,
+    "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage("이번 달 절약"),
+    "trafficStats": MessageLookupByLibrary.simpleMessage("트래픽 통계"),
+    "trafficStatsDesc": MessageLookupByLibrary.simpleMessage(
+      "이 기기의 이번 달 중국 본토 직결 트래픽, VPN 트래픽, 절약된 프록시 트래픽입니다.",
+    ),
+    "trafficStatsScope": MessageLookupByLibrary.simpleMessage(
+      "이 기기의 이번 달만 집계합니다. 앱이 캡처한 트래픽이 대상입니다.",
+    ),
     "trafficTotal": m97,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("트래픽 사용량"),
     "transport": MessageLookupByLibrary.simpleMessage("전송"),
@@ -1910,6 +1919,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnConfigChangeDetected": MessageLookupByLibrary.simpleMessage(
       "VPN 관련 구성이 변경되었습니다. 눌러서 재시작",
     ),
+    "vpnTraffic": MessageLookupByLibrary.simpleMessage("VPN"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV 구성"),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("화이트리스트 모드"),
     "writeToSystem": MessageLookupByLibrary.simpleMessage("시스템에 기록"),

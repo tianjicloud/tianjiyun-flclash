@@ -5,3 +5,7 @@ export 'event.dart';
 export 'lib.dart';
 export 'method.dart';
 export 'service.dart';
+export 'traffic/model.dart';
+export 'traffic/report.dart';
+export 'traffic/service.dart';
+export 'traffic/store.dart';

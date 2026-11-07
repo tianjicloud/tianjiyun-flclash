@@ -1118,5 +1118,11 @@
   "onboardingFailureNotSubscriptionDescription": "Tap “Copy subscription address” in your user panel, then paste it here.",
   "onboardingFailureUnknownTitle": "Import failed",
   "onboardingFailureUnknownDescription": "Check your network and try again.",
-  "onboardingConnectFailed": "Couldn’t connect. Try again later."
+  "onboardingConnectFailed": "Couldn’t connect. Try again later.",
+  "trafficStats": "Traffic statistics",
+  "trafficStatsDesc": "This device's mainland direct, VPN and saved proxy traffic this month.",
+  "trafficStatsScope": "This device only, this month. Counts traffic captured by the app.",
+  "mainlandDirect": "Mainland direct",
+  "vpnTraffic": "VPN",
+  "trafficSavedThisMonth": "Saved this month"
 }
