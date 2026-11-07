@@ -731,6 +731,7 @@ void main() {
         late _RestartRecordingCoreAction coreAction;
         final container = ProviderContainer(
           overrides: [
+            currentProfileProvider.overrideWithValue(null),
             setupActionProvider.overrideWith(() {
               setupAction = _AuthorizationSetupAction([AuthorizeCode.success]);
               return setupAction;
