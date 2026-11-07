@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:fl_clash/common/constant.dart';
 import 'package:fl_clash/common/migration.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -199,45 +198,48 @@ void main() {
               'systemFontFamily': 'Beta Serif',
             };
 
-      test('starts theme colors over once and keeps the rest', () async {
-        final store = _FakeMigrationStore(
-          configMap: customized(),
-          version: Migration.currentVersion,
-          upgradeVersion: 0,
-        );
+      test(
+        'preserves saved colors while applying other theme upgrades',
+        () async {
+          final store = _FakeMigrationStore(
+            configMap: customized(),
+            version: Migration.currentVersion,
+            upgradeVersion: 0,
+          );
 
-        final config = await Migration(store: store).run();
+          final config = await Migration(store: store).run();
 
-        final theme = config.themeProps;
-        expect(theme.primaryColor, defaultPrimaryColor);
-        expect(theme.primaryColors, defaultPrimaryColors);
-        expect(theme.colorStyle, ColorStyle.vivid);
-        expect(theme.themeMode, ThemeMode.dark);
-        expect(theme.pureBlack, isTrue);
-        expect(theme.liquidGlass, LiquidGlassMode.ultra);
-        expect(theme.fontFamily, 'Beta Serif');
-        expect(store.savedConfig, config);
-        expect(store.version, Migration.currentVersion);
-        expect(store.upgradeVersion, Migration.upgradeVersion);
-        expect(store.events, [
-          'getConfigMap',
-          'getVersion',
-          'saveConfig',
-          'setUpgradeVersion',
-        ]);
+          final theme = config.themeProps;
+          expect(theme.primaryColor, 0xFF123456);
+          expect(theme.primaryColors, [0xFF795548, 0xFF123456]);
+          expect(theme.colorStyle, ColorStyle.vivid);
+          expect(theme.themeMode, ThemeMode.dark);
+          expect(theme.pureBlack, isTrue);
+          expect(theme.liquidGlass, LiquidGlassMode.ultra);
+          expect(theme.fontFamily, 'Beta Serif');
+          expect(store.savedConfig, config);
+          expect(store.version, Migration.currentVersion);
+          expect(store.upgradeVersion, Migration.upgradeVersion);
+          expect(store.events, [
+            'getConfigMap',
+            'getVersion',
+            'saveConfig',
+            'setUpgradeVersion',
+          ]);
 
-        final later = _FakeMigrationStore(
-          configMap: jsonDecode(
-            jsonEncode(config.copyWith.themeProps(primaryColor: 0xFF123456)),
-          ),
-          version: store.version,
-          upgradeVersion: store.upgradeVersion,
-        );
-        final kept = await Migration(store: later).run();
+          final later = _FakeMigrationStore(
+            configMap: jsonDecode(
+              jsonEncode(config.copyWith.themeProps(primaryColor: 0xFF123456)),
+            ),
+            version: store.version,
+            upgradeVersion: store.upgradeVersion,
+          );
+          final kept = await Migration(store: later).run();
 
-        expect(kept.themeProps.primaryColor, 0xFF123456);
-        expect(later.events, ['getConfigMap', 'getVersion']);
-      });
+          expect(kept.themeProps.primaryColor, 0xFF123456);
+          expect(later.events, ['getConfigMap', 'getVersion']);
+        },
+      );
 
       test('keeps standard glass on the ultra tier it became, once', () async {
         Future<LiquidGlassMode> upgrade(String mode, int from) async {
@@ -257,37 +259,40 @@ void main() {
         expect(await upgrade('standard', 2), LiquidGlassMode.standard);
       });
 
-      test('moves presets picked before to the current system colors, '
-          'once', () async {
-        Future<ThemeProps> upgrade(int from) async {
-          final configMap = _createConfigMap();
-          (configMap['themeProps']! as Map<String, Object?>)
-            ..['primaryColor'] = 0xFFFF9500
-            ..['primaryColors'] = [
-              0xFF007AFF,
-              0xFFAF52DE,
-              0xFFCB30E0,
-              0xFFFF9500,
-              0xFF123456,
-            ];
-          final store = _FakeMigrationStore(
-            configMap: configMap,
-            version: Migration.currentVersion,
-            upgradeVersion: from,
-          );
-          return (await Migration(store: store).run()).themeProps;
-        }
+      test(
+        'preserves saved presets through older system color upgrades',
+        () async {
+          Future<ThemeProps> upgrade(int from) async {
+            final configMap = _createConfigMap();
+            (configMap['themeProps']! as Map<String, Object?>)
+              ..['primaryColor'] = 0xFFFF9500
+              ..['primaryColors'] = [
+                0xFF007AFF,
+                0xFFAF52DE,
+                0xFFCB30E0,
+                0xFFFF9500,
+                0xFF123456,
+              ];
+            final store = _FakeMigrationStore(
+              configMap: configMap,
+              version: Migration.currentVersion,
+              upgradeVersion: from,
+            );
+            return (await Migration(store: store).run()).themeProps;
+          }
 
-        final moved = await upgrade(2);
-        expect(moved.primaryColor, 0xFFFF8D28);
-        expect(moved.primaryColors, [
-          0xFF007AFF,
-          0xFFCB30E0,
-          0xFFFF8D28,
-          0xFF123456,
-        ]);
-        expect((await upgrade(3)).primaryColor, 0xFFFF9500);
-      });
+          final moved = await upgrade(2);
+          expect(moved.primaryColor, 0xFFFF9500);
+          expect(moved.primaryColors, [
+            0xFF007AFF,
+            0xFFAF52DE,
+            0xFFCB30E0,
+            0xFFFF9500,
+            0xFF123456,
+          ]);
+          expect((await upgrade(3)).primaryColor, 0xFFFF9500);
+        },
+      );
 
       test('turns off the sidebar blur releases stored unseen, once', () async {
         Future<bool> upgrade(int from) async {
@@ -306,6 +311,26 @@ void main() {
         expect(await upgrade(4), isTrue);
       });
 
+      test(
+        'preserves the ambiguous old brand blue and system color choice',
+        () async {
+          for (final color in [0xFF0A55F5, null]) {
+            final configMap = _createConfigMap();
+            (configMap['themeProps']! as Map<String, Object?>)['primaryColor'] =
+                color;
+            final store = _FakeMigrationStore(
+              configMap: configMap,
+              version: Migration.currentVersion,
+              upgradeVersion: 0,
+            );
+            expect(
+              (await Migration(store: store).run()).themeProps.primaryColor,
+              color,
+            );
+          }
+        },
+      );
+
       test('a new install only records it', () async {
         final store = _FakeMigrationStore(
           configMap: null,
@@ -316,6 +341,7 @@ void main() {
         final config = await Migration(store: store).run();
 
         expect(config.themeProps, defaultThemeProps);
+        expect(config.themeProps.primaryColor, 0xFF3D5AFE);
         expect(store.upgradeVersion, Migration.upgradeVersion);
         expect(
           store.events.where((event) => event == 'saveConfig'),

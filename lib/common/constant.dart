@@ -179,8 +179,8 @@ const proxiesListStoreKey = PageStorageKey<String>('proxies_list');
 const toolsStoreKey = PageStorageKey<String>('tools');
 const profilesStoreKey = PageStorageKey<String>('profiles');
 
-// The tianjiyun.org brand blue.
-const defaultPrimaryColor = 0xFF0A55F5;
+// The TianjiCloud deep-space brand seed.
+const defaultPrimaryColor = 0xFF3D5AFE;
 
 const maxLogsLength = 5000;
 const maxRequestsLength = 2000;

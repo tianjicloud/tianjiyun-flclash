@@ -116,6 +116,10 @@ class Migration {
       for (var version = from + 1; version <= upgradeVersion; version++) {
         upgraded = _upgrades[version]!(upgraded);
       }
+      upgraded = upgraded.copyWith.themeProps(
+        primaryColor: config.themeProps.primaryColor,
+        primaryColors: config.themeProps.primaryColors,
+      );
     }
     if (upgraded != config && !await _store.saveConfig(upgraded)) {
       return config;
