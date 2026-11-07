@@ -1,3 +1,4 @@
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/traffic/model.dart';
 import 'package:fl_clash/core/traffic/service.dart';
@@ -58,7 +59,11 @@ void main() {
     container.dispose();
   });
 
-  Future<void> pumpCard(WidgetTester tester, Size size) async {
+  Future<void> pumpCard(
+    WidgetTester tester,
+    Size size, {
+    bool business = false,
+  }) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -76,7 +81,9 @@ void main() {
                       ? DashboardDensity.standard
                       : DashboardDensity.mobile,
                   scale: 1,
-                  child: const TrafficSavingsCard(),
+                  child: business
+                      ? const BusinessAppearance(child: TrafficSavingsCard())
+                      : const TrafficSavingsCard(),
                 ),
               ],
             ),
@@ -86,6 +93,31 @@ void main() {
     );
     await tester.pump();
   }
+
+  testWidgets('business ring shows all shares and centers savings', (
+    tester,
+  ) async {
+    stats.summary.value = const TrafficSummary(
+      month: TrafficAllocation(
+        mainlandDirect: TrafficBytes(down: 30),
+        proxy: TrafficBytes(down: 60),
+        otherDirect: TrafficBytes(down: 10),
+      ),
+    );
+    await pumpCard(tester, const Size(400, 800), business: true);
+    for (final value in ['60.0%', '30.0%', '10.0%']) {
+      expect(find.text(value), findsOneWidget);
+    }
+    expect(find.text('Other direct'), findsOneWidget);
+    final title = tester.getCenter(find.text('Saved this month'));
+    final saved = tester.getCenter(find.text(_traffic(30)).first);
+    expect(saved.dx, closeTo(title.dx, 0.1));
+    expect(tester.takeException(), isNull);
+    stats.summary.value = TrafficSummary.empty;
+    await tester.pump();
+    expect(find.text('0.0%'), findsNWidgets(3));
+    expect(find.text('NaN%'), findsNothing);
+  });
 
   testWidgets('localizes and fits at a phone width', (tester) async {
     await pumpCard(tester, const Size(400, 800));

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/traffic/model.dart';
@@ -24,47 +25,113 @@ class TrafficSavingsCard extends ConsumerWidget {
         valueListenable: service.summary,
         builder: (context, summary, _) {
           if (BusinessTheme.of(context)) {
-            final total = summary.monthMainlandDirect + summary.monthProxy;
-            final value = total == 0
-                ? 0.0
-                : summary.monthMainlandDirect / total;
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 12,
-              children: [
-                DashboardCardHeader(
-                  glyph: AppGlyphs.dataUsage,
-                  title: appLocalizations.trafficStats,
+            final colors = DashboardColors.of(context);
+            final entries = [
+              (
+                appLocalizations.vpnTraffic,
+                summary.monthProxy,
+                context.colorScheme.primary,
+              ),
+              (
+                appLocalizations.mainlandDirect,
+                summary.monthMainlandDirect,
+                colors.ok,
+              ),
+              (
+                appLocalizations.trafficOtherDirect,
+                summary.month.otherDirect.total,
+                colors.warn,
+              ),
+            ];
+            final total = entries.fold(0, (sum, entry) => sum + entry.$2);
+            final ring = SizedBox.square(
+              dimension: 104,
+              child: CustomPaint(
+                painter: _SavingsRing(
+                  values: [
+                    for (final entry in entries)
+                      total == 0 ? 0 : entry.$2 / total,
+                  ],
+                  colors: [for (final entry in entries) entry.$3],
+                  track: colors.tone2,
                 ),
-                Center(
-                  child: SizedBox.square(
-                    dimension: 112,
-                    child: CustomPaint(
-                      painter: _SavingsRing(
-                        value: value,
-                        color: context.colorScheme.primary,
-                        track: DashboardColors.of(context).tone2,
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: _TrafficStat(
-                            label: appLocalizations.trafficSavedThisMonth,
-                            bytes: summary.monthSavings,
-                          ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SizedBox(
+                        width: 68,
+                        child: _TrafficStat(
+                          label: appLocalizations.trafficSavedThisMonth,
+                          bytes: summary.monthSavings,
+                          centered: true,
                         ),
                       ),
                     ),
                   ),
                 ),
-                _TrafficStat(
-                  label: appLocalizations.mainlandDirect,
-                  bytes: summary.monthMainlandDirect,
+              ),
+            );
+            final legend = Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                for (final (label, bytes, color) in entries)
+                  Row(
+                    spacing: 8,
+                    children: [
+                      DecoratedBox(
+                        decoration: ShapeDecoration(
+                          color: color,
+                          shape: AppShape.circle,
+                        ),
+                        child: const SizedBox.square(dimension: 8),
+                      ),
+                      Expanded(
+                        child: Text(label, style: DashboardText.label(context)),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${(total == 0 ? 0 : bytes / total * 100).toStringAsFixed(1)}%',
+                            style: DashboardText.label(context),
+                          ),
+                          Text(
+                            dashboardTraffic(bytes),
+                            style: DashboardText.label(context),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+              ],
+            );
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 10,
+              children: [
+                DashboardCardHeader(
+                  glyph: AppGlyphs.dataUsage,
+                  title: appLocalizations.trafficStats,
                 ),
-                _TrafficStat(
-                  label: appLocalizations.vpnTraffic,
-                  bytes: summary.monthProxy,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth /
+                            MediaQuery.textScalerOf(context).scale(1) <
+                        240) {
+                      return Column(spacing: 12, children: [ring, legend]);
+                    }
+                    return Row(
+                      spacing: 16,
+                      children: [
+                        ring,
+                        Expanded(child: legend),
+                      ],
+                    );
+                  },
                 ),
                 Text(
                   appLocalizations.trafficStatsScope,
@@ -120,7 +187,13 @@ class TrafficSavingsCard extends ConsumerWidget {
 }
 
 class _TrafficStat extends StatelessWidget {
-  const _TrafficStat({required this.label, required this.bytes});
+  const _TrafficStat({
+    required this.label,
+    required this.bytes,
+    this.centered = false,
+  });
+
+  final bool centered;
 
   final String label;
   final int bytes;
@@ -128,18 +201,24 @@ class _TrafficStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: centered
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       spacing: 4,
       children: [
         Text(
           label,
+          textAlign: centered ? TextAlign.center : TextAlign.start,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: DashboardText.label(context),
         ),
         FittedBox(
           fit: BoxFit.scaleDown,
-          alignment: AlignmentDirectional.centerStart,
+          alignment: centered
+              ? Alignment.center
+              : AlignmentDirectional.centerStart,
           child: Text(
             dashboardTraffic(bytes),
             maxLines: 1,
@@ -153,13 +232,13 @@ class _TrafficStat extends StatelessWidget {
 
 class _SavingsRing extends CustomPainter {
   const _SavingsRing({
-    required this.value,
-    required this.color,
+    required this.values,
+    required this.colors,
     required this.track,
   });
 
-  final double value;
-  final Color color;
+  final List<double> values;
+  final List<Color> colors;
   final Color track;
 
   @override
@@ -169,18 +248,17 @@ class _SavingsRing extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8;
     canvas.drawArc(rect, 0, math.pi * 2, false, paint..color = track);
-    canvas.drawArc(
-      rect,
-      -math.pi / 2,
-      math.pi * 2 * value,
-      false,
-      paint..color = color,
-    );
+    var start = -math.pi / 2;
+    for (var i = 0; i < values.length; i++) {
+      final sweep = math.pi * 2 * values[i];
+      canvas.drawArc(rect, start, sweep, false, paint..color = colors[i]);
+      start += sweep;
+    }
   }
 
   @override
   bool shouldRepaint(_SavingsRing oldDelegate) =>
-      value != oldDelegate.value ||
-      color != oldDelegate.color ||
-      track != oldDelegate.track;
+      track != oldDelegate.track ||
+      !listEquals(values, oldDelegate.values) ||
+      !listEquals(colors, oldDelegate.colors);
 }
