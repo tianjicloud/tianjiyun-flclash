@@ -155,10 +155,14 @@ ACK 只确认已发送的 revision；发送期间新采集的字节会推进 rev
 `deploy/xboard-plugins/TianjiClientTraffic/`；运营后台支持日期/用户筛选和按日 CSV。
 统计来自客户端估算，不参与用户扣费或余额计算，接口故障与零上报分开显示。
 
-**尚未部署生产或发布客户端安装包。** 上线须显式建统计表和订阅 token 索引、登记插件、
-重载 Octane，再发布边缘入口及后台，最后发布包含 Core 补丁的客户端。
-生产变更遵循相邻仓库 `AGENTS.md` 的逐项授权要求；安装与回滚见插件 README。
-服务端部署前，上报失败会退避，本地统计和 UI 不受影响。
+用户于 2026-11-07 明确确认上线后，已完成生产建表、token 索引、插件登记、Octane 热重载、
+两个边缘 Worker 与运营后台部署。六个订阅主机均通过真实 HTTPS 鉴权、重复上报去重和
+订阅下载验收；验收的临时零字节记录已清理。运营后台继续由 Cloudflare Access 保护。
+数据库备份及 Worker 回退版本记录在相邻仓库插件 README，回退不得覆盖其他业务的新交易。
+
+客户端 0.9.4 发布构建：
+`https://github.com/tianjicloud/tianjiyun-flclash/actions/runs/42345911898`。
+完整 CI 检查 `42345912107` 已全部通过。正式下载链接和最终发布结果见下方发布验收记录。
 
 ## 子模块特性补丁
 
@@ -197,7 +201,7 @@ cd core && GOOS=android GOARCH=arm64 CGO_ENABLED=0 go vet -tags=with_gvisor . ./
 - Flutter 测试期间临时把 `setup.build_assets` 和 `rust_api.build_assets` 置为 false，
   结束后已恢复原值；
 - 最终计量测试使用内存 TCP/UDP 替身，无需启动监听端口或测试服务器；
-- Android 真机上的后台/断连恢复、真实服务端 ACK 与授权交换尚未验证。
+- Android 真机后台/断连恢复尚未验证；真实服务端 ACK 与授权交换已完成六入口验收。
 
 ## 2026-11-07 独立复核结果
 
@@ -208,5 +212,16 @@ cd core && GOOS=android GOARCH=arm64 CGO_ENABLED=0 go vet -tags=with_gvisor . ./
 - 服务端真实 Laravel HTTP Kernel + 隔离 SQLite 鉴权/幂等/整批回滚/多进程并发测试通过。
 - 两个边缘入口分别 9 项和 7 项测试通过，含分块超限立即取消读取与订阅 GET 回归。
 - 运营后台 110 项测试、类型检查和 Next.js 生产构建通过；Core 流量累计 race 检查通过。
-- 本机缺 Cargo，未完成原生安装包构建和 Windows 实机验收；真实上线鉴权链路待部署后验收。
-- 本轮未部署生产、未提交或推送；两个 OpenCode 实施进程已停止，没有保留监听端口。
+- 本机缺 Cargo 的覆盖缺口已由 GitHub CI 补齐：Rust、Windows Helper 和三平台桌面检查均通过。
+  Windows 实机安装和 Access 登录后的人工目检仍待完成。
+- 实施代码已提交并推送，服务端已上线。两个 OpenCode 实施进程已停止，没有保留监听端口。
+
+## 发布验收记录
+
+- 0.9.4 预览版已发布：
+  `https://github.com/tianjicloud/tianjiyun-flclash/releases/tag/preview-42345911898`。
+- 发布构建 `42345911898` 全部成功，源码提交 `94df77ec`；完整检查 `42345912107` 全部成功。
+- 共 10 个安装包和 `SHA256SUMS`；发布资产的 GitHub SHA256 digest 与清单逐一一致。
+- Windows setup.exe（44,047,619 字节）和便携 zip（69,275,055 字节）另行下载并实算 SHA256，通过。
+- 此次仍为预览版，未设置为 stable/latest；旧客户端需要主动下载安装，安装后天机订阅默认上报。
+- 实机安装与后台 Access 登录后的人工目检尚未完成，不将构建成功表述为实机验收。
