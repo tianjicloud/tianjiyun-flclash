@@ -9982,6 +9982,51 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Background`
+  String get appBackground {
+    return Intl.message(
+      'Background',
+      name: 'appBackground',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solid color`
+  String get backgroundSolid {
+    return Intl.message(
+      'Solid color',
+      name: 'backgroundSolid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Orbit`
+  String get backgroundOrbit {
+    return Intl.message('Orbit', name: 'backgroundOrbit', desc: '', args: []);
+  }
+
+  /// `Mountains`
+  String get backgroundMountains {
+    return Intl.message(
+      'Mountains',
+      name: 'backgroundMountains',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other direct`
+  String get trafficOtherDirect {
+    return Intl.message(
+      'Other direct',
+      name: 'trafficOtherDirect',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

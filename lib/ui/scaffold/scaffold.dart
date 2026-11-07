@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui' show ImageFilter, lerpDouble;
 
+import 'package:fl_clash/ui/app_background.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
@@ -838,7 +840,10 @@ class ScaffoldState extends State<Scaffold>
     _searchDocked = form.hasDockedSearch;
     final keywords = widget.keywords;
     final docked = form.dockedSearch;
-    return PrismScaffold(
+    final wallpaper =
+        AppBackgroundScope.hasImage(context) &&
+        !ScaffoldSurface.of(context).isModal;
+    final scaffold = PrismScaffold(
       bar: _buildAppBar(backAction, form),
       body: SortModeScope(sorting: _sorting, child: widget.body),
       headerListenable: keywords,
@@ -856,8 +861,12 @@ class ScaffoldState extends State<Scaffold>
       footActions: form.pop?.atFoot == true
           ? _buildFootActions(widget.confirmationAction!)
           : null,
-      backgroundColor: widget.backgroundColor,
+      backgroundColor: wallpaper ? Colors.transparent : widget.backgroundColor,
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+    );
+    return AppBackground(
+      enabled: !ScaffoldSurface.of(context).isModal,
+      child: scaffold,
     );
   }
 }

@@ -378,6 +378,7 @@ _ThemeProps _$ThemePropsFromJson(Map<String, dynamic> json) => _ThemeProps(
         _readColorStyle(json, 'colorStyle'),
       ) ??
       ColorStyle.vivid,
+  background: json['background'] as String? ?? 'solid',
   pureBlack: json['pureBlack'] as bool? ?? false,
   sidebarBlur: json['sidebarBlur'] as bool? ?? false,
   liquidGlass:
@@ -398,6 +399,7 @@ Map<String, dynamic> _$ThemePropsToJson(_ThemeProps instance) =>
       'primaryColors': instance.primaryColors,
       'themeMode': _$ThemeModeEnumMap[instance.themeMode]!,
       'colorStyle': _$ColorStyleEnumMap[instance.colorStyle]!,
+      'background': instance.background,
       'pureBlack': instance.pureBlack,
       'sidebarBlur': instance.sidebarBlur,
       'liquidGlass': _$LiquidGlassModeEnumMap[instance.liquidGlass]!,

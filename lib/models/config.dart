@@ -511,6 +511,7 @@ abstract class ThemeProps with _$ThemeProps {
     @Default(ColorStyle.vivid)
     @JsonKey(readValue: _readColorStyle)
     ColorStyle colorStyle,
+    @Default('solid') String background,
     @Default(false) bool pureBlack,
     @Default(false) bool sidebarBlur,
     @Default(LiquidGlassMode.none)

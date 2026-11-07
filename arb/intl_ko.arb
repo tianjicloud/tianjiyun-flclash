@@ -1168,5 +1168,10 @@
   "selectionUnknown": "출구가 선택한 항목과 다릅니다. 원인을 확인할 수 없습니다. 다시 확인해 보세요.",
   "selectionRecheck": "다시 확인",
   "residentialBulkBypass": "목록에 있는 영상과 대용량 다운로드는 일반 자동 회선을 사용하여 가정용 트래픽을 절약합니다. 직접 연결은 유지되며 목록 밖의 대상은 가정용 회선을 사용합니다.",
-  "residentialBulkUnconfirmed": "대용량 우회가 확인되지 않았습니다. 영상과 다운로드가 가정용 트래픽을 사용할 수 있습니다."
+  "residentialBulkUnconfirmed": "대용량 우회가 확인되지 않았습니다. 영상과 다운로드가 가정용 트래픽을 사용할 수 있습니다.",
+  "appBackground": "배경",
+  "backgroundSolid": "단색",
+  "backgroundOrbit": "궤도",
+  "backgroundMountains": "산",
+  "trafficOtherDirect": "기타 직접 연결"
 }

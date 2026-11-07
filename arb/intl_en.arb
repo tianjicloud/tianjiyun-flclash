@@ -1168,5 +1168,10 @@
   "selectionUnknown": "The exit differs from your selection. The reason could not be confirmed. Try checking again.",
   "selectionRecheck": "Check again",
   "residentialBulkBypass": "Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.",
-  "residentialBulkUnconfirmed": "Bulk bypass is not confirmed. Video and downloads may consume residential traffic."
+  "residentialBulkUnconfirmed": "Bulk bypass is not confirmed. Video and downloads may consume residential traffic.",
+  "appBackground": "Background",
+  "backgroundSolid": "Solid color",
+  "backgroundOrbit": "Orbit",
+  "backgroundMountains": "Mountains",
+  "trafficOtherDirect": "Other direct"
 }

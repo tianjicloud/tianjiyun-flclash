@@ -1168,5 +1168,10 @@
   "selectionUnknown": "La salida difiere de tu selección. No se pudo confirmar el motivo. Comprueba de nuevo.",
   "selectionRecheck": "Comprobar de nuevo",
   "residentialBulkBypass": "Los vídeos y descargas de la lista usan líneas normales automáticas sin consumir tráfico residencial. El tráfico directo sigue directo; los destinos no incluidos usan la salida residencial.",
-  "residentialBulkUnconfirmed": "El desvío de grandes transferencias no está confirmado. Los vídeos y descargas pueden consumir tráfico residencial."
+  "residentialBulkUnconfirmed": "El desvío de grandes transferencias no está confirmado. Los vídeos y descargas pueden consumir tráfico residencial.",
+  "appBackground": "Fondo",
+  "backgroundSolid": "Color sólido",
+  "backgroundOrbit": "Órbita",
+  "backgroundMountains": "Montañas",
+  "trafficOtherDirect": "Otro tráfico directo"
 }

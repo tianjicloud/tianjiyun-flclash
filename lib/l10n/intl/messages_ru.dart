@@ -367,6 +367,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
       "Контроль доступа приложений",
     ),
+    "appBackground": MessageLookupByLibrary.simpleMessage("Фон"),
     "appIconDesign": MessageLookupByLibrary.simpleMessage(
       "Дизайн значка приложения",
     ),
@@ -409,6 +410,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "back": MessageLookupByLibrary.simpleMessage("Назад"),
     "backgroundBlur": MessageLookupByLibrary.simpleMessage("Размытие фона"),
+    "backgroundMountains": MessageLookupByLibrary.simpleMessage("Горы"),
+    "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Орбита"),
+    "backgroundSolid": MessageLookupByLibrary.simpleMessage("Сплошной цвет"),
     "backup": MessageLookupByLibrary.simpleMessage("Резервное копирование"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
       "Резервное копирование и восстановление",
@@ -2403,6 +2407,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalUpload": MessageLookupByLibrary.simpleMessage("Отдано"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Порт TProxy"),
     "traffic": MessageLookupByLibrary.simpleMessage("Трафик"),
+    "trafficOtherDirect": MessageLookupByLibrary.simpleMessage(
+      "Прочие прямые подключения",
+    ),
     "trafficPeak": m96,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(
       "Сэкономлено за месяц",

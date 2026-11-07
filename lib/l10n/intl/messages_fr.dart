@@ -378,6 +378,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
       "Contrôle d’accès des apps",
     ),
+    "appBackground": MessageLookupByLibrary.simpleMessage("Arrière-plan"),
     "appIconDesign": MessageLookupByLibrary.simpleMessage(
       "Conception de l’icône de l’app",
     ),
@@ -424,6 +425,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundBlur": MessageLookupByLibrary.simpleMessage(
       "Flou d’arrière-plan",
     ),
+    "backgroundMountains": MessageLookupByLibrary.simpleMessage("Montagnes"),
+    "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Orbite"),
+    "backgroundSolid": MessageLookupByLibrary.simpleMessage("Couleur unie"),
     "backup": MessageLookupByLibrary.simpleMessage("Sauvegarde"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
       "Sauvegarde et restauration",
@@ -2472,6 +2476,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalUpload": MessageLookupByLibrary.simpleMessage("Envoyé"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Port TProxy"),
     "traffic": MessageLookupByLibrary.simpleMessage("Trafic"),
+    "trafficOtherDirect": MessageLookupByLibrary.simpleMessage(
+      "Autre trafic direct",
+    ),
     "trafficPeak": m96,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(
       "Économisé ce mois",

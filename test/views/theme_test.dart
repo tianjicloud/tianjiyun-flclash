@@ -52,6 +52,18 @@ void main() {
 
   ThemeProps readTheme() => container.read(themeSettingProvider);
 
+  testWidgets('background presets apply and return to solid', (tester) async {
+    await pumpThemeView(tester);
+    expect(readTheme().background, 'solid');
+    await tester.ensureVisible(find.text('Orbit'));
+    await tester.tap(find.text('Orbit'));
+    await tester.pumpAndSettle();
+    expect(readTheme().background, 'orbit');
+    await tester.tap(find.text('Solid color'));
+    await tester.pumpAndSettle();
+    expect(readTheme().background, 'solid');
+  });
+
   group('theme mode', () {
     testWidgets('defaults to following the system', (tester) async {
       await pumpThemeView(tester);

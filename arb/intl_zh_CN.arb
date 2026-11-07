@@ -1168,5 +1168,10 @@
   "selectionUnknown": "出口与所选不一致，暂时无法确认原因。可以重新检测一次。",
   "selectionRecheck": "重新检测",
   "residentialBulkBypass": "名单内的视频和大文件下载会走普通自动线路，不占家宽流量；原本直连的仍直连，名单外的仍走家宽。",
-  "residentialBulkUnconfirmed": "暂未确认大流量绕行已启用；视频和下载可能占用家宽流量。"
+  "residentialBulkUnconfirmed": "暂未确认大流量绕行已启用；视频和下载可能占用家宽流量。",
+  "appBackground": "背景",
+  "backgroundSolid": "纯色",
+  "backgroundOrbit": "深空轨道",
+  "backgroundMountains": "远山",
+  "trafficOtherDirect": "其他直连"
 }

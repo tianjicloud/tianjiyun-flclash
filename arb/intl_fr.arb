@@ -1168,5 +1168,10 @@
   "selectionUnknown": "La sortie diffère de votre choix. La cause n’a pas pu être confirmée. Réessayez.",
   "selectionRecheck": "Vérifier à nouveau",
   "residentialBulkBypass": "Les vidéos et téléchargements répertoriés utilisent les lignes ordinaires automatiques, sans consommer le trafic résidentiel. Le trafic direct reste direct ; les autres destinations utilisent la sortie résidentielle.",
-  "residentialBulkUnconfirmed": "Le contournement des gros transferts n’est pas confirmé. Vidéos et téléchargements peuvent consommer du trafic résidentiel."
+  "residentialBulkUnconfirmed": "Le contournement des gros transferts n’est pas confirmé. Vidéos et téléchargements peuvent consommer du trafic résidentiel.",
+  "appBackground": "Arrière-plan",
+  "backgroundSolid": "Couleur unie",
+  "backgroundOrbit": "Orbite",
+  "backgroundMountains": "Montagnes",
+  "trafficOtherDirect": "Autre trafic direct"
 }

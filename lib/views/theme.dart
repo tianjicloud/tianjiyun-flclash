@@ -7,6 +7,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/views/font_family.dart';
 import 'package:fl_clash/views/theme_preview.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -48,6 +49,8 @@ class ThemeView extends StatelessWidget {
           const _FontFamilyItem(),
           const SizedBox(height: 16),
           const _TextScaleFactorItem(),
+          const SizedBox(height: 16),
+          const _BackgroundItem(),
         ],
       ),
     );
@@ -1183,6 +1186,50 @@ class _CustomColorPreview extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _BackgroundItem extends ConsumerWidget {
+  const _BackgroundItem();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.appLocalizations;
+    final background = ref.watch(
+      themeSettingProvider.select((state) => state.background),
+    );
+    return PreviewChoiceGroup<String>(
+      info: Info(label: strings.appBackground, glyph: AppGlyphs.sun),
+      value: const ['orbit', 'mountains'].contains(background)
+          ? background
+          : 'solid',
+      choices: [
+        for (final (value, label) in [
+          ('solid', strings.backgroundSolid),
+          ('orbit', strings.backgroundOrbit),
+          ('mountains', strings.backgroundMountains),
+        ])
+          PreviewChoice(
+            value: value,
+            label: label,
+            pictogram: AppBackgroundScope(
+              preset: value,
+              child: AppBackground(
+                child: SizedBox(
+                  width: 96,
+                  height: 64,
+                  child: value == 'solid'
+                      ? ColoredBox(color: context.colorScheme.surface)
+                      : null,
+                ),
+              ),
+            ),
+          ),
+      ],
+      onChanged: (value) => ref
+          .read(themeSettingProvider.notifier)
+          .update((state) => state.copyWith(background: value)),
     );
   }
 }

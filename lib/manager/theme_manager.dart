@@ -4,6 +4,7 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/ui.dart';
+import 'package:fl_clash/ui/app_background.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/services.dart';
@@ -101,7 +102,12 @@ class ThemeManager extends ConsumerWidget {
                   .updateViewSize(
                     Size(constraints.maxWidth, constraints.maxHeight),
                   );
-              return RepaintBoundary(child: _buildSystemUi(child));
+              return AppBackgroundScope(
+                preset: ref.watch(
+                  themeSettingProvider.select((state) => state.background),
+                ),
+                child: RepaintBoundary(child: _buildSystemUi(child)),
+              );
             },
           ),
         ),
