@@ -1,4 +1,4 @@
-"""Generate installation, Android notification and in-app icons from the
+"""Generate installation, Windows tray, Android notification and in-app icons from the
 天机云 brand mark.
 
 The mark is a raster with gradients and a soft glow, so unlike upstream's
@@ -8,10 +8,11 @@ root with Pillow installed:
     python3 tool/generate_brand_icons.py
 """
 
+import argparse
 import json
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'assets_source/images/icon/tianjiyun-mark.png'
@@ -104,6 +105,22 @@ def banner(mark):
     return canvas.convert('RGB')
 
 
+def generate_windows_tray(mark):
+    sizes = [(size, size) for size in [16, 20, 24, 32, 40, 48, 64, 128, 256]]
+    for status, tint in [(1, '#8490a2'), (2, None), (3, '#13b89d'), (4, '#e99a23')]:
+        icon = mark.copy()
+        if tint is not None:
+            icon = ImageOps.colorize(
+                ImageOps.grayscale(mark), '#172235', tint
+            ).convert('RGBA')
+            icon.putalpha(mark.getchannel('A'))
+        save(
+            place(icon, 256, 0.96),
+            ROOT / f'assets/images/tray/windows/status_{status}.ico',
+            sizes=sizes,
+        )
+
+
 def main():
     mark = load_mark()
     shape = silhouette(mark)
@@ -161,4 +178,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--tray-only', action='store_true', help='Only generate Windows tray icons')
+    args = parser.parse_args()
+    generate_windows_tray(load_mark())
+    if not args.tray_only:
+        main()
