@@ -420,11 +420,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Intervalo de actualización automática",
     ),
     "back": MessageLookupByLibrary.simpleMessage("Atrás"),
+    "backgroundAurora": MessageLookupByLibrary.simpleMessage("Aurora"),
     "backgroundBlur": MessageLookupByLibrary.simpleMessage(
       "Desenfoque de fondo",
     ),
+    "backgroundGlobe": MessageLookupByLibrary.simpleMessage("Globo"),
     "backgroundMountains": MessageLookupByLibrary.simpleMessage("Montañas"),
+    "backgroundNebula": MessageLookupByLibrary.simpleMessage("Nebulosa"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Órbita"),
+    "backgroundPlanet": MessageLookupByLibrary.simpleMessage("Planeta"),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("Color sólido"),
     "backup": MessageLookupByLibrary.simpleMessage("Copia de seguridad"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(

@@ -422,11 +422,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Intervalle de mise à jour automatique",
     ),
     "back": MessageLookupByLibrary.simpleMessage("Retour"),
+    "backgroundAurora": MessageLookupByLibrary.simpleMessage("Aurore"),
     "backgroundBlur": MessageLookupByLibrary.simpleMessage(
       "Flou d’arrière-plan",
     ),
+    "backgroundGlobe": MessageLookupByLibrary.simpleMessage("Globe"),
     "backgroundMountains": MessageLookupByLibrary.simpleMessage("Montagnes"),
+    "backgroundNebula": MessageLookupByLibrary.simpleMessage("Nébuleuse"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Orbite"),
+    "backgroundPlanet": MessageLookupByLibrary.simpleMessage("Planète"),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("Couleur unie"),
     "backup": MessageLookupByLibrary.simpleMessage("Sauvegarde"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(

@@ -648,11 +648,12 @@ void main() {
       await tester.tap(find.byTooltip('Stop'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 80));
-      expect(painter().color, isNot(BusinessPalette.secondary));
+      expect(painter().color, isNot(BusinessPalette.accent));
       expect(painter().color, isNot(BusinessPalette.blue));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 500));
       expect(action.requests, [false]);
-      expect(painter().color, BusinessPalette.secondary);
+      expect(painter().color, BusinessPalette.accent);
+      expect(painter().pulse, isNotNull);
       await tester.tap(find.byTooltip('Start'));
       await tester.pumpAndSettle();
       expect(action.requests, [false, true]);

@@ -17,8 +17,17 @@ class AppBackgroundScope extends InheritedWidget {
           ?.preset ??
       'solid';
 
+  static const imagePresets = [
+    'orbit',
+    'mountains',
+    'planet',
+    'aurora',
+    'nebula',
+    'globe',
+  ];
+
   static bool hasImage(BuildContext context) =>
-      const ['orbit', 'mountains'].contains(of(context));
+      imagePresets.contains(of(context));
 
   @override
   bool updateShouldNotify(AppBackgroundScope oldWidget) =>
@@ -51,11 +60,23 @@ class AppBackground extends StatelessWidget {
                   : Stack(
                       fit: StackFit.expand,
                       children: [
-                        SvgPicture.asset(
-                          'assets/images/background_${AppBackgroundScope.of(context)}.svg',
-                          fit: BoxFit.cover,
-                          excludeFromSemantics: true,
-                        ),
+                        if (const [
+                          'planet',
+                          'aurora',
+                          'nebula',
+                          'globe',
+                        ].contains(AppBackgroundScope.of(context)))
+                          Image.asset(
+                            'assets/images/background_${AppBackgroundScope.of(context)}.jpg',
+                            fit: BoxFit.cover,
+                            excludeFromSemantics: true,
+                          )
+                        else
+                          SvgPicture.asset(
+                            'assets/images/background_${AppBackgroundScope.of(context)}.svg',
+                            fit: BoxFit.cover,
+                            excludeFromSemantics: true,
+                          ),
                         ColoredBox(
                           color: SurfaceLevel.page
                               .colorOf(scheme)

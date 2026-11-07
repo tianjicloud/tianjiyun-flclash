@@ -10018,6 +10018,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Planet`
+  String get backgroundPlanet {
+    return Intl.message('Planet', name: 'backgroundPlanet', desc: '', args: []);
+  }
+
+  /// `Aurora`
+  String get backgroundAurora {
+    return Intl.message('Aurora', name: 'backgroundAurora', desc: '', args: []);
+  }
+
+  /// `Nebula`
+  String get backgroundNebula {
+    return Intl.message('Nebula', name: 'backgroundNebula', desc: '', args: []);
+  }
+
+  /// `Globe`
+  String get backgroundGlobe {
+    return Intl.message('Globe', name: 'backgroundGlobe', desc: '', args: []);
+  }
+
   /// `Other direct`
   String get trafficOtherDirect {
     return Intl.message(

@@ -66,7 +66,11 @@ void main() {
         addTearDown(container.dispose);
         globalState.container = container;
         container.read(viewSizeProvider.notifier).value = const Size(1200, 800);
-        for (final preset in ['solid', 'mountains', 'orbit', 'solid']) {
+        for (final preset in [
+          'solid',
+          ...AppBackgroundScope.imagePresets,
+          'solid',
+        ]) {
           await tester.pumpWidget(
             UncontrolledProviderScope(
               container: container,
@@ -87,10 +91,9 @@ void main() {
           );
           await tester.pumpAndSettle();
           final image = preset != 'solid';
-          expect(
-            find.byType(SvgPicture),
-            image ? findsOneWidget : findsNothing,
-          );
+          final vector = const ['mountains', 'orbit'].contains(preset);
+          final picture = vector ? find.byType(SvgPicture) : find.byType(Image);
+          expect(picture, image ? findsOneWidget : findsNothing);
           final sidebarSurface = tester.widget<Surface>(
             find
                 .ancestor(
@@ -120,7 +123,7 @@ void main() {
           );
           if (image) {
             expect(
-              tester.getRect(find.byType(SvgPicture)),
+              tester.getRect(picture),
               const Rect.fromLTWH(0, 0, 1200, 800),
             );
             expect(find.text('count: 1'), findsOneWidget);

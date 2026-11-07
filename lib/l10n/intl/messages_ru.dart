@@ -409,9 +409,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Интервал автообновления",
     ),
     "back": MessageLookupByLibrary.simpleMessage("Назад"),
+    "backgroundAurora": MessageLookupByLibrary.simpleMessage("Сияние"),
     "backgroundBlur": MessageLookupByLibrary.simpleMessage("Размытие фона"),
+    "backgroundGlobe": MessageLookupByLibrary.simpleMessage("Глобус"),
     "backgroundMountains": MessageLookupByLibrary.simpleMessage("Горы"),
+    "backgroundNebula": MessageLookupByLibrary.simpleMessage("Туманность"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Орбита"),
+    "backgroundPlanet": MessageLookupByLibrary.simpleMessage("Планета"),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("Сплошной цвет"),
     "backup": MessageLookupByLibrary.simpleMessage("Резервное копирование"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(

@@ -507,11 +507,11 @@ abstract class ThemeProps with _$ThemeProps {
   const factory ThemeProps({
     int? primaryColor,
     @Default(defaultPrimaryColors) List<int> primaryColors,
-    @Default(ThemeMode.system) ThemeMode themeMode,
+    @Default(ThemeMode.dark) ThemeMode themeMode,
     @Default(ColorStyle.vivid)
     @JsonKey(readValue: _readColorStyle)
     ColorStyle colorStyle,
-    @Default('solid') String background,
+    @Default('orbit') String background,
     @Default(false) bool pureBlack,
     @Default(false) bool sidebarBlur,
     @Default(LiquidGlassMode.none)

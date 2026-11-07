@@ -1173,5 +1173,9 @@
   "backgroundSolid": "Сплошной цвет",
   "backgroundOrbit": "Орбита",
   "backgroundMountains": "Горы",
+  "backgroundPlanet": "Планета",
+  "backgroundAurora": "Сияние",
+  "backgroundNebula": "Туманность",
+  "backgroundGlobe": "Глобус",
   "trafficOtherDirect": "Прочие прямые подключения"
 }

@@ -1201,13 +1201,17 @@ class _BackgroundItem extends ConsumerWidget {
     );
     return PreviewChoiceGroup<String>(
       info: Info(label: strings.appBackground, glyph: AppGlyphs.sun),
-      value: const ['orbit', 'mountains'].contains(background)
+      value: AppBackgroundScope.imagePresets.contains(background)
           ? background
           : 'solid',
       choices: [
         for (final (value, label) in [
           ('solid', strings.backgroundSolid),
           ('orbit', strings.backgroundOrbit),
+          ('planet', strings.backgroundPlanet),
+          ('aurora', strings.backgroundAurora),
+          ('nebula', strings.backgroundNebula),
+          ('globe', strings.backgroundGlobe),
           ('mountains', strings.backgroundMountains),
         ])
           PreviewChoice(

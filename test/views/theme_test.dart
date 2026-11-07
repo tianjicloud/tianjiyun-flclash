@@ -54,7 +54,7 @@ void main() {
 
   testWidgets('background presets apply and return to solid', (tester) async {
     await pumpThemeView(tester);
-    expect(readTheme().background, 'solid');
+    expect(readTheme().background, 'orbit');
     await tester.ensureVisible(find.text('Orbit'));
     await tester.tap(find.text('Orbit'));
     await tester.pumpAndSettle();
@@ -65,10 +65,10 @@ void main() {
   });
 
   group('theme mode', () {
-    testWidgets('defaults to following the system', (tester) async {
+    testWidgets('defaults to dark', (tester) async {
       await pumpThemeView(tester);
 
-      expect(readTheme().themeMode, ThemeMode.system);
+      expect(readTheme().themeMode, ThemeMode.dark);
     });
 
     testWidgets('switches to light and back to dark', (tester) async {
