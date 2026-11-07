@@ -1906,6 +1906,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Actions rapides"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Modification rapide"),
+    "quickLines": MessageLookupByLibrary.simpleMessage("Lignes rapides"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Requêtes récentes"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("Suggestions"),
     "recordType": MessageLookupByLibrary.simpleMessage("Type d’enregistrement"),
@@ -2237,6 +2238,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage(
       "Enregistrer les modifications ?",
     ),
+    "scene": MessageLookupByLibrary.simpleMessage("Scène"),
+    "sceneAi": MessageLookupByLibrary.simpleMessage("IA"),
+    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
+      "Le changement de scène arrive bientôt. Votre routage actuel reste inchangé.",
+    ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("Quotidien"),
+    "sceneNote": MessageLookupByLibrary.simpleMessage(
+      "Le gros trafic passe automatiquement par les nœuds à large bande · Le trafic vers la Chine continentale reste direct",
+    ),
+    "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
     "script": MessageLookupByLibrary.simpleMessage("Script"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "Mode script : réécrit tout le profil avec un script d’extension",

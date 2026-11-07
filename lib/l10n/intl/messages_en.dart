@@ -1765,6 +1765,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Quick actions"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Quick edit"),
+    "quickLines": MessageLookupByLibrary.simpleMessage("Quick lines"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Recent requests"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("Suggested"),
     "recordType": MessageLookupByLibrary.simpleMessage("Record type"),
@@ -2072,6 +2073,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "saturation": MessageLookupByLibrary.simpleMessage("Saturation"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save the changes?"),
+    "scene": MessageLookupByLibrary.simpleMessage("Scene"),
+    "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
+    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
+      "Scene switching is coming soon. Your current routing stays unchanged.",
+    ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("Daily"),
+    "sceneNote": MessageLookupByLibrary.simpleMessage(
+      "Heavy traffic auto-routes to big-bandwidth nodes · Mainland traffic goes direct",
+    ),
+    "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
     "script": MessageLookupByLibrary.simpleMessage("Script"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "Script mode: rewrites the whole profile with an extension script",

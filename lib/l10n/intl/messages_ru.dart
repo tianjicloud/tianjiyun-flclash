@@ -1855,6 +1855,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Быстрые действия"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Быстрое редактирование"),
+    "quickLines": MessageLookupByLibrary.simpleMessage("Быстрые линии"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Последние запросы"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("Рекомендуемые"),
     "recordType": MessageLookupByLibrary.simpleMessage("Тип записи"),
@@ -2176,6 +2177,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "saturation": MessageLookupByLibrary.simpleMessage("Насыщенность"),
     "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("Сохранить изменения?"),
+    "scene": MessageLookupByLibrary.simpleMessage("Сценарий"),
+    "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
+    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
+      "Переключение сценариев скоро появится. Текущая маршрутизация не изменится.",
+    ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("Обычный"),
+    "sceneNote": MessageLookupByLibrary.simpleMessage(
+      "Тяжёлый трафик автоматически идёт через широкополосные узлы · Трафик в материковый Китай — напрямую",
+    ),
+    "sceneWatch": MessageLookupByLibrary.simpleMessage("Видео"),
     "script": MessageLookupByLibrary.simpleMessage("Скрипт"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "Режим скрипта: переписывает весь профиль скриптом расширения",

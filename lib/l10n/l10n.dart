@@ -9622,6 +9622,51 @@ class AppLocalizations {
     );
   }
 
+  /// `Scene`
+  String get scene {
+    return Intl.message('Scene', name: 'scene', desc: '', args: []);
+  }
+
+  /// `Daily`
+  String get sceneDaily {
+    return Intl.message('Daily', name: 'sceneDaily', desc: '', args: []);
+  }
+
+  /// `AI`
+  String get sceneAi {
+    return Intl.message('AI', name: 'sceneAi', desc: '', args: []);
+  }
+
+  /// `Streaming`
+  String get sceneWatch {
+    return Intl.message('Streaming', name: 'sceneWatch', desc: '', args: []);
+  }
+
+  /// `Scene switching is coming soon. Your current routing stays unchanged.`
+  String get sceneComingSoon {
+    return Intl.message(
+      'Scene switching is coming soon. Your current routing stays unchanged.',
+      name: 'sceneComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quick lines`
+  String get quickLines {
+    return Intl.message('Quick lines', name: 'quickLines', desc: '', args: []);
+  }
+
+  /// `Heavy traffic auto-routes to big-bandwidth nodes · Mainland traffic goes direct`
+  String get sceneNote {
+    return Intl.message(
+      'Heavy traffic auto-routes to big-bandwidth nodes · Mainland traffic goes direct',
+      name: 'sceneNote',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Subscription policy`
   String get residentialSubscriptionPolicy {
     return Intl.message(

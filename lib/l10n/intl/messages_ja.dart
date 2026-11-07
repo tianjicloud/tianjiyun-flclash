@@ -1522,6 +1522,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("クイック操作"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("クイック編集"),
+    "quickLines": MessageLookupByLibrary.simpleMessage("よく使う回線"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("最近のリクエスト"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("おすすめ"),
     "recordType": MessageLookupByLibrary.simpleMessage("レコードタイプ"),
@@ -1793,6 +1794,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "saturation": MessageLookupByLibrary.simpleMessage("彩度"),
     "save": MessageLookupByLibrary.simpleMessage("保存"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("変更を保存しますか？"),
+    "scene": MessageLookupByLibrary.simpleMessage("シーン"),
+    "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
+    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
+      "シーン切り替えは近日対応予定です。現在のルーティングは変わりません。",
+    ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("日常"),
+    "sceneNote": MessageLookupByLibrary.simpleMessage(
+      "大容量通信は広帯域ノードへ自動迂回 · 中国本土向けは直接接続",
+    ),
+    "sceneWatch": MessageLookupByLibrary.simpleMessage("視聴"),
     "script": MessageLookupByLibrary.simpleMessage("スクリプト"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "スクリプトモード：拡張スクリプトでプロファイル全体を書き換えます",

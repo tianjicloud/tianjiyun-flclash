@@ -1900,6 +1900,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Acciones rápidas"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Edición rápida"),
+    "quickLines": MessageLookupByLibrary.simpleMessage("Líneas rápidas"),
     "recentRequests": MessageLookupByLibrary.simpleMessage(
       "Solicitudes recientes",
     ),
@@ -2233,6 +2234,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage(
       "¿Guardar los cambios?",
     ),
+    "scene": MessageLookupByLibrary.simpleMessage("Escena"),
+    "sceneAi": MessageLookupByLibrary.simpleMessage("IA"),
+    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
+      "El cambio de escena llegará pronto. Tu enrutamiento actual no cambia.",
+    ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("Diario"),
+    "sceneNote": MessageLookupByLibrary.simpleMessage(
+      "El tráfico pesado se desvía automáticamente a nodos de gran ancho de banda · El tráfico a China continental va directo",
+    ),
+    "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
     "script": MessageLookupByLibrary.simpleMessage("Script"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "Modo script: reescribe todo el perfil con un script de extensión",

@@ -1494,6 +1494,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("빠른 작업"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("빠른 편집"),
+    "quickLines": MessageLookupByLibrary.simpleMessage("자주 쓰는 회선"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("최근 요청"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("추천"),
     "recordType": MessageLookupByLibrary.simpleMessage("레코드 유형"),
@@ -1759,6 +1760,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "saturation": MessageLookupByLibrary.simpleMessage("채도"),
     "save": MessageLookupByLibrary.simpleMessage("저장"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("변경 사항을 저장하시겠습니까?"),
+    "scene": MessageLookupByLibrary.simpleMessage("장면"),
+    "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
+    "sceneComingSoon": MessageLookupByLibrary.simpleMessage(
+      "장면 전환은 곧 제공됩니다. 현재 라우팅은 그대로 유지됩니다.",
+    ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("일상"),
+    "sceneNote": MessageLookupByLibrary.simpleMessage(
+      "대용량 트래픽은 대역폭이 큰 노드로 자동 우회 · 중국 본토 트래픽은 직접 연결",
+    ),
+    "sceneWatch": MessageLookupByLibrary.simpleMessage("시청"),
     "script": MessageLookupByLibrary.simpleMessage("스크립트"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "스크립트 모드: 확장 스크립트로 프로필 전체를 다시 작성합니다",
