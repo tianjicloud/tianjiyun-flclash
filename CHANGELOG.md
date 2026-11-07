@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.9.7 (2026-11-07)
+
+Internal improvements only.
+
+## v0.9.6 (2026-11-07)
+
+Internal improvements only.
+
+## v0.9.5 (2026-11-07)
+
+**Features**
+
+- **residential** Simplified Tianji dashboard with residential exit selection and fail-safe routing (85199bb)
+- **traffic** Show traffic savings and automatically sync usage summaries for Tianji subscriptions (94df77e)
+- Guide a new user from pasting a subscription to a verified connection (76d799e)
+- Drop the disclaimer from startup and the tools page (b82d7ed)
+- **desktop** Give the desktop builds their own identity (3cce975)
+- **android** Replace the app icons with the 天机云 brand mark (781ea74)
+- **android** Give the Android build its own identity and update source (19db3a7)
+
+**Bug Fixes**
+
+- **core** Keep the previous core configuration when a replacement is rejected (731ed7a)
+
 ## v0.9.3 (2026-11-04)
 
 **Features**

@@ -2,6 +2,76 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.7",
+      "tag": "v0.9.7",
+      "date": "2026-11-07",
+      "prerelease": false,
+      "groups": []
+    },
+    {
+      "version": "0.9.6",
+      "tag": "v0.9.6",
+      "date": "2026-11-07",
+      "prerelease": false,
+      "groups": []
+    },
+    {
+      "version": "0.9.5",
+      "tag": "v0.9.5",
+      "date": "2026-11-07",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "85199bb",
+              "scope": "residential",
+              "text": "Simplified Tianji dashboard with residential exit selection and fail-safe routing"
+            },
+            {
+              "id": "94df77e",
+              "scope": "traffic",
+              "text": "Show traffic savings and automatically sync usage summaries for Tianji subscriptions"
+            },
+            {
+              "id": "76d799e",
+              "text": "Guide a new user from pasting a subscription to a verified connection"
+            },
+            {
+              "id": "b82d7ed",
+              "text": "Drop the disclaimer from startup and the tools page"
+            },
+            {
+              "id": "3cce975",
+              "scope": "desktop",
+              "text": "Give the desktop builds their own identity"
+            },
+            {
+              "id": "781ea74",
+              "scope": "android",
+              "text": "Replace the app icons with the 天机云 brand mark"
+            },
+            {
+              "id": "19db3a7",
+              "scope": "android",
+              "text": "Give the Android build its own identity and update source"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "731ed7a",
+              "scope": "core",
+              "text": "Keep the previous core configuration when a replacement is rejected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.3",
       "tag": "v0.9.3",
       "date": "2026-11-04",
