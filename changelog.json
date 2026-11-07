@@ -2,6 +2,24 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.9",
+      "tag": "v0.9.9",
+      "date": "2026-11-07",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "d8c6938",
+              "scope": "dashboard",
+              "text": "Show ordinary line controls for standard subscriptions and enable TUN for new desktop installs"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.8",
       "tag": "v0.9.8",
       "date": "2026-11-07",

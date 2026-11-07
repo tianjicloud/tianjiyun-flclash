@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.9 (2026-11-07)
+
+**Features**
+
+- **dashboard** Show ordinary line controls for standard subscriptions and enable TUN for new desktop installs (d8c6938)
+
 ## v0.9.8 (2026-11-07)
 
 Internal improvements only.
