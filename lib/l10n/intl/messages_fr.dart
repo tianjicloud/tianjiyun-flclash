@@ -454,8 +454,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessChooseLine": MessageLookupByLibrary.simpleMessage(
       "Changer de ligne",
     ),
+    "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nœud actuel"),
+    "businessEnableRules": MessageLookupByLibrary.simpleMessage(
+      "Activer le routage intelligent",
+    ),
+    "businessLineFailed": MessageLookupByLibrary.simpleMessage(
+      "Le changement de ligne a échoué. Réessayez.",
+    ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
-      "Ligne de connexion",
+      "Ligne par défaut",
     ),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "Aucune ligne chargée. Vérifiez votre abonnement.",
@@ -464,7 +471,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chargement des lignes disponibles…",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "Le trafic local privilégie une connexion directe. Les règles de l’abonnement choisissent les lignes proxy pour le reste.",
+      "Seule la ligne par défaut change. L’IA et le streaming conservent leurs règles, ainsi que les connexions directes et les blocages.",
+    ),
+    "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
+      "Le routage intelligent est désactivé. Cette ligne par défaut n’est pas utilisée actuellement.",
+    ),
+    "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
+      "L’abonnement ou le mode a changé. Rouvrez la sélection.",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Routage intelligent",

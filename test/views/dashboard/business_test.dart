@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:fl_clash/common/default_line.dart';
 import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/constant.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/host_scaffold.dart';
+import '../../helpers/default_lines.dart';
 import '../../helpers/test_app.dart';
 
 class _TestResidentialAction extends ResidentialAction {
@@ -18,6 +21,31 @@ class _TestResidentialAction extends ResidentialAction {
 
   @override
   ResidentialApplyState build() => initial;
+}
+
+const _profile = Profile(
+  id: 1,
+  type: ProfileType.url,
+  url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+  autoUpdateDuration: Duration.zero,
+);
+
+class _TestGroupsSource extends GroupsSourceProfile {
+  @override
+  GroupsCatalogSource build() =>
+      GroupsCatalogSource(profileId: 1, url: _profile.url, loaded: true);
+}
+
+class _TestProxiesAction extends ProxiesAction {
+  final choices = <DefaultLineChoice>[];
+  Future<bool> Function()? handle;
+  @override
+  void build() {}
+  @override
+  Future<bool> changeDefaultLine(DefaultLineChoice choice) {
+    choices.add(choice);
+    return handle?.call() ?? Future.value(true);
+  }
 }
 
 ResidentialPolicy _policy({
@@ -48,13 +76,22 @@ Widget _app(
   double width = 380,
   bool adaptive = false,
   List<Group> groups = const [],
+  Map<String, String> selections = const {appName: 'Auto'},
+  _TestProxiesAction? proxies,
+  Mode mode = Mode.rule,
 }) {
   return TestApp(
     locale: const Locale('en'),
     overrides: [
       residentialPolicyProvider.overrideWithValue(policy),
       groupsProvider.overrideWithBuild((_, _) => groups),
-      selectedProxyNameProvider(appName).overrideWith((_) => 'Auto'),
+      selectedMapProvider.overrideWith((_) => selections),
+      currentProfileProvider.overrideWithValue(_profile),
+      groupsSourceProfileProvider.overrideWith(_TestGroupsSource.new),
+      patchClashConfigProvider.overrideWithBuild(
+        (_, _) => defaultClashConfig.copyWith(mode: mode),
+      ),
+      if (proxies != null) proxiesActionProvider.overrideWith(() => proxies),
       residentialActionProvider.overrideWith(
         () => _TestResidentialAction(action),
       ),
@@ -77,6 +114,179 @@ Widget _app(
 }
 
 void main() {
+  testWidgets('manual default line and its resolved node are both visible', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        _policy(rootAvailable: false, choices: const []),
+        adaptive: true,
+        groups: defaultLineTestGroups,
+        selections: const {appName: '📍 指定节点', '📍 指定节点': 'Tokyo'},
+      ),
+    );
+    expect(find.text('Tokyo'), findsOneWidget);
+    expect(find.text('Tokyo transport'), findsOneWidget);
+    expect(find.text('📍 指定节点'), findsNothing);
+  });
+
+  testWidgets(
+    'ordinary picker exposes node names and submits the chosen line',
+    (tester) async {
+      final action = _TestProxiesAction();
+      await tester.pumpWidget(
+        _app(
+          _policy(rootAvailable: false, choices: const []),
+          adaptive: true,
+          groups: defaultLineTestGroups,
+          selections: const {},
+          proxies: action,
+        ),
+      );
+      await tester.tap(find.text('Change line'));
+      await tester.pumpAndSettle();
+      expect(find.text('Tokyo'), findsOneWidget);
+      expect(find.text('Hong Kong'), findsOneWidget);
+      expect(find.text('📍 指定节点'), findsNothing);
+      await tester.tap(find.text('Tokyo'));
+      await tester.pumpAndSettle();
+      expect(action.choices.single.name, 'Tokyo');
+      expect(find.text('Hong Kong'), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'pending selection prevents double submission and failure keeps picker open',
+    (tester) async {
+      final pending = Completer<bool>();
+      final action = _TestProxiesAction()..handle = () => pending.future;
+      await tester.pumpWidget(
+        _app(
+          _policy(rootAvailable: false, choices: const []),
+          adaptive: true,
+          groups: defaultLineTestGroups,
+          selections: const {},
+          proxies: action,
+        ),
+      );
+      await tester.tap(find.text('Change line'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Tokyo'));
+      await tester.pump();
+      await tester.tap(find.text('Hong Kong'));
+      expect(action.choices.length, 1);
+      pending.complete(false);
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Could not finish switching lines. Retry.'),
+        findsOneWidget,
+      );
+      expect(find.text('Tokyo'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'an unexpected selection error releases the pending state for retry',
+    (tester) async {
+      final action = _TestProxiesAction()
+        ..handle = () async => throw StateError('unavailable');
+      await tester.pumpWidget(
+        _app(
+          _policy(rootAvailable: false, choices: const []),
+          adaptive: true,
+          groups: defaultLineTestGroups,
+          selections: const {},
+          proxies: action,
+        ),
+      );
+      await tester.tap(find.text('Change line'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Tokyo'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Could not finish switching lines. Retry.'),
+        findsOneWidget,
+      );
+      action.handle = () async => true;
+      await tester.tap(find.text('Tokyo'));
+      await tester.pumpAndSettle();
+      expect(action.choices.length, 2);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('long node names wrap in the picker instead of being ellipsized', (
+    tester,
+  ) async {
+    const name =
+        'Tokyo premium route with a deliberately long descriptive node name and transport information';
+    final groups = [...defaultLineTestGroups];
+    groups[2] = groups[2].copyWith(
+      all: const [Proxy(name: name, type: 'ss')],
+    );
+    await tester.pumpWidget(
+      _app(
+        _policy(rootAvailable: false, choices: const []),
+        adaptive: true,
+        groups: groups,
+        selections: const {},
+        proxies: _TestProxiesAction(),
+      ),
+    );
+    await tester.tap(find.text('Change line'));
+    await tester.pumpAndSettle();
+    final text = tester
+        .widgetList<RichText>(find.byType(RichText))
+        .singleWhere((text) => text.text.toPlainText() == name);
+    expect(text.maxLines, isNull);
+    expect(text.overflow, isNot(TextOverflow.ellipsis));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'closing the picker during selection leaves no disposed widget callbacks',
+    (tester) async {
+      final pending = Completer<bool>();
+      final action = _TestProxiesAction()..handle = () => pending.future;
+      await tester.pumpWidget(
+        _app(
+          _policy(rootAvailable: false, choices: const []),
+          adaptive: true,
+          groups: defaultLineTestGroups,
+          selections: const {},
+          proxies: action,
+        ),
+      );
+      await tester.tap(find.text('Change line'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Tokyo'));
+      await tester.pumpWidget(const SizedBox.shrink());
+      pending.complete(true);
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final mode in [Mode.global, Mode.direct]) {
+    testWidgets('$mode explains why the default line is not in effect', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _app(
+          _policy(rootAvailable: false, choices: const []),
+          adaptive: true,
+          groups: defaultLineTestGroups,
+          mode: mode,
+        ),
+      );
+      expect(find.text('Change line'), findsNothing);
+      expect(find.text('Enable smart routing'), findsOneWidget);
+      await tester.tap(find.text('Enable smart routing'));
+      await tester.pump();
+      expect(find.text('Change line'), findsOneWidget);
+    });
+  }
+
   testWidgets(
     'ordinary subscriptions get line controls without residential prompts',
     (tester) async {
@@ -94,7 +304,7 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.text('Connection line'), findsOneWidget);
+      expect(find.text('Default line'), findsOneWidget);
       expect(find.text('Auto'), findsOneWidget);
       expect(find.text('Change line'), findsOneWidget);
       expect(find.text('No residential lines available'), findsNothing);

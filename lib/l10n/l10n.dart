@@ -9783,10 +9783,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Connection line`
+  /// `Default line`
   String get businessLineTitle {
     return Intl.message(
-      'Connection line',
+      'Default line',
       name: 'businessLineTitle',
       desc: '',
       args: [],
@@ -9823,10 +9823,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.`
+  /// `This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.`
   String get businessRoutingDesc {
     return Intl.message(
-      'Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.',
+      'This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.',
       name: 'businessRoutingDesc',
       desc: '',
       args: [],
@@ -9838,6 +9838,56 @@ class AppLocalizations {
     return Intl.message(
       'Change line',
       name: 'businessChooseLine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current node`
+  String get businessCurrentNode {
+    return Intl.message(
+      'Current node',
+      name: 'businessCurrentNode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smart routing is not active. This default line is not currently in effect.`
+  String get businessRuleModeRequired {
+    return Intl.message(
+      'Smart routing is not active. This default line is not currently in effect.',
+      name: 'businessRuleModeRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable smart routing`
+  String get businessEnableRules {
+    return Intl.message(
+      'Enable smart routing',
+      name: 'businessEnableRules',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not finish switching lines. Retry.`
+  String get businessLineFailed {
+    return Intl.message(
+      'Could not finish switching lines. Retry.',
+      name: 'businessLineFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The subscription or mode changed. Reopen line selection.`
+  String get businessSelectionStale {
+    return Intl.message(
+      'The subscription or mode changed. Reopen line selection.',
+      name: 'businessSelectionStale',
       desc: '',
       args: [],
     );

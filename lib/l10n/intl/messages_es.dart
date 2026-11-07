@@ -456,8 +456,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "brightness": MessageLookupByLibrary.simpleMessage("Brillo"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Cambiar línea"),
+    "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nodo actual"),
+    "businessEnableRules": MessageLookupByLibrary.simpleMessage(
+      "Activar enrutamiento inteligente",
+    ),
+    "businessLineFailed": MessageLookupByLibrary.simpleMessage(
+      "No se pudo completar el cambio. Reinténtalo.",
+    ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
-      "Línea de conexión",
+      "Línea predeterminada",
     ),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "No se han cargado líneas. Revisa tu suscripción.",
@@ -466,7 +473,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Cargando líneas disponibles…",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "El tráfico local prefiere la conexión directa. Las reglas de la suscripción eligen líneas proxy para el resto.",
+      "Solo cambia la línea predeterminada. La IA y el streaming conservan sus reglas, al igual que las conexiones directas y los bloqueos.",
+    ),
+    "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
+      "El enrutamiento inteligente no está activo. Esta línea predeterminada no se está usando.",
+    ),
+    "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
+      "La suscripción o el modo cambió. Abre de nuevo la selección.",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Enrutamiento inteligente",

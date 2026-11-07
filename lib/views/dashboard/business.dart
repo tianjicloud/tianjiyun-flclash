@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/default_line.dart';
 import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
@@ -186,10 +187,13 @@ class BusinessLineCard extends ConsumerWidget {
     final groups = policy.catalogReady
         ? ref.watch(groupsProvider)
         : const <Group>[];
-    final root = groups.where((group) => group.name == appName).firstOrNull;
-    final selected = root == null
-        ? null
-        : ref.watch(selectedProxyNameProvider(root.name));
+    final catalog = DefaultLineCatalog(groups);
+    final selections = ref.watch(selectedMapProvider);
+    final selected = catalog.selected(selections);
+    final node = catalog.currentNode(selections);
+    final mode = ref.watch(
+      patchClashConfigProvider.select((config) => config.mode),
+    );
     return DashboardCard(
       semanticLabel: strings.businessLineTitle,
       child: Column(
@@ -217,24 +221,136 @@ class BusinessLineCard extends ConsumerWidget {
             ),
           ] else ...[
             EmojiText(
-              selected?.isNotEmpty == true
-                  ? selected!
-                  : strings.businessSmartRouting,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              selected?.name ?? strings.businessSmartRouting,
               style: DashboardText.figure(context, AppTextStyle.title2),
             ),
+            if (mode == Mode.rule &&
+                node != null &&
+                node != selected?.name) ...[
+              Text(
+                strings.businessCurrentNode,
+                style: DashboardText.label(context),
+              ),
+              EmojiText(node, style: DashboardText.rowTitle(context)),
+            ],
             Text(
               strings.businessRoutingDesc,
               style: DashboardText.label(context),
             ),
-            FilledButton(
-              onPressed: () => showProxiesSheet(context, groupName: root?.name),
-              child: Text(strings.businessChooseLine),
-            ),
+            if (mode != Mode.rule) ...[
+              Text(
+                '${strings.outboundMode}: ${mode.label}',
+                style: DashboardText.rowTitle(context),
+              ),
+              Text(
+                strings.businessRuleModeRequired,
+                style: DashboardText.label(context),
+              ),
+              FilledButton(
+                onPressed: () => ref
+                    .read(patchClashConfigProvider.notifier)
+                    .update((state) => state.copyWith(mode: Mode.rule)),
+                child: Text(strings.businessEnableRules),
+              ),
+            ] else
+              FilledButton(
+                onPressed: catalog.root == null
+                    ? () => showProxiesSheet(context)
+                    : () => _showDefaultLineSheet(context),
+                child: Text(strings.businessChooseLine),
+              ),
           ],
         ],
       ),
+    );
+  }
+}
+
+Future<void> _showDefaultLineSheet(BuildContext context) {
+  final profile = ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(currentProfileProvider);
+  return showSheet<void>(
+    context: context,
+    builder: (_) =>
+        _DefaultLineSheet(profileId: profile?.id, url: profile?.url),
+  );
+}
+
+class _DefaultLineSheet extends ConsumerStatefulWidget {
+  const _DefaultLineSheet({required this.profileId, required this.url});
+
+  final int? profileId;
+  final String? url;
+
+  @override
+  ConsumerState<_DefaultLineSheet> createState() => _DefaultLineSheetState();
+}
+
+class _DefaultLineSheetState extends ConsumerState<_DefaultLineSheet> {
+  bool _applying = false;
+  bool _failed = false;
+
+  bool _matches(Profile? profile) =>
+      profile?.id == widget.profileId && profile?.url == widget.url;
+
+  Future<void> _select(DefaultLineChoice choice) async {
+    if (_applying || !_matches(ref.read(currentProfileProvider))) return;
+    setState(() {
+      _applying = true;
+      _failed = false;
+    });
+    var applied = false;
+    try {
+      applied = await ref
+          .read(proxiesActionProvider.notifier)
+          .changeDefaultLine(choice);
+      if (mounted && applied) Navigator.of(context).pop();
+    } catch (error) {
+      commonPrint.log(
+        'default line selection failed: ${compactError(error)}',
+        logLevel: coreFailureLogLevel(error),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _applying = false;
+          _failed = !applied;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.appLocalizations;
+    final profile = ref.watch(currentProfileProvider);
+    final valid =
+        _matches(profile) &&
+        ref
+            .watch(groupsSourceProfileProvider)
+            .matches(profile?.id, profile?.url) &&
+        ref.watch(patchClashConfigProvider.select((config) => config.mode)) ==
+            Mode.rule;
+    final catalog = DefaultLineCatalog(
+      valid ? ref.watch(groupsProvider) : const [],
+    );
+    final selected = catalog.selected(ref.watch(selectedMapProvider));
+    return SelectionSheet<DefaultLineChoice>(
+      title: _applying
+          ? strings.residentialApplying
+          : _failed
+          ? strings.businessLineFailed
+          : strings.businessChooseLine,
+      sections: [SelectionSection(items: catalog.choices)],
+      labelBuilder: (choice) => choice.name,
+      titleBuilder: (choice, _) => EmojiText(choice.name),
+      selectedOf: (_) => selected,
+      emptyLabel: valid
+          ? strings.businessLinesEmpty
+          : strings.businessSelectionStale,
+      onSelected: (choice) => unawaited(_select(choice)),
     );
   }
 }

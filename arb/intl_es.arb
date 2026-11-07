@@ -1149,10 +1149,15 @@
   "residentialLoadingCatalog": "Cargando líneas residenciales…",
   "residentialLoadingCatalogDesc": "Leyendo las líneas disponibles en tu suscripción.",
   "residentialCaptureOff": "No se está capturando el tráfico del equipo. Activa el proxy del sistema o TUN abajo.",
-  "businessLineTitle": "Línea de conexión",
+  "businessLineTitle": "Línea predeterminada",
   "businessLinesLoading": "Cargando líneas disponibles…",
   "businessLinesEmpty": "No se han cargado líneas. Revisa tu suscripción.",
   "businessSmartRouting": "Enrutamiento inteligente",
-  "businessRoutingDesc": "El tráfico local prefiere la conexión directa. Las reglas de la suscripción eligen líneas proxy para el resto.",
-  "businessChooseLine": "Cambiar línea"
+  "businessRoutingDesc": "Solo cambia la línea predeterminada. La IA y el streaming conservan sus reglas, al igual que las conexiones directas y los bloqueos.",
+  "businessChooseLine": "Cambiar línea",
+  "businessCurrentNode": "Nodo actual",
+  "businessRuleModeRequired": "El enrutamiento inteligente no está activo. Esta línea predeterminada no se está usando.",
+  "businessEnableRules": "Activar enrutamiento inteligente",
+  "businessLineFailed": "No se pudo completar el cambio. Reinténtalo.",
+  "businessSelectionStale": "La suscripción o el modo cambió. Abre de nuevo la selección."
 }

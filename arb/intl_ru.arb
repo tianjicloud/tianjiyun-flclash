@@ -1149,10 +1149,15 @@
   "residentialLoadingCatalog": "Загрузка домашних линий…",
   "residentialLoadingCatalogDesc": "Загрузка доступных линий из подписки.",
   "residentialCaptureOff": "Трафик компьютера не перехватывается. Включите системный прокси или TUN ниже.",
-  "businessLineTitle": "Линия подключения",
+  "businessLineTitle": "Линия по умолчанию",
   "businessLinesLoading": "Загрузка доступных линий…",
   "businessLinesEmpty": "Линии ещё не загружены. Проверьте подписку.",
   "businessSmartRouting": "Умная маршрутизация",
-  "businessRoutingDesc": "Для местного трафика предпочтительно прямое соединение. Для остального правила подписки выбирают прокси-линии.",
-  "businessChooseLine": "Сменить линию"
+  "businessRoutingDesc": "Меняется только линия по умолчанию. Правила ИИ, стриминга, прямых соединений и блокировок сохраняются.",
+  "businessChooseLine": "Сменить линию",
+  "businessCurrentNode": "Текущий узел",
+  "businessRuleModeRequired": "Умная маршрутизация выключена. Эта линия по умолчанию сейчас не применяется.",
+  "businessEnableRules": "Включить умную маршрутизацию",
+  "businessLineFailed": "Не удалось завершить переключение. Повторите попытку.",
+  "businessSelectionStale": "Подписка или режим изменились. Откройте выбор линии заново."
 }

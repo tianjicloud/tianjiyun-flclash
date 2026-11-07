@@ -1149,10 +1149,15 @@
   "residentialLoadingCatalog": "正在加载家宽线路…",
   "residentialLoadingCatalogDesc": "正在读取订阅中的可用线路。",
   "residentialCaptureOff": "尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。",
-  "businessLineTitle": "连接线路",
+  "businessLineTitle": "默认线路",
   "businessLinesLoading": "正在读取可用线路…",
   "businessLinesEmpty": "暂未读取到可用线路，请检查订阅。",
   "businessSmartRouting": "智能分流",
-  "businessRoutingDesc": "国内访问优先直连，其他访问按订阅规则选择代理线路。",
-  "businessChooseLine": "更换线路"
+  "businessRoutingDesc": "此处只更改默认线路；AI、流媒体等仍按各自规则分流，直连和拦截规则保持不变。",
+  "businessChooseLine": "更换线路",
+  "businessCurrentNode": "当前节点",
+  "businessRuleModeRequired": "当前未使用智能分流，这里的默认线路暂不生效。",
+  "businessEnableRules": "启用智能分流",
+  "businessLineFailed": "未能完成线路切换，请重试",
+  "businessSelectionStale": "订阅或模式已变化，请重新打开线路选择。"
 }

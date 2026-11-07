@@ -1149,10 +1149,15 @@
   "residentialLoadingCatalog": "주거용 회선을 불러오는 중…",
   "residentialLoadingCatalogDesc": "구독에서 사용 가능한 회선을 불러오는 중입니다.",
   "residentialCaptureOff": "컴퓨터 트래픽을 처리하고 있지 않습니다. 아래에서 시스템 프록시 또는 TUN을 켜세요.",
-  "businessLineTitle": "연결 회선",
+  "businessLineTitle": "기본 회선",
   "businessLinesLoading": "사용 가능한 회선을 불러오는 중…",
   "businessLinesEmpty": "회선을 불러오지 못했습니다. 구독을 확인하세요.",
   "businessSmartRouting": "스마트 라우팅",
-  "businessRoutingDesc": "국내 트래픽은 직접 연결을 우선하며, 나머지는 구독 규칙에 따라 프록시 회선을 선택합니다.",
-  "businessChooseLine": "회선 변경"
+  "businessRoutingDesc": "기본 회선만 변경합니다. AI·스트리밍의 개별 규칙과 직접 연결·차단 규칙은 유지됩니다.",
+  "businessChooseLine": "회선 변경",
+  "businessCurrentNode": "현재 노드",
+  "businessRuleModeRequired": "스마트 라우팅이 비활성화되어 이 기본 회선은 현재 적용되지 않습니다.",
+  "businessEnableRules": "스마트 라우팅 활성화",
+  "businessLineFailed": "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
+  "businessSelectionStale": "구독 또는 모드가 변경되었습니다. 회선 선택을 다시 여세요."
 }

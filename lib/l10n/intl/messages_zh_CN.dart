@@ -350,13 +350,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body 重写"),
     "brightness": MessageLookupByLibrary.simpleMessage("亮度"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("更换线路"),
-    "businessLineTitle": MessageLookupByLibrary.simpleMessage("连接线路"),
+    "businessCurrentNode": MessageLookupByLibrary.simpleMessage("当前节点"),
+    "businessEnableRules": MessageLookupByLibrary.simpleMessage("启用智能分流"),
+    "businessLineFailed": MessageLookupByLibrary.simpleMessage("未能完成线路切换，请重试"),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage("默认线路"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "暂未读取到可用线路，请检查订阅。",
     ),
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage("正在读取可用线路…"),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "国内访问优先直连，其他访问按订阅规则选择代理线路。",
+      "此处只更改默认线路；AI、流媒体等仍按各自规则分流，直连和拦截规则保持不变。",
+    ),
+    "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
+      "当前未使用智能分流，这里的默认线路暂不生效。",
+    ),
+    "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
+      "订阅或模式已变化，请重新打开线路选择。",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("智能分流"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("排除域名"),

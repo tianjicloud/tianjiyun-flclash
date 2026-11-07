@@ -159,7 +159,7 @@ void main() {
           find.byType(ResidentialExitCard),
           residential ? findsOneWidget : findsNothing,
         );
-        if (!residential) expect(find.text('连接线路'), findsOneWidget);
+        if (!residential) expect(find.text('默认线路'), findsOneWidget);
         expect(
           find.text('尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。'),
           captureOff ? findsOneWidget : findsNothing,

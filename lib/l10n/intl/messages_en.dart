@@ -423,9 +423,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body rewrite"),
     "brightness": MessageLookupByLibrary.simpleMessage("Brightness"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
-    "businessLineTitle": MessageLookupByLibrary.simpleMessage(
-      "Connection line",
+    "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Current node"),
+    "businessEnableRules": MessageLookupByLibrary.simpleMessage(
+      "Enable smart routing",
     ),
+    "businessLineFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not finish switching lines. Retry.",
+    ),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage("Default line"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "No lines loaded yet. Check your subscription.",
     ),
@@ -433,7 +438,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Loading available lines…",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.",
+      "This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.",
+    ),
+    "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
+      "Smart routing is not active. This default line is not currently in effect.",
+    ),
+    "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
+      "The subscription or mode changed. Reopen line selection.",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Smart routing",

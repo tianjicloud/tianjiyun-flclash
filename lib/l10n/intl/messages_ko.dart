@@ -360,7 +360,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("본문 재작성"),
     "brightness": MessageLookupByLibrary.simpleMessage("밝기"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
-    "businessLineTitle": MessageLookupByLibrary.simpleMessage("연결 회선"),
+    "businessCurrentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
+    "businessEnableRules": MessageLookupByLibrary.simpleMessage("스마트 라우팅 활성화"),
+    "businessLineFailed": MessageLookupByLibrary.simpleMessage(
+      "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
+    ),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage("기본 회선"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "회선을 불러오지 못했습니다. 구독을 확인하세요.",
     ),
@@ -368,7 +373,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "사용 가능한 회선을 불러오는 중…",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "국내 트래픽은 직접 연결을 우선하며, 나머지는 구독 규칙에 따라 프록시 회선을 선택합니다.",
+      "기본 회선만 변경합니다. AI·스트리밍의 개별 규칙과 직접 연결·차단 규칙은 유지됩니다.",
+    ),
+    "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
+      "스마트 라우팅이 비활성화되어 이 기본 회선은 현재 적용되지 않습니다.",
+    ),
+    "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
+      "구독 또는 모드가 변경되었습니다. 회선 선택을 다시 여세요.",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("스마트 라우팅"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("우회 도메인"),

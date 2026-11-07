@@ -441,8 +441,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Перезапись тела"),
     "brightness": MessageLookupByLibrary.simpleMessage("Яркость"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
+    "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Текущий узел"),
+    "businessEnableRules": MessageLookupByLibrary.simpleMessage(
+      "Включить умную маршрутизацию",
+    ),
+    "businessLineFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось завершить переключение. Повторите попытку.",
+    ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
-      "Линия подключения",
+      "Линия по умолчанию",
     ),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "Линии ещё не загружены. Проверьте подписку.",
@@ -451,7 +458,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Загрузка доступных линий…",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "Для местного трафика предпочтительно прямое соединение. Для остального правила подписки выбирают прокси-линии.",
+      "Меняется только линия по умолчанию. Правила ИИ, стриминга, прямых соединений и блокировок сохраняются.",
+    ),
+    "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
+      "Умная маршрутизация выключена. Эта линия по умолчанию сейчас не применяется.",
+    ),
+    "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
+      "Подписка или режим изменились. Откройте выбор линии заново.",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Умная маршрутизация",

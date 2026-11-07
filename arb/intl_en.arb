@@ -1149,10 +1149,15 @@
   "residentialLoadingCatalog": "Loading residential lines…",
   "residentialLoadingCatalogDesc": "Reading the available lines in your subscription.",
   "residentialCaptureOff": "Computer traffic is not being captured. Enable System proxy or TUN below.",
-  "businessLineTitle": "Connection line",
+  "businessLineTitle": "Default line",
   "businessLinesLoading": "Loading available lines…",
   "businessLinesEmpty": "No lines loaded yet. Check your subscription.",
   "businessSmartRouting": "Smart routing",
-  "businessRoutingDesc": "Local traffic prefers a direct connection. Subscription rules choose proxy lines for other traffic.",
-  "businessChooseLine": "Change line"
+  "businessRoutingDesc": "This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.",
+  "businessChooseLine": "Change line",
+  "businessCurrentNode": "Current node",
+  "businessRuleModeRequired": "Smart routing is not active. This default line is not currently in effect.",
+  "businessEnableRules": "Enable smart routing",
+  "businessLineFailed": "Could not finish switching lines. Retry.",
+  "businessSelectionStale": "The subscription or mode changed. Reopen line selection."
 }

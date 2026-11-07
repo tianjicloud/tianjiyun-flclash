@@ -1149,10 +1149,15 @@
   "residentialLoadingCatalog": "Chargement des lignes résidentielles…",
   "residentialLoadingCatalogDesc": "Lecture des lignes disponibles dans votre abonnement.",
   "residentialCaptureOff": "Le trafic de l’ordinateur n’est pas pris en charge. Activez le proxy système ou TUN ci-dessous.",
-  "businessLineTitle": "Ligne de connexion",
+  "businessLineTitle": "Ligne par défaut",
   "businessLinesLoading": "Chargement des lignes disponibles…",
   "businessLinesEmpty": "Aucune ligne chargée. Vérifiez votre abonnement.",
   "businessSmartRouting": "Routage intelligent",
-  "businessRoutingDesc": "Le trafic local privilégie une connexion directe. Les règles de l’abonnement choisissent les lignes proxy pour le reste.",
-  "businessChooseLine": "Changer de ligne"
+  "businessRoutingDesc": "Seule la ligne par défaut change. L’IA et le streaming conservent leurs règles, ainsi que les connexions directes et les blocages.",
+  "businessChooseLine": "Changer de ligne",
+  "businessCurrentNode": "Nœud actuel",
+  "businessRuleModeRequired": "Le routage intelligent est désactivé. Cette ligne par défaut n’est pas utilisée actuellement.",
+  "businessEnableRules": "Activer le routage intelligent",
+  "businessLineFailed": "Le changement de ligne a échoué. Réessayez.",
+  "businessSelectionStale": "L’abonnement ou le mode a changé. Rouvrez la sélection."
 }

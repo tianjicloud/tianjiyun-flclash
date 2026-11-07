@@ -38,6 +38,7 @@ class ProxiesAction extends _$ProxiesAction {
   final List<String> _bufferedFinishes = [];
 
   Timer? _delayFlushTimer;
+  bool _changingDefaultLine = false;
 
   final Map<String, String> _pendingSelectedRollback = {};
 
@@ -242,6 +243,65 @@ class ProxiesAction extends _$ProxiesAction {
         'changeProxy($groupName -> $proxyName) connection reset failed: $error',
         logLevel: coreFailureLogLevel(error),
       );
+    }
+  }
+
+  Future<bool> changeDefaultLine(DefaultLineChoice choice) async {
+    if (_changingDefaultLine) return false;
+    final profile = ref.read(currentProfileProvider);
+    if (profile == null) return false;
+    final catalog = DefaultLineCatalog(ref.read(groupsProvider));
+    final root = catalog.root;
+    if (root == null || !catalog.choices.contains(choice)) return false;
+    bool isCurrent() {
+      if (!ref.mounted) return false;
+      final current = ref.read(currentProfileProvider);
+      final latestCatalog = DefaultLineCatalog(ref.read(groupsProvider));
+      return current?.id == profile.id &&
+          current?.url == profile.url &&
+          !isResidentialPolicyActive(current) &&
+          ref.read(patchClashConfigProvider).mode == Mode.rule &&
+          ref
+              .read(groupsSourceProfileProvider)
+              .matches(profile.id, profile.url) &&
+          latestCatalog.root?.name == root.name &&
+          latestCatalog.choices.contains(choice);
+    }
+
+    if (!isCurrent()) return false;
+    _changingDefaultLine = true;
+    try {
+      final changes = [
+        if (choice.selector case final selector?) (selector, choice.name),
+        (root.name, choice.rootTarget),
+      ];
+      for (final (group, target) in changes) {
+        if (!isCurrent()) return false;
+        final result = await _core.changeProxy(
+          ChangeProxyParams(groupName: group, proxyName: target),
+        );
+        if (result.message.isNotEmpty) throw MessageException(result.message);
+        if (!isCurrent()) return false;
+        ref
+            .read(profilesActionProvider.notifier)
+            .updateCurrentSelectedMap(group, target);
+      }
+      await _core.closeConnections();
+      return isCurrent();
+    } catch (error) {
+      commonPrint.log(
+        'default line change failed: ${compactError(error)}',
+        logLevel: coreFailureLogLevel(error),
+      );
+      if (isCurrent()) {
+        dialogs.showBanner(
+          currentAppLocalizations.businessLineFailed,
+          level: BannerLevel.error,
+        );
+      }
+      return false;
+    } finally {
+      _changingDefaultLine = false;
     }
   }
 

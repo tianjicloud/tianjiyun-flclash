@@ -364,7 +364,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("ボディ書き換え"),
     "brightness": MessageLookupByLibrary.simpleMessage("明度"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
-    "businessLineTitle": MessageLookupByLibrary.simpleMessage("接続回線"),
+    "businessCurrentNode": MessageLookupByLibrary.simpleMessage("現在のノード"),
+    "businessEnableRules": MessageLookupByLibrary.simpleMessage(
+      "スマートルーティングを有効化",
+    ),
+    "businessLineFailed": MessageLookupByLibrary.simpleMessage(
+      "回線の切り替えを完了できませんでした。再試行してください。",
+    ),
+    "businessLineTitle": MessageLookupByLibrary.simpleMessage("既定の回線"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "回線が読み込まれていません。サブスクリプションを確認してください。",
     ),
@@ -372,7 +379,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "利用可能な回線を読み込み中…",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "国内通信は直接接続を優先し、その他の通信はサブスクリプションのルールで回線を選択します。",
+      "既定の回線のみ変更します。AI・動画などの個別ルール、直接接続、ブロックのルールは維持します。",
+    ),
+    "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
+      "スマートルーティングが無効のため、この既定の回線は現在適用されていません。",
+    ),
+    "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションまたはモードが変わりました。回線選択を開き直してください。",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("スマートルーティング"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("除外ドメイン"),
