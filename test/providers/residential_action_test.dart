@@ -53,9 +53,7 @@ void main() {
     setup = _ControlledSetupAction();
     container = ProviderContainer(
       overrides: [
-        profilesProvider.overrideWith(
-          () => TestProfiles([first, second]),
-        ),
+        profilesProvider.overrideWith(() => TestProfiles([first, second])),
         setupActionProvider.overrideWith(() => setup),
         coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
       ],
@@ -70,23 +68,26 @@ void main() {
 
   Profile profile(int id) => container.read(profilesProvider).getProfile(id)!;
 
-  test('select persists the identity choice and closes old connections', () async {
-    final applied = await action().select('Tokyo');
+  test(
+    'select persists the identity choice and closes old connections',
+    () async {
+      final applied = await action().select('Tokyo');
 
-    expect(applied, isTrue);
-    final current = profile(first.id);
-    expect(current.overrides.residentialExit, 'Tokyo');
-    expect(
-      current.overrides.residentialSubscriptionFingerprint,
-      resolveTianjiProfile(first)!.fingerprint,
-    );
-    final state = container.read(residentialActionProvider);
-    expect(state.applying, isFalse);
-    expect(state.failed, isFalse);
-    verify(() => core.closeConnections()).called(1);
-    verify(() => core.resetConnections()).called(1);
-    expect(setup.calls.single.force, isTrue);
-  });
+      expect(applied, isTrue);
+      final current = profile(first.id);
+      expect(current.overrides.residentialExit, 'Tokyo');
+      expect(
+        current.overrides.residentialSubscriptionFingerprint,
+        resolveTianjiProfile(first)!.fingerprint,
+      );
+      final state = container.read(residentialActionProvider);
+      expect(state.applying, isFalse);
+      expect(state.failed, isFalse);
+      verify(() => core.closeConnections()).called(1);
+      verify(() => core.resetConnections()).called(1);
+      expect(setup.calls.single.force, isTrue);
+    },
+  );
 
   test('a failed apply keeps the attempted target for retry', () async {
     var attempts = 0;
@@ -110,14 +111,16 @@ void main() {
 
   test('retry remembers a failed clear instead of the old target', () async {
     final fingerprint = resolveTianjiProfile(first)!.fingerprint;
-    container.read(profilesProvider.notifier).put(
-      first.copyWith(
-        overrides: ProfileOverrides(
-          residentialExit: 'Tokyo',
-          residentialSubscriptionFingerprint: fingerprint,
-        ),
-      ),
-    );
+    container
+        .read(profilesProvider.notifier)
+        .put(
+          first.copyWith(
+            overrides: ProfileOverrides(
+              residentialExit: 'Tokyo',
+              residentialSubscriptionFingerprint: fingerprint,
+            ),
+          ),
+        );
     var attempts = 0;
     setup.handler = () async => ++attempts > 1;
 
@@ -145,7 +148,10 @@ void main() {
     final newer = action().select('Hong Kong');
     secondApply.complete(true);
     expect(await newer, isTrue);
-    expect(container.read(residentialActionProvider).attemptedExit, 'Hong Kong');
+    expect(
+      container.read(residentialActionProvider).attemptedExit,
+      'Hong Kong',
+    );
 
     firstApply.complete(true);
     expect(await older, isFalse);
@@ -156,19 +162,22 @@ void main() {
     verify(() => core.closeConnections()).called(1);
   });
 
-  test('switching profile during apply writes only the original profile', () async {
-    final apply = Completer<bool>();
-    setup.handler = () => apply.future;
+  test(
+    'switching profile during apply writes only the original profile',
+    () async {
+      final apply = Completer<bool>();
+      setup.handler = () => apply.future;
 
-    final future = action().select('Tokyo');
-    container.read(currentProfileIdProvider.notifier).value = second.id;
-    apply.complete(true);
-    expect(await future, isFalse);
+      final future = action().select('Tokyo');
+      container.read(currentProfileIdProvider.notifier).value = second.id;
+      apply.complete(true);
+      expect(await future, isFalse);
 
-    expect(profile(first.id).overrides.residentialExit, 'Tokyo');
-    expect(profile(second.id).overrides.residentialExit, isNull);
-    final state = container.read(residentialActionProvider);
-    expect(state.profileId, first.id);
-    verifyNever(() => core.closeConnections());
-  });
+      expect(profile(first.id).overrides.residentialExit, 'Tokyo');
+      expect(profile(second.id).overrides.residentialExit, isNull);
+      final state = container.read(residentialActionProvider);
+      expect(state.profileId, first.id);
+      verifyNever(() => core.closeConnections());
+    },
+  );
 }

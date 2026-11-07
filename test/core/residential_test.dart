@@ -90,7 +90,7 @@ void main() {
     expect(locked['hidden'], isTrue);
     expect(
       (groups.firstWhere((group) => (group as Map)['name'] == 'Tokyo')
-              as Map)['proxies'],
+          as Map)['proxies'],
       ['Tokyo transport'],
     );
     expect(source['mode'], 'global');
@@ -107,26 +107,25 @@ void main() {
         config: _config(rules: rules),
         selectedExit: 'Hong Kong',
       );
-      expect((result.config['rules'] as List).last,
-          'MATCH,$tianjiResidentialLockedGroupName');
+      expect(
+        (result.config['rules'] as List).last,
+        'MATCH,$tianjiResidentialLockedGroupName',
+      );
     }
   });
 
   test('sub-rule jumps stay jumps and their targets follow the exit', () {
-    final source = _config(
-      rules: [
-        'SUB-RULE,(NETWORK,tcp),children',
-        'MATCH,Default',
-      ],
-    )..['sub-rules'] = {
-      'children': [
-        'DOMAIN,blocked.test,REJECT',
-        'DOMAIN,direct.test,DIRECT',
-        'DOMAIN,ai.test,AI',
-        'SUB-RULE,(DST-PORT,53),other',
-      ],
-      'other': ['DOMAIN,dns.test,Default'],
-    };
+    final source =
+        _config(rules: ['SUB-RULE,(NETWORK,tcp),children', 'MATCH,Default'])
+          ..['sub-rules'] = {
+            'children': [
+              'DOMAIN,blocked.test,REJECT',
+              'DOMAIN,direct.test,DIRECT',
+              'DOMAIN,ai.test,AI',
+              'SUB-RULE,(DST-PORT,53),other',
+            ],
+            'other': ['DOMAIN,dns.test,Default'],
+          };
 
     final result = applyResidentialEgress(
       config: source,
@@ -158,8 +157,7 @@ void main() {
     expect(result.missingExit, isTrue);
     final locked = (result.config['proxy-groups'] as List).last as Map;
     expect(locked['proxies'], ['REJECT']);
-    expect(result.config['rules'],
-        ['MATCH,$tianjiResidentialLockedGroupName']);
+    expect(result.config['rules'], ['MATCH,$tianjiResidentialLockedGroupName']);
   });
 
   test('choices are direct root members on safe proxy chains', () {
@@ -177,19 +175,14 @@ void main() {
   test('unsupported shapes and reserved name collisions are refused', () {
     final badRules = _config()..['rules'] = 'MATCH,Default';
     expect(
-      () => applyResidentialEgress(
-        config: badRules,
-        selectedExit: 'Tokyo',
-      ),
+      () => applyResidentialEgress(config: badRules, selectedExit: 'Tokyo'),
       throwsA(isA<ResidentialConfigException>()),
     );
 
     final unknownTarget = _config(rules: ['DOMAIN,a.test,Missing']);
     expect(
-      () => applyResidentialEgress(
-        config: unknownTarget,
-        selectedExit: 'Tokyo',
-      ),
+      () =>
+          applyResidentialEgress(config: unknownTarget, selectedExit: 'Tokyo'),
       throwsA(isA<ResidentialConfigException>()),
     );
 
@@ -200,10 +193,7 @@ void main() {
       'proxies': ['home-a'],
     });
     expect(
-      () => applyResidentialEgress(
-        config: collision,
-        selectedExit: 'Tokyo',
-      ),
+      () => applyResidentialEgress(config: collision, selectedExit: 'Tokyo'),
       throwsA(isA<ResidentialConfigException>()),
     );
   });

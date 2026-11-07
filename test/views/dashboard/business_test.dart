@@ -98,26 +98,19 @@ void main() {
       find.textContaining('service-side alternative exit'),
       findsOneWidget,
     );
-    expect(
-      find.textContaining('current check destination'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('current check destination'), findsOneWidget);
   });
 
   testWidgets('a missing exit fails closed and says so', (tester) async {
     await tester.pumpWidget(
-      _app(
-        _policy(
-          active: true,
-          choices: const [],
-          configured: 'Tokyo',
-        ),
-      ),
+      _app(_policy(active: true, choices: const [], configured: 'Tokyo')),
     );
     await tester.pump();
 
     expect(
-      find.text('The selected residential exit is no longer in this subscription.'),
+      find.text(
+        'The selected residential exit is no longer in this subscription.',
+      ),
       findsOneWidget,
     );
     expect(find.textContaining('Proxy traffic is blocked'), findsOneWidget);

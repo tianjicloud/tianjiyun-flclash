@@ -25,10 +25,7 @@ const _commaPayloadActions = {
 enum ResidentialExitState { applied, missingExit }
 
 class ResidentialTransformResult {
-  const ResidentialTransformResult({
-    required this.config,
-    required this.state,
-  });
+  const ResidentialTransformResult({required this.config, required this.state});
 
   final Map<String, dynamic> config;
   final ResidentialExitState state;
@@ -148,10 +145,7 @@ class ResidentialGraph {
   }
 
   bool safeGroup(String name) {
-    return _safeGroups.putIfAbsent(
-      name,
-      () => _safeGroup(name, <String>{}),
-    );
+    return _safeGroups.putIfAbsent(name, () => _safeGroup(name, <String>{}));
   }
 
   bool isProxyTarget(String target) {

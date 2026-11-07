@@ -5,11 +5,7 @@ import 'package:fl_clash/providers/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GroupsCatalogSource {
-  const GroupsCatalogSource({
-    this.profileId,
-    this.url,
-    this.loaded = false,
-  });
+  const GroupsCatalogSource({this.profileId, this.url, this.loaded = false});
 
   final int? profileId;
   final String? url;
