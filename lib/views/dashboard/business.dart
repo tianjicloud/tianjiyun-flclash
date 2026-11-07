@@ -247,15 +247,16 @@ class _ControlBar extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final tileWidth = constraints.maxWidth >= 900 ? 230.0 : 190.0;
-          return Row(
+          return Wrap(
             spacing: 16,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
                 context.appLocalizations.outboundMode,
                 style: DashboardText.cardTitle(context),
               ),
               const OutboundModeInline(),
-              const Spacer(),
               for (final tile in tiles)
                 SizedBox(width: tileWidth, height: 56, child: tile),
             ],
