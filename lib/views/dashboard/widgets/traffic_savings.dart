@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/traffic/model.dart';
 import 'package:fl_clash/providers/traffic.dart';
@@ -21,6 +23,56 @@ class TrafficSavingsCard extends ConsumerWidget {
       child: ValueListenableBuilder<TrafficSummary>(
         valueListenable: service.summary,
         builder: (context, summary, _) {
+          if (BusinessTheme.of(context)) {
+            final total = summary.monthMainlandDirect + summary.monthProxy;
+            final value = total == 0
+                ? 0.0
+                : summary.monthMainlandDirect / total;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 12,
+              children: [
+                DashboardCardHeader(
+                  glyph: AppGlyphs.dataUsage,
+                  title: appLocalizations.trafficStats,
+                ),
+                Center(
+                  child: SizedBox.square(
+                    dimension: 112,
+                    child: CustomPaint(
+                      painter: _SavingsRing(
+                        value: value,
+                        color: context.colorScheme.primary,
+                        track: DashboardColors.of(context).tone2,
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: _TrafficStat(
+                            label: appLocalizations.trafficSavedThisMonth,
+                            bytes: summary.monthSavings,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                _TrafficStat(
+                  label: appLocalizations.mainlandDirect,
+                  bytes: summary.monthMainlandDirect,
+                ),
+                _TrafficStat(
+                  label: appLocalizations.vpnTraffic,
+                  bytes: summary.monthProxy,
+                ),
+                Text(
+                  appLocalizations.trafficStatsScope,
+                  style: DashboardText.label(context),
+                ),
+              ],
+            );
+          }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -97,4 +149,38 @@ class _TrafficStat extends StatelessWidget {
       ],
     );
   }
+}
+
+class _SavingsRing extends CustomPainter {
+  const _SavingsRing({
+    required this.value,
+    required this.color,
+    required this.track,
+  });
+
+  final double value;
+  final Color color;
+  final Color track;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = (Offset.zero & size).deflate(5);
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8;
+    canvas.drawArc(rect, 0, math.pi * 2, false, paint..color = track);
+    canvas.drawArc(
+      rect,
+      -math.pi / 2,
+      math.pi * 2 * value,
+      false,
+      paint..color = color,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_SavingsRing oldDelegate) =>
+      value != oldDelegate.value ||
+      color != oldDelegate.color ||
+      track != oldDelegate.track;
 }

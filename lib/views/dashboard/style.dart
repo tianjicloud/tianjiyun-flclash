@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:intl/intl.dart' show NumberFormat;
 import 'package:flutter/widgets.dart';
@@ -23,6 +24,8 @@ class DashboardColors {
   factory DashboardColors.of(BuildContext context) {
     final colorScheme = context.colorScheme;
     final card = SurfaceLevel.card.colorOf(colorScheme);
+    final business = BusinessTheme.of(context);
+    final businessDark = business && colorScheme.brightness == Brightness.dark;
     return DashboardColors._(
       page: SurfaceLevel.page.colorOf(colorScheme),
       card: card,
@@ -34,12 +37,29 @@ class DashboardColors {
         colorScheme.primary.withValues(alpha: 0.45),
         card,
       ),
-      ok: colorScheme.success,
-      okContainer: colorScheme.successContainer,
-      onOkContainer: colorScheme.onSuccessContainer,
-      warn: colorScheme.warning,
-      warnContainer: colorScheme.warningContainer,
-      onWarnContainer: colorScheme.onWarningContainer,
+      ok: businessDark ? BusinessPalette.connected : colorScheme.success,
+      okContainer: business
+          ? Color.alphaBlend(
+              BusinessPalette.connected.withValues(alpha: 0.12),
+              card,
+            )
+          : colorScheme.successContainer,
+      onOkContainer: business
+          ? businessDark
+                ? BusinessPalette.connected
+                : Color.lerp(
+                    BusinessPalette.connected,
+                    BusinessPalette.page,
+                    0.65,
+                  )!
+          : colorScheme.onSuccessContainer,
+      warn: businessDark ? BusinessPalette.warning : colorScheme.warning,
+      warnContainer: businessDark
+          ? BusinessPalette.warning.withValues(alpha: 0.12)
+          : colorScheme.warningContainer,
+      onWarnContainer: businessDark
+          ? BusinessPalette.warning
+          : colorScheme.onWarningContainer,
     );
   }
 

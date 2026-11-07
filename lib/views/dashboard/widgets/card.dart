@@ -3,6 +3,7 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -56,7 +57,21 @@ class DashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final density = DashboardDensityScope.of(context);
-    final shape = AppShape.all(dashboardCardRadius(density));
+    final business = BusinessTheme.of(context);
+    final shape = AppShape.all(
+      business ? BusinessPalette.cardRadius : dashboardCardRadius(density),
+    );
+    final border = side != BorderSide.none
+        ? side
+        : business
+        ? BorderSide(
+            color:
+                (Theme.brightnessOf(context) == Brightness.dark
+                        ? Colors.white
+                        : BusinessPalette.blue)
+                    .withValues(alpha: 0.075),
+          )
+        : BorderSide.none;
     final content = Padding(
       padding: padding ?? dashboardCardPadding(density),
       child: child,
@@ -65,13 +80,15 @@ class DashboardCard extends StatelessWidget {
     final card = Container(
       clipBehavior: clipBehavior,
       decoration: ShapeDecoration(
-        color: DashboardColors.of(context).card,
+        color: business && Theme.brightnessOf(context) == Brightness.dark
+            ? Colors.white.withValues(alpha: 0.04)
+            : DashboardColors.of(context).card,
         shape: shape,
-        shadows: DashboardShadows.e1(context),
+        shadows: business ? const [] : DashboardShadows.e1(context),
       ),
-      foregroundDecoration: side == BorderSide.none
+      foregroundDecoration: border == BorderSide.none
           ? null
-          : ShapeDecoration(shape: shape.copyWith(side: side)),
+          : ShapeDecoration(shape: shape.copyWith(side: border)),
       child: onTap == null
           ? content
           : PressSurface(
@@ -410,7 +427,12 @@ class DashboardConnectedButton extends StatelessWidget {
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: Color.lerp(background, colorScheme.primary, amount),
+                  color: BusinessTheme.of(context) && selected
+                      ? null
+                      : Color.lerp(background, colorScheme.primary, amount),
+                  gradient: BusinessTheme.of(context) && selected
+                      ? BusinessPalette.gradient
+                      : null,
                   shape: shape,
                 ),
                 child: PressRegion(
@@ -457,7 +479,11 @@ class DashboardChip extends StatelessWidget {
       DashboardChipTone.warn => (colors.warnContainer, colors.onWarnContainer),
     };
     return Container(
-      height: large ? 28 : 24,
+      height:
+          (large ? 28.0 : 24.0) *
+          (BusinessTheme.of(context)
+              ? DashboardDensityScope.scaleOf(context)
+              : 1),
       padding: EdgeInsets.symmetric(horizontal: large ? 12 : 10),
       decoration: ShapeDecoration(color: background, shape: AppShape.full),
       child: Row(

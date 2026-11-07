@@ -6,6 +6,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/views/profiles/custom/custom.dart';
@@ -135,6 +136,47 @@ class ProfilesCard extends ConsumerWidget {
           ),
       ],
     );
+    if (BusinessTheme.of(context)) {
+      return DashboardCard(
+        semanticLabel: cardTitle,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 12,
+          children: [
+            DashboardCardHeader(
+              glyph: AppGlyphs.profiles,
+              title: cardTitle,
+              trailing: [?sync],
+            ),
+            nameRow,
+            if (expiry != null) ...[
+              Text(
+                appLocalizations.profileDaysLeft(_daysLeft(expiry)),
+                style: DashboardText.figure(
+                  context,
+                  AppTextStyle.title2,
+                  color: _daysLeft(expiry) <= _soonDays
+                      ? DashboardColors.of(context).warn
+                      : null,
+                ),
+              ),
+              Text(_expiryText(context, expiry), style: label),
+            ],
+            if (usage != null)
+              _UsageMeter(usage: usage, figure: figure, gap: 8),
+            TextButton(
+              onPressed: () => _openProfile(context, profile),
+              child: Text(appLocalizations.details(cardTitle)),
+            ),
+            TextButton(
+              onPressed: () => dialogs.openUrl(userPanelUrl),
+              child: Text(appLocalizations.residentialManageSubscription),
+            ),
+          ],
+        ),
+      );
+    }
     return DashboardCard(
       semanticLabel: cardTitle,
       onTap: mobile || profile == null
@@ -444,4 +486,65 @@ class _WavyProgressPainter extends CustomPainter {
       oldDelegate.value != value ||
       oldDelegate.active != active ||
       oldDelegate.track != track;
+}
+
+class BusinessSubscriptionStatus extends ConsumerWidget {
+  const BusinessSubscriptionStatus({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(currentProfileProvider);
+    final expiry = _expiryOf(profile);
+    final updated = profile?.lastUpdateDate;
+    final running = ref.watch(isStartProvider);
+    final suspended = ref.watch(suspendProvider);
+    final strings = context.appLocalizations;
+    final connecting = ref.watch(coreStatusProvider) == CoreStatus.connecting;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 12,
+      children: [
+        Wrap(
+          spacing: 12,
+          runSpacing: 8,
+          alignment: WrapAlignment.end,
+          children: [
+            if (updated != null)
+              Text(
+                strings.profileUpdatedAt(
+                  updated.getLastUpdateTimeDesc(context),
+                ),
+                style: DashboardText.label(context),
+              ),
+            DashboardChip(
+              label: connecting
+                  ? strings.connecting
+                  : suspended
+                  ? strings.suspended
+                  : running
+                  ? strings.running
+                  : strings.notRunning,
+              tone: connecting
+                  ? DashboardChipTone.warn
+                  : suspended
+                  ? DashboardChipTone.warn
+                  : running
+                  ? DashboardChipTone.ok
+                  : DashboardChipTone.idle,
+              dot: running,
+            ),
+          ],
+        ),
+        if (expiry != null && _daysLeft(expiry) <= 7)
+          DashboardCard(
+            child: Text(
+              _expiryText(context, expiry),
+              style: DashboardText.rowTitle(
+                context,
+              ).copyWith(color: DashboardColors.of(context).warn),
+            ),
+          ),
+      ],
+    );
+  }
 }

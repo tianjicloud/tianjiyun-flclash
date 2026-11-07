@@ -11,6 +11,7 @@ import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/probe_start_hold.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
@@ -96,6 +97,68 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         : isStart
         ? (appLocalizations.running, DashboardChipTone.ok)
         : (appLocalizations.notRunning, DashboardChipTone.idle);
+    if (BusinessTheme.of(context)) {
+      final details = Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 20,
+        children: [
+          DashboardCardHeader(
+            glyph: AppGlyphs.status,
+            title: appLocalizations.status,
+            leading: [
+              DashboardChip(label: chipLabel, tone: chipTone, dot: isStart),
+            ],
+          ),
+          _ExitRow(
+            info: ipInfo,
+            failed: failed,
+            loading: loading,
+            checking: phase == ProbePhase.probing || qualityLoading,
+            onRefresh: () => _refresh(ipInfo?.ip),
+            quality: quality,
+            active: isStart,
+            metrics: metrics,
+            large: true,
+          ),
+          _Cells(
+            quality: quality,
+            loading: loading,
+            active: isStart && !suspended,
+            gap: metrics.cellGap,
+          ),
+          _BusinessMetrics(
+            active: isStart && !suspended,
+            exit: phase == ProbePhase.fresh
+                ? entry.stamp?.hits.firstOrNull?.exit
+                : null,
+          ),
+        ],
+      );
+      final toggle = _StartToggle(
+        size: 208,
+        enabled: hasProfile,
+        running: isStart,
+        suspended: suspended,
+      );
+      return DashboardCard(
+        semanticLabel: rootAccess
+            ? '${appLocalizations.status} ${appLocalizations.root}'
+            : appLocalizations.status,
+        side: rootAccess
+            ? BorderSide(color: colorScheme.primary, width: 1.5)
+            : BorderSide.none,
+        child: density.isDesktop
+            ? Row(
+                spacing: 24,
+                children: [
+                  Expanded(child: details),
+                  toggle,
+                ],
+              )
+            : Column(spacing: 16, children: [toggle, details]),
+      );
+    }
     return TweenAnimationBuilder<double>(
       tween: Tween(end: rootAccess ? 1 : 0),
       duration: context.motionDuration(commonDuration),
@@ -317,7 +380,7 @@ class _ExitRow extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final style = DashboardText.figure(
       context,
-      metrics.ip,
+      BusinessTheme.of(context) ? AppTextStyle.display : metrics.ip,
       color: active ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
     ).copyWith(letterSpacing: 0);
     final info = this.info;
@@ -359,8 +422,10 @@ class _ExitRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height:
-                    metrics.ip.leading * DashboardDensityScope.scaleOf(context),
+                height: BusinessTheme.of(context)
+                    ? null
+                    : metrics.ip.leading *
+                          DashboardDensityScope.scaleOf(context),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: ip,
@@ -401,6 +466,9 @@ class _IpText extends ConsumerWidget {
     final hideIp = ref.watch(
       appSettingProvider.select((state) => state.hideIp),
     );
+    if (BusinessTheme.of(context)) {
+      return Text(hideIp ? _ipMask : ip, style: style);
+    }
     return DashboardFitText(hideIp ? _ipMask : ip, style: style);
   }
 }
@@ -424,41 +492,39 @@ class _IpChips extends StatelessWidget {
   Widget build(BuildContext context) {
     final quality = this.quality;
     final height = _chipHeight(large);
-    // Chips that do not fit wrap onto a clipped second line; the details
-    // sheet still lists them all.
+    final chips = Wrap(
+      spacing: 6,
+      runSpacing: BusinessTheme.of(context) ? 6 : height,
+      children: switch (quality) {
+        final quality? => [
+          DashboardChip(label: quality.type.label(context), large: large),
+          DashboardChip(
+            label:
+                '${context.appLocalizations.ipQualityShort} ${quality.level.label(context)}',
+            tone: switch (quality.level) {
+              IpQualityLevel.good => DashboardChipTone.ok,
+              IpQualityLevel.normal => DashboardChipTone.idle,
+              IpQualityLevel.risky => DashboardChipTone.warn,
+            },
+            large: large,
+          ),
+        ],
+        null when loading => [
+          for (final width in _chipSkeletonWidths)
+            SkeletonPill(width: width, height: height),
+        ],
+        null => [
+          DashboardChip(
+            label: context.appLocalizations.ipTypeUnknown,
+            large: large,
+          ),
+        ],
+      },
+    );
+    if (BusinessTheme.of(context)) return chips;
     return SizedBox(
       height: height,
-      child: ClipRect(
-        child: Wrap(
-          spacing: 6,
-          runSpacing: height,
-          children: switch (quality) {
-            final quality? => [
-              DashboardChip(label: quality.type.label(context), large: large),
-              DashboardChip(
-                label:
-                    '${context.appLocalizations.ipQualityShort} ${quality.level.label(context)}',
-                tone: switch (quality.level) {
-                  IpQualityLevel.good => DashboardChipTone.ok,
-                  IpQualityLevel.normal => DashboardChipTone.idle,
-                  IpQualityLevel.risky => DashboardChipTone.warn,
-                },
-                large: large,
-              ),
-            ],
-            null when loading => [
-              for (final width in _chipSkeletonWidths)
-                SkeletonPill(width: width, height: height),
-            ],
-            null => [
-              DashboardChip(
-                label: context.appLocalizations.ipTypeUnknown,
-                large: large,
-              ),
-            ],
-          },
-        ),
-      ),
+      child: ClipRect(child: chips),
     );
   }
 }
@@ -781,6 +847,55 @@ class _StartToggleState extends ConsumerState<_StartToggle>
         : widget.running
         ? appLocalizations.stop
         : appLocalizations.start;
+    if (BusinessTheme.of(context)) {
+      final connecting = ref.watch(coreStatusProvider) == CoreStatus.connecting;
+      final color = !enabled
+          ? BusinessPalette.secondary
+          : connecting || widget.suspended
+          ? BusinessPalette.warning
+          : widget.running
+          ? BusinessPalette.blue
+          : BusinessPalette.secondary;
+      final label = connecting ? appLocalizations.connecting : tooltip;
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Tooltip(
+            message: label,
+            child: Semantics(
+              button: true,
+              enabled: enabled,
+              label: label,
+              child: PressRegion(
+                onTap: enabled ? _toggle : null,
+                shape: AppShape.circle,
+                overlay: PressRegion.hoverOverlay,
+                onFocusChange: (value) => setState(() => _focused = value),
+                child: RepaintBoundary(
+                  child: CustomPaint(
+                    painter: OrbitPainter(color: color, focused: _focused),
+                    child: SizedBox.square(
+                      dimension: size,
+                      child: Center(
+                        child: GlyphIcon(
+                          widget.suspended
+                              ? AppGlyphs.wifiOff
+                              : AppGlyphs.playPause(widget.running ? 1 : 0),
+                          size: size * 0.26,
+                          color: Colors.white,
+                          fill: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Text(label, style: DashboardText.label(context)),
+        ],
+      );
+    }
     final stateDuration = context.motionDuration(_stateDuration);
     return Tooltip(
       message: tooltip,
@@ -949,4 +1064,45 @@ class _MorphClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(_MorphClipper oldClipper) =>
       oldClipper.progress != progress;
+}
+
+class _BusinessMetrics extends ConsumerWidget {
+  const _BusinessMetrics({required this.active, required this.exit});
+
+  final bool active;
+  final String? exit;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final speed = ref.watch(
+      trafficsProvider.select((state) => state.list.safeLast(const Traffic())),
+    );
+    final delay = exit == null || exit!.isEmpty
+        ? null
+        : ref.watch(delayProvider(proxyName: exit!));
+    final strings = context.appLocalizations;
+    return Wrap(
+      spacing: 28,
+      runSpacing: 12,
+      children: [
+        if (active && delay != null)
+          _Cell(
+            label: strings.delay,
+            value: _CellText(delay < 0 ? strings.delayFailed : '$delay ms'),
+          ),
+        _Cell(
+          label: strings.download,
+          value: active
+              ? _CellText('${speed.down.traffic.show}/s')
+              : const _Placeholder(),
+        ),
+        _Cell(
+          label: strings.upload,
+          value: active
+              ? _CellText('${speed.up.traffic.show}/s')
+              : const _Placeholder(),
+        ),
+      ],
+    );
+  }
 }

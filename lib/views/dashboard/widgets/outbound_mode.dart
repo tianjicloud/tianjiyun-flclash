@@ -3,6 +3,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,13 +51,17 @@ class OutboundModeCard extends ConsumerWidget {
                     selected: item == mode,
                     first: index == 0,
                     last: index == Mode.values.length - 1,
-                    outer: _outer,
+                    outer: BusinessTheme.of(context)
+                        ? BusinessPalette.buttonRadius
+                        : _outer,
                     inner: 12,
                     background: tone,
                     semanticLabel: item.label,
                     onTap: () => _changeMode(ref, item),
                     builder: (foreground) => SizedBox(
-                      height: 52,
+                      height: BusinessTheme.of(context)
+                          ? 52 * DashboardDensityScope.scaleOf(context)
+                          : 52,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 2,

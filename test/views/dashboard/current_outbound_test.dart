@@ -12,6 +12,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart';
 import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
@@ -539,6 +540,7 @@ void main() {
       WidgetTester tester, {
       DashboardDensity density = DashboardDensity.standard,
       bool glass = false,
+      bool business = false,
     }) async {
       globalState.container = container;
       await tester.pumpWidget(
@@ -547,7 +549,19 @@ void main() {
           child: TestApp(
             child: LiquidGlassScope(
               enabled: glass,
-              child: _card(density: density),
+              child: business
+                  ? const BusinessAppearance(
+                      child: HostScaffold(
+                        body: SingleChildScrollView(
+                          child: DashboardDensityScope(
+                            density: DashboardDensity.mobile,
+                            scale: 1.6,
+                            child: CurrentOutboundCard(),
+                          ),
+                        ),
+                      ),
+                    )
+                  : _card(density: density),
             ),
           ),
         ),
@@ -578,6 +592,42 @@ void main() {
       expect(container.read(isStartProvider), isTrue);
       await tester.pumpAndSettle();
       expect(find.byTooltip('Stop'), findsOneWidget);
+    });
+
+    testWidgets('the orbit preserves stop/start and reflects running state', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 900);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      container = containerWith();
+      container.read(runTimeProvider.notifier).value = 1;
+      await pumpCard(tester, business: true);
+      OrbitPainter painter() => tester
+          .widgetList<CustomPaint>(find.byType(CustomPaint))
+          .map((widget) => widget.painter)
+          .whereType<OrbitPainter>()
+          .single;
+      expect(painter().color, BusinessPalette.blue);
+      expect(tester.widget<Text>(find.text(_ip)).maxLines, isNull);
+      expect(
+        tester.getRect(find.text(_ip)).bottom,
+        lessThanOrEqualTo(tester.getRect(find.text('Residential')).top),
+      );
+      final action =
+          container.read(setupActionProvider.notifier) as _RecordingSetupAction;
+      await tester.tap(find.byTooltip('Stop'));
+      await tester.pumpAndSettle();
+      expect(action.requests, [false]);
+      expect(painter().color, BusinessPalette.secondary);
+      await tester.tap(find.byTooltip('Start'));
+      await tester.pumpAndSettle();
+      expect(action.requests, [false, true]);
+      expect(painter().color, BusinessPalette.blue);
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('a suspended tunnel swaps in the Wi-Fi off glyph and says so', (

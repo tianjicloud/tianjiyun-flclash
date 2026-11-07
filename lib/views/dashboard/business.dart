@@ -9,12 +9,14 @@ import 'package:fl_clash/features/features.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart';
 import 'package:fl_clash/views/dashboard/widgets/core_status_button.dart';
 import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
+import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:fl_clash/views/dashboard/widgets/profile_detail.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
 import 'package:fl_clash/views/dashboard/widgets/proxy_groups.dart';
@@ -33,24 +35,30 @@ class BusinessDashboardView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
-    return Scaffold(
-      backgroundColor: DashboardColors.of(context).page,
-      title: appLocalizations.dashboard,
-      actions: [if (coreLib == null) const CoreStatusButton()],
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final scale = math.max(
-            1.0,
-            MediaQuery.textScalerOf(context).scale(1),
-          );
-          final room = constraints.biggest / scale;
-          final density = DashboardDensity.of(room);
-          return DashboardDensityScope(
-            density: density,
-            scale: scale,
-            child: _BusinessBody(density: density, platform: platform),
-          );
-        },
+    return BusinessAppearance(
+      child: Builder(
+        builder: (context) => Scaffold(
+          backgroundColor: DashboardColors.of(context).page,
+          title: appLocalizations.dashboard,
+          actions: [if (coreLib == null) const CoreStatusButton()],
+          body: BusinessBackdrop(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final scale = math.max(
+                  1.0,
+                  MediaQuery.textScalerOf(context).scale(1),
+                );
+                final room = constraints.biggest / scale;
+                final density = DashboardDensity.of(room);
+                return DashboardDensityScope(
+                  density: density,
+                  scale: scale,
+                  child: _BusinessBody(density: density, platform: platform),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -95,12 +103,9 @@ class _BusinessBody extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: gap,
             children: [
-              SizedBox(
-                height: density.isDesktop
-                    ? (density.isCompact ? 176 : 208) * scale
-                    : null,
-                child: const RepaintBoundary(child: CurrentOutboundCard()),
-              ),
+              const BusinessSubscriptionStatus(),
+              const RepaintBoundary(child: CurrentOutboundCard()),
+              const OutboundModeCard(),
               if (needsTakeover)
                 Text(
                   context.appLocalizations.residentialCaptureOff,
@@ -109,30 +114,30 @@ class _BusinessBody extends ConsumerWidget {
                   ).copyWith(color: DashboardColors.of(context).warn),
                 ),
               const RepaintBoundary(child: BusinessLineCard()),
-              if (density.isDesktop)
-                SizedBox(
-                  height: (density.isCompact ? 152 : 176) * scale,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    spacing: gap,
-                    children: [
-                      const Expanded(child: TrafficSavingsCard()),
-                      Expanded(
-                        child: ProfilesCard(
-                          title: context.appLocalizations.subscriptionInfo,
-                        ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final cards = [
+                    const RepaintBoundary(child: TrafficSavingsCard()),
+                    RepaintBoundary(
+                      child: ProfilesCard(
+                        title: context.appLocalizations.subscriptionInfo,
                       ),
-                    ],
-                  ),
-                )
-              else ...[
-                const RepaintBoundary(child: TrafficSavingsCard()),
-                RepaintBoundary(
-                  child: ProfilesCard(
-                    title: context.appLocalizations.subscriptionInfo,
-                  ),
-                ),
-              ],
+                    ),
+                  ];
+                  if (constraints.maxWidth / scale < 350) {
+                    return Column(
+                      spacing: gap,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: cards,
+                    );
+                  }
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: gap,
+                    children: [for (final card in cards) Expanded(child: card)],
+                  );
+                },
+              ),
               _TakeoverRow(platform: platform, density: density),
             ],
           ),
@@ -273,8 +278,11 @@ Future<void> _showDefaultLineSheet(BuildContext context) {
   ).read(currentProfileProvider);
   return showSheet<void>(
     context: context,
-    builder: (_) =>
-        _DefaultLineSheet(profileId: profile?.id, url: profile?.url),
+    builder: (_) => BusinessTheme.of(context)
+        ? BusinessAppearance(
+            child: _DefaultLineSheet(profileId: profile?.id, url: profile?.url),
+          )
+        : _DefaultLineSheet(profileId: profile?.id, url: profile?.url),
   );
 }
 
@@ -379,6 +387,9 @@ class ResidentialExitCard extends ConsumerWidget {
     final routeNote = Text(appLocalizations.residentialRouteNote, style: label);
     return DashboardCard(
       semanticLabel: appLocalizations.residentialTitle,
+      side: BusinessTheme.of(context)
+          ? BorderSide(color: BusinessPalette.purple.withValues(alpha: 0.35))
+          : BorderSide.none,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -575,7 +586,9 @@ class _ExitActions extends StatelessWidget {
 Future<void> showResidentialExitSheet(BuildContext context) {
   return showSheet<void>(
     context: context,
-    builder: (_) => const _ResidentialExitSheet(),
+    builder: (_) => BusinessTheme.of(context)
+        ? const BusinessAppearance(child: _ResidentialExitSheet())
+        : const _ResidentialExitSheet(),
   );
 }
 
