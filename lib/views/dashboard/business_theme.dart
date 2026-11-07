@@ -53,13 +53,14 @@ class OrbitPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2;
-    if (pulse case final pulse?) {
-      final spread = radius * (0.78 + 0.2 * pulse);
+    if (pulse case final pulse? when pulse < 0.3) {
+      final wave = pulse / 0.3;
+      final spread = radius * (0.78 + 0.2 * wave);
       canvas.drawCircle(
         center,
         spread,
         Paint()
-          ..color = color.withValues(alpha: 0.35 * (1 - pulse))
+          ..color = color.withValues(alpha: 0.35 * (1 - wave))
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2,
       );
@@ -68,7 +69,7 @@ class OrbitPainter extends CustomPainter {
         radius * 0.97,
         Paint()
           ..color = color.withValues(
-            alpha: 0.12 + 0.1 * math.sin(pulse * math.pi),
+            alpha: 0.12 + 0.1 * math.sin(wave * math.pi),
           )
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.5,

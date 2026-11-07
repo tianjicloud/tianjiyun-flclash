@@ -893,12 +893,26 @@ class _StartToggleState extends ConsumerState<_StartToggle>
       } else {
         widget.running ? _controller.forward() : _controller.reverse();
       }
+      if (_settled) {
+        _syncPulse();
+      } else {
+        _controller.addStatusListener(_pulseOnSettle);
+      }
     }
-    _syncPulse();
+  }
+
+  void _pulseOnSettle(AnimationStatus status) {
+    if (status != AnimationStatus.completed &&
+        status != AnimationStatus.dismissed) {
+      return;
+    }
+    _controller.removeStatusListener(_pulseOnSettle);
+    if (mounted) _syncPulse();
   }
 
   @override
   void dispose() {
+    _controller.removeStatusListener(_pulseOnSettle);
     _progress.dispose();
     _controller.dispose();
     _pulseController.dispose();
