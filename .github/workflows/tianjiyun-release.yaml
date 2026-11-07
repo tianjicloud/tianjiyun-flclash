@@ -1,11 +1,6 @@
 name: tianjiyun-release
 
-# A `vX.Y.Z` tag builds the signed Android APKs and publishes them, with
-# SHA256SUMS, as a release of this repository: installed builds look for their
-# update there. A manual run builds the same APKs as a `pre` build and only
-# keeps them as workflow artifacts.
-#
-# Desktop packages are not part of the release yet.
+# Tags publish stable packages; manual runs keep preview packages in Actions artifacts.
 
 on:
   push:
@@ -154,8 +149,113 @@ jobs:
             dist/SHA256SUMS
           if-no-files-found: error
 
+  desktop:
+    name: Package ${{ matrix.platform }} ${{ matrix.arch }}
+    if: github.repository == 'tianjicloud/tianjiyun-flclash'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            os: windows-2022
+            arch: amd64
+            targets: exe,zip
+          - platform: linux
+            os: ubuntu-22.04
+            arch: amd64
+            targets: deb,appimage,rpm
+          - platform: macos
+            os: macos-15-intel
+            arch: amd64
+            targets: dmg
+          - platform: macos
+            os: macos-latest
+            arch: arm64
+            targets: dmg
+    steps:
+      - name: Enable git long paths
+        if: matrix.platform == 'windows'
+        run: git config --global core.longpaths true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: core/go.sum
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: package-${{ matrix.platform }}-${{ matrix.arch }}
+          workspaces: |
+            services/helper
+            plugins/rust_api/rust
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Setup Xcode
+        if: matrix.platform == 'macos'
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app || sudo xcode-select -s /Applications/Xcode_26.2.app
+          xcodebuild -version
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Disable Impeller on Intel macOS
+        if: matrix.platform == 'macos' && matrix.arch == 'amd64'
+        run: plutil -replace FLTEnableImpeller -bool NO macos/Runner/Info.plist
+
+      - name: Fetch CA certificates
+        shell: bash
+        env:
+          CA_BUNDLE: cacert-2026-09-25.pem
+          CA_BUNDLE_SHA256: a41b5d356aea97a529fe27e0f7316d2f9d946d75927476cf9cf1b90637d00505
+        run: |
+          bundle=core/Clash.Meta/component/ca/ca-certificates.crt
+          curl -fsSL --retry 3 -o "$bundle" "https://curl.se/ca/$CA_BUNDLE"
+          echo "$CA_BUNDLE_SHA256  $bundle" | sha256sum -c -
+
+      - name: Build packages
+        run: dart setup.dart ${{ matrix.platform }} --targets ${{ matrix.targets }} ${{ github.ref_type == 'tag' && '--env stable' || '' }} -v
+
+      - name: Verify packages and generate SHA256SUMS
+        shell: bash
+        env:
+          PACKAGE_TARGETS: ${{ matrix.targets }}
+        run: |
+          cd dist
+          IFS=',' read -ra targets <<< "$PACKAGE_TARGETS"
+          for target in "${targets[@]}"; do
+            test "$target" != appimage || target=AppImage
+            compgen -G "*.$target" > /dev/null || { echo "::error::Missing $target package"; exit 1; }
+          done
+          if command -v sha256sum > /dev/null; then
+            sha256sum ./* > SHA256SUMS
+          else
+            shasum -a 256 ./* > SHA256SUMS
+          fi
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}-${{ matrix.arch }}
+          path: dist/*
+          if-no-files-found: error
+
   release:
-    needs: android
+    needs: [android, desktop]
     # Tags with a suffix (v1.0.0-rc.1) cannot be compared as versions by the app.
     if: github.ref_type == 'tag' && !contains(github.ref_name, '-')
     runs-on: ubuntu-latest
@@ -165,8 +265,21 @@ jobs:
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: android
-          path: dist
+          path: packages
+
+      - name: Collect packages and checksums
+        run: |
+          mkdir dist
+          for directory in packages/*; do
+            (cd "$directory" && sha256sum -c SHA256SUMS)
+            for package in "$directory"/*; do
+              test "$(basename "$package")" != SHA256SUMS || continue
+              test ! -e "dist/$(basename "$package")"
+              cp "$package" dist/
+            done
+          done
+          cd dist
+          sha256sum ./* > SHA256SUMS
 
       - name: Release
         uses: softprops/action-gh-release@v2
