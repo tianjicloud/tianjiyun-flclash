@@ -552,46 +552,65 @@ Map<String, dynamic> _$ProfileTunToJson(_ProfileTun instance) =>
       'exclude-dst-port': instance.excludeDstPort,
     };
 
-_ProfileOverrides _$ProfileOverridesFromJson(Map<String, dynamic> json) =>
-    _ProfileOverrides(
-      dns: json['dns'] == null
-          ? defaultDns
-          : Dns.safeDnsFromJson(json['dns'] as Map<String, Object?>),
-      dnsOverrideKeys: json['dns-override-keys'] == null
-          ? const {}
-          : _dnsOverrideKeysFromJson(json['dns-override-keys'] as List),
-      ntp: json['ntp'] == null
-          ? defaultNtp
-          : Ntp.safeNtpFromJson(json['ntp'] as Map<String, Object?>),
-      ntpOverrideKeys: json['ntp-override-keys'] == null
-          ? const {}
-          : _ntpOverrideKeysFromJson(json['ntp-override-keys'] as List),
-      sniffer: json['sniffer'] == null
-          ? defaultSniffer
-          : Sniffer.safeSnifferFromJson(
-              json['sniffer'] as Map<String, Object?>,
-            ),
-      snifferOverrideKeys: json['sniffer-override-keys'] == null
-          ? const {}
-          : _snifferOverrideKeysFromJson(json['sniffer-override-keys'] as List),
-      tun: json['tun'] == null
-          ? defaultProfileTun
-          : ProfileTun.safeFromJson(json['tun'] as Map<String, Object?>),
-      tunOverrideKeys: json['tun-override-keys'] == null
-          ? const {}
-          : _tunOverrideKeysFromJson(json['tun-override-keys'] as List),
-      proxyProviders:
-          (json['proxy-providers'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(
-              k,
-              ProxyProviderOptions.fromJson(e as Map<String, dynamic>),
-            ),
-          ) ??
-          const {},
-      residentialExit: json['residential-exit'] as String?,
-      residentialSubscriptionFingerprint:
-          json['residential-subscription-fingerprint'] as String?,
+_ManualSelection _$ManualSelectionFromJson(Map<String, dynamic> json) =>
+    _ManualSelection(
+      node: json['node'] as String,
+      sequence: (json['sequence'] as num).toInt(),
+      automaticGroup: json['automaticGroup'] as bool? ?? false,
     );
+
+Map<String, dynamic> _$ManualSelectionToJson(_ManualSelection instance) =>
+    <String, dynamic>{
+      'node': instance.node,
+      'sequence': instance.sequence,
+      'automaticGroup': instance.automaticGroup,
+    };
+
+_ProfileOverrides _$ProfileOverridesFromJson(
+  Map<String, dynamic> json,
+) => _ProfileOverrides(
+  dns: json['dns'] == null
+      ? defaultDns
+      : Dns.safeDnsFromJson(json['dns'] as Map<String, Object?>),
+  dnsOverrideKeys: json['dns-override-keys'] == null
+      ? const {}
+      : _dnsOverrideKeysFromJson(json['dns-override-keys'] as List),
+  ntp: json['ntp'] == null
+      ? defaultNtp
+      : Ntp.safeNtpFromJson(json['ntp'] as Map<String, Object?>),
+  ntpOverrideKeys: json['ntp-override-keys'] == null
+      ? const {}
+      : _ntpOverrideKeysFromJson(json['ntp-override-keys'] as List),
+  sniffer: json['sniffer'] == null
+      ? defaultSniffer
+      : Sniffer.safeSnifferFromJson(json['sniffer'] as Map<String, Object?>),
+  snifferOverrideKeys: json['sniffer-override-keys'] == null
+      ? const {}
+      : _snifferOverrideKeysFromJson(json['sniffer-override-keys'] as List),
+  tun: json['tun'] == null
+      ? defaultProfileTun
+      : ProfileTun.safeFromJson(json['tun'] as Map<String, Object?>),
+  tunOverrideKeys: json['tun-override-keys'] == null
+      ? const {}
+      : _tunOverrideKeysFromJson(json['tun-override-keys'] as List),
+  proxyProviders:
+      (json['proxy-providers'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(
+          k,
+          ProxyProviderOptions.fromJson(e as Map<String, dynamic>),
+        ),
+      ) ??
+      const {},
+  residentialExit: json['residential-exit'] as String?,
+  residentialSubscriptionFingerprint:
+      json['residential-subscription-fingerprint'] as String?,
+  manualSelections:
+      (json['manualSelections'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry(k, ManualSelection.fromJson(e as Map<String, dynamic>)),
+      ) ??
+      const {},
+);
 
 Map<String, dynamic> _$ProfileOverridesToJson(_ProfileOverrides instance) =>
     <String, dynamic>{
@@ -615,6 +634,7 @@ Map<String, dynamic> _$ProfileOverridesToJson(_ProfileOverrides instance) =>
       'residential-exit': instance.residentialExit,
       'residential-subscription-fingerprint':
           instance.residentialSubscriptionFingerprint,
+      'manualSelections': instance.manualSelections,
     };
 
 const _$DnsOverrideKeyEnumMap = {

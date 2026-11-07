@@ -12,28 +12,29 @@ typedef DefaultLineChoice = ({
   String? selector,
 });
 
+Group? defaultLineRootOf(List<Group> groups) =>
+    groups
+        .where(
+          (group) => group.name == appName && group.type == GroupType.Selector,
+        )
+        .firstOrNull ??
+    groups
+        .where(
+          (group) =>
+              group.type == GroupType.Selector &&
+              group.name != 'GLOBAL' &&
+              group.all.any(
+                (member) =>
+                    member.name == _manualGroupName ||
+                    member.name == _automaticGroupName,
+              ),
+        )
+        .firstOrNull;
+
 class DefaultLineCatalog {
   DefaultLineCatalog(List<Group> groups)
     : _groups = {for (final group in groups) group.name: group} {
-    root =
-        groups
-            .where(
-              (group) =>
-                  group.name == appName && group.type == GroupType.Selector,
-            )
-            .firstOrNull ??
-        groups
-            .where(
-              (group) =>
-                  group.type == GroupType.Selector &&
-                  group.name != 'GLOBAL' &&
-                  group.all.any(
-                    (member) =>
-                        member.name == _manualGroupName ||
-                        member.name == _automaticGroupName,
-                  ),
-            )
-            .firstOrNull;
+    root = defaultLineRootOf(groups);
     final choices = <DefaultLineChoice>[];
     for (final member in root?.all ?? const <Proxy>[]) {
       if (_nonProxyTypes.contains(member.type.toLowerCase())) continue;
@@ -62,6 +63,9 @@ class DefaultLineCatalog {
   final Map<String, Group> _groups;
   late final Group? root;
   late final List<DefaultLineChoice> choices;
+
+  bool isAutomaticChoice(DefaultLineChoice choice) =>
+      choice.rootTarget == _automaticGroupName;
 
   DefaultLineChoice? selected(Map<String, String> selections) {
     final root = this.root;

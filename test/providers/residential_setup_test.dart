@@ -193,6 +193,51 @@ void main() {
   );
 
   test(
+    'manual ordinary choices use full config assembly, not a base overlay',
+    () async {
+      final state = await container.read(
+        setupStateProvider(_profile.id).future,
+      );
+      final built = await setup.getProfile(
+        setupState: state.copyWith(
+          manualSelections: const {
+            'Default': ManualSelection(node: 'Ordinary', sequence: 1),
+          },
+        ),
+        patchConfig: const PatchClashConfig(),
+      );
+      final yaml = loadYaml(built.yaml) as YamlMap;
+      expect(built.base, isNull);
+      final group = (yaml['proxy-groups'] as List).last;
+      expect(group['type'], 'select');
+      expect(group['default-selected'], 'Ordinary');
+      expect(group['proxies'].first, 'REJECT');
+      expect(yaml['rules'], [
+        'DOMAIN-SUFFIX,example.cn,DIRECT',
+        'MATCH,Default',
+      ]);
+      verifyNever(() => core.getProfileBase(any()));
+    },
+  );
+
+  test('residential assembly ignores ordinary manual overrides', () async {
+    choose('Tokyo');
+    final state = await container.read(setupStateProvider(_profile.id).future);
+    final built = await setup.getProfile(
+      setupState: state.copyWith(
+        manualSelections: const {
+          'Default': ManualSelection(node: 'Ordinary', sequence: 1),
+        },
+      ),
+      patchConfig: const PatchClashConfig(),
+    );
+    final yaml = loadYaml(built.yaml) as YamlMap;
+    final groups = yaml['proxy-groups'] as List;
+    expect(groups[1]['proxies'], ['Ordinary', tianjiResidentialRootName]);
+    expect(groups.last['proxies'], ['Tokyo']);
+  });
+
+  test(
     'live updates force rule mode and restore the stored mode on clear',
     () async {
       container

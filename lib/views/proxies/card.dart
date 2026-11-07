@@ -14,7 +14,14 @@ void selectGroupProxy(
   required GroupType groupType,
   required String proxyName,
 }) {
-  final isComputedSelected = groupType.isComputedSelected;
+  final isComputedSelected =
+      groupType.isComputedSelected ||
+      ref
+              .read(currentProfileProvider)
+              ?.overrides
+              .manualSelections[groupName]
+              ?.automaticGroup ==
+          true;
   if (isComputedSelected || groupType == GroupType.Selector) {
     final currentProxyName = ref.read(proxyNameProvider(groupName));
     final nextProxyName = switch (isComputedSelected) {

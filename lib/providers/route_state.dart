@@ -100,6 +100,7 @@ class RouteStamp {
     required this.hostEpoch,
     required this.proxied,
     this.hits = const [],
+    this.chains = const [],
   });
 
   final int coreEpoch;
@@ -107,6 +108,7 @@ class RouteStamp {
   final int hostEpoch;
   final bool proxied;
   final List<RouteHit> hits;
+  final List<String> chains;
 
   RouteStamp verifiedAt(int routeVersion) => RouteStamp(
     coreEpoch: coreEpoch,
@@ -114,6 +116,7 @@ class RouteStamp {
     hostEpoch: hostEpoch,
     proxied: proxied,
     hits: hits,
+    chains: chains,
   );
 
   @override
@@ -123,7 +126,8 @@ class RouteStamp {
       other.routeVersion == routeVersion &&
       other.hostEpoch == hostEpoch &&
       other.proxied == proxied &&
-      listEquals(other.hits, hits);
+      listEquals(other.hits, hits) &&
+      listEquals(other.chains, chains);
 
   @override
   int get hashCode => Object.hash(
@@ -132,6 +136,7 @@ class RouteStamp {
     hostEpoch,
     proxied,
     Object.hashAll(hits),
+    Object.hashAll(chains),
   );
 }
 

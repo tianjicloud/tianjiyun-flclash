@@ -1644,6 +1644,18 @@ Map<String, Object?> _withLegacyTunOverride(Map<String, Object?> json) {
 }
 
 @freezed
+abstract class ManualSelection with _$ManualSelection {
+  const factory ManualSelection({
+    required String node,
+    required int sequence,
+    @Default(false) bool automaticGroup,
+  }) = _ManualSelection;
+
+  factory ManualSelection.fromJson(Map<String, Object?> json) =>
+      _$ManualSelectionFromJson(json);
+}
+
+@freezed
 abstract class ProfileOverrides with _$ProfileOverrides {
   const factory ProfileOverrides({
     @Default(defaultDns) @JsonKey(fromJson: Dns.safeDnsFromJson) Dns dns,
@@ -1675,6 +1687,7 @@ abstract class ProfileOverrides with _$ProfileOverrides {
     @JsonKey(name: 'residential-exit') String? residentialExit,
     @JsonKey(name: 'residential-subscription-fingerprint')
     String? residentialSubscriptionFingerprint,
+    @Default({}) Map<String, ManualSelection> manualSelections,
   }) = _ProfileOverrides;
 
   factory ProfileOverrides.fromJson(Map<String, Object?> json) =>

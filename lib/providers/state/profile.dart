@@ -107,6 +107,7 @@ Future<SetupState> setupState(Ref ref, int? profileId) async {
   }
   final residentialActive = isResidentialPolicyActive(profile);
   return SetupState(
+    manualSelections: profile?.overrides.manualSelections ?? const {},
     residentialActive: residentialActive,
     residentialExit: residentialActive
         ? profile?.overrides.residentialExit

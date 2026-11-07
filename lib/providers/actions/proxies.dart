@@ -41,10 +41,16 @@ class ProxiesAction extends _$ProxiesAction {
   bool _changingDefaultLine = false;
 
   final Map<String, String> _pendingSelectedRollback = {};
+  final Map<String, ManualSelection> _pendingManualSelections = {};
 
   @override
   void build() {
     ref.onDispose(() => _delayFlushTimer?.cancel());
+    ref.onDispose(() {
+      for (final group in _pendingSelectedRollback.keys) {
+        debouncer.cancel((FunctionTag.changeProxy, group));
+      }
+    });
     ref.listen(coreStatusProvider, (_, next) {
       if (next != CoreStatus.connected) {
         cancelDelayTests();
@@ -54,6 +60,11 @@ class ProxiesAction extends _$ProxiesAction {
       currentProfileProvider.select((profile) => (profile?.id, profile?.url)),
       (prev, next) {
         if (prev != next) {
+          for (final group in _pendingSelectedRollback.keys) {
+            debouncer.cancel((FunctionTag.changeProxy, group));
+          }
+          _pendingSelectedRollback.clear();
+          _pendingManualSelections.clear();
           ref.read(groupsSourceProfileProvider.notifier).clear();
         }
       },
@@ -101,7 +112,14 @@ class ProxiesAction extends _$ProxiesAction {
   }
 
   void changeProxyDebounce(String groupName, String proxyName) {
-    if (_rejectResidentialGroupChange(groupName)) return;
+    if (_rejectResidentialGroupChange(groupName)) {
+      ref.read(residentialSelectionRejectionProvider.notifier).reject();
+      return;
+    }
+    final selection = ref
+        .read(profilesActionProvider.notifier)
+        .recordManualSelection(groupName, proxyName);
+    if (selection != null) _pendingManualSelections[groupName] = selection;
     _pendingSelectedRollback.putIfAbsent(
       groupName,
       () => _currentSelectedName(groupName),
@@ -114,7 +132,7 @@ class ProxiesAction extends _$ProxiesAction {
       String proxyName,
     ) async {
       await changeProxy(groupName: groupName, proxyName: proxyName);
-      updateGroupsDebounce();
+      if (ref.mounted) updateGroupsDebounce();
     }, args: [groupName, proxyName]);
   }
 
@@ -203,21 +221,61 @@ class ProxiesAction extends _$ProxiesAction {
     required String groupName,
     required String proxyName,
   }) async {
-    if (_rejectResidentialGroupChange(groupName)) return;
+    debouncer.cancel((FunctionTag.changeProxy, groupName));
+    if (_rejectResidentialGroupChange(groupName)) {
+      final pending = _pendingManualSelections.remove(groupName);
+      _pendingSelectedRollback.remove(groupName);
+      ref
+          .read(manualSelectionPendingProvider.notifier)
+          .finish(pending?.sequence);
+      ref.read(residentialSelectionRejectionProvider.notifier).reject();
+      return;
+    }
     final profilesAction = ref.read(profilesActionProvider.notifier);
+    final profile = ref.read(currentProfileProvider);
+    final pending = _pendingManualSelections.remove(groupName);
+    final selection = pending?.node == proxyName
+        ? pending
+        : profilesAction.recordManualSelection(groupName, proxyName);
+    bool isCurrent() {
+      if (!ref.mounted) return false;
+      final current = ref.read(currentProfileProvider);
+      return current?.id == profile?.id &&
+          current?.url == profile?.url &&
+          current?.overrides.manualSelections[groupName] == selection;
+    }
+
     final rollbackName =
         _pendingSelectedRollback.remove(groupName) ??
         _currentSelectedName(groupName);
     profilesAction.updateCurrentSelectedMap(groupName, proxyName);
     final ChangeProxyResult result;
     try {
-      result = await _core.changeProxy(
-        ChangeProxyParams(groupName: groupName, proxyName: proxyName),
-      );
+      final group = ref.read(groupsProvider).getGroup(groupName);
+      if (selection != null &&
+          group != null &&
+          !isResidentialPolicyActive(profile)) {
+        final applied = await ref
+            .read(setupActionProvider.notifier)
+            .applyProfile(force: true, silence: true);
+        if (!applied) {
+          throw const FormatException('manual selection apply failed');
+        }
+        result = const ChangeProxyResult(changed: true);
+      } else {
+        result = await _core.changeProxy(
+          ChangeProxyParams(groupName: groupName, proxyName: proxyName),
+        );
+      }
       if (result.message.isNotEmpty) {
         throw MessageException(result.message);
       }
     } catch (error) {
+      if (!isCurrent()) return;
+      ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
+      ref
+          .read(manualSelectionPendingProvider.notifier)
+          .finish(selection?.sequence);
       commonPrint.log(
         'changeProxy($groupName -> $proxyName) failed: $error',
         logLevel: coreFailureLogLevel(error),
@@ -229,9 +287,17 @@ class ProxiesAction extends _$ProxiesAction {
       );
       return;
     }
+    if (!isCurrent()) return;
     if (!result.changed) {
+      ref
+          .read(manualSelectionPendingProvider.notifier)
+          .finish(selection?.sequence);
       return;
     }
+    ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
+    ref
+        .read(manualSelectionPendingProvider.notifier)
+        .finish(selection?.sequence);
     try {
       if (ref.read(appSettingProvider).closeConnections) {
         await _core.closeConnections();
@@ -270,6 +336,14 @@ class ProxiesAction extends _$ProxiesAction {
 
     if (!isCurrent()) return false;
     _changingDefaultLine = true;
+    final sequences = <int>[];
+    void record(String group, String node) {
+      final selection = ref
+          .read(profilesActionProvider.notifier)
+          .recordManualSelection(group, node);
+      if (selection != null) sequences.add(selection.sequence);
+    }
+
     try {
       final changes = [
         if (choice.selector case final selector?) (selector, choice.name),
@@ -277,6 +351,7 @@ class ProxiesAction extends _$ProxiesAction {
       ];
       for (final (group, target) in changes) {
         if (!isCurrent()) return false;
+        record(group, target);
         final result = await _core.changeProxy(
           ChangeProxyParams(groupName: group, proxyName: target),
         );
@@ -286,7 +361,17 @@ class ProxiesAction extends _$ProxiesAction {
             .read(profilesActionProvider.notifier)
             .updateCurrentSelectedMap(group, target);
       }
+      if (catalog.isAutomaticChoice(choice)) {
+        record(choice.rootTarget, '');
+      }
+      if (!await ref
+          .read(setupActionProvider.notifier)
+          .applyProfile(force: true, silence: true)) {
+        throw const FormatException('default line apply failed');
+      }
+      if (!isCurrent()) return false;
       await _core.closeConnections();
+      ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
       return isCurrent();
     } catch (error) {
       commonPrint.log(
@@ -294,6 +379,7 @@ class ProxiesAction extends _$ProxiesAction {
         logLevel: coreFailureLogLevel(error),
       );
       if (isCurrent()) {
+        ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
         dialogs.showBanner(
           currentAppLocalizations.businessLineFailed,
           level: BannerLevel.error,
@@ -301,6 +387,14 @@ class ProxiesAction extends _$ProxiesAction {
       }
       return false;
     } finally {
+      if (ref.mounted) {
+        final current = ref.read(currentProfileProvider);
+        if (current?.id == profile.id && current?.url == profile.url) {
+          for (final sequence in sequences) {
+            ref.read(manualSelectionPendingProvider.notifier).finish(sequence);
+          }
+        }
+      }
       _changingDefaultLine = false;
     }
   }

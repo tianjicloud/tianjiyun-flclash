@@ -1,3 +1,4 @@
+import 'package:fl_clash/core/manual_selection.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -381,6 +382,9 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
         .toList();
   }
   rawConfig['rules'] = [...mitm.rules, ...rules];
+  if (data.residentialExit == null) {
+    rawConfig = applyManualSelections(rawConfig, data.manualSelections);
+  }
   if (data.residentialExit case final exit? when exit.isNotEmpty) {
     final transformed = applyResidentialEgress(
       config: rawConfig,

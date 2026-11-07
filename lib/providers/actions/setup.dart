@@ -16,15 +16,23 @@ typedef BuiltProfile = ({
   SetupBase? base,
 });
 
-(int?, ProfileType?, String?, DateTime?, String?, String?) _profileBuildKey(
-  Profile? profile,
-) => (
+(
+  int?,
+  ProfileType?,
+  String?,
+  DateTime?,
+  String?,
+  String?,
+  Map<String, ManualSelection>?,
+)
+_profileBuildKey(Profile? profile) => (
   profile?.id,
   profile?.type,
   profile?.url,
   profile?.lastUpdateDate,
   profile?.overrides.residentialExit,
   profile?.overrides.residentialSubscriptionFingerprint,
+  profile?.overrides.manualSelections,
 );
 
 class _RunRequest {
@@ -74,12 +82,22 @@ class SetupAction extends _$SetupAction {
           !ref.read(safeModeProvider) &&
           ref.read(appSettingProvider).showTrayTitle);
 
-  SetupParams get _setupParams => SetupParams(
-    selectedMap: ref.read(selectedMapProvider),
-    options: ref.read(coreOptionsProvider),
-  );
+  SetupParams get _setupParams {
+    final profile = ref.read(currentProfileProvider);
+    return SetupParams(
+      selectedMap: {
+        ...ref.read(selectedMapProvider),
+        if (!isResidentialPolicyActive(profile))
+          for (final entry
+              in profile?.overrides.manualSelections.entries ??
+                  const <MapEntry<String, ManualSelection>>[])
+            entry.key: entry.value.node,
+      },
+      options: ref.read(coreOptionsProvider),
+    );
+  }
 
-  // The selection reaches the Core through changeProxy, not through an apply.
+  // Manual overrides are already tracked by SetupState; RPC-only picks are not.
   SetupParams get _appliedParams =>
       _setupParams.copyWith(selectedMap: const {});
 
@@ -534,7 +552,13 @@ class SetupAction extends _$SetupAction {
         ? await setupState.script?.content
         : null;
     final hasScript = scriptContent?.isNotEmpty == true;
-    final profileBase = !isCustom && !hasScript && !residentialEnabled
+    final profileBase =
+        !isCustom &&
+            !hasScript &&
+            !residentialEnabled &&
+            !setupState.manualSelections.values.any(
+              (pick) => pick.node.isNotEmpty,
+            )
         ? await _core.getProfileBase(profileId)
         : null;
     Map<String, dynamic> rawConfig = isCustom
@@ -582,6 +606,7 @@ class SetupAction extends _$SetupAction {
         safeMode: ref.read(safeModeProvider),
         mitmModules: setupState.mitmModules,
         residentialExit: selectedResidentialExit,
+        manualSelections: setupState.manualSelections,
       ),
     );
     if (profileBase == null) {

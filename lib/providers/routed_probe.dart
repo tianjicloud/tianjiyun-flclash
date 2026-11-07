@@ -65,12 +65,14 @@ class ProbeAnswer<V> {
     this.coreEpoch,
     this.routeVersion,
     this.hits = const [],
+    this.chains = const [],
   });
 
   final V? value;
   final int? coreEpoch;
   final int? routeVersion;
   final List<RouteHit> hits;
+  final List<String> chains;
 }
 
 /// Keeps one answer per target and only ever shows one that still describes
@@ -199,6 +201,13 @@ mixin RoutedProbe<K, V>
     for (final target in targets) {
       _mark(target, keepValue: true, forced: true);
     }
+  }
+
+  void recheck(K target) {
+    final entries = Map<K, ProbeEntry<V>>.of(state.entries);
+    _invalidate(target, entries);
+    state = RoutedProbeState(entries);
+    _schedule();
   }
 
   ProbeEntry<V> _entryOf(K target) => state.entryOf(target);
@@ -368,6 +377,7 @@ mixin RoutedProbe<K, V>
     hostEpoch: route.hostEpoch,
     proxied: route.proxied,
     hits: answer.hits,
+    chains: answer.chains,
   );
 
   void _onRoute(RouteState? previous, RouteState next) {

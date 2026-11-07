@@ -18,6 +18,16 @@ import '../helpers/test_profiles.dart';
 
 class _Core extends Mock implements CoreHandlerInterface {}
 
+class _Setup extends SetupAction {
+  bool success = true;
+  @override
+  Future<bool> applyProfile({
+    bool silence = false,
+    bool force = false,
+    Future<void> Function()? preloadInvoke,
+  }) async => success;
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late ProviderContainer container;
@@ -54,6 +64,7 @@ void main() {
         currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
         coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
         groupsProvider.overrideWithBuild((_, _) => defaultLineTestGroups),
+        setupActionProvider.overrideWith(_Setup.new),
       ],
     );
     container.listen(currentProfileProvider, (_, _) {});
@@ -87,6 +98,42 @@ void main() {
     expect(await action.changeDefaultLine(catalog.choices.first), isTrue);
     expect(calls.single.groupName, appName);
     expect(calls.single.proxyName, '⚡ 自动选择');
+  });
+
+  test(
+    'a failed config apply is not reported as a completed default switch',
+    () async {
+      (container.read(setupActionProvider.notifier) as _Setup).success = false;
+      expect(await action.changeDefaultLine(tokyo), isFalse);
+      verifyNever(() => core.closeConnections());
+    },
+  );
+
+  test('choosing automatic clears a saved automatic-group pin', () async {
+    container
+        .read(profilesProvider.notifier)
+        .put(
+          profile.copyWith(
+            overrides: const ProfileOverrides(
+              manualSelections: {
+                '⚡ 自动选择': ManualSelection(
+                  node: 'HK transport',
+                  sequence: 1,
+                  automaticGroup: true,
+                ),
+              },
+            ),
+          ),
+        );
+    expect(await action.changeDefaultLine(catalog.choices.first), isTrue);
+    expect(
+      container
+          .read(currentProfileProvider)!
+          .overrides
+          .manualSelections['⚡ 自动选择']!
+          .node,
+      '',
+    );
   });
 
   test('a rejected manual selection never changes the root', () async {

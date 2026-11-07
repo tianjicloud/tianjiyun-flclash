@@ -7,6 +7,39 @@ class ProfilesAction extends _$ProfilesAction {
   @override
   void build() {}
 
+  ManualSelection? recordManualSelection(String group, String node) {
+    final profile = ref.read(currentProfileProvider);
+    if (profile == null) return null;
+    final selections = profile.overrides.manualSelections;
+    final selection = ManualSelection(
+      node: node,
+      sequence:
+          selections.values.fold<int>(
+            0,
+            (latest, value) =>
+                value.sequence > latest ? value.sequence : latest,
+          ) +
+          1,
+      automaticGroup:
+          selections[group]?.automaticGroup == true ||
+          ref.read(groupsProvider).getGroup(group)?.type.isComputedSelected ==
+              true,
+    );
+    ref
+        .read(manualSelectionPendingProvider.notifier)
+        .begin(group, selection.sequence);
+    ref
+        .read(profilesProvider.notifier)
+        .put(
+          profile.copyWith(
+            overrides: profile.overrides.copyWith(
+              manualSelections: {...selections, group: selection},
+            ),
+          ),
+        );
+    return selection;
+  }
+
   void updateCurrentSelectedMap(String groupName, String proxyName) {
     final currentProfile = ref.read(currentProfileProvider);
     if (currentProfile != null &&
