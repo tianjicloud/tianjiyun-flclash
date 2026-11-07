@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/mitm_module.dart';
 import 'package:fl_clash/core/residential.dart';
+import 'package:fl_clash/core/residential_bulk.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart';
@@ -390,7 +391,10 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
       config: rawConfig,
       selectedExit: exit,
     );
-    rawConfig = transformed.config;
+    rawConfig = applyResidentialBulkBypass(
+      original: rawConfig,
+      residential: transformed,
+    );
   }
   final yaml = await _encodeYaml(Map<String, dynamic>.from(rawConfig));
   return (yaml: yaml, md5: yaml.toMd5(), counts: configCountsOf(rawConfig));
