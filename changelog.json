@@ -2,6 +2,49 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.11",
+      "tag": "v0.9.11",
+      "date": "2026-11-07",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "5f1efed",
+              "scope": "theme",
+              "text": "Choose solid, orbit or mountain backgrounds across application pages without resetting page state."
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "893345f",
+              "scope": "windows",
+              "text": "Replace the remaining FlClash tray icons with TianjiCloud icons for all Windows states."
+            },
+            {
+              "id": "43b0922",
+              "scope": "traffic",
+              "text": "Show VPN, mainland direct and other direct shares with a centered savings total."
+            },
+            {
+              "id": "d37bff5",
+              "scope": "dashboard",
+              "text": "Compact the Windows dashboard, follow the app palette and animate connection state transitions."
+            },
+            {
+              "id": "842345d",
+              "scope": "update",
+              "text": "Show update progress and installation controls on the Tianji dashboard and About page"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.10",
       "tag": "v0.9.10",
       "date": "2026-11-07",

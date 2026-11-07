@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.9.11 (2026-11-07)
+
+**Features**
+
+- **theme** Choose solid, orbit or mountain backgrounds across application pages without resetting page state. (5f1efed)
+
+**Bug Fixes**
+
+- **windows** Replace the remaining FlClash tray icons with TianjiCloud icons for all Windows states. (893345f)
+- **traffic** Show VPN, mainland direct and other direct shares with a centered savings total. (43b0922)
+- **dashboard** Compact the Windows dashboard, follow the app palette and animate connection state transitions. (d37bff5)
+- **update** Show update progress and installation controls on the Tianji dashboard and About page (842345d)
+
 ## v0.9.10 (2026-11-07)
 
 **Features**
