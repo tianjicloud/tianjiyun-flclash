@@ -9723,10 +9723,10 @@ class AppLocalizations {
     );
   }
 
-  /// `All traffic that requires the proxy uses the selected residential line. Mainland and direct traffic still follows the subscription. Some destinations may use a service-side alternative exit.`
+  /// `Default proxy traffic uses the selected residential exit; mainland and direct traffic follow the subscription. Bulk bypass status is shown below when active. Some destinations may use a service-side alternative exit.`
   String get residentialExplanation {
     return Intl.message(
-      'All traffic that requires the proxy uses the selected residential line. Mainland and direct traffic still follows the subscription. Some destinations may use a service-side alternative exit.',
+      'Default proxy traffic uses the selected residential exit; mainland and direct traffic follow the subscription. Bulk bypass status is shown below when active. Some destinations may use a service-side alternative exit.',
       name: 'residentialExplanation',
       desc: '',
       args: [],
@@ -9958,6 +9958,26 @@ class AppLocalizations {
     return Intl.message(
       'Check again',
       name: 'selectionRecheck',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.`
+  String get residentialBulkBypass {
+    return Intl.message(
+      'Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.',
+      name: 'residentialBulkBypass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bulk bypass is not confirmed. Video and downloads may consume residential traffic.`
+  String get residentialBulkUnconfirmed {
+    return Intl.message(
+      'Bulk bypass is not confirmed. Video and downloads may consume residential traffic.',
+      name: 'residentialBulkUnconfirmed',
       desc: '',
       args: [],
     );

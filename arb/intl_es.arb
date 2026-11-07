@@ -1143,7 +1143,7 @@
   "residentialNoPlan": "No hay líneas residenciales disponibles",
   "residentialNoPlanDesc": "Esta suscripción no tiene ninguna salida residencial utilizable ahora mismo. Sigue usando la política de la suscripción o revisa el panel de suscripción.",
   "residentialManageSubscription": "Gestionar suscripción",
-  "residentialExplanation": "Todo el tráfico que necesita el proxy usa la línea residencial seleccionada. El tráfico directo y de China continental sigue la suscripción. Algunos destinos pueden usar una salida alternativa del servicio.",
+  "residentialExplanation": "El tráfico proxy predeterminado usa la salida residencial elegida; el tráfico directo sigue la suscripción. El desvío de descargas se indica abajo cuando está activo. El servidor puede usar salidas alternativas para ciertos destinos.",
   "residentialRouteNote": "La tarjeta de IP muestra la salida de su destino de comprobación actual, no una salida única para todos los sitios.",
   "residentialExitLocked": "Elige la salida residencial desde el panel. Otros grupos no pueden cambiarla mientras el enrutamiento residencial esté activo.",
   "residentialLoadingCatalog": "Cargando líneas residenciales…",
@@ -1166,5 +1166,7 @@
   "selectionGroupOverridden": "El grupo automático eligió otro nodo. Selecciona un nodo manualmente para fijarlo.",
   "selectionUnknownPending": "La salida difiere de tu selección. Comprobando el motivo…",
   "selectionUnknown": "La salida difiere de tu selección. No se pudo confirmar el motivo. Comprueba de nuevo.",
-  "selectionRecheck": "Comprobar de nuevo"
+  "selectionRecheck": "Comprobar de nuevo",
+  "residentialBulkBypass": "Los vídeos y descargas de la lista usan líneas normales automáticas sin consumir tráfico residencial. El tráfico directo sigue directo; los destinos no incluidos usan la salida residencial.",
+  "residentialBulkUnconfirmed": "El desvío de grandes transferencias no está confirmado. Los vídeos y descargas pueden consumir tráfico residencial."
 }

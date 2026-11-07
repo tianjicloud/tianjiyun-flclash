@@ -1525,6 +1525,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "회선을 적용하지 못했습니다. 다시 시도하거나 다른 회선을 선택하세요.",
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("적용 중…"),
+    "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
+      "목록에 있는 영상과 대용량 다운로드는 일반 자동 회선을 사용하여 가정용 트래픽을 절약합니다. 직접 연결은 유지되며 목록 밖의 대상은 가정용 회선을 사용합니다.",
+    ),
+    "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "대용량 우회가 확인되지 않았습니다. 영상과 다운로드가 가정용 트래픽을 사용할 수 있습니다.",
+    ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "컴퓨터 트래픽을 처리하고 있지 않습니다. 아래에서 시스템 프록시 또는 TUN을 켜세요.",
     ),
@@ -1534,7 +1540,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "대시보드에서 주거용 출구를 선택하세요. 주거용 라우팅이 활성화된 동안 다른 그룹에서는 변경할 수 없습니다.",
     ),
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
-      "프록시가 필요한 모든 트래픽은 선택한 주거용 회선을 사용합니다. 중국 본토 및 직접 연결 트래픽은 구독을 따릅니다. 일부 대상은 서비스 측에서 대체 출구를 사용할 수 있습니다.",
+      "기본 프록시 트래픽은 선택한 가정용 회선을 사용하고 직접 연결 트래픽은 구독 규칙을 따릅니다. 대용량 우회가 활성화되면 아래에 표시됩니다. 일부 대상은 서버의 대체 출구를 사용할 수 있습니다.",
     ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "주거용 회선을 불러오는 중…",

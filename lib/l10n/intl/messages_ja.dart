@@ -1553,6 +1553,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "この回線を適用できませんでした。再試行するか、別の回線を選んでください。",
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("適用中…"),
+    "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
+      "一覧内の動画と大容量ダウンロードは通常の自動回線を使用し、住宅回線の通信量を消費しません。直接通信は維持され、一覧外は住宅回線を使用します。",
+    ),
+    "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "大容量通信の迂回は確認できていません。動画やダウンロードは住宅回線の通信量を消費する場合があります。",
+    ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "パソコンの通信はまだ取り込まれていません。下のシステムプロキシまたは TUN を有効にしてください。",
     ),
@@ -1562,7 +1568,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "住宅出口はダッシュボードで選択してください。住宅ルーティング有効中は他のグループから変更できません。",
     ),
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
-      "プロキシが必要な通信はすべて選択した住宅回線を使用します。中国本土と直接通信はサブスクリプションの分流に従います。一部の宛先はサービス側で別の出口が使われる場合があります。",
+      "既定のプロキシ通信は選択した住宅回線を使用し、中国本土と直接通信はサブスクリプションに従います。大容量通信の迂回が有効な場合は下に表示します。一部の宛先ではサーバーが別の出口を使用する場合があります。",
     ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "住宅回線を読み込み中…",

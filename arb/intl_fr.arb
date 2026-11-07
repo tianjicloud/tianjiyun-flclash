@@ -1143,7 +1143,7 @@
   "residentialNoPlan": "Aucune ligne résidentielle disponible",
   "residentialNoPlanDesc": "Cet abonnement n’a aucune sortie résidentielle utilisable pour le moment. Continuez avec la politique de l’abonnement ou vérifiez le panneau d’abonnement.",
   "residentialManageSubscription": "Gérer l’abonnement",
-  "residentialExplanation": "Tout le trafic nécessitant le proxy utilise la ligne résidentielle sélectionnée. Le trafic direct et de Chine continentale suit toujours l’abonnement. Certaines destinations peuvent utiliser une sortie alternative côté service.",
+  "residentialExplanation": "Le trafic proxy par défaut utilise la sortie résidentielle choisie ; le trafic direct suit l’abonnement. Le contournement des gros transferts est indiqué ci-dessous lorsqu’il est actif. Le serveur peut utiliser d’autres sorties pour certaines destinations.",
   "residentialRouteNote": "La carte IP affiche la sortie pour sa destination de test actuelle, pas une sortie unique pour tous les sites.",
   "residentialExitLocked": "Choisissez la sortie résidentielle depuis le tableau de bord. Les autres groupes ne peuvent pas la modifier tant que le routage résidentiel est actif.",
   "residentialLoadingCatalog": "Chargement des lignes résidentielles…",
@@ -1166,5 +1166,7 @@
   "selectionGroupOverridden": "Ce groupe automatique a choisi un autre nœud. Sélectionnez un nœud manuellement pour le fixer.",
   "selectionUnknownPending": "La sortie diffère de votre choix. Vérification de la cause…",
   "selectionUnknown": "La sortie diffère de votre choix. La cause n’a pas pu être confirmée. Réessayez.",
-  "selectionRecheck": "Vérifier à nouveau"
+  "selectionRecheck": "Vérifier à nouveau",
+  "residentialBulkBypass": "Les vidéos et téléchargements répertoriés utilisent les lignes ordinaires automatiques, sans consommer le trafic résidentiel. Le trafic direct reste direct ; les autres destinations utilisent la sortie résidentielle.",
+  "residentialBulkUnconfirmed": "Le contournement des gros transferts n’est pas confirmé. Vidéos et téléchargements peuvent consommer du trafic résidentiel."
 }

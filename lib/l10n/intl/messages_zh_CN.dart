@@ -1409,6 +1409,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "线路未能生效，请重试或选择其他线路。",
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("正在应用…"),
+    "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
+      "名单内的视频和大文件下载会走普通自动线路，不占家宽流量；原本直连的仍直连，名单外的仍走家宽。",
+    ),
+    "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "暂未确认大流量绕行已启用；视频和下载可能占用家宽流量。",
+    ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。",
     ),
@@ -1418,7 +1424,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "请在仪表盘选择家宽出口。家宽分流生效期间，其他分组无法更改它。",
     ),
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
-      "需要代理的流量都会使用所选家宽线路；大陆与直连流量仍按订阅分流。部分目标可能由服务端使用替代出口。",
+      "默认代理流量使用所选家宽线路；大陆与直连流量仍按订阅分流。大流量绕行状态见下方说明。部分目标可能由服务端使用替代出口。",
     ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "正在加载家宽线路…",

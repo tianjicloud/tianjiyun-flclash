@@ -1143,7 +1143,7 @@
   "residentialNoPlan": "사용 가능한 주거용 회선 없음",
   "residentialNoPlanDesc": "이 구독에는 현재 사용할 수 있는 주거용 출구가 없습니다. 구독 정책을 계속 사용하거나 구독 패널을 확인하세요.",
   "residentialManageSubscription": "구독 관리",
-  "residentialExplanation": "프록시가 필요한 모든 트래픽은 선택한 주거용 회선을 사용합니다. 중국 본토 및 직접 연결 트래픽은 구독을 따릅니다. 일부 대상은 서비스 측에서 대체 출구를 사용할 수 있습니다.",
+  "residentialExplanation": "기본 프록시 트래픽은 선택한 가정용 회선을 사용하고 직접 연결 트래픽은 구독 규칙을 따릅니다. 대용량 우회가 활성화되면 아래에 표시됩니다. 일부 대상은 서버의 대체 출구를 사용할 수 있습니다.",
   "residentialRouteNote": "IP 카드는 현재 확인 대상의 출구만 표시하며 모든 사이트가 같은 출구를 쓰는 것은 아닙니다.",
   "residentialExitLocked": "대시보드에서 주거용 출구를 선택하세요. 주거용 라우팅이 활성화된 동안 다른 그룹에서는 변경할 수 없습니다.",
   "residentialLoadingCatalog": "주거용 회선을 불러오는 중…",
@@ -1166,5 +1166,7 @@
   "selectionGroupOverridden": "자동 그룹이 다른 노드를 선택했습니다. 고정하려면 노드를 수동으로 선택하세요.",
   "selectionUnknownPending": "출구가 선택한 항목과 다릅니다. 원인을 확인하는 중…",
   "selectionUnknown": "출구가 선택한 항목과 다릅니다. 원인을 확인할 수 없습니다. 다시 확인해 보세요.",
-  "selectionRecheck": "다시 확인"
+  "selectionRecheck": "다시 확인",
+  "residentialBulkBypass": "목록에 있는 영상과 대용량 다운로드는 일반 자동 회선을 사용하여 가정용 트래픽을 절약합니다. 직접 연결은 유지되며 목록 밖의 대상은 가정용 회선을 사용합니다.",
+  "residentialBulkUnconfirmed": "대용량 우회가 확인되지 않았습니다. 영상과 다운로드가 가정용 트래픽을 사용할 수 있습니다."
 }

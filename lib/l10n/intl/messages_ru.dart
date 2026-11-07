@@ -1894,6 +1894,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Не удалось применить линию. Повторите попытку или выберите другую.",
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Применение…"),
+    "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
+      "Видео и загрузки из списка используют обычные автоматические линии, экономя домашний трафик. Прямой трафик остаётся прямым; остальные адреса используют домашний выход.",
+    ),
+    "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Обход для больших загрузок не подтверждён. Видео и загрузки могут расходовать домашний трафик.",
+    ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "Трафик компьютера не перехватывается. Включите системный прокси или TUN ниже.",
     ),
@@ -1903,7 +1909,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выберите домашний выход на панели. Пока домашняя маршрутизация активна, другие группы не могут её изменить.",
     ),
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
-      "Весь проксируемый трафик использует выбранную домашнюю линию. Трафик материкового Китая и прямой трафик по-прежнему идёт по подписке. Для некоторых назначений сервис может использовать альтернативный выход.",
+      "Прокси-трафик по умолчанию использует выбранный домашний выход; прямой трафик следует подписке. Активный обход для больших загрузок указан ниже. Для отдельных адресов сервер может использовать другой выход.",
     ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "Загрузка домашних линий…",

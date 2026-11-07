@@ -1947,6 +1947,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Impossible d’appliquer cette ligne. Réessayez ou choisissez une autre ligne.",
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Application…"),
+    "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
+      "Les vidéos et téléchargements répertoriés utilisent les lignes ordinaires automatiques, sans consommer le trafic résidentiel. Le trafic direct reste direct ; les autres destinations utilisent la sortie résidentielle.",
+    ),
+    "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Le contournement des gros transferts n’est pas confirmé. Vidéos et téléchargements peuvent consommer du trafic résidentiel.",
+    ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "Le trafic de l’ordinateur n’est pas pris en charge. Activez le proxy système ou TUN ci-dessous.",
     ),
@@ -1960,7 +1966,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Choisissez la sortie résidentielle depuis le tableau de bord. Les autres groupes ne peuvent pas la modifier tant que le routage résidentiel est actif.",
     ),
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
-      "Tout le trafic nécessitant le proxy utilise la ligne résidentielle sélectionnée. Le trafic direct et de Chine continentale suit toujours l’abonnement. Certaines destinations peuvent utiliser une sortie alternative côté service.",
+      "Le trafic proxy par défaut utilise la sortie résidentielle choisie ; le trafic direct suit l’abonnement. Le contournement des gros transferts est indiqué ci-dessous lorsqu’il est actif. Le serveur peut utiliser d’autres sorties pour certaines destinations.",
     ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "Chargement des lignes résidentielles…",

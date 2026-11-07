@@ -52,6 +52,7 @@ ResidentialPolicy _policy({
   bool catalogReady = true,
   bool active = false,
   bool rootAvailable = true,
+  bool bulkBypass = false,
   List<String> choices = const ['Tokyo'],
   String? configured,
 }) {
@@ -64,6 +65,7 @@ ResidentialPolicy _policy({
     rootAvailable: rootAvailable,
     choices: choices,
     catalogReady: catalogReady,
+    bulkBypass: bulkBypass,
   );
 }
 
@@ -114,6 +116,17 @@ Widget _app(
 }
 
 void main() {
+  testWidgets('bulk notice appears only when the applied group is present', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_app(_policy(active: true)));
+    expect(find.textContaining('Listed video'), findsNothing);
+    await tester.pumpWidget(_app(_policy(active: true, bulkBypass: true)));
+    expect(find.textContaining('Listed video'), findsOneWidget);
+    await tester.pumpWidget(_app(_policy(bulkBypass: true)));
+    expect(find.textContaining('Listed video'), findsNothing);
+  });
+
   testWidgets('manual default line and its resolved node are both visible', (
     tester,
   ) async {

@@ -1,5 +1,6 @@
 import 'package:fl_clash/core/traffic/auth.dart';
 import 'package:fl_clash/core/residential.dart';
+import 'package:fl_clash/core/residential_bulk.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/models/profile.dart';
@@ -48,6 +49,7 @@ ResidentialPolicy buildResidentialPolicy({
     rootAvailable: rootAvailable,
     choices: choices,
     catalogReady: catalogReady,
+    bulkBypass: groups.getGroup(residentialBulkGroup) != null,
     rejected:
         groups
             .getGroup(tianjiResidentialLockedGroupName)
@@ -83,6 +85,7 @@ class ResidentialPolicy {
     required this.choices,
     required this.catalogReady,
     this.rejected = false,
+    this.bulkBypass = false,
   });
 
   final int? profileId;
@@ -94,6 +97,7 @@ class ResidentialPolicy {
   final List<String> choices;
   final bool catalogReady;
   final bool rejected;
+  final bool bulkBypass;
 
   bool get hasPlan => rootAvailable && choices.isNotEmpty;
 

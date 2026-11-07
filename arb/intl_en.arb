@@ -1143,7 +1143,7 @@
   "residentialNoPlan": "No residential lines available",
   "residentialNoPlanDesc": "This subscription has no usable residential exit right now. Keep using the subscription policy, or check the subscription panel.",
   "residentialManageSubscription": "Manage subscription",
-  "residentialExplanation": "All traffic that requires the proxy uses the selected residential line. Mainland and direct traffic still follows the subscription. Some destinations may use a service-side alternative exit.",
+  "residentialExplanation": "Default proxy traffic uses the selected residential exit; mainland and direct traffic follow the subscription. Bulk bypass status is shown below when active. Some destinations may use a service-side alternative exit.",
   "residentialRouteNote": "The IP card shows the exit for its current check destination, not one universal exit.",
   "residentialExitLocked": "Choose the residential exit from the dashboard. Other groups cannot change it while residential routing is active.",
   "residentialLoadingCatalog": "Loading residential lines…",
@@ -1166,5 +1166,7 @@
   "selectionGroupOverridden": "This automatic group chose a different node. Select a node manually to keep a fixed choice.",
   "selectionUnknownPending": "The exit differs from your selection. Checking the reason…",
   "selectionUnknown": "The exit differs from your selection. The reason could not be confirmed. Try checking again.",
-  "selectionRecheck": "Check again"
+  "selectionRecheck": "Check again",
+  "residentialBulkBypass": "Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.",
+  "residentialBulkUnconfirmed": "Bulk bypass is not confirmed. Video and downloads may consume residential traffic."
 }

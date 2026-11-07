@@ -1143,7 +1143,7 @@
   "residentialNoPlan": "暂无可用家宽线路",
   "residentialNoPlanDesc": "当前订阅没有可用的家宽出口。可继续使用订阅策略，或前往订阅面板查看。",
   "residentialManageSubscription": "管理订阅",
-  "residentialExplanation": "需要代理的流量都会使用所选家宽线路；大陆与直连流量仍按订阅分流。部分目标可能由服务端使用替代出口。",
+  "residentialExplanation": "默认代理流量使用所选家宽线路；大陆与直连流量仍按订阅分流。大流量绕行状态见下方说明。部分目标可能由服务端使用替代出口。",
   "residentialRouteNote": "IP 卡片只显示当前检测目标对应的出口，不代表所有网站都使用同一个出口。",
   "residentialExitLocked": "请在仪表盘选择家宽出口。家宽分流生效期间，其他分组无法更改它。",
   "residentialLoadingCatalog": "正在加载家宽线路…",
@@ -1166,5 +1166,7 @@
   "selectionGroupOverridden": "这个分组正在自动选择节点，实际节点与所选不同。请手动选择节点来固定线路。",
   "selectionUnknownPending": "出口与所选不一致，原因正在确认…",
   "selectionUnknown": "出口与所选不一致，暂时无法确认原因。可以重新检测一次。",
-  "selectionRecheck": "重新检测"
+  "selectionRecheck": "重新检测",
+  "residentialBulkBypass": "名单内的视频和大文件下载会走普通自动线路，不占家宽流量；原本直连的仍直连，名单外的仍走家宽。",
+  "residentialBulkUnconfirmed": "暂未确认大流量绕行已启用；视频和下载可能占用家宽流量。"
 }

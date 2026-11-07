@@ -1804,6 +1804,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "This line could not be applied. Retry or choose another line.",
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Applying…"),
+    "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
+      "Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.",
+    ),
+    "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Bulk bypass is not confirmed. Video and downloads may consume residential traffic.",
+    ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "Computer traffic is not being captured. Enable System proxy or TUN below.",
     ),
@@ -1813,7 +1819,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Choose the residential exit from the dashboard. Other groups cannot change it while residential routing is active.",
     ),
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
-      "All traffic that requires the proxy uses the selected residential line. Mainland and direct traffic still follows the subscription. Some destinations may use a service-side alternative exit.",
+      "Default proxy traffic uses the selected residential exit; mainland and direct traffic follow the subscription. Bulk bypass status is shown below when active. Some destinations may use a service-side alternative exit.",
     ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "Loading residential lines…",

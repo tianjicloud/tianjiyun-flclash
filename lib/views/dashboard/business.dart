@@ -543,6 +543,15 @@ class ResidentialExitCard extends ConsumerWidget {
           ],
           const SizedBox(height: 14),
           explanation,
+          if (policy.active && !missing) ...[
+            const SizedBox(height: 6),
+            Text(
+              policy.bulkBypass
+                  ? appLocalizations.residentialBulkBypass
+                  : appLocalizations.residentialBulkUnconfirmed,
+              style: label,
+            ),
+          ],
           const SizedBox(height: 6),
           routeNote,
         ],
@@ -601,7 +610,16 @@ class _ResidentialExitSheet extends ConsumerWidget {
     final policy = ref.watch(residentialPolicyProvider);
     return SelectionSheet<String>(
       title: appLocalizations.residentialTitle,
-      sections: [SelectionSection(items: policy.choices)],
+      sections: [
+        SelectionSection(
+          label: policy.active
+              ? policy.bulkBypass
+                    ? appLocalizations.residentialBulkBypass
+                    : appLocalizations.residentialBulkUnconfirmed
+              : null,
+          items: policy.choices,
+        ),
+      ],
       labelBuilder: (item) => item,
       selectedOf: (_) => policy.selectedExit,
       emptyLabel: appLocalizations.residentialNoPlan,

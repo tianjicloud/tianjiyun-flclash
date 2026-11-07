@@ -1943,6 +1943,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se pudo aplicar esta línea. Reintenta o elige otra línea.",
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Aplicando…"),
+    "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
+      "Los vídeos y descargas de la lista usan líneas normales automáticas sin consumir tráfico residencial. El tráfico directo sigue directo; los destinos no incluidos usan la salida residencial.",
+    ),
+    "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "El desvío de grandes transferencias no está confirmado. Los vídeos y descargas pueden consumir tráfico residencial.",
+    ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "No se está capturando el tráfico del equipo. Activa el proxy del sistema o TUN abajo.",
     ),
@@ -1952,7 +1958,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Elige la salida residencial desde el panel. Otros grupos no pueden cambiarla mientras el enrutamiento residencial esté activo.",
     ),
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
-      "Todo el tráfico que necesita el proxy usa la línea residencial seleccionada. El tráfico directo y de China continental sigue la suscripción. Algunos destinos pueden usar una salida alternativa del servicio.",
+      "El tráfico proxy predeterminado usa la salida residencial elegida; el tráfico directo sigue la suscripción. El desvío de descargas se indica abajo cuando está activo. El servidor puede usar salidas alternativas para ciertos destinos.",
     ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "Cargando líneas residenciales…",
