@@ -186,6 +186,67 @@ DashboardChip _chip(WidgetTester tester, String label) =>
     );
 
 void main() {
+  testWidgets('stopped business desktop hides probe data and keeps selection', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1568, 1024);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      TestApp(
+        locale: const Locale('en'),
+        overrides: [
+          profilesProvider.overrideWithValue(const [_profile]),
+          isStartProvider.overrideWithValue(false),
+          suspendProvider.overrideWithValue(false),
+          coreStatusProvider.overrideWithValue(CoreStatus.connected),
+          outboundIpProbeProvider.overrideWith(_Ips.new),
+          ipQualityProvider.overrideWith((_, _) async => _residential),
+          selectionCheckProvider.overrideWithBuild(
+            (_, _) => SelectionVerdict.confirming,
+          ),
+          scenePolicyProvider.overrideWithValue(
+            const ScenePolicy(
+              available: false,
+              current: null,
+              suspended: false,
+            ),
+          ),
+          currentGroupsStateProvider.overrideWithValue(
+            const GroupsState(
+              value: [
+                Group(
+                  name: 'Lines',
+                  type: GroupType.Selector,
+                  all: [Proxy(name: 'Tokyo', type: 'anytls')],
+                ),
+              ],
+            ),
+          ),
+          selectedProxyNameProvider('Lines').overrideWithValue('Tokyo'),
+        ],
+        child: const BusinessAppearance(
+          child: HostScaffold(
+            body: DashboardDensityScope(
+              density: DashboardDensity.standard,
+              scale: 1,
+              child: CurrentOutboundCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text(_ip), findsNothing);
+    expect(find.text('Example Broadband'), findsNothing);
+    expect(find.text('GB'), findsNothing);
+    expect(find.text('Residential'), findsNothing);
+    expect(find.text('Tokyo'), findsOneWidget);
+    expect(find.textContaining('Confirming'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('compact desktop supports 125 percent text', (tester) async {
     tester.view.physicalSize = const Size(1280, 800);
     tester.view.devicePixelRatio = 1;
@@ -196,6 +257,7 @@ void main() {
         locale: const Locale('en'),
         overrides: [
           profilesProvider.overrideWithValue(const [_profile]),
+          isStartProvider.overrideWithValue(true),
           suspendProvider.overrideWithValue(false),
           selectionCheckProvider.overrideWithBuild(
             (_, _) => SelectionVerdict.untouched,
@@ -240,6 +302,7 @@ void main() {
         locale: const Locale('en'),
         overrides: [
           profilesProvider.overrideWithValue(const [_profile]),
+          isStartProvider.overrideWithValue(true),
           suspendProvider.overrideWithValue(false),
           selectionCheckProvider.overrideWithBuild(
             (_, _) => SelectionVerdict.untouched,

@@ -106,11 +106,12 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         : (appLocalizations.notRunning, DashboardChipTone.idle);
     final verdict = ref.watch(selectionCheckProvider);
     final showSelection =
+        (isStart || !BusinessTheme.of(context)) &&
         verdict != SelectionVerdict.untouched &&
         verdict != SelectionVerdict.consistent;
     if (BusinessTheme.of(context)) {
       final active = isStart && !suspended;
-      final exitName = phase == ProbePhase.fresh
+      final exitName = isStart && phase == ProbePhase.fresh
           ? entry.stamp?.hits.firstOrNull?.exit
           : null;
       final line = currentDashboardLine(ref);
@@ -145,11 +146,11 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         compact: density.isCompact,
         statusText: statusText,
         statusTone: statusTone,
-        checking: checking && !isStart,
-        info: ipInfo,
-        failed: failed,
-        loading: loading,
-        quality: quality,
+        checking: checking && connectingStatus,
+        info: isStart ? ipInfo : null,
+        failed: isStart && failed,
+        loading: isStart && loading,
+        quality: isStart ? quality : null,
         active: active,
         onRefresh: () => _refresh(ipInfo?.ip),
         line: line,
@@ -180,7 +181,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                   child: _BusinessStatusLine(
                     text: statusText,
                     tone: statusTone,
-                    checking: checking && !isStart,
+                    checking: checking && connectingStatus,
                     centered: true,
                   ),
                 ),
@@ -724,6 +725,9 @@ class _BusinessIp extends StatelessWidget {
       color: active ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
     );
     final info = this.info;
+    if (info == null && !failed && !loading) {
+      return const _Placeholder();
+    }
     if (info != null) {
       return Align(
         alignment: AlignmentDirectional.centerStart,
@@ -784,11 +788,14 @@ class _BusinessChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final quality = this.quality;
+    if (info == null && quality == null && !loading) {
+      return const SizedBox.shrink();
+    }
     final code = info?.countryCode;
     final country = code == null || code.isEmpty
         ? null
         : DashboardChip(label: code.toUpperCase(), large: large);
-    final quality = this.quality;
     final chips = <Widget>[
       ?country,
       if (quality != null) ...[
