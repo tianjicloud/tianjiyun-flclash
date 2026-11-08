@@ -25,6 +25,7 @@ import 'package:fl_clash/views/dashboard/widgets/scene_bar.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -128,17 +129,14 @@ class _BusinessBody extends ConsumerWidget {
                       context,
                     ).copyWith(color: DashboardColors.of(context).warn),
                   ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                _EqualHeightRow(
                   spacing: gap,
+                  flexes: const [4, 3, 3],
                   children: [
-                    const Expanded(flex: 4, child: BusinessLineCard()),
-                    const Expanded(flex: 3, child: TrafficSavingsCard()),
-                    Expanded(
-                      flex: 3,
-                      child: ProfilesCard(
-                        title: context.appLocalizations.subscriptionInfo,
-                      ),
+                    const BusinessLineCard(),
+                    const TrafficSavingsCard(),
+                    ProfilesCard(
+                      title: context.appLocalizations.subscriptionInfo,
                     ),
                   ],
                 ),
@@ -169,12 +167,10 @@ class _BusinessBody extends ConsumerWidget {
                         children: cards,
                       );
                     }
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    return _EqualHeightRow(
                       spacing: gap,
-                      children: [
-                        for (final card in cards) Expanded(child: card),
-                      ],
+                      flexes: const [1, 1],
+                      children: cards,
                     );
                   },
                 ),
@@ -716,5 +712,153 @@ class _ResidentialExitSheet extends ConsumerWidget {
         unawaited(ref.read(residentialActionProvider.notifier).select(item));
       },
     );
+  }
+}
+
+class _EqualHeightRow extends MultiChildRenderObjectWidget {
+  const _EqualHeightRow({
+    required this.spacing,
+    required this.flexes,
+    required super.children,
+  });
+
+  final double spacing;
+  final List<int> flexes;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderEqualHeightRow(spacing: spacing, flexes: flexes);
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _RenderEqualHeightRow renderObject,
+  ) {
+    renderObject
+      ..spacing = spacing
+      ..flexes = flexes;
+  }
+}
+
+class _EqualHeightRowParentData extends ContainerBoxParentData<RenderBox> {}
+
+class _RenderEqualHeightRow extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, _EqualHeightRowParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, _EqualHeightRowParentData> {
+  _RenderEqualHeightRow({required double spacing, required List<int> flexes})
+    : _spacing = spacing,
+      _flexes = flexes;
+
+  double _spacing;
+  List<int> _flexes;
+
+  double get spacing => _spacing;
+
+  set spacing(double value) {
+    if (_spacing == value) return;
+    _spacing = value;
+    markNeedsLayout();
+  }
+
+  List<int> get flexes => _flexes;
+
+  set flexes(List<int> value) {
+    if (_flexes == value) return;
+    _flexes = value;
+    markNeedsLayout();
+  }
+
+  List<double> _widthsFor(double maxWidth, int count) {
+    final available = math.max(0.0, maxWidth - _spacing * (count - 1));
+    var totalFlex = 0;
+    for (var i = 0; i < count; i++) {
+      totalFlex += i < _flexes.length ? _flexes[i] : 1;
+    }
+    return [
+      for (var i = 0; i < count; i++)
+        totalFlex == 0
+            ? available / count
+            : available * (i < _flexes.length ? _flexes[i] : 1) / totalFlex,
+    ];
+  }
+
+  @override
+  void setupParentData(RenderBox child) {
+    if (child.parentData is! _EqualHeightRowParentData) {
+      child.parentData = _EqualHeightRowParentData();
+    }
+  }
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    final count = childCount;
+    if (count == 0 || !constraints.hasBoundedWidth) {
+      return constraints.smallest;
+    }
+    final widths = _widthsFor(constraints.maxWidth, count);
+    var maxHeight = 0.0;
+    var child = firstChild;
+    var index = 0;
+    while (child != null) {
+      final childSize = child.getDryLayout(
+        BoxConstraints(minWidth: widths[index], maxWidth: widths[index]),
+      );
+      maxHeight = math.max(maxHeight, childSize.height);
+      child = childAfter(child);
+      index++;
+    }
+    final height = maxHeight
+        .clamp(constraints.minHeight, constraints.maxHeight)
+        .toDouble();
+    return Size(constraints.maxWidth, height);
+  }
+
+  @override
+  void performLayout() {
+    final count = childCount;
+    if (count == 0) {
+      size = constraints.smallest;
+      return;
+    }
+    final widths = _widthsFor(constraints.maxWidth, count);
+    var maxHeight = 0.0;
+    var child = firstChild;
+    var index = 0;
+    while (child != null) {
+      child.layout(
+        BoxConstraints(minWidth: widths[index], maxWidth: widths[index]),
+        parentUsesSize: true,
+      );
+      maxHeight = math.max(maxHeight, child.size.height);
+      child = childAfter(child);
+      index++;
+    }
+    final height = maxHeight
+        .clamp(constraints.minHeight, constraints.maxHeight)
+        .toDouble();
+    child = firstChild;
+    index = 0;
+    var x = 0.0;
+    while (child != null) {
+      child.layout(
+        BoxConstraints.tightFor(width: widths[index], height: height),
+        parentUsesSize: true,
+      );
+      (child.parentData! as _EqualHeightRowParentData).offset = Offset(x, 0);
+      x += widths[index] + _spacing;
+      child = childAfter(child);
+      index++;
+    }
+    size = Size(constraints.maxWidth, height);
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) =>
+      defaultHitTestChildren(result, position: position);
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    defaultPaint(context, offset);
   }
 }
