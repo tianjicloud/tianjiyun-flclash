@@ -257,7 +257,7 @@ class _BusinessSidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = context.colorScheme.brightness == Brightness.dark;
     final foreground = selected
-        ? (dark ? const Color(0xFFEDF0FF) : context.colorScheme.onSurface)
+        ? (dark ? const Color(0xFFEDF0FF) : context.colorScheme.primary)
         : (dark
               ? const Color(0xFFB9C0E4)
               : context.colorScheme.onSurfaceVariant);
@@ -278,16 +278,21 @@ class _BusinessSidebarItem extends StatelessWidget {
               child: Stack(
                 children: [
                   if (selected)
-                    const Positioned.fill(
+                    Positioned.fill(
                       child: DecoratedBox(
                         decoration: ShapeDecoration(
-                          gradient: BusinessPalette.navSelection,
+                          color: dark
+                              ? null
+                              : context.colorScheme.primary.withValues(
+                                  alpha: 0.10,
+                                ),
+                          gradient: dark ? BusinessPalette.navSelection : null,
                           shape: _sidebarRowShape,
                         ),
                       ),
                     ),
                   if (selected)
-                    const PositionedDirectional(
+                    PositionedDirectional(
                       start: 0,
                       top: 11,
                       bottom: 11,
@@ -295,7 +300,9 @@ class _BusinessSidebarItem extends StatelessWidget {
                         width: 2.5,
                         child: DecoratedBox(
                           decoration: ShapeDecoration(
-                            color: BusinessPalette.accent,
+                            color: dark
+                                ? BusinessPalette.accent
+                                : context.colorScheme.primary,
                             shape: AppShape.full,
                           ),
                         ),

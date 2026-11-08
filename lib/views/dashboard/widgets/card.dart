@@ -96,7 +96,9 @@ class DashboardCard extends StatelessWidget {
             ? cardColor.withValues(alpha: density.isDesktop ? 0.62 : 0.66)
             : cardColor,
         shape: shape,
-        shadows: business ? const [] : DashboardShadows.e1(context),
+        shadows: business && context.colorScheme.brightness == Brightness.dark
+            ? const []
+            : DashboardShadows.e1(context),
       ),
       foregroundDecoration: border == BorderSide.none
           ? null
