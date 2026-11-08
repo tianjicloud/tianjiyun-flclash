@@ -1188,10 +1188,11 @@
   "backgroundAurora": "オーロラ",
   "backgroundNebula": "星雲",
   "backgroundGlobe": "グローブ",
-  "trafficOtherDirect": "その他の直接接続",
+  "trafficOtherDirect": "直接通信（地域未確認）",
   "mobileRemainingTraffic": "今月の残り通信量",
   "mobilePlanValidity": "プラン有効期限",
   "lineRate": "倍率",
   "daysUnit": "日",
-  "subscriptionDetails": "詳細"
+  "subscriptionDetails": "詳細",
+  "trafficMainlandThisMonth": "今月の中国本土への直接通信"
 }

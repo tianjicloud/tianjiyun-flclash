@@ -2508,8 +2508,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalUpload": MessageLookupByLibrary.simpleMessage("Envoyé"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Port TProxy"),
     "traffic": MessageLookupByLibrary.simpleMessage("Trafic"),
+    "trafficMainlandThisMonth": MessageLookupByLibrary.simpleMessage(
+      "Direct vers la Chine ce mois-ci",
+    ),
     "trafficOtherDirect": MessageLookupByLibrary.simpleMessage(
-      "Autre trafic direct",
+      "Direct (région non confirmée)",
     ),
     "trafficPeak": m96,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(

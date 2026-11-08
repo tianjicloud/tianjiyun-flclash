@@ -10113,10 +10113,10 @@ class AppLocalizations {
     return Intl.message('Globe', name: 'backgroundGlobe', desc: '', args: []);
   }
 
-  /// `Other direct`
+  /// `Direct (region unconfirmed)`
   String get trafficOtherDirect {
     return Intl.message(
-      'Other direct',
+      'Direct (region unconfirmed)',
       name: 'trafficOtherDirect',
       desc: '',
       args: [],
@@ -10158,6 +10158,16 @@ class AppLocalizations {
     return Intl.message(
       'Details',
       name: 'subscriptionDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mainland direct this month`
+  String get trafficMainlandThisMonth {
+    return Intl.message(
+      'Mainland direct this month',
+      name: 'trafficMainlandThisMonth',
       desc: '',
       args: [],
     );

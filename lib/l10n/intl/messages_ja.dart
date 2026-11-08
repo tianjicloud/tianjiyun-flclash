@@ -2006,7 +2006,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalUpload": MessageLookupByLibrary.simpleMessage("アップロード量"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxyポート"),
     "traffic": MessageLookupByLibrary.simpleMessage("通信量"),
-    "trafficOtherDirect": MessageLookupByLibrary.simpleMessage("その他の直接接続"),
+    "trafficMainlandThisMonth": MessageLookupByLibrary.simpleMessage(
+      "今月の中国本土への直接通信",
+    ),
+    "trafficOtherDirect": MessageLookupByLibrary.simpleMessage("直接通信（地域未確認）"),
     "trafficPeak": m96,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage("今月の節約"),
     "trafficStats": MessageLookupByLibrary.simpleMessage("通信統計"),

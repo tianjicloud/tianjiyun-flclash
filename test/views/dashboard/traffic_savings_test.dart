@@ -94,7 +94,7 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('business ring shows all shares and centers savings', (
+  testWidgets('business ring shows all shares and centers mainland direct', (
     tester,
   ) async {
     stats.summary.value = const TrafficSummary(
@@ -108,8 +108,8 @@ void main() {
     for (final value in ['60.0%', '30.0%', '10.0%']) {
       expect(find.text(value), findsOneWidget);
     }
-    expect(find.text('Other direct'), findsOneWidget);
-    final title = tester.getCenter(find.text('Saved this month'));
+    expect(find.text('Direct (region unconfirmed)'), findsOneWidget);
+    final title = tester.getCenter(find.text('Mainland direct this month'));
     final saved = tester.getCenter(find.text(_traffic(30)).first);
     expect(saved.dx, closeTo(title.dx, 0.1));
     expect(tester.takeException(), isNull);

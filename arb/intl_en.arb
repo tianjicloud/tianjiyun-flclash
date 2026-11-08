@@ -1188,10 +1188,11 @@
   "backgroundAurora": "Aurora",
   "backgroundNebula": "Nebula",
   "backgroundGlobe": "Globe",
-  "trafficOtherDirect": "Other direct",
+  "trafficOtherDirect": "Direct (region unconfirmed)",
   "mobileRemainingTraffic": "Traffic left",
   "mobilePlanValidity": "Plan validity",
   "lineRate": "Rate",
   "daysUnit": "days",
-  "subscriptionDetails": "Details"
+  "subscriptionDetails": "Details",
+  "trafficMainlandThisMonth": "Mainland direct this month"
 }

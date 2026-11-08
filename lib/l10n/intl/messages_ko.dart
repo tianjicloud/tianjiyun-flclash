@@ -1974,7 +1974,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalUpload": MessageLookupByLibrary.simpleMessage("업로드량"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxy 포트"),
     "traffic": MessageLookupByLibrary.simpleMessage("트래픽"),
-    "trafficOtherDirect": MessageLookupByLibrary.simpleMessage("기타 직접 연결"),
+    "trafficMainlandThisMonth": MessageLookupByLibrary.simpleMessage(
+      "이번 달 중국 본토 직접 연결",
+    ),
+    "trafficOtherDirect": MessageLookupByLibrary.simpleMessage(
+      "직접 연결 (지역 미확인)",
+    ),
     "trafficPeak": m96,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage("이번 달 절약"),
     "trafficStats": MessageLookupByLibrary.simpleMessage("트래픽 통계"),

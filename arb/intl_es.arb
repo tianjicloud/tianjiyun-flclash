@@ -1188,10 +1188,11 @@
   "backgroundAurora": "Aurora",
   "backgroundNebula": "Nebulosa",
   "backgroundGlobe": "Globo",
-  "trafficOtherDirect": "Otro tráfico directo",
+  "trafficOtherDirect": "Directo (región sin confirmar)",
   "mobileRemainingTraffic": "Tráfico restante",
   "mobilePlanValidity": "Validez del plan",
   "lineRate": "Tasa",
   "daysUnit": "días",
-  "subscriptionDetails": "Detalles"
+  "subscriptionDetails": "Detalles",
+  "trafficMainlandThisMonth": "Directo a China este mes"
 }

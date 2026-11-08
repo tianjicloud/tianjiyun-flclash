@@ -1188,10 +1188,11 @@
   "backgroundAurora": "오로라",
   "backgroundNebula": "성운",
   "backgroundGlobe": "글로브",
-  "trafficOtherDirect": "기타 직접 연결",
+  "trafficOtherDirect": "직접 연결 (지역 미확인)",
   "mobileRemainingTraffic": "이번 달 남은 트래픽",
   "mobilePlanValidity": "요금제 유효 기간",
   "lineRate": "배율",
   "daysUnit": "일",
-  "subscriptionDetails": "상세"
+  "subscriptionDetails": "상세",
+  "trafficMainlandThisMonth": "이번 달 중국 본토 직접 연결"
 }

@@ -2437,8 +2437,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalUpload": MessageLookupByLibrary.simpleMessage("Отдано"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Порт TProxy"),
     "traffic": MessageLookupByLibrary.simpleMessage("Трафик"),
+    "trafficMainlandThisMonth": MessageLookupByLibrary.simpleMessage(
+      "Напрямую в Китай за месяц",
+    ),
     "trafficOtherDirect": MessageLookupByLibrary.simpleMessage(
-      "Прочие прямые подключения",
+      "Напрямую (регион не подтверждён)",
     ),
     "trafficPeak": m96,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(

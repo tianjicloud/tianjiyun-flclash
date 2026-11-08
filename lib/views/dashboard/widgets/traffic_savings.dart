@@ -64,7 +64,7 @@ class TrafficSavingsCard extends ConsumerWidget {
                       child: SizedBox(
                         width: 68,
                         child: _TrafficStat(
-                          label: appLocalizations.trafficSavedThisMonth,
+                          label: appLocalizations.trafficMainlandThisMonth,
                           bytes: summary.monthSavings,
                           centered: true,
                         ),
