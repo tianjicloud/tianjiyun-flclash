@@ -1,7 +1,8 @@
 import 'dart:math' as math;
-import 'dart:ui' show lerpDouble;
+import 'dart:ui' show ImageFilter, lerpDouble;
 
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
@@ -61,16 +62,26 @@ class DashboardCard extends StatelessWidget {
     final shape = AppShape.all(
       business ? BusinessPalette.cardRadius : dashboardCardRadius(density),
     );
-    final border = side;
+    final overWallpaper =
+        business &&
+        context.colorScheme.brightness == Brightness.dark &&
+        AppBackgroundScope.hasImage(context);
+    final border = side != BorderSide.none
+        ? side
+        : overWallpaper
+        ? const BorderSide(color: Color(0x298C96FF))
+        : BorderSide.none;
     final content = Padding(
       padding: padding ?? dashboardCardPadding(density),
       child: child,
     );
     final onTap = this.onTap;
-    final card = Container(
+    Widget card = Container(
       clipBehavior: clipBehavior,
       decoration: ShapeDecoration(
-        color: DashboardColors.of(context).card,
+        color: overWallpaper
+            ? DashboardColors.of(context).card.withValues(alpha: 0.62)
+            : DashboardColors.of(context).card,
         shape: shape,
         shadows: business ? const [] : DashboardShadows.e1(context),
       ),
@@ -87,6 +98,18 @@ class DashboardCard extends StatelessWidget {
               child: Semantics(label: semanticLabel, child: content),
             ),
     );
+    if (overWallpaper) {
+      card = ClipPath(
+        clipper: ShapeBorderClipper(
+          shape: shape,
+          textDirection: Directionality.of(context),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+          child: card,
+        ),
+      );
+    }
     if (onTap != null) {
       return card;
     }

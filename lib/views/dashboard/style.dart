@@ -23,15 +23,23 @@ class DashboardColors {
 
   factory DashboardColors.of(BuildContext context) {
     final colorScheme = context.colorScheme;
-    final card = SurfaceLevel.card.colorOf(colorScheme);
     final business = BusinessTheme.of(context);
     final businessDark = business && colorScheme.brightness == Brightness.dark;
+    final card = businessDark
+        ? const Color(0xFF101636)
+        : SurfaceLevel.card.colorOf(colorScheme);
     return DashboardColors._(
       page: SurfaceLevel.page.colorOf(colorScheme),
       card: card,
-      tone: SurfaceLevel.block.colorOf(colorScheme),
-      tone2: SurfaceLevel.inset.colorOf(colorScheme),
-      track: colorScheme.surfaceContainerHighest,
+      tone: businessDark
+          ? const Color.fromRGBO(255, 255, 255, 0.06)
+          : SurfaceLevel.block.colorOf(colorScheme),
+      tone2: businessDark
+          ? const Color.fromRGBO(255, 255, 255, 0.10)
+          : SurfaceLevel.inset.colorOf(colorScheme),
+      track: businessDark
+          ? const Color.fromRGBO(255, 255, 255, 0.12)
+          : colorScheme.surfaceContainerHighest,
       thumb: colorScheme.outline,
       series2: Color.alphaBlend(
         colorScheme.primary.withValues(alpha: 0.45),

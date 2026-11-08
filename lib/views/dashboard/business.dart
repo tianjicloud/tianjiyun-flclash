@@ -243,19 +243,30 @@ class _ControlBar extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final tileWidth = constraints.maxWidth >= 900 ? 230.0 : 190.0;
+          final label = Text(
+            context.appLocalizations.outboundMode,
+            style: DashboardText.cardTitle(context),
+          );
+          final tileWidgets = [
+            for (final tile in tiles)
+              SizedBox(width: tileWidth, height: 56, child: tile),
+          ];
+          if (constraints.maxWidth >= 880) {
+            return Row(
+              spacing: 16,
+              children: [
+                label,
+                const IntrinsicWidth(child: OutboundModeInline()),
+                const Spacer(),
+                ...tileWidgets,
+              ],
+            );
+          }
           return Wrap(
             spacing: 16,
             runSpacing: 12,
             crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Text(
-                context.appLocalizations.outboundMode,
-                style: DashboardText.cardTitle(context),
-              ),
-              const OutboundModeInline(),
-              for (final tile in tiles)
-                SizedBox(width: tileWidth, height: 56, child: tile),
-            ],
+            children: [label, const OutboundModeInline(), ...tileWidgets],
           );
         },
       ),
