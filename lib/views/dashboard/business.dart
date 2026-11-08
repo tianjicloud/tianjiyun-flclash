@@ -140,7 +140,9 @@ class _BusinessBody extends ConsumerWidget {
                       .sceneNoticeDismissed !=
                   true)
                 const SceneUnavailableCard(),
-              const QuickLines(),
+              QuickLines(
+                onChooseResidential: () => showResidentialExitSheet(context),
+              ),
               if (density.isDesktop) ...[
                 if (needsTakeover)
                   Text(

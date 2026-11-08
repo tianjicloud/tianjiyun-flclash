@@ -1,4 +1,5 @@
 import 'package:fl_clash/core/scene.dart';
+import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -13,8 +14,10 @@ class DashboardLine {
     required this.delay,
     required this.current,
     required this.rate,
+    this.residential = false,
   });
 
+  final bool residential;
   final String groupName;
   final String name;
   final String displayName;
@@ -70,6 +73,7 @@ Group? _hostOf(WidgetRef ref, List<Group> groups) {
 List<DashboardLine> dashboardLines(WidgetRef ref, {int limit = 4}) {
   final groups = ref.watch(currentGroupsStateProvider).value;
   if (groups.isEmpty) return const [];
+  final policy = ref.watch(residentialPolicyProvider);
   final byName = {for (final group in groups) group.name: group};
   final delays = ref.watch(delaysAtLastTestBatchProvider);
   final testUrl = ref.watch(realTestUrlProvider());
@@ -89,6 +93,11 @@ List<DashboardLine> dashboardLines(WidgetRef ref, {int limit = 4}) {
     final leafProxy = leaf?.all.firstOrNull;
     final type = leafProxy?.type ?? member.type;
     if (type.isEmpty) continue;
+    final residentialGroup =
+        member.name == tianjiResidentialRootName ||
+        member.name == tianjiResidentialLockedGroupName;
+    final residential =
+        residentialGroup || policy.choices.contains(member.name);
     final ownRate = _rateOf(member.name);
     final parsed = ownRate ?? _rateOf(resolved);
     lines.add(
@@ -98,7 +107,11 @@ List<DashboardLine> dashboardLines(WidgetRef ref, {int limit = 4}) {
         displayName: ownRate?.name ?? member.name,
         type: type,
         delay: delays[testUrl]?[resolved],
-        current: selected == member.name,
+        residential: residential,
+        current: residential
+            ? policy.active &&
+                  (residentialGroup || policy.selectedExit == member.name)
+            : !policy.active && selected == member.name,
         rate: parsed?.rate,
       ),
     );

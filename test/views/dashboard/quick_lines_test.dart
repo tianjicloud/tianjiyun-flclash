@@ -1,4 +1,7 @@
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/common/residential.dart';
+import 'package:fl_clash/core/residential.dart';
+import 'package:fl_clash/views/dashboard/line_data.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
@@ -78,6 +81,79 @@ void main() {
 
   tearDown(() => container.dispose());
 
+  for (final active in [false, true]) {
+    testWidgets('residential shortcut uses residential state: $active', (
+      tester,
+    ) async {
+      var opened = 0;
+      late List<DashboardLine> lines;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            currentGroupsStateProvider.overrideWithValue(
+              const GroupsState(
+                value: [
+                  Group(
+                    name: '线路',
+                    type: GroupType.Selector,
+                    all: [
+                      Proxy(name: tianjiResidentialRootName, type: 'Selector'),
+                      Proxy(name: 'ordinary', type: 'ss'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            selectedProxyNameProvider('线路').overrideWithValue(
+              active ? 'ordinary' : tianjiResidentialRootName,
+            ),
+            residentialPolicyProvider.overrideWithValue(
+              ResidentialPolicy(
+                profileId: 1,
+                fingerprint: 'test',
+                configuredExit: active ? 'home' : null,
+                selectedExit: active ? 'home' : null,
+                active: active,
+                rootAvailable: true,
+                choices: const ['home'],
+                catalogReady: true,
+              ),
+            ),
+            scenePolicyProvider.overrideWithValue(
+              const ScenePolicy(
+                available: false,
+                current: null,
+                suspended: false,
+              ),
+            ),
+            delaysAtLastTestBatchProvider.overrideWithValue(const {}),
+            realTestUrlProvider().overrideWithValue('https://probe.invalid'),
+          ],
+          child: TestApp(
+            child: Consumer(
+              builder: (context, ref, child) {
+                lines = dashboardLines(ref);
+                return QuickLines(onChooseResidential: () => opened++);
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(lines.first.residential, isTrue);
+      expect(lines.first.current, active);
+      expect(lines.last.current, isFalse);
+      await tester.tap(
+        find
+            .textContaining(tianjiResidentialRootName, findRichText: true)
+            .first,
+      );
+      await tester.pump();
+      expect(opened, 1);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   for (final (width, scale, columns) in [
     (390.0, 1.0, 2),
     (320.0, 1.0, 1),
@@ -103,7 +179,7 @@ void main() {
                 child: DashboardDensityScope(
                   density: DashboardDensity.mobile,
                   scale: scale,
-                  child: const QuickLines(),
+                  child: QuickLines(onChooseResidential: () {}),
                 ),
               ),
             ),

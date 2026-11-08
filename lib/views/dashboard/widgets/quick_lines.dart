@@ -15,7 +15,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'card.dart';
 
 class QuickLines extends ConsumerWidget {
-  const QuickLines({super.key});
+  const QuickLines({super.key, required this.onChooseResidential});
+
+  final VoidCallback onChooseResidential;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,11 +69,16 @@ class QuickLines extends ConsumerWidget {
       for (final line in lines)
         _QuickLineCard(
           line: line,
-          onTap: () => unawaited(
-            ref
-                .read(proxiesActionProvider.notifier)
-                .changeProxy(groupName: line.groupName, proxyName: line.name),
-          ),
+          onTap: line.residential
+              ? onChooseResidential
+              : () => unawaited(
+                  ref
+                      .read(proxiesActionProvider.notifier)
+                      .changeProxy(
+                        groupName: line.groupName,
+                        proxyName: line.name,
+                      ),
+                ),
         ),
     ];
     return Column(
