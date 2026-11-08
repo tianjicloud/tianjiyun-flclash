@@ -19,16 +19,40 @@ class _QuickLine {
   const _QuickLine({
     required this.groupName,
     required this.name,
+    required this.displayName,
     required this.type,
     required this.delay,
     required this.current,
+    required this.rate,
   });
 
   final String groupName;
   final String name;
+  final String displayName;
   final String type;
   final int? delay;
   final bool current;
+  final double? rate;
+}
+
+final _ratePatterns = [
+  RegExp(r'倍率\s*(\d+(?:\.\d+)?)\s*[x×]?'),
+  RegExp(r'(\d+(?:\.\d+)?)\s*[x×](?![0-9a-zA-Z])'),
+];
+
+({double rate, String name})? _rateOf(String name) {
+  for (final pattern in _ratePatterns) {
+    final match = pattern.firstMatch(name);
+    if (match == null) continue;
+    final rate = double.tryParse(match.group(1)!);
+    if (rate == null || rate <= 0) continue;
+    final stripped = (name.replaceRange(match.start, match.end, ''))
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(RegExp(r'^[\s·|/—-]+|[\s·|/—-]+$'), '')
+        .trim();
+    return (rate: rate, name: stripped.isEmpty ? name : stripped);
+  }
+  return null;
 }
 
 /// Up to four one-tap lines under the scene bar: the scene group's members
@@ -149,13 +173,17 @@ class QuickLines extends ConsumerWidget {
       final leafProxy = leaf?.all.firstOrNull;
       final type = leafProxy?.type ?? member.type;
       if (type.isEmpty) continue;
+      final ownRate = _rateOf(member.name);
+      final parsed = ownRate ?? _rateOf(resolved);
       lines.add(
         _QuickLine(
           groupName: host.name,
           name: member.name,
+          displayName: ownRate?.name ?? member.name,
           type: type,
           delay: delays[testUrl]?[resolved],
           current: selected == member.name,
+          rate: parsed?.rate,
         ),
       );
     }
@@ -191,7 +219,7 @@ class _QuickLineCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  line.name,
+                  line.displayName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: DashboardText.rowTitle(context),
@@ -214,7 +242,9 @@ class _QuickLineCard extends StatelessWidget {
             ],
           ),
           Text(
-            line.type.toUpperCase(),
+            line.rate == null
+                ? line.type.toUpperCase()
+                : '${line.type.toUpperCase()} · ${context.appLocalizations.lineRate} ${line.rate!.toStringAsFixed(2)}x',
             maxLines: 1,
             style: DashboardText.label(context),
           ),

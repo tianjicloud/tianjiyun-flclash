@@ -90,6 +90,11 @@ class _BusinessBody extends ConsumerWidget {
             ref.watch(authorizedTunEnableProvider) ==
                 TunAuthorizationState.authorized);
     final gap = cardSpacingOf(context, ViewMode.desktop);
+    final subInfo = ref.watch(
+      currentProfileProvider.select((profile) => profile?.subscriptionInfo),
+    );
+    final hasMobileMetrics =
+        subInfo != null && subInfo.total > 0 && subInfo.expire > 0;
     final scale = DashboardDensityScope.scaleOf(context);
     final padding = EdgeInsetsDirectional.fromSTEB(
       16,
@@ -108,6 +113,7 @@ class _BusinessBody extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: gap,
             children: [
+              if (!density.isDesktop) const _MobileBrandRow(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -150,30 +156,40 @@ class _BusinessBody extends ConsumerWidget {
                     ).copyWith(color: DashboardColors.of(context).warn),
                   ),
                 const RepaintBoundary(child: BusinessLineCard()),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final cards = [
-                      const RepaintBoundary(child: TrafficSavingsCard()),
-                      RepaintBoundary(
-                        child: ProfilesCard(
-                          title: context.appLocalizations.subscriptionInfo,
+                if (hasMobileMetrics)
+                  _EqualHeightRow(
+                    spacing: gap,
+                    flexes: const [1, 1],
+                    children: const [
+                      RepaintBoundary(child: RemainingTrafficCard()),
+                      RepaintBoundary(child: PlanValidityCard()),
+                    ],
+                  )
+                else
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final cards = [
+                        const RepaintBoundary(child: TrafficSavingsCard()),
+                        RepaintBoundary(
+                          child: ProfilesCard(
+                            title: context.appLocalizations.subscriptionInfo,
+                          ),
                         ),
-                      ),
-                    ];
-                    if (constraints.maxWidth / scale < 350) {
-                      return Column(
+                      ];
+                      if (constraints.maxWidth / scale < 350) {
+                        return Column(
+                          spacing: gap,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: cards,
+                        );
+                      }
+                      return _EqualHeightRow(
                         spacing: gap,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        flexes: const [1, 1],
                         children: cards,
                       );
-                    }
-                    return _EqualHeightRow(
-                      spacing: gap,
-                      flexes: const [1, 1],
-                      children: cards,
-                    );
-                  },
-                ),
+                    },
+                  ),
               ],
               if (!density.isDesktop)
                 _TakeoverRow(platform: platform, density: density),
@@ -181,6 +197,51 @@ class _BusinessBody extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _MobileBrandRow extends ConsumerWidget {
+  const _MobileBrandRow();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.appLocalizations;
+    final expire = ref.watch(
+      currentProfileProvider.select(
+        (profile) => profile?.subscriptionInfo?.expire ?? 0,
+      ),
+    );
+    final daysLeft = expire > 0
+        ? math.max(
+            0,
+            DateTime.fromMillisecondsSinceEpoch(
+              expire * 1000,
+            ).difference(DateTime.now()).inDays,
+          )
+        : null;
+    return Row(
+      children: [
+        ClipRSuperellipse(
+          borderRadius: BorderRadius.circular(11),
+          child: Image.asset(
+            'assets/images/icon.png',
+            width: 34,
+            height: 34,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text('天机云', style: AppTextStyle.headline.of(context, emphasized: true)),
+        const Spacer(),
+        if (daysLeft != null)
+          DashboardChip(
+            label: strings.profileDaysLeft(daysLeft),
+            tone: daysLeft <= 7
+                ? DashboardChipTone.warn
+                : DashboardChipTone.idle,
+          ),
+      ],
     );
   }
 }

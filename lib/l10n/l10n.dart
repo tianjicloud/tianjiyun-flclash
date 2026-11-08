@@ -7663,8 +7663,7 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one:
-          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -10101,6 +10100,36 @@ class AppLocalizations {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Traffic left`
+  String get mobileRemainingTraffic {
+    return Intl.message(
+      'Traffic left',
+      name: 'mobileRemainingTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plan validity`
+  String get mobilePlanValidity {
+    return Intl.message(
+      'Plan validity',
+      name: 'mobilePlanValidity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rate`
+  String get lineRate {
+    return Intl.message('Rate', name: 'lineRate', desc: '', args: []);
+  }
+
+  /// `days`
+  String get daysUnit {
+    return Intl.message('days', name: 'daysUnit', desc: '', args: []);
   }
 }
 

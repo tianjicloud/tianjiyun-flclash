@@ -540,6 +540,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "daysAgo": m20,
     "daysAgoShort": m21,
+    "daysUnit": MessageLookupByLibrary.simpleMessage("일"),
     "decryptUntrusted": MessageLookupByLibrary.simpleMessage("로컬 신뢰 없이 복호화"),
     "defaultNameserverDesc": MessageLookupByLibrary.simpleMessage(
       "다른 DNS 서버의 도메인을 확인합니다. IP 주소만 입력할 수 있습니다.",
@@ -1022,6 +1023,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "layout": MessageLookupByLibrary.simpleMessage("레이아웃"),
     "light": MessageLookupByLibrary.simpleMessage("라이트"),
     "lineIssueTip": m47,
+    "lineRate": MessageLookupByLibrary.simpleMessage("배율"),
     "lineWrap": MessageLookupByLibrary.simpleMessage("자동 줄 바꿈"),
     "link": MessageLookupByLibrary.simpleMessage("링크"),
     "liquidGlass": MessageLookupByLibrary.simpleMessage("Liquid Glass"),
@@ -1210,6 +1212,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "mitmTrustReady": MessageLookupByLibrary.simpleMessage("신뢰됨"),
     "mitmTrustUntrusted": MessageLookupByLibrary.simpleMessage("완전히 신뢰되지 않음"),
     "mixedPort": MessageLookupByLibrary.simpleMessage("혼합 포트"),
+    "mobilePlanValidity": MessageLookupByLibrary.simpleMessage("요금제 유효 기간"),
+    "mobileRemainingTraffic": MessageLookupByLibrary.simpleMessage(
+      "이번 달 남은 트래픽",
+    ),
     "mode": MessageLookupByLibrary.simpleMessage("모드"),
     "monochromeIcon": MessageLookupByLibrary.simpleMessage("모노크롬 아이콘"),
     "monochromeScheme": MessageLookupByLibrary.simpleMessage("모노크롬"),

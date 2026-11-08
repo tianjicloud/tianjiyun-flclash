@@ -1185,5 +1185,9 @@
   "backgroundAurora": "Сияние",
   "backgroundNebula": "Туманность",
   "backgroundGlobe": "Глобус",
-  "trafficOtherDirect": "Прочие прямые подключения"
+  "trafficOtherDirect": "Прочие прямые подключения",
+  "mobileRemainingTraffic": "Осталось трафика",
+  "mobilePlanValidity": "Срок действия тарифа",
+  "lineRate": "Тариф",
+  "daysUnit": "дн."
 }

@@ -262,6 +262,128 @@ class ProfilesCard extends ConsumerWidget {
   }
 }
 
+class _MetricBar extends StatelessWidget {
+  const _MetricBar({required this.fraction});
+
+  final double fraction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 7,
+      decoration: ShapeDecoration(
+        color: DashboardColors.of(context).track,
+        shape: AppShape.full,
+      ),
+      child: FractionallySizedBox(
+        alignment: AlignmentDirectional.centerStart,
+        widthFactor: fraction.clamp(0.0, 1.0),
+        child: Container(
+          decoration: const ShapeDecoration(
+            gradient: LinearGradient(
+              colors: [BusinessPalette.blue, BusinessPalette.connected],
+            ),
+            shape: AppShape.full,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RemainingTrafficCard extends ConsumerWidget {
+  const RemainingTrafficCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.appLocalizations;
+    final usage = _usageOf(ref.watch(currentProfileProvider));
+    if (usage == null) return const SizedBox.shrink();
+    final remaining = usage.total - usage.used;
+    final show = remaining.traffic;
+    return DashboardCard(
+      semanticLabel: strings.mobileRemainingTraffic,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 10,
+        children: [
+          DashboardCardHeader(
+            glyph: AppGlyphs.bolt,
+            title: strings.mobileRemainingTraffic,
+          ),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: show.value,
+                  style: DashboardText.figure(context, AppTextStyle.title1),
+                ),
+                TextSpan(
+                  text: ' / ${dashboardTraffic(usage.total)}',
+                  style: DashboardText.label(context),
+                ),
+              ],
+            ),
+          ),
+          _MetricBar(fraction: 1 - usage.share),
+          Text(
+            '${strings.usedShort} ${dashboardTraffic(usage.used)}',
+            style: DashboardText.label(context),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PlanValidityCard extends ConsumerWidget {
+  const PlanValidityCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.appLocalizations;
+    final expiry = _expiryOf(ref.watch(currentProfileProvider));
+    if (expiry == null) return const SizedBox.shrink();
+    final days = _daysLeft(expiry);
+    return DashboardCard(
+      semanticLabel: strings.mobilePlanValidity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 10,
+        children: [
+          DashboardCardHeader(
+            glyph: AppGlyphs.clock,
+            title: strings.mobilePlanValidity,
+          ),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '$days',
+                  style: DashboardText.figure(context, AppTextStyle.title1),
+                ),
+                TextSpan(
+                  text: ' ${strings.daysUnit}',
+                  style: DashboardText.label(context),
+                ),
+              ],
+            ),
+          ),
+          _MetricBar(fraction: days / 365),
+          Text(
+            strings.validUntil(expiry.show),
+            style: DashboardText.label(context),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 const _rowGap = 12.0;
 
 double _widthOf(String text, TextStyle style) =>

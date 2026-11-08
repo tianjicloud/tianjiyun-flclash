@@ -1185,5 +1185,9 @@
   "backgroundAurora": "极光",
   "backgroundNebula": "星云",
   "backgroundGlobe": "星网",
-  "trafficOtherDirect": "其他直连"
+  "trafficOtherDirect": "其他直连",
+  "mobileRemainingTraffic": "本月剩余流量",
+  "mobilePlanValidity": "套餐有效期",
+  "lineRate": "倍率",
+  "daysUnit": "天"
 }

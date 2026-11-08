@@ -1185,5 +1185,9 @@
   "backgroundAurora": "オーロラ",
   "backgroundNebula": "星雲",
   "backgroundGlobe": "グローブ",
-  "trafficOtherDirect": "その他の直接接続"
+  "trafficOtherDirect": "その他の直接接続",
+  "mobileRemainingTraffic": "今月の残り通信量",
+  "mobilePlanValidity": "プラン有効期限",
+  "lineRate": "倍率",
+  "daysUnit": "日"
 }

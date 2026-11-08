@@ -1185,5 +1185,9 @@
   "backgroundAurora": "Aurora",
   "backgroundNebula": "Nebulosa",
   "backgroundGlobe": "Globo",
-  "trafficOtherDirect": "Otro tráfico directo"
+  "trafficOtherDirect": "Otro tráfico directo",
+  "mobileRemainingTraffic": "Tráfico restante",
+  "mobilePlanValidity": "Validez del plan",
+  "lineRate": "Tasa",
+  "daysUnit": "días"
 }
