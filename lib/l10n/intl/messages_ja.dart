@@ -1570,10 +1570,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("適用中…"),
     "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
-      "一覧内の動画と大容量ダウンロードは通常の自動回線を使用し、住宅回線の通信量を消費しません。直接通信は維持され、一覧外は住宅回線を使用します。",
+      "動画と大容量ダウンロードは通常回線を使用し、住宅回線の通信量を消費しません。",
     ),
     "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
-      "大容量通信の迂回は確認できていません。動画やダウンロードは住宅回線の通信量を消費する場合があります。",
+      "大容量通信の迂回が未確認です。動画やダウンロードが住宅回線を使う場合があります。",
     ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "パソコンの通信はまだ取り込まれていません。下のシステムプロキシまたは TUN を有効にしてください。",

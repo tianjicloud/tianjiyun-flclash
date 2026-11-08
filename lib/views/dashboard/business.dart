@@ -667,11 +667,6 @@ class ResidentialExitCard extends ConsumerWidget {
     final noPlan = catalogReady && !policy.hasPlan && !policy.active;
     final warn = DashboardColors.of(context).warn;
     final label = DashboardText.label(context);
-    final explanation = Text(
-      appLocalizations.residentialExplanation,
-      style: label,
-    );
-    final routeNote = Text(appLocalizations.residentialRouteNote, style: label);
     return DashboardCard(
       semanticLabel: appLocalizations.residentialTitle,
       side: BusinessTheme.of(context)
@@ -825,10 +820,8 @@ class ResidentialExitCard extends ConsumerWidget {
               child: Text(appLocalizations.residentialChoose),
             ),
           ],
-          const SizedBox(height: 14),
-          explanation,
           if (policy.active && !missing) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 14),
             Text(
               policy.bulkBypass
                   ? appLocalizations.residentialBulkBypass
@@ -836,9 +829,8 @@ class ResidentialExitCard extends ConsumerWidget {
               style: label,
             ),
           ],
-          const SizedBox(height: 6),
-          routeNote,
-          if (policy.active && !missing)
+          if (policy.active && !missing) ...[
+            const SizedBox(height: 14),
             _ExitActions(
               applying: applying,
               onChoose: () => showResidentialExitSheet(context),
@@ -846,6 +838,7 @@ class ResidentialExitCard extends ConsumerWidget {
                 ref.read(residentialActionProvider.notifier).clear(),
               ),
             ),
+          ],
         ],
       ),
     );

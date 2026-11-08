@@ -1966,10 +1966,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Aplicando…"),
     "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
-      "Los vídeos y descargas de la lista usan líneas normales automáticas sin consumir tráfico residencial. El tráfico directo sigue directo; los destinos no incluidos usan la salida residencial.",
+      "Los vídeos y descargas grandes usan líneas normales, sin consumir tráfico residencial.",
     ),
     "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
-      "El desvío de grandes transferencias no está confirmado. Los vídeos y descargas pueden consumir tráfico residencial.",
+      "Desvío de grandes transferencias no confirmado; vídeos y descargas pueden usar tráfico residencial.",
     ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "No se está capturando el tráfico del equipo. Activa el proxy del sistema o TUN abajo.",

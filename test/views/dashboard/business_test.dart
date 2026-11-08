@@ -120,11 +120,11 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(_app(_policy(active: true)));
-    expect(find.textContaining('Listed video'), findsNothing);
+    expect(find.textContaining('Video and large downloads'), findsNothing);
     await tester.pumpWidget(_app(_policy(active: true, bulkBypass: true)));
-    expect(find.textContaining('Listed video'), findsOneWidget);
+    expect(find.textContaining('Video and large downloads'), findsOneWidget);
     await tester.pumpWidget(_app(_policy(bulkBypass: true)));
-    expect(find.textContaining('Listed video'), findsNothing);
+    expect(find.textContaining('Video and large downloads'), findsNothing);
   });
 
   testWidgets('manual default line and its resolved node are both visible', (
@@ -384,18 +384,17 @@ void main() {
     expect(find.text('Choose exit'), findsNothing);
   });
 
-  testWidgets('the selected exit explains the business route', (tester) async {
+  testWidgets('the selected exit keeps the card terse', (tester) async {
     await tester.pumpWidget(_app(_policy(active: true)));
     await tester.pump();
 
     expect(find.text('Tokyo'), findsOneWidget);
     expect(find.text('Change exit'), findsOneWidget);
     expect(find.text('Use subscription policy'), findsOneWidget);
-    expect(
-      find.textContaining('service-side alternative exit'),
-      findsOneWidget,
-    );
-    expect(find.textContaining('current check destination'), findsOneWidget);
+    // The owner cut the multi-paragraph explanation and the IP caveat
+    // from the card face; neither may come back.
+    expect(find.textContaining('service-side alternative exit'), findsNothing);
+    expect(find.textContaining('current check destination'), findsNothing);
   });
 
   testWidgets('a missing exit fails closed and says so', (tester) async {

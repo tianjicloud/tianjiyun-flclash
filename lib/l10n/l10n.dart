@@ -10038,20 +10038,20 @@ class AppLocalizations {
     );
   }
 
-  /// `Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.`
+  /// `Video and large downloads use ordinary routes, saving residential traffic.`
   String get residentialBulkBypass {
     return Intl.message(
-      'Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.',
+      'Video and large downloads use ordinary routes, saving residential traffic.',
       name: 'residentialBulkBypass',
       desc: '',
       args: [],
     );
   }
 
-  /// `Bulk bypass is not confirmed. Video and downloads may consume residential traffic.`
+  /// `Bulk bypass not confirmed; video and downloads may use residential traffic.`
   String get residentialBulkUnconfirmed {
     return Intl.message(
-      'Bulk bypass is not confirmed. Video and downloads may consume residential traffic.',
+      'Bulk bypass not confirmed; video and downloads may use residential traffic.',
       name: 'residentialBulkUnconfirmed',
       desc: '',
       args: [],

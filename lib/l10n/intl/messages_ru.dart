@@ -1915,10 +1915,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Применение…"),
     "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
-      "Видео и загрузки из списка используют обычные автоматические линии, экономя домашний трафик. Прямой трафик остаётся прямым; остальные адреса используют домашний выход.",
+      "Видео и большие загрузки идут по обычным линиям, экономя домашний трафик.",
     ),
     "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
-      "Обход для больших загрузок не подтверждён. Видео и загрузки могут расходовать домашний трафик.",
+      "Обход больших загрузок не подтверждён; видео и загрузки могут расходовать домашний трафик.",
     ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "Трафик компьютера не перехватывается. Включите системный прокси или TUN ниже.",

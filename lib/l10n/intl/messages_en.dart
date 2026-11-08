@@ -1823,10 +1823,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Applying…"),
     "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
-      "Listed video and large downloads use ordinary automatic routes, saving residential traffic. Direct traffic stays direct; unlisted destinations still use the residential exit.",
+      "Video and large downloads use ordinary routes, saving residential traffic.",
     ),
     "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
-      "Bulk bypass is not confirmed. Video and downloads may consume residential traffic.",
+      "Bulk bypass not confirmed; video and downloads may use residential traffic.",
     ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "Computer traffic is not being captured. Enable System proxy or TUN below.",

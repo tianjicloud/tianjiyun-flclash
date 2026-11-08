@@ -166,22 +166,40 @@ class SceneUnavailableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final density = DashboardDensityScope.of(context);
     final mobile = !density.isDesktop;
+    final strings = context.appLocalizations;
     return DashboardCard(
-      semanticLabel: context.appLocalizations.sceneUnavailable,
+      semanticLabel: strings.sceneUnavailable,
       radius: mobile ? BusinessRadius.sceneMobile : BusinessRadius.sceneDesktop,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 6,
+      padding: EdgeInsets.symmetric(
+        horizontal: dashboardCardPadding(density).left,
+        vertical: 10,
+      ),
+      child: Row(
+        spacing: 10,
         children: [
-          DashboardCardHeader(
-            glyph: AppGlyphs.sliders,
-            title: context.appLocalizations.sceneUnavailable,
+          GlyphIcon(
+            AppGlyphs.sliders,
+            size: 18,
+            color: context.colorScheme.onSurfaceVariant,
           ),
-          Text(
-            context.appLocalizations.sceneUnavailableDesc,
-            style: DashboardText.label(context),
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: strings.sceneUnavailable,
+                    style: DashboardText.rowTitle(context),
+                  ),
+                  TextSpan(
+                    text: ' · ${strings.sceneUnavailableDesc}',
+                    style: DashboardText.label(context),
+                  ),
+                ],
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          SizedBox(height: density.isDesktop ? 2 : 0),
         ],
       ),
     );

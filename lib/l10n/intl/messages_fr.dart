@@ -1970,10 +1970,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("Application…"),
     "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
-      "Les vidéos et téléchargements répertoriés utilisent les lignes ordinaires automatiques, sans consommer le trafic résidentiel. Le trafic direct reste direct ; les autres destinations utilisent la sortie résidentielle.",
+      "Vidéos et gros téléchargements passent par les lignes ordinaires, sans consommer le trafic résidentiel.",
     ),
     "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
-      "Le contournement des gros transferts n’est pas confirmé. Vidéos et téléchargements peuvent consommer du trafic résidentiel.",
+      "Contournement des gros transferts non confirmé ; vidéos et téléchargements peuvent utiliser le trafic résidentiel.",
     ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "Le trafic de l’ordinateur n’est pas pris en charge. Activez le proxy système ou TUN ci-dessous.",

@@ -1426,10 +1426,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialApplying": MessageLookupByLibrary.simpleMessage("正在应用…"),
     "residentialBulkBypass": MessageLookupByLibrary.simpleMessage(
-      "名单内的视频和大文件下载会走普通自动线路，不占家宽流量；原本直连的仍直连，名单外的仍走家宽。",
+      "视频和大文件下载走普通线路，不占家宽流量。",
     ),
     "residentialBulkUnconfirmed": MessageLookupByLibrary.simpleMessage(
-      "暂未确认大流量绕行已启用；视频和下载可能占用家宽流量。",
+      "大流量绕行未确认；视频和下载可能占家宽流量。",
     ),
     "residentialCaptureOff": MessageLookupByLibrary.simpleMessage(
       "尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。",
