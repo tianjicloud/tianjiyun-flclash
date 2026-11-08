@@ -41,7 +41,7 @@ void main() {
       expect(restored.background, preset);
       expect(restored.primaryColor, props.primaryColor);
     }
-    expect(ThemeProps.fromJson({}).background, 'orbit');
+    expect(ThemeProps.fromJson({}).background, 'solid');
   });
 
   for (final brightness in Brightness.values) {

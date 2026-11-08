@@ -4,6 +4,8 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
+import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,6 +55,7 @@ class ProxyCard extends ConsumerWidget {
   final GroupType groupType;
   final ProxyCardType type;
   final String? testUrl;
+  final bool businessStyle;
 
   const ProxyCard({
     super.key,
@@ -61,6 +64,7 @@ class ProxyCard extends ConsumerWidget {
     required this.proxy,
     required this.groupType,
     required this.type,
+    this.businessStyle = false,
   });
 
   Measure get measure => globalState.measure;
@@ -87,6 +91,74 @@ class ProxyCard extends ConsumerWidget {
         ),
       );
     }
+  }
+
+  ({String? code, String name}) _businessName() {
+    final runes = proxy.name.runes.toList();
+    var start = 0;
+    while (start < runes.length &&
+        (runes[start] == 0x20 || runes[start] == 0xA0)) {
+      start++;
+    }
+    if (start + 1 >= runes.length ||
+        runes[start] < 0x1F1E6 ||
+        runes[start] > 0x1F1FF ||
+        runes[start + 1] < 0x1F1E6 ||
+        runes[start + 1] > 0x1F1FF) {
+      return (code: null, name: proxy.name);
+    }
+    return (
+      code: String.fromCharCodes([
+        65 + runes[start] - 0x1F1E6,
+        65 + runes[start + 1] - 0x1F1E6,
+      ]),
+      name: String.fromCharCodes(runes.skip(start + 2)).trimLeft(),
+    );
+  }
+
+  Widget _buildBusinessContent(BuildContext context) {
+    final region = _businessName();
+    final delayText = _DelayText(
+      proxy: proxy,
+      testUrl: testUrl,
+      alignment: Alignment.centerRight,
+    );
+    final chipStyle = AppTextStyle.caption1
+        .of(context)
+        .copyWith(color: context.colorScheme.onSurfaceVariant);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 8,
+          children: [
+            if (region.code case final code?) RegionCodeBadge(code: code),
+            Expanded(
+              child: EmojiText(
+                region.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BusinessText.cardTitle(context),
+              ),
+            ),
+            delayText,
+          ],
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 6,
+          runSpacing: 4,
+          children: [
+            if (proxy.providerName case final provider?
+                when provider.isNotEmpty)
+              _ProxyMetaChip(label: provider, style: chipStyle),
+            _ProxyMetaChip(label: proxy.type, style: chipStyle),
+          ],
+        ),
+      ],
+    );
   }
 
   void _handleSelect(WidgetRef ref) {
@@ -206,33 +278,76 @@ class ProxyCard extends ConsumerWidget {
           ),
           child: Card(
             radius: AppCorner.lg,
+            shape: businessStyle
+                ? RoundedSuperellipseBorder(
+                    side: BorderSide(
+                      color: inUse
+                          ? BusinessPalette.blue
+                          : const Color(0xFFDCE1E7),
+                      width: inUse ? 2 : 1,
+                    ),
+                    borderRadius: AppRadius.lg,
+                  )
+                : null,
             enterActionsOnRight: true,
             key: key,
             onPressed: () => _handleSelect(ref),
             isSelected: inUse,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: businessStyle
+                ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
+                : const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 4,
-                  children: [
-                    Expanded(child: proxyNameText),
-                    if (pinned)
-                      SelectionBadge(glyph: Glyphs.pin, tonal: !inUse)
-                    else if (inUse)
-                      const SelectionBadge(),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                details,
-              ],
+              children: businessStyle
+                  ? [_buildBusinessContent(context)]
+                  : [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 4,
+                        children: [
+                          Expanded(child: proxyNameText),
+                          if (pinned)
+                            SelectionBadge(glyph: Glyphs.pin, tonal: !inUse)
+                          else if (inUse)
+                            const SelectionBadge(),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      details,
+                    ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _ProxyMetaChip extends StatelessWidget {
+  const _ProxyMetaChip({required this.label, required this.style});
+
+  final String label;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: context.colorScheme.brightness == Brightness.dark
+            ? context.colorScheme.surfaceContainerHigh
+            : const Color(0xFFEEF1F4),
+        shape: AppShape.sm,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: style,
+        ),
+      ),
     );
   }
 }

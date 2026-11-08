@@ -255,14 +255,12 @@ void main() {
     const hintKey = ValueKey('scrollbarHintPill');
     expect(find.byKey(hintKey), findsNothing);
 
-    final thumb = await revealScrollbarThumb(
-      tester,
-      scrollable: find.byWidgetPredicate(
-        (widget) =>
-            widget is Scrollable &&
-            axisDirectionToAxis(widget.axisDirection) == Axis.vertical,
-      ),
+    final scrollable = find.byWidgetPredicate(
+      (widget) =>
+          widget is Scrollable &&
+          axisDirectionToAxis(widget.axisDirection) == Axis.vertical,
     );
+    final thumb = await revealScrollbarThumb(tester, scrollable: scrollable);
     final gesture = await tester.startGesture(thumb);
     await gesture.moveBy(const Offset(0, -1));
     await tester.pump();
@@ -272,12 +270,11 @@ void main() {
       find.descendant(of: find.byKey(hintKey), matching: find.byType(Text)),
     );
     expect(label.data, requests.last.start.showFull);
-    // The hint is pinned to the thumb: at the newest end the thumb center
-    // rests 24 dp (half the 48 dp minimum thumb) below the track's top edge,
-    // which the list running under the bar leaves at the bar's foot.
+    // The list starts below the feed selector; its newest-end thumb rests
+    // half its 48 dp minimum extent below the list viewport's top edge.
     expect(
       tester.getCenter(find.byKey(hintKey)).dy,
-      closeTo(tester.getRect(find.byType(AppBar)).bottom + 24, 6),
+      closeTo(tester.getRect(scrollable.first).top + 24, 6),
     );
 
     await gesture.up();
@@ -730,7 +727,13 @@ void main() {
         find.descendant(of: bar, matching: find.text('Recent requests')),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Running'), findsOneWidget);
+      expect(find.text('Running'), findsNWidgets(2));
+      await tester.tap(find.text('Running').last);
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(of: bar, matching: find.text('Running')),
+        findsOneWidget,
+      );
       await teardownView(tester);
     }
   });

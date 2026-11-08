@@ -175,6 +175,9 @@ void main() {
     await pumpCard(tester);
     await tester.tap(_stat('Recent requests'));
     await tester.pumpAndSettle();
+    final feedSelector = find.byKey(const ValueKey('requestFeedSelector'));
+    Finder feedOption(String label) =>
+        find.descendant(of: feedSelector, matching: find.text(label));
     ScrollPosition position() => tester
         .state<ScrollableState>(
           find
@@ -192,9 +195,9 @@ void main() {
         .position;
     expect(position().pixels, position().maxScrollExtent);
 
-    await tester.tap(find.text('Recent requests').last);
+    await tester.tap(feedOption('Recent requests'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Running'));
+    await tester.tap(feedOption('Running'));
     await tester.pumpAndSettle();
     await tester.pump();
     await tester.pump();
@@ -202,9 +205,9 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
     expect(position().pixels, 0);
 
-    await tester.tap(find.text('Running').last);
+    await tester.tap(feedOption('Running'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Recent requests').last);
+    await tester.tap(feedOption('Recent requests'));
     await tester.pumpAndSettle();
     await tester.pump();
     await tester.pump();

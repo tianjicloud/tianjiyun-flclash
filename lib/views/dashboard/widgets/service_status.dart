@@ -10,6 +10,7 @@ import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/providers/service_status.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/probe_start_hold.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -123,6 +124,234 @@ class ServiceStatusCard extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ServiceStatusCard> createState() => _ServiceStatusCardState();
+}
+
+class BusinessAIStatusStrip extends ConsumerStatefulWidget {
+  const BusinessAIStatusStrip({super.key, this.compact = false});
+
+  final bool compact;
+
+  @override
+  ConsumerState<BusinessAIStatusStrip> createState() =>
+      _BusinessAIStatusStripState();
+}
+
+class BusinessAIStatusCard extends StatelessWidget {
+  const BusinessAIStatusCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.appLocalizations;
+    return DashboardCard(
+      semanticLabel: strings.serviceStatus,
+      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 10,
+        children: [
+          DashboardCardHeader(
+            glyph: AppGlyphs.verified,
+            title: strings.serviceStatus,
+          ),
+          const BusinessAIStatusStrip(compact: true),
+        ],
+      ),
+    );
+  }
+}
+
+class _BusinessAIStatusStripState extends ConsumerState<BusinessAIStatusStrip>
+    with ProbeStartHold<BusinessAIStatusStrip> {
+  static const _targets = [
+    ServiceTarget.chatgpt,
+    ServiceTarget.claude,
+    ServiceTarget.gemini,
+  ];
+
+  late final ServiceStatus _services = ref.read(serviceStatusProvider.notifier);
+  Set<ServiceTarget> _watched = const {};
+  Set<ServiceTarget> _shown = const {};
+  var _syncScheduled = false;
+
+  @override
+  void dispose() {
+    for (final target in _watched) {
+      _services.unwatch(target);
+    }
+    super.dispose();
+  }
+
+  void _syncShown(Set<ServiceTarget> shown) {
+    if (setEquals(shown, _shown)) return;
+    _shown = shown;
+    if (_syncScheduled) return;
+    _syncScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncScheduled = false;
+      if (!mounted) return;
+      final shown = _shown;
+      for (final target in shown.difference(_watched)) {
+        _services.watch(target);
+      }
+      for (final target in _watched.difference(shown)) {
+        _services.unwatch(target);
+      }
+      _watched = shown;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = ref.watch(enabledServiceTargetsProvider).toSet();
+    final shown = _targets.where(enabled.contains).toList();
+    _syncShown(shown.toSet());
+    final state = ref.watch(serviceStatusProvider);
+    final route = ref.watch(routeTrackerProvider);
+    ProbePhase phaseOf(ProbeEntry<ServiceCheck> entry) {
+      final phase = shownPhase(entry);
+      final stamp = entry.stamp;
+      return phase != ProbePhase.empty && stamp != null && !route.isFresh(stamp)
+          ? ProbePhase.empty
+          : phase;
+    }
+
+    if (widget.compact) {
+      final running = ref.watch(isStartProvider);
+      final suspended = ref.watch(suspendProvider);
+      final available = running && !suspended
+          ? shown.where((target) {
+              final entry = state.entryOf(target);
+              return phaseOf(entry) == ProbePhase.fresh &&
+                  entry.value?.status == ServiceProbeStatus.available;
+            }).length
+          : 0;
+      final statuses = shown
+          .map((target) {
+            final entry = state.entryOf(target);
+            final service = _ServiceView(target, entry, phaseOf(entry));
+            final status = !running
+                ? context.appLocalizations.servicePending
+                : suspended
+                ? context.appLocalizations.suspended
+                : service.statusOf(context).$1;
+            return '${target.label}: $status';
+          })
+          .join(' · ');
+      return PressRegion(
+        onTap: () => showServiceStatusSheet(context),
+        shape: AppShape.sm,
+        overlay: PressRegion.focusOverlay,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 5,
+            children: [
+              Text(
+                '$available / ${shown.length} ${context.appLocalizations.serviceAvailable}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BusinessText.quickMetaMobile(context),
+              ),
+              Text(
+                statuses.isEmpty
+                    ? context.appLocalizations.servicePending
+                    : statuses,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: DashboardText.label(context),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return Wrap(
+      alignment: WrapAlignment.start,
+      spacing: 8,
+      runSpacing: 6,
+      children: [
+        for (final target in shown)
+          _AIStatusPill(
+            target: target,
+            service: _ServiceView(
+              target,
+              state.entryOf(target),
+              phaseOf(state.entryOf(target)),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _AIStatusPill extends ConsumerWidget {
+  const _AIStatusPill({required this.target, required this.service});
+
+  final ServiceTarget target;
+  final _ServiceView service;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = DashboardColors.of(context);
+    final running = ref.watch(isStartProvider);
+    final suspended = ref.watch(suspendProvider);
+    final (label, tone) = !running
+        ? (
+            context.appLocalizations.servicePending,
+            context.colorScheme.onSurfaceVariant,
+          )
+        : suspended
+        ? (context.appLocalizations.suspended, colors.warn)
+        : _statusOf(context, service.check, service.phase);
+    final background = Color.alphaBlend(
+      tone.withValues(alpha: 0.1),
+      colors.card,
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fullLabel = '${target.label}: $label';
+        return Tooltip(
+          message: fullLabel,
+          child: Semantics(
+            label: fullLabel,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: constraints.maxWidth),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: ShapeDecoration(
+                color: background,
+                shape: AppShape.full,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 5,
+                children: [
+                  Flexible(
+                    child: Text(
+                      target.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: DashboardText.label(context),
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: DashboardText.label(context).copyWith(color: tone),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _ServiceStatusCardState extends ConsumerState<ServiceStatusCard>

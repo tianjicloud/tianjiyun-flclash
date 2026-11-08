@@ -327,24 +327,70 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
               child: ScrollConfiguration(
                 behavior: const ShowBarScrollBehavior(),
                 child: ArrivalCacheExtentBuilder(
-                  builder: (cacheExtent) => CustomScrollView(
-                    scrollCacheExtent: cacheExtent,
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: SizedBox(height: context.sectionsTopPadding),
-                      ),
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                        ).copyWith(bottom: 24 + context.bottomInset),
-                        sliver: SliverMainAxisGroup(
-                          slivers: [
-                            SliverToBoxAdapter(child: _overview),
-                            if (_groupsShown) _groups,
+                  builder: (cacheExtent) => LayoutBuilder(
+                    builder: (context, constraints) {
+                      final sliverPadding = const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ).copyWith(bottom: 24 + context.bottomInset);
+                      if (system.isDesktop && constraints.maxWidth >= 900) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: CustomScrollView(
+                                scrollCacheExtent: cacheExtent,
+                                slivers: [
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(
+                                      height: context.sectionsTopPadding,
+                                    ),
+                                  ),
+                                  SliverPadding(
+                                    padding: sliverPadding,
+                                    sliver: SliverToBoxAdapter(
+                                      child: _overview,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomScrollView(
+                                scrollCacheExtent: cacheExtent,
+                                slivers: [
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(
+                                      height: context.sectionsTopPadding,
+                                    ),
+                                  ),
+                                  if (_groupsShown)
+                                    SliverPadding(
+                                      padding: sliverPadding,
+                                      sliver: _groups,
+                                    ),
+                                ],
+                              ),
+                            ),
                           ],
-                        ),
-                      ),
-                    ],
+                        );
+                      }
+                      return CustomScrollView(
+                        scrollCacheExtent: cacheExtent,
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: SizedBox(height: context.sectionsTopPadding),
+                          ),
+                          SliverPadding(
+                            padding: sliverPadding,
+                            sliver: SliverMainAxisGroup(
+                              slivers: [
+                                SliverToBoxAdapter(child: _overview),
+                                if (_groupsShown) _groups,
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),

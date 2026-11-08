@@ -179,8 +179,8 @@ const proxiesListStoreKey = PageStorageKey<String>('proxies_list');
 const toolsStoreKey = PageStorageKey<String>('tools');
 const profilesStoreKey = PageStorageKey<String>('profiles');
 
-// The TianjiCloud deep-space brand seed.
-const defaultPrimaryColor = 0xFF3D5AFE;
+const defaultPrimaryColor = 0xFF0A55F5;
+const previousDefaultPrimaryColor = 0xFF3D5AFE;
 
 const maxLogsLength = 5000;
 const maxRequestsLength = 2000;
@@ -201,6 +201,16 @@ const trafficReportInterval = Duration(minutes: 5);
 // macOS accent colors.
 const defaultPrimaryColors = [
   defaultPrimaryColor,
+  0xFFCB30E0,
+  0xFFFF2D55,
+  0xFFFF383C,
+  0xFFFF8D28,
+  0xFFFFCC00,
+  0xFF34C759,
+  0xFF8E8E93,
+];
+const previousDefaultPrimaryColors = [
+  previousDefaultPrimaryColor,
   0xFFCB30E0,
   0xFFFF2D55,
   0xFFFF383C,

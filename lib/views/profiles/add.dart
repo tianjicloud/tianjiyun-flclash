@@ -8,6 +8,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/profiles/custom/custom.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,10 +17,6 @@ class AddProfileMenu extends ConsumerWidget {
   const AddProfileMenu({super.key, required this.builder});
 
   final Widget Function(PopupOpen open) builder;
-
-  Future<void> _handleAddProfileFormFile(WidgetRef ref) async {
-    unawaited(ref.read(profilesActionProvider.notifier).addProfileFormFile());
-  }
 
   Future<void> _toScan(BuildContext context, WidgetRef ref) async {
     final profilesAction = ref.read(profilesActionProvider.notifier);
@@ -41,10 +38,37 @@ class AddProfileMenu extends ConsumerWidget {
 
   Future<void> _toAdd(BuildContext context, WidgetRef ref) async {
     final profilesAction = ref.read(profilesActionProvider.notifier);
+    final request = await showFormSheet<_ProfileAddRequest>(
+      context: context,
+      builder: (_) => const _ProfileAddForm(),
+    );
+    if (request == null || !context.mounted) {
+      return;
+    }
+    switch (request.source) {
+      case _ProfileAddSource.link:
+        unawaited(
+          profilesAction.addProfileFromLink(
+            request.url,
+            label: request.label,
+            ageSecretKey: request.ageSecretKey,
+          ),
+        );
+        return;
+      case _ProfileAddSource.file:
+        unawaited(profilesAction.addProfileFormFile());
+        return;
+      case _ProfileAddSource.custom:
+        _toAddCustom(context, ref);
+        return;
+    }
+  }
+
+  Future<void> _toAddBatch(BuildContext context, WidgetRef ref) async {
     final appLocalizations = context.appLocalizations;
     final res = await showNamedUrlsForm(
       context,
-      title: appLocalizations.importFromLink,
+      title: appLocalizations.batchImport,
       urlLabel: appLocalizations.link,
       batchTip: appLocalizations.batchLinkInputTip,
       urlValidator: (value) {
@@ -62,9 +86,11 @@ class AddProfileMenu extends ConsumerWidget {
       },
       withAgeSecretKey: true,
     );
+    if (res == null) {
+      return;
+    }
+    final profilesAction = ref.read(profilesActionProvider.notifier);
     switch (res) {
-      case null:
-        return;
       case [final single]:
         unawaited(
           profilesAction.addProfileFromLink(
@@ -137,14 +163,14 @@ class AddProfileMenu extends ConsumerWidget {
             onPressed: () => _toScan(context, ref),
           ),
           PopupMenuItem(
-            glyph: AppGlyphs.importFile,
-            label: appLocalizations.file,
-            onPressed: () => _handleAddProfileFormFile(ref),
+            glyph: AppGlyphs.cloudDownload,
+            label: appLocalizations.addProfile,
+            onPressed: () => _toAdd(context, ref),
           ),
           PopupMenuItem(
-            glyph: AppGlyphs.cloudDownload,
-            label: appLocalizations.link,
-            onPressed: () => _toAdd(context, ref),
+            glyph: AppGlyphs.listAdd,
+            label: appLocalizations.batchImport,
+            onPressed: () => _toAddBatch(context, ref),
           ),
           if (system.isTV)
             PopupMenuItem(
@@ -152,14 +178,180 @@ class AddProfileMenu extends ConsumerWidget {
               label: appLocalizations.sendFromPhone,
               onPressed: () => _toSendFromPhone(ref),
             ),
-          PopupMenuItem(
-            section: const PopupMenuSection(),
-            glyph: AppGlyphs.customize,
-            label: appLocalizations.customProfile,
-            onPressed: () => _toAddCustom(context, ref),
-          ),
         ],
       ),
+    );
+  }
+}
+
+enum _ProfileAddSource { link, file, custom }
+
+class _ProfileAddRequest {
+  const _ProfileAddRequest({
+    required this.source,
+    this.url = '',
+    this.label = '',
+    this.ageSecretKey = '',
+  });
+
+  final _ProfileAddSource source;
+  final String url;
+  final String label;
+  final String ageSecretKey;
+}
+
+class _ProfileAddForm extends StatefulWidget {
+  const _ProfileAddForm();
+
+  @override
+  State<_ProfileAddForm> createState() => _ProfileAddFormState();
+}
+
+class _ProfileAddFormState extends State<_ProfileAddForm> {
+  final _urlController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _ageSecretKeyController = TextEditingController();
+  var _source = _ProfileAddSource.link;
+  var _attempted = false;
+
+  String? get _urlIssue {
+    final appLocalizations = context.appLocalizations;
+    final value = _urlController.text.trim();
+    if (value.isEmpty) {
+      return appLocalizations.emptyTip(appLocalizations.link);
+    }
+    if (!value.isUrl && !value.isShareLink) {
+      return appLocalizations.invalidLinkTip;
+    }
+    return null;
+  }
+
+  void _submit() {
+    if (_source == _ProfileAddSource.link && _urlIssue != null) {
+      setState(() => _attempted = true);
+      return;
+    }
+    Navigator.of(context).pop(
+      _ProfileAddRequest(
+        source: _source,
+        url: _urlController.text.trim(),
+        label: _nameController.text.trim(),
+        ageSecretKey: _ageSecretKeyController.text.trim(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _urlController.dispose();
+    _nameController.dispose();
+    _ageSecretKeyController.dispose();
+    super.dispose();
+  }
+
+  Widget _sourceCard(
+    BuildContext context, {
+    required _ProfileAddSource source,
+    required String title,
+    required String description,
+  }) {
+    final selected = source == _source;
+    return DecorationListItem(
+      isSelected: selected,
+      minVerticalPadding: 8,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+      title: Text(title),
+      subtitle: Text(description, maxLines: 2),
+      onPressed: () => setState(() => _source = source),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    final urlIssue = _attempted ? _urlIssue : null;
+    return FormPage(
+      title: appLocalizations.addProfile,
+      saveLabel: appLocalizations.import,
+      onSave: _submit,
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final cards = [
+              _sourceCard(
+                context,
+                source: _ProfileAddSource.link,
+                title: appLocalizations.link,
+                description: appLocalizations.profileAddLinkSourceDesc,
+              ),
+              _sourceCard(
+                context,
+                source: _ProfileAddSource.file,
+                title: appLocalizations.file,
+                description: appLocalizations.profileAddFileSourceDesc,
+              ),
+              _sourceCard(
+                context,
+                source: _ProfileAddSource.custom,
+                title: appLocalizations.customProfile,
+                description: appLocalizations.profileAddCustomSourceDesc,
+              ),
+            ];
+            if (constraints.maxWidth < 500) {
+              return Column(spacing: 8, children: cards);
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 8,
+              children: [for (final card in cards) Expanded(child: card)],
+            );
+          },
+        ),
+        if (_source == _ProfileAddSource.link) ...[
+          generateSection(
+            items: [
+              FormRow(
+                title: appLocalizations.link,
+                invalid: urlIssue != null,
+                trailing: FormRowTextField(
+                  controller: _urlController,
+                  hintText: appLocalizations.required,
+                  keyboardType: TextInputType.url,
+                  textInputAction: TextInputAction.next,
+                  autocorrect: false,
+                  onChanged: (_) {
+                    if (_attempted) setState(() {});
+                  },
+                ),
+              ),
+              FormRow(
+                title: appLocalizations.name,
+                trailing: FormRowTextField(
+                  controller: _nameController,
+                  hintText: appLocalizations.optional,
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+              FormRow(
+                title: appLocalizations.ageSecretKey,
+                trailing: FormRowSecretTextField(
+                  controller: _ageSecretKeyController,
+                  hintText: appLocalizations.optional,
+                ),
+              ),
+            ],
+          ),
+          generateSection(
+            items: [
+              ListItem(
+                leading: const GlyphIcon(AppGlyphs.info),
+                title: Text(appLocalizations.profileAddValidationNote),
+              ),
+            ],
+          ),
+        ],
+        if (urlIssue != null) ErrorBanner(message: urlIssue),
+      ],
     );
   }
 }

@@ -176,7 +176,12 @@ class TrackerInfoTableRow extends StatelessWidget {
       child: RecordTableRow(
         table: table,
         striped: striped,
-        onTap: () => showTrackerInfoDetail(context, trackerInfo, detailTitle),
+        onTap: () => showTrackerInfoDetail(
+          context,
+          trackerInfo,
+          detailTitle,
+          onClose: onClose,
+        ),
         cells: table.cellsOf(context, trackerInfo),
       ),
     );

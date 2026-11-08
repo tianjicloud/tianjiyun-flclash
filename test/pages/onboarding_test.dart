@@ -15,6 +15,7 @@ import 'package:fl_clash/views/onboarding/onboarding.dart';
 import 'package:fl_clash/views/onboarding/plan_card.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -91,6 +92,37 @@ void main() {
     expect(find.byType(OnboardingView), findsOneWidget);
     expect(find.text(AppLocalizations.current.onboardingTitle), findsOneWidget);
     expect(find.byType(HomeBackScopeContainer), findsNothing);
+  });
+
+  testWidgets('short desktop with large text scrolls instead of overflowing', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1280, 500);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final container = homeContainer();
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          locale: const Locale('en'),
+          homeBuilder: (child) => Builder(
+            builder: (context) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: const TextScaler.linear(1.4)),
+              child: child,
+            ),
+          ),
+          child: const OnboardingView(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byType(OnboardingView), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('onboarding stays visible until it finishes', (tester) async {

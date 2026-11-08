@@ -1,26 +1,33 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 import 'package:prism_ui/prism_ui.dart';
+import 'fonts.dart';
 
 abstract final class BusinessPalette {
-  static const blue = Color(0xFF3D5AFE);
-  static const violet = Color(0xFF7C4DFF);
-  static const accent = Color(0xFF6A5CFF);
-  static const page = Color(0xFF0A0F2B);
-  static const deep = Color(0xFF070B1F);
-  static const secondary = Color(0xFF98A2C8);
-  static const purple = Color(0xFF8C78FF);
-  static const connected = Color(0xFF34E0B0);
-  static const warning = Color(0xFFFFC24D);
-  static const error = Color(0xFFFF5C7A);
-  static const cardRadius = 22.0;
-  static const buttonRadius = 14.0;
-  static const gradient = LinearGradient(colors: [blue, accent]);
+  static const blue = Color(0xFF0A55F5);
+  static const violet = Color(0xFF6A4BD8);
+  static const accent = blue;
+  static const page = Color(0xFFF2F2F7);
+  static const deep = Color(0xFF0E1726);
+  static const secondary = Color(0xFF56616F);
+  static const purple = Color(0xFF6A4BD8);
+  static const connected = Color(0xFF0B6E4B);
+  static const warning = Color(0xFFA15C00);
+  static const error = Color(0xFFB42335);
+  static const cardRadius = 18.0;
+  static const buttonRadius = 16.0;
+  static const gradient = LinearGradient(
+    colors: [Color(0xFF2E6DFF), blue],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
   static const navSelection = LinearGradient(
-    colors: [Color(0x523D5AFE), Color(0x2E7C4DFF)],
+    colors: [Color(0xFFE6EEFE), Color(0xFFE6EEFE)],
   );
 }
 
-/// The V3 home's off-scale type roles. The Dynamic Type steps are close but
+/// The business home's off-scale type roles. The Dynamic Type steps are close but
 /// not the design's: its headline IP, 14 dp card titles and 10.5 dp dock
 /// labels sit between steps, so they are named here once instead of repeated
 /// as bare sizes at call sites.
@@ -29,18 +36,18 @@ abstract final class BusinessText {
 
   static TextStyle pageTitle(BuildContext context) => AppTextStyle.custom(
     context,
-    size: 26,
-    leading: 32,
+    size: 22,
+    leading: 28,
     weight: FontWeight.w700,
   ).copyWith(letterSpacing: 0.5);
 
   static TextStyle heroIp(BuildContext context, {required double size}) =>
       AppTextStyle.custom(
         context,
-        size: size,
-        leading: size * 1.08,
+        size: math.min(size, 46),
+        leading: math.min(size, 46) * 1.08,
         weight: FontWeight.w800,
-      ).copyWith(letterSpacing: 0.5, fontFeatures: _tabular);
+      ).copyWith(letterSpacing: -0.3, fontFeatures: _tabular).toJetBrainsMono;
 
   static TextStyle heroStatus(BuildContext context) => AppTextStyle.custom(
     context,
@@ -135,6 +142,16 @@ abstract final class BusinessText {
   static TextStyle dataBigUnit(BuildContext context, {bool mobile = false}) =>
       AppTextStyle.custom(context, size: mobile ? 13 : 15, leading: 20);
 
+  static TextStyle residentialExit(
+    BuildContext context, {
+    bool mobile = false,
+  }) => AppTextStyle.custom(
+    context,
+    size: mobile ? 18 : 22,
+    leading: mobile ? 24 : 28,
+    weight: FontWeight.w700,
+  );
+
   static TextStyle dataBody(BuildContext context, {bool mobile = false}) =>
       AppTextStyle.custom(
         context,
@@ -216,18 +233,18 @@ abstract final class BusinessText {
 
 /// The design's per-surface corner values, which one card token cannot carry.
 abstract final class BusinessRadius {
-  static const brandMobile = 10.0;
-  static const heroDesktop = 26.0;
-  static const heroMobile = 24.0;
-  static const sceneDesktop = 20.0;
-  static const sceneMobile = 24.0;
-  static const quickDesktop = 20.0;
-  static const quickMobile = 18.0;
-  static const dataDesktop = 24.0;
-  static const dataMobile = 20.0;
-  static const control = 22.0;
-  static const metricMobile = 20.0;
-  static const navItem = 13.0;
-  static const account = 15.0;
+  static const brandMobile = 6.0;
+  static const heroDesktop = 18.0;
+  static const heroMobile = 18.0;
+  static const sceneDesktop = 16.0;
+  static const sceneMobile = 16.0;
+  static const quickDesktop = 16.0;
+  static const quickMobile = 14.0;
+  static const dataDesktop = 18.0;
+  static const dataMobile = 16.0;
+  static const control = 16.0;
+  static const metricMobile = 16.0;
+  static const navItem = 10.0;
+  static const account = 14.0;
   static const dock = 24.0;
 }

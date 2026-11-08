@@ -371,10 +371,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("스마트 라우팅 활성화"),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage(
+      "연결됨 · 출구 검증됨",
+    ),
+    "businessHome": MessageLookupByLibrary.simpleMessage("홈"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage("기본 회선"),
+    "businessLines": MessageLookupByLibrary.simpleMessage("회선"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "회선을 불러오지 못했습니다. 구독을 확인하세요.",
     ),
@@ -391,6 +396,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "구독 또는 모드가 변경되었습니다. 회선 선택을 다시 여세요.",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("스마트 라우팅"),
+    "businessSubscriptions": MessageLookupByLibrary.simpleMessage("구독"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("우회 도메인"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "우회 도메인은 시스템 프록시가 켜져 있을 때만 적용됩니다.",
@@ -573,6 +579,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "개발자 모드가 켜졌습니다.",
     ),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("실패"),
+    "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("통과"),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("진단 시작"),
+    "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("기본 경로 출구 검증"),
+    "diagnosticsTitle": MessageLookupByLibrary.simpleMessage("원클릭 진단"),
+    "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
+      "DNS 출구, 브라우저 WebRTC 및 NTP 검사는 제공되지 않습니다.",
+    ),
+    "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage("미검사"),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("다이얼러 프록시"),
     "dialerProxyLoopStopped": m25,
     "dialog": MessageLookupByLibrary.simpleMessage("대화상자"),
@@ -671,6 +686,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "disconnected": MessageLookupByLibrary.simpleMessage("연결 끊김"),
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage("새 버전 발견"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("DNS 캐시를 지웠습니다"),
+    "dnsExit": MessageLookupByLibrary.simpleMessage("DNS 출구"),
+    "dnsExitUnavailable": MessageLookupByLibrary.simpleMessage("검사 결과 없음"),
     "dnsHijackDesc": MessageLookupByLibrary.simpleMessage(
       "추가하지 않으면 53번 포트로 가는 모든 DNS 쿼리를 하이재킹합니다(any:53).",
     ),
@@ -1436,6 +1453,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage("개인 키 암호"),
     "process": MessageLookupByLibrary.simpleMessage("프로세스"),
     "profile": MessageLookupByLibrary.simpleMessage("프로필"),
+    "profileAddCustomSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "로컬 프록시, 그룹 및 규칙 만들기",
+    ),
+    "profileAddFileSourceDesc": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "profileAddLinkSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "사용자 패널에서 링크 복사",
+    ),
+    "profileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "가져오기 전에 검증합니다. 구문 분석에 실패해도 현재 프로필은 바뀌지 않습니다.",
+    ),
     "profileAutoUpdateIntervalInvalidValidationDesc":
         MessageLookupByLibrary.simpleMessage("올바른 간격을 입력하세요"),
     "profileAutoUpdateIntervalNullValidationDesc":
@@ -1774,6 +1803,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneDaily": MessageLookupByLibrary.simpleMessage("일상"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
       "대용량 트래픽은 주거용 출구를 자동으로 우회 · 중국 본토 트래픽은 직접 연결 · 주거용 출구 적용 중에는 장면이 일시 중지됩니다",
+    ),
+    "sceneSuspended": MessageLookupByLibrary.simpleMessage(
+      "가정용 회선 모드에서 시나리오 전환 일시 중지",
     ),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage("장면을 사용할 수 없음"),
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(

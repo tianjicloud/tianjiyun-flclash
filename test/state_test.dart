@@ -52,6 +52,61 @@ void main() {
     );
   });
 
+  test('default Tianji schemes use the v4 light and dark surfaces', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    final light = container.read(genColorSchemeProvider(Brightness.light));
+    expect(light.primary, const Color(0xFF0A55F5));
+    expect(light.surface, const Color(0xFFFFFFFF));
+    expect(light.surfaceContainerLow, const Color(0xFFF8F9FB));
+    expect(light.surfaceContainer, const Color(0xFFF1F3F6));
+    expect(light.outlineVariant, const Color(0xFFDCE1E7));
+
+    final dark = container.read(genColorSchemeProvider(Brightness.dark));
+    expect(dark.primary, const Color(0xFF3D73FF));
+    expect(dark.surface, const Color(0xFF0B0F14));
+    expect(dark.surfaceContainerLow, const Color(0xFF0F141B));
+    expect(dark.surfaceContainer, const Color(0xFF131A22));
+  });
+
+  test('custom colors and styles remain seeded, including pure black', () {
+    const customSeed = Color(0xFF9C27B0);
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    container
+        .read(themeSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(
+            primaryColor: customSeed.toARGB32(),
+            colorStyle: ColorStyle.soft,
+          ),
+        );
+
+    final custom = container.read(genColorSchemeProvider(Brightness.light));
+    expect(
+      custom,
+      seededColorScheme(
+        seedColor: customSeed,
+        brightness: Brightness.light,
+        style: ColorStyle.soft,
+      ),
+    );
+
+    container
+        .read(themeSettingProvider.notifier)
+        .update((state) => state.copyWith(pureBlack: true));
+    final pureBlack = container.read(genColorSchemeProvider(Brightness.dark));
+    expect(
+      pureBlack,
+      seededColorScheme(
+        seedColor: customSeed,
+        brightness: Brightness.dark,
+        style: ColorStyle.soft,
+      ).toPureBlack(true),
+    );
+  });
+
   test('pure black darkens only the dark scheme and keeps surface order', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);

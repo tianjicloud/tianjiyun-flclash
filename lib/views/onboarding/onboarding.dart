@@ -24,6 +24,11 @@ class OnboardingView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(onboardingProvider);
+    final useDesktopSplit =
+        MediaQuery.sizeOf(context).width >= 1100 &&
+        MediaQuery.sizeOf(context).height >= 620 &&
+        MediaQuery.textScalerOf(context).scale(1) < 1.25 &&
+        !context.isMobileView;
     return Surface(
       color: SurfaceLevel.page.colorOf(context.colorScheme),
       child: _OnboardingBackdrop(
@@ -39,37 +44,223 @@ class OnboardingView extends ConsumerWidget {
                   constraints: BoxConstraints(
                     minHeight: math.max(0, constraints.maxHeight - 48),
                   ),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 420),
-                      child: switch (state) {
-                        OnboardingWelcome() ||
-                        OnboardingDone() => const _WelcomeView(),
-                        OnboardingConfirm(:final url) => _ConfirmView(url: url),
-                        OnboardingImporting() => const _ProgressView(
-                          titleKey: _ProgressTitle.importing,
-                        ),
-                        OnboardingImported(
-                          :final profileId,
-                          :final proxyCount,
-                        ) =>
-                          _ImportedView(
-                            profileId: profileId,
-                            proxyCount: proxyCount,
+                  child: useDesktopSplit
+                      ? _DesktopOnboardingLayout(
+                          state: state,
+                          content: _onboardingContent(state),
+                          minHeight: math.max(0, constraints.maxHeight - 48),
+                        )
+                      : Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 420),
+                            child: _onboardingContent(state),
                           ),
-                        OnboardingFailed(:final failure, :final url) =>
-                          _FailedView(failure: failure, url: url),
-                        OnboardingConnecting() ||
-                        OnboardingConnected() => const _ConnectView(),
-                      },
-                    ),
-                  ),
+                        ),
                 ),
               );
             },
           ),
         ),
       ),
+    );
+  }
+}
+
+Widget _onboardingContent(OnboardingState state) => switch (state) {
+  OnboardingWelcome() || OnboardingDone() => const _WelcomeView(),
+  OnboardingConfirm(:final url) => _ConfirmView(url: url),
+  OnboardingImporting() => const _ProgressView(
+    titleKey: _ProgressTitle.importing,
+  ),
+  OnboardingImported(:final profileId, :final proxyCount) => _ImportedView(
+    profileId: profileId,
+    proxyCount: proxyCount,
+  ),
+  OnboardingFailed(:final failure, :final url) => _FailedView(
+    failure: failure,
+    url: url,
+  ),
+  OnboardingConnecting() || OnboardingConnected() => const _ConnectView(),
+};
+
+class _DesktopOnboardingLayout extends StatelessWidget {
+  const _DesktopOnboardingLayout({
+    required this.state,
+    required this.content,
+    required this.minHeight,
+  });
+
+  final OnboardingState state;
+  final Widget content;
+  final double minHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final activeStep = switch (state) {
+      OnboardingWelcome() || OnboardingDone() => 0,
+      OnboardingConfirm() || OnboardingImporting() || OnboardingFailed() => 1,
+      _ => 2,
+    };
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: minHeight),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              width: 460,
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: const Color(0xFF0E1726),
+                  shape: AppShape.all(AppCorner.fit(800)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(40),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/images/icon.png',
+                        width: 48,
+                        height: 48,
+                      ),
+                      const SizedBox(height: 28),
+                      Text(
+                        appName,
+                        style: AppTextStyle.title2
+                            .of(context, emphasized: true)
+                            .copyWith(color: const Color(0xFFFFFFFF)),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        l10n.onboardingTitle,
+                        style: AppTextStyle.title1
+                            .of(context, emphasized: true)
+                            .copyWith(color: const Color(0xFFFFFFFF)),
+                      ),
+                      const SizedBox(height: 14),
+                      Text(
+                        l10n.onboardingDescription,
+                        style: AppTextStyle.body
+                            .of(context)
+                            .copyWith(color: const Color(0xFFC3CCD8)),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => dialogs.openUrl(userPanelUrl),
+                        child: Text(
+                          l10n.onboardingNoSubscription,
+                          style: AppTextStyle.callout
+                              .of(context)
+                              .copyWith(color: const Color(0xFFFFFFFF)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 56,
+                  vertical: 36,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _OnboardingSteps(activeStep: activeStep),
+                    const SizedBox(height: 32),
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 520),
+                        child: content,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OnboardingSteps extends StatelessWidget {
+  const _OnboardingSteps({required this.activeStep});
+
+  final int activeStep;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final labels = [
+      l10n.onboardingPasteFromClipboard,
+      l10n.onboardingConfirmTitle,
+      l10n.onboardingConnect,
+    ];
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 12,
+      runSpacing: 8,
+      children: [
+        for (var i = 0; i < labels.length; i++)
+          _OnboardingStep(index: i, activeStep: activeStep, label: labels[i]),
+      ],
+    );
+  }
+}
+
+class _OnboardingStep extends StatelessWidget {
+  const _OnboardingStep({
+    required this.index,
+    required this.activeStep,
+    required this.label,
+  });
+
+  final int index;
+  final int activeStep;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = index == activeStep;
+    final done = index < activeStep;
+    final color = done
+        ? const Color(0xFF0E8A5F)
+        : selected
+        ? context.colorScheme.primary
+        : context.colorScheme.onSurfaceVariant;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 8,
+      children: [
+        DecoratedBox(
+          decoration: ShapeDecoration(
+            color: done ? color : const Color(0x00000000),
+            shape: AppShape.circle,
+          ),
+          child: SizedBox.square(
+            dimension: 26,
+            child: Center(
+              child: Text(
+                done ? '✓' : '${index + 1}',
+                style: AppTextStyle.caption1
+                    .of(context, emphasized: true)
+                    .copyWith(color: done ? const Color(0xFFFFFFFF) : color),
+              ),
+            ),
+          ),
+        ),
+        Text(
+          label,
+          style: AppTextStyle.footnote.of(context).copyWith(color: color),
+        ),
+      ],
     );
   }
 }

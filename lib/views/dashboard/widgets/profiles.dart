@@ -397,6 +397,54 @@ class RemainingTrafficCard extends ConsumerWidget {
   }
 }
 
+class MobileUsageCard extends ConsumerWidget {
+  const MobileUsageCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.appLocalizations;
+    final usage = _usageOf(ref.watch(currentProfileProvider));
+    if (usage == null) return const SizedBox.shrink();
+    final used = usage.used.traffic;
+    return DashboardCard(
+      semanticLabel: strings.trafficStats,
+      radius: BusinessRadius.metricMobile,
+      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 8,
+        children: [
+          DashboardCardHeader(
+            glyph: AppGlyphs.dataUsage,
+            title: strings.trafficStats,
+          ),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: used.value,
+                  style: BusinessText.dataBig(context, mobile: true),
+                ),
+                TextSpan(
+                  text: ' ${used.unit} / ${dashboardTraffic(usage.total)}',
+                  style: BusinessText.dataBigUnit(
+                    context,
+                    mobile: true,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+              ],
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          _MetricBar(fraction: usage.share),
+        ],
+      ),
+    );
+  }
+}
+
 class PlanValidityCard extends ConsumerWidget {
   const PlanValidityCard({super.key});
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fl_clash/common/constant.dart';
 import 'package:fl_clash/common/migration.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -331,6 +332,63 @@ void main() {
         },
       );
 
+      test('replaces only the shipped brand defaults once', () async {
+        final configMap = _createConfigMap();
+        (configMap['themeProps']! as Map<String, Object?>)
+          ..['primaryColor'] = previousDefaultPrimaryColor
+          ..['primaryColors'] = previousDefaultPrimaryColors
+          ..['themeMode'] = 'dark'
+          ..['background'] = 'orbit';
+        final store = _FakeMigrationStore(
+          configMap: configMap,
+          version: Migration.currentVersion,
+          upgradeVersion: 4,
+        );
+
+        final config = await Migration(store: store).run();
+
+        expect(config.themeProps.primaryColor, defaultPrimaryColor);
+        expect(config.themeProps.primaryColors, defaultPrimaryColors);
+        expect(config.themeProps.background, 'solid');
+        expect(config.themeProps.themeMode, ThemeMode.dark);
+        expect(store.upgradeVersion, Migration.upgradeVersion);
+        expect(store.events, [
+          'getConfigMap',
+          'getVersion',
+          'saveConfig',
+          'setUpgradeVersion',
+        ]);
+
+        final later = _FakeMigrationStore(
+          configMap: jsonDecode(jsonEncode(config)),
+          version: store.version,
+          upgradeVersion: store.upgradeVersion,
+        );
+        final unchanged = await Migration(store: later).run();
+
+        expect(unchanged.themeProps, config.themeProps);
+        expect(later.events, ['getConfigMap', 'getVersion']);
+      });
+
+      test('keeps custom colors and backgrounds on the new upgrade', () async {
+        final configMap = _createConfigMap();
+        (configMap['themeProps']! as Map<String, Object?>)
+          ..['primaryColor'] = 0xFF123456
+          ..['primaryColors'] = [0xFF123456, 0xFFABCDEF]
+          ..['background'] = 'nebula';
+        final store = _FakeMigrationStore(
+          configMap: configMap,
+          version: Migration.currentVersion,
+          upgradeVersion: 4,
+        );
+
+        final config = await Migration(store: store).run();
+
+        expect(config.themeProps.primaryColor, 0xFF123456);
+        expect(config.themeProps.primaryColors, [0xFF123456, 0xFFABCDEF]);
+        expect(config.themeProps.background, 'nebula');
+      });
+
       test('a new install only records it', () async {
         final store = _FakeMigrationStore(
           configMap: null,
@@ -341,7 +399,9 @@ void main() {
         final config = await Migration(store: store).run();
 
         expect(config.themeProps, defaultThemeProps);
-        expect(config.themeProps.primaryColor, 0xFF3D5AFE);
+        expect(config.themeProps.primaryColor, defaultPrimaryColor);
+        expect(config.themeProps.background, 'solid');
+        expect(config.themeProps.themeMode, ThemeMode.light);
         expect(store.upgradeVersion, Migration.upgradeVersion);
         expect(
           store.events.where((event) => event == 'saveConfig'),

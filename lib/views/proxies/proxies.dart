@@ -1,9 +1,11 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/proxies/list.dart';
+import 'package:fl_clash/views/proxies/business_browser.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -113,15 +115,24 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
     ];
   }
 
-  IconButtonData? _buildPrimaryAction() {
-    if (!_isTab) {
+  IconButtonData? _buildPrimaryAction({required bool business}) {
+    if (!_isTab && !business) {
       return null;
     }
     final isDelayTesting = ref.watch(currentGroupDelayTestingProvider);
     return IconButtonData(
       glyph: AppGlyphs.bolt,
       onPressed: () {
-        _proxiesTabKey.currentState?.delayTestCurrentGroup();
+        if (_isTab) {
+          _proxiesTabKey.currentState?.delayTestCurrentGroup();
+        } else if (business) {
+          final groupName = ref.read(proxiesTabStateProvider).currentGroupName;
+          if (groupName != null) {
+            ref
+                .read(proxiesActionProvider.notifier)
+                .delayTestPageGroup(groupName);
+          }
+        }
       },
       tooltip: context.appLocalizations.delayTest,
       isLoading: isDelayTesting,
@@ -153,31 +164,104 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
   @override
   Widget build(BuildContext context) {
     final style = ref.watch(proxiesStyleSettingProvider);
+    final business = isTianjiSubscriptionProfile(
+      ref.watch(currentProfileProvider),
+    );
+    final isMobile = ref.watch(isMobileViewProvider);
+    final businessDesktop = business && !isMobile;
+    final businessDesktopSearch =
+        businessDesktop && MediaQuery.sizeOf(context).width >= 900;
+    final groups = ref.watch(proxiesTabStateProvider).groups;
+    final testingGroups = ref.watch(delayTestingGroupsProvider);
     final isLoading = ref.watch(loadingProvider(LoadingTag.proxies));
     final picker = widget.picker;
-    final primaryAction = _buildPrimaryAction();
+    final primaryAction = businessDesktop
+        ? null
+        : _buildPrimaryAction(business: business);
+    final desktopActions = businessDesktop
+        ? [
+            IconButtonData(
+              glyph: AppGlyphs.sort,
+              tooltip: context.appLocalizations.sort,
+              isSelected: style.sortType == ProxiesSortType.delay,
+              onPressed: () => _updateStyle(
+                (state) => state.copyWith(
+                  sortType: state.sortType == ProxiesSortType.delay
+                      ? ProxiesSortType.none
+                      : ProxiesSortType.delay,
+                ),
+              ),
+            ),
+            IconButtonData(
+              glyph: AppGlyphs.bolt,
+              tooltip: context.appLocalizations.delayTest,
+              isLoading: testingGroups.isNotEmpty,
+              onPressed: groups.isEmpty
+                  ? null
+                  : () => ref
+                        .read(proxiesActionProvider.notifier)
+                        .delayTestGroups(groups),
+            ),
+          ]
+        : [
+            if (_isTab && !picker)
+              IconButtonData(
+                glyph: AppGlyphs.locate,
+                onPressed: () {
+                  _proxiesTabKey.currentState?.scrollToGroupSelected();
+                },
+                tooltip: context.appLocalizations.scrollToSelected,
+              ),
+          ];
     return Scaffold(
       isLoading: isLoading,
       resizeToAvoidBottomInset: false,
       primaryAction: primaryAction,
       searchActions: [?primaryAction],
-      iconActions: [
-        if (_isTab && !picker)
-          IconButtonData(
-            glyph: AppGlyphs.locate,
-            onPressed: () {
-              _proxiesTabKey.currentState?.scrollToGroupSelected();
-            },
-            tooltip: context.appLocalizations.scrollToSelected,
-          ),
-      ],
+      iconActions: desktopActions,
       menuItems: picker ? const [] : _buildMenuItems(context, style),
-      title: context.appLocalizations.proxies,
-      searchState: AppBarSearchState(onSearch: _onSearch),
-      body: switch (style.type) {
-        ProxiesType.tab => _tabView,
-        ProxiesType.list => const ProxiesListView(),
+      title: business
+          ? context.appLocalizations.businessLines
+          : context.appLocalizations.proxies,
+      titleWidget: businessDesktopSearch
+          ? _BusinessProxyTitle(onSearch: _onSearch)
+          : null,
+      searchState: businessDesktopSearch
+          ? null
+          : AppBarSearchState(onSearch: _onSearch),
+      body: switch ((business, style.type)) {
+        (true, ProxiesType.list) => const BusinessProxyBrowser(),
+        (_, ProxiesType.tab) => _tabView,
+        (_, ProxiesType.list) => const ProxiesListView(),
       },
+    );
+  }
+}
+
+class _BusinessProxyTitle extends StatelessWidget {
+  const _BusinessProxyTitle({required this.onSearch});
+
+  final ValueChanged<String> onSearch;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 16,
+      children: [
+        Text(
+          context.appLocalizations.businessLines,
+          style: AppTextStyle.pageTitle.of(context),
+        ),
+        SizedBox(
+          width: 240,
+          child: SearchField(
+            height: 34,
+            hintText: context.appLocalizations.search,
+            onChanged: onSearch,
+          ),
+        ),
+      ],
     );
   }
 }

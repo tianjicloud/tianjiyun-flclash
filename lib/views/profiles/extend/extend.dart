@@ -121,20 +121,60 @@ class _ExtendViewState extends ConsumerState<ExtendView> {
                 child: Text(appLocalizations.applyNow),
               ),
           ],
-          body: ScrollConfiguration(
-            behavior: const ShowBarScrollBehavior(),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(height: context.sectionsTopPadding),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              final modePane = ScrollConfiguration(
+                behavior: const ShowBarScrollBehavior(),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: context.sectionsTopPadding),
+                    ),
+                    const _ModeSection(),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: context.bottomInset),
+                    ),
+                  ],
                 ),
-                const _ModeSection(),
-                const _Content(),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: context.bottomInset),
+              );
+              final contentPane = ScrollConfiguration(
+                behavior: const ShowBarScrollBehavior(),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: context.sectionsTopPadding),
+                    ),
+                    const _Content(),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: context.bottomInset),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+              if (!system.isDesktop || constraints.maxWidth < 900) {
+                return ScrollConfiguration(
+                  behavior: const ShowBarScrollBehavior(),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: context.sectionsTopPadding),
+                      ),
+                      const _ModeSection(),
+                      const _Content(),
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: context.bottomInset),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return Row(
+                children: [
+                  SizedBox(width: 300, child: modePane),
+                  Expanded(child: contentPane),
+                ],
+              );
+            },
           ),
         ),
       ),

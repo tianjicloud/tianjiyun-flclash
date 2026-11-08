@@ -5,6 +5,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/line_data.dart';
@@ -140,15 +141,16 @@ class _QuickLineCard extends StatelessWidget {
     final mobile = !density.isDesktop;
     final delay = line.delay;
     final delayColor = colorScheme.delayColor(delay);
+    final regionName = _regionNameFromFlag(line.displayName);
     final meta = [
-      line.type.toUpperCase(),
+      if (!mobile) line.type.toUpperCase(),
       if (line.rate case final rate?)
         '${context.appLocalizations.lineRate} ${rate.toStringAsFixed(2)}x',
-      if (mobile && line.current) context.appLocalizations.businessCurrentNode,
+      if (mobile && line.current) context.appLocalizations.residentialSelected,
     ].join(' · ');
     final compact = density.isCompact;
     final cardHeight = mobile
-        ? 77.0
+        ? 64.0
         : compact
         ? 72.0
         : 92.0;
@@ -171,19 +173,25 @@ class _QuickLineCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
-          spacing: mobile || compact ? 6 : 8,
+          spacing: mobile
+              ? 4
+              : compact
+              ? 6
+              : 8,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               spacing: 6,
               children: [
+                if (mobile && regionName.code != null)
+                  RegionCodeBadge(code: regionName.code!),
                 Expanded(
                   child: Tooltip(
                     message: line.name,
                     child: EmojiText(
-                      line.displayName,
-                      maxLines: 2,
+                      mobile ? regionName.name : line.displayName,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: BusinessText.quickName(
                         context,
@@ -193,7 +201,7 @@ class _QuickLineCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (delay != null && delay >= 0)
+                if (!mobile && delay != null && delay >= 0)
                   Text.rich(
                     TextSpan(
                       children: [
@@ -220,7 +228,7 @@ class _QuickLineCard extends StatelessWidget {
                     ),
                     maxLines: 1,
                   )
-                else if (delay != null)
+                else if (!mobile && delay != null)
                   GlyphIcon(
                     AppGlyphs.warning,
                     size: 14,
@@ -228,21 +236,96 @@ class _QuickLineCard extends StatelessWidget {
                   ),
               ],
             ),
-            Text(
-              meta,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style:
-                  (mobile
-                          ? BusinessText.quickMetaMobile(context)
-                          : compact
-                          ? BusinessText.quickMetaCompact(context)
-                          : BusinessText.quickMeta(context))
-                      .copyWith(color: context.colorScheme.onSurfaceVariant),
-            ),
+            if (mobile)
+              Row(
+                children: [
+                  if (delay != null && delay >= 0)
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '$delay',
+                            style: BusinessText.quickDelay(
+                              context,
+                              mobile: true,
+                            ).copyWith(color: delayColor),
+                          ),
+                          TextSpan(
+                            text: ' ms',
+                            style: BusinessText.quickUnit(context, mobile: true)
+                                .copyWith(
+                                  color: context.colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ),
+                    )
+                  else if (delay != null)
+                    GlyphIcon(
+                      AppGlyphs.warning,
+                      size: 14,
+                      color: colorScheme.error,
+                    )
+                  else
+                    Text(
+                      context.appLocalizations.servicePending,
+                      style: BusinessText.quickMetaMobile(
+                        context,
+                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                    ),
+                  const Spacer(),
+                  if (meta.isNotEmpty)
+                    Flexible(
+                      child: Text(
+                        meta,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: BusinessText.quickMetaMobile(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                ],
+              )
+            else
+              Text(
+                meta,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    (compact
+                            ? BusinessText.quickMetaCompact(context)
+                            : BusinessText.quickMeta(context))
+                        .copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
           ],
         ),
       ),
     );
   }
+}
+
+({String? code, String name}) _regionNameFromFlag(String name) {
+  final runes = name.runes.toList();
+  var start = 0;
+  while (start < runes.length &&
+      (runes[start] == 0x20 || runes[start] == 0xA0)) {
+    start++;
+  }
+  if (start + 1 >= runes.length ||
+      runes[start] < 0x1F1E6 ||
+      runes[start] > 0x1F1FF ||
+      runes[start + 1] < 0x1F1E6 ||
+      runes[start + 1] > 0x1F1FF) {
+    return (code: null, name: name);
+  }
+  final code = String.fromCharCodes([
+    65 + runes[start] - 0x1F1E6,
+    65 + runes[start + 1] - 0x1F1E6,
+  ]);
+  return (
+    code: code,
+    name: String.fromCharCodes(runes.skip(start + 2)).trimLeft(),
+  );
 }

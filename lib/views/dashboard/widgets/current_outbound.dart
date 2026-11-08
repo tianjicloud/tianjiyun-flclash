@@ -12,6 +12,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/line_data.dart';
@@ -37,6 +38,27 @@ const _ipMask = '*****';
 const _decorationGrowth = 0.12;
 
 const _decorationTurn = 2 * math.pi / 12;
+
+bool isVerifiedOutbound({
+  required bool active,
+  required bool captured,
+  required ProbePhase phase,
+  required IpInfo? info,
+  required RouteStamp? stamp,
+  required RouteState route,
+  required SelectionVerdict verdict,
+}) =>
+    active &&
+    captured &&
+    phase == ProbePhase.fresh &&
+    info != null &&
+    stamp != null &&
+    route.isFresh(stamp) &&
+    stamp.proxied &&
+    stamp.hits.isNotEmpty &&
+    stamp.chains.isNotEmpty &&
+    (verdict == SelectionVerdict.untouched ||
+        verdict == SelectionVerdict.consistent);
 
 /// The address the proxied traffic leaves by, next to the start button.
 class CurrentOutboundCard extends ConsumerStatefulWidget {
@@ -116,29 +138,69 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           : null;
       final line = currentDashboardLine(ref);
       final checking = phase == ProbePhase.probing || qualityLoading;
-      final statusText = connectingStatus
+      final captured =
+          ref.watch(
+            networkSettingProvider.select((value) => value.systemProxy),
+          ) ||
+          ref.watch(
+            patchClashConfigProvider.select((value) => value.tun.enable),
+          );
+      final route = ref.watch(routeTrackerProvider);
+      final stamp = entry.stamp;
+      final verifiedExit = isVerifiedOutbound(
+        active: active,
+        captured: captured,
+        phase: phase,
+        info: ipInfo,
+        stamp: stamp,
+        route: route,
+        verdict: verdict,
+      );
+      final ringColor = switch ((checking, failed, verdict)) {
+        _ when connectingStatus => BusinessPalette.blue,
+        _ when !isStart => const Color(0xFF98A2AD),
+        _ when suspended => colors.warn,
+        (_, true, _) => colors.warn,
+        (
+          _,
+          _,
+          SelectionVerdict.failed ||
+              SelectionVerdict.notCaptured ||
+              SelectionVerdict.residentialLocked ||
+              SelectionVerdict.groupOverridden,
+        ) =>
+          colors.warn,
+        _ when phase == ProbePhase.probing => BusinessPalette.blue,
+        _ when verifiedExit => colors.ok,
+        _ => const Color(0xFF98A2AD),
+      };
+      final statusText = density.isDesktop
+          ? verifiedExit
+                ? appLocalizations.businessExitVerified
+                : appLocalizations.outboundIp
+          : connectingStatus
           ? appLocalizations.connecting
           : suspended
           ? appLocalizations.suspended
+          : verifiedExit
+          ? appLocalizations.businessExitVerified
           : isStart
           ? appLocalizations.running
           : appLocalizations.notRunning;
       final statusTone = connectingStatus || suspended
-          ? BusinessPalette.warning
+          ? colors.warn
           : failed
-          ? BusinessPalette.error
-          : isStart
-          ? BusinessPalette.connected
-          : const Color(0xFF5B6BAA);
+          ? colorScheme.error
+          : verifiedExit
+          ? colors.ok
+          : colorScheme.onSurfaceVariant;
       final toggle = _StartToggle(
-        size: density.isDesktop
-            ? (density.isCompact ? 116 : 172)
-            : isStart
-            ? 128
-            : 158,
+        size: density.isDesktop ? 184 : 164,
         enabled: hasProfile,
         running: isStart,
         suspended: suspended,
+        ringColor: ringColor,
+        showLabel: density.isDesktop,
         idleLabel: density.isDesktop ? null : appLocalizations.start,
       );
       final details = _BusinessHeroDetails(
@@ -160,16 +222,20 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
       final content = density.isDesktop
           ? ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight:
-                    (density.isCompact ? 132 : 180) + (showSelection ? 84 : 0),
+                minHeight: 192 + (showSelection ? 84 : 0),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(child: details),
-                  _HeroSpeeds(active: active, vertical: true),
-                  const SizedBox(width: 12),
                   Center(child: toggle),
+                  Container(
+                    width: 1,
+                    height: 132,
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    color: const Color(0xFFE5E9EE),
+                  ),
+                  _HeroSpeeds(active: active, vertical: true),
                 ],
               ),
             )
@@ -194,6 +260,8 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                     failed: failed,
                     loading: loading,
                     active: active,
+                    quality: quality,
+                    line: line,
                     onRefresh: () => _refresh(ipInfo?.ip),
                   ),
                 ],
@@ -226,12 +294,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
             Positioned.fill(child: _HeroBackdrop(mobile: !density.isDesktop)),
             Padding(
               padding: density.isDesktop
-                  ? EdgeInsetsDirectional.fromSTEB(
-                      density.isCompact ? 24 : 34,
-                      density.isCompact ? 20 : 30,
-                      density.isCompact ? 20 : 26,
-                      density.isCompact ? 20 : 30,
-                    )
+                  ? const EdgeInsetsDirectional.fromSTEB(26, 14, 26, 14)
                   : const EdgeInsetsDirectional.fromSTEB(20, 18, 20, 18),
               child: businessContent,
             ),
@@ -358,6 +421,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                       enabled: hasProfile,
                       running: isStart,
                       suspended: suspended,
+                      ringColor: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -393,8 +457,8 @@ class _OutboundMetrics {
       cellGap: 28,
       badgeSize: 48,
       ip: AppTextStyle.title1,
-      buttonSize: 104,
-      buttonSlot: 120,
+      buttonSize: 184,
+      buttonSlot: 184,
       decorationSize: 290,
       decorationEnd: -64,
       decorationTop: -87,
@@ -406,8 +470,8 @@ class _OutboundMetrics {
       cellGap: 22,
       badgeSize: 40,
       ip: AppTextStyle.title2,
-      buttonSize: 84,
-      buttonSlot: 100,
+      buttonSize: 184,
+      buttonSlot: 184,
       decorationSize: 250,
       decorationEnd: -64,
       decorationTop: -75,
@@ -477,7 +541,7 @@ class _BusinessStatusLine extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: BusinessText.heroStatus(
               context,
-            ).copyWith(color: const Color(0xFF9FB0FF)),
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
         ),
       ],
@@ -521,11 +585,7 @@ class _BusinessHeroDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final runTime = ref.watch(runTimeProvider);
-    final organization = switch (quality) {
-      IpQuality(organization: final name?) when name.isNotEmpty => name,
-      IpQuality(asn: final asn?) => 'AS$asn',
-      _ => null,
-    };
+    final delay = line?.delay;
     final status = showStatus
         ? _BusinessStatusLine(
             text: statusText,
@@ -538,7 +598,7 @@ class _BusinessHeroDetails extends ConsumerWidget {
       info: info,
       failed: failed,
       loading: loading,
-      size: compact ? 40 : 52,
+      size: 46,
       active: active,
       onRefresh: onRefresh,
     );
@@ -558,57 +618,82 @@ class _BusinessHeroDetails extends ConsumerWidget {
         SizedBox(height: compact ? 8 : 12),
         chips,
         SizedBox(height: compact ? 10 : 14),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: compact ? 16 : 24,
-          children: [
-            Expanded(
-              child: _Cell(
-                label: context.appLocalizations.ipOrganization,
-                value: organization != null
-                    ? _CellText(organization)
-                    : loading
-                    ? SkeletonText(width: 96, style: _cellStyle(context))
-                    : const _Placeholder(),
-              ),
-            ),
-            _Cell(
-              label: context.appLocalizations.runTime,
-              value: active
-                  ? _CellText(getTimeText(runTime))
-                  : const _Placeholder(),
-            ),
-            Expanded(
-              child: _Cell(
-                label: context.appLocalizations.businessCurrentNode,
-                value: switch (exitName ?? line?.displayName) {
-                  final exit? => EmojiText(
-                    exit,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: _cellStyle(context),
-                  ),
-                  _ => const _Placeholder(),
-                },
-              ),
-            ),
-          ],
-        ),
         if (showSelection) ...[
           const SizedBox(height: 8),
           const SelectionNotice(),
-        ],
+        ] else
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final cells = [
+                _Cell(
+                  label: context.appLocalizations.businessCurrentNode,
+                  value: switch (exitName ?? line?.displayName) {
+                    final exit? => EmojiText(
+                      exit,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: _cellStyle(context),
+                    ),
+                    _ => const _Placeholder(),
+                  },
+                ),
+                _Cell(
+                  label: context.appLocalizations.runTime,
+                  value: active
+                      ? _CellText(getTimeText(runTime))
+                      : const _Placeholder(),
+                ),
+                _Cell(
+                  label: context.appLocalizations.delay,
+                  value: delay != null
+                      ? _CellText('$delay ms')
+                      : const _Placeholder(),
+                ),
+                _Cell(
+                  label: context.appLocalizations.dnsExit,
+                  value: Text(
+                    context.appLocalizations.dnsExitUnavailable,
+                    style: DashboardText.label(context),
+                  ),
+                ),
+              ];
+              if (constraints.maxWidth < 460) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
+                  children: [
+                    for (var i = 0; i < cells.length; i += 2)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 16,
+                        children: [
+                          Expanded(child: cells[i]),
+                          Expanded(child: cells[i + 1]),
+                        ],
+                      ),
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: compact ? 16 : 24,
+                children: [for (final cell in cells) Expanded(child: cell)],
+              );
+            },
+          ),
       ],
     );
   }
 }
 
-class _MobileConnectedSummary extends StatefulWidget {
+class _MobileConnectedSummary extends ConsumerWidget {
   const _MobileConnectedSummary({
     required this.info,
     required this.failed,
     required this.loading,
     required this.active,
+    required this.quality,
+    required this.line,
     required this.onRefresh,
   });
 
@@ -616,89 +701,96 @@ class _MobileConnectedSummary extends StatefulWidget {
   final bool failed;
   final bool loading;
   final bool active;
+  final IpQuality? quality;
+  final DashboardLine? line;
   final VoidCallback onRefresh;
 
   @override
-  State<_MobileConnectedSummary> createState() =>
-      _MobileConnectedSummaryState();
-}
-
-class _MobileConnectedSummaryState extends State<_MobileConnectedSummary> {
-  var _expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final ip = widget.info;
-    final foreground = widget.failed
-        ? context.colorScheme.error
-        : context.colorScheme.onSurface;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final info = this.info;
+    final delay = line?.delay;
+    final speed = ref.watch(
+      trafficsProvider.select((state) => state.list.safeLast(const Traffic())),
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 10,
       children: [
+        _BusinessIp(
+          info: active ? info : null,
+          failed: failed,
+          loading: loading,
+          size: 30,
+          active: active,
+          onRefresh: onRefresh,
+        ),
+        _BusinessChips(
+          info: active ? info : null,
+          quality: active ? quality : null,
+          loading: active && loading,
+          large: true,
+        ),
         Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 6,
           children: [
-            if (ip != null)
-              Flexible(
-                child: Tooltip(
-                  message: context.appLocalizations.details(
-                    context.appLocalizations.outboundIp,
-                  ),
-                  child: PressRegion(
-                    shape: AppShape.xs,
-                    overlay: PressRegion.focusOverlay,
-                    onTap: () => showIpQualitySheet(context, ip: ip.ip),
-                    child: _IpText(
-                      ip: ip.ip,
-                      style: BusinessText.quickName(
-                        context,
-                      ).copyWith(color: foreground),
-                    ),
-                  ),
-                ),
-              )
-            else if (widget.failed)
-              Flexible(
-                child: Text(
-                  context.appLocalizations.serviceFailed,
-                  maxLines: 1,
-                  style: BusinessText.quickName(
-                    context,
-                  ).copyWith(color: foreground),
-                ),
-              )
-            else if (widget.loading)
-              SkeletonText(width: 120, style: BusinessText.quickName(context)),
-            Tooltip(
-              message: context.appLocalizations.details(
-                context.appLocalizations.status,
+            Expanded(
+              child: _MobileMetric(
+                label: context.appLocalizations.delay,
+                value: delay == null ? null : '$delay ms',
+                active: active,
               ),
-              child: PressRegion(
-                shape: AppShape.sm,
-                overlay: PressRegion.hoverOverlay,
-                onTap: () => setState(() => _expanded = !_expanded),
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: GlyphIcon(
-                    _expanded ? AppGlyphs.chevronUp : AppGlyphs.chevronDown,
-                    size: 16,
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
-                ),
+            ),
+            Expanded(
+              child: _MobileMetric(
+                label: context.appLocalizations.download,
+                value: speed.down.traffic.show,
+                suffix: '/s',
+                active: active,
+              ),
+            ),
+            Expanded(
+              child: _MobileMetric(
+                label: context.appLocalizations.upload,
+                value: speed.up.traffic.show,
+                suffix: '/s',
+                active: active,
               ),
             ),
           ],
         ),
-        if (widget.failed)
-          TextButton(
-            onPressed: widget.onRefresh,
-            child: Text(context.appLocalizations.selectionRecheck),
-          ),
-        if (_expanded) _HeroSpeeds(active: widget.active, vertical: false),
       ],
     );
   }
+}
+
+class _MobileMetric extends StatelessWidget {
+  const _MobileMetric({
+    required this.label,
+    required this.value,
+    required this.active,
+    this.suffix = '',
+  });
+
+  final String label;
+  final String? value;
+  final String suffix;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(label, style: DashboardText.label(context)),
+      Text(
+        active && value != null ? '$value$suffix' : '—',
+        style: BusinessText.quickDelay(context, mobile: true).copyWith(
+          color: active
+              ? context.colorScheme.onSurface
+              : context.colorScheme.onSurfaceVariant,
+        ),
+      ),
+    ],
+  );
 }
 
 class _BusinessIp extends StatelessWidget {
@@ -795,10 +887,15 @@ class _BusinessChips extends StatelessWidget {
     final code = info?.countryCode;
     final country = code == null || code.isEmpty
         ? null
-        : DashboardChip(label: code.toUpperCase(), large: large);
+        : RegionCodeBadge(code: code);
     final chips = <Widget>[
       ?country,
       if (quality != null) ...[
+        if (quality.organization case final organization?
+            when organization.isNotEmpty)
+          DashboardChip(label: organization, large: large)
+        else if (quality.asn case final asn?)
+          DashboardChip(label: 'AS$asn', large: large),
         DashboardChip(label: quality.type.label(context), large: large),
         DashboardChip(
           label:
@@ -859,12 +956,11 @@ class _HeroSpeeds extends ConsumerWidget {
     if (!vertical) {
       return Wrap(spacing: 28, runSpacing: 10, children: cells);
     }
-    return Center(
-      child: Row(
-        spacing: 36,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: cells,
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 18,
+      children: cells,
     );
   }
 }
@@ -1348,6 +1444,8 @@ class _StartToggle extends ConsumerStatefulWidget {
     required this.enabled,
     required this.running,
     required this.suspended,
+    this.ringColor,
+    this.showLabel = true,
     this.idleLabel,
   });
 
@@ -1355,6 +1453,8 @@ class _StartToggle extends ConsumerStatefulWidget {
   final bool enabled;
   final bool running;
   final bool suspended;
+  final Color? ringColor;
+  final bool showLabel;
 
   /// Replaces the start label while stopped, for the design's "tap to start".
   final String? idleLabel;
@@ -1517,8 +1617,9 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                         animation: _progress,
                         builder: (context, _) => CustomPaint(
                           painter: OrbitPainter(
-                            color: animatedColor ?? color,
+                            color: widget.ringColor ?? animatedColor ?? color,
                             focused: _focused,
+                            running: widget.running,
                             pulse: _pulseController.isAnimating
                                 ? _pulseController.value
                                 : null,
@@ -1529,12 +1630,12 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                               child: GlyphIcon(
                                 widget.suspended
                                     ? AppGlyphs.wifiOff
-                                    : AppGlyphs.playPause(
-                                        _progress.value.clamp(0, 1),
-                                      ),
-                                size: size * 0.26,
-                                color: Colors.white,
-                                fill: 1,
+                                    : AppGlyphs.power,
+                                size: size * 0.22,
+                                color: widget.running
+                                    ? Colors.white
+                                    : const Color(0xFF0E1726),
+                                fill: 0,
                               ),
                             ),
                           ),
@@ -1546,12 +1647,13 @@ class _StartToggleState extends ConsumerState<_StartToggle>
               ),
             ),
           ),
-          Text(
-            label,
-            style: BusinessText.startLabel(
-              context,
-            ).copyWith(color: context.colorScheme.onSurfaceVariant),
-          ),
+          if (widget.showLabel)
+            Text(
+              label,
+              style: BusinessText.startLabel(
+                context,
+              ).copyWith(color: context.colorScheme.onSurfaceVariant),
+            ),
         ],
       );
     }

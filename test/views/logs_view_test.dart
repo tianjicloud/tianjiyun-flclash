@@ -26,7 +26,7 @@ void main() {
   );
 
   Future<void> pumpLogsView(WidgetTester tester) async {
-    tester.view.physicalSize = const Size(1400, 1000);
+    tester.view.physicalSize = const Size(900, 1000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -50,6 +50,10 @@ void main() {
   }
 
   const hintKey = ValueKey('scrollbarHintPill');
+  final logScrollable = find.descendant(
+    of: find.byType(ScrollToEndBox),
+    matching: find.byType(Scrollable),
+  );
 
   Finder hintFinder() => find.byKey(hintKey);
 
@@ -59,7 +63,10 @@ void main() {
     await pumpLogsView(tester);
     expect(hintFinder(), findsNothing);
 
-    final thumb = await revealScrollbarThumb(tester);
+    final thumb = await revealScrollbarThumb(
+      tester,
+      scrollable: logScrollable.first,
+    );
     final gesture = await tester.startGesture(thumb);
     await gesture.moveBy(const Offset(0, -1));
     await tester.pump();
@@ -70,7 +77,7 @@ void main() {
     );
     expect(seedLogs().map((log) => log.dateTime), contains(label.data));
 
-    final scrollableRect = tester.getRect(find.byType(Scrollable).first);
+    final scrollableRect = tester.getRect(logScrollable.first);
     // The list runs under the bar, so the scrollbar track starts at the
     // bar's foot. The minimum thumb length is 48, so at the newest end the
     // thumb center rests 24 dp below the track's top edge.
@@ -83,7 +90,7 @@ void main() {
     // way down and rests centred on it, the thumb being the track's share of
     // the content, both less the part under the bar.
     final position = tester
-        .widget<Scrollable>(find.byType(Scrollable).first)
+        .widget<Scrollable>(logScrollable.first)
         .controller!
         .position;
     final underBar = trackTop - scrollableRect.top;

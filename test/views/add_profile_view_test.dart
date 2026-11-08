@@ -85,18 +85,15 @@ Future<void> _openMenu(WidgetTester tester, ProviderContainer container) async {
 }
 
 void main() {
-  testWidgets('offers the QR code, file, link, and custom entries', (
-    tester,
-  ) async {
+  testWidgets('offers the QR code, add form, and batch import', (tester) async {
     final container = _containerFor(tester);
 
     await _openMenu(tester, container);
 
     final l10n = currentAppLocalizations;
     expect(find.text(l10n.qrcode), findsOne);
-    expect(find.text(l10n.file), findsOne);
-    expect(find.text(l10n.link), findsOne);
-    expect(find.text(l10n.customProfile), findsOne);
+    expect(find.text(l10n.addProfile), findsOne);
+    expect(find.text(l10n.batchImport), findsOne);
     expect(tester.takeException(), null);
   });
 
@@ -113,7 +110,7 @@ void main() {
     await _openMenu(tester, container);
 
     final l10n = currentAppLocalizations;
-    await tester.tap(find.text(l10n.link));
+    await tester.tap(find.text(l10n.batchImport));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip(l10n.batchImport));
     await tester.pumpAndSettle();
@@ -138,14 +135,14 @@ void main() {
     await _openMenu(tester, container);
 
     final l10n = currentAppLocalizations;
-    await tester.tap(find.text(l10n.link));
+    await tester.tap(find.text(l10n.addProfile));
     await tester.pumpAndSettle();
     await tester.enterText(
       _field(l10n.link),
       'trojan://pass@example.com:443#HK',
     );
     await tester.pump();
-    await tester.tap(find.text(l10n.submit));
+    await tester.tap(find.text(l10n.import));
     await tester.pumpAndSettle();
 
     expect(action.singles, ['trojan://pass@example.com:443#HK']);
@@ -161,12 +158,12 @@ void main() {
     await _openMenu(tester, container);
 
     final l10n = currentAppLocalizations;
-    await tester.tap(find.text(l10n.link));
+    await tester.tap(find.text(l10n.addProfile));
     await tester.pumpAndSettle();
     await tester.enterText(_field(l10n.link), 'https://example.com/sub');
     await tester.enterText(_field(l10n.ageSecretKey), ' AGE-SECRET-KEY-1A ');
     await tester.pump();
-    await tester.tap(find.text(l10n.submit));
+    await tester.tap(find.text(l10n.import));
     await tester.pumpAndSettle();
 
     expect(action.singles, ['https://example.com/sub']);
@@ -183,14 +180,14 @@ void main() {
     await _openMenu(tester, container);
 
     final l10n = currentAppLocalizations;
-    await tester.tap(find.text(l10n.link));
+    await tester.tap(find.text(l10n.addProfile));
     await tester.pumpAndSettle();
     await tester.enterText(
       _field(l10n.link),
       'wireguard://key@example.com:51820',
     );
     await tester.pump();
-    await tester.tap(find.text(l10n.submit));
+    await tester.tap(find.text(l10n.import));
     await tester.pumpAndSettle();
 
     expect(find.text(l10n.invalidLinkTip), findsOne);

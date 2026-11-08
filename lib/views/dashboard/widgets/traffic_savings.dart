@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart' show listEquals;
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/common/common.dart';
@@ -41,37 +40,30 @@ class TrafficSavingsCard extends ConsumerWidget {
               (
                 appLocalizations.trafficOtherDirect,
                 summary.month.otherDirect.total,
-                colors.warn,
+                colors.tone2,
               ),
             ];
             final total = entries.fold(0, (sum, entry) => sum + entry.$2);
-            final ring = SizedBox.square(
-              dimension: 104,
-              child: CustomPaint(
-                painter: _SavingsRing(
-                  values: [
-                    for (final entry in entries)
-                      total == 0 ? 0 : entry.$2 / total,
-                  ],
-                  colors: [for (final entry in entries) entry.$3],
-                  track: colors.tone2,
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: SizedBox(
-                        width: 76,
-                        child: _TrafficStat(
-                          label: appLocalizations.trafficMainlandThisMonth,
-                          bytes: summary.monthSavings,
-                          centered: true,
-                        ),
+            final bar = ClipRSuperellipse(
+              borderRadius: AppRadius.full,
+              child: SizedBox(
+                height: 10,
+                child: total == 0
+                    ? ColoredBox(color: colors.tone2)
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (final entry in entries)
+                            if (entry.$2 > 0)
+                              Expanded(
+                                flex: math.max(
+                                  1,
+                                  (entry.$2 / total * 1000).round(),
+                                ),
+                                child: ColoredBox(color: entry.$3),
+                              ),
+                        ],
                       ),
-                    ),
-                  ),
-                ),
               ),
             );
             final legend = Column(
@@ -100,14 +92,11 @@ class TrafficSavingsCard extends ConsumerWidget {
                               ),
                         ),
                       ),
-                      Tooltip(
-                        message: dashboardTraffic(bytes),
-                        child: Text(
-                          '${(total == 0 ? 0 : bytes / total * 100).toStringAsFixed(1)}%',
-                          style: BusinessText.quickMeta(
-                            context,
-                          ).copyWith(color: context.colorScheme.onSurface),
-                        ),
+                      Text(
+                        dashboardTraffic(bytes),
+                        style: BusinessText.quickMeta(context)
+                            .copyWith(color: context.colorScheme.onSurface)
+                            .toJetBrainsMono,
                       ),
                     ],
                   ),
@@ -122,28 +111,26 @@ class TrafficSavingsCard extends ConsumerWidget {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: 10,
+                  spacing: 12,
                   children: [
-                    DashboardCardHeader(
-                      glyph: AppGlyphs.dataUsage,
-                      title: appLocalizations.trafficStats,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DashboardCardHeader(
+                            glyph: AppGlyphs.dataUsage,
+                            title: appLocalizations.trafficStats,
+                          ),
+                        ),
+                        Text(
+                          dashboardTraffic(total),
+                          style: BusinessText.metaValue(
+                            context,
+                          ).toJetBrainsMono,
+                        ),
+                      ],
                     ),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        if (constraints.maxWidth /
-                                MediaQuery.textScalerOf(context).scale(1) <
-                            240) {
-                          return Column(spacing: 12, children: [ring, legend]);
-                        }
-                        return Row(
-                          spacing: 16,
-                          children: [
-                            ring,
-                            Expanded(child: legend),
-                          ],
-                        );
-                      },
-                    ),
+                    bar,
+                    legend,
                   ],
                 ),
                 Text(
@@ -200,13 +187,7 @@ class TrafficSavingsCard extends ConsumerWidget {
 }
 
 class _TrafficStat extends StatelessWidget {
-  const _TrafficStat({
-    required this.label,
-    required this.bytes,
-    this.centered = false,
-  });
-
-  final bool centered;
+  const _TrafficStat({required this.label, required this.bytes});
 
   final String label;
   final int bytes;
@@ -215,23 +196,18 @@ class _TrafficStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: centered
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
         Text(
           label,
-          textAlign: centered ? TextAlign.center : TextAlign.start,
-          maxLines: centered ? null : 1,
-          overflow: centered ? TextOverflow.visible : TextOverflow.ellipsis,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: DashboardText.label(context),
         ),
         FittedBox(
           fit: BoxFit.scaleDown,
-          alignment: centered
-              ? Alignment.center
-              : AlignmentDirectional.centerStart,
+          alignment: AlignmentDirectional.centerStart,
           child: Text(
             dashboardTraffic(bytes),
             maxLines: 1,
@@ -260,37 +236,4 @@ class _LegendDotPainter extends CustomPainter {
   @override
   bool shouldRepaint(_LegendDotPainter oldDelegate) =>
       color != oldDelegate.color;
-}
-
-class _SavingsRing extends CustomPainter {
-  const _SavingsRing({
-    required this.values,
-    required this.colors,
-    required this.track,
-  });
-
-  final List<double> values;
-  final List<Color> colors;
-  final Color track;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = (Offset.zero & size).deflate(5);
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 8;
-    canvas.drawArc(rect, 0, math.pi * 2, false, paint..color = track);
-    var start = -math.pi / 2;
-    for (var i = 0; i < values.length; i++) {
-      final sweep = math.pi * 2 * values[i];
-      canvas.drawArc(rect, start, sweep, false, paint..color = colors[i]);
-      start += sweep;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_SavingsRing oldDelegate) =>
-      track != oldDelegate.track ||
-      !listEquals(values, oldDelegate.values) ||
-      !listEquals(colors, oldDelegate.colors);
 }

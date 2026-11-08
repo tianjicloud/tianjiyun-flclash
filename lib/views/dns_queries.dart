@@ -233,12 +233,10 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
 void _showDnsQueryDetail(BuildContext context, DnsQuery dnsQuery) {
   showSheet<void>(
     context: context,
-    builder: (_) {
-      return Scaffold(
-        body: DnsQueryDetailView(dnsQuery: dnsQuery),
-        title: context.appLocalizations.details('DNS'),
-      );
-    },
+    builder: (_) => Scaffold(
+      body: DnsQueryDetailView(dnsQuery: dnsQuery),
+      title: context.appLocalizations.details('DNS'),
+    ),
   );
 }
 
@@ -445,33 +443,102 @@ class DnsQueryDetailView extends StatelessWidget {
       (appLocalizations.responseCode, dnsQuery.rcode),
       (appLocalizations.delay, '${dnsQuery.delay} ms'),
     ];
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
-        bottom: 20 + context.bottomInset,
-        top: context.sectionsTopPadding,
-      ),
+    return Column(
       children: [
-        generateSection(
-          title: appLocalizations.basicInfo,
-          items: [
-            for (final (title, value) in entries)
-              if (value.isNotEmpty) DetailRow.text(title: title, value: value),
-          ],
-        ),
-        if (dnsQuery.error.isNotEmpty)
-          generateSection(
-            title: appLocalizations.error,
-            items: [_ErrorRow(error: dnsQuery.error)],
-          ),
-        if (dnsQuery.answers.isNotEmpty)
-          generateSection(
-            title: appLocalizations.answers,
-            items: [
-              for (final answer in dnsQuery.answers)
-                DetailRow(title: answer, copyText: answer),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ).copyWith(bottom: 16, top: context.sectionsTopPadding),
+            children: [
+              _DnsQueryHeading(dnsQuery: dnsQuery),
+              generateSection(
+                title: appLocalizations.basicInfo,
+                items: [
+                  for (final (title, value) in entries)
+                    if (value.isNotEmpty)
+                      DetailRow.text(title: title, value: value),
+                ],
+              ),
+              if (dnsQuery.error.isNotEmpty)
+                generateSection(
+                  title: appLocalizations.error,
+                  items: [_ErrorRow(error: dnsQuery.error)],
+                ),
+              if (dnsQuery.answers.isNotEmpty)
+                generateSection(
+                  title: appLocalizations.answers,
+                  items: [
+                    for (final answer in dnsQuery.answers)
+                      DetailRow(title: answer, copyText: answer),
+                  ],
+                ),
             ],
           ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + context.bottomInset),
+          child: SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () => _copy(context, dnsQuery.domain),
+              child: Text(appLocalizations.copyHost),
+            ),
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class _DnsQueryHeading extends StatelessWidget {
+  const _DnsQueryHeading({required this.dnsQuery});
+
+  final DnsQuery dnsQuery;
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    return Card(
+      radius: AppCorner.lg,
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
+        children: [
+          Text(
+            appLocalizations.dnsQueries,
+            style: AppTextStyle.footnote
+                .of(context)
+                .copyWith(color: context.colorScheme.onSurfaceVariant),
+          ),
+          SelectableText(
+            dnsQuery.domain,
+            style: AppTextStyle.title3.of(context, emphasized: true),
+          ),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              _DnsKeyword(
+                RecordFilter(RecordFacetKind.type, dnsQuery.type),
+                tone: dnsQuery.isFailed ? RecordTone.error : RecordTone.neutral,
+              ),
+              if (dnsQuery.initiator case final initiator?)
+                _DnsKeyword(
+                  RecordFilter(RecordFacetKind.initiator, initiator.label),
+                ),
+              if (dnsQuery.rcode.isNotEmpty)
+                _DnsKeyword(
+                  RecordFilter(RecordFacetKind.rcode, dnsQuery.rcode),
+                  tone: dnsQuery.hasFailureRcode
+                      ? RecordTone.error
+                      : RecordTone.neutral,
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

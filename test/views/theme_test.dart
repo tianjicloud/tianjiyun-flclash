@@ -54,7 +54,7 @@ void main() {
 
   testWidgets('background presets apply and return to solid', (tester) async {
     await pumpThemeView(tester);
-    expect(readTheme().background, 'orbit');
+    expect(readTheme().background, 'solid');
     await tester.ensureVisible(find.text('Orbit'));
     await tester.tap(find.text('Orbit'));
     await tester.pumpAndSettle();
@@ -65,10 +65,10 @@ void main() {
   });
 
   group('theme mode', () {
-    testWidgets('defaults to dark', (tester) async {
+    testWidgets('defaults to light', (tester) async {
       await pumpThemeView(tester);
 
-      expect(readTheme().themeMode, ThemeMode.dark);
+      expect(readTheme().themeMode, ThemeMode.light);
     });
 
     testWidgets('switches to light and back to dark', (tester) async {
@@ -100,7 +100,7 @@ void main() {
           .update((_) => defaultThemeProps);
       await pumpThemeView(tester);
 
-      expect(readTheme().primaryColor, 0xFF3D5AFE);
+      expect(readTheme().primaryColor, defaultPrimaryColor);
       for (final color in defaultPrimaryColors) {
         expect(swatch(color), findsOneWidget);
       }
@@ -182,16 +182,16 @@ void main() {
       tester,
     ) async {
       await pumpThemeView(tester);
-      await tester.tap(swatch(0xFF3D5AFE));
+      await tester.tap(swatch(defaultPrimaryColor));
       await tester.pumpAndSettle();
       final count = readTheme().primaryColors.length;
 
-      await editColor(tester, 0xFFCB30E0, '3D5AFE');
+      await editColor(tester, 0xFFCB30E0, '0A55F5');
 
       expect(readTheme().primaryColors, hasLength(count - 1));
       expect(readTheme().primaryColors, isNot(contains(0xFFCB30E0)));
-      expect(readTheme().primaryColor, 0xFF3D5AFE);
-      expect(swatch(0xFF3D5AFE), findsOneWidget);
+      expect(readTheme().primaryColor, defaultPrimaryColor);
+      expect(swatch(defaultPrimaryColor), findsOneWidget);
     });
 
     testWidgets('adds a custom color once and selects it', (tester) async {

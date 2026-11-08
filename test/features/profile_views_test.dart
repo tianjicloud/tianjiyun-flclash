@@ -624,7 +624,10 @@ void main() {
       await tester.pumpAndSettle();
       final l = currentAppLocalizations;
 
+      await tester.tap(find.text(l.addProfile));
+      await tester.pumpAndSettle();
       await tester.tap(find.text(l.customProfile));
+      await tester.tap(find.text(l.import));
       await tester.pumpAndSettle();
 
       expect(find.byType(TextFormField), findsNothing);
@@ -658,7 +661,11 @@ void main() {
       await tester.tap(find.text('home'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text(currentAppLocalizations.customProfile));
+      final l = currentAppLocalizations;
+      await tester.tap(find.text(l.addProfile));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l.customProfile));
+      await tester.tap(find.text(l.import));
       await tester.pumpAndSettle();
 
       expect(

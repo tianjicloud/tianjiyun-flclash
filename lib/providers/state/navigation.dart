@@ -24,6 +24,24 @@ NavigationItemsState navigationItemsState(Ref ref) {
 NavigationItemsState currentNavigationItemsState(Ref ref) {
   final viewWidth = ref.watch(viewWidthProvider);
   final navigationItemsState = ref.watch(navigationItemsStateProvider);
+  final isBusiness = isTianjiSubscriptionProfile(
+    ref.watch(currentProfileProvider),
+  );
+  if (viewWidth > maxMobileWidth && isBusiness) {
+    const businessDestinations = {
+      PageLabel.dashboard,
+      PageLabel.proxies,
+      PageLabel.profiles,
+      PageLabel.requests,
+      PageLabel.logs,
+      PageLabel.tools,
+    };
+    return NavigationItemsState(
+      value: navigationItemsState.value
+          .where((item) => businessDestinations.contains(item.label))
+          .toList(),
+    );
+  }
   final navigationItemMode = switch (viewWidth <= maxMobileWidth) {
     true => NavigationItemMode.mobile,
     false => NavigationItemMode.desktop,

@@ -18,6 +18,8 @@ import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
 import 'package:fl_clash/views/about.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
+import 'package:fl_clash/views/dashboard/widgets/scene_bar.dart';
+import 'package:fl_clash/views/dashboard/widgets/service_status.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -180,15 +182,13 @@ void main() {
             ),
           );
           await tester.pump();
-          expect(find.byType(TrafficSavingsCard), findsOneWidget);
           expect(find.byType(OutboundModeInline), findsOneWidget);
-          if (width == 390) {
-            expect(find.byType(RemainingTrafficCard), findsOneWidget);
-            expect(find.byType(PlanValidityCard), findsOneWidget);
-            expect(
-              tester.getTopLeft(find.byType(RemainingTrafficCard)).dy,
-              lessThan(tester.getTopLeft(find.byType(BusinessLineCard)).dy),
-            );
+          final mobile = width / scale < 640;
+          if (mobile) {
+            expect(find.byType(MobileUsageCard), findsOneWidget);
+            expect(find.byType(BusinessAIStatusCard), findsOneWidget);
+          } else {
+            expect(find.byType(TrafficSavingsCard), findsOneWidget);
           }
           expect(tester.takeException(), isNull);
           await tester.pumpWidget(const SizedBox.shrink());
@@ -198,10 +198,53 @@ void main() {
     }
   }
 
+  testWidgets(
+    'desktop keeps outbound mode when scene controls are unavailable',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      container.read(viewSizeProvider.notifier).value = const Size(1200, 900);
+      final sceneUnavailableContainer = ProviderContainer(
+        parent: container,
+        overrides: [
+          scenePolicyProvider.overrideWithValue(
+            const ScenePolicy(
+              available: false,
+              current: null,
+              suspended: false,
+            ),
+          ),
+        ],
+      );
+      addTearDown(sceneUnavailableContainer.dispose);
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: sceneUnavailableContainer,
+          child: const TestApp(
+            locale: Locale('en'),
+            child: BusinessDashboardView(platform: SupportPlatform.Windows),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SceneBar), findsNothing);
+      expect(find.byType(OutboundModeInline), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+    },
+  );
+
   for (final about in [false, true]) {
     testWidgets(
       'update stays visible on ${about ? 'about' : 'business home'}',
       (tester) async {
+        tester.view.physicalSize = const Size(1200, 900);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
         container.read(viewSizeProvider.notifier).value = const Size(1200, 900);
         await tester.pumpWidget(
           UncontrolledProviderScope(
@@ -281,6 +324,7 @@ void main() {
               Group(
                 name: '天机云',
                 type: GroupType.Selector,
+                now: '⚡ 自动选择',
                 all: [Proxy(name: '⚡ 自动选择', type: 'URLTest')],
               ),
             ];
@@ -316,7 +360,7 @@ void main() {
 
           expect(
             find.byType(ResidentialExitCard),
-            residential ? findsOneWidget : findsNothing,
+            residential && width / scale >= 640 ? findsOneWidget : findsNothing,
           );
           if (width >= 1200 && scale == 1 && !captureOff) {
             await tester.scrollUntilVisible(
@@ -328,7 +372,9 @@ void main() {
               lessThanOrEqualTo(700),
             );
           }
-          if (!residential) expect(find.text('默认线路'), findsOneWidget);
+          if (!residential && width / scale >= 640) {
+            expect(find.byType(BusinessLineCard), findsOneWidget);
+          }
           expect(
             find.text('尚未接管电脑流量，请开启下方的系统代理或 TUN 模式。'),
             captureOff ? findsOneWidget : findsNothing,

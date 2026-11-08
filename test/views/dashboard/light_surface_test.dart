@@ -15,7 +15,9 @@ import 'package:prism_ui/prism_ui.dart';
 import '../../helpers/test_app.dart';
 
 void main() {
-  testWidgets('light sidebar selection uses the theme primary', (tester) async {
+  testWidgets('light sidebar selection uses white with the brand icon', (
+    tester,
+  ) async {
     final scheme = seededColorScheme(
       seedColor: const Color(0xFF3D5AFE),
       brightness: Brightness.light,
@@ -42,16 +44,13 @@ void main() {
       ),
     );
     final text = tester.widget<Text>(find.text('Dashboard'));
-    expect(text.style!.color, scheme.primary);
+    expect(text.style!.color, scheme.onSurface);
     final backgrounds = tester
         .widgetList<DecoratedBox>(find.byType(DecoratedBox))
         .map((w) => w.decoration)
         .whereType<ShapeDecoration>();
     expect(backgrounds.any((d) => d.gradient != null), isFalse);
-    expect(
-      backgrounds.any((d) => d.color == scheme.primary.withValues(alpha: 0.10)),
-      isTrue,
-    );
+    expect(backgrounds.any((d) => d.color == const Color(0xFFFFFFFF)), isTrue);
   });
 
   for (final brightness in Brightness.values) {
@@ -98,7 +97,7 @@ void main() {
         );
       } else {
         expect(decoration.shadows, isEmpty);
-        expect(colors.card, const Color(0xFF101636));
+        expect(colors.card, const Color(0xFF131A22));
       }
     });
   }

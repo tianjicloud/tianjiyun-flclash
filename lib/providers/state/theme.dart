@@ -81,16 +81,67 @@ ColorScheme _cachedColorScheme(
   final key = (seedColor, brightness, style, pureBlack);
   final colorScheme =
       _colorSchemes.remove(key) ??
-      seededColorScheme(
+      _tianjiDefaultColorScheme(
+        seededColorScheme(
+          seedColor: seedColor,
+          brightness: brightness,
+          style: style,
+        ),
         seedColor: seedColor,
-        brightness: brightness,
         style: style,
-      ).toPureBlack(pureBlack);
+        pureBlack: pureBlack,
+      );
   _colorSchemes[key] = colorScheme;
   if (_colorSchemes.length > _maxCachedColorSchemes) {
     _colorSchemes.remove(_colorSchemes.keys.first);
   }
   return colorScheme;
+}
+
+ColorScheme _tianjiDefaultColorScheme(
+  ColorScheme scheme, {
+  required Color seedColor,
+  required ColorStyle style,
+  required bool pureBlack,
+}) {
+  final dark = scheme.brightness == Brightness.dark;
+  if (seedColor.toARGB32() != defaultPrimaryColor ||
+      style != ColorStyle.vivid) {
+    return scheme.toPureBlack(pureBlack && dark);
+  }
+  if (pureBlack && dark) return scheme.toPureBlack(true);
+  final primary = dark ? const Color(0xFF3D73FF) : BusinessPalette.blue;
+  return scheme.copyWith(
+    primary: primary,
+    onPrimary: const Color(0xFFFFFFFF),
+    primaryContainer: dark ? const Color(0xFF1D376E) : const Color(0xFFE6EEFE),
+    onPrimaryContainer: dark
+        ? const Color(0xFFD5E2FF)
+        : const Color(0xFF0842C2),
+    surfaceTint: primary,
+    onSurface: dark ? const Color(0xFFEDF0F7) : BusinessPalette.deep,
+    onSurfaceVariant: dark
+        ? const Color(0xFFADB6C2)
+        : BusinessPalette.secondary,
+    surface: dark ? const Color(0xFF0B0F14) : const Color(0xFFFFFFFF),
+    surfaceBright: dark ? const Color(0xFF2A3442) : const Color(0xFFFFFFFF),
+    surfaceDim: dark ? const Color(0xFF080B0F) : const Color(0xFFF1F3F6),
+    surfaceContainerLowest: dark
+        ? const Color(0xFF0B0F14)
+        : const Color(0xFFFFFFFF),
+    surfaceContainerLow: dark
+        ? const Color(0xFF0F141B)
+        : const Color(0xFFF8F9FB),
+    surfaceContainer: dark ? const Color(0xFF131A22) : const Color(0xFFF1F3F6),
+    surfaceContainerHigh: dark
+        ? const Color(0xFF1A2330)
+        : const Color(0xFFEEF1F4),
+    surfaceContainerHighest: dark
+        ? const Color(0xFF232D3A)
+        : const Color(0xFFE6E9ED),
+    outlineVariant: dark ? const Color(0xFF323C48) : const Color(0xFFDCE1E7),
+    error: dark ? const Color(0xFFFF6B74) : const Color(0xFFB42335),
+  );
 }
 
 typedef WindowBlurRequest = ({bool enabled, Brightness brightness, Color tint});

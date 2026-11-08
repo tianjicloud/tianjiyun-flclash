@@ -515,7 +515,7 @@ class DashboardChip extends StatelessWidget {
           (BusinessTheme.of(context)
               ? DashboardDensityScope.scaleOf(context)
               : 1),
-      padding: EdgeInsets.symmetric(horizontal: large ? 12 : 10),
+      padding: EdgeInsets.symmetric(horizontal: large ? 10 : 9),
       decoration: ShapeDecoration(color: background, shape: AppShape.full),
       child: Row(
         mainAxisSize: MainAxisSize.min,

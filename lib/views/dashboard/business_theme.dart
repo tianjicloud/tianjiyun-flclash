@@ -31,18 +31,25 @@ class BusinessAppearance extends StatelessWidget {
 }
 
 class OrbitPainter extends CustomPainter {
-  const OrbitPainter({required this.color, required this.focused, this.pulse});
+  const OrbitPainter({
+    required this.color,
+    required this.focused,
+    required this.running,
+    this.pulse,
+  });
 
   final Color color;
   final bool focused;
+  final bool running;
   final double? pulse;
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2;
-    final ticks = radius;
-    final ballRadius = radius * 0.78;
+    final tickStart = radius * 0.86;
+    final tickEnd = radius * 0.98;
+    final ballRadius = radius * 0.71;
     if (pulse case final pulse? when pulse < 0.3) {
       final wave = pulse / 0.3;
       canvas.drawCircle(
@@ -54,94 +61,68 @@ class OrbitPainter extends CustomPainter {
           ..strokeWidth = 2,
       );
     }
-    canvas.drawCircle(
-      center,
-      radius * 1.18,
-      Paint()
-        ..shader = RadialGradient(
-          colors: [
-            color.withValues(alpha: 0),
-            color.withValues(alpha: 0.12),
-            color.withValues(alpha: 0),
-          ],
-          stops: const [0.76, 0.92, 1],
-        ).createShader(Rect.fromCircle(center: center, radius: radius * 1.18)),
-    );
-    canvas.drawCircle(
-      center,
-      radius * 1.18,
-      Paint()
-        ..color = BusinessPalette.accent.withValues(
-          alpha: focused ? 0.55 : 0.35,
-        )
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5,
-    );
-    final dash = Paint()
-      ..color = const Color(0xFF96A0FF).withValues(alpha: focused ? 0.62 : 0.4)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    for (var i = 0; i < 40; i++) {
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: ticks),
-        i * math.pi / 20,
-        math.pi / 34,
-        false,
-        dash,
+    final tick = Paint()
+      ..color = color.withValues(alpha: focused ? 0.96 : 0.78)
+      ..strokeWidth = math.max(1.4, radius * 0.025)
+      ..strokeCap = StrokeCap.round;
+    for (var i = 0; i < 48; i++) {
+      final angle = i * math.pi / 24 - math.pi / 2;
+      final direction = Offset(math.cos(angle), math.sin(angle));
+      canvas.drawLine(
+        center + direction * tickStart,
+        center + direction * tickEnd,
+        tick,
       );
     }
     final ball = Rect.fromCircle(center: center, radius: ballRadius);
+    if (running) {
+      canvas.drawCircle(
+        center,
+        ballRadius + radius * 0.04,
+        Paint()
+          ..color = BusinessPalette.blue.withValues(alpha: 0.08)
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, radius * 0.07),
+      );
+    }
     canvas.drawCircle(
       center,
       ballRadius,
       Paint()
-        ..shader = const RadialGradient(
-          center: Alignment(-0.32, -0.4),
-          radius: 1.08,
-          colors: [Color(0xFFAAB8FF), Color(0xFF3D5AFE), Color(0xFF4527A0)],
-          stops: [0, 0.52, 1],
-        ).createShader(ball),
+        ..color = running ? BusinessPalette.blue : const Color(0xFFFFFFFF)
+        ..shader = running
+            ? const RadialGradient(
+                center: Alignment(0, -0.44),
+                radius: 1.12,
+                colors: [
+                  Color(0xFF5B8FFF),
+                  Color(0xFF0A55F5),
+                  Color(0xFF0842C2),
+                ],
+                stops: [0, 0.52, 1],
+              ).createShader(ball)
+            : null,
     );
+    if (running) {
+      canvas.drawCircle(
+        center,
+        ballRadius,
+        Paint()
+          ..shader = const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.center,
+            colors: [Color(0x70FFFFFF), Color(0x00FFFFFF)],
+          ).createShader(ball),
+      );
+    }
     canvas.drawCircle(
       center,
       ballRadius,
       Paint()
-        ..shader = RadialGradient(
-          center: const Alignment(-0.18, -0.42),
-          radius: 0.9,
-          colors: [
-            Colors.white.withValues(alpha: 0.26),
-            Colors.white.withValues(alpha: 0),
-          ],
-        ).createShader(ball),
-    );
-    final specular = center + Offset(-ballRadius * 0.34, -ballRadius * 0.42);
-    final specularRadius = ballRadius * 0.42;
-    canvas.drawCircle(
-      specular,
-      specularRadius,
-      Paint()
-        ..shader =
-            RadialGradient(
-              colors: [
-                Colors.white.withValues(alpha: 0.34),
-                Colors.white.withValues(alpha: 0),
-              ],
-            ).createShader(
-              Rect.fromCircle(center: specular, radius: specularRadius),
-            ),
-    );
-    final satellite = center + Offset(0, -ticks);
-    final satelliteRadius = math.max(2.4, radius * 0.045);
-    canvas.drawCircle(
-      satellite,
-      satelliteRadius * 2.8,
-      Paint()..color = const Color(0xFF8FA2FF).withValues(alpha: 0.28),
-    );
-    canvas.drawCircle(
-      satellite,
-      satelliteRadius,
-      Paint()..color = const Color(0xFFC9D3FF),
+        ..color = running
+            ? Colors.white.withValues(alpha: 0.16)
+            : const Color(0xFF98A2AD).withValues(alpha: 0.35)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = running ? 1 : 1.2,
     );
   }
 
@@ -149,5 +130,6 @@ class OrbitPainter extends CustomPainter {
   bool shouldRepaint(OrbitPainter oldDelegate) =>
       color != oldDelegate.color ||
       focused != oldDelegate.focused ||
+      running != oldDelegate.running ||
       pulse != oldDelegate.pulse;
 }

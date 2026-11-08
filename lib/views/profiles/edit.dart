@@ -11,6 +11,8 @@ import 'package:fl_clash/providers/core.dart';
 import 'package:fl_clash/providers/database.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/profiles/extend/extend.dart';
+import 'package:fl_clash/views/profiles/preview.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -270,6 +272,35 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     );
   }
 
+  Future<void> _handleDeleteProfile() async {
+    final profilesAction = ref.read(profilesActionProvider.notifier);
+    final appLocalizations = context.appLocalizations;
+    final users = await profilesAction.providerUsers(widget.profile);
+    if (!mounted) {
+      return;
+    }
+    final res = await dialogs.showMessage(
+      title: appLocalizations.tip,
+      message: TextSpan(
+        text: users.isEmpty
+            ? appLocalizations.deleteTip(appLocalizations.profile)
+            : appLocalizations.providerInUse(
+                widget.profile.realLabel,
+                users.map((item) => item.realLabel).join(', '),
+              ),
+      ),
+      destructive: true,
+      confirmText: appLocalizations.delete,
+    );
+    if (res != true || !mounted) {
+      return;
+    }
+    await profilesAction.deleteProfile(widget.profile.id);
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
+  }
+
   Future<void> _handleBack() async {
     final appLocalizations = context.appLocalizations;
     final res = await dialogs.showMessage(
@@ -301,7 +332,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     final appLocalizations = context.appLocalizations;
     final isUrl = widget.profile.type == ProfileType.url;
     final issue = _attempted ? _issue(appLocalizations) : null;
-    final sections = [
+    final sections = <Widget>[
       generateSection(
         items: [
           _ProfileNameField(
@@ -334,6 +365,27 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
               ),
           ],
         ),
+      if (isUrl)
+        generateSection(
+          items: [
+            FormRow(
+              title: appLocalizations.extend,
+              trailing: const GlyphIcon(AppGlyphs.chevronForward),
+              onPressed: () => BaseNavigator.push(
+                context,
+                ExtendView(profileId: widget.profile.id),
+              ),
+            ),
+            FormRow(
+              title: appLocalizations.runtimeConfig,
+              trailing: const GlyphIcon(AppGlyphs.chevronForward),
+              onPressed: () => BaseNavigator.push(
+                context,
+                PreviewProfileView(profile: widget.profile),
+              ),
+            ),
+          ],
+        ),
       generateSection(
         items: [
           _ProfileFileItem(
@@ -343,6 +395,19 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
           ),
         ],
       ),
+      if (isUrl)
+        generateSection(
+          items: [
+            FormRow(
+              title: appLocalizations.delete,
+              trailing: Text(
+                appLocalizations.delete,
+                style: TextStyle(color: context.colorScheme.error),
+              ),
+              onPressed: _handleDeleteProfile,
+            ),
+          ],
+        ),
     ];
     return FocusTraversalGroup(
       policy: PageTraversalPolicy(),
@@ -362,20 +427,124 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
               tooltip: appLocalizations.save,
             ),
             body: Builder(
-              builder: (context) => ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
-                  top: context.sectionsTopPadding,
-                  bottom: context.bottomInset + 16,
-                ),
-                children: [
-                  ErrorBanner(message: issue?.message),
-                  ...sections,
-                ],
+              builder: (context) => LayoutBuilder(
+                builder: (context, constraints) {
+                  final padding = const EdgeInsets.symmetric(horizontal: 16)
+                      .copyWith(
+                        top: context.sectionsTopPadding,
+                        bottom: context.bottomInset + 16,
+                      );
+                  final form = ListView(
+                    padding: padding,
+                    children: [
+                      ErrorBanner(message: issue?.message),
+                      ...sections,
+                    ],
+                  );
+                  if (!system.isDesktop || constraints.maxWidth < 900) {
+                    return form;
+                  }
+                  final editorSections = isUrl
+                      ? sections.take(sections.length - 1).toList()
+                      : sections;
+                  return ListView(
+                    padding: padding,
+                    children: [
+                      ErrorBanner(message: issue?.message),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 16,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: editorSections,
+                            ),
+                          ),
+                          if (isUrl)
+                            SizedBox(
+                              width: 320,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  _SubscriptionSummary(profile: widget.profile),
+                                  _DeleteProfileAction(
+                                    onPressed: _handleDeleteProfile,
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DeleteProfileAction extends StatelessWidget {
+  const _DeleteProfileAction({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    return generateSection(
+      title: appLocalizations.delete,
+      items: [
+        FormRow(
+          title: appLocalizations.deleteTip(appLocalizations.profile),
+          trailing: Text(
+            appLocalizations.delete,
+            style: TextStyle(color: context.colorScheme.error),
+          ),
+          onPressed: onPressed,
+        ),
+      ],
+    );
+  }
+}
+
+class _SubscriptionSummary extends StatelessWidget {
+  const _SubscriptionSummary({required this.profile});
+
+  final Profile profile;
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    final info = profile.subscriptionInfo;
+    final used = (info?.upload ?? 0) + (info?.download ?? 0);
+    final expireDate = info?.expireDate;
+    return generateSection(
+      title: appLocalizations.subscriptionInfo,
+      items: [
+        if (expireDate != null)
+          FormRow(
+            title: appLocalizations.expireTime,
+            trailing: Text(expireDate.show),
+          ),
+        if (info != null && info.total > 0)
+          FormRow(
+            title: appLocalizations.traffic,
+            trailing: Text('${used.traffic.show} / ${info.total.traffic.show}'),
+          ),
+        if (profile.lastUpdateDate != null)
+          FormRow(
+            title: appLocalizations.lastUpdated,
+            trailing: LastUpdateTimeText(
+              lastUpdateDate: profile.lastUpdateDate!,
+              compact: true,
+            ),
+          ),
+      ],
     );
   }
 }
@@ -456,15 +625,58 @@ class _ProfileUrlField extends StatelessWidget {
     return FormRow(
       title: appLocalizations.url,
       invalid: invalid,
-      trailing: FormRowTextField(
+      trailing: _SecretProfileUrlField(
         controller: controller,
-        hintText: appLocalizations.required,
-        keyboardType: TextInputType.url,
-        textInputAction: TextInputAction.next,
-        autocorrect: false,
-        inputFormatters: TextInputLimits.limit(TextInputLimits.url),
         onChanged: onChanged,
       ),
+    );
+  }
+}
+
+class _SecretProfileUrlField extends StatefulWidget {
+  const _SecretProfileUrlField({
+    required this.controller,
+    required this.onChanged,
+  });
+
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+
+  @override
+  State<_SecretProfileUrlField> createState() => _SecretProfileUrlFieldState();
+}
+
+class _SecretProfileUrlFieldState extends State<_SecretProfileUrlField> {
+  var _obscure = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: FormRowTextField(
+            controller: widget.controller,
+            hintText: appLocalizations.required,
+            keyboardType: TextInputType.url,
+            textInputAction: TextInputAction.next,
+            autocorrect: false,
+            inputFormatters: TextInputLimits.limit(TextInputLimits.url),
+            obscureText: _obscure,
+            onChanged: widget.onChanged,
+          ),
+        ),
+        MinIconButtonTheme(
+          child: IconButton(
+            tooltip: _obscure
+                ? appLocalizations.showPassword
+                : appLocalizations.hidePassword,
+            icon: GlyphIcon(_obscure ? AppGlyphs.eye : AppGlyphs.eyeOff),
+            onPressed: () => setState(() => _obscure = !_obscure),
+          ),
+        ),
+      ],
     );
   }
 }

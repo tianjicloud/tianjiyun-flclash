@@ -94,7 +94,7 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('business ring shows all shares and centers mainland direct', (
+  testWidgets('business chart shows all traffic segments and byte values', (
     tester,
   ) async {
     stats.summary.value = const TrafficSummary(
@@ -105,21 +105,40 @@ void main() {
       ),
     );
     await pumpCard(tester, const Size(400, 800), business: true);
-    for (final value in ['60.0%', '30.0%', '10.0%']) {
-      expect(find.text(value), findsOneWidget);
-    }
+    expect(find.text('VPN'), findsOneWidget);
+    expect(find.text('Mainland direct'), findsOneWidget);
     expect(find.text('Direct (region unconfirmed)'), findsOneWidget);
-    final label = tester.widget<Text>(find.text('Mainland direct this month'));
-    expect(label.maxLines, isNull);
-    expect(label.overflow, TextOverflow.visible);
-    expect(label.textAlign, TextAlign.center);
-    final title = tester.getCenter(find.text('Mainland direct this month'));
-    final saved = tester.getCenter(find.text(_traffic(30)).first);
-    expect(saved.dx, closeTo(title.dx, 0.1));
+    expect(find.text(_traffic(60)), findsOneWidget);
+    expect(find.text(_traffic(30)), findsOneWidget);
+    expect(find.text(_traffic(10)), findsOneWidget);
+    final segments =
+        tester
+            .widgetList<ColoredBox>(
+              find.descendant(
+                of: find.byType(TrafficSavingsCard),
+                matching: find.byType(ColoredBox),
+              ),
+            )
+            .toList()
+          ..sort(
+            (a, b) => tester
+                .getSize(find.byWidget(b))
+                .width
+                .compareTo(tester.getSize(find.byWidget(a)).width),
+          );
+    expect(segments, hasLength(3));
+    final widths = [
+      for (final segment in segments)
+        tester.getSize(find.byWidget(segment)).width,
+    ];
+    final totalWidth = widths.reduce((a, b) => a + b);
+    expect(widths[0] / totalWidth, closeTo(0.6, 0.01));
+    expect(widths[1] / totalWidth, closeTo(0.3, 0.01));
+    expect(widths[2] / totalWidth, closeTo(0.1, 0.01));
     expect(tester.takeException(), isNull);
     stats.summary.value = TrafficSummary.empty;
     await tester.pump();
-    expect(find.text('0.0%'), findsNWidgets(3));
+    expect(find.text(_traffic(0)), findsNWidgets(4));
     expect(find.text('NaN%'), findsNothing);
   });
 

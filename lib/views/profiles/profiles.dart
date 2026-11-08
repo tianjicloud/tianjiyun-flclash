@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/views/profiles/custom/custom.dart';
 import 'package:fl_clash/views/profiles/extend/extend.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -99,11 +101,16 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
         final appLocalizations = context.appLocalizations;
         final isLoading = ref.watch(loadingProvider(LoadingTag.profiles));
         final state = ref.watch(profilesStateProvider);
+        final business = isTianjiSubscriptionProfile(
+          ref.watch(currentProfileProvider),
+        );
         final spacing = cardSpacingOf(context, ref.watch(viewModeProvider));
         final picker = widget.picker;
         return Scaffold(
           isLoading: isLoading,
-          title: appLocalizations.profiles,
+          title: business && !picker
+              ? appLocalizations.businessSubscriptions
+              : appLocalizations.profiles,
           iconActions: picker ? const [] : _buildActions(state.profiles),
           actions: state.profiles.isEmpty || picker
               ? null
@@ -131,12 +138,18 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
                 ),
               ),
             ),
-            child: _ProfilesGrid(
-              profiles: state.profiles,
-              currentProfileId: state.currentProfileId,
-              spacing: spacing,
-              revealsSelected: !picker,
-            ),
+            child: !picker && business
+                ? _BusinessProfilesList(
+                    profiles: state.profiles,
+                    currentProfileId: state.currentProfileId,
+                    spacing: spacing,
+                  )
+                : _ProfilesGrid(
+                    profiles: state.profiles,
+                    currentProfileId: state.currentProfileId,
+                    spacing: spacing,
+                    revealsSelected: !picker,
+                  ),
           ),
         );
       },
@@ -265,16 +278,572 @@ class _ProfilesGridState extends ConsumerState<_ProfilesGrid> {
   }
 }
 
+class _BusinessProfilesList extends ConsumerWidget {
+  const _BusinessProfilesList({
+    required this.profiles,
+    required this.currentProfileId,
+    required this.spacing,
+  });
+
+  final List<Profile> profiles;
+  final int? currentProfileId;
+  final double spacing;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current =
+        profiles.getProfile(currentProfileId) ??
+        (profiles.isEmpty ? null : profiles.first);
+    final others = [
+      for (final profile in profiles)
+        if (profile.id != current?.id) profile,
+    ];
+    final horizontalInset = ref.watch(isMobileViewProvider) ? 16.0 : 24.0;
+    return CustomScrollView(
+      key: profilesStoreKey,
+      slivers: [
+        SliverToBoxAdapter(child: SizedBox(height: context.contentTopPadding)),
+        if (current != null)
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+            sliver: SliverToBoxAdapter(
+              child: _BusinessSubscriptionCard(
+                profile: current,
+                currentProfileId: currentProfileId,
+              ),
+            ),
+          ),
+        if (others.isNotEmpty) ...[
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                horizontalInset,
+                24,
+                horizontalInset,
+                10,
+              ),
+              child: Text(
+                context.appLocalizations.other,
+                style: AppTextStyle.headline.of(context, emphasized: true),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+            sliver: SliverPrismList(
+              itemCount: others.length,
+              gap: spacing,
+              itemBuilder: (_, index) => ProfileItem(
+                profile: others[index],
+                groupValue: currentProfileId,
+                businessCompact: true,
+                onChanged: (profileId) {
+                  ref.read(currentProfileIdProvider.notifier).value = profileId;
+                },
+              ),
+            ),
+          ),
+        ],
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              horizontalInset,
+              16,
+              horizontalInset,
+              20 + context.bottomInset,
+            ),
+            child: AddProfileMenu(
+              builder: (open) => TonalButton(
+                size: TonalButtonSize.bar,
+                glyph: AppGlyphs.addCircle,
+                label: context.appLocalizations.addProfile,
+                onPressed: open,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _BusinessSubscriptionCard extends ConsumerWidget {
+  const _BusinessSubscriptionCard({
+    required this.profile,
+    required this.currentProfileId,
+  });
+
+  final Profile profile;
+  final int? currentProfileId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final info = profile.type == ProfileType.url
+        ? profile.subscriptionInfo
+        : null;
+    final usage = info?.usage;
+    final used = info == null ? null : info.upload + info.download;
+    final isUpdating = ref.watch(isUpdatingProvider(profile.updatingKey));
+    final action = ProfileItem(
+      profile: profile,
+      groupValue: currentProfileId,
+      onChanged: (_) {},
+    );
+    final colorScheme = context.colorScheme;
+    return ContextMenuRegion(
+      menuItems: isUpdating ? null : action._menuItems(context, ref),
+      child: Card(
+        radius: BusinessPalette.cardRadius,
+        padding: const EdgeInsets.all(22),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth >= 900) {
+              return _buildDesktop(
+                context,
+                action: action,
+                info: info,
+                usage: usage,
+                used: used,
+                isUpdating: isUpdating,
+                colorScheme: colorScheme,
+                ref: ref,
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        profile.realLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.title2.of(
+                          context,
+                          emphasized: true,
+                        ),
+                      ),
+                    ),
+                    Tooltip(
+                      message: context.appLocalizations.subscriptionDetails,
+                      child: const SelectionBadge(size: 24),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _profileTypeLabel(context, profile.type),
+                        style: AppTextStyle.subheadline
+                            .of(context)
+                            .copyWith(color: colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                    action._buildTrailing(context, isUpdating: isUpdating),
+                  ],
+                ),
+                if (info?.expireDate case final expire?) ...[
+                  const SizedBox(height: 18),
+                  Text(
+                    context.appLocalizations.validUntil(expire.show),
+                    style: AppTextStyle.footnote
+                        .of(context)
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    context.appLocalizations.profileDaysLeft(
+                      expire
+                          .difference(DateTime.now())
+                          .inDays
+                          .clamp(0, 999999)
+                          .toInt(),
+                    ),
+                    style: AppTextStyle.title3.of(context, emphasized: true),
+                  ),
+                ],
+                if (usage != null && used != null && info != null) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${used.traffic.show} / ${info.total.traffic.show}',
+                          style: AppTextStyle.footnote
+                              .of(context)
+                              .copyWith(color: colorScheme.onSurfaceVariant),
+                        ),
+                      ),
+                      Text(
+                        '${(usage * 100).round()}%',
+                        style: AppTextStyle.footnote
+                            .of(context, emphasized: true)
+                            .copyWith(color: BusinessPalette.blue),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    height: 8,
+                    child: DecoratedBox(
+                      decoration: const ShapeDecoration(
+                        color: Color(0xFFEEF1F4),
+                        shape: AppShape.full,
+                      ),
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: FractionallySizedBox(
+                          widthFactor: usage,
+                          heightFactor: 1,
+                          child: const DecoratedBox(
+                            decoration: ShapeDecoration(
+                              color: BusinessPalette.blue,
+                              shape: AppShape.full,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 20),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    if (profile.type == ProfileType.url)
+                      TonalButton(
+                        size: TonalButtonSize.bar,
+                        glyph: AppGlyphs.link,
+                        label: context.appLocalizations.renew,
+                        onPressed: () => dialogs.openUrl(userPanelUrl),
+                      ),
+                    if (profile.type == ProfileType.url)
+                      TonalButton(
+                        size: TonalButtonSize.bar,
+                        glyph: AppGlyphs.sync,
+                        label: context.appLocalizations.update,
+                        onPressed: isUpdating
+                            ? null
+                            : () => action.updateProfile(ref),
+                      ),
+                    if (profile.type == ProfileType.url)
+                      TonalButton(
+                        size: TonalButtonSize.bar,
+                        glyph: AppGlyphs.copy,
+                        label: context.appLocalizations.copyLink,
+                        onPressed: () => action._handleCopyLink(context),
+                      ),
+                    TonalButton(
+                      size: TonalButtonSize.bar,
+                      glyph: AppGlyphs.edit,
+                      label: context.appLocalizations.edit,
+                      onPressed: () => action._handleEdit(context),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDesktop(
+    BuildContext context, {
+    required ProfileItem action,
+    required SubscriptionInfo? info,
+    required double? usage,
+    required int? used,
+    required bool isUpdating,
+    required ColorScheme colorScheme,
+    required WidgetRef ref,
+  }) {
+    final l10n = context.appLocalizations;
+    final expire = info?.expireDate;
+    final url = Uri.tryParse(profile.url);
+    final maskedUrl = url != null && url.hasAuthority
+        ? '${url.scheme}://${url.host}/••••••••'
+        : null;
+    final actions = <Widget>[
+      if (profile.type == ProfileType.url)
+        FilledButton.icon(
+          onPressed: () => dialogs.openUrl(userPanelUrl),
+          icon: const GlyphIcon(AppGlyphs.link, fill: 1),
+          label: Text(l10n.renew),
+        ),
+      if (profile.type == ProfileType.url)
+        OutlinedButton.icon(
+          onPressed: isUpdating ? null : () => action.updateProfile(ref),
+          icon: const GlyphIcon(AppGlyphs.sync),
+          label: Text(l10n.update),
+        ),
+      if (profile.type == ProfileType.url)
+        OutlinedButton.icon(
+          onPressed: () => action._handleCopyLink(context),
+          icon: const GlyphIcon(AppGlyphs.copy),
+          label: Text(l10n.copyLink),
+        ),
+      OutlinedButton.icon(
+        onPressed: () => action._handleEdit(context),
+        icon: const GlyphIcon(AppGlyphs.edit),
+        label: Text(l10n.edit),
+      ),
+    ];
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 24,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        profile.realLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.title2.of(
+                          context,
+                          emphasized: true,
+                        ),
+                      ),
+                    ),
+                    const SelectionBadge(size: 24),
+                  ],
+                ),
+                if (maskedUrl != null) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    maskedUrl,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.footnote
+                        .of(context)
+                        .toJetBrainsMono
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ],
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    if (info?.total case final total? when total > 0)
+                      _ProfileMetaChip(label: total.traffic.show),
+                    if (profile.type == ProfileType.url)
+                      _ProfileMetaChip(label: l10n.remote),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: _ProfileMetric(
+                        label: l10n.trafficUsage,
+                        value: used != null && info != null
+                            ? '${used.traffic.show} / ${info.total.traffic.show}'
+                            : '—',
+                        footnote: usage == null
+                            ? null
+                            : '${(usage * 100).round()}%',
+                        progress: usage,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _ProfileMetric(
+                        label: l10n.expireTime,
+                        value: info == null
+                            ? '—'
+                            : expire?.show ?? l10n.infiniteTime,
+                        footnote: expire == null
+                            ? null
+                            : l10n.profileDaysLeft(
+                                expire
+                                    .difference(DateTime.now())
+                                    .inDays
+                                    .clamp(0, 999999)
+                                    .toInt(),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.lastUpdated,
+                            style: AppTextStyle.footnote
+                                .of(context)
+                                .copyWith(color: colorScheme.onSurfaceVariant),
+                          ),
+                          const SizedBox(height: 4),
+                          action._buildTrailing(
+                            context,
+                            isUpdating: isUpdating,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 1,
+            child: ColoredBox(color: colorScheme.outlineVariant),
+          ),
+          SizedBox(
+            width: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 8,
+              children: actions,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileMetric extends StatelessWidget {
+  const _ProfileMetric({
+    required this.label,
+    required this.value,
+    this.footnote,
+    this.progress,
+  });
+
+  final String label;
+  final String value;
+  final String? footnote;
+  final double? progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = context.colorScheme.brightness == Brightness.dark;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyle.footnote
+              .of(context)
+              .copyWith(color: context.colorScheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyle.title3.of(context, emphasized: true),
+        ),
+        if (footnote != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            footnote!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyle.footnote
+                .of(context)
+                .copyWith(color: context.colorScheme.onSurfaceVariant),
+          ),
+        ],
+        if (progress case final value?) ...[
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 8,
+            child: DecoratedBox(
+              decoration: ShapeDecoration(
+                color: dark
+                    ? context.colorScheme.surfaceContainerHigh
+                    : const Color(0xFFEEF1F4),
+                shape: AppShape.full,
+              ),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: FractionallySizedBox(
+                  widthFactor: value,
+                  heightFactor: 1,
+                  child: const DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: BusinessPalette.blue,
+                      shape: AppShape.full,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _ProfileMetaChip extends StatelessWidget {
+  const _ProfileMetaChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = context.colorScheme.brightness == Brightness.dark;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: dark
+            ? context.colorScheme.surfaceContainerHigh
+            : const Color(0xFFEEF1F4),
+        shape: AppShape.sm,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        child: Text(
+          label,
+          style: AppTextStyle.caption1
+              .of(context)
+              .copyWith(color: context.colorScheme.onSurfaceVariant),
+        ),
+      ),
+    );
+  }
+}
+
+String _profileTypeLabel(BuildContext context, ProfileType type) {
+  final l10n = context.appLocalizations;
+  return switch (type) {
+    ProfileType.url => l10n.remote,
+    ProfileType.file => l10n.local,
+    ProfileType.custom => l10n.custom,
+  };
+}
+
 class ProfileItem extends ConsumerWidget {
   final Profile profile;
   final int? groupValue;
   final void Function(int? value) onChanged;
+  final bool businessCompact;
 
   const ProfileItem({
     super.key,
     required this.profile,
     required this.groupValue,
     required this.onChanged,
+    this.businessCompact = false,
   });
 
   Future<void> _handleDeleteProfile(BuildContext context, WidgetRef ref) async {
@@ -504,7 +1073,7 @@ class ProfileItem extends ConsumerWidget {
       menuItems: isUpdating ? null : _menuItems(context, ref),
       child: Card(
         enterActionsOnRight: true,
-        radius: AppCorner.xl,
+        radius: businessCompact ? BusinessPalette.cardRadius : AppCorner.xl,
         isSelected: isSelected,
         onPressed: () {
           onChanged(profile.id);

@@ -86,6 +86,22 @@ class _FailedIps extends _Ips {
   void refresh(Iterable<String> targets) => refreshed.addAll(targets);
 }
 
+class _RingIps extends OutboundIpProbe {
+  _RingIps(this.entry);
+
+  final ProbeEntry<IpInfo> entry;
+
+  @override
+  RoutedProbeState<String, IpInfo> build() =>
+      RoutedProbeState({routedOutbound: entry});
+
+  @override
+  void watch(String target) {}
+
+  @override
+  void unwatch(String target) {}
+}
+
 OutboundIpResult _address({int coreEpoch = 1}) => OutboundIpResult(
   url: 'https://www.cloudflare.com/cdn-cgi/trace',
   body: 'ip=$_ip\nloc=GB\n',
@@ -186,6 +202,138 @@ DashboardChip _chip(WidgetTester tester, String label) =>
     );
 
 void main() {
+  testWidgets('business health ring requires a fresh captured route', (
+    tester,
+  ) async {
+    const stamp = RouteStamp(
+      coreEpoch: 1,
+      routeVersion: 2,
+      hostEpoch: 3,
+      proxied: true,
+      hits: [RouteHit(host: 'example.com', proxy: 'Proxy', exit: 'Tokyo')],
+      chains: ['Tokyo'],
+    );
+
+    Future<Color> ringColor({
+      required bool running,
+      required ProbePhase phase,
+      required RouteState route,
+      required SelectionVerdict verdict,
+    }) async {
+      await tester.pumpWidget(
+        TestApp(
+          locale: const Locale('en'),
+          overrides: [
+            profilesProvider.overrideWithValue(const [_profile]),
+            isStartProvider.overrideWithValue(running),
+            runTimeProvider.overrideWithValue(running ? 1 : null),
+            suspendProvider.overrideWithValue(false),
+            coreStatusProvider.overrideWithValue(CoreStatus.disconnected),
+            networkSettingProvider.overrideWithBuild(
+              (_, _) => const NetworkProps(systemProxy: true),
+            ),
+            routeTrackerProvider.overrideWithBuild((_, _) => route),
+            selectionCheckProvider.overrideWithBuild((_, _) => verdict),
+            outboundIpProbeProvider.overrideWith(
+              () => _RingIps(
+                ProbeEntry(
+                  phase: phase,
+                  value: phase == ProbePhase.failed
+                      ? null
+                      : const IpInfo(ip: _ip, countryCode: 'GB'),
+                  stamp: phase == ProbePhase.fresh ? stamp : null,
+                ),
+              ),
+            ),
+            ipQualityProvider.overrideWith((_, _) async => _residential),
+          ],
+          child: const BusinessAppearance(
+            child: HostScaffold(
+              body: DashboardDensityScope(
+                density: DashboardDensity.standard,
+                scale: 1,
+                child: CurrentOutboundCard(),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      final customPaint = tester.widget<CustomPaint>(
+        find.byWidgetPredicate(
+          (widget) => widget is CustomPaint && widget.painter is OrbitPainter,
+        ),
+      );
+      final color = (customPaint.painter! as OrbitPainter).color;
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      return color;
+    }
+
+    const freshRoute = RouteState(
+      coreEpoch: 1,
+      routeVersion: 2,
+      hostEpoch: 3,
+      proxied: true,
+      synced: true,
+      live: true,
+    );
+    expect(
+      await ringColor(
+        running: true,
+        phase: ProbePhase.fresh,
+        route: freshRoute,
+        verdict: SelectionVerdict.untouched,
+      ),
+      BusinessPalette.connected,
+    );
+    expect(
+      await ringColor(
+        running: false,
+        phase: ProbePhase.fresh,
+        route: freshRoute,
+        verdict: SelectionVerdict.untouched,
+      ),
+      const Color(0xFF98A2AD),
+    );
+    expect(
+      await ringColor(
+        running: true,
+        phase: ProbePhase.fresh,
+        route: freshRoute.copyWith(routeVersion: 3),
+        verdict: SelectionVerdict.untouched,
+      ),
+      const Color(0xFF98A2AD),
+    );
+    expect(
+      await ringColor(
+        running: true,
+        phase: ProbePhase.failed,
+        route: freshRoute,
+        verdict: SelectionVerdict.untouched,
+      ),
+      BusinessPalette.warning,
+    );
+    expect(
+      await ringColor(
+        running: true,
+        phase: ProbePhase.probing,
+        route: freshRoute,
+        verdict: SelectionVerdict.untouched,
+      ),
+      BusinessPalette.blue,
+    );
+    expect(
+      await ringColor(
+        running: true,
+        phase: ProbePhase.probing,
+        route: freshRoute,
+        verdict: SelectionVerdict.notCaptured,
+      ),
+      BusinessPalette.warning,
+    );
+  });
+
   testWidgets('stopped business desktop hides probe data and keeps selection', (
     tester,
   ) async {
@@ -200,7 +348,8 @@ void main() {
           profilesProvider.overrideWithValue(const [_profile]),
           isStartProvider.overrideWithValue(false),
           suspendProvider.overrideWithValue(false),
-          coreStatusProvider.overrideWithValue(CoreStatus.connected),
+          coreStatusProvider.overrideWithValue(CoreStatus.disconnected),
+          routeTrackerProvider.overrideWithBuild((_, _) => const RouteState()),
           outboundIpProbeProvider.overrideWith(_Ips.new),
           ipQualityProvider.overrideWith((_, _) async => _residential),
           selectionCheckProvider.overrideWithBuild(
@@ -790,9 +939,9 @@ void main() {
           .map((widget) => widget.painter)
           .whereType<OrbitPainter>()
           .single;
-      expect(painter().color, BusinessPalette.blue);
+      expect(painter().color, const Color(0xFF98A2AD));
       expect(tester.widget<Text>(find.text(_ip)).maxLines, 1);
-      expect(find.text('Residential'), findsNothing);
+      expect(find.text('Residential'), findsOneWidget);
       final action =
           container.read(setupActionProvider.notifier) as _RecordingSetupAction;
       await tester.tap(find.byTooltip('Stop'));
@@ -802,16 +951,16 @@ void main() {
       expect(painter().color, isNot(BusinessPalette.blue));
       await tester.pump(const Duration(milliseconds: 500));
       expect(action.requests, [false]);
-      expect(painter().color, BusinessPalette.accent);
+      expect(painter().color, const Color(0xFF98A2AD));
       expect(painter().pulse, isNotNull);
       await tester.tap(find.byTooltip('Start'));
       await tester.pumpAndSettle();
       expect(action.requests, [false, true]);
-      expect(painter().color, BusinessPalette.blue);
+      expect(painter().color, const Color(0xFF98A2AD));
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('mobile business keeps the real run time beside the speeds', (
+    testWidgets('mobile business shows the expanded IP and live metrics', (
       tester,
     ) async {
       tester.view.physicalSize = const Size(390, 900);
@@ -823,16 +972,10 @@ void main() {
       final strings = tester
           .element(find.byType(CurrentOutboundCard))
           .appLocalizations;
-      expect(find.text(strings.runTime), findsNothing);
-      await tester.tap(find.byTooltip(strings.details(strings.status)));
-      await tester.pump();
-      expect(find.text(strings.runTime), findsOneWidget);
-      expect(find.text(getTimeText(7200000)), findsOneWidget);
-
-      container.read(runTimeProvider.notifier).value = null;
-      await tester.pump();
-      expect(find.text(strings.runTime), findsNothing);
-      expect(find.text(getTimeText(7200000)), findsNothing);
+      expect(find.text(_ip), findsOneWidget);
+      expect(find.text(strings.delay), findsOneWidget);
+      expect(find.text(strings.download), findsOneWidget);
+      expect(find.text(strings.upload), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -866,8 +1009,8 @@ void main() {
 
       await tester.tap(find.text(_ip));
       await tester.pumpAndSettle();
-      expect(find.text('Residential'), findsOneWidget);
-      Navigator.of(tester.element(find.text('Residential'))).pop();
+      expect(find.text('Residential'), findsNWidgets(2));
+      Navigator.of(tester.element(find.text('Residential').last)).pop();
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     });

@@ -24,14 +24,15 @@ String _endpointText(String ip, String port) {
 void showTrackerInfoDetail(
   BuildContext context,
   TrackerInfo trackerInfo,
-  String title,
-) {
+  String title, {
+  ValueChanged<TrackerInfo>? onClose,
+}) {
   showSheet<void>(
     context: context,
     props: nestedPagedSheetProps,
     builder: (_) => NestedPagedSheet(
       builder: (_) => Scaffold(
-        body: TrackerInfoDetailView(trackerInfo: trackerInfo),
+        body: TrackerInfoDetailView(trackerInfo: trackerInfo, onClose: onClose),
         title: title,
       ),
     ),
@@ -110,6 +111,7 @@ class TrackerInfoItem extends ConsumerWidget {
           context,
           latest?.call() ?? trackerInfo,
           detailTitle,
+          onClose: onClose,
         ),
         header: _buildHeader(context),
         body: _TrackerInfoBody(trackerInfo: trackerInfo, showIcon: showIcon),
@@ -323,8 +325,13 @@ class _MitmHostSection extends ConsumerWidget {
 
 class TrackerInfoDetailView extends ConsumerWidget {
   final TrackerInfo trackerInfo;
+  final ValueChanged<TrackerInfo>? onClose;
 
-  const TrackerInfoDetailView({super.key, required this.trackerInfo});
+  const TrackerInfoDetailView({
+    super.key,
+    required this.trackerInfo,
+    this.onClose,
+  });
 
   Widget _buildChains(BuildContext context) {
     return DetailRow(
@@ -359,55 +366,81 @@ class TrackerInfoDetailView extends ConsumerWidget {
   Widget _buildOverview(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     final metadata = trackerInfo.metadata;
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
-        bottom: 20 + context.bottomInset,
-        top: context.sectionsTopPadding,
-      ),
+    final route = <(String, String)>[
+      if (trackerInfo.progressText.isNotEmpty)
+        (appLocalizations.process, trackerInfo.progressText),
+      if (trackerInfo.ruleText.isNotEmpty)
+        (appLocalizations.rule, trackerInfo.ruleText),
+      for (final chain in trackerInfo.chains.reversed)
+        (appLocalizations.outboundExit, chain),
+    ];
+    return Column(
       children: [
-        generateSection(
-          title: appLocalizations.basicInfo,
-          items: _buildRows([
-            (appLocalizations.creationTime, trackerInfo.start.showFull),
-            (appLocalizations.networkType, metadata.network),
-            (appLocalizations.process, trackerInfo.progressText),
-            (appLocalizations.rule, trackerInfo.ruleText),
-            (appLocalizations.upload, trackerInfo.upload.traffic.show),
-            (appLocalizations.download, trackerInfo.download.traffic.show),
-          ]),
-        ),
-        generateSection(
-          title: appLocalizations.address,
-          items: _buildRows([
-            (appLocalizations.host, metadata.host),
-            (
-              appLocalizations.source,
-              _endpointText(metadata.sourceIP, metadata.sourcePort),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
+              bottom: onClose == null ? 20 + context.bottomInset : 12,
+              top: context.sectionsTopPadding,
             ),
-            (
-              appLocalizations.destination,
-              _endpointText(metadata.destinationIP, metadata.destinationPort),
-            ),
-            (
-              appLocalizations.destinationGeoIP,
-              metadata.destinationGeoIP.join(' '),
-            ),
-            (appLocalizations.destinationIPASN, metadata.destinationIPASN),
-            (appLocalizations.remoteDestination, metadata.remoteDestination),
-          ]),
+            children: [
+              _ConnectionHeading(trackerInfo: trackerInfo),
+              if (route.isNotEmpty) _ConnectionRouteCard(route: route),
+              generateSection(
+                title: appLocalizations.basicInfo,
+                items: _buildRows([
+                  (appLocalizations.creationTime, trackerInfo.start.showFull),
+                  (appLocalizations.networkType, metadata.network),
+                  (appLocalizations.rule, trackerInfo.ruleText),
+                  (appLocalizations.upload, trackerInfo.upload.traffic.show),
+                  (
+                    appLocalizations.download,
+                    trackerInfo.download.traffic.show,
+                  ),
+                ]),
+              ),
+              generateSection(
+                title: appLocalizations.address,
+                items: _buildRows([
+                  (
+                    appLocalizations.destinationGeoIP,
+                    metadata.destinationGeoIP.join(' '),
+                  ),
+                  (
+                    appLocalizations.destinationIPASN,
+                    metadata.destinationIPASN,
+                  ),
+                  (
+                    appLocalizations.remoteDestination,
+                    metadata.remoteDestination,
+                  ),
+                ]),
+              ),
+              generateSection(
+                title: appLocalizations.proxies,
+                items: [
+                  ..._buildRows([
+                    (appLocalizations.specialProxy, metadata.specialProxy),
+                    (appLocalizations.specialRules, metadata.specialRules),
+                    (appLocalizations.dnsMode, metadata.dnsMode?.name ?? ''),
+                  ]),
+                  _buildChains(context),
+                ],
+              ),
+              if (mitmFeature) _MitmHostSection(metadata: metadata),
+            ],
+          ),
         ),
-        generateSection(
-          title: appLocalizations.proxies,
-          items: [
-            ..._buildRows([
-              (appLocalizations.specialProxy, metadata.specialProxy),
-              (appLocalizations.specialRules, metadata.specialRules),
-              (appLocalizations.dnsMode, metadata.dnsMode?.name ?? ''),
-            ]),
-            _buildChains(context),
-          ],
-        ),
-        if (mitmFeature) _MitmHostSection(metadata: metadata),
+        if (onClose != null)
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + context.bottomInset),
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () => onClose!(trackerInfo),
+                child: Text(appLocalizations.closeConnection),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -431,6 +464,199 @@ class TrackerInfoDetailView extends ConsumerWidget {
             (_) => MitmExchangesView(trackerInfo: trackerInfo),
           ),
       ],
+    );
+  }
+}
+
+class _ConnectionHeading extends StatelessWidget {
+  const _ConnectionHeading({required this.trackerInfo});
+
+  final TrackerInfo trackerInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    final metadata = trackerInfo.metadata;
+    final process = trackerInfo.progressText;
+    final target = _endpointText(trackerInfo.title, metadata.destinationPort);
+    final source = _endpointText(metadata.sourceIP, metadata.sourcePort);
+    final destination = _endpointText(
+      metadata.destinationIP,
+      metadata.destinationPort,
+    );
+    return Card(
+      radius: AppCorner.lg,
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        spacing: 12,
+        children: [
+          if (process.isNotEmpty)
+            PackageIcon(packageName: process, size: 40)
+          else
+            SizedBox.square(
+              dimension: 40,
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: context.raisedSurfaceLevel.colorOf(
+                    context.colorScheme,
+                  ),
+                  shape: AppShape.md,
+                ),
+                child: Center(
+                  child: GlyphIcon(
+                    AppGlyphs.connections,
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 4,
+              children: [
+                if (process.isNotEmpty)
+                  Text(
+                    process,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.title3.of(context, emphasized: true),
+                  ),
+                Text(
+                  target,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyle.subheadline.of(context),
+                ),
+                if (metadata.host.isNotEmpty)
+                  Text(
+                    metadata.host,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.footnote.of(context),
+                  ),
+                Text(
+                  '${metadata.network.toUpperCase()} · ${trackerInfo.start.showFull}',
+                  style: AppTextStyle.footnote
+                      .of(context)
+                      .copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+                if (source.isNotEmpty)
+                  Row(
+                    spacing: 6,
+                    children: [
+                      Text(
+                        '${context.appLocalizations.source} ·',
+                        style: AppTextStyle.footnote
+                            .of(context)
+                            .copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          source,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.footnote.of(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                if (destination.isNotEmpty)
+                  Row(
+                    spacing: 6,
+                    children: [
+                      Text(
+                        '${context.appLocalizations.destination} ·',
+                        style: AppTextStyle.footnote
+                            .of(context)
+                            .copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          destination,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.footnote.of(context),
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ConnectionRouteCard extends StatelessWidget {
+  const _ConnectionRouteCard({required this.route});
+
+  final List<(String, String)> route;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      radius: AppCorner.lg,
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 10,
+        children: [
+          Text(
+            context.appLocalizations.proxyChains,
+            style: AppTextStyle.subheadline.of(context, emphasized: true),
+          ),
+          for (final (index, (label, value)) in route.indexed)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: ShapeDecoration(
+                        color: index == route.length - 1
+                            ? context.colorScheme.primary
+                            : context.colorScheme.surfaceContainerHighest,
+                        shape: const CircleBorder(),
+                      ),
+                    ),
+                    if (index < route.length - 1)
+                      Container(
+                        width: 2,
+                        height: 16,
+                        color: context.colorScheme.surfaceContainerHighest,
+                      ),
+                  ],
+                ),
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '$label · ',
+                          style: TextStyle(
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        TextSpan(text: value),
+                      ],
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 }

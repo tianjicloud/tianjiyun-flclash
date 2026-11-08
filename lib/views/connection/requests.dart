@@ -136,7 +136,46 @@ class _RequestsViewState extends ConsumerState<RequestsView>
           keywords: _filters.keywordsOf(pinned: pinned),
           iconActions: _buildActions(),
           menuItems: _filters.menuItems(context, pinned: pinned),
-          body: body!,
+          body: AppBarClearance(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ValueListenableBuilder<TrackerInfosState>(
+                          valueListenable: _live,
+                          builder: (context, _, _) =>
+                              SegmentedControl<RequestFeed>(
+                                key: const ValueKey('requestFeedSelector'),
+                                segments: [
+                                  (
+                                    RequestFeed.live,
+                                    context.appLocalizations.running,
+                                  ),
+                                  (
+                                    RequestFeed.recent,
+                                    context.appLocalizations.recentRequests,
+                                  ),
+                                ],
+                                value: _feed,
+                                onChanged: _selectFeed,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(child: body!),
+                if (_feed == RequestFeed.live)
+                  ValueListenableBuilder<TrackerInfosState>(
+                    valueListenable: _live,
+                    builder: (context, _, _) => _buildLiveSummary(context),
+                  ),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -147,15 +186,36 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     RequestFeed.live => context.appLocalizations.running,
   };
 
-  List<PopupMenuItem> _buildFeedMenu() {
-    return [
-      for (final feed in RequestFeed.values)
-        PopupMenuItem(
-          label: _labelOf(feed),
-          checked: feed == _feed,
-          onPressed: () => _selectFeed(feed),
+  List<PopupMenuItem> _buildFeedMenu() => [
+    for (final feed in RequestFeed.values)
+      PopupMenuItem(
+        label: _labelOf(feed),
+        checked: feed == _feed,
+        onPressed: () => _selectFeed(feed),
+      ),
+  ];
+
+  Widget _buildLiveSummary(BuildContext context) {
+    final connections = _live.value.trackerInfos;
+    var download = 0;
+    var upload = 0;
+    for (final connection in connections) {
+      download += connection.downloadSpeed ?? 0;
+      upload += connection.uploadSpeed ?? 0;
+    }
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16, 6, 16, 12 + context.bottomInset),
+      child: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(
+          '${connections.length} ${context.appLocalizations.connections} · '
+          '↓ ${download.traffic.show}/s · ↑ ${upload.traffic.show}/s',
+          style: AppTextStyle.footnote
+              .of(context)
+              .copyWith(color: context.colorScheme.onSurfaceVariant),
         ),
-    ];
+      ),
+    );
   }
 
   Widget _buildBody() {

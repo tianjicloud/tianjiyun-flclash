@@ -92,6 +92,18 @@ class AboutView extends ConsumerWidget {
             items: [
               _buildLinkItem(
                 glyph: AppGlyphs.code,
+                title: appLocalizations.profiles,
+                url: userPanelUrl,
+                label: 'panel.tianjiyun.org',
+              ),
+              _buildLinkItem(
+                glyph: AppGlyphs.code,
+                title: appLocalizations.serviceStatus,
+                url: statusPageUrl,
+                label: 'status.tianjiyun.org',
+              ),
+              _buildLinkItem(
+                glyph: AppGlyphs.code,
                 title: appLocalizations.project,
                 url: 'https://github.com/$repository',
                 label: 'github.com/$repository',
@@ -159,69 +171,78 @@ class _AboutHero extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
     final appLocalizations = context.appLocalizations;
+    final logo = _DeveloperModeDetector(
+      onEnterDeveloperMode: onEnterDeveloperMode,
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: context.raisedSurfaceLevel.colorOf(colorScheme),
+          shape: AppShape.all(AppCorner.fit(_logoSize)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(_logoInset),
+          child: Image.asset(
+            'assets/images/icon.png',
+            width: _logoSize - _logoInset * 2,
+            height: _logoSize - _logoInset * 2,
+          ),
+        ),
+      ),
+    );
+    final details = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(appName, style: AppTextStyle.title2.of(context, emphasized: true)),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            _Pill(
+              label: 'v${globalState.packageInfo.version}',
+              color: colorScheme.primary,
+              foregroundColor: colorScheme.onPrimary,
+            ),
+            _Pill(
+              label: 'GPL-3.0',
+              color: context.raisedSurfaceLevel.colorOf(colorScheme),
+              foregroundColor: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: Text(
+            appLocalizations.desc,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.subheadline
+                .of(context)
+                .copyWith(color: colorScheme.onSurfaceVariant, height: 1.5),
+          ),
+        ),
+        const SizedBox(height: 20),
+        TonalButton(
+          size: TonalButtonSize.bar,
+          glyph: AppGlyphs.sync,
+          label: appLocalizations.checkUpdate,
+          onPressed: isCheckingUpdate ? null : onCheckUpdate,
+        ),
+      ],
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-      child: Column(
-        children: [
-          _DeveloperModeDetector(
-            onEnterDeveloperMode: onEnterDeveloperMode,
-            child: DecoratedBox(
-              decoration: ShapeDecoration(
-                color: context.raisedSurfaceLevel.colorOf(colorScheme),
-                shape: AppShape.all(AppCorner.fit(_logoSize)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(_logoInset),
-                child: Image.asset(
-                  'assets/images/icon.png',
-                  width: _logoSize - _logoInset * 2,
-                  height: _logoSize - _logoInset * 2,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            appName,
-            style: AppTextStyle.title2.of(context, emphasized: true),
-          ),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              _Pill(
-                label: 'v${globalState.packageInfo.version}',
-                color: colorScheme.primary,
-                foregroundColor: colorScheme.onPrimary,
-              ),
-              _Pill(
-                label: 'GPL-3.0',
-                color: context.raisedSurfaceLevel.colorOf(colorScheme),
-                foregroundColor: colorScheme.onSurfaceVariant,
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: Text(
-              appLocalizations.desc,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.subheadline
-                  .of(context)
-                  .copyWith(color: colorScheme.onSurfaceVariant, height: 1.5),
-            ),
-          ),
-          const SizedBox(height: 20),
-          TonalButton(
-            size: TonalButtonSize.bar,
-            glyph: AppGlyphs.sync,
-            label: appLocalizations.checkUpdate,
-            onPressed: isCheckingUpdate ? null : onCheckUpdate,
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) => constraints.maxWidth >= 720
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 24,
+                children: [
+                  logo,
+                  Flexible(child: details),
+                ],
+              )
+            : Column(children: [logo, const SizedBox(height: 20), details]),
       ),
     );
   }

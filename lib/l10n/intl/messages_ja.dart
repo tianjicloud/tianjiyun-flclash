@@ -377,10 +377,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "スマートルーティングを有効化",
     ),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage(
+      "接続済み · 出口検証済み",
+    ),
+    "businessHome": MessageLookupByLibrary.simpleMessage("ホーム"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "回線の切り替えを完了できませんでした。再試行してください。",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage("既定の回線"),
+    "businessLines": MessageLookupByLibrary.simpleMessage("回線"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "回線が読み込まれていません。サブスクリプションを確認してください。",
     ),
@@ -397,6 +402,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "サブスクリプションまたはモードが変わりました。回線選択を開き直してください。",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("スマートルーティング"),
+    "businessSubscriptions": MessageLookupByLibrary.simpleMessage("サブスクリプション"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("除外ドメイン"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "除外ドメインはシステムプロキシが有効な場合のみ適用されます。",
@@ -587,6 +593,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "開発者モードが有効になりました。",
     ),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("失敗"),
+    "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("成功"),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("診断を開始"),
+    "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("既定経路の出口検証"),
+    "diagnosticsTitle": MessageLookupByLibrary.simpleMessage("ワンクリック診断"),
+    "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
+      "DNS 出口、ブラウザーの WebRTC、NTP の検査は利用できません。",
+    ),
+    "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage("未検査"),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("ダイヤラープロキシ"),
     "dialerProxyLoopStopped": m25,
     "dialog": MessageLookupByLibrary.simpleMessage("ダイアログ"),
@@ -683,6 +698,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "新しいバージョンが見つかりました",
     ),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("DNSキャッシュをクリアしました"),
+    "dnsExit": MessageLookupByLibrary.simpleMessage("DNS 出口"),
+    "dnsExitUnavailable": MessageLookupByLibrary.simpleMessage("検査結果なし"),
     "dnsHijackDesc": MessageLookupByLibrary.simpleMessage(
       "追加しない場合、ポート 53 宛てのすべての DNS 問い合わせをハイジャックします（any:53）。",
     ),
@@ -1460,6 +1477,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage("秘密鍵のパスフレーズ"),
     "process": MessageLookupByLibrary.simpleMessage("プロセス"),
     "profile": MessageLookupByLibrary.simpleMessage("プロファイル"),
+    "profileAddCustomSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "ローカルのプロキシ・グループ・ルールを作成",
+    ),
+    "profileAddFileSourceDesc": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "profileAddLinkSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "ユーザーパネルからリンクをコピー",
+    ),
+    "profileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "インポート前に検証します。解析に失敗しても現在のプロファイルは置き換えません。",
+    ),
     "profileAutoUpdateIntervalInvalidValidationDesc":
         MessageLookupByLibrary.simpleMessage("有効な間隔を入力してください"),
     "profileAutoUpdateIntervalNullValidationDesc":
@@ -1807,6 +1836,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneNote": MessageLookupByLibrary.simpleMessage(
       "大容量通信は広帯域ノードへ自動迂回 · 中国本土向けは直接接続 · 住宅回線の適用中はシーンが一時停止します",
     ),
+    "sceneSuspended": MessageLookupByLibrary.simpleMessage("住宅回線モードではシーン切替を停止"),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage("シーンは利用できません"),
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "このサブスクリプションにはシーングループがまだありません。サポートへお問い合わせいただくか、プロキシページで切り替えてください。",

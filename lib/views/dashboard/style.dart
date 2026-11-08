@@ -26,26 +26,42 @@ class DashboardColors {
     final business = BusinessTheme.of(context);
     final businessDark = business && colorScheme.brightness == Brightness.dark;
     final card = businessDark
-        ? const Color(0xFF101636)
+        ? const Color(0xFF131A22)
+        : business
+        ? const Color(0xFFFFFFFF)
         : SurfaceLevel.card.colorOf(colorScheme);
     return DashboardColors._(
-      page: SurfaceLevel.page.colorOf(colorScheme),
+      page: business && !businessDark
+          ? MediaQuery.sizeOf(context).width < 640
+                ? BusinessPalette.page
+                : const Color(0xFFF5F6F9)
+          : SurfaceLevel.page.colorOf(colorScheme),
       card: card,
       tone: businessDark
           ? const Color.fromRGBO(255, 255, 255, 0.06)
+          : business
+          ? const Color(0xFFEEF1F4)
           : SurfaceLevel.block.colorOf(colorScheme),
       tone2: businessDark
           ? const Color.fromRGBO(255, 255, 255, 0.10)
+          : business
+          ? const Color(0xFFE4E8ED)
           : SurfaceLevel.inset.colorOf(colorScheme),
       track: businessDark
           ? const Color.fromRGBO(255, 255, 255, 0.12)
+          : business
+          ? const Color(0xFFE4E8ED)
           : colorScheme.surfaceContainerHighest,
       thumb: colorScheme.outline,
       series2: Color.alphaBlend(
         colorScheme.primary.withValues(alpha: 0.45),
         card,
       ),
-      ok: businessDark ? BusinessPalette.connected : colorScheme.success,
+      ok: businessDark
+          ? const Color(0xFF34E0B0)
+          : business
+          ? BusinessPalette.connected
+          : colorScheme.success,
       okContainer: business
           ? Color.alphaBlend(
               BusinessPalette.connected.withValues(alpha: 0.12),
@@ -54,19 +70,21 @@ class DashboardColors {
           : colorScheme.successContainer,
       onOkContainer: business
           ? businessDark
-                ? BusinessPalette.connected
-                : Color.lerp(
-                    BusinessPalette.connected,
-                    BusinessPalette.page,
-                    0.65,
-                  )!
+                ? const Color(0xFF34E0B0)
+                : const Color(0xFF07543B)
           : colorScheme.onSuccessContainer,
-      warn: businessDark ? BusinessPalette.warning : colorScheme.warning,
+      warn: businessDark
+          ? const Color(0xFFFFC24D)
+          : business
+          ? BusinessPalette.warning
+          : colorScheme.warning,
       warnContainer: businessDark
           ? BusinessPalette.warning.withValues(alpha: 0.12)
           : colorScheme.warningContainer,
       onWarnContainer: businessDark
-          ? BusinessPalette.warning
+          ? const Color(0xFFFFC24D)
+          : business
+          ? const Color(0xFF784400)
           : colorScheme.onWarningContainer,
     );
   }
@@ -133,10 +151,10 @@ abstract final class DashboardShadows {
 /// Off the [AppCorner] scale: a dashboard card is taller than any other
 /// surface in the app and keeps a larger corner than a sheet.
 abstract final class DashboardCorner {
-  static const desktopCard = 32.0;
-  static const mobileCard = 34.0;
-  static const block = 20.0;
-  static const mobileBlock = 22.0;
+  static const desktopCard = 18.0;
+  static const mobileCard = 18.0;
+  static const block = 16.0;
+  static const mobileBlock = 16.0;
   static const tab = 16.0;
   static const tableHeader = 12.0;
   static const badge = 14.0;

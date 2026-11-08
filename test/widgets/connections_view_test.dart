@@ -196,14 +196,17 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     expect(find.textContaining('host-0.com'), findsOneWidget);
 
+    final feedSelector = find.byKey(const ValueKey('requestFeedSelector'));
+    Finder feedOption(String label) =>
+        find.descendant(of: feedSelector, matching: find.text(label));
     fails = true;
-    await tester.tap(find.text('Running'));
+    await tester.tap(feedOption('Running'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Recent requests'));
+    await tester.tap(feedOption('Recent requests'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Recent requests'));
+    await tester.tap(feedOption('Recent requests'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Running').last);
+    await tester.tap(feedOption('Running'));
     await tester.pumpAndSettle();
 
     expect(find.textContaining('host-0.com'), findsNothing);

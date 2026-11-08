@@ -454,12 +454,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Включить умную маршрутизацию",
     ),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage(
+      "Подключено · Выход проверен",
+    ),
+    "businessHome": MessageLookupByLibrary.simpleMessage("Главная"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось завершить переключение. Повторите попытку.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
       "Линия по умолчанию",
     ),
+    "businessLines": MessageLookupByLibrary.simpleMessage("Линии"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "Линии ещё не загружены. Проверьте подписку.",
     ),
@@ -478,6 +483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Умная маршрутизация",
     ),
+    "businessSubscriptions": MessageLookupByLibrary.simpleMessage("Подписки"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Исключённые домены"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Исключённые домены действуют только при включённом системном прокси.",
@@ -714,6 +720,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Режим разработчика включён.",
     ),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Ошибка"),
+    "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Пройдено"),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage(
+      "Запустить диагностику",
+    ),
+    "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
+      "Проверка выхода маршрута по умолчанию",
+    ),
+    "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
+      "Быстрая диагностика",
+    ),
+    "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
+      "Проверки выхода DNS, WebRTC браузера и NTP недоступны.",
+    ),
+    "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
+      "Не проверено",
+    ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage(
       "Прокси для подключения",
     ),
@@ -832,6 +855,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Доступна новая версия",
     ),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("Кэш DNS очищен"),
+    "dnsExit": MessageLookupByLibrary.simpleMessage("Выход DNS"),
+    "dnsExitUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Результат недоступен",
+    ),
     "dnsHijackDesc": MessageLookupByLibrary.simpleMessage(
       "Без этого параметра TUN перехватывает все DNS-запросы на порт 53 (any:53).",
     ),
@@ -1791,6 +1818,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "process": MessageLookupByLibrary.simpleMessage("Процесс"),
     "profile": MessageLookupByLibrary.simpleMessage("Профиль"),
+    "profileAddCustomSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "Создать локальные прокси, группы и правила",
+    ),
+    "profileAddFileSourceDesc": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "profileAddLinkSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "Скопируйте ссылку из личного кабинета",
+    ),
+    "profileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "Импорт сначала проверяется. Ошибка разбора не заменяет активный профиль.",
+    ),
     "profileAutoUpdateIntervalInvalidValidationDesc":
         MessageLookupByLibrary.simpleMessage("Введите корректный интервал"),
     "profileAutoUpdateIntervalNullValidationDesc":
@@ -2191,6 +2230,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Обычный"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
       "Тяжёлый трафик автоматически идёт через широкополосные узлы · Трафик в материковый Китай — напрямую · Сценарии на паузе, пока активен жилой выход",
+    ),
+    "sceneSuspended": MessageLookupByLibrary.simpleMessage(
+      "Сценарии приостановлены в домашнем режиме",
     ),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage(
       "Сценарии недоступны",

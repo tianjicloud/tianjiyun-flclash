@@ -419,9 +419,12 @@ void main() {
     expect(find.byTooltip('Close connections'), findsNothing);
     verifyNever(core.getConnections);
 
-    await tester.tap(find.text('Recent requests'));
+    final feedSelector = find.byKey(const ValueKey('requestFeedSelector'));
+    Finder feedOption(String label) =>
+        find.descendant(of: feedSelector, matching: find.text(label));
+    await tester.tap(feedOption('Recent requests'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Running'));
+    await tester.tap(feedOption('Running'));
     await tester.pumpAndSettle();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -430,9 +433,9 @@ void main() {
     expect(find.textContaining('finished.test'), findsNothing);
     expect(find.byTooltip('Close connections'), findsOneWidget);
 
-    await tester.tap(find.text('Running'));
+    await tester.tap(feedOption('Running'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Recent requests'));
+    await tester.tap(feedOption('Recent requests'));
     await tester.pumpAndSettle();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));

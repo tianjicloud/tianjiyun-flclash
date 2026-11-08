@@ -10172,6 +10172,171 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Lines`
+  String get businessLines {
+    return Intl.message('Lines', name: 'businessLines', desc: '', args: []);
+  }
+
+  /// `Subscriptions`
+  String get businessSubscriptions {
+    return Intl.message(
+      'Subscriptions',
+      name: 'businessSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get businessHome {
+    return Intl.message('Home', name: 'businessHome', desc: '', args: []);
+  }
+
+  /// `DNS exit`
+  String get dnsExit {
+    return Intl.message('DNS exit', name: 'dnsExit', desc: '', args: []);
+  }
+
+  /// `No result available`
+  String get dnsExitUnavailable {
+    return Intl.message(
+      'No result available',
+      name: 'dnsExitUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy from your user panel`
+  String get profileAddLinkSourceDesc {
+    return Intl.message(
+      'Copy from your user panel',
+      name: 'profileAddLinkSourceDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `.yaml / .yml`
+  String get profileAddFileSourceDesc {
+    return Intl.message(
+      '.yaml / .yml',
+      name: 'profileAddFileSourceDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create local proxies, groups and rules`
+  String get profileAddCustomSourceDesc {
+    return Intl.message(
+      'Create local proxies, groups and rules',
+      name: 'profileAddCustomSourceDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Imports are validated first. A parsing failure does not replace the active profile.`
+  String get profileAddValidationNote {
+    return Intl.message(
+      'Imports are validated first. A parsing failure does not replace the active profile.',
+      name: 'profileAddValidationNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scenes paused in residential mode`
+  String get sceneSuspended {
+    return Intl.message(
+      'Scenes paused in residential mode',
+      name: 'sceneSuspended',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `One-click diagnostics`
+  String get diagnosticsTitle {
+    return Intl.message(
+      'One-click diagnostics',
+      name: 'diagnosticsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Run diagnostics`
+  String get diagnosticsRunAgain {
+    return Intl.message(
+      'Run diagnostics',
+      name: 'diagnosticsRunAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passed`
+  String get diagnosticsPassed {
+    return Intl.message(
+      'Passed',
+      name: 'diagnosticsPassed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed`
+  String get diagnosticsFailed {
+    return Intl.message(
+      'Failed',
+      name: 'diagnosticsFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not checked`
+  String get diagnosticsUnverified {
+    return Intl.message(
+      'Not checked',
+      name: 'diagnosticsUnverified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DNS exit, browser WebRTC and NTP checks are not available.`
+  String get diagnosticsUnavailableNotice {
+    return Intl.message(
+      'DNS exit, browser WebRTC and NTP checks are not available.',
+      name: 'diagnosticsUnavailableNotice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default route exit verification`
+  String get diagnosticsSelection {
+    return Intl.message(
+      'Default route exit verification',
+      name: 'diagnosticsSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected · Exit verified`
+  String get businessExitVerified {
+    return Intl.message(
+      'Connected · Exit verified',
+      name: 'businessExitVerified',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

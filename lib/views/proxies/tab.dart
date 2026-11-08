@@ -5,6 +5,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -231,6 +232,7 @@ class ProxyGroupView extends ConsumerWidget {
   final ScrollController controller;
   final int columns;
   final ProxyCardType cardType;
+  final bool businessStyle;
 
   const ProxyGroupView({
     super.key,
@@ -238,6 +240,7 @@ class ProxyGroupView extends ConsumerWidget {
     required this.controller,
     required this.columns,
     required this.cardType,
+    this.businessStyle = false,
   });
 
   PageStorageKey _getPageStorageKey(WidgetRef ref) {
@@ -253,6 +256,9 @@ class ProxyGroupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final proxies = group.all;
+    final itemHeight = businessStyle
+        ? max(getItemHeight(cardType), _businessCardExtent(context))
+        : getItemHeight(cardType);
     return Scrollbar(
       controller: controller,
       thumbVisibility: true,
@@ -268,7 +274,7 @@ class ProxyGroupView extends ConsumerWidget {
           crossAxisCount: columns,
           mainAxisSpacing: proxyGridSpacing,
           crossAxisSpacing: 8,
-          mainAxisExtent: getItemHeight(cardType),
+          mainAxisExtent: itemHeight,
         ),
         itemCount: proxies.length,
         addAutomaticKeepAlives: false,
@@ -280,9 +286,31 @@ class ProxyGroupView extends ConsumerWidget {
             type: cardType,
             proxy: proxy,
             groupName: group.name,
+            businessStyle: businessStyle,
           );
         },
       ),
     );
   }
+}
+
+double _businessCardExtent(BuildContext context) {
+  final titleHeight = _measureTextHeight(
+    context,
+    BusinessText.cardTitle(context),
+  );
+  final metadataHeight =
+      _measureTextHeight(context, AppTextStyle.caption1.of(context)) + 6;
+  return 24 + titleHeight + 8 + (metadataHeight * 2) + 4;
+}
+
+double _measureTextHeight(BuildContext context, TextStyle style) {
+  final painter = TextPainter(
+    text: TextSpan(text: 'X', style: style),
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  )..layout();
+  final height = painter.height;
+  painter.dispose();
+  return height;
 }

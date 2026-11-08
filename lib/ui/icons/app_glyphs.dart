@@ -1440,6 +1440,14 @@ abstract final class AppGlyphs {
     ], role: GlyphRole.detail),
   ]);
 
+  static const power = Glyph([
+    GlyphArc(12, 12, 8, -math.pi / 4, math.pi * 1.5),
+    GlyphPolyline([
+      GlyphVertex(12, 3),
+      GlyphVertex(12, 11),
+    ], role: GlyphRole.line),
+  ]);
+
   static const status = Glyph([
     GlyphBox(3, 4.2, 21, 19.8, 4.5),
     GlyphPolyline([

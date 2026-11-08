@@ -28,7 +28,7 @@ class BusinessSegmented<T> extends StatelessWidget {
 
   final List<BusinessSegment<T>> items;
   final T selected;
-  final ValueChanged<T> onSelected;
+  final ValueChanged<T>? onSelected;
   final double height;
   final bool expand;
   final bool mobile;
@@ -50,7 +50,7 @@ class BusinessSegmented<T> extends StatelessWidget {
     );
     return Container(
       padding: const EdgeInsets.all(4),
-      decoration: ShapeDecoration(color: colors.tone, shape: AppShape.full),
+      decoration: ShapeDecoration(color: colors.tone2, shape: AppShape.full),
       child: row,
     );
   }
@@ -62,24 +62,24 @@ class BusinessSegmented<T> extends StatelessWidget {
   ) {
     final isSelected = item.value == selected;
     final foreground = isSelected
-        ? const Color(0xFFFFFFFF)
+        ? context.colorScheme.onSurface
         : context.colorScheme.onSurfaceVariant;
     return PressRegion(
       shape: AppShape.full,
       overlay: PressRegion.hoverOverlay,
-      onTap: () => onSelected(item.value),
+      onTap: onSelected == null ? null : () => onSelected!(item.value),
       child: Container(
         height: height,
         padding: EdgeInsets.symmetric(horizontal: mobile ? 7 : 15),
         decoration: ShapeDecoration(
-          gradient: isSelected ? BusinessPalette.gradient : null,
+          color: isSelected ? context.colorScheme.surface : null,
           shape: AppShape.full,
           shadows: isSelected
               ? const [
                   BoxShadow(
-                    color: Color(0x66465AFF),
-                    blurRadius: 16,
-                    offset: Offset(0, 6),
+                    color: Color(0x1F000000),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
                   ),
                 ]
               : const [],

@@ -190,25 +190,17 @@ void main() {
 
       expect(tester.takeException(), isNull);
       for (final name in _names) {
-        expect(
-          find.textContaining(name, findRichText: true),
-          findsWidgets,
-          reason: name,
-        );
+        expect(find.byTooltip(name), findsOneWidget, reason: name);
       }
       final long = tester.widget<EmojiText>(
         find.byWidgetPredicate(
-          (widget) => widget is EmojiText && widget.text == _names.first,
+          (widget) => widget is EmojiText && widget.text.contains('超长线路名称'),
         ),
       );
-      expect(long.maxLines, 2);
+      expect(long.maxLines, 1);
 
-      final first = tester.getTopLeft(
-        find.textContaining(_names[0], findRichText: true),
-      );
-      final second = tester.getTopLeft(
-        find.textContaining(_names[1], findRichText: true),
-      );
+      final first = tester.getTopLeft(find.byTooltip(_names[0]));
+      final second = tester.getTopLeft(find.byTooltip(_names[1]));
       if (columns == 2) {
         expect(second.dy, moreOrLessEquals(first.dy, epsilon: 1));
       } else {

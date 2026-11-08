@@ -371,14 +371,14 @@ _ThemeProps _$ThemePropsFromJson(Map<String, dynamic> json) => _ThemeProps(
       defaultPrimaryColors,
   themeMode:
       $enumDecodeNullable(_$ThemeModeEnumMap, json['themeMode']) ??
-      ThemeMode.dark,
+      ThemeMode.light,
   colorStyle:
       $enumDecodeNullable(
         _$ColorStyleEnumMap,
         _readColorStyle(json, 'colorStyle'),
       ) ??
       ColorStyle.vivid,
-  background: json['background'] as String? ?? 'orbit',
+  background: json['background'] as String? ?? 'solid',
   pureBlack: json['pureBlack'] as bool? ?? false,
   sidebarBlur: json['sidebarBlur'] as bool? ?? false,
   liquidGlass:

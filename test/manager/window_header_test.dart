@@ -688,21 +688,29 @@ void main() {
 
   group('WindowHeaderContainer', () {
     late ProviderContainer container;
+    var containerCreated = false;
+
+    setUp(() => containerCreated = false);
 
     Future<void> pumpContainer(
       WidgetTester tester, {
       required int version,
       required Size viewSize,
     }) async {
-      container = ProviderContainer(
-        overrides: [
-          versionProvider.overrideWithBuild((_, _) => version),
-          viewSizeProvider.overrideWithBuild((_, _) => viewSize),
-        ],
-      );
-      addTearDown(container.dispose);
-      container.listen(overlayTopOffsetProvider, (_, _) {});
-      globalState.container = container;
+      if (!containerCreated) {
+        container = ProviderContainer(
+          overrides: [
+            versionProvider.overrideWithBuild((_, _) => version),
+            viewSizeProvider.overrideWithBuild((_, _) => viewSize),
+          ],
+        );
+        containerCreated = true;
+        addTearDown(container.dispose);
+        container.listen(overlayTopOffsetProvider, (_, _) {});
+        globalState.container = container;
+      } else {
+        container.read(viewSizeProvider.notifier).value = viewSize;
+      }
       tester.view.physicalSize = viewSize;
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
@@ -775,6 +783,8 @@ void main() {
           reason: 'view size $viewSize',
         );
       }
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
     });
   });
 }

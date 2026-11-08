@@ -275,7 +275,7 @@ void main() {
 
       expect(window.blurRequests, hasLength(1));
       expect(window.blurRequests.single.enabled, isTrue);
-      expect(window.blurRequests.single.brightness, Brightness.dark);
+      expect(window.blurRequests.single.brightness, Brightness.light);
       expect(container.read(windowBlurProvider), 0);
     });
 

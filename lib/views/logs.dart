@@ -6,6 +6,8 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/diagnostics.dart';
+import 'package:fl_clash/views/dns_queries.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -128,7 +130,7 @@ class _LogsViewState extends ConsumerState<LogsView>
           keywords: _filters.keywordsOf(pinned: pinned),
           menuItems: _filters.menuItems(context, pinned: pinned),
           searchState: AppBarSearchState(onSearch: _listController.search),
-          title: context.appLocalizations.logs,
+          title: context.appLocalizations.logsAndDiagnostics,
           body: body!,
         );
       },
@@ -142,7 +144,7 @@ class _LogsViewState extends ConsumerState<LogsView>
       builder: (context, _) {
         final state = _listController.value;
         final logs = _filters.apply(state.list);
-        return NullStatusSwitcher(
+        final feed = NullStatusSwitcher(
           isEmpty: logs.isEmpty,
           isSearching: state.isSearching || _filters.isFiltering,
           nullStatus: NullStatus(
@@ -151,7 +153,72 @@ class _LogsViewState extends ConsumerState<LogsView>
           ),
           child: _buildList(context, state, logs),
         );
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            if (!system.isDesktop || constraints.maxWidth < 1000) {
+              return feed;
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 14,
+              children: [
+                SizedBox(
+                  width: 430,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      top: context.contentTopPadding,
+                      bottom: 16 + context.bottomInset,
+                    ),
+                    child: DiagnosticsPanel(
+                      onRun: () => refreshDiagnostics(ref),
+                    ),
+                  ),
+                ),
+                Expanded(child: _logCard(context, feed)),
+              ],
+            );
+          },
+        );
       },
+    );
+  }
+
+  Widget _logCard(BuildContext context, Widget feed) {
+    final appLocalizations = context.appLocalizations;
+    return Padding(
+      padding: EdgeInsets.only(
+        top: context.contentTopPadding,
+        bottom: 16 + context.bottomInset,
+      ),
+      child: Card(
+        radius: AppCorner.xl,
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 12, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      appLocalizations.logs,
+                      style: AppTextStyle.subheadline.of(context),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      BaseNavigator.push(context, const DnsQueriesView());
+                    },
+                    child: Text(appLocalizations.dnsQueries),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(child: feed),
+          ],
+        ),
+      ),
     );
   }
 

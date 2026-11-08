@@ -436,10 +436,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Enable smart routing",
     ),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage(
+      "Connected · Exit verified",
+    ),
+    "businessHome": MessageLookupByLibrary.simpleMessage("Home"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Could not finish switching lines. Retry.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage("Default line"),
+    "businessLines": MessageLookupByLibrary.simpleMessage("Lines"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "No lines loaded yet. Check your subscription.",
     ),
@@ -457,6 +462,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Smart routing",
+    ),
+    "businessSubscriptions": MessageLookupByLibrary.simpleMessage(
+      "Subscriptions",
     ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Bypass domains"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
@@ -684,6 +692,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Developer mode is enabled.",
     ),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Failed"),
+    "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Passed"),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage(
+      "Run diagnostics",
+    ),
+    "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
+      "Default route exit verification",
+    ),
+    "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
+      "One-click diagnostics",
+    ),
+    "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
+      "DNS exit, browser WebRTC and NTP checks are not available.",
+    ),
+    "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
+      "Not checked",
+    ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Dialer proxy"),
     "dialerProxyLoopStopped": m25,
     "dialog": MessageLookupByLibrary.simpleMessage("Dialog"),
@@ -797,6 +822,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage(
       "DNS cache cleared",
+    ),
+    "dnsExit": MessageLookupByLibrary.simpleMessage("DNS exit"),
+    "dnsExitUnavailable": MessageLookupByLibrary.simpleMessage(
+      "No result available",
     ),
     "dnsHijackDesc": MessageLookupByLibrary.simpleMessage(
       "Without this entry, TUN hijacks every DNS query to port 53 (any:53).",
@@ -1697,6 +1726,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "process": MessageLookupByLibrary.simpleMessage("Process"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+    "profileAddCustomSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "Create local proxies, groups and rules",
+    ),
+    "profileAddFileSourceDesc": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "profileAddLinkSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "Copy from your user panel",
+    ),
+    "profileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "Imports are validated first. A parsing failure does not replace the active profile.",
+    ),
     "profileAutoUpdateIntervalInvalidValidationDesc":
         MessageLookupByLibrary.simpleMessage("Please enter a valid interval"),
     "profileAutoUpdateIntervalNullValidationDesc":
@@ -2085,6 +2126,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Daily"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
       "Large traffic bypasses residential automatically · mainland traffic stays direct · scenes pause while a residential exit is active",
+    ),
+    "sceneSuspended": MessageLookupByLibrary.simpleMessage(
+      "Scenes paused in residential mode",
     ),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage(
       "Scenes unavailable",

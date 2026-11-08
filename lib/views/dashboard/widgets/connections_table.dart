@@ -326,7 +326,11 @@ class _ConnectionsTableCardState extends ConsumerState<ConnectionsTableCard>
         children: [
           Container(
             height: headerHeight,
-            padding: EdgeInsets.symmetric(horizontal: tabInset - cellStart),
+            padding: EdgeInsets.symmetric(
+              horizontal: (tabInset - cellStart)
+                  .clamp(0, double.infinity)
+                  .toDouble(),
+            ),
             child: LayoutBuilder(
               builder: (context, constraints) => DashboardCappedRow(
                 share: 0.45,

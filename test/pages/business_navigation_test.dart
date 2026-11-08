@@ -95,14 +95,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(BusinessNavigationSidebar), findsOneWidget);
-    expect(tester.getSize(find.byType(BusinessNavigationSidebar)).width, 216);
-    expect(find.textContaining('Tianji Plan · '), findsOneWidget);
-    expect(find.textContaining('25% used'), findsNothing);
+    expect(tester.getSize(find.byType(BusinessNavigationSidebar)).width, 220);
+    expect(find.text('Tianji Plan'), findsOneWidget);
+    expect(find.textContaining('25% used'), findsOneWidget);
     expect(find.textContaining('days'), findsOneWidget);
     expect(find.text('Orders'), findsNothing);
 
     final dashboardLabel = find.text('Dashboard');
-    final proxiesLabel = find.text('Proxies');
+    final proxiesLabel = find.text('Lines');
     bool navigationItemHasFocus(Finder label) {
       final focus = FocusManager.instance.primaryFocus;
       return focus?.context
@@ -158,13 +158,13 @@ void main() {
 
     final dockBar = find.byKey(const ValueKey('business-navigation-dock-bar'));
     final dockRect = tester.getRect(dockBar);
-    expect(dockRect.width, 362);
-    expect(dockRect.height, 68);
-    expect(dockRect.bottom, 830);
+    expect(dockRect.width, 390);
+    expect(dockRect.height, 58);
+    expect(dockRect.bottom, 844);
     final insetContext = tester.element(
       find.byKey(const ValueKey('bottom-content')),
     );
-    expect(BottomInsetScope.of(insetContext), 82);
+    expect(BottomInsetScope.of(insetContext), 58);
     expect(find.text('Orders'), findsNothing);
     expect(find.text('Tianji Plan'), findsNothing);
 
@@ -173,7 +173,7 @@ void main() {
     );
     expect(contentRect.bottom, lessThanOrEqualTo(dockRect.top));
 
-    await tester.tap(find.text('Proxies'));
+    await tester.tap(find.text('Lines'));
     await tester.pumpAndSettle();
     expect(container.read(currentPageLabelProvider), PageLabel.proxies);
     expect(tester.takeException(), isNull);

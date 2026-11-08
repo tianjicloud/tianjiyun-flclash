@@ -467,12 +467,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Activer le routage intelligent",
     ),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage(
+      "Connecté · Sortie vérifiée",
+    ),
+    "businessHome": MessageLookupByLibrary.simpleMessage("Accueil"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Le changement de ligne a échoué. Réessayez.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
       "Ligne par défaut",
     ),
+    "businessLines": MessageLookupByLibrary.simpleMessage("Lignes"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "Aucune ligne chargée. Vérifiez votre abonnement.",
     ),
@@ -490,6 +495,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Routage intelligent",
+    ),
+    "businessSubscriptions": MessageLookupByLibrary.simpleMessage(
+      "Abonnements",
     ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Domaines contournés"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
@@ -739,6 +747,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Le mode développeur est activé.",
     ),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Échec"),
+    "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Réussi"),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage(
+      "Lancer le diagnostic",
+    ),
+    "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
+      "Vérification de la sortie du chemin par défaut",
+    ),
+    "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
+      "Diagnostic rapide",
+    ),
+    "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
+      "Les contrôles de sortie DNS, WebRTC du navigateur et NTP ne sont pas disponibles.",
+    ),
+    "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
+      "Non vérifié",
+    ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Proxy de connexion"),
     "dialerProxyLoopStopped": m25,
     "dialog": MessageLookupByLibrary.simpleMessage("Boîte de dialogue"),
@@ -853,6 +878,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nouvelle version disponible",
     ),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("Cache DNS vidé"),
+    "dnsExit": MessageLookupByLibrary.simpleMessage("Sortie DNS"),
+    "dnsExitUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Aucun résultat disponible",
+    ),
     "dnsHijackDesc": MessageLookupByLibrary.simpleMessage(
       "Sans cette entrée, TUN détourne toutes les requêtes DNS vers le port 53 (any:53).",
     ),
@@ -1834,6 +1863,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "process": MessageLookupByLibrary.simpleMessage("Processus"),
     "profile": MessageLookupByLibrary.simpleMessage("Profil"),
+    "profileAddCustomSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "Créer des proxys, groupes et règles locaux",
+    ),
+    "profileAddFileSourceDesc": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "profileAddLinkSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "Copiez le lien depuis votre espace client",
+    ),
+    "profileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "Les imports sont d’abord validés. Une erreur d’analyse ne remplace pas le profil actif.",
+    ),
     "profileAutoUpdateIntervalInvalidValidationDesc":
         MessageLookupByLibrary.simpleMessage(
           "Veuillez saisir un intervalle valide",
@@ -2254,6 +2295,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Quotidien"),
     "sceneNote": MessageLookupByLibrary.simpleMessage(
       "Le gros trafic contourne automatiquement la sortie résidentielle · Le trafic vers la Chine continentale reste direct · Les scènes sont en pause tant qu’une sortie résidentielle est active",
+    ),
+    "sceneSuspended": MessageLookupByLibrary.simpleMessage(
+      "Scènes en pause en mode résidentiel",
     ),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage(
       "Scènes indisponibles",

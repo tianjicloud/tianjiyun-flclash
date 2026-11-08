@@ -91,13 +91,14 @@ class Migration {
 
   /// One-off setting changes for upgrades, apart from [currentVersion], which
   /// backups carry and an older app refuses when it is newer than its own.
-  static const upgradeVersion = 4;
+  static const upgradeVersion = 5;
 
   static const Map<int, Config Function(Config config)> _upgrades = {
     1: _resetThemeColors,
     2: _keepGlassLook,
     3: _followSystemColors,
     4: _turnOffSidebarBlur,
+    5: _replaceOldBrandDefaults,
   };
 
   Future<Config> run() async {
@@ -114,12 +115,14 @@ class Migration {
     var upgraded = config;
     if (installed) {
       for (var version = from + 1; version <= upgradeVersion; version++) {
+        if (version == 5) {
+          upgraded = upgraded.copyWith.themeProps(
+            primaryColor: config.themeProps.primaryColor,
+            primaryColors: config.themeProps.primaryColors,
+          );
+        }
         upgraded = _upgrades[version]!(upgraded);
       }
-      upgraded = upgraded.copyWith.themeProps(
-        primaryColor: config.themeProps.primaryColor,
-        primaryColors: config.themeProps.primaryColors,
-      );
     }
     if (upgraded != config && !await _store.saveConfig(upgraded)) {
       return config;
@@ -241,6 +244,23 @@ Config _followSystemColors(Config config) {
 // Releases stored sidebar blur on while its switch stayed hidden.
 Config _turnOffSidebarBlur(Config config) =>
     config.copyWith(themeProps: config.themeProps.copyWith(sidebarBlur: false));
+
+Config _replaceOldBrandDefaults(Config config) {
+  final theme = config.themeProps;
+  final oldColors = theme.primaryColors;
+  final matchesOldColors =
+      oldColors.length == previousDefaultPrimaryColors.length &&
+      oldColors.indexed.every(
+        (entry) => entry.$2 == previousDefaultPrimaryColors[entry.$1],
+      );
+  return config.copyWith.themeProps(
+    primaryColor: theme.primaryColor == previousDefaultPrimaryColor
+        ? defaultPrimaryColor
+        : theme.primaryColor,
+    primaryColors: matchesOldColors ? defaultPrimaryColors : oldColors,
+    background: theme.background == 'orbit' ? 'solid' : theme.background,
+  );
+}
 
 bool _isV0(Map<String, Object?>? configMap) =>
     configMap?['proxiesStyle'] != null;

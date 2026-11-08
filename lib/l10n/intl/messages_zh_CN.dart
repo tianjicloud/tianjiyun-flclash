@@ -361,8 +361,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("更换线路"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("当前节点"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("启用智能分流"),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage("已连接 · 出口已校验"),
+    "businessHome": MessageLookupByLibrary.simpleMessage("首页"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage("未能完成线路切换，请重试"),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage("默认线路"),
+    "businessLines": MessageLookupByLibrary.simpleMessage("线路"),
     "businessLinesEmpty": MessageLookupByLibrary.simpleMessage(
       "暂未读取到可用线路，请检查订阅。",
     ),
@@ -377,6 +380,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "订阅或模式已变化，请重新打开线路选择。",
     ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("智能分流"),
+    "businessSubscriptions": MessageLookupByLibrary.simpleMessage("订阅"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("排除域名"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "排除域名仅在系统代理启用时生效。",
@@ -541,6 +545,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "detectionTip": MessageLookupByLibrary.simpleMessage("依赖第三方api，仅供参考"),
     "developerMode": MessageLookupByLibrary.simpleMessage("开发者模式"),
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage("开发者模式已启用。"),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("失败"),
+    "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("通过"),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("开始检测"),
+    "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("默认路径出口校验"),
+    "diagnosticsTitle": MessageLookupByLibrary.simpleMessage("一键诊断"),
+    "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
+      "暂不提供 DNS 出口、浏览器 WebRTC 和 NTP 检测。",
+    ),
+    "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage("未检测"),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("拨号代理"),
     "dialerProxyLoopStopped": m25,
     "dialog": MessageLookupByLibrary.simpleMessage("对话框"),
@@ -623,6 +636,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "disconnected": MessageLookupByLibrary.simpleMessage("已断开"),
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage("发现新版本"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("DNS缓存已清除"),
+    "dnsExit": MessageLookupByLibrary.simpleMessage("DNS 出口"),
+    "dnsExitUnavailable": MessageLookupByLibrary.simpleMessage("暂无检测结果"),
     "dnsHijackDesc": MessageLookupByLibrary.simpleMessage(
       "未添加时劫持所有发往 53 端口的 DNS 请求（any:53）。",
     ),
@@ -1320,6 +1335,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage("私钥密码"),
     "process": MessageLookupByLibrary.simpleMessage("进程"),
     "profile": MessageLookupByLibrary.simpleMessage("配置"),
+    "profileAddCustomSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "创建本地节点、分组和规则",
+    ),
+    "profileAddFileSourceDesc": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "profileAddLinkSourceDesc": MessageLookupByLibrary.simpleMessage(
+      "从用户面板复制订阅链接",
+    ),
+    "profileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "导入前会先校验；解析失败不会替换当前配置。",
+    ),
     "profileAutoUpdateIntervalInvalidValidationDesc":
         MessageLookupByLibrary.simpleMessage("请输入有效间隔时间格式"),
     "profileAutoUpdateIntervalNullValidationDesc":
@@ -1635,6 +1662,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneNote": MessageLookupByLibrary.simpleMessage(
       "大流量自动绕行大带宽节点 · 大陆流量本地直连 · 家宽接管期间场景暂停",
     ),
+    "sceneSuspended": MessageLookupByLibrary.simpleMessage("家宽模式下，场景切换已暂停"),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage("场景暂不可用"),
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "当前订阅还没有场景分组，联系客服开通，或在代理页手动分流。",

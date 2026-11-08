@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/launch.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/config.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
@@ -401,12 +403,29 @@ class _WindowHeaderState extends ConsumerState<WindowHeader> {
     final backdropOpacity = ref.watch(isMobileViewProvider)
         ? null
         : ref.watch(windowBlurProvider);
+    final isBusiness = isTianjiSubscriptionProfile(
+      ref.watch(currentProfileProvider),
+    );
     return WindowHeaderBar(
       height: kHeaderHeight,
       backdropOpacity: backdropOpacity,
       onDragStart: desktopWindow.startDragging,
       onDoubleTap: caption.toggleMaximized,
-      title: system.isMacOS ? const Text(appName) : null,
+      leading: isBusiness
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                const BusinessBrandMark(size: 22),
+                Text(
+                  context.appLocalizations.brandName,
+                  style: AppTextStyle.subheadline.of(context, emphasized: true),
+                ),
+              ],
+            )
+          : null,
+      leadingInset: system.isMacOS ? 84 : 12,
+      title: system.isMacOS && !isBusiness ? const Text(appName) : null,
       actions: system.isMacOS
           ? null
           : WindowHeaderActions(
@@ -429,6 +448,8 @@ class WindowHeaderBar extends StatelessWidget {
     required this.onDragStart,
     required this.onDoubleTap,
     this.backdropOpacity,
+    this.leading,
+    this.leadingInset = 12,
     this.title,
     this.actions,
   });
@@ -437,6 +458,8 @@ class WindowHeaderBar extends StatelessWidget {
   final VoidCallback onDragStart;
   final VoidCallback onDoubleTap;
   final double? backdropOpacity;
+  final Widget? leading;
+  final double leadingInset;
   final Widget? title;
   final Widget? actions;
 
@@ -470,6 +493,13 @@ class WindowHeaderBar extends StatelessWidget {
             if (title != null)
               Positioned.fill(
                 child: IgnorePointer(child: Center(child: title)),
+              ),
+            if (leading != null)
+              PositionedDirectional(
+                start: leadingInset,
+                top: 0,
+                bottom: 0,
+                child: IgnorePointer(child: Center(child: leading)),
               ),
             if (actions != null)
               Positioned(
