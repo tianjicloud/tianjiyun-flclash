@@ -176,7 +176,7 @@ void main() {
       'G2',
     });
     await tester.pumpAndSettle();
-    final radius = AppCorner.xl.ap(tester.element(find.text('G0')));
+    final radius = AppCorner.lg.ap(tester.element(find.text('G0')));
     final unfolding = find.byType(UnfoldEntryTransition);
     final cards = find.byWidgetPredicate(
       (widget) => widget is ProxyCard && widget.groupName == 'G0',
@@ -218,7 +218,7 @@ void main() {
     expect(floating.shadows, isNotEmpty);
     expect(
       (floating.shape as RoundedSuperellipseBorder).borderRadius,
-      AppRadius.all(AppCorner.xl.ap(tester.element(headerOf('G0')))),
+      AppRadius.all(AppCorner.lg.ap(tester.element(headerOf('G0')))),
     );
 
     final pinnedTop = tester.getRect(headerOf('G0')).top;
