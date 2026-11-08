@@ -605,6 +605,7 @@ _ProfileOverrides _$ProfileOverridesFromJson(
   residentialSubscriptionFingerprint:
       json['residential-subscription-fingerprint'] as String?,
   scene: json['scene'] as String?,
+  sceneNoticeDismissed: json['sceneNoticeDismissed'] as bool? ?? false,
   manualSelections:
       (json['manualSelections'] as Map<String, dynamic>?)?.map(
         (k, e) =>
@@ -636,6 +637,7 @@ Map<String, dynamic> _$ProfileOverridesToJson(_ProfileOverrides instance) =>
       'residential-subscription-fingerprint':
           instance.residentialSubscriptionFingerprint,
       'scene': instance.scene,
+      'sceneNoticeDismissed': instance.sceneNoticeDismissed,
       'manualSelections': instance.manualSelections,
     };
 

@@ -134,7 +134,11 @@ class _BusinessBody extends ConsumerWidget {
               const RepaintBoundary(child: CurrentOutboundCard()),
               if (ref.watch(scenePolicyProvider).available)
                 const SceneBar()
-              else
+              else if (ref
+                      .watch(currentProfileProvider)
+                      ?.overrides
+                      .sceneNoticeDismissed !=
+                  true)
                 const SceneUnavailableCard(),
               const QuickLines(),
               if (density.isDesktop) ...[

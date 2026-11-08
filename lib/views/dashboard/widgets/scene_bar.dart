@@ -157,65 +157,61 @@ class _SceneSegment extends ConsumerWidget {
   }
 }
 
-/// Shown in place of the scene bar when the profile has no scene groups:
-/// the honest state, in the same slot, without a control that cannot work.
-class SceneUnavailableCard extends StatelessWidget {
+class SceneUnavailableCard extends ConsumerWidget {
   const SceneUnavailableCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final density = DashboardDensityScope.of(context);
-    final mobile = !density.isDesktop;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(currentProfileProvider);
+    if (profile?.overrides.sceneNoticeDismissed == true ||
+        ref.watch(scenePolicyProvider).available) {
+      return const SizedBox.shrink();
+    }
     final strings = context.appLocalizations;
-    return DashboardCard(
-      semanticLabel: strings.sceneUnavailable,
-      radius: mobile ? BusinessRadius.sceneMobile : BusinessRadius.sceneDesktop,
-      padding: EdgeInsets.symmetric(
-        horizontal: dashboardCardPadding(density).left,
-        vertical: 10,
-      ),
+    return SizedBox(
+      height: 40,
       child: Row(
-        spacing: 10,
+        spacing: 8,
         children: [
           GlyphIcon(
             AppGlyphs.sliders,
-            size: 18,
+            size: 16,
             color: context.colorScheme.onSurfaceVariant,
           ),
           Expanded(
-            child: Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: strings.sceneUnavailable,
-                    style: DashboardText.rowTitle(context),
-                  ),
-                  TextSpan(
-                    text: ' · ${strings.sceneUnavailableDesc}',
-                    style: DashboardText.label(context),
-                  ),
-                ],
+            child: Tooltip(
+              message: strings.sceneUnavailableDesc,
+              child: Text(
+                strings.sceneUnavailable,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: DashboardText.label(
+                  context,
+                ).copyWith(color: context.colorScheme.onSurfaceVariant),
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
+          ),
+          IconButton(
+            tooltip: strings.close,
+            icon: const GlyphIcon(AppGlyphs.close, size: 16),
+            onPressed: profile == null
+                ? null
+                : () {
+                    final current = ref.read(currentProfileProvider);
+                    if (current == null || current.id != profile.id) return;
+                    ref
+                        .read(profilesProvider.notifier)
+                        .put(
+                          current.copyWith(
+                            overrides: current.overrides.copyWith(
+                              sceneNoticeDismissed: true,
+                            ),
+                          ),
+                        );
+                  },
           ),
         ],
       ),
-    );
-  }
-}
-
-/// The note that replaces the scene bar under a residential exit: scenes
-/// resume as soon as the exit is released back to the subscription.
-class SceneNoteLine extends StatelessWidget {
-  const SceneNoteLine({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      context.appLocalizations.sceneNote,
-      style: DashboardText.label(context),
     );
   }
 }
