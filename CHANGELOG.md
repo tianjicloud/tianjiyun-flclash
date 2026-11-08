@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.9.12 (2026-11-08)
+
+**Features**
+
+- **dashboard** Phone home matches the v3 mockup rows (8b66495)
+- **dashboard** Deep-space glass cards per the v3 design (1394774)
+- **dashboard** V3 home — real scene switch, quick lines, merged control bar (68c2610)
+- **theme** Deep-space defaults, photo backgrounds, livelier start button (e3dda58)
+
+**Bug Fixes**
+
+- **dashboard** Scene bar crashed the phone home when scenes exist (c63766f)
+- **dashboard** Equal height for the three home cards (928558d)
+- **dashboard** Restart the idle pulse once the start morph settles (3f4cb29)
+- **theme** Extend preset backgrounds across the sidebar and page as one continuous image while preserving page state. (d2a20b3)
+
 ## v0.9.11 (2026-11-07)
 
 **Features**

@@ -2,6 +2,64 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.12",
+      "tag": "v0.9.12",
+      "date": "2026-11-08",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "8b66495",
+              "scope": "dashboard",
+              "text": "Phone home matches the v3 mockup rows"
+            },
+            {
+              "id": "1394774",
+              "scope": "dashboard",
+              "text": "Deep-space glass cards per the v3 design"
+            },
+            {
+              "id": "68c2610",
+              "scope": "dashboard",
+              "text": "V3 home — real scene switch, quick lines, merged control bar"
+            },
+            {
+              "id": "e3dda58",
+              "scope": "theme",
+              "text": "Deep-space defaults, photo backgrounds, livelier start button"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "c63766f",
+              "scope": "dashboard",
+              "text": "Scene bar crashed the phone home when scenes exist"
+            },
+            {
+              "id": "928558d",
+              "scope": "dashboard",
+              "text": "Equal height for the three home cards"
+            },
+            {
+              "id": "3f4cb29",
+              "scope": "dashboard",
+              "text": "Restart the idle pulse once the start morph settles"
+            },
+            {
+              "id": "d2a20b3",
+              "scope": "theme",
+              "text": "Extend preset backgrounds across the sidebar and page as one continuous image while preserving page state."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.11",
       "tag": "v0.9.11",
       "date": "2026-11-07",
