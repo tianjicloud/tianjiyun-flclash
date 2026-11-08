@@ -90,6 +90,19 @@ void main() {
   });
   tearDown(() => container.dispose());
 
+  testWidgets('confirmation times out and a retry can succeed', (tester) async {
+    container.invalidate(selectionCheckProvider);
+    expect(container.read(selectionCheckProvider), SelectionVerdict.confirming);
+    await tester.pump(const Duration(seconds: 15));
+    expect(container.read(selectionCheckProvider), SelectionVerdict.failed);
+    probe.recheck(routedOutbound);
+    expect(container.read(selectionCheckProvider), SelectionVerdict.confirming);
+    probe.answer(['A', 'Manual', appName]);
+    expect(container.read(selectionCheckProvider), SelectionVerdict.consistent);
+    await tester.pump(const Duration(seconds: 20));
+    expect(container.read(selectionCheckProvider), SelectionVerdict.consistent);
+  });
+
   test(
     'a newer selection outside the sampled route cannot cause a mismatch',
     () {

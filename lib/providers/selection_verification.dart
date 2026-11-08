@@ -6,6 +6,7 @@ import 'package:fl_clash/providers/routed_probe.dart';
 enum SelectionVerdict {
   untouched,
   confirming,
+  failed,
   consistent,
   notCaptured,
   residentialLocked,
@@ -28,6 +29,11 @@ SelectionVerdict verifySelection({
   if (running && !captured) return SelectionVerdict.notCaptured;
   if (residentialLocked) return SelectionVerdict.residentialLocked;
   final stamp = entry.stamp;
+  if (running &&
+      entry.phase == ProbePhase.failed &&
+      (stamp == null || route.isFresh(stamp))) {
+    return SelectionVerdict.failed;
+  }
   if (!running ||
       entry.phase != ProbePhase.fresh ||
       entry.value == null ||

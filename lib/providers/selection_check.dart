@@ -60,6 +60,21 @@ final residentialSelectionRejectionProvider =
 class SelectionCheck extends Notifier<SelectionVerdict> {
   Object? _retried;
 
+  SelectionVerdict _bounded(SelectionVerdict verdict) {
+    if (verdict != SelectionVerdict.confirming || !ref.read(isStartProvider)) {
+      return verdict;
+    }
+    final timer = Timer(const Duration(seconds: 15), () {
+      if (ref.mounted && state == SelectionVerdict.confirming) {
+        state = SelectionVerdict.failed;
+      }
+    });
+    ref.onDispose(timer.cancel);
+    ref.onCancel(timer.cancel);
+    ref.onResume(ref.invalidateSelf);
+    return verdict;
+  }
+
   @override
   SelectionVerdict build() {
     final profile = ref.watch(currentProfileProvider);
@@ -129,7 +144,7 @@ class SelectionCheck extends Notifier<SelectionVerdict> {
     if (!residential.active &&
         (pending.containsValue(choice.sequence) ||
             (choice.sequence > 0 && choice.expected == null))) {
-      return SelectionVerdict.confirming;
+      return _bounded(SelectionVerdict.confirming);
     }
     if (verdict == SelectionVerdict.unknownPending && _retried != key) {
       _retried = key;
@@ -139,7 +154,7 @@ class SelectionCheck extends Notifier<SelectionVerdict> {
         }
       });
     }
-    return verdict;
+    return _bounded(verdict);
   }
 }
 

@@ -57,13 +57,15 @@ void main() {
     expect(verify(entry: answer(version: 6)), SelectionVerdict.confirming);
   });
   test('pending and failed probes never pass', () {
-    for (final phase in [
-      ProbePhase.empty,
-      ProbePhase.probing,
-      ProbePhase.failed,
-    ]) {
+    for (final phase in [ProbePhase.empty, ProbePhase.probing]) {
       expect(verify(entry: answer(phase: phase)), SelectionVerdict.confirming);
     }
+  });
+  test('a failed probe is a retryable failure, not pending', () {
+    expect(
+      verify(entry: answer(phase: ProbePhase.failed)),
+      SelectionVerdict.failed,
+    );
   });
   test('capture and residential rejection use explicit signals', () {
     expect(verify(captured: false), SelectionVerdict.notCaptured);

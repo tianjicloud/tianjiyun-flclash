@@ -17,6 +17,7 @@ class SelectionNotice extends ConsumerWidget {
     final message = switch (verdict) {
       SelectionVerdict.untouched || SelectionVerdict.consistent => null,
       SelectionVerdict.confirming => l10n.selectionConfirming,
+      SelectionVerdict.failed => l10n.serviceFailed,
       SelectionVerdict.notCaptured => l10n.selectionNotCaptured,
       SelectionVerdict.residentialLocked => l10n.selectionResidentialLocked,
       SelectionVerdict.groupOverridden => l10n.selectionGroupOverridden,
