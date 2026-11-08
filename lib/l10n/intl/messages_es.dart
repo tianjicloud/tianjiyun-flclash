@@ -462,6 +462,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage(
       "Reescritura del cuerpo",
     ),
+    "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("Brillo"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Cambiar línea"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nodo actual"),
@@ -543,6 +544,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "checkUpdateError": MessageLookupByLibrary.simpleMessage(
       "La app ya está actualizada",
+    ),
+    "checkingExit": MessageLookupByLibrary.simpleMessage(
+      "Comprobando la salida…",
     ),
     "cipher": MessageLookupByLibrary.simpleMessage("Cifrado"),
     "clearData": MessageLookupByLibrary.simpleMessage("Borrar datos"),
@@ -1932,6 +1936,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "remove": MessageLookupByLibrary.simpleMessage("Quitar"),
     "rename": MessageLookupByLibrary.simpleMessage("Renombrar"),
+    "renew": MessageLookupByLibrary.simpleMessage("Renovar"),
     "replace": MessageLookupByLibrary.simpleMessage("Reemplazar"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("Reemplazar todo"),
     "request": MessageLookupByLibrary.simpleMessage("Solicitud"),

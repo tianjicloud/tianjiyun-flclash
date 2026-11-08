@@ -639,10 +639,7 @@ void main() {
           .single;
       expect(painter().color, BusinessPalette.blue);
       expect(tester.widget<Text>(find.text(_ip)).maxLines, 1);
-      expect(
-        tester.getRect(find.text(_ip)).bottom,
-        lessThanOrEqualTo(tester.getRect(find.text('Residential')).top),
-      );
+      expect(find.text('Residential'), findsNothing);
       final action =
           container.read(setupActionProvider.notifier) as _RecordingSetupAction;
       await tester.tap(find.byTooltip('Stop'));
@@ -673,14 +670,52 @@ void main() {
       final strings = tester
           .element(find.byType(CurrentOutboundCard))
           .appLocalizations;
+      expect(find.text(strings.runTime), findsNothing);
+      await tester.tap(find.byTooltip(strings.details(strings.status)));
+      await tester.pump();
       expect(find.text(strings.runTime), findsOneWidget);
       expect(find.text(getTimeText(7200000)), findsOneWidget);
 
       container.read(runTimeProvider.notifier).value = null;
       await tester.pump();
-      expect(find.text(strings.runTime), findsOneWidget);
+      expect(find.text(strings.runTime), findsNothing);
       expect(find.text(getTimeText(7200000)), findsNothing);
-      expect(find.text('—'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('mobile business respects the hidden IP setting', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      container = containerWith();
+      container.read(runTimeProvider.notifier).value = 1;
+      container
+          .read(appSettingProvider.notifier)
+          .update((state) => state.copyWith(hideIp: true));
+      await pumpCard(tester, business: true);
+
+      expect(find.text(_ip), findsNothing);
+      expect(find.text('*****'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('mobile business IP opens quality details', (tester) async {
+      tester.view.physicalSize = const Size(390, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      container = containerWith();
+      container.read(runTimeProvider.notifier).value = 1;
+      await pumpCard(tester, business: true);
+
+      await tester.tap(find.text(_ip));
+      await tester.pumpAndSettle();
+      expect(find.text('Residential'), findsOneWidget);
+      Navigator.of(tester.element(find.text('Residential'))).pop();
+      await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     });
 

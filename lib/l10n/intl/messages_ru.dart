@@ -447,6 +447,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "blockQuic": MessageLookupByLibrary.simpleMessage("Блокировать QUIC"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Перезапись тела"),
+    "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("Яркость"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Текущий узел"),
@@ -525,6 +526,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "checkUpdateError": MessageLookupByLibrary.simpleMessage(
       "У вас уже последняя версия",
     ),
+    "checkingExit": MessageLookupByLibrary.simpleMessage("Проверяем выход…"),
     "cipher": MessageLookupByLibrary.simpleMessage("Шифр"),
     "clearData": MessageLookupByLibrary.simpleMessage("Очистить данные"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -1887,6 +1889,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "remove": MessageLookupByLibrary.simpleMessage("Убрать"),
     "rename": MessageLookupByLibrary.simpleMessage("Переименовать"),
+    "renew": MessageLookupByLibrary.simpleMessage("Продлить"),
     "replace": MessageLookupByLibrary.simpleMessage("Заменить"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("Заменить все"),
     "request": MessageLookupByLibrary.simpleMessage("Запрос"),

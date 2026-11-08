@@ -29,7 +29,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const _businessMaxWidth = 1280.0;
+const _businessMaxWidth = 1284.0;
 
 class BusinessDashboardView extends ConsumerWidget {
   const BusinessDashboardView({super.key, required this.platform});
@@ -45,10 +45,19 @@ class BusinessDashboardView extends ConsumerWidget {
         builder: (context) => Scaffold(
           backgroundColor: DashboardColors.of(context).page,
           title: mobile ? null : appLocalizations.dashboard,
-          titleWidget: mobile ? const _MobileBrandTitle() : null,
+          titleWidget: mobile
+              ? const _MobileBrandTitle()
+              : Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 18),
+                  child: Text(
+                    appLocalizations.dashboard,
+                    style: BusinessText.pageTitle(context),
+                  ),
+                ),
           actions: [
+            if (mobile) const _MobileNotice() else const _DesktopBarStatus(),
             const UpdateStatusButton(),
-            if (coreLib == null) const CoreStatusButton(),
+            if (!mobile && coreLib == null) const CoreStatusButton(),
           ],
           body: LayoutBuilder(
             builder: (context, constraints) {
@@ -91,20 +100,23 @@ class _BusinessBody extends ConsumerWidget {
             ) &&
             ref.watch(authorizedTunEnableProvider) ==
                 TunAuthorizationState.authorized);
-    final gap = density.isCompact
-        ? 12.0
-        : cardSpacingOf(context, ViewMode.desktop);
     final subInfo = ref.watch(
       currentProfileProvider.select((profile) => profile?.subscriptionInfo),
     );
     final hasMobileMetrics =
         subInfo != null && subInfo.total > 0 && subInfo.expire > 0;
     final scale = DashboardDensityScope.scaleOf(context);
+    final mobile = !density.isDesktop;
+    final gap = mobile
+        ? 13.0
+        : density.isCompact
+        ? 14.0
+        : 16.0;
     final padding = EdgeInsetsDirectional.fromSTEB(
-      16,
-      context.contentTopPadding,
-      24,
-      24 + context.bottomInset,
+      mobile ? 18 : 34,
+      mobile ? context.appBarInset - 23 : context.appBarInset - 9,
+      mobile ? 18 : 34,
+      (mobile ? 18 : 24) + context.bottomInset,
     );
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -117,13 +129,7 @@ class _BusinessBody extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: gap,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  UpdateStatusSlot(gap: gap),
-                  const BusinessSubscriptionStatus(),
-                ],
-              ),
+              UpdateStatusSlot(gap: gap),
               const RepaintBoundary(child: CurrentOutboundCard()),
               if (ref.watch(scenePolicyProvider).available)
                 const SceneBar()
@@ -140,12 +146,21 @@ class _BusinessBody extends ConsumerWidget {
                   ),
                 _EqualHeightRow(
                   spacing: gap,
-                  flexes: const [4, 3, 3],
+                  flexes: const [5, 4, 4],
                   children: [
-                    const BusinessLineCard(),
-                    const TrafficSavingsCard(),
-                    ProfilesCard(
-                      title: context.appLocalizations.subscriptionInfo,
+                    _CardMinHeight(
+                      minHeight: density.isCompact ? 210 : 288,
+                      child: const BusinessLineCard(),
+                    ),
+                    _CardMinHeight(
+                      minHeight: density.isCompact ? 210 : 288,
+                      child: const TrafficSavingsCard(),
+                    ),
+                    _CardMinHeight(
+                      minHeight: density.isCompact ? 210 : 288,
+                      child: ProfilesCard(
+                        title: context.appLocalizations.subscriptionInfo,
+                      ),
                     ),
                   ],
                 ),
@@ -162,8 +177,18 @@ class _BusinessBody extends ConsumerWidget {
                   builder: (context, constraints) {
                     final cards = hasMobileMetrics
                         ? const [
-                            RepaintBoundary(child: RemainingTrafficCard()),
-                            RepaintBoundary(child: PlanValidityCard()),
+                            RepaintBoundary(
+                              child: _CardMinHeight(
+                                minHeight: 132,
+                                child: RemainingTrafficCard(),
+                              ),
+                            ),
+                            RepaintBoundary(
+                              child: _CardMinHeight(
+                                minHeight: 132,
+                                child: PlanValidityCard(),
+                              ),
+                            ),
                           ]
                         : [
                             const RepaintBoundary(child: TrafficSavingsCard()),
@@ -218,7 +243,7 @@ class _MobileBrandTitle extends StatelessWidget {
       spacing: 9,
       children: [
         ClipRSuperellipse(
-          borderRadius: AppRadius.sm,
+          borderRadius: AppRadius.all(BusinessRadius.brandMobile),
           child: Image.asset(
             'assets/images/icon.png',
             width: 30,
@@ -226,8 +251,100 @@ class _MobileBrandTitle extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        Text('天机云', style: AppTextStyle.headline.of(context, emphasized: true)),
+        Text(
+          context.appLocalizations.brandName,
+          style: AppTextStyle.custom(
+            context,
+            size: 16,
+            leading: 20,
+            weight: FontWeight.w700,
+          ),
+        ),
       ],
+    );
+  }
+}
+
+/// The bar's real state on desktop: the subscription's own update time and
+/// the run state, as the design's top row shows them.
+class _DesktopBarStatus extends ConsumerWidget {
+  const _DesktopBarStatus();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(currentProfileProvider);
+    final updated = profile?.lastUpdateDate;
+    final running = ref.watch(isStartProvider);
+    final suspended = ref.watch(suspendProvider);
+    final connecting = ref.watch(coreStatusProvider) == CoreStatus.connecting;
+    final strings = context.appLocalizations;
+    final tone = connecting || suspended
+        ? DashboardColors.of(context).warn
+        : running
+        ? BusinessPalette.connected
+        : context.colorScheme.onSurfaceVariant;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 12,
+      children: [
+        if (updated != null)
+          Text(
+            strings.profileUpdatedAt(updated.getLastUpdateTimeDesc(context)),
+            style: BusinessText.quickMetaMobile(
+              context,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
+          ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+          decoration: const ShapeDecoration(
+            color: Color(0x12FFFFFF),
+            shape: AppShape.full,
+          ),
+          child: Text(
+            connecting
+                ? strings.connecting
+                : suspended
+                ? strings.suspended
+                : running
+                ? strings.running
+                : strings.notRunning,
+            style: BusinessText.quickMetaMobile(context).copyWith(color: tone),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// The phone bar's right side: the subscription update time, or the real
+/// update state once one is downloading.
+class _MobileNotice extends ConsumerWidget {
+  const _MobileNotice();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final updated = ref.watch(currentProfileProvider)?.lastUpdateDate;
+    final download = ref.watch(updateDownloadStateProvider);
+    final label = switch (download) {
+      UpdateReady() => context.appLocalizations.updateReady,
+      UpdateDownloading(:final received, :final total) =>
+        total > 0 ? '${received * 100 ~/ total}%' : received.traffic.show,
+      null => updated?.getLastUpdateTimeDesc(context),
+    };
+    if (label == null) return const SizedBox.shrink();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: const ShapeDecoration(
+        color: Color(0x2E3D5AFE),
+        shape: AppShape.full,
+      ),
+      child: Text(
+        label,
+        maxLines: 1,
+        style: BusinessText.notice(
+          context,
+        ).copyWith(color: const Color(0xFF9FB0FF)),
+      ),
     );
   }
 }
@@ -295,37 +412,52 @@ class _ControlBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final density = DashboardDensityScope.of(context);
-    final tiles = DashboardWidget.networkTakeover.platforms.contains(platform)
+    final blocks = DashboardWidget.networkTakeover.platforms.contains(platform)
         ? const [
-            NetworkTakeoverTile(TakeoverSwitch.systemProxy),
-            NetworkTakeoverTile(TakeoverSwitch.tun),
+            NetworkTakeoverBlock(TakeoverSwitch.systemProxy),
+            NetworkTakeoverBlock(TakeoverSwitch.tun),
           ]
-        : const [VpnTile()];
+        : const [VpnBlock()];
     return DashboardCard(
       semanticLabel: context.appLocalizations.outboundMode,
+      radius: BusinessRadius.control,
       padding: EdgeInsets.symmetric(
-        horizontal: dashboardCardPadding(density).left,
-        vertical: 10,
+        horizontal: density.isCompact ? 16 : 18,
+        vertical: density.isCompact ? 10 : 20,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final tileWidth = constraints.maxWidth >= 900 ? 230.0 : 190.0;
+          final blockWidth = constraints.maxWidth >= 1000 ? 214.0 : 188.0;
           final label = Text(
             context.appLocalizations.outboundMode,
-            style: DashboardText.cardTitle(context),
+            style: BusinessText.controlLabel(
+              context,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
           );
-          final tileWidgets = [
-            for (final tile in tiles)
-              SizedBox(width: tileWidth, height: 56, child: tile),
+          final blockWidgets = [
+            for (final block in blocks)
+              SizedBox(width: blockWidth, child: block),
           ];
+          if (constraints.maxWidth / DashboardDensityScope.scaleOf(context) >=
+              950) {
+            return Row(
+              spacing: 16,
+              children: [
+                label,
+                const IntrinsicWidth(child: OutboundModeInline()),
+                const Spacer(),
+                ...blockWidgets,
+              ],
+            );
+          }
           return Wrap(
             spacing: 16,
-            runSpacing: 12,
+            runSpacing: 10,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               label,
               const IntrinsicWidth(child: OutboundModeInline()),
-              ...tileWidgets,
+              ...blockWidgets,
             ],
           );
         },
@@ -547,7 +679,8 @@ class ResidentialExitCard extends ConsumerWidget {
           : BorderSide.none,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           DashboardCardHeader(
             glyph: AppGlyphs.vpn,
@@ -618,7 +751,10 @@ class ResidentialExitCard extends ConsumerWidget {
               policy.selectedExit ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: DashboardText.figure(context, AppTextStyle.title2),
+              style: BusinessText.dataBig(
+                context,
+                mobile: !DashboardDensityScope.of(context).isDesktop,
+              ),
             ),
             const SizedBox(height: 6),
             Text(appLocalizations.residentialActiveDesc, style: label),
@@ -657,13 +793,6 @@ class ResidentialExitCard extends ConsumerWidget {
               Text(appLocalizations.residentialPending, style: label),
             ] else
               const SizedBox(height: 10),
-            _ExitActions(
-              applying: applying,
-              onChoose: () => showResidentialExitSheet(context),
-              onClear: () => unawaited(
-                ref.read(residentialActionProvider.notifier).clear(),
-              ),
-            ),
           ] else ...[
             Text(
               appLocalizations.residentialSubscriptionPolicy,
@@ -709,6 +838,14 @@ class ResidentialExitCard extends ConsumerWidget {
           ],
           const SizedBox(height: 6),
           routeNote,
+          if (policy.active && !missing)
+            _ExitActions(
+              applying: applying,
+              onChoose: () => showResidentialExitSheet(context),
+              onClear: () => unawaited(
+                ref.read(residentialActionProvider.notifier).clear(),
+              ),
+            ),
         ],
       ),
     );
@@ -782,6 +919,21 @@ class _ResidentialExitSheet extends ConsumerWidget {
         Navigator.of(context).pop();
         unawaited(ref.read(residentialActionProvider.notifier).select(item));
       },
+    );
+  }
+}
+
+class _CardMinHeight extends StatelessWidget {
+  const _CardMinHeight({required this.minHeight, required this.child});
+
+  final double minHeight;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: minHeight),
+      child: child,
     );
   }
 }

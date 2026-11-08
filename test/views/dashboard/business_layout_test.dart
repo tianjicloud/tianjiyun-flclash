@@ -320,11 +320,11 @@ void main() {
           );
           if (width >= 1200 && scale == 1 && !captureOff) {
             await tester.scrollUntilVisible(
-              find.byType(NetworkTakeoverTile).last,
+              find.byType(NetworkTakeoverBlock).last,
               200,
             );
             expect(
-              tester.getBottomRight(find.byType(NetworkTakeoverTile).last).dy,
+              tester.getBottomRight(find.byType(NetworkTakeoverBlock).last).dy,
               lessThanOrEqualTo(700),
             );
           }

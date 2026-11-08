@@ -80,6 +80,11 @@ class AppLocalizations {
     return Intl.message('Dashboard', name: 'dashboard', desc: '', args: []);
   }
 
+  /// `Tianji Cloud`
+  String get brandName {
+    return Intl.message('Tianji Cloud', name: 'brandName', desc: '', args: []);
+  }
+
   /// `Proxies`
   String get proxies {
     return Intl.message('Proxies', name: 'proxies', desc: '', args: []);
@@ -9778,6 +9783,11 @@ class AppLocalizations {
     );
   }
 
+  /// `Renew`
+  String get renew {
+    return Intl.message('Renew', name: 'renew', desc: '', args: []);
+  }
+
   /// `Default proxy traffic uses the selected residential exit; mainland and direct traffic follow the subscription. Bulk bypass status is shown below when active. Some destinations may use a service-side alternative exit.`
   String get residentialExplanation {
     return Intl.message(
@@ -9903,6 +9913,16 @@ class AppLocalizations {
     return Intl.message(
       'Current node',
       name: 'businessCurrentNode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checking exit…`
+  String get checkingExit {
+    return Intl.message(
+      'Checking exit…',
+      name: 'checkingExit',
       desc: '',
       args: [],
     );

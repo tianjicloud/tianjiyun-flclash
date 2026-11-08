@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/system_dns.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -10,6 +11,7 @@ import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/widgets/icon.dart';
+import 'package:fl_clash/widgets/business_navigation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -150,12 +152,14 @@ class _Sidebar extends ConsumerWidget {
     required this.currentIndex,
     required this.viewMode,
     required this.onSelected,
+    required this.business,
   });
 
   final List<NavigationItem> items;
   final int currentIndex;
   final ViewMode viewMode;
   final void Function(int index) onSelected;
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -164,6 +168,30 @@ class _Sidebar extends ConsumerWidget {
       appSettingProvider.select((state) => state.sidebarExpanded),
     );
     final version = ref.watch(versionProvider);
+    final windowControls = windowControlsOverSidebar(
+      isMacOS: system.isMacOS,
+      version: version,
+    );
+    if (business && canExpand) {
+      return BusinessNavigationSidebar(
+        items: items,
+        currentIndex: currentIndex,
+        expanded: canExpand && sidebarExpanded,
+        onSelected: onSelected,
+        onToggle: canExpand
+            ? () {
+                ref
+                    .read(appSettingProvider.notifier)
+                    .update(
+                      (state) => state.copyWith(
+                        sidebarExpanded: !state.sidebarExpanded,
+                      ),
+                    );
+              }
+            : null,
+        windowControls: windowControls,
+      );
+    }
     return NavigationSidebar(
       destinations: [
         for (final item in items)
@@ -182,10 +210,7 @@ class _Sidebar extends ConsumerWidget {
                   );
             }
           : null,
-      windowControls: windowControlsOverSidebar(
-        isMacOS: system.isMacOS,
-        version: version,
-      ),
+      windowControls: windowControls,
     );
   }
 }
@@ -208,7 +233,10 @@ class AppSidebarContainer extends ConsumerWidget {
     final focusContext = focusNode?.context;
     final preserveNavigationFocus =
         focusContext?.findAncestorWidgetOfExactType<NavigationSidebar>() !=
-        null;
+            null ||
+        focusContext
+                ?.findAncestorWidgetOfExactType<BusinessNavigationSidebar>() !=
+            null;
     ref.read(currentPageLabelProvider.notifier).toPage(pageLabel);
     if (!preserveNavigationFocus || focusNode == null) {
       return;
@@ -230,6 +258,10 @@ class AppSidebarContainer extends ConsumerWidget {
     final wallpaper = AppBackgroundScope.hasImage(context);
     final page = SurfaceLevel.page.colorOf(context.colorScheme);
     final chrome = context.colorScheme.chromeSurface;
+    final isBusiness = isTianjiSubscriptionProfile(
+      ref.watch(currentProfileProvider),
+    );
+    final customBusinessSidebar = isBusiness && canExpandSidebar(viewMode);
     void onSelected(int index) {
       _handleToPage(ref, navigationItems[index].label);
     }
@@ -244,7 +276,7 @@ class AppSidebarContainer extends ConsumerWidget {
             AnimatedVisibility.sidebar(
               visible: hasSidebar,
               child: Surface(
-                color: wallpaper
+                color: customBusinessSidebar || wallpaper
                     ? Colors.transparent
                     : backdropOpacity != null
                     ? chrome.withValues(alpha: backdropOpacity)
@@ -261,6 +293,7 @@ class AppSidebarContainer extends ConsumerWidget {
                     currentIndex: currentIndex,
                     viewMode: viewMode,
                     onSelected: onSelected,
+                    business: isBusiness,
                   ),
                 ),
               ),

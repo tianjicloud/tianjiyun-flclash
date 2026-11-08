@@ -40,12 +40,17 @@ class DashboardCard extends StatelessWidget {
     this.semanticLabel,
     this.clipBehavior = Clip.none,
     this.side = BorderSide.none,
+    this.radius,
     required this.child,
   });
 
   final EdgeInsetsGeometry? padding;
   final VoidCallback? onTap;
   final String? semanticLabel;
+
+  /// Overrides the density's card corner where the design gives the surface
+  /// its own value.
+  final double? radius;
 
   /// Drawn over the content, which may bleed to the card's edge.
   final BorderSide side;
@@ -60,7 +65,10 @@ class DashboardCard extends StatelessWidget {
     final density = DashboardDensityScope.of(context);
     final business = BusinessTheme.of(context);
     final shape = AppShape.all(
-      business ? BusinessPalette.cardRadius : dashboardCardRadius(density),
+      radius ??
+          (business
+              ? BusinessPalette.cardRadius
+              : dashboardCardRadius(density)),
     );
     final overWallpaper =
         business &&
@@ -149,7 +157,12 @@ class DashboardCardHeader extends StatelessWidget {
     final scale = DashboardDensityScope.scaleOf(context);
     final colorScheme = context.colorScheme;
     final iconColor = colorScheme.onSurfaceVariant;
-    final style = mobile
+    final style = BusinessTheme.of(context)
+        ? BusinessText.cardTitle(
+            context,
+            mobile: mobile,
+          ).copyWith(color: colorScheme.onSurfaceVariant)
+        : mobile
         ? DashboardText.mobileCardTitle(context)
         : DashboardText.cardTitle(context);
     final end = [

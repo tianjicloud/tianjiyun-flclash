@@ -429,6 +429,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "blacklistMode": MessageLookupByLibrary.simpleMessage("Blacklist mode"),
     "blockQuic": MessageLookupByLibrary.simpleMessage("Block QUIC"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body rewrite"),
+    "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("Brightness"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Current node"),
@@ -503,6 +504,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "checkUpdateError": MessageLookupByLibrary.simpleMessage(
       "The app is already up to date",
     ),
+    "checkingExit": MessageLookupByLibrary.simpleMessage("Checking exit…"),
     "cipher": MessageLookupByLibrary.simpleMessage("Cipher"),
     "clearData": MessageLookupByLibrary.simpleMessage("Clear data"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -1795,6 +1797,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "remove": MessageLookupByLibrary.simpleMessage("Remove"),
     "rename": MessageLookupByLibrary.simpleMessage("Rename"),
+    "renew": MessageLookupByLibrary.simpleMessage("Renew"),
     "replace": MessageLookupByLibrary.simpleMessage("Replace"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("Replace all"),
     "request": MessageLookupByLibrary.simpleMessage("Request"),

@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/widgets.dart';
 
 import 'card.dart';
+import 'segmented.dart';
 
 Glyph _glyphOf(Mode mode) => switch (mode) {
   Mode.rule => AppGlyphs.rules,
@@ -100,85 +101,21 @@ class OutboundModeInline extends ConsumerWidget {
     final mode = ref.watch(
       patchClashConfigProvider.select((state) => state.mode),
     );
-    final style = AppTextStyle.subheadline.of(context, emphasized: true);
-    final stretch = !DashboardDensityScope.of(context).isDesktop;
-    return DashboardConnectedGroup(
-      children: [
-        for (final (index, item) in Mode.values.indexed)
-          if (stretch)
-            Expanded(
-              child: DashboardConnectedButton(
-                selected: item == mode,
-                first: index == 0,
-                last: index == Mode.values.length - 1,
-                outer: BusinessPalette.buttonRadius,
-                inner: 10,
-                background: DashboardColors.of(context).tone,
-                semanticLabel: item.label,
-                onTap: () => _changeMode(ref, item),
-                builder: (foreground) => _ModeButtonBody(
-                  item: item,
-                  foreground: foreground,
-                  style: style,
-                ),
-              ),
-            )
-          else
-            DashboardConnectedButton(
-              selected: item == mode,
-              first: index == 0,
-              last: index == Mode.values.length - 1,
-              outer: BusinessPalette.buttonRadius,
-              inner: 10,
-              background: DashboardColors.of(context).tone,
-              semanticLabel: item.label,
-              onTap: () => _changeMode(ref, item),
-              builder: (foreground) => _ModeButtonBody(
-                item: item,
-                foreground: foreground,
-                style: style,
-              ),
-            ),
-      ],
-    );
-  }
-}
-
-class _ModeButtonBody extends StatelessWidget {
-  const _ModeButtonBody({
-    required this.item,
-    required this.foreground,
-    required this.style,
-  });
-
-  final Mode item;
-  final Color foreground;
-  final TextStyle style;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40 * DashboardDensityScope.scaleOf(context),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 6,
-            children: [
-              GlyphIcon(_glyphOf(item), size: 16, color: foreground),
-              Flexible(
-                child: Text(
-                  item.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: style.copyWith(color: foreground),
-                ),
-              ),
-            ],
+    final mobile = !DashboardDensityScope.of(context).isDesktop;
+    return BusinessSegmented<Mode>(
+      items: [
+        for (final item in Mode.values)
+          BusinessSegment(
+            value: item,
+            label: item.label,
+            glyph: _glyphOf(item),
           ),
-        ),
-      ),
+      ],
+      selected: mode,
+      onSelected: (item) => _changeMode(ref, item),
+      height: mobile ? 34 : 38,
+      expand: mobile,
+      mobile: mobile,
     );
   }
 }

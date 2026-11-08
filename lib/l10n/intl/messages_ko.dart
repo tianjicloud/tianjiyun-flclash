@@ -366,6 +366,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "blacklistMode": MessageLookupByLibrary.simpleMessage("블랙리스트 모드"),
     "blockQuic": MessageLookupByLibrary.simpleMessage("QUIC 차단"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("본문 재작성"),
+    "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("밝기"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
@@ -426,6 +427,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "checkUpdate": MessageLookupByLibrary.simpleMessage("업데이트 확인"),
     "checkUpdateError": MessageLookupByLibrary.simpleMessage("이미 최신 버전입니다"),
+    "checkingExit": MessageLookupByLibrary.simpleMessage("출구 확인 중…"),
     "cipher": MessageLookupByLibrary.simpleMessage("암호화 방식"),
     "clearData": MessageLookupByLibrary.simpleMessage("데이터 지우기"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -1520,6 +1522,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remoteDnsResolve": MessageLookupByLibrary.simpleMessage("원격 DNS 확인"),
     "remove": MessageLookupByLibrary.simpleMessage("제거"),
     "rename": MessageLookupByLibrary.simpleMessage("이름 변경"),
+    "renew": MessageLookupByLibrary.simpleMessage("갱신"),
     "replace": MessageLookupByLibrary.simpleMessage("바꾸기"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("모두 바꾸기"),
     "request": MessageLookupByLibrary.simpleMessage("요청"),

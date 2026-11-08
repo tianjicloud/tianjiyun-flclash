@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/traffic/model.dart';
 import 'package:fl_clash/providers/traffic.dart';
@@ -75,7 +76,7 @@ class TrafficSavingsCard extends ConsumerWidget {
             );
             final legend = Column(
               mainAxisSize: MainAxisSize.min,
-              spacing: 8,
+              spacing: 9,
               children: [
                 for (final (label, bytes, color) in entries)
                   Row(
@@ -86,49 +87,64 @@ class TrafficSavingsCard extends ConsumerWidget {
                         child: const SizedBox.square(dimension: 8),
                       ),
                       Expanded(
-                        child: Text(label, style: DashboardText.label(context)),
+                        child: Text(
+                          label,
+                          style:
+                              BusinessText.dataBody(
+                                context,
+                                mobile: !DashboardDensityScope.of(
+                                  context,
+                                ).isDesktop,
+                              ).copyWith(
+                                color: context.colorScheme.onSurfaceVariant,
+                              ),
+                        ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${(total == 0 ? 0 : bytes / total * 100).toStringAsFixed(1)}%',
-                            style: DashboardText.label(context),
-                          ),
-                          Text(
-                            dashboardTraffic(bytes),
-                            style: DashboardText.label(context),
-                          ),
-                        ],
+                      Tooltip(
+                        message: dashboardTraffic(bytes),
+                        child: Text(
+                          '${(total == 0 ? 0 : bytes / total * 100).toStringAsFixed(1)}%',
+                          style: BusinessText.quickMeta(
+                            context,
+                          ).copyWith(color: context.colorScheme.onSurface),
+                        ),
                       ),
                     ],
                   ),
               ],
             );
             return Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 10,
               children: [
-                DashboardCardHeader(
-                  glyph: AppGlyphs.dataUsage,
-                  title: appLocalizations.trafficStats,
-                ),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (constraints.maxWidth /
-                            MediaQuery.textScalerOf(context).scale(1) <
-                        240) {
-                      return Column(spacing: 12, children: [ring, legend]);
-                    }
-                    return Row(
-                      spacing: 16,
-                      children: [
-                        ring,
-                        Expanded(child: legend),
-                      ],
-                    );
-                  },
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 10,
+                  children: [
+                    DashboardCardHeader(
+                      glyph: AppGlyphs.dataUsage,
+                      title: appLocalizations.trafficStats,
+                    ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        if (constraints.maxWidth /
+                                MediaQuery.textScalerOf(context).scale(1) <
+                            240) {
+                          return Column(spacing: 12, children: [ring, legend]);
+                        }
+                        return Row(
+                          spacing: 16,
+                          children: [
+                            ring,
+                            Expanded(child: legend),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 Text(
                   appLocalizations.trafficStatsScope,

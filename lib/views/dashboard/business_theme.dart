@@ -1,23 +1,11 @@
 import 'dart:math' as math;
 
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prism_ui/prism_ui.dart';
 
-abstract final class BusinessPalette {
-  static const blue = Color(0xFF3D5AFE);
-  static const violet = Color(0xFF7C4DFF);
-  static const accent = Color(0xFF6A5CFF);
-  static const page = Color(0xFF0A0F2B);
-  static const deep = Color(0xFF070B1F);
-  static const secondary = Color(0xFF98A2C8);
-  static const purple = Color(0xFF8C78FF);
-  static const connected = Color(0xFF34E0B0);
-  static const warning = Color(0xFFFFC24D);
-  static const error = Color(0xFFFF5C7A);
-  static const cardRadius = 22.0;
-  static const buttonRadius = 14.0;
-  static const gradient = LinearGradient(colors: [blue, accent]);
-}
+export 'package:fl_clash/ui/business_style.dart'
+    show BusinessPalette, BusinessRadius, BusinessText;
 
 class BusinessTheme extends InheritedTheme {
   const BusinessTheme({super.key, required super.child});
@@ -53,79 +41,82 @@ class OrbitPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2;
+    final ticks = radius;
+    final ballRadius = radius * 0.78;
     if (pulse case final pulse? when pulse < 0.3) {
       final wave = pulse / 0.3;
-      final spread = radius * (0.78 + 0.2 * wave);
       canvas.drawCircle(
         center,
-        spread,
+        radius * (1.08 + 0.22 * wave),
         Paint()
-          ..color = color.withValues(alpha: 0.35 * (1 - wave))
+          ..color = color.withValues(alpha: 0.32 * (1 - wave))
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2,
       );
-      canvas.drawCircle(
-        center,
-        radius * 0.97,
-        Paint()
-          ..color = color.withValues(
-            alpha: 0.12 + 0.1 * math.sin(wave * math.pi),
-          )
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5,
-      );
     }
     canvas.drawCircle(
       center,
-      radius,
+      radius * 1.18,
       Paint()
         ..shader = RadialGradient(
-          colors: [color.withValues(alpha: 0.25), color.withValues(alpha: 0)],
-        ).createShader(Offset.zero & size),
+          colors: [
+            color.withValues(alpha: 0),
+            color.withValues(alpha: 0.12),
+            color.withValues(alpha: 0),
+          ],
+          stops: const [0.76, 0.92, 1],
+        ).createShader(Rect.fromCircle(center: center, radius: radius * 1.18)),
     );
     canvas.drawCircle(
       center,
-      radius * 0.99,
+      radius * 1.18,
       Paint()
-        ..color = color.withValues(alpha: focused ? 0.6 : 0.3)
+        ..color = BusinessPalette.accent.withValues(
+          alpha: focused ? 0.55 : 0.35,
+        )
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.5,
     );
-    final ring = Paint()
-      ..color = color.withValues(alpha: focused ? 1 : 0.45)
+    final dash = Paint()
+      ..color = const Color(0xFF96A0FF).withValues(alpha: focused ? 0.62 : 0.4)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = focused ? 2 : 1;
-    for (var i = 0; i < 48; i++) {
+      ..strokeWidth = 2;
+    for (var i = 0; i < 40; i++) {
       canvas.drawArc(
-        Rect.fromCircle(center: center, radius: radius * 0.91),
-        i * math.pi / 24,
-        math.pi / 48,
+        Rect.fromCircle(center: center, radius: ticks),
+        i * math.pi / 20,
+        math.pi / 34,
         false,
-        ring,
+        dash,
       );
     }
+    final ball = Rect.fromCircle(center: center, radius: ballRadius);
     canvas.drawCircle(
       center,
-      radius * 0.77,
-      Paint()..color = color.withValues(alpha: 0.14),
+      ballRadius,
+      Paint()
+        ..shader = const RadialGradient(
+          center: Alignment(-0.32, -0.4),
+          radius: 1.08,
+          colors: [Color(0xFFAAB8FF), Color(0xFF3D5AFE), Color(0xFF4527A0)],
+          stops: [0, 0.52, 1],
+        ).createShader(ball),
     );
-    final ball = Rect.fromCircle(center: center, radius: radius * 0.69);
     canvas.drawCircle(
       center,
-      radius * 0.69,
+      ballRadius,
       Paint()
         ..shader = RadialGradient(
-          center: const Alignment(-0.4, -0.5),
-          radius: 1,
+          center: const Alignment(-0.18, -0.42),
+          radius: 0.9,
           colors: [
-            Color.lerp(color, Colors.white, 0.32)!,
-            color,
-            Color.lerp(color, BusinessPalette.deep, 0.55)!,
+            Colors.white.withValues(alpha: 0.26),
+            Colors.white.withValues(alpha: 0),
           ],
         ).createShader(ball),
     );
-    final specular = center + Offset(-radius * 0.24, -radius * 0.34);
-    final specularRadius = radius * 0.3;
+    final specular = center + Offset(-ballRadius * 0.34, -ballRadius * 0.42);
+    final specularRadius = ballRadius * 0.42;
     canvas.drawCircle(
       specular,
       specularRadius,
@@ -140,18 +131,17 @@ class OrbitPainter extends CustomPainter {
               Rect.fromCircle(center: specular, radius: specularRadius),
             ),
     );
-    final satellite = center + Offset(0, -radius * 0.985);
-    final satelliteRadius = math.max(2.0, radius * 0.038);
+    final satellite = center + Offset(0, -ticks);
+    final satelliteRadius = math.max(2.4, radius * 0.045);
     canvas.drawCircle(
       satellite,
-      satelliteRadius * 2.6,
-      Paint()
-        ..color = Color.lerp(color, Colors.white, 0.7)!.withValues(alpha: 0.22),
+      satelliteRadius * 2.8,
+      Paint()..color = const Color(0xFF8FA2FF).withValues(alpha: 0.28),
     );
     canvas.drawCircle(
       satellite,
       satelliteRadius,
-      Paint()..color = Color.lerp(color, Colors.white, 0.9)!,
+      Paint()..color = const Color(0xFFC9D3FF),
     );
   }
 

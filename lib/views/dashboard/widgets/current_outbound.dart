@@ -10,9 +10,11 @@ import 'package:fl_clash/providers/ip_quality.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
+import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
+import 'package:fl_clash/views/dashboard/line_data.dart';
 import 'package:fl_clash/views/dashboard/probe_start_hold.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -76,6 +78,8 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
     );
     final isStart = ref.watch(isStartProvider);
     final suspended = isStart && ref.watch(suspendProvider);
+    final connectingStatus =
+        ref.watch(coreStatusProvider) == CoreStatus.connecting;
     final rootAccess =
         mitmFeature && (ref.watch(rootAccessProvider).value ?? false);
     final entry = ref.watch(
@@ -105,81 +109,131 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         verdict != SelectionVerdict.untouched &&
         verdict != SelectionVerdict.consistent;
     if (BusinessTheme.of(context)) {
-      final details = Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: density.isDesktop ? 10 : 14,
-        children: [
-          _ExitRow(
-            info: ipInfo,
-            failed: failed,
-            loading: loading,
-            checking: phase == ProbePhase.probing || qualityLoading,
-            onRefresh: () => _refresh(ipInfo?.ip),
-            quality: quality,
-            active: isStart,
-            metrics: metrics,
-            large: density.isDesktop && !density.isCompact,
-          ),
-          if (showSelection) const SelectionNotice(),
-          if (density.isDesktop)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 20,
-              children: [
-                Expanded(
-                  child: _Cells(
-                    quality: quality,
-                    loading: loading,
-                    active: isStart && !suspended,
-                    gap: metrics.cellGap,
-                  ),
-                ),
-                Expanded(
-                  child: _BusinessMetrics(
-                    active: isStart && !suspended,
-                    exit: phase == ProbePhase.fresh
-                        ? entry.stamp?.hits.firstOrNull?.exit
-                        : null,
-                  ),
-                ),
-              ],
-            )
-          else
-            _BusinessMetrics(
-              active: isStart && !suspended,
-              exit: phase == ProbePhase.fresh
-                  ? entry.stamp?.hits.firstOrNull?.exit
-                  : null,
-              showRunTime: true,
-            ),
-        ],
-      );
+      final active = isStart && !suspended;
+      final exitName = phase == ProbePhase.fresh
+          ? entry.stamp?.hits.firstOrNull?.exit
+          : null;
+      final line = currentDashboardLine(ref);
+      final checking = phase == ProbePhase.probing || qualityLoading;
+      final statusText = connectingStatus
+          ? appLocalizations.connecting
+          : suspended
+          ? appLocalizations.suspended
+          : isStart
+          ? appLocalizations.running
+          : appLocalizations.notRunning;
+      final statusTone = connectingStatus || suspended
+          ? BusinessPalette.warning
+          : failed
+          ? BusinessPalette.error
+          : isStart
+          ? BusinessPalette.connected
+          : const Color(0xFF5B6BAA);
       final toggle = _StartToggle(
-        size: density.isDesktop ? (density.isCompact ? 112 : 140) : 152,
+        size: density.isDesktop
+            ? (density.isCompact ? 116 : 172)
+            : isStart
+            ? 128
+            : 158,
         enabled: hasProfile,
         running: isStart,
         suspended: suspended,
+        idleLabel: density.isDesktop ? null : appLocalizations.start,
       );
+      final details = _BusinessHeroDetails(
+        showStatus: density.isDesktop,
+        compact: density.isCompact,
+        statusText: statusText,
+        statusTone: statusTone,
+        checking: checking && !isStart,
+        info: ipInfo,
+        failed: failed,
+        loading: loading,
+        quality: quality,
+        active: active,
+        onRefresh: () => _refresh(ipInfo?.ip),
+        line: line,
+        exitName: exitName,
+        showSelection: showSelection,
+      );
+      final content = density.isDesktop
+          ? SizedBox(
+              height:
+                  (density.isCompact ? 150 : 217) + (showSelection ? 84 : 0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: details),
+                  _HeroSpeeds(active: active, vertical: true),
+                  const SizedBox(width: 26),
+                  Center(child: toggle),
+                ],
+              ),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: _BusinessStatusLine(
+                    text: statusText,
+                    tone: statusTone,
+                    checking: checking && !isStart,
+                    centered: true,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Center(child: toggle),
+                if (isStart) ...[
+                  const SizedBox(height: 10),
+                  _MobileConnectedSummary(
+                    info: ipInfo,
+                    failed: failed,
+                    loading: loading,
+                    active: active,
+                    onRefresh: () => _refresh(ipInfo?.ip),
+                  ),
+                ],
+                if (showSelection) ...[
+                  const SizedBox(height: 12),
+                  const SelectionNotice(),
+                ],
+              ],
+            );
+      final businessContent = density.isDesktop
+          ? content
+          : ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 219),
+              child: content,
+            );
       return DashboardCard(
-        padding: density.isDesktop
-            ? null
-            : const EdgeInsetsDirectional.fromSTEB(20, 14, 16, 14),
+        radius: density.isDesktop
+            ? BusinessRadius.heroDesktop
+            : BusinessRadius.heroMobile,
+        clipBehavior: Clip.antiAlias,
+        padding: EdgeInsets.zero,
         semanticLabel: rootAccess
             ? '${appLocalizations.status} ${appLocalizations.root}'
             : appLocalizations.status,
         side: rootAccess
             ? BorderSide(color: colorScheme.primary, width: 1.5)
             : BorderSide.none,
-        child: density.isDesktop
-            ? Row(
-                spacing: 24,
-                children: [
-                  Expanded(child: details),
-                  toggle,
-                ],
-              )
-            : Column(spacing: 12, children: [toggle, details]),
+        child: Stack(
+          children: [
+            Positioned.fill(child: _HeroBackdrop(mobile: !density.isDesktop)),
+            Padding(
+              padding: density.isDesktop
+                  ? EdgeInsetsDirectional.fromSTEB(
+                      density.isCompact ? 24 : 34,
+                      density.isCompact ? 20 : 30,
+                      density.isCompact ? 20 : 26,
+                      density.isCompact ? 20 : 30,
+                    )
+                  : const EdgeInsetsDirectional.fromSTEB(20, 18, 20, 18),
+              child: businessContent,
+            ),
+          ],
+        ),
       );
     }
     return TweenAnimationBuilder<double>(
@@ -381,6 +435,472 @@ class _OutboundMetrics {
   final double decorationSize;
   final double decorationEnd;
   final double decorationTop;
+}
+
+class _BusinessStatusLine extends StatelessWidget {
+  const _BusinessStatusLine({
+    required this.text,
+    required this.tone,
+    required this.checking,
+    required this.centered,
+  });
+
+  final String text;
+  final Color tone;
+  final bool checking;
+  final bool centered;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = checking
+        ? '$text · ${context.appLocalizations.checkingExit}'
+        : text;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: centered
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.start,
+      spacing: 8,
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          decoration: ShapeDecoration(color: tone, shape: AppShape.circle),
+        ),
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: BusinessText.heroStatus(
+              context,
+            ).copyWith(color: const Color(0xFF9FB0FF)),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _BusinessHeroDetails extends ConsumerWidget {
+  const _BusinessHeroDetails({
+    required this.showStatus,
+    required this.compact,
+    required this.statusText,
+    required this.statusTone,
+    required this.checking,
+    required this.info,
+    required this.failed,
+    required this.loading,
+    required this.quality,
+    required this.active,
+    required this.onRefresh,
+    required this.line,
+    required this.exitName,
+    required this.showSelection,
+  });
+
+  final bool showStatus;
+  final bool compact;
+  final String statusText;
+  final Color statusTone;
+  final bool checking;
+  final IpInfo? info;
+  final bool failed;
+  final bool loading;
+  final IpQuality? quality;
+  final bool active;
+  final VoidCallback onRefresh;
+  final DashboardLine? line;
+  final String? exitName;
+  final bool showSelection;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final runTime = ref.watch(runTimeProvider);
+    final organization = switch (quality) {
+      IpQuality(organization: final name?) when name.isNotEmpty => name,
+      IpQuality(asn: final asn?) => 'AS$asn',
+      _ => null,
+    };
+    final status = showStatus
+        ? _BusinessStatusLine(
+            text: statusText,
+            tone: statusTone,
+            checking: checking,
+            centered: false,
+          )
+        : null;
+    final ip = _BusinessIp(
+      info: info,
+      failed: failed,
+      loading: loading,
+      size: compact ? 40 : 52,
+      active: active,
+      onRefresh: onRefresh,
+    );
+    final chips = _BusinessChips(
+      info: info,
+      quality: quality,
+      loading: loading,
+      large: !compact,
+    );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        status!,
+        SizedBox(height: compact ? 6 : 10),
+        ip,
+        SizedBox(height: compact ? 8 : 12),
+        chips,
+        SizedBox(height: compact ? 12 : 22),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: compact ? 20 : 40,
+          children: [
+            Expanded(
+              child: _Cell(
+                label: context.appLocalizations.ipOrganization,
+                value: organization != null
+                    ? _CellText(organization)
+                    : loading
+                    ? SkeletonText(width: 96, style: _cellStyle(context))
+                    : const _Placeholder(),
+              ),
+            ),
+            _Cell(
+              label: context.appLocalizations.runTime,
+              value: active
+                  ? _CellText(getTimeText(runTime))
+                  : const _Placeholder(),
+            ),
+            Expanded(
+              child: _Cell(
+                label: context.appLocalizations.businessCurrentNode,
+                value: switch (exitName ?? line?.displayName) {
+                  final exit? => EmojiText(
+                    exit,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: _cellStyle(context),
+                  ),
+                  _ => const _Placeholder(),
+                },
+              ),
+            ),
+          ],
+        ),
+        if (showSelection) ...[
+          const SizedBox(height: 8),
+          const SelectionNotice(),
+        ],
+      ],
+    );
+  }
+}
+
+class _MobileConnectedSummary extends StatefulWidget {
+  const _MobileConnectedSummary({
+    required this.info,
+    required this.failed,
+    required this.loading,
+    required this.active,
+    required this.onRefresh,
+  });
+
+  final IpInfo? info;
+  final bool failed;
+  final bool loading;
+  final bool active;
+  final VoidCallback onRefresh;
+
+  @override
+  State<_MobileConnectedSummary> createState() =>
+      _MobileConnectedSummaryState();
+}
+
+class _MobileConnectedSummaryState extends State<_MobileConnectedSummary> {
+  var _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final ip = widget.info;
+    final foreground = widget.failed
+        ? context.colorScheme.error
+        : context.colorScheme.onSurface;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 6,
+          children: [
+            if (ip != null)
+              Flexible(
+                child: Tooltip(
+                  message: context.appLocalizations.details(
+                    context.appLocalizations.outboundIp,
+                  ),
+                  child: PressRegion(
+                    shape: AppShape.xs,
+                    overlay: PressRegion.focusOverlay,
+                    onTap: () => showIpQualitySheet(context, ip: ip.ip),
+                    child: _IpText(
+                      ip: ip.ip,
+                      style: BusinessText.quickName(
+                        context,
+                      ).copyWith(color: foreground),
+                    ),
+                  ),
+                ),
+              )
+            else if (widget.failed)
+              Flexible(
+                child: Text(
+                  context.appLocalizations.serviceFailed,
+                  maxLines: 1,
+                  style: BusinessText.quickName(
+                    context,
+                  ).copyWith(color: foreground),
+                ),
+              )
+            else if (widget.loading)
+              SkeletonText(width: 120, style: BusinessText.quickName(context)),
+            Tooltip(
+              message: context.appLocalizations.details(
+                context.appLocalizations.status,
+              ),
+              child: PressRegion(
+                shape: AppShape.sm,
+                overlay: PressRegion.hoverOverlay,
+                onTap: () => setState(() => _expanded = !_expanded),
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: GlyphIcon(
+                    _expanded ? AppGlyphs.chevronUp : AppGlyphs.chevronDown,
+                    size: 16,
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (widget.failed)
+          TextButton(
+            onPressed: widget.onRefresh,
+            child: Text(context.appLocalizations.selectionRecheck),
+          ),
+        if (_expanded) _HeroSpeeds(active: widget.active, vertical: false),
+      ],
+    );
+  }
+}
+
+class _BusinessIp extends StatelessWidget {
+  const _BusinessIp({
+    required this.info,
+    required this.failed,
+    required this.loading,
+    required this.size,
+    required this.active,
+    required this.onRefresh,
+  });
+
+  final IpInfo? info;
+  final bool failed;
+  final bool loading;
+  final double size;
+  final bool active;
+  final VoidCallback onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    final style = BusinessText.heroIp(context, size: size).copyWith(
+      color: active ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
+    );
+    final info = this.info;
+    if (info != null) {
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: Tooltip(
+          message: context.appLocalizations.details(
+            context.appLocalizations.outboundIp,
+          ),
+          child: FocusRing(
+            shape: AppShape.xs,
+            standsOff: true,
+            child: PressRegion(
+              onTap: () => showIpQualitySheet(context, ip: info.ip),
+              shape: AppShape.xs,
+              overlay: PressRegion.focusOverlay,
+              child: _IpText(ip: info.ip, style: style),
+            ),
+          ),
+        ),
+      );
+    }
+    if (failed) {
+      return Text(
+        context.appLocalizations.serviceFailed,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style.copyWith(color: colorScheme.error),
+      );
+    }
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: SkeletonText(width: size * 3.2, style: style),
+    );
+  }
+}
+
+class _BusinessChips extends StatelessWidget {
+  const _BusinessChips({
+    required this.info,
+    required this.quality,
+    required this.loading,
+    required this.large,
+  });
+
+  final IpInfo? info;
+  final IpQuality? quality;
+  final bool loading;
+  final bool large;
+
+  @override
+  Widget build(BuildContext context) {
+    final code = info?.countryCode;
+    final country = code == null || code.isEmpty
+        ? null
+        : DashboardChip(label: code.toUpperCase(), large: large);
+    final quality = this.quality;
+    final chips = <Widget>[
+      ?country,
+      if (quality != null) ...[
+        DashboardChip(label: quality.type.label(context), large: large),
+        DashboardChip(
+          label:
+              '${context.appLocalizations.ipQualityShort} ${quality.level.label(context)}',
+          tone: switch (quality.level) {
+            IpQualityLevel.good => DashboardChipTone.ok,
+            IpQualityLevel.normal => DashboardChipTone.idle,
+            IpQualityLevel.risky => DashboardChipTone.warn,
+          },
+          large: large,
+        ),
+      ] else if (loading)
+        for (final width in _chipSkeletonWidths)
+          SkeletonPill(width: width, height: _chipHeight(large))
+      else
+        DashboardChip(
+          label: context.appLocalizations.ipTypeUnknown,
+          large: large,
+        ),
+    ];
+    return Wrap(spacing: 8, runSpacing: 6, children: chips);
+  }
+}
+
+class _HeroSpeeds extends ConsumerWidget {
+  const _HeroSpeeds({required this.active, required this.vertical});
+
+  final bool active;
+  final bool vertical;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final speed = ref.watch(
+      trafficsProvider.select((state) => state.list.safeLast(const Traffic())),
+    );
+    final runTime = vertical ? null : ref.watch(runTimeProvider);
+    final cells = [
+      if (!vertical)
+        _Cell(
+          label: context.appLocalizations.runTime,
+          value: active
+              ? _CellText(getTimeText(runTime))
+              : const _Placeholder(),
+        ),
+      _Cell(
+        label: context.appLocalizations.download,
+        value: active
+            ? _CellText('${speed.down.traffic.show}/s')
+            : const _Placeholder(),
+      ),
+      _Cell(
+        label: context.appLocalizations.upload,
+        value: active
+            ? _CellText('${speed.up.traffic.show}/s')
+            : const _Placeholder(),
+      ),
+    ];
+    if (!vertical) {
+      return Wrap(spacing: 28, runSpacing: 10, children: cells);
+    }
+    return Center(
+      child: Row(
+        spacing: 36,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: cells,
+      ),
+    );
+  }
+}
+
+class _HeroBackdrop extends StatelessWidget {
+  const _HeroBackdrop({required this.mobile});
+
+  final bool mobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final image =
+        AppBackgroundScope.hasImage(context) &&
+        context.colorScheme.brightness == Brightness.dark;
+    if (!image) {
+      return const SizedBox.shrink();
+    }
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Opacity(
+          opacity: mobile ? 0.3 : 0.5,
+          child: Image.asset(
+            'assets/images/background_planet.jpg',
+            fit: BoxFit.cover,
+            alignment: mobile
+                ? const Alignment(0.95, -0.85)
+                : const Alignment(1.35, -1.15),
+            excludeFromSemantics: true,
+          ),
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: mobile
+                ? const LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    colors: [Color(0xE6070B1F), Color(0xA6070B1F)],
+                    stops: [0.2, 1],
+                  )
+                : const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Color(0xF00D1230),
+                      Color(0xB80D1230),
+                      Color(0x260D1230),
+                    ],
+                    stops: [0, 0.55, 1],
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _ExitRow extends StatelessWidget {
@@ -809,12 +1329,16 @@ class _StartToggle extends ConsumerStatefulWidget {
     required this.enabled,
     required this.running,
     required this.suspended,
+    this.idleLabel,
   });
 
   final double size;
   final bool enabled;
   final bool running;
   final bool suspended;
+
+  /// Replaces the start label while stopped, for the design's "tap to start".
+  final String? idleLabel;
 
   @override
   ConsumerState<_StartToggle> createState() => _StartToggleState();
@@ -944,9 +1468,14 @@ class _StartToggleState extends ConsumerState<_StartToggle>
           : widget.running
           ? BusinessPalette.blue
           : BusinessPalette.accent;
-      final label = connecting ? appLocalizations.connecting : tooltip;
+      final label = connecting
+          ? appLocalizations.connecting
+          : !widget.running && !widget.suspended && widget.idleLabel != null
+          ? widget.idleLabel!
+          : tooltip;
       return Column(
         mainAxisSize: MainAxisSize.min,
+        spacing: 8,
         children: [
           Tooltip(
             message: label,
@@ -998,7 +1527,12 @@ class _StartToggleState extends ConsumerState<_StartToggle>
               ),
             ),
           ),
-          Text(label, style: DashboardText.label(context)),
+          Text(
+            label,
+            style: BusinessText.startLabel(
+              context,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
+          ),
         ],
       );
     }
@@ -1170,55 +1704,4 @@ class _MorphClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(_MorphClipper oldClipper) =>
       oldClipper.progress != progress;
-}
-
-class _BusinessMetrics extends ConsumerWidget {
-  const _BusinessMetrics({
-    required this.active,
-    required this.exit,
-    this.showRunTime = false,
-  });
-
-  final bool active;
-  final String? exit;
-  final bool showRunTime;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final speed = ref.watch(
-      trafficsProvider.select((state) => state.list.safeLast(const Traffic())),
-    );
-    final delay = exit == null || exit!.isEmpty
-        ? null
-        : ref.watch(delayProvider(proxyName: exit!));
-    final strings = context.appLocalizations;
-    return Wrap(
-      spacing: 28,
-      runSpacing: 12,
-      children: [
-        if (showRunTime)
-          _Cell(
-            label: strings.runTime,
-            value: active ? const _RunTimeValue() : const _Placeholder(),
-          ),
-        if (active && delay != null)
-          _Cell(
-            label: strings.delay,
-            value: _CellText(delay < 0 ? strings.delayFailed : '$delay ms'),
-          ),
-        _Cell(
-          label: strings.download,
-          value: active
-              ? _CellText('${speed.down.traffic.show}/s')
-              : const _Placeholder(),
-        ),
-        _Cell(
-          label: strings.upload,
-          value: active
-              ? _CellText('${speed.up.traffic.show}/s')
-              : const _Placeholder(),
-        ),
-      ],
-    );
-  }
 }

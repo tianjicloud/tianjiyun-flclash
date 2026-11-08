@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/manager/app_manager.dart';
 import 'package:fl_clash/models/common.dart';
@@ -7,6 +8,7 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/views/onboarding/onboarding.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:fl_clash/widgets/business_navigation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,6 +80,9 @@ class _HomeShell extends ConsumerWidget {
     final floating = ref.watch(
       appSettingProvider.select((state) => state.floatingNavigationBar),
     );
+    final business = isTianjiSubscriptionProfile(
+      ref.watch(currentProfileProvider),
+    );
     return Surface(
       color: AppBackgroundScope.hasImage(context)
           ? Colors.transparent
@@ -92,7 +97,9 @@ class _HomeShell extends ConsumerWidget {
                     policy: PageTraversalPolicy(),
                     child: BottomInsetScope(
                       inset: isMobile && floating
-                          ? NavigationDock.insetOf(context)
+                          ? business
+                                ? BusinessNavigationDock.insetOf(context)
+                                : NavigationDock.insetOf(context)
                           : 0,
                       child: _BodyPadding(isMobile: isMobile, child: child),
                     ),
@@ -106,19 +113,33 @@ class _HomeShell extends ConsumerWidget {
                     visible: isMobile && floating,
                     child: BarItemPresence.held(
                       child: _NavigationPadding(
-                        child: NavigationDock(
-                          destinations: [
-                            for (final item in navigationItems)
-                              NavigationDockDestination(
-                                glyph: item.glyph,
-                                label: item.label.label,
+                        child: business
+                            ? BusinessNavigationDock(
+                                items: navigationItems,
+                                selectedIndex: state.currentIndex,
+                                onSelected: (index) {
+                                  _handleToPage(
+                                    navigationItems[index].label,
+                                    ref,
+                                  );
+                                },
+                              )
+                            : NavigationDock(
+                                destinations: [
+                                  for (final item in navigationItems)
+                                    NavigationDockDestination(
+                                      glyph: item.glyph,
+                                      label: item.label.label,
+                                    ),
+                                ],
+                                selectedIndex: state.currentIndex,
+                                onSelected: (index) {
+                                  _handleToPage(
+                                    navigationItems[index].label,
+                                    ref,
+                                  );
+                                },
                               ),
-                          ],
-                          selectedIndex: state.currentIndex,
-                          onSelected: (index) {
-                            _handleToPage(navigationItems[index].label, ref);
-                          },
-                        ),
                       ),
                     ),
                   ),

@@ -356,6 +356,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "blacklistMode": MessageLookupByLibrary.simpleMessage("黑名单模式"),
     "blockQuic": MessageLookupByLibrary.simpleMessage("阻止 QUIC"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body 重写"),
+    "brandName": MessageLookupByLibrary.simpleMessage("天机云"),
     "brightness": MessageLookupByLibrary.simpleMessage("亮度"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("更换线路"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("当前节点"),
@@ -408,6 +409,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
     "checkUpdateError": MessageLookupByLibrary.simpleMessage("当前应用已经是最新版了"),
+    "checkingExit": MessageLookupByLibrary.simpleMessage("正在确认出口…"),
     "cipher": MessageLookupByLibrary.simpleMessage("加密方式"),
     "clearData": MessageLookupByLibrary.simpleMessage("清除数据"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -1402,6 +1404,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remoteDnsResolve": MessageLookupByLibrary.simpleMessage("远程 DNS 解析"),
     "remove": MessageLookupByLibrary.simpleMessage("移除"),
     "rename": MessageLookupByLibrary.simpleMessage("重命名"),
+    "renew": MessageLookupByLibrary.simpleMessage("续费"),
     "replace": MessageLookupByLibrary.simpleMessage("替换"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("全部替换"),
     "request": MessageLookupByLibrary.simpleMessage("请求"),

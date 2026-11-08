@@ -115,6 +115,9 @@ class ProfilesCard extends ConsumerWidget {
     final sync = profile != null && profile.type == ProfileType.url
         ? _SyncButton(profile: profile)
         : null;
+    final detailLabel = appLocalizations.details(cardTitle);
+    final manageLabel = appLocalizations.residentialManageSubscription;
+    final renewLabel = appLocalizations.renew;
     final nameRow = Row(
       children: [
         Flexible(
@@ -137,47 +140,127 @@ class ProfilesCard extends ConsumerWidget {
       ],
     );
     if (BusinessTheme.of(context)) {
+      final days = expiry == null ? null : _daysLeft(expiry);
+      final soon = days != null && days <= _soonDays;
+      final usageText = usage == null
+          ? null
+          : '${appLocalizations.usedShort} '
+                '${dashboardTraffic(usage.used)} / '
+                '${dashboardTraffic(usage.total)}';
+      final meta = [
+        if (expiry != null) appLocalizations.validUntil(expiry.show),
+        ?usageText,
+      ].join(' · ');
       return DashboardCard(
         semanticLabel: cardTitle,
+        radius: mobile
+            ? BusinessRadius.metricMobile
+            : BusinessRadius.dataDesktop,
+        padding: EdgeInsetsDirectional.fromSTEB(
+          mobile ? 15 : 22,
+          mobile ? 15 : 20,
+          mobile ? 15 : 22,
+          mobile ? 15 : 20,
+        ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 12,
           children: [
-            DashboardCardHeader(
-              glyph: AppGlyphs.profiles,
-              title: cardTitle,
-              trailing: [?sync],
-            ),
-            nameRow,
-            if (expiry != null) ...[
-              Text(
-                appLocalizations.profileDaysLeft(_daysLeft(expiry)),
-                style: DashboardText.figure(
-                  context,
-                  AppTextStyle.title2,
-                  color: _daysLeft(expiry) <= _soonDays
-                      ? DashboardColors.of(context).warn
-                      : null,
-                ),
-              ),
-              Text(_expiryText(context, expiry), style: label),
-            ],
-            if (usage != null)
-              _UsageMeter(usage: usage, figure: figure, gap: 8),
-            Wrap(
-              spacing: 8,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: mobile ? 8 : 12,
               children: [
-                TextButton(
-                  onPressed: () => _openProfile(context, profile),
-                  child: Text(appLocalizations.details(cardTitle)),
+                DashboardCardHeader(
+                  glyph: AppGlyphs.profiles,
+                  title: cardTitle,
+                  trailing: [?sync],
                 ),
-                TextButton(
-                  onPressed: () => dialogs.openUrl(userPanelUrl),
-                  child: Text(appLocalizations.residentialManageSubscription),
-                ),
+                if (expiry != null)
+                  Text(
+                    appLocalizations.profileDaysLeft(days!),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.dataBig(context, mobile: mobile)
+                        .copyWith(
+                          color: soon ? DashboardColors.of(context).warn : null,
+                        ),
+                  )
+                else
+                  nameRow,
+                if (meta.isNotEmpty)
+                  Text(
+                    meta,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.dataBody(
+                      context,
+                      mobile: mobile,
+                    ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ),
+                if (usage != null) _MetricBar(fraction: usage.share),
               ],
             ),
+            if (compact)
+              Row(
+                children: [
+                  Expanded(
+                    child: Tooltip(
+                      message: detailLabel,
+                      child: TextButton(
+                        onPressed: () => _openProfile(context, profile),
+                        child: Text(
+                          detailLabel,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Tooltip(
+                      message: manageLabel,
+                      child: TextButton(
+                        onPressed: () => dialogs.openUrl(userPanelUrl),
+                        child: Text(
+                          manageLabel,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                  FilledButton(
+                    onPressed: () => dialogs.openUrl(userPanelUrl),
+                    child: Text(
+                      renewLabel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              )
+            else
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                spacing: 4,
+                runSpacing: 4,
+                children: [
+                  TextButton(
+                    onPressed: () => _openProfile(context, profile),
+                    child: Text(detailLabel),
+                  ),
+                  TextButton(
+                    onPressed: () => dialogs.openUrl(userPanelUrl),
+                    child: Text(manageLabel),
+                  ),
+                  FilledButton(
+                    onPressed: () => dialogs.openUrl(userPanelUrl),
+                    child: Text(renewLabel),
+                  ),
+                ],
+              ),
           ],
         ),
       );
@@ -303,10 +386,12 @@ class RemainingTrafficCard extends ConsumerWidget {
     final show = remaining.traffic;
     return DashboardCard(
       semanticLabel: strings.mobileRemainingTraffic,
+      radius: BusinessRadius.metricMobile,
+      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 10,
+        spacing: 8,
         children: [
           DashboardCardHeader(
             glyph: AppGlyphs.bolt,
@@ -317,11 +402,14 @@ class RemainingTrafficCard extends ConsumerWidget {
               children: [
                 TextSpan(
                   text: show.value,
-                  style: DashboardText.figure(context, AppTextStyle.title1),
+                  style: BusinessText.dataBig(context, mobile: true),
                 ),
                 TextSpan(
                   text: ' ${show.unit} / ${dashboardTraffic(usage.total)}',
-                  style: DashboardText.label(context),
+                  style: BusinessText.dataBigUnit(
+                    context,
+                    mobile: true,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -329,7 +417,12 @@ class RemainingTrafficCard extends ConsumerWidget {
           _MetricBar(fraction: 1 - usage.share),
           Text(
             '${strings.usedShort} ${dashboardTraffic(usage.used)}',
-            style: DashboardText.label(context),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: BusinessText.dataBody(
+              context,
+              mobile: true,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
         ],
       ),
@@ -348,10 +441,12 @@ class PlanValidityCard extends ConsumerWidget {
     final days = _daysLeft(expiry);
     return DashboardCard(
       semanticLabel: strings.mobilePlanValidity,
+      radius: BusinessRadius.metricMobile,
+      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 10,
+        spacing: 8,
         children: [
           DashboardCardHeader(
             glyph: AppGlyphs.clock,
@@ -362,20 +457,26 @@ class PlanValidityCard extends ConsumerWidget {
               children: [
                 TextSpan(
                   text: '$days',
-                  style: DashboardText.figure(context, AppTextStyle.title1),
+                  style: BusinessText.dataBig(context, mobile: true),
                 ),
                 TextSpan(
                   text: ' ${strings.daysUnit}',
-                  style: DashboardText.label(context),
+                  style: BusinessText.dataBigUnit(
+                    context,
+                    mobile: true,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
           ),
           Text(
             strings.validUntil(expiry.show),
-            style: DashboardText.label(context),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            style: BusinessText.dataBody(
+              context,
+              mobile: true,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
         ],
       ),

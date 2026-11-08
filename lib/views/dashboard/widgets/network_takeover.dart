@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
@@ -224,6 +225,155 @@ class VpnTile extends ConsumerWidget {
         color: Colors.transparent,
         onTap: () => _setVpn(ref, !enabled),
         onChanged: (value) => _setVpn(ref, value),
+      ),
+    );
+  }
+}
+
+/// A takeover switch in the design's bottom control bar: icon, title, state
+/// and switch in one inline block, with the same real actions as the tile.
+class NetworkTakeoverBlock extends ConsumerWidget {
+  const NetworkTakeoverBlock(this.kind, {super.key});
+
+  final TakeoverSwitch kind;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final systemProxy = kind == TakeoverSwitch.systemProxy;
+    final value = systemProxy
+        ? ref.watch(networkSettingProvider.select((state) => state.systemProxy))
+        : ref.watch(
+            patchClashConfigProvider.select((state) => state.tun.enable),
+          );
+    final subtitle = systemProxy
+        ? appLocalizations.portValue(
+            ref.watch(
+              patchClashConfigProvider.select((state) => state.mixedPort),
+            ),
+          )
+        : value
+        ? appLocalizations.enabled
+        : appLocalizations.disabled;
+    void change(bool next) => systemProxy
+        ? ref
+              .read(networkSettingProvider.notifier)
+              .update((state) => state.copyWith(systemProxy: next))
+        : ref
+              .read(patchClashConfigProvider.notifier)
+              .update((state) => state.copyWith.tun(enable: next));
+    return _TakeoverBlockBody(
+      glyph: systemProxy ? AppGlyphs.shuffle : AppGlyphs.vpn,
+      title: _titleOf(context, kind),
+      subtitle: subtitle,
+      value: value,
+      onTap: () => change(!value),
+      onChanged: change,
+    );
+  }
+}
+
+class VpnBlock extends ConsumerWidget {
+  const VpnBlock({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final enabled = ref.watch(
+      vpnSettingProvider.select((state) => state.enable),
+    );
+    return _TakeoverBlockBody(
+      glyph: AppGlyphs.vpn,
+      title: 'VPN',
+      subtitle: enabled ? appLocalizations.enabled : appLocalizations.disabled,
+      value: enabled,
+      onTap: () => _setVpn(ref, !enabled),
+      onChanged: (value) => _setVpn(ref, value),
+    );
+  }
+}
+
+class _TakeoverBlockBody extends StatelessWidget {
+  const _TakeoverBlockBody({
+    required this.glyph,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onTap,
+    required this.onChanged,
+  });
+
+  final Glyph glyph;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final VoidCallback onTap;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    return PressRegion(
+      shape: AppShape.md,
+      overlay: PressRegion.hoverOverlay,
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          spacing: 11,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: ShapeDecoration(
+                color: Color.alphaBlend(
+                  colorScheme.primary.withValues(alpha: value ? 0.28 : 0.16),
+                  BusinessPalette.deep,
+                ),
+                shape: AppShape.sm,
+              ),
+              child: Center(
+                child: GlyphIcon(
+                  glyph,
+                  size: 17,
+                  color: value
+                      ? const Color(0xFFAEB9FF)
+                      : colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.toggleTitle(
+                      context,
+                    ).copyWith(color: colorScheme.onSurface),
+                  ),
+                  Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.toggleSub(
+                      context,
+                    ).copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
+            ),
+            DashboardSwitch(
+              value: value,
+              onChanged: onChanged,
+              semanticLabel: title,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -370,6 +370,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "blacklistMode": MessageLookupByLibrary.simpleMessage("ブラックリストモード"),
     "blockQuic": MessageLookupByLibrary.simpleMessage("QUIC をブロック"),
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("ボディ書き換え"),
+    "brandName": MessageLookupByLibrary.simpleMessage("天機クラウド"),
     "brightness": MessageLookupByLibrary.simpleMessage("明度"),
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("現在のノード"),
@@ -434,6 +435,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "checkUpdate": MessageLookupByLibrary.simpleMessage("更新を確認"),
     "checkUpdateError": MessageLookupByLibrary.simpleMessage("すでに最新バージョンです"),
+    "checkingExit": MessageLookupByLibrary.simpleMessage("出口を確認中…"),
     "cipher": MessageLookupByLibrary.simpleMessage("暗号方式"),
     "clearData": MessageLookupByLibrary.simpleMessage("データを消去"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -1546,6 +1548,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remoteDnsResolve": MessageLookupByLibrary.simpleMessage("リモート DNS 解決"),
     "remove": MessageLookupByLibrary.simpleMessage("削除"),
     "rename": MessageLookupByLibrary.simpleMessage("名前を変更"),
+    "renew": MessageLookupByLibrary.simpleMessage("更新する"),
     "replace": MessageLookupByLibrary.simpleMessage("置換"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("すべて置換"),
     "request": MessageLookupByLibrary.simpleMessage("リクエスト"),
