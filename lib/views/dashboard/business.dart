@@ -29,7 +29,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const _businessMaxWidth = 1120.0;
+const _businessMaxWidth = 1280.0;
 
 class BusinessDashboardView extends ConsumerWidget {
   const BusinessDashboardView({super.key, required this.platform});
@@ -39,11 +39,13 @@ class BusinessDashboardView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
+    final mobile = MediaQuery.sizeOf(context).width < 640;
     return BusinessAppearance(
       child: Builder(
         builder: (context) => Scaffold(
           backgroundColor: DashboardColors.of(context).page,
-          title: appLocalizations.dashboard,
+          title: mobile ? null : appLocalizations.dashboard,
+          titleWidget: mobile ? const _MobileBrandTitle() : null,
           actions: [
             const UpdateStatusButton(),
             if (coreLib == null) const CoreStatusButton(),
@@ -89,7 +91,9 @@ class _BusinessBody extends ConsumerWidget {
             ) &&
             ref.watch(authorizedTunEnableProvider) ==
                 TunAuthorizationState.authorized);
-    final gap = cardSpacingOf(context, ViewMode.desktop);
+    final gap = density.isCompact
+        ? 12.0
+        : cardSpacingOf(context, ViewMode.desktop);
     final subInfo = ref.watch(
       currentProfileProvider.select((profile) => profile?.subscriptionInfo),
     );
@@ -100,7 +104,7 @@ class _BusinessBody extends ConsumerWidget {
       16,
       context.contentTopPadding,
       24,
-      24 + MediaQuery.paddingOf(context).bottom,
+      24 + context.bottomInset,
     );
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -113,7 +117,6 @@ class _BusinessBody extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: gap,
             children: [
-              if (!density.isDesktop) const _MobileBrandRow(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -155,41 +158,45 @@ class _BusinessBody extends ConsumerWidget {
                       context,
                     ).copyWith(color: DashboardColors.of(context).warn),
                   ),
-                const RepaintBoundary(child: BusinessLineCard()),
-                if (hasMobileMetrics)
-                  _EqualHeightRow(
-                    spacing: gap,
-                    flexes: const [1, 1],
-                    children: const [
-                      RepaintBoundary(child: RemainingTrafficCard()),
-                      RepaintBoundary(child: PlanValidityCard()),
-                    ],
-                  )
-                else
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final cards = [
-                        const RepaintBoundary(child: TrafficSavingsCard()),
-                        RepaintBoundary(
-                          child: ProfilesCard(
-                            title: context.appLocalizations.subscriptionInfo,
-                          ),
-                        ),
-                      ];
-                      if (constraints.maxWidth / scale < 350) {
-                        return Column(
-                          spacing: gap,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: cards,
-                        );
-                      }
-                      return _EqualHeightRow(
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final cards = hasMobileMetrics
+                        ? const [
+                            RepaintBoundary(child: RemainingTrafficCard()),
+                            RepaintBoundary(child: PlanValidityCard()),
+                          ]
+                        : [
+                            const RepaintBoundary(child: TrafficSavingsCard()),
+                            RepaintBoundary(
+                              child: ProfilesCard(
+                                title:
+                                    context.appLocalizations.subscriptionInfo,
+                              ),
+                            ),
+                          ];
+                    if (constraints.maxWidth / scale < 350) {
+                      return Column(
                         spacing: gap,
-                        flexes: const [1, 1],
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: cards,
                       );
-                    },
+                    }
+                    return _EqualHeightRow(
+                      spacing: gap,
+                      flexes: const [1, 1],
+                      children: cards,
+                    );
+                  },
+                ),
+                const RepaintBoundary(child: BusinessLineCard()),
+                if (hasMobileMetrics) ...[
+                  const RepaintBoundary(child: TrafficSavingsCard()),
+                  RepaintBoundary(
+                    child: ProfilesCard(
+                      title: context.appLocalizations.subscriptionInfo,
+                    ),
                   ),
+                ],
               ],
               if (!density.isDesktop)
                 _TakeoverRow(platform: platform, density: density),
@@ -201,46 +208,25 @@ class _BusinessBody extends ConsumerWidget {
   }
 }
 
-class _MobileBrandRow extends ConsumerWidget {
-  const _MobileBrandRow();
+class _MobileBrandTitle extends StatelessWidget {
+  const _MobileBrandTitle();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final strings = context.appLocalizations;
-    final expire = ref.watch(
-      currentProfileProvider.select(
-        (profile) => profile?.subscriptionInfo?.expire ?? 0,
-      ),
-    );
-    final daysLeft = expire > 0
-        ? math.max(
-            0,
-            DateTime.fromMillisecondsSinceEpoch(
-              expire * 1000,
-            ).difference(DateTime.now()).inDays,
-          )
-        : null;
+  Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 9,
       children: [
         ClipRSuperellipse(
-          borderRadius: BorderRadius.circular(11),
+          borderRadius: AppRadius.sm,
           child: Image.asset(
             'assets/images/icon.png',
-            width: 34,
-            height: 34,
+            width: 30,
+            height: 30,
             fit: BoxFit.cover,
           ),
         ),
-        const SizedBox(width: 10),
         Text('天机云', style: AppTextStyle.headline.of(context, emphasized: true)),
-        const Spacer(),
-        if (daysLeft != null)
-          DashboardChip(
-            label: strings.profileDaysLeft(daysLeft),
-            tone: daysLeft <= 7
-                ? DashboardChipTone.warn
-                : DashboardChipTone.idle,
-          ),
       ],
     );
   }
@@ -264,7 +250,27 @@ class _TakeoverRow extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 8,
-        children: tiles,
+        children: [
+          DashboardCard(
+            semanticLabel: context.appLocalizations.outboundMode,
+            padding: EdgeInsets.symmetric(
+              horizontal: dashboardCardPadding(density).left,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 8,
+              children: [
+                Text(
+                  context.appLocalizations.outboundMode,
+                  style: DashboardText.cardTitle(context),
+                ),
+                const OutboundModeInline(),
+              ],
+            ),
+          ),
+          ...tiles,
+        ],
       );
     }
     return SizedBox(
@@ -312,22 +318,15 @@ class _ControlBar extends StatelessWidget {
             for (final tile in tiles)
               SizedBox(width: tileWidth, height: 56, child: tile),
           ];
-          if (constraints.maxWidth >= 880) {
-            return Row(
-              spacing: 16,
-              children: [
-                label,
-                const IntrinsicWidth(child: OutboundModeInline()),
-                const Spacer(),
-                ...tileWidgets,
-              ],
-            );
-          }
           return Wrap(
             spacing: 16,
             runSpacing: 12,
             crossAxisAlignment: WrapCrossAlignment.center,
-            children: [label, const OutboundModeInline(), ...tileWidgets],
+            children: [
+              label,
+              const IntrinsicWidth(child: OutboundModeInline()),
+              ...tileWidgets,
+            ],
           );
         },
       ),

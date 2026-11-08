@@ -50,6 +50,8 @@ class AppBackground extends StatelessWidget {
             ?.visible ??
         false;
     final visible = enabled && AppBackgroundScope.hasImage(context);
+    final preset = AppBackgroundScope.of(context);
+    final dark = scheme.brightness == Brightness.dark;
     return Stack(
       children: [
         Positioned.fill(
@@ -57,36 +59,59 @@ class AppBackground extends StatelessWidget {
             child: RepaintBoundary(
               child: !visible || inherited
                   ? const SizedBox.shrink()
-                  : Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        if (const [
-                          'planet',
-                          'aurora',
-                          'nebula',
-                          'globe',
-                        ].contains(AppBackgroundScope.of(context)))
-                          Image.asset(
-                            'assets/images/background_${AppBackgroundScope.of(context)}.jpg',
-                            fit: BoxFit.cover,
-                            excludeFromSemantics: true,
-                          )
-                        else
-                          SvgPicture.asset(
-                            'assets/images/background_${AppBackgroundScope.of(context)}.svg',
-                            fit: BoxFit.cover,
-                            excludeFromSemantics: true,
-                          ),
-                        ColoredBox(
-                          color: SurfaceLevel.page
-                              .colorOf(scheme)
-                              .withValues(
-                                alpha: scheme.brightness == Brightness.dark
-                                    ? 0.64
-                                    : 0.86,
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        final planet = preset == 'planet';
+                        final deep = planet && dark;
+                        final wide = constraints.maxWidth >= 640;
+                        return Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (deep) const ColoredBox(color: _planetDeep),
+                            if (const [
+                              'planet',
+                              'aurora',
+                              'nebula',
+                              'globe',
+                            ].contains(preset))
+                              deep
+                                  ? Opacity(
+                                      opacity: 0.55,
+                                      child: Image.asset(
+                                        'assets/images/background_$preset.jpg',
+                                        fit: BoxFit.cover,
+                                        alignment: wide
+                                            ? Alignment.center
+                                            : Alignment.topCenter,
+                                        excludeFromSemantics: true,
+                                      ),
+                                    )
+                                  : Image.asset(
+                                      'assets/images/background_$preset.jpg',
+                                      fit: BoxFit.cover,
+                                      excludeFromSemantics: true,
+                                    )
+                            else
+                              SvgPicture.asset(
+                                'assets/images/background_$preset.svg',
+                                fit: BoxFit.cover,
+                                excludeFromSemantics: true,
                               ),
-                        ),
-                      ],
+                            if (deep)
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: _planetVeil(wide: wide),
+                                ),
+                              )
+                            else
+                              ColoredBox(
+                                color: SurfaceLevel.page
+                                    .colorOf(scheme)
+                                    .withValues(alpha: dark ? 0.64 : 0.86),
+                              ),
+                          ],
+                        );
+                      },
                     ),
             ),
           ),
@@ -96,6 +121,28 @@ class AppBackground extends StatelessWidget {
     );
   }
 }
+
+const _planetDeep = Color(0xFF070B1F);
+
+/// Nearly black on the content side, letting the planet show through the other.
+LinearGradient _planetVeil({required bool wide}) => wide
+    ? const LinearGradient(
+        begin: Alignment(-1, -0.18),
+        end: Alignment(1, 0.18),
+        colors: [
+          Color(0xE0070B1F),
+          Color(0xE0070B1F),
+          Color(0x8C070B1F),
+          Color(0x59070B1F),
+        ],
+        stops: [0, 0.30, 0.65, 1],
+      )
+    : const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Color(0xB8070B1F), Color(0xE6070B1F)],
+        stops: [0, 0.55],
+      );
 
 class _PaintedBackground extends InheritedWidget {
   const _PaintedBackground({required this.visible, required super.child});

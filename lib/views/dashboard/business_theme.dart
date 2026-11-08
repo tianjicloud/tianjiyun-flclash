@@ -83,6 +83,14 @@ class OrbitPainter extends CustomPainter {
           colors: [color.withValues(alpha: 0.25), color.withValues(alpha: 0)],
         ).createShader(Offset.zero & size),
     );
+    canvas.drawCircle(
+      center,
+      radius * 0.99,
+      Paint()
+        ..color = color.withValues(alpha: focused ? 0.6 : 0.3)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5,
+    );
     final ring = Paint()
       ..color = color.withValues(alpha: focused ? 1 : 0.45)
       ..style = PaintingStyle.stroke
@@ -110,11 +118,40 @@ class OrbitPainter extends CustomPainter {
           center: const Alignment(-0.4, -0.5),
           radius: 1,
           colors: [
-            Color.lerp(color, Colors.white, 0.22)!,
+            Color.lerp(color, Colors.white, 0.32)!,
             color,
-            Color.lerp(color, BusinessPalette.deep, 0.5)!,
+            Color.lerp(color, BusinessPalette.deep, 0.55)!,
           ],
         ).createShader(ball),
+    );
+    final specular = center + Offset(-radius * 0.24, -radius * 0.34);
+    final specularRadius = radius * 0.3;
+    canvas.drawCircle(
+      specular,
+      specularRadius,
+      Paint()
+        ..shader =
+            RadialGradient(
+              colors: [
+                Colors.white.withValues(alpha: 0.34),
+                Colors.white.withValues(alpha: 0),
+              ],
+            ).createShader(
+              Rect.fromCircle(center: specular, radius: specularRadius),
+            ),
+    );
+    final satellite = center + Offset(0, -radius * 0.985);
+    final satelliteRadius = math.max(2.0, radius * 0.038);
+    canvas.drawCircle(
+      satellite,
+      satelliteRadius * 2.6,
+      Paint()
+        ..color = Color.lerp(color, Colors.white, 0.7)!.withValues(alpha: 0.22),
+    );
+    canvas.drawCircle(
+      satellite,
+      satelliteRadius,
+      Paint()..color = Color.lerp(color, Colors.white, 0.9)!,
     );
   }
 

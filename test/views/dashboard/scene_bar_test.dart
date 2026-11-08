@@ -1,9 +1,4 @@
-// Throwaway v3 home render harness: lives outside the repo test tree in
-// spirit; copy into test/ to run, remove afterwards. Pumps the real
-// BusinessDashboardView over the planet wallpaper at desktop and phone
-// widths and writes PNGs next to the design mockups.
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,6 +18,7 @@ import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
+import 'package:fl_clash/views/dashboard/widgets/quick_lines.dart';
 import 'package:fl_clash/views/dashboard/widgets/scene_bar.dart';
 
 import '../../helpers/preferences.dart';
@@ -114,6 +110,7 @@ void main() {
       Group(
         name: '总出口',
         type: GroupType.Selector,
+        hidden: false,
         all: [
           Proxy(name: '场景模式', type: 'select'),
           Proxy(name: '节点选择', type: 'select'),
@@ -122,6 +119,7 @@ void main() {
       Group(
         name: '场景模式',
         type: GroupType.Selector,
+        hidden: false,
         all: [
           Proxy(name: '日常', type: 'url-test'),
           Proxy(name: 'AI模式', type: 'select'),
@@ -130,7 +128,9 @@ void main() {
       ),
       Group(
         name: '日常',
-        type: GroupType.URLTest,
+        type: GroupType.Selector,
+        hidden: false,
+        now: '香港01',
         all: [
           Proxy(name: '香港01', type: 'anytls'),
           Proxy(name: '日本01', type: 'anytls'),
@@ -140,6 +140,7 @@ void main() {
       Group(
         name: 'AI模式',
         type: GroupType.Selector,
+        hidden: false,
         all: [
           Proxy(name: 'AI住宅-东京', type: 'anytls'),
           Proxy(name: 'AI住宅-洛杉矶', type: 'anytls'),
@@ -148,6 +149,7 @@ void main() {
       Group(
         name: '观影模式',
         type: GroupType.Selector,
+        hidden: false,
         all: [
           Proxy(name: '观影-日本', type: 'anytls'),
           Proxy(name: '观影-美国', type: 'anytls'),
@@ -156,6 +158,7 @@ void main() {
       Group(
         name: '节点选择',
         type: GroupType.Selector,
+        hidden: false,
         all: [
           Proxy(name: '香港01', type: 'anytls'),
           Proxy(name: '日本01', type: 'anytls'),
@@ -165,6 +168,7 @@ void main() {
       Group(
         name: 'AI服务',
         type: GroupType.Selector,
+        hidden: false,
         all: [
           Proxy(name: 'AI住宅-东京', type: 'anytls'),
           Proxy(name: 'AI住宅-洛杉矶', type: 'anytls'),
@@ -173,6 +177,7 @@ void main() {
       Group(
         name: '流媒体',
         type: GroupType.Selector,
+        hidden: false,
         all: [
           Proxy(name: '观影-日本', type: 'anytls'),
           Proxy(name: '观影-美国', type: 'anytls'),
@@ -181,11 +186,13 @@ void main() {
       Group(
         name: '🏠 家宽',
         type: GroupType.Selector,
+        hidden: false,
         all: [Proxy(name: '🇯🇵 东京家宽 · 01', type: 'URLTest')],
       ),
       Group(
         name: '🇯🇵 东京家宽 · 01',
         type: GroupType.URLTest,
+        hidden: false,
         all: [Proxy(name: 'home-a', type: 'ss')],
       ),
     ];
@@ -209,15 +216,13 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: TestApp(
+        child: const TestApp(
           themeMode: ThemeMode.dark,
-          locale: const Locale('zh', 'CN'),
+          locale: Locale('zh', 'CN'),
           child: AppBackgroundScope(
             preset: 'planet',
             child: AppBackground(
-              child: const BusinessDashboardView(
-                platform: SupportPlatform.Android,
-              ),
+              child: BusinessDashboardView(platform: SupportPlatform.Android),
             ),
           ),
         ),
@@ -228,5 +233,8 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.byType(SceneBar), findsOneWidget);
     expect(find.byType(OutboundModeInline), findsOneWidget);
+    expect(find.byType(QuickLines), findsOneWidget);
+    expect(find.text('常用线路'), findsOneWidget);
+    expect(find.textContaining('香港01', findRichText: true), findsWidgets);
   });
 }

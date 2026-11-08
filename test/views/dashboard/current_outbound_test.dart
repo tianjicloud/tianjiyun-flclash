@@ -638,7 +638,7 @@ void main() {
           .whereType<OrbitPainter>()
           .single;
       expect(painter().color, BusinessPalette.blue);
-      expect(tester.widget<Text>(find.text(_ip)).maxLines, isNull);
+      expect(tester.widget<Text>(find.text(_ip)).maxLines, 1);
       expect(
         tester.getRect(find.text(_ip)).bottom,
         lessThanOrEqualTo(tester.getRect(find.text('Residential')).top),
@@ -658,6 +658,29 @@ void main() {
       await tester.pumpAndSettle();
       expect(action.requests, [false, true]);
       expect(painter().color, BusinessPalette.blue);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('mobile business keeps the real run time beside the speeds', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      container = containerWith();
+      container.read(runTimeProvider.notifier).value = 7200000;
+      await pumpCard(tester, business: true);
+      final strings = tester
+          .element(find.byType(CurrentOutboundCard))
+          .appLocalizations;
+      expect(find.text(strings.runTime), findsOneWidget);
+      expect(find.text(getTimeText(7200000)), findsOneWidget);
+
+      container.read(runTimeProvider.notifier).value = null;
+      await tester.pump();
+      expect(find.text(strings.runTime), findsOneWidget);
+      expect(find.text(getTimeText(7200000)), findsNothing);
+      expect(find.text('—'), findsWidgets);
       expect(tester.takeException(), isNull);
     });
 

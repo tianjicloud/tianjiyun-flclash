@@ -119,24 +119,42 @@ class QuickLines extends ConsumerWidget {
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      spacing: 10,
+      spacing: density.isCompact ? 8 : 10,
       children: [
         header,
-        if (density.isDesktop)
-          Row(
-            spacing: 12,
-            children: [for (final card in cards) Expanded(child: card)],
-          )
-        else
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 2.4,
-            children: cards,
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            if (density.isDesktop) {
+              return Row(
+                spacing: 12,
+                children: [for (final card in cards) Expanded(child: card)],
+              );
+            }
+            final scale = MediaQuery.textScalerOf(context).scale(1);
+            if (constraints.maxWidth / scale < 340) {
+              return Column(spacing: 10, children: cards);
+            }
+            return Column(
+              spacing: 10,
+              children: [
+                for (var index = 0; index < cards.length; index += 2)
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: 10,
+                      children: [
+                        Expanded(child: cards[index]),
+                        if (index + 1 < cards.length)
+                          Expanded(child: cards[index + 1])
+                        else
+                          const Spacer(),
+                      ],
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
       ],
     );
   }
@@ -147,13 +165,20 @@ class QuickLines extends ConsumerWidget {
     final byName = {for (final group in groups) group.name: group};
     final delays = ref.watch(delaysAtLastTestBatchProvider);
     final testUrl = ref.watch(realTestUrlProvider());
+    Group? selectorNamed(String? name) {
+      final group = name == null ? null : byName[name];
+      return group != null && group.type == GroupType.Selector ? group : null;
+    }
+
+    final scene = ref.watch(scenePolicyProvider).current;
     Group? host;
-    for (final candidate in [sceneGroupName, sceneRootGroupName]) {
-      final group = byName[candidate];
-      if (group != null && group.type == GroupType.Selector) {
-        host = group;
-        break;
-      }
+    for (final candidate in [
+      scene?.groupName,
+      sceneGroupName,
+      sceneRootGroupName,
+    ]) {
+      host = selectorNamed(candidate);
+      if (host != null) break;
     }
     host ??= groups
         .where((group) => group.type == GroupType.Selector)
@@ -200,6 +225,7 @@ class _QuickLineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
+    final compact = DashboardDensityScope.of(context).isCompact;
     final delay = line.delay;
     final delayColor = colorScheme.delayColor(delay);
     return DashboardCard(
@@ -208,7 +234,7 @@ class _QuickLineCard extends StatelessWidget {
       side: line.current
           ? const BorderSide(color: BusinessPalette.accent, width: 1.5)
           : BorderSide.none,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: compact ? 8 : 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -218,11 +244,14 @@ class _QuickLineCard extends StatelessWidget {
             spacing: 8,
             children: [
               Expanded(
-                child: Text(
-                  line.displayName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: DashboardText.rowTitle(context),
+                child: Tooltip(
+                  message: line.name,
+                  child: EmojiText(
+                    line.displayName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: DashboardText.rowTitle(context),
+                  ),
                 ),
               ),
               if (delay != null && delay >= 0)

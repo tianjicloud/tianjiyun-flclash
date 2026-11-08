@@ -299,7 +299,7 @@ class RemainingTrafficCard extends ConsumerWidget {
     final strings = context.appLocalizations;
     final usage = _usageOf(ref.watch(currentProfileProvider));
     if (usage == null) return const SizedBox.shrink();
-    final remaining = usage.total - usage.used;
+    final remaining = math.max(0, usage.total - usage.used);
     final show = remaining.traffic;
     return DashboardCard(
       semanticLabel: strings.mobileRemainingTraffic,
@@ -320,7 +320,7 @@ class RemainingTrafficCard extends ConsumerWidget {
                   style: DashboardText.figure(context, AppTextStyle.title1),
                 ),
                 TextSpan(
-                  text: ' / ${dashboardTraffic(usage.total)}',
+                  text: ' ${show.unit} / ${dashboardTraffic(usage.total)}',
                   style: DashboardText.label(context),
                 ),
               ],
@@ -371,7 +371,6 @@ class PlanValidityCard extends ConsumerWidget {
               ],
             ),
           ),
-          _MetricBar(fraction: days / 365),
           Text(
             strings.validUntil(expiry.show),
             style: DashboardText.label(context),
@@ -636,6 +635,13 @@ class BusinessSubscriptionStatus extends ConsumerWidget {
           runSpacing: 8,
           alignment: WrapAlignment.end,
           children: [
+            if (!DashboardDensityScope.of(context).isDesktop && expiry != null)
+              DashboardChip(
+                label: strings.profileDaysLeft(_daysLeft(expiry)),
+                tone: _daysLeft(expiry) <= 7
+                    ? DashboardChipTone.warn
+                    : DashboardChipTone.idle,
+              ),
             if (updated != null)
               Text(
                 strings.profileUpdatedAt(

@@ -71,8 +71,13 @@ class DashboardCard extends StatelessWidget {
         : overWallpaper
         ? const BorderSide(color: Color(0x298C96FF))
         : BorderSide.none;
+    final cardColor = DashboardColors.of(context).card;
     final content = Padding(
-      padding: padding ?? dashboardCardPadding(density),
+      padding:
+          padding ??
+          (business && density.isCompact
+              ? const EdgeInsets.symmetric(horizontal: 18, vertical: 12)
+              : dashboardCardPadding(density)),
       child: child,
     );
     final onTap = this.onTap;
@@ -80,8 +85,8 @@ class DashboardCard extends StatelessWidget {
       clipBehavior: clipBehavior,
       decoration: ShapeDecoration(
         color: overWallpaper
-            ? DashboardColors.of(context).card.withValues(alpha: 0.62)
-            : DashboardColors.of(context).card,
+            ? cardColor.withValues(alpha: density.isDesktop ? 0.62 : 0.66)
+            : cardColor,
         shape: shape,
         shadows: business ? const [] : DashboardShadows.e1(context),
       ),

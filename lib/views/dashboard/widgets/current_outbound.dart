@@ -108,16 +108,8 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
       final details = Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: density.isDesktop ? 10 : 20,
+        spacing: density.isDesktop ? 10 : 14,
         children: [
-          if (!density.isDesktop)
-            DashboardCardHeader(
-              glyph: AppGlyphs.status,
-              title: appLocalizations.status,
-              leading: [
-                DashboardChip(label: chipLabel, tone: chipTone, dot: isStart),
-              ],
-            ),
           _ExitRow(
             info: ipInfo,
             failed: failed,
@@ -127,7 +119,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
             quality: quality,
             active: isStart,
             metrics: metrics,
-            large: true,
+            large: density.isDesktop && !density.isCompact,
           ),
           if (showSelection) const SelectionNotice(),
           if (density.isDesktop)
@@ -153,29 +145,26 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                 ),
               ],
             )
-          else ...[
-            _Cells(
-              quality: quality,
-              loading: loading,
-              active: isStart && !suspended,
-              gap: metrics.cellGap,
-            ),
+          else
             _BusinessMetrics(
               active: isStart && !suspended,
               exit: phase == ProbePhase.fresh
                   ? entry.stamp?.hits.firstOrNull?.exit
                   : null,
+              showRunTime: true,
             ),
-          ],
         ],
       );
       final toggle = _StartToggle(
-        size: density.isDesktop ? 140 : 208,
+        size: density.isDesktop ? (density.isCompact ? 112 : 140) : 152,
         enabled: hasProfile,
         running: isStart,
         suspended: suspended,
       );
       return DashboardCard(
+        padding: density.isDesktop
+            ? null
+            : const EdgeInsetsDirectional.fromSTEB(20, 14, 16, 14),
         semanticLabel: rootAccess
             ? '${appLocalizations.status} ${appLocalizations.root}'
             : appLocalizations.status,
@@ -190,7 +179,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                   toggle,
                 ],
               )
-            : Column(spacing: 16, children: [toggle, details]),
+            : Column(spacing: 12, children: [toggle, details]),
       );
     }
     return TweenAnimationBuilder<double>(
@@ -422,7 +411,13 @@ class _ExitRow extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final style = DashboardText.figure(
       context,
-      BusinessTheme.of(context) ? AppTextStyle.display : metrics.ip,
+      BusinessTheme.of(context)
+          ? (large
+                ? AppTextStyle.display
+                : DashboardDensityScope.of(context).isDesktop
+                ? AppTextStyle.title1
+                : metrics.ip)
+          : metrics.ip,
       color: active ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
     ).copyWith(letterSpacing: 0);
     final info = this.info;
@@ -508,9 +503,6 @@ class _IpText extends ConsumerWidget {
     final hideIp = ref.watch(
       appSettingProvider.select((state) => state.hideIp),
     );
-    if (BusinessTheme.of(context)) {
-      return Text(hideIp ? _ipMask : ip, style: style);
-    }
     return DashboardFitText(hideIp ? _ipMask : ip, style: style);
   }
 }
@@ -1181,10 +1173,15 @@ class _MorphClipper extends CustomClipper<Path> {
 }
 
 class _BusinessMetrics extends ConsumerWidget {
-  const _BusinessMetrics({required this.active, required this.exit});
+  const _BusinessMetrics({
+    required this.active,
+    required this.exit,
+    this.showRunTime = false,
+  });
 
   final bool active;
   final String? exit;
+  final bool showRunTime;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1199,6 +1196,11 @@ class _BusinessMetrics extends ConsumerWidget {
       spacing: 28,
       runSpacing: 12,
       children: [
+        if (showRunTime)
+          _Cell(
+            label: strings.runTime,
+            value: active ? const _RunTimeValue() : const _Placeholder(),
+          ),
         if (active && delay != null)
           _Cell(
             label: strings.delay,

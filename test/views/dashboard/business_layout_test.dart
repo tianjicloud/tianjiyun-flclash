@@ -13,6 +13,9 @@ import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
+import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
+import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
+import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
 import 'package:fl_clash/views/about.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:flutter/widgets.dart';
@@ -125,6 +128,75 @@ void main() {
     container.dispose();
     stats.dispose();
   });
+
+  for (final brightness in Brightness.values) {
+    for (final (width, scale) in [
+      (1000.0, 1.0),
+      (1200.0, 1.2),
+      (390.0, 1.0),
+      (390.0, 1.6),
+    ]) {
+      testWidgets(
+        'subscribed English home fits $brightness $width at scale $scale',
+        (tester) async {
+          tester.view.physicalSize = Size(width, 900);
+          tester.view.devicePixelRatio = 1;
+          tester.platformDispatcher.textScaleFactorTestValue = scale;
+          addTearDown(tester.view.reset);
+          addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+          container.read(viewSizeProvider.notifier).value = Size(width, 900);
+          final profile = container.read(currentProfileProvider)!;
+          container
+              .read(profilesProvider.notifier)
+              .put(
+                profile.copyWith(
+                  subscriptionInfo: SubscriptionInfo(
+                    upload: 0,
+                    download: 50 * 1024 * 1024 * 1024,
+                    total: 100 * 1024 * 1024 * 1024,
+                    expire:
+                        DateTime.now()
+                            .add(const Duration(days: 30))
+                            .millisecondsSinceEpoch ~/
+                        1000,
+                  ),
+                ),
+              );
+          await tester.pumpWidget(
+            UncontrolledProviderScope(
+              container: container,
+              child: TestApp(
+                theme: ThemeData(
+                  colorScheme: seededColorScheme(
+                    seedColor: BusinessPalette.blue,
+                    brightness: brightness,
+                  ),
+                ),
+                locale: const Locale('en'),
+                child: const BusinessDashboardView(
+                  platform: SupportPlatform.Windows,
+                ),
+              ),
+            ),
+          );
+          await tester.pump();
+          expect(find.byType(TrafficSavingsCard), findsOneWidget);
+          expect(find.byType(OutboundModeInline), findsOneWidget);
+          if (width == 390) {
+            expect(find.byType(RemainingTrafficCard), findsOneWidget);
+            expect(find.byType(PlanValidityCard), findsOneWidget);
+            expect(
+              tester.getTopLeft(find.byType(RemainingTrafficCard)).dy,
+              lessThan(tester.getTopLeft(find.byType(BusinessLineCard)).dy),
+            );
+          }
+          expect(tester.takeException(), isNull);
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.pump(const Duration(seconds: 5));
+        },
+      );
+    }
+  }
 
   for (final about in [false, true]) {
     testWidgets(

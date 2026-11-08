@@ -101,43 +101,84 @@ class OutboundModeInline extends ConsumerWidget {
       patchClashConfigProvider.select((state) => state.mode),
     );
     final style = AppTextStyle.subheadline.of(context, emphasized: true);
+    final stretch = !DashboardDensityScope.of(context).isDesktop;
     return DashboardConnectedGroup(
       children: [
         for (final (index, item) in Mode.values.indexed)
-          DashboardConnectedButton(
-            selected: item == mode,
-            first: index == 0,
-            last: index == Mode.values.length - 1,
-            outer: BusinessPalette.buttonRadius,
-            inner: 10,
-            background: DashboardColors.of(context).tone,
-            semanticLabel: item.label,
-            onTap: () => _changeMode(ref, item),
-            builder: (foreground) => SizedBox(
-              height: 40 * DashboardDensityScope.scaleOf(context),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 6,
-                    children: [
-                      GlyphIcon(_glyphOf(item), size: 16, color: foreground),
-                      Flexible(
-                        child: Text(
-                          item.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: style.copyWith(color: foreground),
-                        ),
-                      ),
-                    ],
-                  ),
+          if (stretch)
+            Expanded(
+              child: DashboardConnectedButton(
+                selected: item == mode,
+                first: index == 0,
+                last: index == Mode.values.length - 1,
+                outer: BusinessPalette.buttonRadius,
+                inner: 10,
+                background: DashboardColors.of(context).tone,
+                semanticLabel: item.label,
+                onTap: () => _changeMode(ref, item),
+                builder: (foreground) => _ModeButtonBody(
+                  item: item,
+                  foreground: foreground,
+                  style: style,
                 ),
               ),
+            )
+          else
+            DashboardConnectedButton(
+              selected: item == mode,
+              first: index == 0,
+              last: index == Mode.values.length - 1,
+              outer: BusinessPalette.buttonRadius,
+              inner: 10,
+              background: DashboardColors.of(context).tone,
+              semanticLabel: item.label,
+              onTap: () => _changeMode(ref, item),
+              builder: (foreground) => _ModeButtonBody(
+                item: item,
+                foreground: foreground,
+                style: style,
+              ),
             ),
-          ),
       ],
+    );
+  }
+}
+
+class _ModeButtonBody extends StatelessWidget {
+  const _ModeButtonBody({
+    required this.item,
+    required this.foreground,
+    required this.style,
+  });
+
+  final Mode item;
+  final Color foreground;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40 * DashboardDensityScope.scaleOf(context),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 6,
+            children: [
+              GlyphIcon(_glyphOf(item), size: 16, color: foreground),
+              Flexible(
+                child: Text(
+                  item.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: style.copyWith(color: foreground),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

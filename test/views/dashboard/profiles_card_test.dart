@@ -143,6 +143,53 @@ void main() {
 
   Finder label(String text) => find.text(text, findRichText: true);
 
+  for (final (used, expected) in [
+    (1023 * _gib, '1 GB / 1 TB'),
+    (1025 * _gib, '0 B / 1 TB'),
+  ]) {
+    testWidgets('remaining traffic keeps units and clamps exhaustion: $used', (
+      tester,
+    ) async {
+      setUpProfiles([
+        _profile(
+          1,
+          info: SubscriptionInfo(
+            upload: 0,
+            download: used,
+            total: 1024 * _gib,
+            expire: 0,
+          ),
+        ),
+      ]);
+      await pumpCard(tester, card: const RemainingTrafficCard());
+      expect(label(expected), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('plan validity shows days and date without a made-up ratio', (
+    tester,
+  ) async {
+    final expiry = DateTime.now().add(const Duration(days: 30, hours: 1));
+    setUpProfiles([
+      _profile(
+        1,
+        info: SubscriptionInfo(
+          upload: 0,
+          download: _gib,
+          total: 100 * _gib,
+          expire: expiry.millisecondsSinceEpoch ~/ 1000,
+        ),
+      ),
+    ]);
+    await pumpCard(tester, card: const PlanValidityCard());
+    expect(find.textContaining('30'), findsWidgets);
+    expect(find.textContaining('days', findRichText: true), findsWidgets);
+    expect(find.byType(FractionallySizedBox), findsNothing);
+    expect(find.textContaining('%', findRichText: true), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('offers to add a profile without profiles', (tester) async {
     setUpProfiles([]);
     await pumpCard(tester);

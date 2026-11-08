@@ -12,7 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'card.dart';
-import 'outbound_mode.dart';
 
 String _sceneLabel(BuildContext context, SceneKind scene) => switch (scene) {
   SceneKind.daily => context.appLocalizations.sceneDaily,
@@ -56,7 +55,7 @@ class SceneBar extends ConsumerWidget {
       semanticLabel: context.appLocalizations.scene,
       padding: EdgeInsets.symmetric(
         horizontal: dashboardCardPadding(density).left,
-        vertical: 10,
+        vertical: density.isCompact ? 6 : 10,
       ),
       child: density.isDesktop
           ? Row(
@@ -74,7 +73,6 @@ class SceneBar extends ConsumerWidget {
                     style: DashboardText.label(context),
                   ),
                 ),
-                const OutboundModeInline(),
               ],
             )
           : Column(
@@ -89,7 +87,6 @@ class SceneBar extends ConsumerWidget {
                       context,
                     ).copyWith(color: DashboardColors.of(context).warn),
                   ),
-                const OutboundModeInline(),
               ],
             ),
     );
