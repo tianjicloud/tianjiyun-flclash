@@ -161,14 +161,14 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           ? ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight:
-                    (density.isCompact ? 150 : 217) + (showSelection ? 84 : 0),
+                    (density.isCompact ? 132 : 180) + (showSelection ? 84 : 0),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(child: details),
                   _HeroSpeeds(active: active, vertical: true),
-                  const SizedBox(width: 26),
+                  const SizedBox(width: 12),
                   Center(child: toggle),
                 ],
               ),
@@ -557,10 +557,10 @@ class _BusinessHeroDetails extends ConsumerWidget {
         ip,
         SizedBox(height: compact ? 8 : 12),
         chips,
-        SizedBox(height: compact ? 12 : 22),
+        SizedBox(height: compact ? 10 : 14),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: compact ? 20 : 40,
+          spacing: compact ? 16 : 24,
           children: [
             Expanded(
               child: _Cell(
