@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif; }
+  body { width:1568px; height:1024px; overflow:hidden; background:#070B1F; color:#EDF0FF; }
+  .bg { position:fixed; inset:0; background:url('planet.jpg') center/cover; opacity:.55; }
+  .bg::after { content:''; position:absolute; inset:0; background:linear-gradient(100deg, rgba(7,11,31,.88) 30%, rgba(7,11,31,.55) 65%, rgba(7,11,31,.35)); }
+  .app { position:relative; display:flex; height:100%; }
+  /* sidebar */
+  .side { width:216px; padding:26px 16px; display:flex; flex-direction:column; gap:6px;
+         background:rgba(10,15,43,.55); backdrop-filter:blur(18px); border-right:1px solid rgba(140,150,255,.12); }
+  .brand { display:flex; align-items:center; gap:11px; padding:2px 10px 22px; }
+  .mark { width:34px; height:34px; border-radius:11px; background:linear-gradient(135deg,#3D5AFE,#7C4DFF);
+          display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 6px 18px rgba(80,90,255,.45); }
+  .brand b { font-size:17px; letter-spacing:.5px; }
+  .brand span { display:block; font-size:11px; color:#98A2C8; margin-top:2px; letter-spacing:0; }
+  .nav { display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:13px; font-size:14.5px; color:#B9C0E4; }
+  .nav.on { background:linear-gradient(90deg, rgba(61,90,254,.32), rgba(124,77,255,.18)); color:#fff; box-shadow:inset 2.5px 0 0 #6A5CFF; }
+  .nav i { font-style:normal; width:20px; text-align:center; font-size:15px; }
+  .side .sp { flex:1; }
+  .acct { background:rgba(255,255,255,.05); border:1px solid rgba(140,150,255,.14); border-radius:15px; padding:12px; }
+  .acct b { font-size:13px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .acct span { font-size:11.5px; color:#8C9BE0; }
+  .acct .bar { height:5px; border-radius:3px; background:rgba(255,255,255,.12); margin-top:9px; }
+  .acct .bar i { display:block; height:100%; width:5%; border-radius:3px; background:linear-gradient(90deg,#3D5AFE,#7C4DFF); }
+  /* main */
+  .main { flex:1; padding:26px 34px; display:flex; flex-direction:column; gap:16px; }
+  .top { display:flex; align-items:center; }
+  .top h1 { font-size:26px; font-weight:700; letter-spacing:.5px; }
+  .top .right { margin-left:auto; display:flex; align-items:center; gap:12px; color:#98A2C8; font-size:12.5px; }
+  .ok { width:34px; height:34px; border-radius:50%; background:#2ED3A3; color:#06281D; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:16px; box-shadow:0 0 0 5px rgba(46,211,163,.18); }
+  .pill { background:rgba(255,255,255,.07); border:1px solid rgba(140,150,255,.16); padding:5px 12px; border-radius:999px; }
+  .glass { background:rgba(16,22,54,.62); border:1px solid rgba(140,150,255,.16); border-radius:26px; backdrop-filter:blur(16px);
+           box-shadow:0 18px 40px rgba(2,4,18,.45); }
+  /* hero */
+  .hero { position:relative; overflow:hidden; padding:30px 34px; display:flex; align-items:center; gap:20px; }
+  .hero::before { content:''; position:absolute; inset:0; background:url('planet.jpg') right -140px top -260px/880px auto no-repeat; opacity:.5; }
+  .hero::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(13,18,48,.88) 45%, rgba(13,18,48,.15)); }
+  .hero > * { position:relative; z-index:1; }
+  .status { display:flex; align-items:center; gap:8px; color:#9FB0FF; font-size:13px; }
+  .dot { width:8px; height:8px; border-radius:50%; background:#5B6BAA; }
+  .ip { font-size:52px; font-weight:800; letter-spacing:.5px; margin:10px 0 12px; font-variant-numeric:tabular-nums; }
+  .chips { display:flex; gap:8px; }
+  .chip { font-size:12.5px; padding:5px 12px; border-radius:999px; background:rgba(61,90,254,.22); color:#B9C8FF; border:1px solid rgba(110,130,255,.35); }
+  .chip.green { background:rgba(46,211,163,.14); color:#5FEBC4; border-color:rgba(46,211,163,.35); }
+  .chip.gray { background:rgba(255,255,255,.07); color:#C6CDF2; border-color:rgba(255,255,255,.12); }
+  .meta { display:flex; gap:44px; margin-top:22px; }
+  .meta small { display:block; color:#98A2C8; font-size:12px; margin-bottom:5px; }
+  .meta b { font-size:15px; font-weight:600; }
+  .hero .mid { flex:1; }
+  .speeds { display:flex; gap:36px; align-items:flex-end; padding-bottom:6px; }
+  .speeds small { display:block; color:#98A2C8; font-size:12px; margin-bottom:5px; }
+  .speeds b { font-size:15px; }
+  /* orbit button */
+  .orbit { width:172px; height:172px; position:relative; flex:none; margin-right:8px; }
+  .orbit .halo { position:absolute; inset:-16px; border-radius:50%; border:1.5px solid rgba(106,92,255,.35);
+                 animation:none; box-shadow:0 0 44px rgba(90,100,255,.25) inset; }
+  .orbit .ticks { position:absolute; inset:0; border-radius:50%; border:2px dashed rgba(150,160,255,.4); }
+  .orbit .ball { position:absolute; inset:19px; border-radius:50%;
+                 background:radial-gradient(circle at 34% 30%, #8FA2FF, #3D5AFE 52%, #4527A0 100%);
+                 box-shadow:0 14px 34px rgba(50,70,255,.5), inset 0 -10px 22px rgba(20,10,80,.55), inset 0 8px 16px rgba(255,255,255,.35);
+                 display:flex; align-items:center; justify-content:center; font-size:44px; color:#fff; }
+  .orbit .sat { position:absolute; width:11px; height:11px; border-radius:50%; background:#B9C8FF; top:6px; left:50%;
+                box-shadow:0 0 10px #8FA2FF; }
+  .orbit p { position:absolute; width:100%; text-align:center; bottom:-30px; font-size:13px; color:#C6CDF2; }
+  /* scene row */
+  .scene { display:flex; align-items:center; gap:14px; padding:13px 18px; border-radius:20px; }
+  .scene .lab { color:#98A2C8; font-size:13px; display:flex; gap:8px; align-items:center; }
+  .seg { display:flex; background:rgba(255,255,255,.06); border-radius:999px; padding:4px; gap:4px; }
+  .seg b { font-weight:600; font-size:13.5px; padding:7px 22px; border-radius:999px; color:#B9C0E4; }
+  .seg b.on { background:linear-gradient(90deg,#3D5AFE,#6A5CFF); color:#fff; box-shadow:0 6px 16px rgba(70,90,255,.4); }
+  .scene .note { margin-left:auto; font-size:12.5px; color:#7E89B8; }
+  /* quick lines */
+  .qlab { display:flex; align-items:baseline; margin:2px 2px -4px; }
+  .qlab h3 { font-size:16.5px; } .qlab a { margin-left:auto; color:#8C9BE0; font-size:13px; }
+  .qrow { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .q { padding:16px 18px; border-radius:20px; }
+  .q .f { font-size:21px; }
+  .q b { font-size:15.5px; margin-left:7px; }
+  .q .ms { float:right; font-size:19px; font-weight:800; color:#2ED3A3; } .q .ms small { font-size:11px; color:#98A2C8; font-weight:400; }
+  .q .ms.warn { color:#FFC24D; }
+  .q p { color:#98A2C8; font-size:12.5px; margin-top:9px; }
+  .q.sel { border-color:rgba(106,92,255,.65); box-shadow:0 0 0 1px rgba(106,92,255,.5), 0 14px 30px rgba(30,30,120,.35); }
+  /* data row */
+  .drow { display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:14px; flex:1; }
+  .dcard { padding:20px 22px; border-radius:24px; display:flex; flex-direction:column; }
+  .dcard h4 { font-size:14px; color:#C6CDF2; display:flex; align-items:center; gap:8px; font-weight:600; }
+  .tag { margin-left:auto; font-size:11.5px; color:#5FEBC4; background:rgba(46,211,163,.13); padding:3px 10px; border-radius:999px; }
+  .big { font-size:30px; font-weight:800; margin:14px 0 6px; }
+  .dcard p { color:#98A2C8; font-size:12.5px; line-height:1.65; }
+  .btns { margin-top:auto; display:flex; gap:14px; align-items:center; }
+  .btn { background:linear-gradient(90deg,#3D5AFE,#6A5CFF); color:#fff; border-radius:999px; padding:9px 22px; font-size:13.5px; font-weight:600; box-shadow:0 8px 20px rgba(70,90,255,.35); }
+  .link { color:#8FA2FF; font-size:13.5px; }
+  .donut { display:flex; align-items:center; gap:18px; margin-top:12px; }
+  .ring { width:104px; height:104px; border-radius:50%; flex:none;
+          background:conic-gradient(#3D5AFE 0 66%, #34E0B0 66% 67.3%, #FFC24D 67.3% 100%);
+          display:flex; align-items:center; justify-content:center; }
+  .ring i { width:80px; height:80px; border-radius:50%; background:#101736; display:flex; flex-direction:column; align-items:center; justify-content:center; font-style:normal; }
+  .ring i small { color:#98A2C8; font-size:10.5px; } .ring i b { font-size:15px; margin-top:2px; }
+  .leg { font-size:12.5px; color:#B9C0E4; display:flex; flex-direction:column; gap:9px; }
+  .leg i { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:8px; font-style:normal; }
+  .leg b { float:right; color:#EDF0FF; margin-left:22px; font-variant-numeric:tabular-nums; }
+  .leg div { display:flex; align-items:center; } .leg div span { flex:1; }
+  .prog { height:7px; border-radius:4px; background:rgba(255,255,255,.1); margin:14px 0 8px; }
+  .prog i { display:block; height:100%; width:5%; border-radius:4px; background:linear-gradient(90deg,#3D5AFE,#2ED3A3); }
+  /* bottom control bar */
+  .ctl { display:flex; align-items:center; gap:16px; padding:12px 16px; border-radius:22px; }
+  .ctl .lab { color:#98A2C8; font-size:13px; }
+  .tgl { display:flex; align-items:center; gap:11px; background:rgba(255,255,255,.05); border:1px solid rgba(140,150,255,.13); padding:9px 14px; border-radius:16px; }
+  .tgl b { font-size:13.5px; display:block; } .tgl small { color:#98A2C8; font-size:11px; }
+  .sw { width:46px; height:27px; border-radius:999px; background:linear-gradient(90deg,#3D5AFE,#6A5CFF); position:relative; flex:none; }
+  .sw::after { content:''; position:absolute; width:21px; height:21px; border-radius:50%; background:#fff; top:3px; right:3px; box-shadow:0 2px 6px rgba(0,0,0,.4); }
+  .sw.off { background:rgba(255,255,255,.16); } .sw.off::after { right:auto; left:3px; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="mark">☁</div><div><b>天机云</b><span>TIANJI CLOUD</span></div></div>
+    <div class="nav on"><i>▦</i>仪表盘</div>
+    <div class="nav"><i>◎</i>代理</div>
+    <div class="nav"><i>▤</i>配置</div>
+    <div class="nav"><i>◷</i>请求</div>
+    <div class="nav"><i>⚒</i>工具</div>
+    <div class="sp"></div>
+    <div class="acct"><b>天机 TIANJI(1)</b><span>剩余 28 天 · 已用 5%</span><div class="bar"><i></i></div></div>
+  </aside>
+  <main class="main">
+    <div class="top"><h1>仪表盘</h1><div class="right"><span>更新于 4 小时前</span><span class="pill">未运行</span><div class="ok">✓</div></div></div>
+
+    <section class="hero glass">
+      <div class="mid">
+        <div class="status"><span class="dot"></span>未连接 · 正在确认出口…</div>
+        <div class="ip">126.51.252.247</div>
+        <div class="chips"><span class="chip gray">JP 日本</span><span class="chip">住宅</span><span class="chip green">质量 优</span></div>
+        <div class="meta">
+          <div><small>组织</small><b>SOFTBANK Corp.</b></div>
+          <div><small>运行时长</small><b>—</b></div>
+          <div><small>当前出口</small><b>东京家宽 · 04</b></div>
+        </div>
+      </div>
+      <div class="speeds">
+        <div><small>↓ 下载</small><b>—</b></div>
+        <div><small>↑ 上传</small><b>—</b></div>
+      </div>
+      <div class="orbit"><div class="halo"></div><div class="ticks"></div><div class="ball">▶</div><div class="sat"></div><p>启动</p></div>
+    </section>
+
+    <section class="scene glass">
+      <span class="lab">✦ 场景</span>
+      <div class="seg"><b class="on">日常</b><b>AI</b><b>观影</b></div>
+      <span class="note">大流量自动绕行大带宽节点 · 大陆流量本地直连</span>
+      <div class="seg"><b class="on">规则</b><b>全局</b><b>直连</b></div>
+    </section>
+
+    <div class="qlab"><h3>常用线路</h3><a>全部线路 ›</a></div>
+    <div class="qrow">
+      <div class="q glass"><span class="f">🇭🇰</span><b>香港 · 家宽</b><span class="ms">37<small> ms</small></span><p>ANYTLS · 倍率 1.50x</p></div>
+      <div class="q glass"><span class="f">🇸🇬</span><b>新加坡</b><span class="ms">85<small> ms</small></span><p>ANYTLS · 倍率 1.00x</p></div>
+      <div class="q glass sel"><span class="f">🇹🇼</span><b>台湾 · 家宽</b><span class="ms">55<small> ms</small></span><p>ANYTLS · 倍率 1.50x · 当前</p></div>
+      <div class="q glass"><span class="f">🇺🇸</span><b>美国 · 洛杉矶</b><span class="ms warn">222<small> ms</small></span><p>ANYTLS · 倍率 1.00x</p></div>
+    </div>
+
+    <div class="drow">
+      <div class="dcard glass">
+        <h4>🛡 家宽线路 <span class="tag">已选择</span></h4>
+        <div class="big">🇯🇵 东京家宽 · 04</div>
+        <p>连接后，需要代理的分组都会自动跟随这条线路。大流量走普通大带宽节点，不占用家宽流量。</p>
+        <div class="btns"><span class="btn">更换线路</span><span class="link">按订阅分流</span></div>
+      </div>
+      <div class="dcard glass">
+        <h4>◔ 流量统计</h4>
+        <div class="donut">
+          <div class="ring"><i><small>本月节省</small><b>150.6 KB</b></i></div>
+          <div class="leg">
+            <div><span><i style="background:#3D5AFE"></i>VPN</span><b>66.0%</b></div>
+            <div><span><i style="background:#34E0B0"></i>内地直连</span><b>1.3%</b></div>
+            <div><span><i style="background:#FFC24D"></i>其他直连</span><b>32.8%</b></div>
+          </div>
+        </div>
+        <p style="margin-top:auto">仅本设备本月统计，包含应用捕获的流量。</p>
+      </div>
+      <div class="dcard glass">
+        <h4>▤ 订阅信息</h4>
+        <div class="big">剩余 28 天</div>
+        <p>2026-12-06 到期 · 已用 10.2 GB / 200 GB</p>
+        <div class="prog"><i></i></div>
+        <div class="btns"><span class="link">订阅详情</span><span class="link">管理订阅</span><span class="btn" style="margin-left:auto">续费</span></div>
+      </div>
+    </div>
+
+    <section class="ctl glass">
+      <span class="lab">出站模式</span>
+      <div class="seg"><b class="on">规则</b><b>全局</b><b>直连</b></div>
+      <div style="flex:1"></div>
+      <div class="tgl"><div><b>系统代理</b><small>端口 7890</small></div><div class="sw"></div></div>
+      <div class="tgl"><div><b>虚拟网卡</b><small>已开启</small></div><div class="sw"></div></div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

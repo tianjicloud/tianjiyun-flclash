@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif; }
+  body { width:390px; height:844px; overflow:hidden; background:#070B1F; color:#EDF0FF; position:relative; }
+  .bg { position:absolute; inset:0; background:url('planet.jpg') center top/cover; opacity:.5; }
+  .bg::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(7,11,31,.72), rgba(7,11,31,.9) 55%); }
+  .app { position:relative; padding:20px 18px 96px; display:flex; flex-direction:column; gap:13px; height:100%; overflow:hidden; }
+  .top { display:flex; align-items:center; }
+  .brand { display:flex; align-items:center; gap:9px; }
+  .mark { width:30px; height:30px; border-radius:10px; background:linear-gradient(135deg,#3D5AFE,#7C4DFF); display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .brand b { font-size:16px; }
+  .notice { margin-left:auto; font-size:11.5px; color:#9FB0FF; background:rgba(61,90,254,.18); border:1px solid rgba(110,130,255,.3); padding:5px 10px; border-radius:999px; }
+  .glass { background:rgba(16,22,54,.66); border:1px solid rgba(140,150,255,.16); border-radius:24px; backdrop-filter:blur(14px); box-shadow:0 14px 30px rgba(2,4,18,.4); }
+  .hero { padding:20px; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background:url('planet.jpg') right -260px top -180px/560px auto no-repeat; opacity:.45; }
+  .hero > * { position:relative; }
+  .status { color:#9FB0FF; font-size:12.5px; display:flex; gap:7px; align-items:center; justify-content:center; }
+  .dot { width:7px; height:7px; border-radius:50%; background:#5B6BAA; }
+  .orbit { width:158px; height:158px; position:relative; margin:16px auto 6px; }
+  .orbit .halo { position:absolute; inset:-13px; border-radius:50%; border:1.5px solid rgba(106,92,255,.35); }
+  .orbit .ticks { position:absolute; inset:0; border-radius:50%; border:2px dashed rgba(150,160,255,.4); }
+  .orbit .ball { position:absolute; inset:17px; border-radius:50%; background:radial-gradient(circle at 34% 30%, #8FA2FF, #3D5AFE 52%, #4527A0 100%);
+                 box-shadow:0 12px 30px rgba(50,70,255,.5), inset 0 -9px 20px rgba(20,10,80,.55), inset 0 7px 14px rgba(255,255,255,.35);
+                 display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff; }
+  .orbit .sat { position:absolute; width:10px; height:10px; border-radius:50%; background:#B9C8FF; top:4px; left:50%; box-shadow:0 0 9px #8FA2FF; }
+  .start { font-size:13px; color:#C6CDF2; }
+  .node { margin-top:14px; font-size:16.5px; font-weight:700; }
+  .node small { display:block; font-size:12px; color:#98A2C8; font-weight:400; margin-top:5px; }
+  .chips { display:flex; gap:7px; justify-content:center; margin-top:11px; }
+  .chip { font-size:11.5px; padding:4px 11px; border-radius:999px; background:rgba(61,90,254,.22); color:#B9C8FF; border:1px solid rgba(110,130,255,.35); }
+  .chip.green { background:rgba(46,211,163,.14); color:#5FEBC4; border-color:rgba(46,211,163,.35); }
+  .speeds { display:flex; justify-content:center; gap:38px; margin-top:15px; }
+  .speeds small { display:block; color:#98A2C8; font-size:11px; margin-bottom:3px; }
+  .speeds b { font-size:14px; }
+  .scene { display:flex; align-items:center; gap:10px; padding:11px 14px; }
+  .scene .lab { color:#98A2C8; font-size:12.5px; }
+  .seg { display:flex; background:rgba(255,255,255,.06); border-radius:999px; padding:3px; gap:3px; margin-left:auto; }
+  .seg b { font-weight:600; font-size:12.5px; padding:6px 15px; border-radius:999px; color:#B9C0E4; }
+  .seg b.on { background:linear-gradient(90deg,#3D5AFE,#6A5CFF); color:#fff; }
+  .qlab { display:flex; align-items:baseline; margin:1px 2px -3px; }
+  .qlab h3 { font-size:15px; } .qlab a { margin-left:auto; color:#8C9BE0; font-size:12px; }
+  .qrow { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+  .q { padding:13px 14px; border-radius:18px; }
+  .q .f { font-size:18px; } .q b { font-size:13.5px; margin-left:5px; }
+  .q .ms { float:right; font-size:16px; font-weight:800; color:#2ED3A3; } .q .ms small { font-size:10px; color:#98A2C8; font-weight:400; }
+  .q .ms.warn { color:#FFC24D; }
+  .q p { color:#98A2C8; font-size:11.5px; margin-top:7px; }
+  .q.sel { border-color:rgba(106,92,255,.65); box-shadow:0 0 0 1px rgba(106,92,255,.5); }
+  .data { display:flex; gap:11px; }
+  .dcard { flex:1; padding:15px 16px; border-radius:20px; }
+  .dcard h4 { font-size:12.5px; color:#C6CDF2; font-weight:600; }
+  .dcard .big { font-size:23px; font-weight:800; margin:9px 0 4px; }
+  .dcard p { color:#98A2C8; font-size:11.5px; line-height:1.6; }
+  .prog { height:6px; border-radius:3px; background:rgba(255,255,255,.1); margin-top:10px; }
+  .prog i { display:block; height:100%; width:5%; border-radius:3px; background:linear-gradient(90deg,#3D5AFE,#2ED3A3); }
+  .dock { position:absolute; left:14px; right:14px; bottom:14px; display:flex; justify-content:space-around; padding:11px 6px;
+          background:rgba(13,18,46,.82); border:1px solid rgba(140,150,255,.18); border-radius:24px; backdrop-filter:blur(18px); }
+  .dock div { text-align:center; font-size:10.5px; color:#8E97C4; width:56px; }
+  .dock i { font-style:normal; font-size:19px; display:block; margin-bottom:3px; }
+  .dock .on { color:#fff; }
+  .dock .on i { color:#8FA2FF; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="app">
+  <div class="top">
+    <div class="brand"><div class="mark">☁</div><b>天机云</b></div>
+    <span class="notice">📣 节点异常请更新最新版客户端</span>
+  </div>
+
+  <section class="hero glass">
+    <div class="status"><span class="dot"></span>未连接</div>
+    <div class="orbit"><div class="halo"></div><div class="ticks"></div><div class="ball">▶</div><div class="sat"></div></div>
+    <div class="start">点击启动</div>
+    <div class="node">🇹🇼 台湾 家宽 01 · 三网优化<small>ANYTLS · 倍率 1.50x · 当前线路</small></div>
+    <div class="chips"><span class="chip">住宅 IP</span><span class="chip green">延迟 67 ms</span></div>
+    <div class="speeds">
+      <div><small>↓ 下载</small><b>—</b></div>
+      <div><small>↑ 上传</small><b>—</b></div>
+      <div><small>出口 IP</small><b>126.51.*.*</b></div>
+    </div>
+  </section>
+
+  <section class="scene glass">
+    <span class="lab">✦ 场景</span>
+    <div class="seg"><b class="on">日常</b><b>AI</b><b>观影</b></div>
+  </section>
+
+  <div class="qlab"><h3>常用线路</h3><a>全部线路 ›</a></div>
+  <div class="qrow">
+    <div class="q glass sel"><span class="f">🇹🇼</span><b>台湾·家宽</b><span class="ms">55<small> ms</small></span><p>倍率 1.50x · 当前</p></div>
+    <div class="q glass"><span class="f">🇭🇰</span><b>香港·家宽</b><span class="ms">37<small> ms</small></span><p>倍率 1.50x</p></div>
+    <div class="q glass"><span class="f">🇸🇬</span><b>新加坡</b><span class="ms">85<small> ms</small></span><p>倍率 1.00x</p></div>
+    <div class="q glass"><span class="f">🇺🇸</span><b>美国</b><span class="ms warn">222<small> ms</small></span><p>倍率 1.00x</p></div>
+  </div>
+
+  <div class="data">
+    <div class="dcard glass"><h4>⚡ 本月剩余流量</h4><div class="big">846<small style="font-size:13px;color:#98A2C8"> / 850 GB</small></div><p>12月6日重置</p><div class="prog"><i style="width:99%"></i></div></div>
+    <div class="dcard glass"><h4>📅 套餐有效期</h4><div class="big">303 天</div><p>到期 2027-09-06</p><div class="prog"><i></i></div></div>
+  </div>
+</div>
+<nav class="dock">
+  <div class="on"><i>▦</i>首页</div>
+  <div><i>◎</i>线路</div>
+  <div><i>▤</i>套餐</div>
+  <div><i>◷</i>订单</div>
+  <div><i>☰</i>我的</div>
+</nav>
+</body>
+</html>
