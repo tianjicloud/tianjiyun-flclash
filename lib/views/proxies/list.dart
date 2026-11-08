@@ -408,7 +408,7 @@ class _GroupSliverState extends ConsumerState<_GroupSliver>
       clipBehavior: Clip.none,
       children: [
         Positioned(
-          top: -AppCorner.xl.ap(context),
+          top: -AppCorner.lg.ap(context),
           left: 0,
           right: 0,
           bottom: 0,
@@ -451,7 +451,7 @@ class _GroupSliverState extends ConsumerState<_GroupSliver>
         color: context.raisedSurfaceLevel.colorOf(context.colorScheme),
         shape: AppShape.vertical(
           top: AppCorner.none,
-          bottom: AppCorner.xl.ap(context),
+          bottom: AppCorner.lg.ap(context),
         ),
       );
       if (!unfolded) {
@@ -610,7 +610,7 @@ class ListHeader extends ConsumerWidget {
     final level = floating > 0
         ? SurfaceLevel.floatingOf(colorScheme)
         : context.raisedSurfaceLevel;
-    final radius = AppCorner.xl.ap(context);
+    final radius = AppCorner.lg.ap(context);
     final card = Card(
       enterActionsOnRight: true,
       enterAnimated: enterAnimated,
@@ -716,7 +716,7 @@ class _GroupIcon extends ConsumerWidget {
                   color: context.raisedSurfaceLevel.colorOf(
                     context.colorScheme,
                   ),
-                  shape: AppShape.all(AppCorner.xl.ap(context) - _headerInset),
+                  shape: AppShape.all(AppCorner.lg.ap(context) - _headerInset),
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: IconTheme.merge(
