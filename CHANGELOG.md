@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.13 (2026-11-08)
+
+**Features**
+
+- **dashboard** Redesigned desktop and mobile home screens with V3 layouts, matching navigation, clearer line names and compact controls. (c3a6f0c)
+
+**Bug Fixes**
+
+- **proxies** Drop group card corners one notch to lose the beak (276a2c4)
+
 ## v0.9.12 (2026-11-08)
 
 **Features**

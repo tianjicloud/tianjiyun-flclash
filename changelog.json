@@ -2,6 +2,34 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.13",
+      "tag": "v0.9.13",
+      "date": "2026-11-08",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "c3a6f0c",
+              "scope": "dashboard",
+              "text": "Redesigned desktop and mobile home screens with V3 layouts, matching navigation, clearer line names and compact controls."
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "276a2c4",
+              "scope": "proxies",
+              "text": "Drop group card corners one notch to lose the beak"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.12",
       "tag": "v0.9.12",
       "date": "2026-11-08",
