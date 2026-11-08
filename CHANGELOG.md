@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.9.16 (2026-11-08)
+
+**Bug Fixes**
+
+- **dashboard** Label core runtime status without a success check (51c5181)
+- **dashboard** Route residential shortcuts through the exit selector (ec3b36d)
+- **dashboard** Tighten hero spacing without changing visual tokens (d0f53bc)
+- **dashboard** Reduce the sidebar subscription to one summary line (fdc19dd)
+- **dashboard** Remember dismissed scene notices per subscription (e19ea90)
+- **dashboard** Name mainland direct traffic explicitly (4e213bc)
+- **dashboard** Bound exit confirmation and expose probe failures (cd99d03)
+- **dashboard** Keep the normal residential card concise with one bypass explanation. (3d15d4e)
+- **dashboard** Prevent scrolling content from showing through the light dashboard header. (eb4ea48)
+- **dashboard** Improve light dashboard card separation and use the theme primary color for selected navigation. (bfec474)
+- **dashboard** Align renewal and subscription actions, and show complete usage totals on their own line. (2616c3a)
+- **dashboard** Hide cached exit IP, quality and verification notices while stopped, and retain the selected line name. (411e497)
+
 ## v0.9.15 (2026-11-08)
 
 **Bug Fixes**

@@ -2,6 +2,79 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.16",
+      "tag": "v0.9.16",
+      "date": "2026-11-08",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "51c5181",
+              "scope": "dashboard",
+              "text": "Label core runtime status without a success check"
+            },
+            {
+              "id": "ec3b36d",
+              "scope": "dashboard",
+              "text": "Route residential shortcuts through the exit selector"
+            },
+            {
+              "id": "d0f53bc",
+              "scope": "dashboard",
+              "text": "Tighten hero spacing without changing visual tokens"
+            },
+            {
+              "id": "fdc19dd",
+              "scope": "dashboard",
+              "text": "Reduce the sidebar subscription to one summary line"
+            },
+            {
+              "id": "e19ea90",
+              "scope": "dashboard",
+              "text": "Remember dismissed scene notices per subscription"
+            },
+            {
+              "id": "4e213bc",
+              "scope": "dashboard",
+              "text": "Name mainland direct traffic explicitly"
+            },
+            {
+              "id": "cd99d03",
+              "scope": "dashboard",
+              "text": "Bound exit confirmation and expose probe failures"
+            },
+            {
+              "id": "3d15d4e",
+              "scope": "dashboard",
+              "text": "Keep the normal residential card concise with one bypass explanation."
+            },
+            {
+              "id": "eb4ea48",
+              "scope": "dashboard",
+              "text": "Prevent scrolling content from showing through the light dashboard header."
+            },
+            {
+              "id": "bfec474",
+              "scope": "dashboard",
+              "text": "Improve light dashboard card separation and use the theme primary color for selected navigation."
+            },
+            {
+              "id": "2616c3a",
+              "scope": "dashboard",
+              "text": "Align renewal and subscription actions, and show complete usage totals on their own line."
+            },
+            {
+              "id": "411e497",
+              "scope": "dashboard",
+              "text": "Hide cached exit IP, quality and verification notices while stopped, and retain the selected line name."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.15",
       "tag": "v0.9.15",
       "date": "2026-11-08",
