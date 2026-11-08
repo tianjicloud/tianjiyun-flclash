@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.17 (2026-11-09)
+
+**Features**
+
+- **ui** Refresh Tianji dashboards, navigation, subscription management, and diagnostics. (23956e7)
+
 ## v0.9.16 (2026-11-08)
 
 **Bug Fixes**
