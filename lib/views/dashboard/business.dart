@@ -752,8 +752,6 @@ class ResidentialExitCard extends ConsumerWidget {
                 mobile: !DashboardDensityScope.of(context).isDesktop,
               ),
             ),
-            const SizedBox(height: 6),
-            Text(appLocalizations.residentialActiveDesc, style: label),
             if (failed) ...[
               const SizedBox(height: 6),
               Text(

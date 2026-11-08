@@ -390,6 +390,12 @@ void main() {
 
     expect(find.text('Tokyo'), findsOneWidget);
     expect(find.text('Change exit'), findsOneWidget);
+    expect(
+      find.text(
+        'Once connected, traffic that needs a proxy follows this line.',
+      ),
+      findsNothing,
+    );
     expect(find.text('Use subscription policy'), findsOneWidget);
     // The owner cut the multi-paragraph explanation and the IP caveat
     // from the card face; neither may come back.
