@@ -36,39 +36,22 @@ class SceneBar extends ConsumerWidget {
     final applying = applyState.applying && applyState.matches(_profileId(ref));
     final failed = applyState.failed && applyState.matches(_profileId(ref));
     final segment = _SceneSegment(policy: policy, applying: applying);
-    final children = <Widget>[
-      Flexible(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 10,
-          children: [
-            GlyphIcon(
-              AppGlyphs.sliders,
-              size: 18,
-              color: context.colorScheme.onSurfaceVariant,
-            ),
-            Text(
-              context.appLocalizations.scene,
-              style: DashboardText.cardTitle(context),
-            ),
-            Flexible(child: segment),
-          ],
+    final segmentRow = Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 10,
+      children: [
+        GlyphIcon(
+          AppGlyphs.sliders,
+          size: 18,
+          color: context.colorScheme.onSurfaceVariant,
         ),
-      ),
-      if (density.isDesktop)
-        Flexible(
-          child: Text(
-            failed
-                ? context.appLocalizations.residentialApplyFailed
-                : context.appLocalizations.sceneNote,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.end,
-            style: DashboardText.label(context),
-          ),
+        Text(
+          context.appLocalizations.scene,
+          style: DashboardText.cardTitle(context),
         ),
-      const OutboundModeInline(),
-    ];
+        Flexible(child: segment),
+      ],
+    );
     return DashboardCard(
       semanticLabel: context.appLocalizations.scene,
       padding: EdgeInsets.symmetric(
@@ -76,12 +59,29 @@ class SceneBar extends ConsumerWidget {
         vertical: 10,
       ),
       child: density.isDesktop
-          ? Row(spacing: 16, children: children)
+          ? Row(
+              spacing: 16,
+              children: [
+                Flexible(child: segmentRow),
+                Flexible(
+                  child: Text(
+                    failed
+                        ? context.appLocalizations.residentialApplyFailed
+                        : context.appLocalizations.sceneNote,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                    style: DashboardText.label(context),
+                  ),
+                ),
+                const OutboundModeInline(),
+              ],
+            )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 10,
               children: [
-                children[0],
+                segmentRow,
                 if (failed)
                   Text(
                     context.appLocalizations.residentialApplyFailed,
@@ -89,7 +89,7 @@ class SceneBar extends ConsumerWidget {
                       context,
                     ).copyWith(color: DashboardColors.of(context).warn),
                   ),
-                children[2],
+                const OutboundModeInline(),
               ],
             ),
     );
