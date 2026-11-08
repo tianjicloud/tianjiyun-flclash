@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 自定义配置 提供者与拨号</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button,input{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.hd{height:104px;flex:none;background:#fff;border-bottom:1px solid #DCE1E7;padding:16px 24px 0;display:flex;flex-direction:column;justify-content:space-between}
+.tabs{display:flex;gap:4px}
+.tab{height:40px;padding:0 16px;display:flex;align-items:center;font-size:14px;color:#4A5568;text-decoration:none;border-bottom:2px solid transparent}
+.tab.on{color:#0E1726;font-weight:600;border-bottom-color:#0A55F5}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:14px}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.blue{background:#E6EEFE;color:#0842C2}.chip.green{background:#E7F5EF;color:#0B6E4B}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid #EEF1F4}
+.node{padding:10px 14px;border:1px solid #DCE1E7;border-radius:10px;background:#fff;font-size:13px;font-weight:600;white-space:nowrap}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div class="hd">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <a href="Profiles.html" aria-label="返回" class="btn" style="width: 34px; padding: 0">‹</a>
+      <div><div style="font-size: 17px; font-weight: 700">自定义 · 公司内网直连</div><div class="lbl">基于「AI 住宅原生 IP」· 订阅更新时保留你的改动</div></div>
+      <span style="flex: 1"></span><button class="btn">预览合并结果</button><button class="btn pri">保存并应用</button>
+    </div>
+    <nav class="tabs" aria-label="自定义配置">
+      <a class="tab" href="CustomProxies.html">代理 · 3</a>
+      <a class="tab" href="CustomGroups.html">分组 · 2</a>
+      <a class="tab" href="CustomRules.html">规则 · 5</a>
+      <a class="tab on" href="CustomProviders.html">提供者与拨号</a>
+    </nav>
+  </div>
+  <div style="flex: 1; min-height: 0; display: flex; gap: 16px; padding: 18px 24px">
+    <section class="card" style="flex: 1; min-width: 0; overflow: hidden" aria-label="提供者">
+      <div style="display: flex; align-items: center; padding: 14px 16px"><div style="flex: 1"><div style="font-size: 14px; font-weight: 700">提供者</div><div class="lbl">从外部链接定期拉取的代理集合或规则集合</div></div><button class="btn pri">＋ 添加</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">公司规则集</div><div class="lbl mono">https://it.corp.example.com/rules.yaml</div></div><span class="chip">规则集 · 86 条</span><span class="lbl">每天</span></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">朋友共享节点</div><div class="lbl mono">https://share.example.org/list.yaml</div></div><span class="chip">代理集 · 6 个</span><span class="lbl">每 12 小时</span></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">本地补充规则</div><div class="lbl mono">文件 · local-extra.yaml</div></div><span class="chip">规则集 · 12 条</span><span class="lbl">手动</span></div>
+      <div style="padding: 14px 16px; border-top: 1px solid #EEF1F4; font-size: 12.5px; color: #56616F; line-height: 1.6">外部来源可能随时变化，建议只添加你信任的链接。拉取失败时继续使用上一次的内容。</div>
+    </section>
+    <section class="card" style="width: 520px; flex: none; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px" aria-label="链式拨号">
+      <div style="display: flex; align-items: center"><div style="flex: 1"><div style="font-size: 14px; font-weight: 700">链式拨号</div><div class="lbl">让一个代理先经过另一个代理再出去</div></div><button class="btn pri">＋ 新建</button></div>
+      <div style="padding: 16px; border-radius: 12px; background: #F7F8FA; display: flex; align-items: center; gap: 10px">
+        <span class="node">本机</span><span class="lbl">→</span>
+        <span class="node" style="border-color: #0A55F5; color: #0842C2">东京家宽 · 04</span><span class="lbl">→</span>
+        <span class="node">家里 NAS 回家</span><span class="lbl">→</span>
+        <span class="node">目标</span>
+      </div>
+      <div class="lbl" style="line-height: 1.6">「家里 NAS 回家」将经由「东京家宽 · 04」拨号。适合需要固定出口再进入内网的情况。</div>
+      <div class="row" style="padding: 12px 0"><div style="flex: 1"><div style="font-size: 14px">公司跳板</div><div class="lbl">直接拨号</div></div><span class="lbl">设置前置代理 ›</span></div>
+      <div class="row" style="padding: 12px 0"><div style="flex: 1"><div style="font-size: 14px">备用 HTTP 代理</div><div class="lbl">直接拨号</div></div><span class="lbl">设置前置代理 ›</span></div>
+      <div style="margin-top: auto; padding: 12px 14px; border-radius: 10px; background: #FFF8EC; border: 1px solid #F3D9A8; font-size: 12.5px; color: #5C3A00; line-height: 1.6">链式拨号会叠加两段延迟，并消耗所选家宽线路的流量。</div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

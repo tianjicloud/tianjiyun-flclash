@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Windows 日志与诊断</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+.window{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.titlebar{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding-left:12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.wc{display:flex}.wc span{width:46px;height:32px;display:grid;place-items:center;color:#2D3748}
+.body{flex:1;display:flex;min-height:0}
+.rail{width:220px;flex:none;background:#F7F8FA;border-right:1px solid #DCE1E7;padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 8px 18px}
+.mark{width:32px;height:32px;border-radius:9px;background:#0E1726;display:grid;place-items:center;flex:none}
+.nav{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:9px;color:#4A5568;text-decoration:none;font-size:14px}
+.nav:hover{background:#EBEEF2;color:#0E1726}
+.nav.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:inset 0 0 0 1px #DCE1E7}
+.nav.on svg{color:#0A55F5}
+.main{flex:1;min-width:0;padding:20px 28px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.top{display:flex;align-items:center;justify-content:space-between;height:34px}
+h1{margin:0;font-size:22px;font-weight:700}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:14px}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.seg{display:inline-flex;background:#E4E8ED;border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;height:30px;padding:0 14px;border-radius:8px;font-size:13px;color:#4A5568;cursor:pointer}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.chk{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid #EEF1F4}
+.st{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none}
+.st.pass{background:#E7F5EF;color:#0B6E4B}.st.fail{background:#FCEBEE;color:#9B1C30}.st.skip{background:#EEF1F4;color:#56616F}
+.res{font-size:12px;font-weight:600;white-space:nowrap}
+.log{display:flex;gap:12px;padding:7px 16px;font-size:12.5px;line-height:1.5;border-bottom:1px solid #F1F3F6}
+.lv{width:44px;flex:none;font-weight:600;font-size:11px;padding-top:2px}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="window">
+  <div class="titlebar">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0E1726"></rect><circle cx="12" cy="12" r="6" fill="none" stroke="#fff" stroke-width="2"></circle><circle cx="16.5" cy="7.5" r="2.2" fill="#5B8CFF"></circle></svg>
+      <span>天机云</span>
+    </div>
+    <div class="wc" aria-hidden="true">
+      <span><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 5h10" stroke="currentColor"></path></svg></span>
+      <span><svg width="10" height="10" viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9" fill="none" stroke="currentColor"></rect></svg></span>
+      <span><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10" stroke="currentColor"></path></svg></span>
+    </div>
+  </div>
+  <div class="body">
+    <nav class="rail" aria-label="主导航">
+      <div class="brand">
+        <div class="mark"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5" fill="none" stroke="#fff" stroke-width="1.8"></circle><circle cx="16.8" cy="7.2" r="2.4" fill="#5B8CFF"></circle></svg></div>
+        <div><div style="font-size: 16px; font-weight: 700; line-height: 1.1">天机云</div><div style="font-size: 10px; letter-spacing: .16em; color: #56616F; margin-top: 3px">TIANJI CLOUD</div></div>
+      </div>
+      <a class="nav" href="../Main.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>仪表盘</a>
+      <a class="nav" href="Proxies.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"></path></svg>线路</a>
+      <a class="nav" href="Profiles.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5M10 13h6M10 17h6"></path></svg>订阅</a>
+      <a class="nav" href="Requests.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 4v16M4 17l3 3 3-3M17 20V4M14 7l3-3 3 3"></path></svg>连接</a>
+      <a class="nav on" href="Logs.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>日志与诊断</a>
+      <a class="nav" href="Settings.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg>设置</a>
+      <div class="card" style="margin-top: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+        <div style="font-size: 13px; font-weight: 600">AI 住宅原生 IP</div>
+        <div class="lbl">剩余 28 天 · 已用 5%</div>
+        <div style="height: 8px; border-radius: 4px; background: #EEF1F4; overflow: hidden"><div style="width: 5%; height: 8px; background: #0A55F5"></div></div>
+      </div>
+    </nav>
+    <main class="main">
+      <div class="top">
+        <h1>日志与诊断</h1>
+        <div class="lbl">导出的报告已去除订阅令牌、密码、浏览记录和你的原始 IP</div>
+      </div>
+      <div style="flex: 1; min-height: 0; display: flex; gap: 14px">
+        <section class="card" style="width: 430px; flex: none; padding: 20px 22px; display: flex; flex-direction: column" aria-label="一键诊断">
+          <div style="display: flex; align-items: center; justify-content: space-between">
+            <div><div style="font-size: 16px; font-weight: 700">一键诊断</div><div class="lbl" style="margin-top: 3px">14:02 完成 · 用时 9 秒</div></div>
+            <button class="btn pri">重新诊断</button>
+          </div>
+          <div style="display: flex; gap: 10px; margin: 16px 0 6px">
+            <div style="flex: 1; padding: 10px 12px; border-radius: 10px; background: #E7F5EF"><div class="mono" style="font-size: 20px; font-weight: 600; color: #0B6E4B">6</div><div class="lbl">通过</div></div>
+            <div style="flex: 1; padding: 10px 12px; border-radius: 10px; background: #FCEBEE"><div class="mono" style="font-size: 20px; font-weight: 600; color: #9B1C30">1</div><div class="lbl">未通过</div></div>
+            <div style="flex: 1; padding: 10px 12px; border-radius: 10px; background: #EEF1F4"><div class="mono" style="font-size: 20px; font-weight: 600; color: #4A5568">1</div><div class="lbl">未能检测</div></div>
+          </div>
+          <div class="chk"><span class="st pass"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="flex: 1; font-size: 13px">内核运行</span><span class="res" style="color: #0B6E4B">通过</span></div>
+          <div class="chk"><span class="st pass"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="flex: 1; font-size: 13px">订阅可访问并已解析</span><span class="res" style="color: #0B6E4B">通过</span></div>
+          <div class="chk"><span class="st pass"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="flex: 1; font-size: 13px">系统代理 / 虚拟网卡已接管</span><span class="res" style="color: #0B6E4B">通过</span></div>
+          <div class="chk"><span class="st pass"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="flex: 1; font-size: 13px">实际出口与所选线路一致</span><span class="res" style="color: #0B6E4B">通过</span></div>
+          <div class="chk"><span class="st pass"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="flex: 1; font-size: 13px">DNS 出口与 IP 出口一致</span><span class="res" style="color: #0B6E4B">通过</span></div>
+          <div class="chk"><span class="st pass"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="flex: 1; font-size: 13px">ChatGPT / Claude 可访问</span><span class="res" style="color: #0B6E4B">通过</span></div>
+          <div class="chk" style="align-items: flex-start"><span class="st fail"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span><span style="flex: 1; font-size: 13px">浏览器 WebRTC 未经代理<div class="lbl" style="margin-top: 3px; line-height: 1.5">Chrome 可能暴露本地网络 IP。开启虚拟网卡的「严格接管」可修复。</div></span><button class="btn" style="height: 28px; font-size: 12px">去修复</button></div>
+          <div class="chk"><span class="st skip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M6 12h12"></path></svg></span><span style="flex: 1; font-size: 13px">IPv6 出口</span><span class="res" style="color: #56616F">未能检测（网络无 IPv6）</span></div>
+          <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 14px">
+            <button class="btn" style="flex: 1">导出脱敏报告</button>
+            <button class="btn" style="flex: 1">复制给客服</button>
+          </div>
+        </section>
+        <section class="card" style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden" aria-label="日志">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #DCE1E7">
+            <div class="seg" role="group" aria-label="日志类型"><button class="on">运行日志</button><button>DNS 查询</button></div>
+            <span style="flex: 1"></span>
+            <div class="seg" role="group" aria-label="级别"><button>全部</button><button class="on">信息</button><button>警告</button><button>错误</button></div>
+            <button class="btn" style="height: 30px">导出</button>
+          </div>
+          <div class="mono" style="flex: 1; overflow: hidden; padding: 6px 0">
+            <div class="log"><span class="lbl">14:22:31</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[TCP] 127.0.0.1:52331 → chatgpt.com:443 使用 AI专线[东京家宽 · 04]</span></div>
+            <div class="log"><span class="lbl">14:22:30</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[TCP] 127.0.0.1:52328 → rr4.googlevideo.com:443 命中 大流量绕行 → 香港 大带宽 02</span></div>
+            <div class="log"><span class="lbl">14:22:28</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[DNS] api.anthropic.com → 160.79.104.10（fake-ip 已映射）</span></div>
+            <div class="log" style="background: #FFF8EC"><span class="lbl">14:22:19</span><span class="lv" style="color: #8A4B00">WARN</span><span style="flex: 1">[Probe] 西雅图 AI 01 测速超时（5000 ms），已从自动选择中暂时移出</span></div>
+            <div class="log"><span class="lbl">14:22:11</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[Exit] 出口校验完成：东京家宽 · 04 = 203.0.113.42，DNS 出口一致</span></div>
+            <div class="log"><span class="lbl">14:21:57</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[TCP] 127.0.0.1:52290 → szextshort.weixin.qq.com:443 命中 大陆直连</span></div>
+            <div class="log" style="background: #FDF1F3"><span class="lbl">14:21:40</span><span class="lv" style="color: #9B1C30">ERROR</span><span style="flex: 1">[UDP] stun.l.google.com:19302 绕过代理（WebRTC），建议开启严格接管</span></div>
+            <div class="log"><span class="lbl">14:21:33</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[Profile] 订阅「AI 住宅原生 IP」更新成功：47 个线路，12 个分组</span></div>
+            <div class="log"><span class="lbl">14:21:02</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[Core] mihomo 内核已启动，监听 127.0.0.1:7890，TUN 已开启</span></div>
+            <div class="log"><span class="lbl">14:20:58</span><span class="lv" style="color: #0842C2">INFO</span><span style="flex: 1">[TUN] 虚拟网卡 TianjiCloud 已创建，DNS 劫持 any:53</span></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 添加订阅</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button,input{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726;position:relative}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 16px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;color:#0E1726}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.src{flex:1;border:1px solid #DCE1E7;border-radius:12px;padding:14px;background:#fff;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.src.on{border-color:#0A55F5;box-shadow:0 0 0 3px #E6EEFE}
+.f{display:flex;flex-direction:column;gap:6px}
+.in{height:40px;padding:0 12px;border:1px solid #DCE1E7;border-radius:9px;background:#fff;font-size:13px;outline:none;width:100%}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div aria-hidden="true" style="flex: 1; display: flex">
+    <div style="width: 220px; background: #F7F8FA; border-right: 1px solid #DCE1E7"></div>
+    <div style="flex: 1; padding: 20px 28px; display: flex; flex-direction: column; gap: 14px">
+      <div style="height: 34px; width: 120px; border-radius: 8px; background: #DCE1E7"></div>
+      <div style="height: 230px; border-radius: 14px; background: #fff"></div>
+      <div style="height: 220px; border-radius: 14px; background: #fff"></div>
+    </div>
+  </div>
+  <div style="position: absolute; inset: 32px 0 0; background: rgba(14,23,38,.42)"></div>
+  <div role="dialog" aria-label="添加订阅" style="position: absolute; left: 50%; top: 92px; transform: translateX(-50%); width: 600px; background: #F7F8FA; border-radius: 18px; box-shadow: 0 24px 60px rgba(14,23,38,.3); padding: 26px 28px; display: flex; flex-direction: column; gap: 18px">
+    <div style="display: flex; align-items: center"><div style="font-size: 19px; font-weight: 700; flex: 1">添加订阅</div><button aria-label="关闭" style="width: 32px; height: 32px; border-radius: 16px; border: 0; background: #E4E8ED">✕</button></div>
+    <div style="display: flex; gap: 10px">
+      <button class="src on"><b style="font-size: 14px">订阅链接</b><span class="lbl">从用户面板复制</span></button>
+      <button class="src"><b style="font-size: 14px">本地文件</b><span class="lbl">.yaml / .yml</span></button>
+      <button class="src"><b style="font-size: 14px">自定义配置</b><span class="lbl">在已有订阅上加规则</span></button>
+    </div>
+    <label class="f"><span style="font-size: 13px; font-weight: 600">订阅链接</span><input class="in mono" value="https://sub.tianjiyun.org/api/v1/client/subscribe?token=••••••••" readonly><span class="lbl">已从剪贴板识别到天机云订阅链接</span></label>
+    <label class="f"><span style="font-size: 13px; font-weight: 600">名称（可选）</span><input class="in" placeholder="留空则使用订阅里的套餐名"></label>
+    <div style="display: flex; gap: 12px">
+      <label class="f" style="flex: 1"><span style="font-size: 13px; font-weight: 600">自动更新</span><span class="in" style="display: flex; align-items: center; justify-content: space-between">每 6 小时<span aria-hidden="true">▾</span></span></label>
+      <label class="f" style="flex: 1"><span style="font-size: 13px; font-weight: 600">User-Agent</span><span class="in" style="display: flex; align-items: center; justify-content: space-between">默认<span aria-hidden="true">▾</span></span></label>
+    </div>
+    <div style="padding: 12px 14px; border-radius: 10px; background: #fff; border: 1px solid #DCE1E7; font-size: 12.5px; line-height: 1.6; color: #2D3748">导入后会先校验；解析失败不会覆盖你正在用的配置。</div>
+    <div style="display: flex; gap: 10px; justify-content: flex-end"><button class="btn">取消</button><button class="btn pri">导入并校验</button></div>
+  </div>
+</div>
+</body>
+</html>

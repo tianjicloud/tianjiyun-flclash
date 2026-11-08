@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 自定义配置 分组</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button,input{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.hd{height:104px;flex:none;background:#fff;border-bottom:1px solid #DCE1E7;padding:16px 24px 0;display:flex;flex-direction:column;justify-content:space-between}
+.tabs{display:flex;gap:4px}
+.tab{height:40px;padding:0 16px;display:flex;align-items:center;font-size:14px;color:#4A5568;text-decoration:none;border-bottom:2px solid transparent}
+.tab.on{color:#0E1726;font-weight:600;border-bottom-color:#0A55F5}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:14px}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.blue{background:#E6EEFE;color:#0842C2}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.row{display:flex;align-items:center;gap:12px;padding:0 16px;height:56px;border-top:1px solid #EEF1F4}
+.row.sel{background:#F4F8FF;box-shadow:inset 3px 0 0 #0A55F5}
+.f{display:flex;flex-direction:column;gap:6px}
+.fl{font-size:13px;font-weight:600}
+.in{height:38px;padding:0 12px;border:1px solid #DCE1E7;border-radius:9px;background:#fff;font-size:13px;display:flex;align-items:center;justify-content:space-between;width:100%}
+.typ{flex:1;border:1px solid #DCE1E7;border-radius:10px;padding:10px;background:#fff;text-align:left;font-size:12px;color:#56616F}
+.typ b{display:block;font-size:13px;color:#0E1726;margin-bottom:2px}
+.typ.on{border-color:#0A55F5;box-shadow:0 0 0 3px #E6EEFE}
+.mem{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border:1px solid #DCE1E7;border-radius:9px;background:#fff;font-size:13px}
+.grip{color:#A0AAB6;letter-spacing:-2px}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div class="hd">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <a href="Profiles.html" aria-label="返回" class="btn" style="width: 34px; padding: 0">‹</a>
+      <div><div style="font-size: 17px; font-weight: 700">自定义 · 公司内网直连</div><div class="lbl">基于「AI 住宅原生 IP」· 订阅更新时保留你的改动</div></div>
+      <span style="flex: 1"></span><button class="btn">预览合并结果</button><button class="btn pri">保存并应用</button>
+    </div>
+    <nav class="tabs" aria-label="自定义配置">
+      <a class="tab" href="CustomProxies.html">代理 · 3</a>
+      <a class="tab on" href="CustomGroups.html">分组 · 2</a>
+      <a class="tab" href="CustomRules.html">规则 · 5</a>
+      <a class="tab" href="CustomProviders.html">提供者与拨号</a>
+    </nav>
+  </div>
+  <div style="flex: 1; min-height: 0; display: flex; gap: 16px; padding: 18px 24px">
+    <section class="card" style="width: 380px; flex: none; overflow: hidden" aria-label="分组">
+      <div style="display: flex; align-items: center; padding: 14px 16px"><span style="font-size: 14px; font-weight: 700; flex: 1">分组</span><button class="btn pri">＋ 新建分组</button></div>
+      <div class="row sel"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">公司内网</div><div class="lbl">手动选择 · 2 个成员</div></div><span class="chip blue">自定义</span></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">回家</div><div class="lbl">故障转移 · 2 个成员</div></div><span class="chip blue">自定义</span></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px">AI 专线</div><div class="lbl">来自订阅 · 只读</div></div><span class="chip">订阅</span></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px">大带宽 · 流媒体</div><div class="lbl">来自订阅 · 只读</div></div><span class="chip">订阅</span></div>
+    </section>
+    <section class="card" style="flex: 1; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px" aria-label="编辑分组">
+      <div style="display: flex; align-items: center"><span style="font-size: 15px; font-weight: 700; flex: 1">编辑分组</span><button class="btn" style="color: #B42335">删除分组</button></div>
+      <div style="display: flex; gap: 14px">
+        <label class="f" style="flex: 1"><span class="fl">名称</span><input class="in" value="公司内网"></label>
+        <label class="f" style="width: 200px"><span class="fl">图标</span><span class="in"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 20px; height: 20px; border-radius: 5px; background: #0E1726"></span>建筑</span><span aria-hidden="true">▾</span></span></label>
+      </div>
+      <div class="f"><span class="fl">选择方式</span>
+        <div style="display: flex; gap: 8px">
+          <button class="typ on"><b>手动选择</b>由你决定用哪个</button>
+          <button class="typ"><b>自动测速</b>选延迟最低的</button>
+          <button class="typ"><b>故障转移</b>按顺序，坏了换下一个</button>
+          <button class="typ"><b>负载均衡</b>分摊到多个</button>
+        </div>
+      </div>
+      <div class="f" style="flex: 1; min-height: 0">
+        <div style="display: flex; align-items: center"><span class="fl" style="flex: 1">成员（拖动调整顺序）</span><button class="btn" style="height: 30px">＋ 添加成员</button></div>
+        <div class="mem"><span class="grip" aria-hidden="true">⋮⋮</span><span style="flex: 1">公司跳板</span><span class="chip blue">自定义代理</span><span class="lbl">移除</span></div>
+        <div class="mem"><span class="grip" aria-hidden="true">⋮⋮</span><span style="flex: 1">DIRECT（直连）</span><span class="chip">内置</span><span class="lbl">移除</span></div>
+        <div class="mem" style="border-style: dashed; color: #56616F; justify-content: center">也可以添加整个订阅分组，例如「香港」</div>
+      </div>
+      <div style="padding: 12px 14px; border-radius: 10px; background: #F7F8FA; font-size: 12.5px; color: #2D3748">被「规则 · 5」里的 2 条规则引用：10.0.0.0/8、*.corp.example.com</div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

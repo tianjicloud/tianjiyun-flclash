@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 macOS 菜单栏</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.seg{display:flex;background:#E4E8ED;border-radius:8px;padding:2px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;height:26px;border-radius:6px;font-size:12px;color:#4A5568;cursor:pointer}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.ln{display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:7px;font-size:13px;border:0;background:transparent;width:100%;text-align:left;cursor:pointer}
+.ln.on{background:#E6EEFE}
+.cc{width:26px;height:18px;border-radius:4px;background:#0E1726;color:#fff;font-size:10px;display:grid;place-items:center;flex:none}
+.it{display:flex;align-items:center;height:30px;padding:0 10px;border-radius:6px;font-size:13px;border:0;background:transparent;width:100%;text-align:left;cursor:pointer;color:#0E1726}
+.hr{height:1px;background:#E1E5EA;margin:6px 0}
+.ok-t{color:#0B6E4B}.warn-t{color:#A15C00}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 380×620 -->
+<div style="width: 380px; height: 620px; background: linear-gradient(160deg, #9FB3CC, #C9D3E0 60%, #E0E5EC); font-family: 'Noto Sans SC', -apple-system, system-ui, sans-serif; color: #0E1726; position: relative; overflow: hidden">
+  <div style="height: 26px; background: rgba(246,247,249,.78); display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 14px; font-size: 12px">
+    <span style="display: grid; place-items: center; width: 26px; height: 20px; border-radius: 4px; background: rgba(14,23,38,.12)">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5" fill="none" stroke="#0E1726" stroke-width="2"></circle><circle cx="16.8" cy="7.2" r="2.6" fill="#0E1726"></circle></svg>
+    </span>
+    <span>周日 14:22</span>
+  </div>
+  <div role="dialog" aria-label="天机云快捷面板" style="position: absolute; right: 14px; top: 32px; width: 320px; background: rgba(250,251,252,.97); border: 1px solid #C9D0D8; border-radius: 12px; box-shadow: 0 18px 44px rgba(14,23,38,.25); padding: 14px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="flex: 1">
+        <div style="font-size: 15px; font-weight: 700">已连接</div>
+        <div class="lbl" style="margin-top: 2px">东京家宽 · 04 · <span class="mono">203.0.113.42</span></div>
+      </div>
+      <button aria-pressed="true" aria-label="连接开关" style="width: 46px; height: 28px; border-radius: 14px; border: 0; background: #0A55F5; position: relative; padding: 0; cursor: pointer"><span style="position: absolute; top: 3px; left: 21px; width: 22px; height: 22px; border-radius: 50%; background: #fff"></span></button>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 12px">
+      <div style="flex: 1; background: #fff; border: 1px solid #E1E5EA; border-radius: 9px; padding: 8px 10px"><div class="lbl">下载</div><div class="mono" style="font-size: 15px; font-weight: 600">2.4 MB/s</div></div>
+      <div style="flex: 1; background: #fff; border: 1px solid #E1E5EA; border-radius: 9px; padding: 8px 10px"><div class="lbl">上传</div><div class="mono" style="font-size: 15px; font-weight: 600">312 KB/s</div></div>
+      <div style="flex: 1; background: #fff; border: 1px solid #E1E5EA; border-radius: 9px; padding: 8px 10px"><div class="lbl">延迟</div><div class="mono ok-t" style="font-size: 15px; font-weight: 600">37 ms</div></div>
+    </div>
+    <div class="lbl" style="margin: 14px 0 6px">场景</div>
+    <div class="seg" role="group" aria-label="场景"><button class="on">日常</button><button>AI</button><button>观影</button></div>
+    <div class="lbl" style="margin: 12px 0 6px">出站</div>
+    <div class="seg" role="group" aria-label="出站模式"><button class="on">规则</button><button>全局</button><button>直连</button></div>
+    <div class="hr" style="margin-top: 14px"></div>
+    <div class="lbl" style="margin: 6px 0 4px">常用线路</div>
+    <button class="ln on"><span class="mono cc">JP</span><span style="flex: 1; font-weight: 600">东京家宽 · 04</span><span class="mono ok-t">37 ms</span></button>
+    <button class="ln"><span class="mono cc">HK</span><span style="flex: 1">香港 · 家宽</span><span class="mono ok-t">42 ms</span></button>
+    <button class="ln"><span class="mono cc">US</span><span style="flex: 1">洛杉矶 住宅 02</span><span class="mono warn-t">142 ms</span></button>
+    <div class="hr"></div>
+    <button class="it">打开天机云…<span style="margin-left: auto" class="lbl">⌘O</span></button>
+    <button class="it">一键诊断</button>
+    <button class="it">复制终端代理命令</button>
+    <div class="hr"></div>
+    <div style="display: flex; align-items: center; padding: 2px 10px 0">
+      <span class="lbl" style="flex: 1">AI 住宅原生 IP · 剩余 28 天</span>
+      <button class="it" style="width: auto; padding: 0 8px">退出</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

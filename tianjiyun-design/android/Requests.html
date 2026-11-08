@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Android 连接</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;font-size:11px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.blue{background:#E6EEFE;color:#0842C2}
+.chip.green{background:#E7F5EF;color:#0B6E4B}
+.chip.red{background:#FCEBEE;color:#9B1C30}
+.seg{display:flex;background:#E4E8ED;border-radius:12px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;height:34px;border-radius:10px;font-size:13px;color:#4A5568}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.fc{height:32px;padding:0 12px;border-radius:16px;border:1px solid #DCE1E7;background:#fff;font-size:12px;flex:none}
+.fc.on{background:#0E1726;border-color:#0E1726;color:#fff}
+.row{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid #EEF1F4;background:#fff}
+.app{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;flex:none}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 390×844 -->
+<div style="width: 390px; height: 844px; background: #EEF1F4; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726; display: flex; flex-direction: column; overflow: hidden">
+  <div style="display: flex; align-items: center; gap: 6px; padding: 14px 10px 8px">
+    <a href="Tools.html" aria-label="返回" style="width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E1726" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+    <span style="font-size: 19px; font-weight: 700">连接与请求</span>
+    <span style="flex: 1"></span>
+    <button aria-label="关闭全部连接" style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #DCE1E7; background: #fff; font-size: 12px">全部关闭</button>
+  </div>
+  <div style="padding: 0 16px 10px"><div class="seg" role="group" aria-label="视图"><button class="on">实时 · 42</button><button>最近请求</button></div></div>
+  <div style="display: flex; gap: 8px; padding: 0 16px 12px; overflow: hidden">
+    <button class="fc on">全部</button><button class="fc">走代理</button><button class="fc">大陆直连</button><button class="fc">已拦截</button>
+  </div>
+  <div style="flex: 1; min-height: 0; overflow: hidden; border-top: 1px solid #DCE1E7">
+    <div class="row"><span class="app" style="background: #0F7B6C">G</span><div style="flex: 1; min-width: 0"><div style="display: flex; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">ChatGPT</span><span class="mono lbl">↓ 18.2 MB</span></div><div class="mono lbl" style="margin: 2px 0 5px">chatgpt.com:443</div><div style="display: flex; gap: 5px"><span class="chip blue">AI 服务</span><span class="chip">东京家宽 · 04</span></div></div></div>
+    <div class="row"><span class="app" style="background: #C15F3C">C</span><div style="flex: 1; min-width: 0"><div style="display: flex; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Claude</span><span class="mono lbl">↓ 4.6 MB</span></div><div class="mono lbl" style="margin: 2px 0 5px">api.anthropic.com:443</div><div style="display: flex; gap: 5px"><span class="chip blue">AI 服务</span><span class="chip">东京家宽 · 04</span></div></div></div>
+    <div class="row"><span class="app" style="background: #C4302B">Y</span><div style="flex: 1; min-width: 0"><div style="display: flex; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">YouTube</span><span class="mono lbl">↓ 412 MB</span></div><div class="mono lbl" style="margin: 2px 0 5px">rr4.googlevideo.com:443</div><div style="display: flex; gap: 5px"><span class="chip">大流量绕行</span><span class="chip">香港 大带宽 02</span></div></div></div>
+    <div class="row"><span class="app" style="background: #1AAD19">W</span><div style="flex: 1; min-width: 0"><div style="display: flex; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">微信</span><span class="mono lbl">↓ 1.2 MB</span></div><div class="mono lbl" style="margin: 2px 0 5px">szextshort.weixin.qq.com:443</div><div style="display: flex; gap: 5px"><span class="chip green">大陆直连</span></div></div></div>
+    <div class="row"><span class="app" style="background: #229ED9">T</span><div style="flex: 1; min-width: 0"><div style="display: flex; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Telegram</span><span class="mono lbl">↓ 8.8 MB</span></div><div class="mono lbl" style="margin: 2px 0 5px">149.154.167.51:443</div><div style="display: flex; gap: 5px"><span class="chip">规则 · Telegram</span><span class="chip">新加坡 01</span></div></div></div>
+    <div class="row"><span class="app" style="background: #4A5568">S</span><div style="flex: 1; min-width: 0"><div style="display: flex; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">系统服务</span><span class="mono lbl">0 B</span></div><div class="mono lbl" style="margin: 2px 0 5px">ads.example-tracker.com:443</div><div style="display: flex; gap: 5px"><span class="chip red">广告拦截</span></div></div></div>
+    <div class="row"><span class="app" style="background: #FB7299">B</span><div style="flex: 1; min-width: 0"><div style="display: flex; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">哔哩哔哩</span><span class="mono lbl">↓ 36.9 MB</span></div><div class="mono lbl" style="margin: 2px 0 5px">www.bilibili.com:443</div><div style="display: flex; gap: 5px"><span class="chip green">大陆直连</span></div></div></div>
+  </div>
+</div>
+</body>
+</html>

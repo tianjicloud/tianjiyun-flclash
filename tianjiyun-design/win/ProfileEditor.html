@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 配置预览与编辑器</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.lbl{font-size:12px;color:#56616F}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.seg{display:inline-flex;background:#E4E8ED;border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;height:30px;padding:0 14px;border-radius:8px;font-size:13px;color:#4A5568}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;line-height:22px;white-space:pre}
+.k{color:#0842C2}.s{color:#0B6E4B}.n{color:#A15C00}.c{color:#8A94A3}
+.ol{display:flex;justify-content:space-between;align-items:center;height:34px;padding:0 12px;border-radius:8px;font-size:13px;text-decoration:none;color:#2D3748}
+.ol.on{background:#E6EEFE;color:#0842C2;font-weight:600}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div style="height: 60px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 20px; background: #fff; border-bottom: 1px solid #DCE1E7">
+    <a href="ProfileEdit.html" aria-label="返回" class="btn" style="width: 34px; padding: 0">‹</a>
+    <div><div style="font-size: 15px; font-weight: 700">AI 住宅原生 IP · config.yaml</div><div class="lbl">只读预览 · 1,284 行 · 19 分钟前从订阅下载</div></div>
+    <span style="flex: 1"></span>
+    <div class="seg" role="group" aria-label="模式"><button class="on">预览</button><button>编辑副本</button></div>
+    <label style="display: flex; align-items: center; gap: 8px; height: 34px; width: 220px; padding: 0 12px; border: 1px solid #DCE1E7; border-radius: 9px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#56616F" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input type="search" placeholder="在配置中查找" aria-label="查找" style="border: 0; outline: none; font-size: 13px; width: 100%"></label>
+    <button class="btn">复制</button>
+    <button class="btn">导出</button>
+  </div>
+  <div style="flex: 1; min-height: 0; display: flex">
+    <nav style="width: 220px; flex: none; background: #F7F8FA; border-right: 1px solid #DCE1E7; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px" aria-label="配置结构">
+      <div class="lbl" style="padding: 4px 12px 8px">结构</div>
+      <a class="ol" href="#">常规<span class="lbl">12</span></a>
+      <a class="ol" href="#">dns<span class="lbl">9</span></a>
+      <a class="ol on" href="#">proxies<span>47</span></a>
+      <a class="ol" href="#">proxy-groups<span class="lbl">12</span></a>
+      <a class="ol" href="#">rule-providers<span class="lbl">8</span></a>
+      <a class="ol" href="#">rules<span class="lbl">164</span></a>
+      <div style="margin-top: auto; padding: 12px; border-radius: 10px; background: #fff; border: 1px solid #DCE1E7; font-size: 12px; line-height: 1.6; color: #2D3748">要改规则或加代理，请用「自定义配置」，订阅更新时不会被覆盖。<a href="CustomProxies.html" style="display: block; color: #0842C2; margin-top: 6px; text-decoration: none">去自定义配置 ›</a></div>
+    </nav>
+    <div style="flex: 1; min-width: 0; display: flex; background: #fff">
+      <div class="code" aria-hidden="true" style="width: 56px; text-align: right; padding: 14px 12px 0 0; color: #A0AAB6; background: #FAFBFC; border-right: 1px solid #EEF1F4">88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116</div>
+      <div class="code" style="flex: 1; padding: 14px 18px 0; overflow: hidden"><span class="k">proxies</span>:
+  - <span class="k">name</span>: <span class="s">东京家宽 · 04</span>
+    <span class="k">type</span>: anytls
+    <span class="k">server</span>: <span class="s">jp-res-04.example.net</span>
+    <span class="k">port</span>: <span class="n">443</span>
+    <span class="k">password</span>: <span class="c">••••••••（已隐藏）</span>
+    <span class="k">sni</span>: <span class="s">jp-res-04.example.net</span>
+    <span class="k">udp</span>: <span class="n">true</span>
+  - <span class="k">name</span>: <span class="s">洛杉矶 住宅 02</span>
+    <span class="k">type</span>: anytls
+    <span class="k">server</span>: <span class="s">us-res-02.example.net</span>
+    <span class="k">port</span>: <span class="n">443</span>
+    <span class="k">password</span>: <span class="c">••••••••（已隐藏）</span>
+    <span class="k">udp</span>: <span class="n">true</span>
+  - <span class="k">name</span>: <span class="s">香港 大带宽 02</span>
+    <span class="k">type</span>: anytls
+    <span class="k">server</span>: <span class="s">hk-bw-02.example.net</span>
+    <span class="k">port</span>: <span class="n">443</span>
+    <span class="k">password</span>: <span class="c">••••••••（已隐藏）</span>
+<span class="c">  # … 另外 44 条线路</span>
+
+<span class="k">proxy-groups</span>:
+  - <span class="k">name</span>: <span class="s">AI 专线</span>
+    <span class="k">type</span>: select
+    <span class="k">proxies</span>: [<span class="s">洛杉矶 住宅 02</span>, <span class="s">洛杉矶 住宅 01</span>, <span class="s">东京 住宅 03</span>]
+  - <span class="k">name</span>: <span class="s">大带宽 · 流媒体</span>
+    <span class="k">type</span>: url-test
+    <span class="k">interval</span>: <span class="n">300</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

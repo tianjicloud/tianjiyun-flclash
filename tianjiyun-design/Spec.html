@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 设计规范</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+.h2{font-size:13px;font-weight:700;letter-spacing:.12em;color:#56616F;margin:0 0 14px}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:16px;padding:22px 24px}
+.sw{display:flex;flex-direction:column;gap:6px;font-size:12px}
+.sw i{display:block;height:56px;border-radius:10px;border:1px solid rgba(14,23,38,.08)}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.lbl{font-size:12px;color:#56616F}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748}
+.dial{position:relative;width:120px;height:120px;display:grid;place-items:center;flex:none}
+.dial::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--tick) 0 1.6deg,transparent 1.6deg 8deg);-webkit-mask:radial-gradient(circle,transparent 51px,#000 52px 60px);mask:radial-gradient(circle,transparent 51px,#000 52px 60px)}
+.core{width:84px;height:84px;border-radius:50%;border:0;display:grid;place-items:center}
+table{border-collapse:collapse;width:100%;font-size:13px}
+td,th{padding:9px 10px;border-bottom:1px solid #EEF1F4;text-align:left;vertical-align:top}
+th{font-size:12px;color:#56616F;font-weight:500}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="index.html">← 全部页面</a>
+<!-- 画板尺寸: 1440×1120 -->
+<div style="width: 1440px; height: 1120px; background: #EEF1F4; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726; padding: 56px 64px; display: flex; flex-direction: column; gap: 22px">
+  <div style="display: flex; align-items: flex-end; gap: 40px">
+    <div style="flex: 1">
+      <div style="display: flex; align-items: center; gap: 14px">
+        <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0E1726"></rect><circle cx="12" cy="12" r="6.5" fill="none" stroke="#fff" stroke-width="1.6"></circle><circle cx="16.8" cy="7.2" r="2.4" fill="#5B8CFF"></circle></svg>
+        <div><div style="font-size: 34px; font-weight: 700; line-height: 1.1">天机仪表</div><div class="lbl" style="letter-spacing: .16em; margin-top: 4px">TIANJI CLOUD · 客户端设计语言 v4</div></div>
+      </div>
+      <p style="margin: 18px 0 0; font-size: 16px; line-height: 1.8; max-width: 760px; color: #2D3748">像一块精密仪表：浅色底、墨色字、唯一的品牌蓝只给「操作」和「当前选择」。状态靠刻度环的颜色说话，数字用等宽字体，所有检测结果如实显示，失败就写失败。</p>
+    </div>
+    <div class="lbl" style="text-align: right; line-height: 1.8">品牌蓝 #0A55F5 取自 tianjiyun.org<br>图中数据均为示意，IP 使用 203.0.113.0/24 文档段</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 22px">
+    <section class="card" aria-label="色彩">
+      <h2 class="h2">色彩</h2>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px">
+        <div class="sw"><i style="background: #0A55F5"></i><b>品牌蓝</b><span class="mono lbl">#0A55F5</span></div>
+        <div class="sw"><i style="background: #0E1726"></i><b>墨</b><span class="mono lbl">#0E1726</span></div>
+        <div class="sw"><i style="background: #EEF1F4"></i><b>底</b><span class="mono lbl">#EEF1F4</span></div>
+        <div class="sw"><i style="background: #FFFFFF"></i><b>面板</b><span class="mono lbl">#FFFFFF</span></div>
+        <div class="sw"><i style="background: #0E8A5F"></i><b>正常</b><span class="mono lbl">#0E8A5F</span></div>
+        <div class="sw"><i style="background: #A15C00"></i><b>注意</b><span class="mono lbl">#A15C00</span></div>
+        <div class="sw"><i style="background: #B42335"></i><b>错误</b><span class="mono lbl">#B42335</span></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; margin-top: 14px">
+        <div class="sw"><i style="background: #3D73FF"></i><span>深色 · 蓝</span></div>
+        <div class="sw"><i style="background: #E8EDF3"></i><span>深色 · 字</span></div>
+        <div class="sw"><i style="background: #0B0F14"></i><span>深色 · 底</span></div>
+        <div class="sw"><i style="background: #131A22"></i><span>深色 · 面板</span></div>
+        <div class="sw"><i style="background: #3DD39A"></i><span>深色 · 正常</span></div>
+        <div class="sw"><i style="background: #F2B44C"></i><span>深色 · 注意</span></div>
+        <div class="sw"><i style="background: #FF6B81"></i><span>深色 · 错误</span></div>
+      </div>
+      <div class="lbl" style="margin-top: 14px; line-height: 1.7">正文与标签在面板上对比度 ≥ 4.5:1；状态色同时改变明度，色弱用户也能分辨；延迟 &lt;100 ms 绿、100–200 ms 琥珀、超时红。</div>
+    </section>
+
+    <section class="card" aria-label="字体">
+      <h2 class="h2">字体</h2>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="lbl" style="width: 80px">出口 IP</span><span class="mono" style="font-size: 40px; font-weight: 600; line-height: 1">203.0.113.42</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="lbl" style="width: 80px">页面标题</span><span style="font-size: 22px; font-weight: 700">仪表盘 · 线路 · 订阅</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="lbl" style="width: 80px">卡片标题</span><span style="font-size: 14px; font-weight: 600">家宽线路 本月流量</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="lbl" style="width: 80px">正文</span><span style="font-size: 13px; color: #4A5568">视频等大流量自动走大带宽节点，不占家宽流量。</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="lbl" style="width: 80px">数字</span><span class="mono" style="font-size: 14px; font-weight: 600">37 ms · 2.4 MB/s · 01:24:36</span></div>
+      </div>
+      <div class="lbl" style="margin-top: 14px">Noto Sans SC（界面）+ JetBrains Mono（IP、速率、时长，等宽不跳动）</div>
+    </section>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px">
+    <section class="card" aria-label="连接刻度环">
+      <h2 class="h2">连接刻度环 · 四种状态</h2>
+      <div style="display: flex; justify-content: space-between">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px"><div class="dial" style="--tick: #B8C1CC"><div class="core" style="background: #fff; box-shadow: 0 0 0 1px #DCE1E7; color: #0E1726"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v8"></path><path d="M6.3 6.8a8 8 0 1 0 11.4 0"></path></svg></div></div><span style="font-size: 13px; font-weight: 600">未连接</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px"><div class="dial" style="--tick: #0A55F5"><div class="core" style="background: #E6EEFE; color: #0A55F5"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v8"></path><path d="M6.3 6.8a8 8 0 1 0 11.4 0"></path></svg></div></div><span style="font-size: 13px; font-weight: 600">连接中 · 刻度旋转</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px"><div class="dial" style="--tick: #0E8A5F"><div class="core" style="background: #0A55F5; color: #fff; box-shadow: 0 0 0 5px #E6EEFE"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v8"></path><path d="M6.3 6.8a8 8 0 1 0 11.4 0"></path></svg></div></div><span style="font-size: 13px; font-weight: 600">已连接 · 出口已校验</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px"><div class="dial" style="--tick: #D48A16"><div class="core" style="background: #FDF1E3; color: #A15C00"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v8"></path><path d="M6.3 6.8a8 8 0 1 0 11.4 0"></path></svg></div></div><span style="font-size: 13px; font-weight: 600">已连接 · 有异常</span></div>
+      </div>
+      <div class="lbl" style="margin-top: 16px; line-height: 1.7">「已连接」只有在出口校验通过后才显示绿色；校验失败或检测不了，环保持琥珀并写明原因，不伪造通过。</div>
+    </section>
+
+    <section class="card" aria-label="组件">
+      <h2 class="h2">基础组件</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+        <button style="height: 34px; padding: 0 14px; border-radius: 9px; border: 0; background: #0A55F5; color: #fff; font-size: 13px; font-weight: 500">主要操作</button>
+        <button style="height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #DCE1E7; background: #fff; font-size: 13px; font-weight: 500">次要操作</button>
+        <span style="display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 12px; border-radius: 14px; font-size: 12px; background: #E7F5EF; border: 1px solid #BFE3D2; color: #0B6E4B"><span style="width: 7px; height: 7px; border-radius: 50%; background: currentColor"></span>已连接 · 出口已校验</span>
+        <span class="chip">JP · 东京</span><span class="chip" style="background: #E6EEFE; color: #0842C2">住宅宽带</span>
+        <span style="display: inline-flex; background: #EEF1F4; border-radius: 10px; padding: 3px; gap: 2px"><span style="height: 30px; padding: 0 14px; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 600; display: grid; place-items: center; box-shadow: 0 1px 2px rgba(14,23,38,.14)">规则</span><span style="height: 30px; padding: 0 14px; font-size: 13px; color: #4A5568; display: grid; place-items: center">全局</span><span style="height: 30px; padding: 0 14px; font-size: 13px; color: #4A5568; display: grid; place-items: center">直连</span></span>
+        <span style="width: 40px; height: 24px; border-radius: 12px; background: #0A55F5; position: relative; display: inline-block"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 50%; background: #fff"></span></span>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 14px">
+        <div style="flex: 1; border: 1px solid #0A55F5; box-shadow: 0 0 0 3px #E6EEFE; border-radius: 12px; padding: 12px 14px"><div style="display: flex; align-items: center; gap: 8px"><span class="mono" style="width: 28px; height: 19px; border-radius: 4px; background: #0E1726; color: #fff; font-size: 10px; display: grid; place-items: center">JP</span><b style="font-size: 14px">东京家宽 · 04</b><span style="flex: 1"></span><span class="mono" style="color: #0B6E4B; font-weight: 600">37 ms</span></div><div class="lbl" style="margin-top: 6px">选中态：蓝描边 + 浅蓝外环</div></div>
+        <div style="flex: 1; border: 1px solid #DCE1E7; background: #F7F8FA; border-radius: 12px; padding: 12px 14px"><div style="display: flex; align-items: center; gap: 8px"><span class="mono" style="width: 28px; height: 19px; border-radius: 4px; background: #8A94A3; color: #fff; font-size: 10px; display: grid; place-items: center">GB</span><b style="font-size: 14px; color: #56616F">伦敦家宽 · 01</b></div><div class="lbl" style="margin-top: 6px">套餐未包含：看得见、点不了、写明原因</div></div>
+      </div>
+      <div class="lbl" style="margin-top: 12px">国家/地区一律用代码块（JP / US），不用旗帜表情；圆角：卡片 14–16、按钮 9、标签 6</div>
+    </section>
+  </div>
+
+  <section class="card" style="flex: 1" aria-label="平台差异与导航">
+    <h2 class="h2">四端差异与导航命名</h2>
+    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px">
+      <table>
+        <thead><tr><th style="width: 90px">平台</th><th>窗口与系统入口</th><th>网络接管</th></tr></thead>
+        <tbody>
+          <tr><td><b>Windows</b></td><td>自绘标题栏（— □ ✕）、左侧导航；托盘菜单可连接、切模式、勾选系统代理与 TUN</td><td>系统代理 + TUN（WinTUN）</td></tr>
+          <tr><td><b>macOS</b></td><td>红绿灯 + 半透明侧栏，工具栏放标题与状态；菜单栏弹出面板替代托盘，含场景与常用线路</td><td>系统代理 + 增强模式（需一次管理员授权）</td></tr>
+          <tr><td><b>Linux</b></td><td>GNOME 头栏（标题居中、圆形窗口按钮），默认跟随系统深色；AppIndicator 托盘同 Windows 菜单</td><td>GNOME/KDE 代理设置 + TUN（polkit 授权）</td></tr>
+          <tr><td><b>Android</b></td><td>底部四标签；快捷设置磁贴一键连断；常驻通知显示速率与操作；线路故障与到期走通知</td><td>VpnService · 分应用代理 · 引导开启「始终开启 VPN」</td></tr>
+        </tbody>
+      </table>
+      <table>
+        <thead><tr><th>代码里的页面</th><th>设计稿命名</th></tr></thead>
+        <tbody>
+          <tr><td>dashboard 仪表盘</td><td>仪表盘 / 首页</td></tr>
+          <tr><td>proxies 代理</td><td>线路（+ 独立的家宽线路页）</td></tr>
+          <tr><td>profiles 配置</td><td>订阅</td></tr>
+          <tr><td>requests 请求</td><td>连接</td></tr>
+          <tr><td>logs 日志</td><td>日志与诊断（合并一键诊断）</td></tr>
+          <tr><td>dns · resources</td><td>DNS 与资源</td></tr>
+          <tr><td>tools 工具</td><td>设置（桌面）/ 工具（手机）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+</body>
+</html>

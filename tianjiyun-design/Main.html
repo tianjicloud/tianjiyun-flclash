@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Windows 仪表盘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+.window{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.titlebar{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding-left:12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.wc{display:flex}.wc span{width:46px;height:32px;display:grid;place-items:center;color:#2D3748}
+.body{flex:1;display:flex;min-height:0}
+.rail{width:220px;flex:none;background:#F7F8FA;border-right:1px solid #DCE1E7;padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 8px 18px}
+.mark{width:32px;height:32px;border-radius:9px;background:#0E1726;display:grid;place-items:center;flex:none}
+.nav{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:9px;color:#4A5568;text-decoration:none;font-size:14px}
+.nav:hover{background:#EBEEF2;color:#0E1726}
+.nav.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:inset 0 0 0 1px #DCE1E7}
+.nav.on svg{color:#0A55F5}
+.main{flex:1;min-width:0;padding:20px 28px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.top{display:flex;align-items:center;justify-content:space-between;height:34px}
+h1{margin:0;font-size:22px;font-weight:700}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:14px}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 12px;border-radius:14px;font-size:12px;background:#fff;border:1px solid #DCE1E7;color:#4A5568;white-space:nowrap}
+.pill.ok{background:#E7F5EF;border-color:#BFE3D2;color:#0B6E4B}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.blue{background:#E6EEFE;color:#0842C2}
+.chip.green{background:#E7F5EF;color:#0B6E4B}
+.seg{display:inline-flex;background:#EEF1F4;border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;height:30px;padding:0 14px;border-radius:8px;font-size:13px;color:#4A5568;cursor:pointer}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.tg{width:40px;height:24px;border-radius:12px;background:#B8C1CC;border:0;position:relative;cursor:pointer;flex:none;padding:0}
+.tg::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.tg.on{background:#0A55F5}.tg.on::after{left:19px}
+.dial{position:relative;width:184px;height:184px;display:grid;place-items:center;flex:none}
+.dial::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(#B8C1CC 0 1.5deg,transparent 1.5deg 7.5deg);-webkit-mask:radial-gradient(circle,transparent 80px,#000 81px 92px);mask:radial-gradient(circle,transparent 80px,#000 81px 92px)}
+.dial.on::before{background:repeating-conic-gradient(#0E8A5F 0 1.5deg,transparent 1.5deg 7.5deg)}
+.core{width:132px;height:132px;border-radius:50%;border:0;background:#fff;box-shadow:0 0 0 1px #DCE1E7,0 8px 24px rgba(14,23,38,.08);display:grid;place-items:center;cursor:pointer;color:#0E1726;position:relative}
+.dial.on .core{background:#0A55F5;color:#fff;box-shadow:0 0 0 7px #E6EEFE,0 12px 28px rgba(10,85,245,.28)}
+.bar{height:8px;border-radius:4px;background:#EEF1F4;overflow:hidden;display:flex}
+.ok-t{color:#0B6E4B}.warn-t{color:#A15C00}.bad-t{color:#B42335}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="window">
+  <div class="titlebar">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0E1726"></rect><circle cx="12" cy="12" r="6" fill="none" stroke="#fff" stroke-width="2"></circle><circle cx="16.5" cy="7.5" r="2.2" fill="#5B8CFF"></circle></svg>
+      <span>天机云</span>
+    </div>
+    <div class="wc" aria-hidden="true">
+      <span><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 5h10" stroke="currentColor"></path></svg></span>
+      <span><svg width="10" height="10" viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9" fill="none" stroke="currentColor"></rect></svg></span>
+      <span><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10" stroke="currentColor"></path></svg></span>
+    </div>
+  </div>
+  <div class="body">
+    <nav class="rail" aria-label="主导航">
+      <div class="brand">
+        <div class="mark"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5" fill="none" stroke="#fff" stroke-width="1.8"></circle><circle cx="16.8" cy="7.2" r="2.4" fill="#5B8CFF"></circle></svg></div>
+        <div>
+          <div style="font-size: 16px; font-weight: 700; line-height: 1.1">天机云</div>
+          <div style="font-size: 10px; letter-spacing: .16em; color: #56616F; margin-top: 3px">TIANJI CLOUD</div>
+        </div>
+      </div>
+      <a class="nav on" href="Main.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>仪表盘</a>
+      <a class="nav" href="win/Proxies.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"></path></svg>线路</a>
+      <a class="nav" href="win/Profiles.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5M10 13h6M10 17h6"></path></svg>订阅</a>
+      <a class="nav" href="win/Requests.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 4v16M4 17l3 3 3-3M17 20V4M14 7l3-3 3 3"></path></svg>连接</a>
+      <a class="nav" href="win/Logs.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>日志与诊断</a>
+      <a class="nav" href="win/Settings.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg>设置</a>
+      <div class="card" style="margin-top: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+        <div style="font-size: 13px; font-weight: 600">AI 住宅原生 IP</div>
+        <div class="lbl">剩余 28 天 · 已用 5%</div>
+        <div class="bar"><div style="width: 5%; background: #0A55F5"></div></div>
+      </div>
+    </nav>
+    <main class="main">
+      <div class="top">
+        <h1>仪表盘</h1>
+        <div style="display: flex; align-items: center; gap: 10px">
+          <span class="lbl">订阅更新于 19 分钟前</span>
+          <span class="pill ok"><span class="dot"></span>已连接 · 出口已校验</span>
+          
+        </div>
+      </div>
+
+      <section class="card" style="height: 236px; padding: 22px 26px; display: flex; align-items: center; gap: 24px" aria-label="连接状态">
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+          <div class="lbl" style="letter-spacing: .08em">当前出口 IP</div>
+          
+            <div class="mono" style="font-size: 46px; font-weight: 600; line-height: 1; letter-spacing: -.01em">203.0.113.42</div>
+          
+          
+          <div style="display: flex; gap: 6px; flex-wrap: wrap">
+            <span class="chip">JP · 日本 东京</span>
+            <span class="chip blue">住宅宽带</span>
+            <span class="chip green">质量 优</span>
+            <span class="chip">SoftBank</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 4px">
+            <div><div class="lbl">当前线路</div><div style="font-size: 14px; font-weight: 600; margin-top: 4px">东京家宽 · 04</div></div>
+            <div><div class="lbl">运行时长</div><div class="mono" style="font-size: 14px; font-weight: 600; margin-top: 4px">01:24:36</div></div>
+            <div><div class="lbl">延迟</div><div class="mono ok-t" style="font-size: 14px; font-weight: 600; margin-top: 4px">37 ms</div></div>
+            <div><div class="lbl">DNS 出口</div><div style="font-size: 14px; font-weight: 600; margin-top: 4px">与 IP 出口一致</div></div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+          <div class="dial on">
+            <button class="core" aria-label="断开连接">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v8"></path><path d="M6.3 6.8a8 8 0 1 0 11.4 0"></path></svg>
+            </button>
+          </div>
+          <div class="lbl">已连接 · 点击断开</div>
+        </div>
+        <div style="width: 1px; align-self: stretch; background: #E5E9EE"></div>
+        <div style="width: 118px; display: flex; flex-direction: column; gap: 18px">
+          <div><div class="lbl">下载</div><div class="mono" style="font-size: 20px; font-weight: 600; margin-top: 4px">2.4 MB/s</div></div>
+          <div><div class="lbl">上传</div><div class="mono" style="font-size: 20px; font-weight: 600; margin-top: 4px">312 KB/s</div></div>
+        </div>
+      </section>
+
+      <section class="card" style="height: 60px; padding: 0 14px 0 18px; display: flex; align-items: center; gap: 14px" aria-label="场景与出站模式">
+        <span class="lbl">场景</span>
+        <div class="seg" role="group" aria-label="场景">
+          <button class="on">日常</button><button class="">AI</button><button class="">观影</button>
+        </div>
+        <span style="font-size: 13px; color: #4A5568">大流量自动绕开家宽 · 大陆流量本地直连</span>
+        <span style="flex: 1"></span>
+        <span class="lbl">出站</span>
+        <div class="seg" role="group" aria-label="出站模式">
+          <button class="on">规则</button><button class="">全局</button><button class="">直连</button>
+        </div>
+      </section>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; height: 214px">
+        <section class="card" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: inset 0 3px 0 #0A55F5" aria-label="家宽线路">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <span style="font-size: 13px; font-weight: 600">家宽线路</span>
+            <span class="chip blue">已锁定出口</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span class="mono" style="width: 34px; height: 24px; border-radius: 5px; background: #0E1726; color: #fff; font-size: 11px; display: grid; place-items: center">JP</span>
+            <span style="font-size: 22px; font-weight: 700">东京家宽 · 04</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #4A5568">AI 与需要代理的分组都从这条线路出去；视频等大流量自动走大带宽节点，不占家宽流量。</p>
+          <div style="display: flex; gap: 8px; margin-top: auto">
+            <a class="btn pri" href="mac/Residential.html">更换线路</a>
+            <button class="btn">按订阅分流</button>
+          </div>
+        </section>
+        <section class="card" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 12px" aria-label="本月流量">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 13px; font-weight: 600">本月流量</span>
+            <span class="mono" style="font-size: 22px; font-weight: 600">38.4 GB</span>
+          </div>
+          <div class="bar" style="height: 10px"><div style="width: 62%; background: #0A55F5"></div><div style="width: 31%; background: #0E8A5F"></div><div style="width: 7%; background: #B8C1CC"></div></div>
+          <div style="display: flex; flex-direction: column; gap: 7px; font-size: 13px">
+            <div style="display: flex; align-items: center; gap: 8px"><span class="dot" style="color: #0A55F5"></span>代理<span style="flex: 1"></span><span class="mono">23.8 GB</span></div>
+            <div style="display: flex; align-items: center; gap: 8px"><span class="dot" style="color: #0E8A5F"></span>大陆直连<span style="flex: 1"></span><span class="mono">11.9 GB</span></div>
+            <div style="display: flex; align-items: center; gap: 8px"><span class="dot" style="color: #8A94A3"></span>直连（地区未确认）<span style="flex: 1"></span><span class="mono">2.7 GB</span></div>
+          </div>
+          <div class="lbl" style="margin-top: auto">仅本设备本月统计</div>
+        </section>
+        <section class="card" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 10px" aria-label="订阅">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <span style="font-size: 13px; font-weight: 600">订阅</span>
+            <span class="lbl">AI 住宅原生 IP</span>
+          </div>
+          <div style="font-size: 30px; font-weight: 700; line-height: 1.1">剩余 28 天</div>
+          <div class="lbl">2026-12-06 到期 · 已用 10.2 / 200 GB</div>
+          <div class="bar"><div style="width: 5%; background: #0A55F5"></div></div>
+          <div style="display: flex; gap: 8px; margin-top: auto">
+            <a class="btn" href="win/Profiles.html">订阅详情</a>
+            <span style="flex: 1"></span>
+            <button class="btn pri">续费</button>
+          </div>
+        </section>
+      </div>
+
+      <section class="card" style="height: 72px; padding: 0 18px; display: flex; align-items: center; gap: 22px" aria-label="网络接管与诊断">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <div><div style="font-size: 14px; font-weight: 600">系统代理</div><div class="lbl">端口 7890</div></div>
+          <button class="tg on" aria-pressed="true" aria-label="系统代理"></button>
+        </div>
+        <div style="width: 1px; height: 32px; background: #E5E9EE"></div>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <div><div style="font-size: 14px; font-weight: 600">虚拟网卡（TUN）</div><div class="lbl">接管所有应用流量</div></div>
+          <button class="tg on" aria-pressed="true" aria-label="虚拟网卡"></button>
+        </div>
+        <div style="width: 1px; height: 32px; background: #E5E9EE"></div>
+        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0">
+          <span style="font-size: 13px; font-weight: 600">AI 服务</span>
+          <span class="chip green">ChatGPT 可用</span>
+          <span class="chip green">Claude 可用</span>
+          <span class="chip green">Gemini 可用</span>
+        </div>
+        <a class="btn" href="win/Logs.html">一键诊断</a>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

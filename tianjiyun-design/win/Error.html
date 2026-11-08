@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 内核启动失败</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 20px;border-radius:10px;border:1px solid #DCE1E7;background:#fff;font-size:14px;font-weight:600;color:#0E1726;text-decoration:none}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.step{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.6}
+.n{width:24px;height:24px;border-radius:50%;background:#EEF1F4;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div style="width: 1280px; height: 800px; background: #EEF1F4; border-radius: 8px; border: 1px solid #C3CAD3; overflow: hidden; display: flex; flex-direction: column; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726">
+  <div style="height: 32px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 18px 0 12px; background: #F7F8FA; border-bottom: 1px solid #DCE1E7; font-size: 12px; color: #4A5568"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div style="flex: 1; display: grid; place-items: center">
+    <div role="alert" style="width: 640px; display: flex; flex-direction: column; gap: 18px">
+      <div style="width: 64px; height: 64px; border-radius: 18px; background: #FCEBEE; display: grid; place-items: center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B42335" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg></div>
+      <div style="font-size: 28px; font-weight: 700">网络内核没能启动</div>
+      <div style="font-size: 15px; line-height: 1.7; color: #2D3748">端口 7890 已被其他程序占用，天机云无法监听。你的网络没有被改动，可以正常上网。</div>
+      <div style="background: #fff; border: 1px solid #DCE1E7; border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="font-size: 13px; font-weight: 700; color: #56616F">可以这样解决</div>
+        <div class="step"><span class="n">1</span><span>关闭其他代理软件（例如另一个 Clash 客户端）后点「重试」</span></div>
+        <div class="step"><span class="n">2</span><span>或者让天机云自动换一个空闲端口</span></div>
+        <div class="step"><span class="n">3</span><span>还不行就导出脱敏报告发给客服</span></div>
+      </div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #56616F; background: #F7F8FA; border-radius: 10px; padding: 10px 14px">错误代码 E_PORT_IN_USE · listen tcp 127.0.0.1:7890: bind: address already in use</div>
+      <div style="display: flex; gap: 10px">
+        <button class="btn pri">重试</button>
+        <button class="btn">自动换端口</button>
+        <a class="btn" href="Logs.html">导出报告给客服</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

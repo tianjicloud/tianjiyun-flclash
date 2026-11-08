@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 连接详情</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726;position:relative}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.blue{background:#E6EEFE;color:#0842C2}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;color:#0E1726}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid #EEF1F4;font-size:13px}
+.kv span:first-child{color:#56616F;flex:none}
+.hop{display:flex;align-items:center;gap:12px;font-size:13px}
+.hop i{width:12px;height:12px;border-radius:50%;border:2px solid #0A55F5;background:#fff;flex:none}
+.line{width:2px;height:18px;background:#C9D9FB;margin-left:5px}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div aria-hidden="true" style="flex: 1; display: flex">
+    <div style="width: 220px; background: #F7F8FA; border-right: 1px solid #DCE1E7"></div>
+    <div style="flex: 1; padding: 20px 28px; display: flex; flex-direction: column; gap: 10px">
+      <div style="height: 34px; width: 120px; border-radius: 8px; background: #DCE1E7"></div>
+      <div style="flex: 1; border-radius: 14px; background: #fff; display: flex; flex-direction: column">
+        <div style="height: 44px; border-bottom: 1px solid #EEF1F4"></div>
+        <div style="height: 44px; background: #E6EEFE; border-bottom: 1px solid #EEF1F4"></div>
+        <div style="height: 44px; border-bottom: 1px solid #EEF1F4"></div>
+        <div style="height: 44px; border-bottom: 1px solid #EEF1F4"></div>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; inset: 32px 0 0; background: rgba(14,23,38,.25)"></div>
+  <aside role="dialog" aria-label="连接详情" style="position: absolute; right: 0; top: 32px; bottom: 0; width: 480px; background: #fff; border-left: 1px solid #DCE1E7; box-shadow: -16px 0 40px rgba(14,23,38,.14); padding: 22px 24px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <span style="width: 40px; height: 40px; border-radius: 10px; background: #1A73E8; color: #fff; display: grid; place-items: center; font-weight: 700">C</span>
+      <div style="flex: 1"><div style="font-size: 16px; font-weight: 700">Chrome</div><div class="lbl mono">chatgpt.com:443 · TCP</div></div>
+      <button aria-label="关闭" style="width: 32px; height: 32px; border-radius: 16px; border: 0; background: #EEF1F4">✕</button>
+    </div>
+    <div style="padding: 16px; border-radius: 12px; background: #F7F8FA">
+      <div class="lbl" style="margin-bottom: 10px">流量路径</div>
+      <div class="hop"><i></i>本机 Chrome</div><div class="line"></div>
+      <div class="hop"><i></i>命中规则 <span class="chip blue">AI 服务 · DOMAIN-SUFFIX chatgpt.com</span></div><div class="line"></div>
+      <div class="hop"><i></i>分组 AI 专线 → 跟随家宽</div><div class="line"></div>
+      <div class="hop"><i style="background: #0A55F5"></i><b>东京家宽 · 04</b><span class="mono lbl">203.0.113.42</span></div>
+    </div>
+    <div>
+      <div class="kv"><span>开始时间</span><span class="mono">14:10:27</span></div>
+      <div class="kv"><span>持续</span><span class="mono">12:04</span></div>
+      <div class="kv"><span>下载 / 上传</span><span class="mono">18.2 MB / 1.1 MB</span></div>
+      <div class="kv"><span>源地址</span><span class="mono">127.0.0.1:52331</span></div>
+      <div class="kv"><span>目标 IP</span><span class="mono">198.18.0.21（fake-ip）</span></div>
+      <div class="kv"><span>进程路径</span><span class="mono" style="font-size: 12px; text-align: right">C:\Program Files\Google\Chrome\chrome.exe</span></div>
+      <div class="kv"><span>嗅探到的域名</span><span class="mono">chatgpt.com</span></div>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: auto">
+      <button class="btn" style="flex: 1">为该域名添加规则</button>
+      <button class="btn" style="flex: 1; color: #B42335; border-color: #F1C4CC">关闭此连接</button>
+    </div>
+  </aside>
+</div>
+</body>
+</html>

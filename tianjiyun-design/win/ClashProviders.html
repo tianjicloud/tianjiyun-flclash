@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 代理集与规则集</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:14px}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.green{background:#E7F5EF;color:#0B6E4B}.chip.amber{background:#FDF1E3;color:#8A4B00}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.row{display:flex;align-items:center;gap:12px;padding:14px 18px;border-top:1px solid #EEF1F4}
+.hb{display:flex;gap:2px;height:6px;border-radius:3px;overflow:hidden;width:120px}
+.hb i{flex:1}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div style="height: 64px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #fff; border-bottom: 1px solid #DCE1E7">
+    <a href="Proxies.html" aria-label="返回" class="btn" style="width: 32px; padding: 0">‹</a>
+    <div><div style="font-size: 16px; font-weight: 700">代理集与规则集</div><div class="lbl">由订阅下发、定期更新的外部集合</div></div>
+    <span style="flex: 1"></span><button class="btn pri">全部更新</button>
+  </div>
+  <div style="flex: 1; min-height: 0; display: flex; gap: 16px; padding: 18px 24px">
+    <section class="card" style="flex: 1; overflow: hidden" aria-label="代理集">
+      <div style="display: flex; align-items: center; padding: 14px 18px"><span style="font-size: 15px; font-weight: 700; flex: 1">代理集 · 3</span><span class="lbl">健康度 = 最近一次检测可用比例</span></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">天机 · 精品线路</div><div class="lbl">32 条 · 2 小时前更新 · 每 30 分钟检测</div></div><div class="hb" aria-label="31 条可用"><i style="background: #0E8A5F; flex: 31"></i><i style="background: #D7DCE2; flex: 1"></i></div><span class="mono lbl">31/32</span><button class="btn">检测</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">天机 · 住宅原生</div><div class="lbl">11 条 · 2 小时前更新</div></div><div class="hb" aria-label="11 条可用"><i style="background: #0E8A5F; flex: 11"></i></div><span class="mono lbl">11/11</span><button class="btn">检测</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">朋友共享节点</div><div class="lbl">6 条 · 自定义来源 · 1 天前更新</div></div><div class="hb" aria-label="4 条可用"><i style="background: #0E8A5F; flex: 4"></i><i style="background: #D48A16; flex: 2"></i></div><span class="mono lbl">4/6</span><button class="btn">检测</button></div>
+    </section>
+    <section class="card" style="flex: 1; overflow: hidden" aria-label="规则集">
+      <div style="display: flex; align-items: center; padding: 14px 18px"><span style="font-size: 15px; font-weight: 700; flex: 1">规则集 · 6</span></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">AI 服务</div><div class="lbl">域名 · 212 条 · 3 小时前</div></div><span class="chip green">最新</span><button class="btn">更新</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">大流量绕行</div><div class="lbl">域名 · 1,408 条 · 3 小时前</div></div><span class="chip green">最新</span><button class="btn">更新</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">中国大陆直连</div><div class="lbl">IP + 域名 · 8,960 条 · 1 天前</div></div><span class="chip green">最新</span><button class="btn">更新</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">广告拦截</div><div class="lbl">域名 · 42,118 条 · 1 天前</div></div><span class="chip green">最新</span><button class="btn">更新</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">Telegram</div><div class="lbl">IP · 64 条 · 7 天前</div></div><span class="chip amber">更新失败，使用旧版</span><button class="btn">重试</button></div>
+      <div class="row"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">公司规则集</div><div class="lbl">自定义 · 86 条 · 今天</div></div><span class="chip green">最新</span><button class="btn">更新</button></div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

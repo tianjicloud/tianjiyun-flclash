@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 DNS 查询详情</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726;position:relative}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.blue{background:#E6EEFE;color:#0842C2}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;color:#0E1726}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid #EEF1F4;font-size:13px}
+.kv span:first-child{color:#56616F;flex:none}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+td,th{padding:8px 10px;border-bottom:1px solid #EEF1F4;text-align:left}
+th{color:#56616F;font-weight:500;font-size:12px}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div aria-hidden="true" style="flex: 1; display: flex">
+    <div style="width: 220px; background: #F7F8FA; border-right: 1px solid #DCE1E7"></div>
+    <div style="flex: 1; padding: 20px 28px; display: flex; flex-direction: column; gap: 10px">
+      <div style="height: 34px; width: 160px; border-radius: 8px; background: #DCE1E7"></div>
+      <div style="flex: 1; border-radius: 14px; background: #fff; display: flex; flex-direction: column">
+        <div style="height: 42px; border-bottom: 1px solid #EEF1F4"></div>
+        <div style="height: 42px; border-bottom: 1px solid #EEF1F4"></div>
+        <div style="height: 42px; background: #E6EEFE; border-bottom: 1px solid #EEF1F4"></div>
+        <div style="height: 42px; border-bottom: 1px solid #EEF1F4"></div>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; inset: 32px 0 0; background: rgba(14,23,38,.25)"></div>
+  <aside role="dialog" aria-label="DNS 查询详情" style="position: absolute; right: 0; top: 32px; bottom: 0; width: 480px; background: #fff; border-left: 1px solid #DCE1E7; box-shadow: -16px 0 40px rgba(14,23,38,.14); padding: 22px 24px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="flex: 1"><div class="lbl">DNS 查询</div><div class="mono" style="font-size: 18px; font-weight: 600; margin-top: 2px">api.anthropic.com</div></div>
+      <button aria-label="关闭" style="width: 32px; height: 32px; border-radius: 16px; border: 0; background: #EEF1F4">✕</button>
+    </div>
+    <div style="display: flex; gap: 6px"><span class="chip blue">代理解析</span><span class="chip">A 记录</span><span class="chip">发起方：Claude</span></div>
+    <div>
+      <div class="kv"><span>时间</span><span class="mono">14:22:30.418</span></div>
+      <div class="kv"><span>返回给应用</span><span class="mono">198.18.0.34（fake-ip）</span></div>
+      <div class="kv"><span>实际解析位置</span><span>出口端 · 东京家宽 · 04</span></div>
+      <div class="kv"><span>本地是否查询运营商 DNS</span><span style="color: #0B6E4B; font-weight: 600">否</span></div>
+      <div class="kv"><span>命中规则</span><span>AI 服务</span></div>
+      <div class="kv"><span>耗时</span><span class="mono">1 ms（缓存）</span></div>
+    </div>
+    <div>
+      <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px">同域名最近查询</div>
+      <table>
+        <thead><tr><th>时间</th><th>结果</th><th>耗时</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">14:22:30</td><td class="mono">198.18.0.34</td><td class="mono">1 ms</td></tr>
+          <tr><td class="mono">14:12:02</td><td class="mono">198.18.0.34</td><td class="mono">1 ms</td></tr>
+          <tr><td class="mono">13:58:44</td><td class="mono">198.18.0.34</td><td class="mono">36 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: auto">
+      <button class="btn" style="flex: 1">复制域名</button>
+      <button class="btn" style="flex: 1">查看相关连接</button>
+    </div>
+  </aside>
+</div>
+</body>
+</html>

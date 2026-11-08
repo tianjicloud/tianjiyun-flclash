@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Android DNS 与资源</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.chip{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;font-size:11px;background:#E6EEFE;color:#0842C2;white-space:nowrap}
+.chip.green{background:#E7F5EF;color:#0B6E4B}.chip.red{background:#FCEBEE;color:#9B1C30}
+.seg{display:flex;background:#E4E8ED;border-radius:12px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;height:36px;border-radius:10px;font-size:14px;color:#4A5568}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.q{display:flex;align-items:center;gap:10px;padding:11px 16px;border-top:1px solid #EEF1F4;background:#fff}
+.res{display:flex;align-items:center;gap:12px;padding:13px 16px;border-top:1px solid #EEF1F4}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 390×844 -->
+<div style="width: 390px; height: 844px; background: #EEF1F4; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726; display: flex; flex-direction: column; overflow: hidden">
+  <div style="display: flex; align-items: center; gap: 6px; padding: 14px 10px 8px">
+    <a href="Tools.html" aria-label="返回" style="width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E1726" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+    <span style="font-size: 19px; font-weight: 700">DNS 与资源</span>
+  </div>
+  <div style="padding: 0 16px 12px"><div class="seg" role="group" aria-label="视图"><button class="on">DNS 查询</button><button>分流资源</button></div></div>
+  <div style="padding: 0 16px 10px; display: flex; gap: 8px"><span class="chip">fake-ip</span><span class="chip" style="background: #fff; color: #2D3748; border: 1px solid #DCE1E7">DoH · 订阅下发</span></div>
+  <div style="border-top: 1px solid #DCE1E7">
+    <div class="q"><div style="flex: 1; min-width: 0"><div class="mono" style="font-size: 13.5px">chatgpt.com</div><div class="lbl mono">14:22:31 · 198.18.0.21</div></div><span class="chip">代理解析</span></div>
+    <div class="q"><div style="flex: 1; min-width: 0"><div class="mono" style="font-size: 13.5px">api.anthropic.com</div><div class="lbl mono">14:22:30 · 198.18.0.34</div></div><span class="chip">代理解析</span></div>
+    <div class="q"><div style="flex: 1; min-width: 0"><div class="mono" style="font-size: 13.5px">www.baidu.com</div><div class="lbl mono">14:22:28 · 110.242.68.3 · 18 ms</div></div><span class="chip green">国内直连</span></div>
+    <div class="q"><div style="flex: 1; min-width: 0"><div class="mono" style="font-size: 13.5px">rr4.googlevideo.com</div><div class="lbl mono">14:22:25 · 198.18.0.57</div></div><span class="chip">代理解析</span></div>
+    <div class="q"><div style="flex: 1; min-width: 0"><div class="mono" style="font-size: 13.5px">ads.example-tracker.com</div><div class="lbl mono">14:22:02 · —</div></div><span class="chip red">已拦截</span></div>
+    <div class="q"><div style="flex: 1; min-width: 0"><div class="mono" style="font-size: 13.5px">www.bilibili.com</div><div class="lbl mono">14:21:49 · 120.92.78.97 · 15 ms</div></div><span class="chip green">国内直连</span></div>
+  </div>
+  <div style="margin: 14px 16px 0; background: #fff; border: 1px solid #DCE1E7; border-radius: 16px; overflow: hidden">
+    <div style="padding: 12px 16px 6px; font-size: 13px; font-weight: 700">分流资源预览</div>
+    <div class="res"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">GeoIP · GeoSite</div><div class="lbl">3 天前更新</div></div><span style="font-size: 13px; color: #0842C2">更新</span></div>
+    <div class="res"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">AI 服务 · 大流量绕行</div><div class="lbl">订阅下发 · 已是最新</div></div><span class="chip green">最新</span></div>
+  </div>
+</div>
+</body>
+</html>

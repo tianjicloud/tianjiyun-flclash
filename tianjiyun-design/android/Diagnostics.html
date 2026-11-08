@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Android 一键诊断</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.chk{display:flex;align-items:center;gap:12px;min-height:50px;padding:8px 16px;border-top:1px solid #EEF1F4;font-size:14px}
+.st{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;flex:none}
+.pass{background:#E7F5EF;color:#0B6E4B}.fail{background:#FCEBEE;color:#9B1C30}.skip{background:#EEF1F4;color:#56616F}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 390×844 -->
+<div style="width: 390px; height: 844px; background: #EEF1F4; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726; display: flex; flex-direction: column; overflow: hidden">
+  <div style="display: flex; align-items: center; gap: 6px; padding: 14px 10px 8px">
+    <a href="Tools.html" aria-label="返回" style="width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E1726" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+    <span style="font-size: 19px; font-weight: 700">一键诊断</span>
+  </div>
+  <div style="flex: 1; padding: 4px 16px 20px; display: flex; flex-direction: column; gap: 12px; overflow: hidden">
+    <div style="display: flex; gap: 8px">
+      <div style="flex: 1; padding: 12px; border-radius: 14px; background: #E7F5EF"><div class="mono" style="font-size: 22px; font-weight: 600; color: #0B6E4B">6</div><div class="lbl">通过</div></div>
+      <div style="flex: 1; padding: 12px; border-radius: 14px; background: #FCEBEE"><div class="mono" style="font-size: 22px; font-weight: 600; color: #9B1C30">1</div><div class="lbl">未通过</div></div>
+      <div style="flex: 1; padding: 12px; border-radius: 14px; background: #fff; border: 1px solid #DCE1E7"><div class="mono" style="font-size: 22px; font-weight: 600; color: #4A5568">1</div><div class="lbl">未能检测</div></div>
+    </div>
+    <div class="lbl">14:02 完成 · 用时 11 秒</div>
+    <div style="background: #fff; border: 1px solid #DCE1E7; border-radius: 16px; overflow: hidden">
+      <div class="chk" style="border-top: 0"><span class="st pass">✓</span><span style="flex: 1">内核运行</span></div>
+      <div class="chk"><span class="st pass">✓</span><span style="flex: 1">订阅可访问并已解析</span></div>
+      <div class="chk"><span class="st pass">✓</span><span style="flex: 1">VPN 已接管全部流量</span></div>
+      <div class="chk"><span class="st pass">✓</span><span style="flex: 1">实际出口与所选线路一致</span></div>
+      <div class="chk"><span class="st pass">✓</span><span style="flex: 1">DNS 出口与 IP 出口一致</span></div>
+      <div class="chk"><span class="st pass">✓</span><span style="flex: 1">ChatGPT / Claude 可访问</span></div>
+      <div class="chk" style="align-items: flex-start"><span class="st fail">✕</span><span style="flex: 1">系统「始终开启 VPN」未启用<div class="lbl" style="margin-top: 3px; line-height: 1.5">应用被系统清理后流量会绕过天机云</div></span><span style="font-size: 13px; color: #0842C2; font-weight: 600">去开启</span></div>
+      <div class="chk"><span class="st skip">–</span><span style="flex: 1">IPv6 出口<div class="lbl">当前网络无 IPv6</div></span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto">
+      <button style="height: 50px; border-radius: 14px; border: 0; background: #0A55F5; color: #fff; font-size: 15px; font-weight: 600">重新诊断</button>
+      <div style="display: flex; gap: 10px"><button style="flex: 1; height: 48px; border-radius: 14px; border: 1px solid #DCE1E7; background: #fff; font-size: 14px; font-weight: 600">导出脱敏报告</button><button style="flex: 1; height: 48px; border-radius: 14px; border: 1px solid #DCE1E7; background: #fff; font-size: 14px; font-weight: 600">发给客服</button></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

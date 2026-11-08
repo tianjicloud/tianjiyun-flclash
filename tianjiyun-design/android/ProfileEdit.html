@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Android 编辑订阅</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button,input{font:inherit;color:inherit}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.f{display:flex;flex-direction:column;gap:6px}
+.fl{font-size:13px;font-weight:600}
+.in{height:48px;padding:0 14px;border:1px solid #DCE1E7;border-radius:12px;background:#fff;font-size:14px;display:flex;align-items:center;justify-content:space-between;width:100%}
+.grp{background:#fff;border:1px solid #DCE1E7;border-radius:16px;overflow:hidden}
+.it{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;border-top:1px solid #EEF1F4;font-size:15px;text-decoration:none;color:#0E1726}
+.it:first-child{border-top:0}
+.tg{width:44px;height:26px;border-radius:13px;background:#B8C1CC;border:0;position:relative;flex:none;padding:0;margin-left:auto}
+.tg::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff}
+.tg.on{background:#0A55F5}.tg.on::after{left:21px}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 390×844 -->
+<div style="width: 390px; height: 844px; background: #EEF1F4; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726; display: flex; flex-direction: column; overflow: hidden">
+  <div style="display: flex; align-items: center; gap: 6px; padding: 14px 10px 8px">
+    <a href="Profiles.html" aria-label="返回" style="width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E1726" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+    <span style="font-size: 19px; font-weight: 700; flex: 1">编辑订阅</span>
+    <button style="height: 36px; padding: 0 16px; border-radius: 18px; border: 0; background: #0A55F5; color: #fff; font-size: 14px; font-weight: 600; margin-right: 6px">保存</button>
+  </div>
+  <div style="flex: 1; padding: 6px 16px 20px; display: flex; flex-direction: column; gap: 16px; overflow: hidden">
+    <label class="f"><span class="fl">名称</span><input class="in" value="AI 住宅原生 IP"></label>
+    <label class="f"><span class="fl">订阅链接</span><span class="in mono" style="font-size: 12px">https://sub.tianjiyun.org/…••••<span style="font-family: 'Noto Sans SC'; color: #0842C2; font-size: 13px">显示</span></span></label>
+    <label class="f"><span class="fl">自动更新</span><span class="in">每 6 小时<span aria-hidden="true">▾</span></span></label>
+    <div class="grp">
+      <div class="it">在首页显示套餐信息<button class="tg on" aria-pressed="true" aria-label="在首页显示套餐信息"></button></div>
+      <div class="it">到期与流量提醒<button class="tg on" aria-pressed="true" aria-label="到期与流量提醒"></button></div>
+      <div class="it">User-Agent<span class="lbl" style="margin-left: auto">默认 ›</span></div>
+      <div class="it">扩展覆写与脚本<span class="lbl" style="margin-left: auto">1 项 ›</span></div>
+      <div class="it">查看原始配置<span class="lbl" style="margin-left: auto">›</span></div>
+    </div>
+    <button style="height: 50px; border-radius: 14px; border: 1px solid #F1C4CC; background: #fff; color: #B42335; font-size: 15px; font-weight: 600; margin-top: auto">删除此订阅</button>
+    <div class="lbl" style="text-align: center">只删除本机配置，不影响你的天机云账号</div>
+  </div>
+</div>
+</body>
+</html>

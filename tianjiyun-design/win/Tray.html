@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Windows 托盘菜单</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+.it{display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;border-radius:6px;font-size:13px;border:0;background:transparent;width:100%;text-align:left;cursor:pointer;color:#0E1726}
+.it:hover{background:#EEF1F4}
+.hr{height:1px;background:#E5E9EE;margin:4px 6px}
+.k{margin-left:auto;font-size:12px;color:#56616F}
+.ck{width:16px;flex:none;color:#0A55F5;font-weight:700}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 360×560 -->
+<div style="width: 360px; height: 560px; background: linear-gradient(180deg, #CBD5E1, #A9B6C7); font-family: 'Noto Sans SC', system-ui, sans-serif; position: relative; overflow: hidden">
+  <div role="menu" aria-label="天机云托盘菜单" style="position: absolute; right: 16px; bottom: 60px; width: 284px; background: #FBFBFC; border: 1px solid #C9D0D8; border-radius: 10px; box-shadow: 0 16px 40px rgba(14,23,38,.22); padding: 6px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px 12px">
+      <span style="width: 10px; height: 10px; border-radius: 50%; background: #0E8A5F; box-shadow: 0 0 0 4px #D5EFE4"></span>
+      <div style="flex: 1"><div style="font-size: 14px; font-weight: 700; color: #0E1726">已连接 · 东京家宽 · 04</div><div style="font-size: 12px; color: #56616F; margin-top: 2px; font-family: 'JetBrains Mono', monospace">↓ 2.4 MB/s　↑ 312 KB/s</div></div>
+    </div>
+    <div class="hr"></div>
+    <button class="it" role="menuitem"><span class="ck"></span>断开连接<span class="k">Ctrl+Alt+T</span></button>
+    <button class="it" role="menuitem"><span class="ck"></span>显示主窗口</button>
+    <div class="hr"></div>
+    <div style="font-size: 11px; color: #56616F; padding: 6px 12px 2px; letter-spacing: .06em">出站模式</div>
+    <button class="it" role="menuitemradio" aria-checked="true"><span class="ck">✓</span>规则</button>
+    <button class="it" role="menuitemradio" aria-checked="false"><span class="ck"></span>全局</button>
+    <button class="it" role="menuitemradio" aria-checked="false"><span class="ck"></span>直连</button>
+    <div class="hr"></div>
+    <button class="it" role="menuitemcheckbox" aria-checked="true"><span class="ck">✓</span>系统代理</button>
+    <button class="it" role="menuitemcheckbox" aria-checked="true"><span class="ck">✓</span>虚拟网卡（TUN）</button>
+    <button class="it" role="menuitem"><span class="ck"></span>常用线路<span class="k">›</span></button>
+    <button class="it" role="menuitem"><span class="ck"></span>复制终端代理命令</button>
+    <div class="hr"></div>
+    <button class="it" role="menuitem"><span class="ck"></span>退出天机云</button>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 48px; background: rgba(243,245,248,.92); border-top: 1px solid #C9D0D8; display: flex; align-items: center; justify-content: flex-end; gap: 14px; padding: 0 16px">
+    <div style="width: 32px; height: 32px; border-radius: 6px; background: #E2E7ED; display: grid; place-items: center; position: relative">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0E1726"></rect><circle cx="12" cy="12" r="6" fill="none" stroke="#fff" stroke-width="2"></circle><circle cx="16.5" cy="7.5" r="2.2" fill="#5B8CFF"></circle></svg>
+      <span style="position: absolute; right: 3px; bottom: 3px; width: 8px; height: 8px; border-radius: 50%; background: #0E8A5F; border: 1.5px solid #fff"></span>
+    </div>
+    <div style="font-size: 12px; color: #2D3748; text-align: right; line-height: 1.3">14:22<br>2026/11/8</div>
+  </div>
+</div>
+</body>
+</html>

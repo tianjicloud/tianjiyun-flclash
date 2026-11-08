@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 MITM 请求记录</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:14px}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.chip{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;font-size:11px;background:#EEF1F4;color:#2D3748;white-space:nowrap;font-family:'JetBrains Mono',monospace}
+.chip.green{background:#E7F5EF;color:#0B6E4B}.chip.red{background:#FCEBEE;color:#9B1C30}.chip.blue{background:#E6EEFE;color:#0842C2}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;color:#0E1726;white-space:nowrap;text-decoration:none}
+.seg{display:inline-flex;background:#E4E8ED;border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;height:28px;padding:0 12px;border-radius:8px;font-size:12.5px;color:#4A5568}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.ex{display:grid;grid-template-columns:56px 60px minmax(0,1fr) 70px;gap:10px;align-items:center;height:46px;padding:0 16px;border-top:1px solid #EEF1F4;font-size:12.5px}
+.ex.sel{background:#F4F8FF;box-shadow:inset 3px 0 0 #0A55F5}
+.hd{display:flex;gap:12px;padding:6px 0;font-family:'JetBrains Mono',monospace;font-size:12px;border-bottom:1px solid #F1F3F6}
+.hd span:first-child{width:150px;color:#56616F;flex:none}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div style="height: 64px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #fff; border-bottom: 1px solid #DCE1E7">
+    <a href="SetMitm.html" aria-label="返回" class="btn" style="width: 32px; padding: 0">‹</a>
+    <div><div style="font-size: 16px; font-weight: 700">MITM 请求记录</div><div class="lbl">仅记录启用模块匹配到的请求 · 退出客户端后清空</div></div>
+    <span style="flex: 1"></span><button class="btn">暂停记录</button><button class="btn">清空</button>
+  </div>
+  <div style="flex: 1; min-height: 0; display: flex; gap: 16px; padding: 18px 24px">
+    <section class="card" style="width: 560px; flex: none; overflow: hidden" aria-label="请求列表">
+      <div class="ex lbl" style="height: 36px; border-top: 0; background: #F7F8FA"><span>方法</span><span>状态</span><span>地址</span><span>改写</span></div>
+      <div class="ex sel"><span class="chip blue">GET</span><span class="chip green">200</span><span class="mono" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">api.dev.example.com/v1/user/profile</span><span class="lbl">无</span></div>
+      <div class="ex"><span class="chip blue">POST</span><span class="chip green">201</span><span class="mono" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">api.dev.example.com/v1/orders</span><span class="lbl">无</span></div>
+      <div class="ex"><span class="chip blue">GET</span><span class="chip">204</span><span class="mono" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">ads.video.example.com/vmap?id=8812</span><span class="chip red">已拦截</span></div>
+      <div class="ex"><span class="chip blue">GET</span><span class="chip green">200</span><span class="mono" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">video.example.com/api/playinfo</span><span class="chip">改写 2</span></div>
+      <div class="ex"><span class="chip blue">GET</span><span class="chip red">500</span><span class="mono" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">api.dev.example.com/v1/report</span><span class="lbl">无</span></div>
+      <div class="ex"><span class="chip blue">GET</span><span class="chip">204</span><span class="mono" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">ads.video.example.com/track</span><span class="chip red">已拦截</span></div>
+    </section>
+    <section class="card" style="flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; overflow: hidden" aria-label="请求详情">
+      <div class="mono" style="font-size: 14px; font-weight: 600">GET https://api.dev.example.com/v1/user/profile</div>
+      <div style="display: flex; gap: 8px; align-items: center"><span class="chip green">200 OK</span><span class="lbl">142 ms · 1.8 KB · 模块「接口调试」 · 东京家宽 · 04</span></div>
+      <div class="seg" role="group" aria-label="详情"><button class="on">请求头</button><button>响应头</button><button>响应体</button><button>改写记录</button></div>
+      <div>
+        <div class="hd"><span>Host</span><span>api.dev.example.com</span></div>
+        <div class="hd"><span>User-Agent</span><span>Mozilla/5.0 (Windows NT 10.0) Chrome/138</span></div>
+        <div class="hd"><span>Accept</span><span>application/json</span></div>
+        <div class="hd"><span>Authorization</span><span style="color: #8A94A3">Bearer ••••••（已隐藏）</span></div>
+        <div class="hd"><span>Cookie</span><span style="color: #8A94A3">••••••（已隐藏）</span></div>
+        <div class="hd"><span>Accept-Encoding</span><span>gzip, br</span></div>
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: auto"><button class="btn">复制为 cURL</button><button class="btn">显示敏感字段</button></div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

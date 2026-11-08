@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 订阅排序</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.lbl{font-size:12px;color:#56616F}
+.it{display:flex;align-items:center;gap:12px;height:60px;padding:0 14px;border:1px solid #DCE1E7;border-radius:12px;background:#fff}
+.it.drag{border-color:#0A55F5;box-shadow:0 10px 24px rgba(14,23,38,.16);transform:translateX(10px) rotate(-1deg)}
+.grip{color:#8A94A3;letter-spacing:-2px;font-size:16px}
+.btn{height:40px;padding:0 18px;border-radius:10px;border:1px solid #DCE1E7;background:#fff;font-size:14px;font-weight:500}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 520×640 -->
+<div style="width: 520px; height: 640px; background: rgba(14,23,38,.42); display: grid; place-items: center; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726">
+  <div role="dialog" aria-label="调整订阅顺序" style="width: 440px; background: #F7F8FA; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 24px 60px rgba(14,23,38,.3)">
+    <div style="font-size: 18px; font-weight: 700">调整订阅顺序</div>
+    <div class="lbl" style="margin-bottom: 6px">拖动排序；顺序会影响仪表盘与托盘菜单里的显示</div>
+    <div class="it"><span class="grip" aria-hidden="true">⋮⋮</span><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">AI 住宅原生 IP</div><div class="lbl">使用中</div></div></div>
+    <div class="it drag"><span class="grip" aria-hidden="true">⋮⋮</span><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">自定义 · 公司内网直连</div><div class="lbl">正在拖动</div></div></div>
+    <div style="height: 6px; border-radius: 3px; background: #0A55F5; margin: -2px 30px"></div>
+    <div class="it"><span class="grip" aria-hidden="true">⋮⋮</span><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">个人畅享（旧）</div><div class="lbl">已过期</div></div></div>
+    <div class="it"><span class="grip" aria-hidden="true">⋮⋮</span><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">office-rules.yaml</div><div class="lbl">本地文件</div></div></div>
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px"><button class="btn">取消</button><button class="btn pri">完成</button></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 Android 首页 未连接</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:16px}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.seg{display:flex;background:#E4E8ED;border-radius:12px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;height:36px;border-radius:10px;font-size:14px;color:#4A5568}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.dial{position:relative;width:180px;height:180px;display:grid;place-items:center}
+.dial::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(#B8C1CC 0 1.6deg,transparent 1.6deg 8deg);-webkit-mask:radial-gradient(circle,transparent 78px,#000 79px 90px);mask:radial-gradient(circle,transparent 78px,#000 79px 90px)}
+.core{width:128px;height:128px;border-radius:50%;border:0;background:#fff;color:#0A55F5;box-shadow:0 0 0 1px #DCE1E7,0 10px 24px rgba(14,23,38,.1);display:grid;place-items:center}
+.ln{background:#fff;border:1px solid #DCE1E7;border-radius:14px;padding:11px 12px;display:flex;flex-direction:column;gap:4px;text-align:left;width:100%;min-height:64px}
+.ln.sel{border-color:#0A55F5;box-shadow:0 0 0 3px #E6EEFE}
+.cc{width:26px;height:18px;border-radius:4px;background:#0E1726;color:#fff;font-size:10px;display:grid;place-items:center;flex:none}
+.tabs{height:72px;flex:none;background:#fff;border-top:1px solid #DCE1E7;display:flex;margin-top:auto}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:#56616F;text-decoration:none}
+.tab .ic{width:56px;height:30px;border-radius:15px;display:grid;place-items:center}
+.tab.on{color:#0E1726;font-weight:600}
+.tab.on .ic{background:#E6EEFE;color:#0A55F5}
+.ok-t{color:#0B6E4B}.warn-t{color:#A15C00}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 390×844 -->
+<div style="width: 390px; height: 844px; background: #EEF1F4; font-family: 'Noto Sans SC', system-ui, sans-serif; color: #0E1726; display: flex; flex-direction: column; overflow: hidden">
+  <div style="flex: 1; min-height: 0; padding: 18px 16px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 10px; height: 40px">
+      <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0E1726"></rect><circle cx="12" cy="12" r="6" fill="none" stroke="#fff" stroke-width="1.8"></circle><circle cx="16.5" cy="7.5" r="2.2" fill="#5B8CFF"></circle></svg>
+      <span style="font-size: 18px; font-weight: 700">天机云</span><span style="flex: 1"></span>
+      <span style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #FDF1E3; font-size: 12px; color: #8A4B00">剩余 6 天 · 续费</span>
+    </div>
+    <section class="card" style="padding: 22px 16px 18px; display: flex; flex-direction: column; align-items: center; gap: 12px" aria-label="连接">
+      <span class="chip" style="height: 26px; border-radius: 13px"><span style="width: 7px; height: 7px; border-radius: 50%; background: #8A94A3; margin-right: 6px"></span>未连接</span>
+      <div class="dial"><button class="core" aria-label="连接"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v8"></path><path d="M6.3 6.8a8 8 0 1 0 11.4 0"></path></svg></button></div>
+      <div style="font-size: 20px; font-weight: 700">轻点连接</div>
+      <div class="lbl" style="text-align: center; line-height: 1.6">将从「东京家宽 · 04」出去<br>首次连接需要允许 VPN 权限</div>
+    </section>
+    <div class="seg" role="group" aria-label="场景"><button class="on">日常</button><button>AI</button><button>观影</button></div>
+    <div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 15px; font-weight: 700">常用线路</span><a href="Lines.html" style="font-size: 13px; color: #0842C2; text-decoration: none">全部线路 ›</a></div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <button class="ln sel"><div style="display: flex; align-items: center; gap: 7px"><span class="mono cc">JP</span><span style="font-size: 14px; font-weight: 600">东京家宽 04</span></div><div class="lbl"><span class="mono ok-t">37 ms</span> · 已选</div></button>
+      <button class="ln"><div style="display: flex; align-items: center; gap: 7px"><span class="mono cc">HK</span><span style="font-size: 14px; font-weight: 600">香港 · 家宽</span></div><div class="lbl"><span class="mono ok-t">42 ms</span></div></button>
+      <button class="ln"><div style="display: flex; align-items: center; gap: 7px"><span class="mono cc">SG</span><span style="font-size: 14px; font-weight: 600">新加坡 01</span></div><div class="lbl"><span class="mono warn-t">85 ms</span></div></button>
+      <button class="ln"><div style="display: flex; align-items: center; gap: 7px"><span class="mono cc">US</span><span style="font-size: 14px; font-weight: 600">洛杉矶 住宅</span></div><div class="lbl"><span class="mono warn-t">142 ms</span></div></button>
+    </div>
+    <div class="card" style="padding: 12px 14px; display: flex; align-items: center; gap: 10px; background: #FFF8EC; border-color: #F3D9A8"><span style="flex: 1; font-size: 13px; color: #5C3A00">套餐 12 月 6 日到期，续费后线路不中断</span><span style="font-size: 13px; font-weight: 600; color: #8A4B00">续费</span></div>
+  </div>
+  <nav class="tabs" aria-label="底部导航">
+    <a class="tab on" href="Home.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span>首页</a>
+    <a class="tab" href="Lines.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"></path></svg></span>线路</a>
+    <a class="tab" href="Profiles.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5M10 13h6M10 17h6"></path></svg></span>订阅</a>
+    <a class="tab" href="Tools.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg></span>工具</a>
+  </nav>
+</div>
+</body>
+</html>

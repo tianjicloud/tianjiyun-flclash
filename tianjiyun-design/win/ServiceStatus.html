@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 内核与内存详情</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726;position:relative}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.lbl{font-size:12px;color:#56616F}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;color:#0E1726}
+.dlg{background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(14,23,38,.3);padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.kv{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid #EEF1F4;font-size:13px}
+.kv span:first-child{color:#56616F}
+.bar{height:10px;border-radius:5px;background:#EEF1F4;overflow:hidden;display:flex}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div aria-hidden="true" style="flex: 1; display: flex"><div style="width: 220px; background: #F7F8FA; border-right: 1px solid #DCE1E7"></div><div style="flex: 1; padding: 20px 28px; display: flex; flex-direction: column; gap: 14px"><div style="height: 236px; border-radius: 14px; background: #fff"></div><div style="height: 60px; border-radius: 14px; background: #fff"></div><div style="height: 214px; border-radius: 14px; background: #fff"></div></div></div>
+  <div style="position: absolute; inset: 32px 0 0; background: rgba(14,23,38,.42); display: flex; align-items: center; justify-content: center; gap: 24px">
+    <div class="dlg" role="dialog" aria-label="内核状态" style="width: 440px">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #EEF1F4; display: grid; place-items: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2D3748" stroke-width="1.8" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg></span>
+        <div style="flex: 1"><div style="font-size: 17px; font-weight: 700">内核状态</div><div class="lbl">mihomo · 运行中</div></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px; background: #EEF1F4; font-size: 12px"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0E8A5F"></span>运行中</span>
+      </div>
+      <div>
+        <div class="kv"><span>内核版本</span><span class="mono">mihomo 1.19.x · tianji-traffic</span></div>
+        <div class="kv"><span>已运行</span><span class="mono">01:24:36</span></div>
+        <div class="kv"><span>监听端口</span><span class="mono">127.0.0.1:7890（混合）</span></div>
+        <div class="kv"><span>虚拟网卡</span><span>TianjiCloud · 已创建</span></div>
+        <div class="kv"><span>系统服务</span><span>TianjiCloudHelperService · 运行中</span></div>
+        <div class="kv"><span>外部控制</span><span>已关闭</span></div>
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 4px"><a class="btn" href="ServiceManage.html" style="flex: 1; text-decoration: none">管理系统服务</a><button class="btn" style="flex: 1">重启内核</button></div>
+      <div class="lbl">重启会断开所有连接约 2 秒</div>
+    </div>
+    <div class="dlg" role="dialog" aria-label="内存占用" style="width: 360px">
+      <div style="font-size: 17px; font-weight: 700">内存占用</div>
+      <div class="mono" style="font-size: 32px; font-weight: 600">186 <span style="font-size: 14px; color: #56616F">MB</span></div>
+      <div class="bar"><div style="width: 38%; background: #0A55F5"></div><div style="width: 22%; background: #6B8FF0"></div><div style="width: 10%; background: #B8C1CC"></div></div>
+      <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+        <div style="display: flex; justify-content: space-between"><span>内核</span><span class="mono">102 MB</span></div>
+        <div style="display: flex; justify-content: space-between"><span>界面</span><span class="mono">58 MB</span></div>
+        <div style="display: flex; justify-content: space-between"><span>规则与 Geo 数据</span><span class="mono">26 MB</span></div>
+      </div>
+      <div class="lbl" style="line-height: 1.6">规则集较大时占用会升高。可在「设置 · 开发者选项」切换为省内存加载。</div>
+      <button class="btn">释放缓存</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

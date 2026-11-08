@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 编辑仪表盘</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.lbl{font-size:12px;color:#56616F}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.slot{position:relative;background:#fff;border:1.5px dashed #9FB4E8;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.slot b{font-size:14px}
+.x{position:absolute;top:-10px;right:-10px;width:24px;height:24px;border-radius:50%;background:#0E1726;color:#fff;border:2px solid #EEF1F4;font-size:11px;display:grid;place-items:center}
+.grip{position:absolute;top:12px;right:14px;color:#8A94A3;letter-spacing:-2px}
+.add{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #DCE1E7;border-radius:12px;background:#fff}
+.ph{height:10px;border-radius:5px;background:#EEF1F4}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div style="height: 64px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #0E1726; color: #fff">
+    <div style="flex: 1"><div style="font-size: 16px; font-weight: 700">编辑仪表盘</div><div style="font-size: 12px; color: #A8B3C2">拖动卡片调整位置，点 ✕ 移除；连接区与场景条固定在顶部</div></div>
+    <button class="btn" style="background: transparent; color: #fff; border-color: #3A4454">恢复默认</button>
+    <a class="btn pri" href="../Main.html">完成</a>
+  </div>
+  <div style="flex: 1; min-height: 0; display: flex; gap: 18px; padding: 20px 24px">
+    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+      <div style="height: 110px; border-radius: 14px; background: #E1E6EC; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #56616F">连接状态 · 出口 IP · 刻度环（固定）</div>
+      <div style="height: 48px; border-radius: 14px; background: #E1E6EC; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #56616F">场景与出站（固定）</div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+        <div class="slot"><span class="x" aria-hidden="true">✕</span><span class="grip">⋮⋮</span><b>家宽线路</b><div class="ph" style="width: 70%"></div><div class="ph" style="width: 50%"></div></div>
+        <div class="slot"><span class="x" aria-hidden="true">✕</span><span class="grip">⋮⋮</span><b>本月流量</b><div class="ph" style="width: 90%"></div><div class="ph" style="width: 60%"></div></div>
+        <div class="slot"><span class="x" aria-hidden="true">✕</span><span class="grip">⋮⋮</span><b>订阅</b><div class="ph" style="width: 60%"></div><div class="ph" style="width: 80%"></div></div>
+        <div class="slot" style="grid-column: span 2; border-color: #0A55F5; box-shadow: 0 12px 28px rgba(10,85,245,.18); transform: rotate(-.5deg)"><span class="x" aria-hidden="true">✕</span><span class="grip">⋮⋮</span><b>网络接管 · 正在拖动</b><div class="ph" style="width: 40%"></div></div>
+        <div class="slot"><span class="x" aria-hidden="true">✕</span><span class="grip">⋮⋮</span><b>AI 服务可用性</b><div class="ph" style="width: 70%"></div></div>
+        <div style="grid-column: span 3; height: 70px; border-radius: 14px; border: 1.5px dashed #B8C1CC; display: grid; place-items: center; font-size: 13px; color: #56616F">把右侧卡片拖到这里</div>
+      </div>
+    </div>
+    <aside style="width: 320px; flex: none; display: flex; flex-direction: column; gap: 8px" aria-label="可添加的卡片">
+      <div style="font-size: 14px; font-weight: 700">可添加的卡片</div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">实时网速</div><div class="lbl">上下行曲线</div></div><button class="btn" style="height: 30px">添加</button></div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">流量节省</div><div class="lbl">大陆直连省下的代理流量</div></div><button class="btn" style="height: 30px">添加</button></div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">代理分组</div><div class="lbl">常用分组的当前选择</div></div><button class="btn" style="height: 30px">添加</button></div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">连接统计</div><div class="lbl">实时连接、请求、DNS 数</div></div><button class="btn" style="height: 30px">添加</button></div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">内核状态</div><div class="lbl">运行时间、版本、重启</div></div><button class="btn" style="height: 30px">添加</button></div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">内网 IP</div><div class="lbl">本机局域网地址</div></div><button class="btn" style="height: 30px">添加</button></div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">内存占用</div><div class="lbl">内核与界面内存</div></div><button class="btn" style="height: 30px">添加</button></div>
+      <div class="add"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">其他配置</div><div class="lbl">快速切换订阅</div></div><button class="btn" style="height: 30px">添加</button></div>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

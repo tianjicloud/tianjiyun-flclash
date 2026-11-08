@@ -1,0 +1,443 @@
+[
+ {
+  "platform": "规范",
+  "title": "设计规范 · 天机仪表",
+  "file": "Spec.html",
+  "width": 1440,
+  "height": 1120
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 仪表盘",
+  "file": "Main.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 线路",
+  "file": "win/Proxies.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 订阅",
+  "file": "win/Profiles.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 连接",
+  "file": "win/Requests.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 日志与诊断",
+  "file": "win/Logs.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 设置 · 常规",
+  "file": "win/Settings.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 首次导入",
+  "file": "win/Onboarding.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "Windows · 托盘菜单",
+  "file": "win/Tray.html",
+  "width": 360,
+  "height": 560
+ },
+ {
+  "platform": "Windows",
+  "title": "订阅 · 添加订阅",
+  "file": "win/ProfileAdd.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "订阅 · 编辑订阅",
+  "file": "win/ProfileEdit.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "订阅 · 配置预览与编辑器",
+  "file": "win/ProfileEditor.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "自定义配置 · 代理",
+  "file": "win/CustomProxies.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "自定义配置 · 分组编辑",
+  "file": "win/CustomGroups.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "自定义配置 · 规则",
+  "file": "win/CustomRules.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "自定义配置 · 提供者与拨号",
+  "file": "win/CustomProviders.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "订阅 · 扩展覆写与脚本",
+  "file": "win/Extend.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "订阅 · 排序",
+  "file": "win/ProfileSort.html",
+  "width": 520,
+  "height": 640
+ },
+ {
+  "platform": "Windows",
+  "title": "线路 · 列表视图",
+  "file": "win/ProxiesList.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "线路 · 代理集与规则集",
+  "file": "win/ClashProviders.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "连接 · 连接详情",
+  "file": "win/RequestDetail.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "DNS · 查询详情",
+  "file": "win/DnsDetail.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "仪表盘 · 编辑卡片",
+  "file": "win/DashboardEdit.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "仪表盘 · 内核与内存详情",
+  "file": "win/ServiceStatus.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 外观",
+  "file": "win/SetTheme.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 快捷键",
+  "file": "win/SetHotkey.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 按需连接",
+  "file": "win/SetOnDemand.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 备份与恢复",
+  "file": "win/SetBackup.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 入站与端口",
+  "file": "win/SetNetwork.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 虚拟网卡 TUN",
+  "file": "win/SetTun.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · DNS",
+  "file": "win/SetDns.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 规则与覆写",
+  "file": "win/SetRules.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 嗅探与 NTP",
+  "file": "win/SetSniffer.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · MITM 与模块",
+  "file": "win/SetMitm.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · MITM 请求记录",
+  "file": "win/MitmExchanges.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 图标与 UA",
+  "file": "win/SetIcons.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 系统服务",
+  "file": "win/ServiceManage.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 开发者选项",
+  "file": "win/SetDeveloper.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "设置 · 关于",
+  "file": "win/About.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "首次启动 · 免责声明",
+  "file": "win/Disclaimer.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Windows",
+  "title": "错误页 · 内核启动失败",
+  "file": "win/Error.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "macOS",
+  "title": "macOS · 仪表盘（未连接）",
+  "file": "mac/Dashboard.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "macOS",
+  "title": "macOS · 家宽线路",
+  "file": "mac/Residential.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "macOS",
+  "title": "macOS · 菜单栏",
+  "file": "mac/MenuBar.html",
+  "width": 380,
+  "height": 620
+ },
+ {
+  "platform": "Linux",
+  "title": "Linux · 仪表盘（深色 · 异常）",
+  "file": "linux/Dashboard.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Linux",
+  "title": "Linux · DNS 与资源",
+  "file": "linux/Dns.html",
+  "width": 1280,
+  "height": 800
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 首页",
+  "file": "android/Home.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 线路",
+  "file": "android/Lines.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 家宽选择",
+  "file": "android/Residential.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 订阅",
+  "file": "android/Profiles.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 工具",
+  "file": "android/Tools.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 连接",
+  "file": "android/Requests.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 分应用代理",
+  "file": "android/AppProxy.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 首次导入",
+  "file": "android/Onboarding.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 快捷设置与通知",
+  "file": "android/QuickTile.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 首页（未连接）",
+  "file": "android/HomeOff.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 扫码导入",
+  "file": "android/Scan.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 编辑订阅",
+  "file": "android/ProfileEdit.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 一键诊断",
+  "file": "android/Diagnostics.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · DNS 与资源",
+  "file": "android/Dns.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 进阶网络设置",
+  "file": "android/Network.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 外观与语言",
+  "file": "android/Appearance.html",
+  "width": 390,
+  "height": 844
+ },
+ {
+  "platform": "Android",
+  "title": "Android · 关于与备份",
+  "file": "android/About.html",
+  "width": 390,
+  "height": 844
+ }
+]

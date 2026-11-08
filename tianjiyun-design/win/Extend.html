@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>天机云 扩展覆写与脚本</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button{font:inherit;color:inherit}
+.w{width:1280px;height:800px;background:#EEF1F4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #C3CAD3;font-family:'Noto Sans SC',system-ui,sans-serif;color:#0E1726}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 12px;background:#F7F8FA;border-bottom:1px solid #DCE1E7;font-size:12px;color:#4A5568}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:14px}
+.lbl{font-size:12px;color:#56616F}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;background:#EEF1F4;color:#2D3748;white-space:nowrap}
+.chip.green{background:#E7F5EF;color:#0B6E4B}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #DCE1E7;background:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;color:#0E1726;white-space:nowrap}
+.btn.pri{background:#0A55F5;border-color:#0A55F5;color:#fff}
+.seg{display:inline-flex;background:#E4E8ED;border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;height:30px;padding:0 14px;border-radius:8px;font-size:13px;color:#4A5568}
+.seg button.on{background:#fff;color:#0E1726;font-weight:600;box-shadow:0 1px 2px rgba(14,23,38,.14)}
+.tg{width:40px;height:24px;border-radius:12px;background:#B8C1CC;border:0;position:relative;flex:none;padding:0}
+.tg::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff}
+.tg.on{background:#0A55F5}.tg.on::after{left:19px}
+.it{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;border:1px solid transparent}
+.it.on{background:#fff;border-color:#0A55F5;box-shadow:0 0 0 3px #E6EEFE}
+.code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;line-height:22px;white-space:pre}
+.k{color:#0842C2}.s{color:#0B6E4B}.c{color:#8A94A3}.n{color:#A15C00}
+</style>
+<!-- 精致化层（Apple 质感），必须在各页基础样式之后加载 -->
+<link rel="stylesheet" href="../assets/polish.css">
+<style>html{background:#D9DEE5}body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}.__back{position:fixed;left:12px;top:10px;font:12px system-ui;color:#56616F;text-decoration:none;z-index:9999}</style>
+</head>
+<body>
+<a class="__back" href="../index.html">← 全部页面</a>
+<!-- 画板尺寸: 1280×800 -->
+<div class="w">
+  <div class="tb"><span>天机云</span><span style="letter-spacing: 22px">—▢✕</span></div>
+  <div style="height: 64px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #fff; border-bottom: 1px solid #DCE1E7">
+    <a href="ProfileEdit.html" aria-label="返回" class="btn" style="width: 34px; padding: 0">‹</a>
+    <div><div style="font-size: 16px; font-weight: 700">扩展覆写与脚本</div><div class="lbl">作用于「AI 住宅原生 IP」· 每次订阅更新后自动重新应用</div></div>
+    <span style="flex: 1"></span>
+    <div class="seg" role="group" aria-label="类型"><button>标准覆写</button><button class="on">脚本</button></div>
+    <button class="btn pri">保存</button>
+  </div>
+  <div style="flex: 1; min-height: 0; display: flex; gap: 16px; padding: 18px 24px">
+    <div style="width: 300px; flex: none; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; align-items: center"><span style="font-size: 14px; font-weight: 700; flex: 1">脚本</span><button class="btn" style="height: 30px">＋ 新建</button></div>
+      <div class="it on"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">加入公司 DNS</div><div class="lbl">修改 dns.nameserver-policy</div></div><button class="tg on" aria-pressed="true" aria-label="启用"></button></div>
+      <div class="it"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">隐藏超时线路</div><div class="lbl">过滤 proxies</div></div><button class="tg" aria-pressed="false" aria-label="启用"></button></div>
+      <div class="card" style="margin-top: auto; padding: 14px; font-size: 12.5px; line-height: 1.7; color: #2D3748">脚本在本机运行，可读改整份配置。出错时跳过脚本、使用原始订阅，并在日志里写明原因。</div>
+    </div>
+    <section class="card" style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden" aria-label="脚本编辑器">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #EEF1F4"><span style="font-size: 14px; font-weight: 600; flex: 1">加入公司 DNS.js</span><span class="chip green">上次运行成功 · 14:21</span><button class="btn" style="height: 30px">试运行</button></div>
+      <div style="flex: 1; display: flex; min-height: 0">
+        <div class="code" aria-hidden="true" style="width: 48px; text-align: right; padding: 14px 10px 0 0; color: #A0AAB6; background: #FAFBFC; border-right: 1px solid #EEF1F4">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12</div>
+        <div class="code" style="flex: 1; padding: 14px 18px 0"><span class="c">// 在订阅配置基础上加入公司内网 DNS</span>
+<span class="k">function</span> main(config) {
+  config.dns = config.dns || {};
+  config.dns[<span class="s">'nameserver-policy'</span>] = {
+    ...(config.dns[<span class="s">'nameserver-policy'</span>] || {}),
+    <span class="s">'+.corp.example.com'</span>: <span class="s">'10.0.0.53'</span>,
+  };
+  <span class="k">return</span> config;
+}</div>
+      </div>
+      <div style="height: 160px; flex: none; border-top: 1px solid #EEF1F4; background: #F7F8FA; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px">
+        <div style="font-size: 13px; font-weight: 600">试运行结果</div>
+        <div class="code" style="font-size: 12.5px; line-height: 20px; color: #2D3748"><span style="color: #0B6E4B">✓ 用时 4 ms</span>
+dns.nameserver-policy 新增 1 项：+.corp.example.com → 10.0.0.53
+其余配置未变化</div>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>
