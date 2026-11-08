@@ -49,6 +49,7 @@ typedef AppBarSearchStateBuilder =
 class Scaffold extends StatefulWidget {
   final Widget body;
   final Color? backgroundColor;
+  final bool opaqueAppBar;
   final String? title;
   final Widget? titleWidget;
   final List<PopupMenuItem> titleMenuItems;
@@ -88,6 +89,7 @@ class Scaffold extends StatefulWidget {
     super.key,
     required this.body,
     this.backgroundColor,
+    this.opaqueAppBar = false,
     this.title,
     this.titleWidget,
     this.titleMenuItems = const [],
@@ -742,7 +744,7 @@ class ScaffoldState extends State<Scaffold>
     );
     // Under a sheet the bar drops its actions, so none reads as the sheet's.
     final uncovered = ReverseAnimation(sheetCoverOf(context));
-    return ScaffoldBar(
+    final bar = ScaffoldBar(
       isCompact: isCompact,
       backgroundColor: widget.backgroundColor,
       loading: _loadingNotifier,
@@ -823,6 +825,23 @@ class ScaffoldState extends State<Scaffold>
         );
         return _buildAppBarWrap(appBar, barSearch: barSearch);
       },
+    );
+    if (!widget.opaqueAppBar) return bar;
+    return PreferredSize(
+      preferredSize: bar.preferredSize,
+      child: DecoratedBox(
+        key: const ValueKey('opaque-app-bar'),
+        decoration: BoxDecoration(
+          color:
+              (widget.backgroundColor ??
+                      SurfaceLevel.page.colorOf(context.colorScheme))
+                  .withValues(alpha: 1),
+          border: Border(
+            bottom: BorderSide(color: context.colorScheme.outlineVariant),
+          ),
+        ),
+        child: bar,
+      ),
     );
   }
 

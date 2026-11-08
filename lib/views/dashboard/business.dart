@@ -44,6 +44,7 @@ class BusinessDashboardView extends ConsumerWidget {
       child: Builder(
         builder: (context) => Scaffold(
           backgroundColor: DashboardColors.of(context).page,
+          opaqueAppBar: context.colorScheme.brightness == Brightness.light,
           title: mobile ? null : appLocalizations.dashboard,
           titleWidget: mobile
               ? const _MobileBrandTitle()
