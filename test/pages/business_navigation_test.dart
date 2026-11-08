@@ -96,8 +96,8 @@ void main() {
 
     expect(find.byType(BusinessNavigationSidebar), findsOneWidget);
     expect(tester.getSize(find.byType(BusinessNavigationSidebar)).width, 216);
-    expect(find.text('Tianji Plan'), findsOneWidget);
-    expect(find.textContaining('25% used'), findsOneWidget);
+    expect(find.textContaining('Tianji Plan · '), findsOneWidget);
+    expect(find.textContaining('25% used'), findsNothing);
     expect(find.textContaining('days'), findsOneWidget);
     expect(find.text('Orders'), findsNothing);
 

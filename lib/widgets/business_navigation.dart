@@ -360,14 +360,10 @@ class _SubscriptionSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = context.colorScheme.brightness == Brightness.dark;
     final info = profile.subscriptionInfo;
-    final usage = info?.usage;
     final expiry = info?.expireDate;
     final daysLeft = expiry == null
         ? null
         : math.max(0, expiry.difference(DateTime.now()).inDays);
-    final usageLabel = usage == null
-        ? context.appLocalizations.noData
-        : '${(usage * 100).round()}% ${context.appLocalizations.usedShort}';
     final remaining = daysLeft == null
         ? context.appLocalizations.unknown
         : context.appLocalizations.profileDaysLeft(daysLeft);
@@ -387,60 +383,18 @@ class _SubscriptionSummary extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              profile.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: BusinessText.sidebarAccount(context).copyWith(
-                color: dark
-                    ? const Color(0xFFEDF0FF)
-                    : context.colorScheme.onSurface,
-              ),
+        child: Tooltip(
+          message: '${profile.realLabel} · $remaining',
+          child: Text(
+            '${profile.realLabel} · $remaining',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: BusinessText.sidebarAccountSub(context).copyWith(
+              color: dark
+                  ? BusinessPalette.secondary
+                  : context.colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(height: 3),
-            Text(
-              '$remaining · $usageLabel',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: BusinessText.sidebarAccountSub(context).copyWith(
-                color: dark
-                    ? BusinessPalette.purple
-                    : context.colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 9),
-            ClipRSuperellipse(
-              borderRadius: AppRadius.full,
-              child: SizedBox(
-                height: 5,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: ColoredBox(
-                        color: dark
-                            ? const Color(0x1FFFFFFF)
-                            : const Color(0x12000000),
-                      ),
-                    ),
-                    if (usage != null)
-                      FractionallySizedBox(
-                        alignment: AlignmentDirectional.centerStart,
-                        widthFactor: usage.clamp(0.0, 1.0).toDouble(),
-                        child: const DecoratedBox(
-                          decoration: ShapeDecoration(
-                            gradient: BusinessPalette.gradient,
-                            shape: AppShape.full,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
