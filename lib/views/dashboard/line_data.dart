@@ -151,14 +151,13 @@ DashboardLine? currentDashboardLine(WidgetRef ref) {
     return null;
   }
   for (final group in selectionGroups) {
-    for (final member in group.all) {
+    for (final member in group.all.where((proxy) => proxy.name == selected)) {
       final target = byName[member.name];
       final resolved = target == null
           ? member.name
           : target.getCurrentSelectedName(
               ref.watch(selectedProxyNameProvider(target.name)) ?? '',
             );
-      if (resolved != selected && member.name != selected) continue;
       final leaf = byName[resolved];
       final type = leaf?.all.firstOrNull?.type ?? member.type;
       if (type.isEmpty) return null;

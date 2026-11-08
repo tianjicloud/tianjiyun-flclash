@@ -74,6 +74,18 @@ class _Ips extends OutboundIpProbe {
   void unwatch(String target) {}
 }
 
+class _FailedIps extends _Ips {
+  final refreshed = <String>[];
+
+  @override
+  RoutedProbeState<String, IpInfo> build() => const RoutedProbeState({
+    routedOutbound: ProbeEntry<IpInfo>(phase: ProbePhase.failed),
+  });
+
+  @override
+  void refresh(Iterable<String> targets) => refreshed.addAll(targets);
+}
+
 OutboundIpResult _address({int coreEpoch = 1}) => OutboundIpResult(
   url: 'https://www.cloudflare.com/cdn-cgi/trace',
   body: 'ip=$_ip\nloc=GB\n',
@@ -174,6 +186,84 @@ DashboardChip _chip(WidgetTester tester, String label) =>
     );
 
 void main() {
+  testWidgets('compact desktop supports 125 percent text', (tester) async {
+    tester.view.physicalSize = const Size(1280, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      TestApp(
+        locale: const Locale('en'),
+        overrides: [
+          profilesProvider.overrideWithValue(const [_profile]),
+          suspendProvider.overrideWithValue(false),
+          selectionCheckProvider.overrideWithBuild(
+            (_, _) => SelectionVerdict.untouched,
+          ),
+          outboundIpProbeProvider.overrideWith(_Ips.new),
+          ipQualityProvider.overrideWith((_, _) async => _residential),
+        ],
+        child: const BusinessAppearance(
+          child: HostScaffold(
+            body: MediaQuery(
+              data: MediaQueryData(
+                size: Size(1064, 800),
+                textScaler: TextScaler.linear(1.25),
+              ),
+              child: SizedBox(
+                width: 996,
+                child: DashboardDensityScope(
+                  density: DashboardDensity.compact,
+                  scale: 1.25,
+                  child: CurrentOutboundCard(),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('failed business desktop retries the default path', (
+    tester,
+  ) async {
+    final probe = _FailedIps();
+    tester.view.physicalSize = const Size(1568, 1024);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      TestApp(
+        locale: const Locale('en'),
+        overrides: [
+          profilesProvider.overrideWithValue(const [_profile]),
+          suspendProvider.overrideWithValue(false),
+          selectionCheckProvider.overrideWithBuild(
+            (_, _) => SelectionVerdict.untouched,
+          ),
+          outboundIpProbeProvider.overrideWith(() => probe),
+        ],
+        child: const BusinessAppearance(
+          child: HostScaffold(
+            body: DashboardDensityScope(
+              density: DashboardDensity.standard,
+              scale: 1,
+              child: CurrentOutboundCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(seconds: 6));
+    expect(tester.takeException(), isNull);
+    expect(find.text('Check failed'), findsOneWidget);
+    await tester.tap(find.widgetWithText(TextButton, 'Check again'));
+    expect(probe.refreshed, [routedOutbound]);
+  });
+
   testWidgets(
     'selection errors fit the existing desktop and mobile exit cards',
     (tester) async {

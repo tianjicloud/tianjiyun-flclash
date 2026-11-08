@@ -157,11 +157,13 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         showSelection: showSelection,
       );
       final content = density.isDesktop
-          ? SizedBox(
-              height:
-                  (density.isCompact ? 150 : 217) + (showSelection ? 84 : 0),
+          ? ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight:
+                    (density.isCompact ? 150 : 217) + (showSelection ? 84 : 0),
+              ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(child: details),
                   _HeroSpeeds(active: active, vertical: true),
@@ -743,11 +745,21 @@ class _BusinessIp extends StatelessWidget {
       );
     }
     if (failed) {
-      return Text(
-        context.appLocalizations.serviceFailed,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: style.copyWith(color: colorScheme.error),
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.appLocalizations.serviceFailed,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: style.copyWith(color: colorScheme.error),
+          ),
+          TextButton(
+            onPressed: onRefresh,
+            child: Text(context.appLocalizations.selectionRecheck),
+          ),
+        ],
       );
     }
     return Align(

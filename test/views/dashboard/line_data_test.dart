@@ -51,6 +51,33 @@ Widget _lineView({
 }
 
 void main() {
+  testWidgets('exact selected member beats an earlier alias', (tester) async {
+    const groups = [
+      Group(
+        name: '线路',
+        type: GroupType.Selector,
+        all: [
+          Proxy(name: '自动选择', type: 'URLTest'),
+          Proxy(name: '东京 02', type: 'anytls'),
+        ],
+      ),
+      Group(
+        name: '自动选择',
+        type: GroupType.URLTest,
+        now: '东京 02',
+        all: [Proxy(name: '东京 02', type: 'anytls')],
+      ),
+    ];
+    await tester.pumpWidget(
+      _lineView(
+        groups: groups,
+        selected: '东京 02',
+        nestedSelections: {'自动选择': '东京 02'},
+      ),
+    );
+    expect(find.text('东京 02'), findsOneWidget);
+  });
+
   testWidgets('current line remains visible after the first four choices', (
     tester,
   ) async {
