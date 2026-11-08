@@ -58,11 +58,11 @@ class TrafficSavingsCard extends ConsumerWidget {
                 ),
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(18),
+                    padding: const EdgeInsets.all(14),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: SizedBox(
-                        width: 68,
+                        width: 76,
                         child: _TrafficStat(
                           label: appLocalizations.trafficMainlandThisMonth,
                           bytes: summary.monthSavings,
@@ -223,8 +223,8 @@ class _TrafficStat extends StatelessWidget {
         Text(
           label,
           textAlign: centered ? TextAlign.center : TextAlign.start,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          maxLines: centered ? null : 1,
+          overflow: centered ? TextOverflow.visible : TextOverflow.ellipsis,
           style: DashboardText.label(context),
         ),
         FittedBox(

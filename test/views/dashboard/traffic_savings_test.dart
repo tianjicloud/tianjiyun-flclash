@@ -109,6 +109,10 @@ void main() {
       expect(find.text(value), findsOneWidget);
     }
     expect(find.text('Direct (region unconfirmed)'), findsOneWidget);
+    final label = tester.widget<Text>(find.text('Mainland direct this month'));
+    expect(label.maxLines, isNull);
+    expect(label.overflow, TextOverflow.visible);
+    expect(label.textAlign, TextAlign.center);
     final title = tester.getCenter(find.text('Mainland direct this month'));
     final saved = tester.getCenter(find.text(_traffic(30)).first);
     expect(saved.dx, closeTo(title.dx, 0.1));
