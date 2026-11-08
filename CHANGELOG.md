@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.15 (2026-11-08)
+
+**Bug Fixes**
+
+- **dashboard** Cut the residential card copy, slim the scene notice (8115b0f)
+
 ## v0.9.14 (2026-11-08)
 
 **Bug Fixes**

@@ -2,6 +2,24 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.15",
+      "tag": "v0.9.15",
+      "date": "2026-11-08",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "8115b0f",
+              "scope": "dashboard",
+              "text": "Cut the residential card copy, slim the scene notice"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.14",
       "tag": "v0.9.14",
       "date": "2026-11-08",
