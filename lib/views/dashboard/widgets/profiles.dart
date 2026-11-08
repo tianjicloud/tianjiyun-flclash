@@ -115,7 +115,6 @@ class ProfilesCard extends ConsumerWidget {
     final sync = profile != null && profile.type == ProfileType.url
         ? _SyncButton(profile: profile)
         : null;
-    final detailLabel = appLocalizations.details(cardTitle);
     final manageLabel = appLocalizations.residentialManageSubscription;
     final renewLabel = appLocalizations.renew;
     final nameRow = Row(
@@ -142,15 +141,12 @@ class ProfilesCard extends ConsumerWidget {
     if (BusinessTheme.of(context)) {
       final days = expiry == null ? null : _daysLeft(expiry);
       final soon = days != null && days <= _soonDays;
+      final used = usage?.used.traffic;
+      final total = usage?.total.traffic;
       final usageText = usage == null
           ? null
           : '${appLocalizations.usedShort} '
-                '${dashboardTraffic(usage.used)} / '
-                '${dashboardTraffic(usage.total)}';
-      final meta = [
-        if (expiry != null) appLocalizations.validUntil(expiry.show),
-        ?usageText,
-      ].join(' · ');
+                '${used!.unit == total!.unit ? used.value : '${used.value} ${used.unit}'} / ${total.value} ${total.unit}';
       return DashboardCard(
         semanticLabel: cardTitle,
         radius: mobile
@@ -189,11 +185,12 @@ class ProfilesCard extends ConsumerWidget {
                   )
                 else
                   nameRow,
-                if (meta.isNotEmpty)
+                for (final text in [
+                  if (expiry != null) appLocalizations.validUntil(expiry.show),
+                  ?usageText,
+                ])
                   Text(
-                    meta,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    text,
                     style: BusinessText.dataBody(
                       context,
                       mobile: mobile,
@@ -202,65 +199,35 @@ class ProfilesCard extends ConsumerWidget {
                 if (usage != null) _MetricBar(fraction: usage.share),
               ],
             ),
-            if (compact)
-              Row(
-                children: [
+            Row(
+              children: [
+                FilledButton(
+                  onPressed: () => dialogs.openUrl(userPanelUrl),
+                  child: Text(renewLabel),
+                ),
+                const SizedBox(width: 4),
+                for (final action in <(String, VoidCallback)>[
+                  (
+                    appLocalizations.subscriptionDetails,
+                    () => _openProfile(context, profile),
+                  ),
+                  (manageLabel, () => dialogs.openUrl(userPanelUrl)),
+                ])
                   Expanded(
                     child: Tooltip(
-                      message: detailLabel,
+                      message: action.$1,
                       child: TextButton(
-                        onPressed: () => _openProfile(context, profile),
+                        onPressed: action.$2,
                         child: Text(
-                          detailLabel,
+                          action.$1,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Tooltip(
-                      message: manageLabel,
-                      child: TextButton(
-                        onPressed: () => dialogs.openUrl(userPanelUrl),
-                        child: Text(
-                          manageLabel,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ),
-                  FilledButton(
-                    onPressed: () => dialogs.openUrl(userPanelUrl),
-                    child: Text(
-                      renewLabel,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              )
-            else
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                spacing: 4,
-                runSpacing: 4,
-                children: [
-                  TextButton(
-                    onPressed: () => _openProfile(context, profile),
-                    child: Text(detailLabel),
-                  ),
-                  TextButton(
-                    onPressed: () => dialogs.openUrl(userPanelUrl),
-                    child: Text(manageLabel),
-                  ),
-                  FilledButton(
-                    onPressed: () => dialogs.openUrl(userPanelUrl),
-                    child: Text(renewLabel),
-                  ),
-                ],
-              ),
+              ],
+            ),
           ],
         ),
       );

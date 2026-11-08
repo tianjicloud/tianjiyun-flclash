@@ -1192,5 +1192,6 @@
   "mobileRemainingTraffic": "今月の残り通信量",
   "mobilePlanValidity": "プラン有効期限",
   "lineRate": "倍率",
-  "daysUnit": "日"
+  "daysUnit": "日",
+  "subscriptionDetails": "詳細"
 }

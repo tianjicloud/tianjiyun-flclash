@@ -1192,5 +1192,6 @@
   "mobileRemainingTraffic": "本月剩余流量",
   "mobilePlanValidity": "套餐有效期",
   "lineRate": "倍率",
-  "daysUnit": "天"
+  "daysUnit": "天",
+  "subscriptionDetails": "详情"
 }

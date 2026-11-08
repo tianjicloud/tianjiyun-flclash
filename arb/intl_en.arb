@@ -1192,5 +1192,6 @@
   "mobileRemainingTraffic": "Traffic left",
   "mobilePlanValidity": "Plan validity",
   "lineRate": "Rate",
-  "daysUnit": "days"
+  "daysUnit": "days",
+  "subscriptionDetails": "Details"
 }

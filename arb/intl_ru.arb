@@ -1192,5 +1192,6 @@
   "mobileRemainingTraffic": "Осталось трафика",
   "mobilePlanValidity": "Срок действия тарифа",
   "lineRate": "Тариф",
-  "daysUnit": "дн."
+  "daysUnit": "дн.",
+  "subscriptionDetails": "Подробнее"
 }

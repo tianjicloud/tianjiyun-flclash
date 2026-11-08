@@ -1192,5 +1192,6 @@
   "mobileRemainingTraffic": "Trafic restant",
   "mobilePlanValidity": "Validité du forfait",
   "lineRate": "Taux",
-  "daysUnit": "jours"
+  "daysUnit": "jours",
+  "subscriptionDetails": "Détails"
 }

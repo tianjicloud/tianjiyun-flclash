@@ -6,6 +6,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/views/dashboard/widgets/profile_detail.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
@@ -142,6 +143,41 @@ void main() {
   );
 
   Finder label(String text) => find.text(text, findRichText: true);
+
+  testWidgets('business usage keeps totals and aligns renewal actions', (
+    tester,
+  ) async {
+    setUpProfiles([
+      _profile(
+        1,
+        info: const SubscriptionInfo(download: 13 * _gib, total: 200 * _gib),
+      ),
+    ]);
+    await pumpCard(
+      tester,
+      width: 300,
+      card: const BusinessAppearance(
+        child: DashboardDensityScope(
+          density: DashboardDensity.compact,
+          scale: 1,
+          child: ProfilesCard(),
+        ),
+      ),
+    );
+    final usage = find.text('used 13 / 200 GB');
+    expect(usage, findsOneWidget);
+    expect(tester.widget<Text>(usage).overflow, isNot(TextOverflow.ellipsis));
+    final renew = find.text('Renew');
+    final details = find.text('Details');
+    final manage = find.text('Manage subscription');
+    expect(
+      tester.getCenter(renew).dy,
+      closeTo(tester.getCenter(details).dy, 1),
+    );
+    expect(tester.getCenter(renew).dy, closeTo(tester.getCenter(manage).dy, 1));
+    expect(tester.getCenter(renew).dx, lessThan(tester.getCenter(details).dx));
+    expect(tester.takeException(), isNull);
+  });
 
   for (final (used, expected) in [
     (1023 * _gib, '1 GB / 1 TB'),

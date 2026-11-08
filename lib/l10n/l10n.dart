@@ -10152,6 +10152,16 @@ class AppLocalizations {
   String get daysUnit {
     return Intl.message('days', name: 'daysUnit', desc: '', args: []);
   }
+
+  /// `Details`
+  String get subscriptionDetails {
+    return Intl.message(
+      'Details',
+      name: 'subscriptionDetails',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
