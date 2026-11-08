@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
-import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -88,73 +87,32 @@ class _CoreStatusButtonState extends ConsumerState<CoreStatusButton> {
     final coreStatus = _holdTimer != null ? CoreStatus.connecting : _status;
     final appLocalizations = context.appLocalizations;
     final colorScheme = context.colorScheme;
-    final statusColor = switch (coreStatus) {
-      CoreStatus.connecting => null,
-      CoreStatus.connected => colorScheme.successContainer,
-      CoreStatus.disconnected => colorScheme.errorContainer,
-    };
-    final statusForeground = switch (coreStatus) {
-      CoreStatus.connecting => null,
-      CoreStatus.connected => colorScheme.onSuccessContainer,
-      CoreStatus.disconnected => colorScheme.onErrorContainer,
-    };
-    final pane = TonalButtonTheme.glassOf(context) && statusColor != null
-        ? LiquidGlassStyle.tinted(colorScheme, statusColor)
-        : null;
-    final iconOnly =
-        coreStatus == CoreStatus.connected || ViewScope.isMobileOf(context);
-    final icon = switch (coreStatus) {
-      CoreStatus.connecting => ActivityIndicator(
-        color: iconOnly ? null : colorScheme.onPrimary,
-      ),
-      CoreStatus.connected => const GlyphIcon(AppGlyphs.check, fill: 1),
-      CoreStatus.disconnected => const GlyphIcon(AppGlyphs.refresh, fill: 1),
+    final label = switch (coreStatus) {
+      CoreStatus.connecting => appLocalizations.connecting,
+      CoreStatus.connected => appLocalizations.running,
+      CoreStatus.disconnected => appLocalizations.notRunning,
     };
     return Tooltip(
       message: appLocalizations.coreStatus,
       child: FadeScaleBox(
         alignment: Alignment.centerRight,
-        child: iconOnly
-            ? IconButton.filled(
-                key: ValueKey(coreStatus),
-                style: ButtonStyle.from(
-                  backgroundColor: pane == null
-                      ? statusColor
-                      : Colors.transparent,
-                  foregroundColor: statusForeground,
-                  backgroundBuilder: pane == null
-                      ? null
-                      : LiquidGlass.buttonBackground((_) => pane),
-                  pressLook: PressLook.none,
-                ),
-                onPressed: _handleConnection,
-                icon: icon,
-              )
-            : FilledButton.icon(
-                key: ValueKey(coreStatus),
-                onPressed: _handleConnection,
-                style: ButtonStyle.from(
-                  backgroundColor: pane == null
-                      ? statusColor
-                      : Colors.transparent,
-                  foregroundColor: statusForeground,
-                  backgroundBuilder: pane == null
-                      ? null
-                      : LiquidGlass.buttonBackground((_) => pane),
-                  pressLook: PressLook.none,
-                ),
-                icon: SizedBox.square(
-                  dimension: globalState.measure.textHeight(
-                    AppTextStyle.subheadline,
-                  ),
-                  child: icon,
-                ),
-                label: Text(switch (coreStatus) {
-                  CoreStatus.connecting => appLocalizations.connecting,
-                  CoreStatus.connected => appLocalizations.connected,
-                  CoreStatus.disconnected => appLocalizations.disconnected,
-                }),
-              ),
+        child: FilledButton.icon(
+          key: ValueKey(coreStatus),
+          onPressed: _handleConnection,
+          style: ButtonStyle.from(
+            backgroundColor: colorScheme.surfaceContainerHigh,
+            foregroundColor: colorScheme.onSurfaceVariant,
+            pressLook: PressLook.none,
+          ),
+          icon: coreStatus == CoreStatus.connecting
+              ? ActivityIndicator(color: colorScheme.onSurfaceVariant)
+              : const GlyphIcon(AppGlyphs.cpu, fill: 1),
+          label: Text(
+            '${appLocalizations.coreStatus}\n$label',
+            textAlign: TextAlign.center,
+            style: AppTextStyle.caption2.of(context),
+          ),
+        ),
       ),
     );
   }

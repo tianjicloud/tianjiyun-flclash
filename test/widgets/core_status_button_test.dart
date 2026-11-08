@@ -33,30 +33,30 @@ void main() {
       );
       await tester.pump();
 
-      expect(find.byGlyph(AppGlyphs.check), findsOneWidget);
+      expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
       expect(find.byType(ActivityIndicator), findsNothing);
 
       container.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
       expect(find.byType(ActivityIndicator), findsOneWidget);
-      expect(find.byGlyph(AppGlyphs.check), findsNothing);
+      expect(find.byGlyph(AppGlyphs.cpu), findsNothing);
 
       container.read(coreStatusProvider.notifier).value = CoreStatus.connected;
       await tester.pump();
       expect(find.byType(ActivityIndicator), findsOneWidget);
-      expect(find.byGlyph(AppGlyphs.check), findsNothing);
+      expect(find.byGlyph(AppGlyphs.cpu), findsNothing);
 
       await tester.pump(const Duration(milliseconds: 199));
       expect(find.byType(ActivityIndicator), findsOneWidget);
 
       await tester.pump(const Duration(milliseconds: 1));
       await tester.pump(const Duration(milliseconds: 400));
-      expect(find.byGlyph(AppGlyphs.check), findsOneWidget);
+      expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
       expect(find.byType(ActivityIndicator), findsNothing);
 
       await tester.pump(const Duration(seconds: 1));
-      expect(find.byGlyph(AppGlyphs.check), findsOneWidget);
+      expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
     },
   );
 
@@ -88,21 +88,19 @@ void main() {
       container.read(coreStatusProvider.notifier).value =
           CoreStatus.disconnected;
       await tester.pump();
-      expect(find.byGlyph(AppGlyphs.refresh), findsOneWidget);
+      expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
 
       await tester.pump(const Duration(milliseconds: 400));
-      expect(find.byGlyph(AppGlyphs.refresh), findsOneWidget);
+      expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
       expect(find.byType(ActivityIndicator), findsNothing);
 
       await tester.pump(const Duration(seconds: 1));
-      expect(find.byGlyph(AppGlyphs.refresh), findsOneWidget);
+      expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
       expect(find.byType(ActivityIndicator), findsNothing);
     },
   );
 
-  testWidgets('labels the status on desktop and keeps it an icon on mobile', (
-    tester,
-  ) async {
+  testWidgets('labels core status on desktop and mobile', (tester) async {
     final container = ProviderContainer();
     addTearDown(container.dispose);
     globalState.container = container;
@@ -124,20 +122,20 @@ void main() {
     }
 
     await pumpAt(const Size(1200, 800));
-    expect(find.text('Disconnected'), findsOneWidget);
-    expect(find.byGlyph(AppGlyphs.refresh), findsOneWidget);
+    expect(find.text('Core status\nNot running'), findsOneWidget);
+    expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
 
     await pumpAt(const Size(400, 800));
-    expect(find.text('Disconnected'), findsNothing);
-    expect(find.byType(IconButton), findsOneWidget);
-    expect(find.byGlyph(AppGlyphs.refresh), findsOneWidget);
+    expect(find.text('Core status\nNot running'), findsOneWidget);
+    expect(find.byType(FilledButton), findsOneWidget);
+    expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
     expect(find.byTooltip('Core status'), findsOneWidget);
 
     container.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
-    expect(find.text('Connecting…'), findsNothing);
-    expect(find.byType(IconButton), findsOneWidget);
+    expect(find.text('Core status\nConnecting…'), findsOneWidget);
+    expect(find.byType(FilledButton), findsOneWidget);
     expect(find.byType(ActivityIndicator), findsOneWidget);
   });
 
@@ -169,11 +167,11 @@ void main() {
     container.read(coreStatusProvider.notifier).value = CoreStatus.connected;
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
-    expect(find.byGlyph(AppGlyphs.check), findsOneWidget);
+    expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
     expect(find.byType(ActivityIndicator), findsNothing);
 
     await tester.pump(const Duration(seconds: 1));
-    expect(find.byGlyph(AppGlyphs.check), findsOneWidget);
+    expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
   });
 
   testWidgets('holds connecting when restarting from disconnected', (
@@ -196,13 +194,13 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byGlyph(AppGlyphs.refresh), findsOneWidget);
+    expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
 
     container.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.byType(ActivityIndicator), findsOneWidget);
-    expect(find.byGlyph(AppGlyphs.refresh), findsNothing);
+    expect(find.byGlyph(AppGlyphs.cpu), findsNothing);
 
     container.read(coreStatusProvider.notifier).value = CoreStatus.connected;
     await tester.pump();
@@ -213,10 +211,10 @@ void main() {
 
     await tester.pump(const Duration(milliseconds: 1));
     await tester.pump(const Duration(milliseconds: 400));
-    expect(find.byGlyph(AppGlyphs.check), findsOneWidget);
+    expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
     expect(find.byType(ActivityIndicator), findsNothing);
 
     await tester.pump(const Duration(seconds: 1));
-    expect(find.byGlyph(AppGlyphs.check), findsOneWidget);
+    expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
   });
 }
