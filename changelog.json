@@ -2,6 +2,24 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.14",
+      "tag": "v0.9.14",
+      "date": "2026-11-08",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "baf8ede",
+              "scope": "dashboard",
+              "text": "Fix desktop text scaling overflow, restore failed exit-check retries, and show the exact selected line instead of an automatic-group alias."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.13",
       "tag": "v0.9.13",
       "date": "2026-11-08",

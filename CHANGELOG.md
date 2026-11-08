@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.14 (2026-11-08)
+
+**Bug Fixes**
+
+- **dashboard** Fix desktop text scaling overflow, restore failed exit-check retries, and show the exact selected line instead of an automatic-group alias. (baf8ede)
+
 ## v0.9.13 (2026-11-08)
 
 **Features**
