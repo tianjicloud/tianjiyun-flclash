@@ -4,6 +4,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/home.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/navigation.dart';
 import 'package:fl_clash/widgets/business_navigation.dart';
@@ -101,6 +102,21 @@ void main() {
     expect(find.textContaining('days'), findsOneWidget);
     expect(find.text('Orders'), findsNothing);
 
+    final sidebarRow = find.byKey(const ValueKey('business-sidebar-dashboard'));
+    final rowCenter = tester.getRect(sidebarRow).center.dy;
+    final dashboardGlyph = find.descendant(
+      of: find.byType(BusinessNavigationSidebar),
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is AnimatedGlyph && widget.glyph == AppGlyphs.dashboard,
+      ),
+    );
+    expect(tester.getCenter(dashboardGlyph).dy, moreOrLessEquals(rowCenter));
+    expect(
+      tester.getCenter(find.text('Dashboard')).dy,
+      moreOrLessEquals(rowCenter),
+    );
+
     final dashboardLabel = find.text('Dashboard');
     final proxiesLabel = find.text('Lines');
     bool navigationItemHasFocus(Finder label) {
@@ -134,6 +150,48 @@ void main() {
     await tester.tap(find.text('Dashboard'));
     await tester.pumpAndSettle();
     expect(container.read(currentPageLabelProvider), PageLabel.dashboard);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('business sidebar leaves the shared wallpaper visible', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final container = _container(_profile(business: true));
+    addTearDown(container.dispose);
+    _setSize(tester, container, const Size(1200, 800));
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const AppBackgroundScope(
+          preset: 'planet',
+          child: TestApp(includeNavigatorKey: false, child: HomePage()),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final sidebar = find.byType(BusinessNavigationSidebar);
+    final sidebarFill = find.descendant(
+      of: sidebar,
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is DecoratedBox &&
+            widget.decoration is ShapeDecoration &&
+            (widget.decoration as ShapeDecoration).color ==
+                const Color(0xFFF7F8FA),
+      ),
+    );
+    expect(sidebarFill, findsNothing);
+    expect(find.byType(Image), findsOneWidget);
+    expect(
+      tester.getRect(find.byType(Image)),
+      const Rect.fromLTWH(0, 0, 1200, 800),
+    );
     expect(tester.takeException(), isNull);
   });
 

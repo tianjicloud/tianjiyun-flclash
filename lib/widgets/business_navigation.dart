@@ -5,6 +5,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/models/profile.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
@@ -60,13 +61,18 @@ class BusinessNavigationSidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(currentProfileProvider);
     final dark = context.colorScheme.brightness == Brightness.dark;
+    final hasWallpaper = AppBackgroundScope.hasImage(context);
     final width = expanded ? _expandedSidebarWidth : _compactSidebarWidth;
     final horizontalInset = expanded ? 16.0 : 8.0;
     return SizedBox(
       width: width,
       child: DecoratedBox(
         decoration: ShapeDecoration(
-          color: dark ? const Color(0x8C0A0F2B) : const Color(0xFFF7F8FA),
+          color: hasWallpaper
+              ? Colors.transparent
+              : dark
+              ? const Color(0x8C0A0F2B)
+              : const Color(0xFFF7F8FA),
           shape: const RoundedSuperellipseBorder(),
         ),
         child: Padding(
@@ -283,8 +289,10 @@ class _BusinessSidebarItem extends StatelessWidget {
             shape: _sidebarRowShape,
             overlay: PressRegion.hoverOverlay,
             child: SizedBox(
+              key: ValueKey('business-sidebar-${item.label.name}'),
               height: 38,
               child: Stack(
+                alignment: AlignmentDirectional.centerStart,
                 children: [
                   if (selected)
                     Positioned.fill(
