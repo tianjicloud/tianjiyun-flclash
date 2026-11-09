@@ -556,6 +556,7 @@ class SetupAction extends _$SetupAction {
         !isCustom &&
             !hasScript &&
             !residentialEnabled &&
+            sceneKindOfSelection(setupState.scene) == null &&
             !setupState.manualSelections.values.any(
               (pick) => pick.node.isNotEmpty,
             )

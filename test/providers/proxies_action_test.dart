@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:drift/native.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/core/method.dart';
+import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/database/database.dart' as db;
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -226,9 +228,12 @@ void main() {
         closeConnections: true,
       );
 
-      await actionOf(
-        container,
-      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+        isTrue,
+      );
 
       verify(
         () => core.changeProxy(
@@ -245,9 +250,12 @@ void main() {
         closeConnections: false,
       );
 
-      await actionOf(
-        container,
-      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+        isTrue,
+      );
 
       verify(core.resetConnections).called(1);
       verifyNever(core.closeConnections);
@@ -265,9 +273,12 @@ void main() {
         closeConnections: true,
       );
 
-      await actionOf(
-        container,
-      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+        isTrue,
+      );
 
       verify(core.closeConnections).called(1);
       expect(container.read(currentProfileProvider)?.selectedMap, {
@@ -279,9 +290,12 @@ void main() {
       when(() => core.changeProxy(any())).thenThrow(StateError('core down'));
       final container = runningContainer();
 
-      await actionOf(
-        container,
-      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+        isFalse,
+      );
 
       verifyNever(core.closeConnections);
       verifyNever(core.resetConnections);
@@ -295,9 +309,12 @@ void main() {
         ).thenAnswer((_) async => const ChangeProxyResult(changed: false));
         final container = runningContainer();
 
-        await actionOf(
-          container,
-        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+        expect(
+          await actionOf(
+            container,
+          ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+          isTrue,
+        );
 
         verifyNever(core.closeConnections);
         verifyNever(core.resetConnections);
@@ -310,9 +327,12 @@ void main() {
       );
       final container = buildContainer(profile: _selectedProfile('HK-00'));
 
-      await actionOf(
-        container,
-      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+        isFalse,
+      );
 
       verifyNever(core.closeConnections);
       expect(container.read(currentProfileProvider)?.selectedMap, {
@@ -323,22 +343,74 @@ void main() {
     test('commits the selection the Core accepted', () async {
       final container = buildContainer(profile: _selectedProfile('HK-00'));
 
-      await actionOf(
-        container,
-      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+        isTrue,
+      );
 
       expect(container.read(currentProfileProvider)?.selectedMap, {
         'Proxy': 'HK-01',
       });
     });
 
+    test('reports stale switches as unsuccessful', () async {
+      final first = _selectedProfile('HK-00');
+      final second = _selectedProfile('Other').copyWith(id: 2);
+      final container = ProviderContainer(
+        overrides: [
+          coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
+          profilesProvider.overrideWith(() => TestProfiles([first, second])),
+          currentProfileIdProvider.overrideWithBuild((_, _) => first.id),
+        ],
+      );
+      addTearDown(container.dispose);
+      final reply = Completer<ChangeProxyResult>();
+      when(() => core.changeProxy(any())).thenAnswer((_) => reply.future);
+
+      final result = actionOf(
+        container,
+      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      container.read(currentProfileIdProvider.notifier).value = second.id;
+      reply.complete(const ChangeProxyResult(changed: true));
+
+      expect(await result, isFalse);
+    });
+
+    test('reports residential root changes rejected by policy', () async {
+      final profile = Profile.normal(
+        label: 'Tianji subscription',
+        url: 'https://sub1.tianjiyun.org/s/review_subscription_A',
+      );
+      final fingerprint = resolveTianjiProfile(profile)!.fingerprint;
+      final active = profile.copyWith(
+        overrides: ProfileOverrides(
+          residentialExit: 'Tokyo',
+          residentialSubscriptionFingerprint: fingerprint,
+        ),
+      );
+      final container = buildContainer(profile: active);
+
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: tianjiResidentialRootName, proxyName: 'Other'),
+        isFalse,
+      );
+      verifyNever(() => core.changeProxy(any()));
+    });
+
     test('rolls the selection back when the switch fails', () async {
       when(() => core.changeProxy(any())).thenThrow(StateError('core down'));
       final container = buildContainer(profile: _selectedProfile('HK-00'));
 
-      await actionOf(
-        container,
-      ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01');
+      expect(
+        await actionOf(
+          container,
+        ).changeProxy(groupName: 'Proxy', proxyName: 'HK-01'),
+        isFalse,
+      );
 
       expect(container.read(currentProfileProvider)?.selectedMap, {
         'Proxy': 'HK-00',

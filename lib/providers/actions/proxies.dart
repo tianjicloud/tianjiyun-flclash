@@ -217,7 +217,7 @@ class ProxiesAction extends _$ProxiesAction {
     _scheduleDelayFlush();
   }
 
-  Future<void> changeProxy({
+  Future<bool> changeProxy({
     required String groupName,
     required String proxyName,
   }) async {
@@ -229,7 +229,7 @@ class ProxiesAction extends _$ProxiesAction {
           .read(manualSelectionPendingProvider.notifier)
           .finish(pending?.sequence);
       ref.read(residentialSelectionRejectionProvider.notifier).reject();
-      return;
+      return false;
     }
     final profilesAction = ref.read(profilesActionProvider.notifier);
     final profile = ref.read(currentProfileProvider);
@@ -271,7 +271,7 @@ class ProxiesAction extends _$ProxiesAction {
         throw MessageException(result.message);
       }
     } catch (error) {
-      if (!isCurrent()) return;
+      if (!isCurrent()) return false;
       ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
       ref
           .read(manualSelectionPendingProvider.notifier)
@@ -285,14 +285,14 @@ class ProxiesAction extends _$ProxiesAction {
         currentAppLocalizations.changeProxyFailedTip,
         level: BannerLevel.error,
       );
-      return;
+      return false;
     }
-    if (!isCurrent()) return;
+    if (!isCurrent()) return false;
     if (!result.changed) {
       ref
           .read(manualSelectionPendingProvider.notifier)
           .finish(selection?.sequence);
-      return;
+      return true;
     }
     ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
     ref
@@ -310,6 +310,7 @@ class ProxiesAction extends _$ProxiesAction {
         logLevel: coreFailureLogLevel(error),
       );
     }
+    return isCurrent();
   }
 
   Future<bool> changeDefaultLine(DefaultLineChoice choice) async {

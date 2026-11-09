@@ -38,6 +38,7 @@ class SceneAction extends _$SceneAction {
     }
     final revision = ++_revision;
     final profileId = profile.id;
+    final profileUrl = profile.url;
     final next = profile.overrides.copyWith(scene: scene.storageValue);
     state = SceneApplyState(
       profileId: profileId,
@@ -54,35 +55,43 @@ class SceneAction extends _$SceneAction {
     } catch (_) {
       applied = false;
     }
-    if (revision != _revision || !_stillCurrent(profileId, scene)) {
-      if (revision == _revision) {
-        state = SceneApplyState(
-          profileId: profileId,
-          attempted: true,
-          attemptedScene: scene,
-        );
-      }
-      return false;
+    if (!_isCurrentAttempt(revision, profileId, profileUrl, scene)) {
+      return _finishStaleAttempt(revision, profileId, scene);
     }
     if (applied) {
-      await ref
-          .read(proxiesActionProvider.notifier)
-          .changeProxy(groupName: sceneGroupName, proxyName: scene.groupName);
+      try {
+        applied = await ref
+            .read(proxiesActionProvider.notifier)
+            .changeProxy(groupName: sceneGroupName, proxyName: scene.groupName);
+      } catch (_) {
+        applied = false;
+      }
+      if (!_isCurrentAttempt(revision, profileId, profileUrl, scene)) {
+        return _finishStaleAttempt(revision, profileId, scene);
+      }
       final root = ref
           .read(groupsProvider)
           .where((group) => group.name == sceneRootGroupName);
-      if (root.isNotEmpty &&
+      if (applied &&
+          root.isNotEmpty &&
           root.first.all.any((proxy) => proxy.name == sceneGroupName)) {
-        await ref
-            .read(proxiesActionProvider.notifier)
-            .changeProxy(
-              groupName: sceneRootGroupName,
-              proxyName: sceneGroupName,
-            );
+        try {
+          applied = await ref
+              .read(proxiesActionProvider.notifier)
+              .changeProxy(
+                groupName: sceneRootGroupName,
+                proxyName: sceneGroupName,
+              );
+        } catch (_) {
+          applied = false;
+        }
+        if (!_isCurrentAttempt(revision, profileId, profileUrl, scene)) {
+          return _finishStaleAttempt(revision, profileId, scene);
+        }
       }
     }
-    if (revision != _revision) return false;
-    final current = _stillCurrent(profileId, scene);
+    final current = _isCurrentAttempt(revision, profileId, profileUrl, scene);
+    if (!current) return _finishStaleAttempt(revision, profileId, scene);
     state = SceneApplyState(
       profileId: profileId,
       failed: current && !applied,
@@ -92,11 +101,33 @@ class SceneAction extends _$SceneAction {
     return current && applied;
   }
 
-  bool _stillCurrent(int profileId, SceneKind scene) {
-    if (ref.read(currentProfileIdProvider) != profileId) {
+  bool _isCurrentAttempt(
+    int revision,
+    int profileId,
+    String? profileUrl,
+    SceneKind scene,
+  ) {
+    return revision == _revision && _stillCurrent(profileId, profileUrl, scene);
+  }
+
+  bool _stillCurrent(int profileId, String? profileUrl, SceneKind scene) {
+    if (!ref.mounted || ref.read(currentProfileIdProvider) != profileId) {
       return false;
     }
     final profile = ref.read(profilesProvider).getProfile(profileId);
-    return profile?.overrides.scene == scene.storageValue;
+    return profile?.url == profileUrl &&
+        !isResidentialPolicyActive(profile) &&
+        profile?.overrides.scene == scene.storageValue;
+  }
+
+  bool _finishStaleAttempt(int revision, int profileId, SceneKind scene) {
+    if (ref.mounted && revision == _revision) {
+      state = SceneApplyState(
+        profileId: profileId,
+        attempted: true,
+        attemptedScene: scene,
+      );
+    }
+    return false;
   }
 }

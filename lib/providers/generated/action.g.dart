@@ -163,7 +163,7 @@ final class SceneActionProvider
   }
 }
 
-String _$sceneActionHash() => r'9912c0d53f112d0f0213e7a926fa0bb61db34d13';
+String _$sceneActionHash() => r'96353444face80a04dd5612ffbccd8267d324abd';
 
 /// Persists a scene pick and re-applies the profile, following the
 /// residential action's discipline: the pick lands first, the apply is
@@ -221,7 +221,7 @@ final class SetupActionProvider extends $NotifierProvider<SetupAction, void> {
   }
 }
 
-String _$setupActionHash() => r'6a216bffc20e024ead5eb23f32fd20116959e696';
+String _$setupActionHash() => r'efa0d8c93e9659a4a7d4952fb32e9d92a6ac54ce';
 
 abstract class _$SetupAction extends $Notifier<void> {
   void build();
@@ -528,7 +528,7 @@ final class ProxiesActionProvider
   }
 }
 
-String _$proxiesActionHash() => r'53d27781e901047f25270a48194b8bbcc99456fe';
+String _$proxiesActionHash() => r'7fb7c6b4fcfd7269a7b1c544196cda6404a02beb';
 
 abstract class _$ProxiesAction extends $Notifier<void> {
   void build();

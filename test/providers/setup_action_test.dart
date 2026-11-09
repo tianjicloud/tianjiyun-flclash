@@ -5,6 +5,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/core/method.dart';
+import 'package:fl_clash/core/scene.dart';
 import 'package:fl_clash/core/spill.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
@@ -1332,6 +1333,110 @@ void main() {
       // Queued behind the rebuild: one that outlasts the pump would compare
       // against the md5 tearDown resets and push into a disposed container.
       await setupAction.applyProfile();
+    });
+
+    test('a stored scene reads full subscription groups and rules', () async {
+      final profile = Profile.normal(label: 'scene profile');
+      final core = _MockCoreHandlerInterface();
+      final profilePath = await appPath.getProfilePath(profile.id.toString());
+      when(() => core.readConfig(profilePath)).thenAnswer(
+        (_) async => {
+          'profile': <String, dynamic>{},
+          'proxies': [
+            for (final name in ['hk', 'jp', 'ai-home', 'watch-jp'])
+              {'name': name, 'type': 'ss'},
+          ],
+          'proxy-groups': [
+            {
+              'name': sceneRootGroupName,
+              'type': 'select',
+              'proxies': [sceneGroupName, '节点选择'],
+            },
+            {
+              'name': sceneGroupName,
+              'type': 'select',
+              'proxies': [
+                sceneDailyGroupName,
+                sceneAiGroupName,
+                sceneWatchGroupName,
+              ],
+            },
+            {
+              'name': sceneDailyGroupName,
+              'type': 'url-test',
+              'proxies': ['hk', 'jp'],
+            },
+            {
+              'name': sceneAiGroupName,
+              'type': 'select',
+              'proxies': ['ai-home'],
+            },
+            {
+              'name': sceneWatchGroupName,
+              'type': 'select',
+              'proxies': ['watch-jp', 'jp'],
+            },
+            {
+              'name': '节点选择',
+              'type': 'select',
+              'proxies': ['hk', 'jp'],
+            },
+            {
+              'name': sceneAiDomainGroupName,
+              'type': 'select',
+              'proxies': ['ai-home'],
+            },
+            {
+              'name': sceneWatchDomainGroupName,
+              'type': 'select',
+              'proxies': ['watch-jp'],
+            },
+          ],
+          'rule': [
+            'DOMAIN-SUFFIX,ai.example,$sceneAiDomainGroupName',
+            'DOMAIN-SUFFIX,video.example,$sceneWatchDomainGroupName',
+            'GEOIP,CN,DIRECT',
+            'MATCH,$sceneRootGroupName',
+          ],
+        },
+      );
+      final scoped = ProviderContainer(
+        overrides: [
+          profilesProvider.overrideWith(() => TestProfiles([profile])),
+          coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
+          setupActionProvider.overrideWith(SetupAction.new),
+        ],
+      );
+      addTearDown(scoped.dispose);
+
+      final built = await scoped
+          .read(setupActionProvider.notifier)
+          .getProfile(
+            setupState: nullProfileSetupState.copyWith(
+              profileId: profile.id,
+              scene: sceneAiGroupName,
+            ),
+            patchConfig: const PatchClashConfig(),
+          );
+
+      verifyNever(() => core.getProfileBase(any()));
+      verify(() => core.readConfig(profilePath)).called(1);
+      final config = loadYaml(built.yaml) as YamlMap;
+      final groups = (config['proxy-groups'] as YamlList).cast<YamlMap>();
+      final pivot = groups.firstWhere(
+        (group) => group['name'] == sceneGroupName,
+      );
+      expect(pivot['default-selected'], sceneAiGroupName);
+      final root = groups.firstWhere(
+        (group) => group['name'] == sceneRootGroupName,
+      );
+      expect(root['default-selected'], sceneGroupName);
+      expect(config['rules'], [
+        'DOMAIN-SUFFIX,ai.example,$sceneAiGroupName',
+        'DOMAIN-SUFFIX,video.example,$sceneDailyGroupName',
+        'GEOIP,CN,DIRECT',
+        'MATCH,$sceneRootGroupName',
+      ]);
     });
 
     test('a debounced apply waits as long as the last push to the Core took, '
