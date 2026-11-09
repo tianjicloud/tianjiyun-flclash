@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.18 (2026-11-09)
+
+**Bug Fixes**
+
+- **scenes** Report failed scene switches and load complete scene rules without changing another subscription (285e655)
+- **dashboard** Improve card spacing and keep line names and actions readable in narrow windows (f914262)
+- **navigation** Extend backgrounds behind the sidebar and vertically align navigation labels (d5b7558)
+- **macos** Replace the old macOS menu bar logo in monochrome and color modes (8fce7cf)
+- **macos** Add a branded macOS installer background and larger installation icons (bf63ed1)
+
 ## v0.9.17 (2026-11-09)
 
 **Features**

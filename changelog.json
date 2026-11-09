@@ -2,6 +2,44 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.18",
+      "tag": "v0.9.18",
+      "date": "2026-11-09",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "285e655",
+              "scope": "scenes",
+              "text": "Report failed scene switches and load complete scene rules without changing another subscription"
+            },
+            {
+              "id": "f914262",
+              "scope": "dashboard",
+              "text": "Improve card spacing and keep line names and actions readable in narrow windows"
+            },
+            {
+              "id": "d5b7558",
+              "scope": "navigation",
+              "text": "Extend backgrounds behind the sidebar and vertically align navigation labels"
+            },
+            {
+              "id": "8fce7cf",
+              "scope": "macos",
+              "text": "Replace the old macOS menu bar logo in monochrome and color modes"
+            },
+            {
+              "id": "bf63ed1",
+              "scope": "macos",
+              "text": "Add a branded macOS installer background and larger installation icons"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.17",
       "tag": "v0.9.17",
       "date": "2026-11-09",
