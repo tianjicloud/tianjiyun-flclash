@@ -68,7 +68,9 @@ void main() {
             safeMode: safeMode,
             monochrome: false,
           ),
-          'assets/images/tray/unix/status_$status.png',
+          status == 4
+              ? 'assets/images/tray/unix/status_$status.png'
+              : 'assets/images/tray/macos/color/status_$status.png',
         );
       }
     });

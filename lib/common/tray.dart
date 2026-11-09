@@ -45,13 +45,19 @@ class AppTray implements TrayPort {
 
   bool _isTemplate(bool monochrome) => isMacOS && monochrome;
 
-  String _trayIconDir(bool monochrome) {
+  String _trayIconDir(bool monochrome, int status) {
     if (isWindows) {
       return 'assets/images/tray/windows';
     }
-    return _isTemplate(monochrome)
-        ? 'assets/images/tray/macos'
-        : 'assets/images/tray/unix';
+    if (!isMacOS) {
+      return 'assets/images/tray/unix';
+    }
+    if (_isTemplate(monochrome)) {
+      return 'assets/images/tray/macos';
+    }
+    return status == 4
+        ? 'assets/images/tray/unix'
+        : 'assets/images/tray/macos/color';
   }
 
   String getTrayIcon({
@@ -70,7 +76,7 @@ class AppTray implements TrayPort {
       (false, false, false) => 2,
       (false, false, true) => 3,
     };
-    return '${_trayIconDir(monochrome)}/status_$status.$_trayIconSuffix';
+    return '${_trayIconDir(monochrome, status)}/status_$status.$_trayIconSuffix';
   }
 
   @override

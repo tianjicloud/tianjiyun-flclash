@@ -18,6 +18,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'assets_source/images/icon/tianjiyun-mark.png'
 APP_RES = ROOT / 'android/app/src/main/res'
 SERVICE_RES = ROOT / 'android/service/src/main/res'
+MACOS_TRAY_RES = ROOT / 'assets/images/tray/macos'
+MACOS_COLOR_TRAY_RES = MACOS_TRAY_RES / 'color'
 
 # Matches @color/ic_launcher_background, which the splash screen shares.
 BACKGROUND = (0xF7, 0xF9, 0xFB, 255)
@@ -121,9 +123,37 @@ def generate_windows_tray(mark):
         )
 
 
+def generate_macos_tray(shape):
+    status_colors = {1: '#8490a2', 2: '#1769d2', 3: '#13b89d'}
+    for status, color in status_colors.items():
+        _save_macos_tray_variants(
+            MACOS_COLOR_TRAY_RES,
+            f'status_{status}.png',
+            _tint(shape, color),
+        )
+    _save_macos_tray_variants(
+        MACOS_TRAY_RES,
+        'status_1.png',
+        _tint(shape, '#000000'),
+    )
+
+
+def _save_macos_tray_variants(directory, name, image):
+    for scale in [1, 2, 3, 4]:
+        scaled_dir = directory if scale == 1 else directory / f'{scale}.0x'
+        save(place(image, 18 * scale, 0.92), scaled_dir / name)
+
+
+def _tint(image, color):
+    tinted = Image.new('RGBA', image.size, color)
+    tinted.putalpha(image.getchannel('A'))
+    return tinted
+
+
 def main():
     mark = load_mark()
     shape = silhouette(mark)
+    generate_macos_tray(shape)
 
     for density, scale in DENSITIES.items():
         adaptive = round(108 * scale)
@@ -180,7 +210,15 @@ def main():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--tray-only', action='store_true', help='Only generate Windows tray icons')
+    parser.add_argument(
+        '--macos-tray-only',
+        action='store_true',
+        help='Only generate TianjiCloud macOS tray icons',
+    )
     args = parser.parse_args()
-    generate_windows_tray(load_mark())
-    if not args.tray_only:
-        main()
+    if args.macos_tray_only:
+        generate_macos_tray(silhouette(load_mark()))
+    else:
+        generate_windows_tray(load_mark())
+        if not args.tray_only:
+            main()

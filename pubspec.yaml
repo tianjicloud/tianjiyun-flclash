@@ -103,6 +103,8 @@ flutter:
       platforms: [ linux, macos ]
     - path: assets/images/tray/macos/
       platforms: [ macos ]
+    - path: assets/images/tray/macos/color/
+      platforms: [ macos ]
     - path: assets/images/tray/windows/
       platforms: [ windows ]
   fonts:

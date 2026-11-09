@@ -252,7 +252,7 @@ void main() {
     expect(
       base['bytes'],
       base64Encode(
-        File('assets/images/tray/unix/status_3.png').readAsBytesSync(),
+        File('assets/images/tray/macos/color/status_3.png').readAsBytesSync(),
       ),
     );
     expect(

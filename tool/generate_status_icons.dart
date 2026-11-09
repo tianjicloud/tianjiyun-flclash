@@ -8,10 +8,7 @@ const pngOutputDir = 'assets/images/tray/unix';
 const icoOutputDir = 'assets/images/tray/windows';
 const macosOutputDir = 'assets/images/tray/macos';
 const statusIconNames = ['status_1', 'status_2', 'status_3', 'status_4'];
-const macosStatusIconSources = {
-  'status_1': '$sourceDir/glyph.svg',
-  'status_4': '$sourceDir/status_4.svg',
-};
+const macosStatusIconSources = {'status_4': '$sourceDir/status_4.svg'};
 const trayBaseSize = 18;
 const trayScales = [1, 2, 3, 4];
 const appIconSource = 'assets/images/icon.png';
