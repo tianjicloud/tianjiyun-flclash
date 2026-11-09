@@ -297,6 +297,7 @@ void main() {
   for (final brightness in Brightness.values) {
     for (final (width, scale, captureOff, residential) in [
       (1200.0, 1.0, false, true),
+      (1024.0, 1.25, false, true),
       (800.0, 1.0, false, true),
       (800.0, 2.0, false, true),
       (390.0, 1.6, false, true),
@@ -362,6 +363,13 @@ void main() {
             find.byType(ResidentialExitCard),
             residential && width / scale >= 640 ? findsOneWidget : findsNothing,
           );
+          if (width == 1024 && scale == 1.25 && residential) {
+            expect(
+              tester.getSize(find.byType(BusinessLineCard)).width,
+              lessThan(tester.getSize(find.byType(ProfilesCard)).width),
+            );
+            expect(find.text('🇯🇵 东京家宽 · 01'), findsOneWidget);
+          }
           if (width >= 1200 && scale == 1 && !captureOff) {
             await tester.scrollUntilVisible(
               find.byType(NetworkTakeoverBlock).last,

@@ -161,25 +161,42 @@ class _BusinessBody extends ConsumerWidget {
                       context,
                     ).copyWith(color: DashboardColors.of(context).warn),
                   ),
-                _EqualHeightRow(
-                  spacing: gap,
-                  flexes: const [1, 1, 1],
-                  children: [
-                    _CardMinHeight(
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final lineCard = _CardMinHeight(
                       minHeight: 214 * scale,
                       child: const BusinessLineCard(),
-                    ),
-                    _CardMinHeight(
+                    );
+                    final trafficCard = _CardMinHeight(
                       minHeight: 214 * scale,
                       child: const TrafficSavingsCard(),
-                    ),
-                    _CardMinHeight(
+                    );
+                    final profileCard = _CardMinHeight(
                       minHeight: 214 * scale,
                       child: ProfilesCard(
                         title: context.appLocalizations.subscriptionInfo,
                       ),
-                    ),
-                  ],
+                    );
+                    if (constraints.maxWidth / scale < 820) {
+                      return Column(
+                        spacing: gap,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _EqualHeightRow(
+                            spacing: gap,
+                            flexes: const [1, 1],
+                            children: [lineCard, trafficCard],
+                          ),
+                          profileCard,
+                        ],
+                      );
+                    }
+                    return _EqualHeightRow(
+                      spacing: gap,
+                      flexes: const [1, 1, 1],
+                      children: [lineCard, trafficCard, profileCard],
+                    );
+                  },
                 ),
                 _ControlBar(platform: platform),
               ] else ...[
@@ -819,7 +836,7 @@ class ResidentialExitCard extends ConsumerWidget {
           ] else if (policy.active) ...[
             EmojiText(
               policy.selectedExit ?? '',
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: BusinessText.residentialExit(
                 context,
@@ -937,20 +954,19 @@ class _ExitActions extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       tapTargetSize: TapTargetSize.shrinkWrap,
     );
-    return Row(
+    return Wrap(
       spacing: 12,
+      runSpacing: 8,
       children: [
         FilledButton(
           onPressed: applying ? null : onChoose,
           style: compactButtonStyle,
           child: Text(appLocalizations.residentialChange),
         ),
-        Flexible(
-          child: TextButton(
-            onPressed: applying ? null : onClear,
-            style: compactButtonStyle,
-            child: Text(appLocalizations.residentialUseSubscription),
-          ),
+        TextButton(
+          onPressed: applying ? null : onClear,
+          style: compactButtonStyle,
+          child: Text(appLocalizations.residentialUseSubscription),
         ),
       ],
     );
