@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960">
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f3f8ff"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#56a8ff"/>
+      <stop offset="1" stop-color="#1769d2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="960" fill="url(#surface)"/>
+  <circle cx="720" cy="20" r="510" fill="#e8f2ff" opacity=".48"/>
+  <path d="M0 760C250 700 410 790 650 754s450-70 790 5v201H0Z" fill="#eaf3ff" opacity=".72"/>
+  <rect x="632" y="132" width="176" height="8" rx="4" fill="url(#accent)"/>
+  <text x="720" y="224" text-anchor="middle" fill="#15365f" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="54" font-weight="600">安装天机云</text>
+  <text x="720" y="278" text-anchor="middle" fill="#60758f" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="28">将左侧应用拖到右侧文件夹即可完成安装</text>
+  <circle cx="720" cy="620" r="68" fill="#ffffff" opacity=".72"/>
+  <path d="M626 620h146" fill="none" stroke="#3986e8" stroke-width="8" stroke-linecap="round"/>
+  <path d="m744 594 28 26-28 26" fill="none" stroke="#3986e8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
