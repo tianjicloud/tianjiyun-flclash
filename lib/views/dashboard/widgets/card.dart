@@ -568,12 +568,14 @@ class BusinessSecondaryButton extends StatelessWidget {
     required this.width,
     required this.onPressed,
     this.height = 34,
+    this.labelColor,
   });
 
   final String label;
   final double width;
   final VoidCallback? onPressed;
   final double height;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -583,9 +585,9 @@ class BusinessSecondaryButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle.from(
         backgroundColor: Colors.transparent,
-        foregroundColor: dark
-            ? context.colorScheme.onSurface
-            : BusinessPalette.deep,
+        foregroundColor:
+            labelColor ??
+            (dark ? context.colorScheme.onSurface : BusinessPalette.deep),
         shape: shape,
         fixedSize: Size(width, height),
         minimumSize: Size(width, height),
@@ -629,7 +631,9 @@ class BusinessSecondaryButton extends StatelessWidget {
       child: Text(
         label,
         style: BusinessText.actionLabel(context).copyWith(
-          color: dark ? context.colorScheme.onSurface : BusinessPalette.deep,
+          color:
+              labelColor ??
+              (dark ? context.colorScheme.onSurface : BusinessPalette.deep),
         ),
       ),
     );

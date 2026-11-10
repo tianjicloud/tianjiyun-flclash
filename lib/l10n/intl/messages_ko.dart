@@ -421,6 +421,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("가상 어댑터 승인"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
+    "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
+      "모두 닫기",
+    ),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
       "연결됨 · 문제가 있습니다",
@@ -442,6 +445,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("속도 측정"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("시간 초과"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("스마트 라우팅 활성화"),
+    "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage("출구 확인 통과"),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
       "실제 출구가 선택한 회선과 일치하지 않습니다",
     ),
@@ -454,7 +458,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
       "가상 어댑터가 아직 승인되지 않았습니다. 터미널과 일부 앱은 프록시를 거치지 않아 로컬 IP가 표시됩니다. 한 번 승인하면 해결됩니다.",
     ),
-    "businessExitVerified": MessageLookupByLibrary.simpleMessage("출구 확인 완료"),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage(
+      "연결됨 · 출구 검증됨",
+    ),
     "businessExitVerifiedDetail": m7,
     "businessExitVerifiedShort": MessageLookupByLibrary.simpleMessage(
       "출구 확인 완료",
@@ -618,16 +624,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "connected": MessageLookupByLibrary.simpleMessage("연결됨"),
     "connecting": MessageLookupByLibrary.simpleMessage("연결 중…"),
     "connection": MessageLookupByLibrary.simpleMessage("연결"),
+    "connectionAddDomainRule": MessageLookupByLibrary.simpleMessage(
+      "이 도메인의 규칙 추가",
+    ),
     "connectionBlockedLabel": MessageLookupByLibrary.simpleMessage("차단됨"),
+    "connectionCloseThis": MessageLookupByLibrary.simpleMessage("이 연결 닫기"),
+    "connectionGroup": MessageLookupByLibrary.simpleMessage("그룹"),
+    "connectionLocalDevice": MessageLookupByLibrary.simpleMessage("이 기기"),
+    "connectionMatchedRule": MessageLookupByLibrary.simpleMessage("일치한 규칙"),
+    "connectionProcessPath": MessageLookupByLibrary.simpleMessage("프로세스 경로"),
     "connectionSearchHint": MessageLookupByLibrary.simpleMessage(
       "도메인, 앱 또는 규칙 검색",
     ),
+    "connectionSniffedDomain": MessageLookupByLibrary.simpleMessage("감지된 도메인"),
+    "connectionSourceAddress": MessageLookupByLibrary.simpleMessage("소스 주소"),
+    "connectionStartTime": MessageLookupByLibrary.simpleMessage("시작 시간"),
     "connectionStats": MessageLookupByLibrary.simpleMessage("연결 통계"),
     "connectionStatsDesc": MessageLookupByLibrary.simpleMessage(
       "실시간 연결, 최근 요청, DNS 쿼리",
     ),
     "connectionSummary": m16,
+    "connectionSustained": MessageLookupByLibrary.simpleMessage("지속 시간"),
+    "connectionTargetIp": MessageLookupByLibrary.simpleMessage("대상 IP"),
+    "connectionTrafficPath": MessageLookupByLibrary.simpleMessage("트래픽 경로"),
     "connections": MessageLookupByLibrary.simpleMessage("연결"),
+    "connectionsAndRequests": MessageLookupByLibrary.simpleMessage("연결 및 요청"),
+    "connectionsLiveShort": MessageLookupByLibrary.simpleMessage("실시간"),
     "connectivity": MessageLookupByLibrary.simpleMessage("연결 상태: "),
     "content": MessageLookupByLibrary.simpleMessage("내용"),
     "contentNotEmpty": MessageLookupByLibrary.simpleMessage("내용을 입력하세요"),

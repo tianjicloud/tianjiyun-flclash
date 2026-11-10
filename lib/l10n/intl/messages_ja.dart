@@ -425,6 +425,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("仮想アダプターを承認"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
+    "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
+      "すべて閉じる",
+    ),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
       "接続済み · 異常があります",
@@ -448,6 +451,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "スマートルーティングを有効化",
     ),
+    "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
+      "出口確認に成功しました",
+    ),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
       "実際の出口が選択した回線と一致しません",
     ),
@@ -460,7 +466,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
       "仮想アダプターが未承認です。ターミナルや一部のアプリはプロキシを経由せず、ローカル IP が表示されます。一度承認すると解決します。",
     ),
-    "businessExitVerified": MessageLookupByLibrary.simpleMessage("出口を確認しました"),
+    "businessExitVerified": MessageLookupByLibrary.simpleMessage(
+      "接続済み · 出口検証済み",
+    ),
     "businessExitVerifiedDetail": m7,
     "businessExitVerifiedShort": MessageLookupByLibrary.simpleMessage(
       "出口を確認済み",
@@ -626,16 +634,34 @@ class MessageLookup extends MessageLookupByLibrary {
     "connected": MessageLookupByLibrary.simpleMessage("接続済み"),
     "connecting": MessageLookupByLibrary.simpleMessage("接続中…"),
     "connection": MessageLookupByLibrary.simpleMessage("接続"),
+    "connectionAddDomainRule": MessageLookupByLibrary.simpleMessage(
+      "このドメインのルールを追加",
+    ),
     "connectionBlockedLabel": MessageLookupByLibrary.simpleMessage("ブロック済み"),
+    "connectionCloseThis": MessageLookupByLibrary.simpleMessage("この接続を閉じる"),
+    "connectionGroup": MessageLookupByLibrary.simpleMessage("グループ"),
+    "connectionLocalDevice": MessageLookupByLibrary.simpleMessage("このデバイス"),
+    "connectionMatchedRule": MessageLookupByLibrary.simpleMessage("適用ルール"),
+    "connectionProcessPath": MessageLookupByLibrary.simpleMessage("プロセスパス"),
     "connectionSearchHint": MessageLookupByLibrary.simpleMessage(
       "ドメイン、アプリ、ルールを検索",
     ),
+    "connectionSniffedDomain": MessageLookupByLibrary.simpleMessage(
+      "検出されたドメイン",
+    ),
+    "connectionSourceAddress": MessageLookupByLibrary.simpleMessage("送信元アドレス"),
+    "connectionStartTime": MessageLookupByLibrary.simpleMessage("開始時刻"),
     "connectionStats": MessageLookupByLibrary.simpleMessage("接続統計"),
     "connectionStatsDesc": MessageLookupByLibrary.simpleMessage(
       "ライブ接続、最近のリクエスト、DNS クエリ",
     ),
     "connectionSummary": m16,
+    "connectionSustained": MessageLookupByLibrary.simpleMessage("経過"),
+    "connectionTargetIp": MessageLookupByLibrary.simpleMessage("宛先 IP"),
+    "connectionTrafficPath": MessageLookupByLibrary.simpleMessage("通信経路"),
     "connections": MessageLookupByLibrary.simpleMessage("接続"),
+    "connectionsAndRequests": MessageLookupByLibrary.simpleMessage("接続とリクエスト"),
+    "connectionsLiveShort": MessageLookupByLibrary.simpleMessage("ライブ"),
     "connectivity": MessageLookupByLibrary.simpleMessage("接続状態："),
     "content": MessageLookupByLibrary.simpleMessage("内容"),
     "contentNotEmpty": MessageLookupByLibrary.simpleMessage("内容は空にできません"),

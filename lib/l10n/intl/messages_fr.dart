@@ -528,6 +528,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessChooseLine": MessageLookupByLibrary.simpleMessage(
       "Changer de ligne",
     ),
+    "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
+      "Tout fermer",
+    ),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
       "Connecté · Anomalie détectée",
@@ -559,6 +562,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Activer le routage intelligent",
     ),
+    "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
+      "Vérification de sortie réussie",
+    ),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
       "La sortie réelle ne correspond pas à la ligne choisie",
     ),
@@ -572,7 +578,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "L’adaptateur virtuel n’est pas autorisé. Le terminal et certaines applications contournent le proxy et voient votre IP locale. Autorisez-le une fois pour corriger cela.",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
-      "Sortie vérifiée",
+      "Connecté · Sortie vérifiée",
     ),
     "businessExitVerifiedDetail": m7,
     "businessExitVerifiedShort": MessageLookupByLibrary.simpleMessage(
@@ -805,9 +811,34 @@ class MessageLookup extends MessageLookupByLibrary {
     "connected": MessageLookupByLibrary.simpleMessage("Connecté"),
     "connecting": MessageLookupByLibrary.simpleMessage("Connexion…"),
     "connection": MessageLookupByLibrary.simpleMessage("Connexion"),
+    "connectionAddDomainRule": MessageLookupByLibrary.simpleMessage(
+      "Ajouter une règle pour ce domaine",
+    ),
     "connectionBlockedLabel": MessageLookupByLibrary.simpleMessage("Bloqué"),
+    "connectionCloseThis": MessageLookupByLibrary.simpleMessage(
+      "Fermer cette connexion",
+    ),
+    "connectionGroup": MessageLookupByLibrary.simpleMessage("Groupe"),
+    "connectionLocalDevice": MessageLookupByLibrary.simpleMessage(
+      "Cet appareil",
+    ),
+    "connectionMatchedRule": MessageLookupByLibrary.simpleMessage(
+      "Règle appliquée",
+    ),
+    "connectionProcessPath": MessageLookupByLibrary.simpleMessage(
+      "Chemin du processus",
+    ),
     "connectionSearchHint": MessageLookupByLibrary.simpleMessage(
       "Rechercher un domaine, une app ou une règle",
+    ),
+    "connectionSniffedDomain": MessageLookupByLibrary.simpleMessage(
+      "Domaine détecté",
+    ),
+    "connectionSourceAddress": MessageLookupByLibrary.simpleMessage(
+      "Adresse source",
+    ),
+    "connectionStartTime": MessageLookupByLibrary.simpleMessage(
+      "Heure de début",
     ),
     "connectionStats": MessageLookupByLibrary.simpleMessage(
       "Statistiques de connexion",
@@ -816,7 +847,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "Connexions en direct, requêtes récentes et requêtes DNS",
     ),
     "connectionSummary": m16,
+    "connectionSustained": MessageLookupByLibrary.simpleMessage("Écoulé"),
+    "connectionTargetIp": MessageLookupByLibrary.simpleMessage(
+      "IP de destination",
+    ),
+    "connectionTrafficPath": MessageLookupByLibrary.simpleMessage(
+      "Chemin du trafic",
+    ),
     "connections": MessageLookupByLibrary.simpleMessage("Connexions"),
+    "connectionsAndRequests": MessageLookupByLibrary.simpleMessage(
+      "Connexions et requêtes",
+    ),
+    "connectionsLiveShort": MessageLookupByLibrary.simpleMessage("En direct"),
     "connectivity": MessageLookupByLibrary.simpleMessage("Connectivité : "),
     "content": MessageLookupByLibrary.simpleMessage("Contenu"),
     "contentNotEmpty": MessageLookupByLibrary.simpleMessage(
@@ -1402,10 +1444,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificat installé",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Ce système masque la liste des apps installées tant que l’autorisation n’est pas accordée. Accordez-la pour configurer le proxy par app.",
     ),
@@ -1930,10 +1971,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "L’importation a échoué",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Impossible d’atteindre l’adresse d’abonnement",
     ),

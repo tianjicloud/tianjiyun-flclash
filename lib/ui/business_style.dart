@@ -22,11 +22,20 @@ abstract final class BusinessPalette {
   static const sidebarSelection = Color(0xFFFFFFFF);
   static const sidebarSelectionShadow = Color(0x140E1726);
   static const sidebarLight = Color(0xFFF7F8FA);
+  static const timelineLine = Color(0xFFD5E1FA);
   static const hintBackground = Color(0xFFF4F8FF);
   static const searchStroke = Color(0x120E1726);
   static const searchShadow = Color(0x0A0E1726);
   static const sidebarDarkOverlay = Color(0x8C0A0F2B);
   static const heroChipText = Color(0xFF2D3748);
+  static const connectionAppColors = [
+    Color(0xFF2878D0),
+    Color(0xFF16866A),
+    Color(0xFFB45C3D),
+    Color(0xFF7358B5),
+    Color(0xFF347F91),
+    Color(0xFFB74E69),
+  ];
   static const connected = Color(0xFF0E8A5F);
   static const connectedText = Color(0xFF0B6E4B);
   static const connectedBackground = Color(0xFFE7F5EF);
@@ -210,6 +219,16 @@ abstract final class BusinessText {
     size: 13,
     leading: 18,
     weight: emphasized ? FontWeight.w600 : FontWeight.w500,
+  );
+
+  static TextStyle connectionPath(
+    BuildContext context, {
+    bool emphasized = false,
+  }) => AppTextStyle.custom(
+    context,
+    size: 13,
+    leading: 18,
+    weight: emphasized ? FontWeight.w700 : FontWeight.w500,
   );
 
   static TextStyle heroMetaValue(BuildContext context) => AppTextStyle.custom(

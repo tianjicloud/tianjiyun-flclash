@@ -1366,9 +1366,29 @@ class AppLocalizations {
     );
   }
 
+  /// `Connections & Requests`
+  String get connectionsAndRequests {
+    return Intl.message(
+      'Connections & Requests',
+      name: 'connectionsAndRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Connections`
   String get connections {
     return Intl.message('Connections', name: 'connections', desc: '', args: []);
+  }
+
+  /// `Live`
+  String get connectionsLiveShort {
+    return Intl.message(
+      'Live',
+      name: 'connectionsLiveShort',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Live connections`
@@ -7658,7 +7678,8 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one:
+          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -10537,10 +10558,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Exit verified`
+  /// `Connected · Exit verified`
   String get businessExitVerified {
     return Intl.message(
-      'Exit verified',
+      'Connected · Exit verified',
       name: 'businessExitVerified',
       desc: '',
       args: [],
@@ -10865,6 +10886,16 @@ class AppLocalizations {
   /// `Locked`
   String get businessLocked {
     return Intl.message('Locked', name: 'businessLocked', desc: '', args: []);
+  }
+
+  /// `Exit check passed`
+  String get businessExitCheckPassed {
+    return Intl.message(
+      'Exit check passed',
+      name: 'businessExitCheckPassed',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Selected “{name}” matches exit {ip}`
@@ -11252,6 +11283,16 @@ class AppLocalizations {
     return Intl.message('All', name: 'all', desc: '', args: []);
   }
 
+  /// `Close all`
+  String get businessCloseAllConnections {
+    return Intl.message(
+      'Close all',
+      name: 'businessCloseAllConnections',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Close all connections`
   String get closeAllConnections {
     return Intl.message(
@@ -11277,6 +11318,121 @@ class AppLocalizations {
     return Intl.message(
       'Blocked',
       name: 'connectionBlockedLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic path`
+  String get connectionTrafficPath {
+    return Intl.message(
+      'Traffic path',
+      name: 'connectionTrafficPath',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This device`
+  String get connectionLocalDevice {
+    return Intl.message(
+      'This device',
+      name: 'connectionLocalDevice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Matched rule`
+  String get connectionMatchedRule {
+    return Intl.message(
+      'Matched rule',
+      name: 'connectionMatchedRule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Group`
+  String get connectionGroup {
+    return Intl.message('Group', name: 'connectionGroup', desc: '', args: []);
+  }
+
+  /// `Source address`
+  String get connectionSourceAddress {
+    return Intl.message(
+      'Source address',
+      name: 'connectionSourceAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Target IP`
+  String get connectionTargetIp {
+    return Intl.message(
+      'Target IP',
+      name: 'connectionTargetIp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Process path`
+  String get connectionProcessPath {
+    return Intl.message(
+      'Process path',
+      name: 'connectionProcessPath',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sniffed domain`
+  String get connectionSniffedDomain {
+    return Intl.message(
+      'Sniffed domain',
+      name: 'connectionSniffedDomain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a rule for this domain`
+  String get connectionAddDomainRule {
+    return Intl.message(
+      'Add a rule for this domain',
+      name: 'connectionAddDomainRule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start time`
+  String get connectionStartTime {
+    return Intl.message(
+      'Start time',
+      name: 'connectionStartTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Close this connection`
+  String get connectionCloseThis {
+    return Intl.message(
+      'Close this connection',
+      name: 'connectionCloseThis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Elapsed`
+  String get connectionSustained {
+    return Intl.message(
+      'Elapsed',
+      name: 'connectionSustained',
       desc: '',
       args: [],
     );

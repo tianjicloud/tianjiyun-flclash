@@ -510,6 +510,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
+    "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
+      "Закрыть все",
+    ),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
       "Подключено · Есть проблема",
@@ -539,6 +542,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Включить умную маршрутизацию",
     ),
+    "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
+      "Проверка выхода пройдена",
+    ),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
       "Фактический выход не совпадает с выбранной линией",
     ),
@@ -552,7 +558,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Виртуальный адаптер не авторизован. Терминал и некоторые приложения обходят прокси и видят ваш локальный IP. Авторизуйте его один раз, чтобы исправить это.",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
-      "Выход проверен",
+      "Подключено · Выход проверен",
     ),
     "businessExitVerifiedDetail": m7,
     "businessExitVerifiedShort": MessageLookupByLibrary.simpleMessage(
@@ -769,12 +775,35 @@ class MessageLookup extends MessageLookupByLibrary {
     "connected": MessageLookupByLibrary.simpleMessage("Подключено"),
     "connecting": MessageLookupByLibrary.simpleMessage("Подключение…"),
     "connection": MessageLookupByLibrary.simpleMessage("Соединение"),
+    "connectionAddDomainRule": MessageLookupByLibrary.simpleMessage(
+      "Добавить правило для домена",
+    ),
     "connectionBlockedLabel": MessageLookupByLibrary.simpleMessage(
       "Заблокировано",
+    ),
+    "connectionCloseThis": MessageLookupByLibrary.simpleMessage(
+      "Закрыть это соединение",
+    ),
+    "connectionGroup": MessageLookupByLibrary.simpleMessage("Группа"),
+    "connectionLocalDevice": MessageLookupByLibrary.simpleMessage(
+      "Это устройство",
+    ),
+    "connectionMatchedRule": MessageLookupByLibrary.simpleMessage(
+      "Совпавшее правило",
+    ),
+    "connectionProcessPath": MessageLookupByLibrary.simpleMessage(
+      "Путь процесса",
     ),
     "connectionSearchHint": MessageLookupByLibrary.simpleMessage(
       "Поиск домена, приложения или правила",
     ),
+    "connectionSniffedDomain": MessageLookupByLibrary.simpleMessage(
+      "Обнаруженный домен",
+    ),
+    "connectionSourceAddress": MessageLookupByLibrary.simpleMessage(
+      "Исходный адрес",
+    ),
+    "connectionStartTime": MessageLookupByLibrary.simpleMessage("Время начала"),
     "connectionStats": MessageLookupByLibrary.simpleMessage(
       "Статистика подключений",
     ),
@@ -782,7 +811,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Подключения, запросы и DNS-запросы",
     ),
     "connectionSummary": m16,
+    "connectionSustained": MessageLookupByLibrary.simpleMessage("Длительность"),
+    "connectionTargetIp": MessageLookupByLibrary.simpleMessage("IP назначения"),
+    "connectionTrafficPath": MessageLookupByLibrary.simpleMessage(
+      "Маршрут трафика",
+    ),
     "connections": MessageLookupByLibrary.simpleMessage("Соединения"),
+    "connectionsAndRequests": MessageLookupByLibrary.simpleMessage(
+      "Подключения и запросы",
+    ),
+    "connectionsLiveShort": MessageLookupByLibrary.simpleMessage("Активные"),
     "connectivity": MessageLookupByLibrary.simpleMessage("Подключение: "),
     "content": MessageLookupByLibrary.simpleMessage("Содержимое"),
     "contentNotEmpty": MessageLookupByLibrary.simpleMessage(
@@ -1358,10 +1396,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Сертификат установлен",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -1880,10 +1917,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Не удалось импортировать",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Не удаётся подключиться к адресу подписки",
     ),

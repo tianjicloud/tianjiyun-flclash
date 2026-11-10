@@ -663,7 +663,7 @@ class _VerificationCard extends ConsumerWidget {
                   children: [
                     Text(
                       success
-                          ? context.appLocalizations.businessExitVerified
+                          ? context.appLocalizations.businessExitCheckPassed
                           : message,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

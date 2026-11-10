@@ -124,29 +124,41 @@ class _RequestsViewState extends ConsumerState<RequestsView>
       child: body,
       builder: (context, body) {
         final pinned = !ViewScope.isMobileOf(context);
+        final businessMobile = isBusiness && !pinned;
         return Scaffold(
-          title: pinned ? null : _labelOf(_feed),
+          title: pinned || businessMobile ? null : _labelOf(_feed),
           titleWidget: pinned
               ? _buildTitleWidget(context, isBusiness: isBusiness)
+              : businessMobile
+              ? Text(
+                  context.appLocalizations.connectionsAndRequests,
+                  style: AppTextStyle.pageTitle.of(context, emphasized: true),
+                )
               : null,
-          searchState: pinned ? null : AppBarSearchState(onSearch: _search),
+          searchState: pinned || businessMobile
+              ? null
+              : AppBarSearchState(onSearch: _search),
           keywords: pinned ? null : _filters.keywordsOf(pinned: false),
-          actions: _feed == RequestFeed.live && pinned
+          actions: _feed == RequestFeed.live && (pinned || businessMobile)
               ? [
                   TonalButton(
                     size: TonalButtonSize.compact,
-                    label: context.appLocalizations.closeAllConnections,
+                    label: businessMobile
+                        ? context.appLocalizations.businessCloseAllConnections
+                        : context.appLocalizations.closeAllConnections,
                     onPressed: () => _liveFeed.currentState?.closeAll(),
                   ),
                 ]
               : const [],
-          iconActions: !pinned ? _buildActions() : const [],
+          iconActions: !pinned && !businessMobile ? _buildActions() : const [],
           menuItems: _filters.menuItems(context, pinned: pinned),
           body: AppBarClearance(
             child: Column(
               children: [
                 if (pinned)
                   _buildControls(context, horizontalInset: isBusiness ? 28 : 16)
+                else if (businessMobile)
+                  _buildBusinessMobileControls(context)
                 else
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
@@ -168,7 +180,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                     child: body!,
                   ),
                 ),
-                if (_feed == RequestFeed.live)
+                if (_feed == RequestFeed.live && (pinned || !isBusiness))
                   ValueListenableBuilder<TrackerInfosState>(
                     valueListenable: _live,
                     builder: (context, _, _) => _buildLiveSummary(
@@ -195,6 +207,48 @@ class _RequestsViewState extends ConsumerState<RequestsView>
         onPressed: () => _liveFeed.currentState?.closeAll(),
       ),
     ];
+  }
+
+  Widget _buildBusinessMobileControls(BuildContext context) {
+    final options = _filters.options.value;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 8,
+        children: [
+          ValueListenableBuilder<TrackerInfosState>(
+            valueListenable: _live,
+            builder: (context, state, _) => BusinessSegmented<RequestFeed>(
+              key: const ValueKey('requestFeedSelector'),
+              selected: _feed,
+              height: 32,
+              expand: true,
+              mobile: true,
+              items: [
+                BusinessSegment(
+                  value: RequestFeed.live,
+                  label:
+                      '${context.appLocalizations.connectionsLiveShort} · ${state.trackerInfos.length}',
+                ),
+                BusinessSegment(
+                  value: RequestFeed.recent,
+                  label: context.appLocalizations.recentRequests,
+                ),
+              ],
+              onSelected: _selectFeed,
+            ),
+          ),
+          _filterBar(
+            context,
+            options[RecordFacetKind.network] ?? const [],
+            options[RecordFacetKind.rule] ?? const [],
+            options[RecordFacetKind.proxy] ?? const [],
+            mobile: true,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildMobileFeedSelector(BuildContext context) {
@@ -328,8 +382,9 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     BuildContext context,
     List<String> networkOptions,
     List<String> ruleOptions,
-    List<String> proxyOptions,
-  ) {
+    List<String> proxyOptions, {
+    bool mobile = false,
+  }) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: ValueListenableBuilder<RecordFilterState>(
@@ -340,6 +395,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
             _filterChip(
               context.appLocalizations.all,
               selected: state.filters.isEmpty,
+              mobile: mobile,
               onPressed: () {
                 for (final filter in [..._filters.filters]) {
                   _filters.remove(filter);
@@ -353,6 +409,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                 selected: state.filters.contains(
                   RecordFilter(RecordFacetKind.network, network),
                 ),
+                mobile: mobile,
                 onPressed: () => _filters.toggle(
                   RecordFilter(RecordFacetKind.network, network),
                 ),
@@ -363,6 +420,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                 selected: state.filters.contains(
                   RecordFilter(RecordFacetKind.rule, rule),
                 ),
+                mobile: mobile,
                 onPressed: () =>
                     _filters.toggle(RecordFilter(RecordFacetKind.rule, rule)),
               ),
@@ -372,6 +430,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                 selected: state.filters.contains(
                   RecordFilter(RecordFacetKind.proxy, proxy),
                 ),
+                mobile: mobile,
                 onPressed: () =>
                     _filters.toggle(RecordFilter(RecordFacetKind.proxy, proxy)),
               ),
@@ -390,6 +449,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     String label, {
     required bool selected,
     required VoidCallback onPressed,
+    bool mobile = false,
   }) {
     final colorScheme = context.colorScheme;
     return PressSurface(
@@ -400,11 +460,11 @@ class _RequestsViewState extends ConsumerState<RequestsView>
       onPressed: onPressed,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: SizedBox(
-        height: 30,
+        height: mobile ? 34 : 30,
         child: Center(
           child: Text(
             label,
-            style: AppTextStyle.footnote
+            style: (mobile ? AppTextStyle.caption1 : AppTextStyle.footnote)
                 .of(context, emphasized: true)
                 .copyWith(
                   color: selected ? colorScheme.surface : colorScheme.onSurface,
@@ -818,7 +878,11 @@ class _LiveFeedState extends ConsumerState<_LiveFeed>
               final detailTitle = appLocalizations.details(
                 appLocalizations.connection,
               );
-              final groups = widget.filters.groupsOf(connections);
+              final businessMobile =
+                  widget.isBusiness && ViewScope.isMobileOf(context);
+              final groups = businessMobile
+                  ? null
+                  : widget.filters.groupsOf(connections);
               if (groups != null) {
                 return TrackerInfoGroupedList(
                   groups: groups,
@@ -831,13 +895,21 @@ class _LiveFeedState extends ConsumerState<_LiveFeed>
                   onClose: _closeConnection,
                 );
               }
-              return TrackerInfoAnimatedList(
+              final list = TrackerInfoAnimatedList(
                 controller: _scrollController,
                 padding: padding,
                 trackerInfos: connections,
                 table: table,
                 detailTitle: detailTitle,
                 onClose: _closeConnection,
+                businessMobile: businessMobile,
+              );
+              if (!businessMobile) {
+                return list;
+              }
+              return ColoredBox(
+                color: context.colorScheme.surface,
+                child: list,
               );
             },
           ),

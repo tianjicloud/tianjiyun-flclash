@@ -491,6 +491,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
+    "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
+      "Close all",
+    ),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
       "Connected · Issue detected",
@@ -518,6 +521,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Enable smart routing",
     ),
+    "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
+      "Exit check passed",
+    ),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
       "Your selected line does not match the actual exit",
     ),
@@ -531,7 +537,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "The virtual adapter has not been authorized. Terminals and some apps are not using the proxy, so they see your local IP. Authorize it once to fix this.",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
-      "Exit verified",
+      "Connected · Exit verified",
     ),
     "businessExitVerifiedDetail": m7,
     "businessExitVerifiedShort": MessageLookupByLibrary.simpleMessage(
@@ -740,16 +746,48 @@ class MessageLookup extends MessageLookupByLibrary {
     "connected": MessageLookupByLibrary.simpleMessage("Connected"),
     "connecting": MessageLookupByLibrary.simpleMessage("Connecting…"),
     "connection": MessageLookupByLibrary.simpleMessage("Connection"),
+    "connectionAddDomainRule": MessageLookupByLibrary.simpleMessage(
+      "Add a rule for this domain",
+    ),
     "connectionBlockedLabel": MessageLookupByLibrary.simpleMessage("Blocked"),
+    "connectionCloseThis": MessageLookupByLibrary.simpleMessage(
+      "Close this connection",
+    ),
+    "connectionGroup": MessageLookupByLibrary.simpleMessage("Group"),
+    "connectionLocalDevice": MessageLookupByLibrary.simpleMessage(
+      "This device",
+    ),
+    "connectionMatchedRule": MessageLookupByLibrary.simpleMessage(
+      "Matched rule",
+    ),
+    "connectionProcessPath": MessageLookupByLibrary.simpleMessage(
+      "Process path",
+    ),
     "connectionSearchHint": MessageLookupByLibrary.simpleMessage(
       "Search domain, app, or rule",
     ),
+    "connectionSniffedDomain": MessageLookupByLibrary.simpleMessage(
+      "Sniffed domain",
+    ),
+    "connectionSourceAddress": MessageLookupByLibrary.simpleMessage(
+      "Source address",
+    ),
+    "connectionStartTime": MessageLookupByLibrary.simpleMessage("Start time"),
     "connectionStats": MessageLookupByLibrary.simpleMessage("Connection stats"),
     "connectionStatsDesc": MessageLookupByLibrary.simpleMessage(
       "Live connections, recent requests and DNS queries",
     ),
     "connectionSummary": m16,
+    "connectionSustained": MessageLookupByLibrary.simpleMessage("Elapsed"),
+    "connectionTargetIp": MessageLookupByLibrary.simpleMessage("Target IP"),
+    "connectionTrafficPath": MessageLookupByLibrary.simpleMessage(
+      "Traffic path",
+    ),
     "connections": MessageLookupByLibrary.simpleMessage("Connections"),
+    "connectionsAndRequests": MessageLookupByLibrary.simpleMessage(
+      "Connections & Requests",
+    ),
+    "connectionsLiveShort": MessageLookupByLibrary.simpleMessage("Live"),
     "connectivity": MessageLookupByLibrary.simpleMessage("Connectivity: "),
     "content": MessageLookupByLibrary.simpleMessage("Content"),
     "contentNotEmpty": MessageLookupByLibrary.simpleMessage(
@@ -1299,10 +1337,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificate installed",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -1793,10 +1830,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Import failed",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Can’t reach the subscription address",
     ),

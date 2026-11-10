@@ -4,10 +4,13 @@ import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/app_update.dart';
 import 'package:fl_clash/core/traffic/model.dart';
 import 'package:fl_clash/core/residential.dart';
+import 'package:fl_clash/common/service_probe.dart' show routedOutbound;
 import 'package:fl_clash/core/traffic/service.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
+import 'package:fl_clash/providers/selection_check.dart';
+import 'package:fl_clash/providers/selection_verification.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
@@ -34,6 +37,30 @@ import '../../helpers/traffic_stats_store.dart';
 class _IdleIpProbe extends OutboundIpProbe {
   @override
   RoutedProbeState<String, IpInfo> build() => const RoutedProbeState({});
+
+  @override
+  void watch(String target) {}
+
+  @override
+  void unwatch(String target) {}
+}
+
+class _VerifiedIpProbe extends OutboundIpProbe {
+  @override
+  RoutedProbeState<String, IpInfo> build() => const RoutedProbeState({
+    routedOutbound: ProbeEntry(
+      phase: ProbePhase.fresh,
+      value: IpInfo(ip: '203.0.113.42', countryCode: 'JP'),
+      stamp: RouteStamp(
+        coreEpoch: 1,
+        routeVersion: 1,
+        hostEpoch: 1,
+        proxied: true,
+        hits: [RouteHit(host: 'example.com', proxy: 'Tokyo', exit: 'Tokyo')],
+        chains: ['Tokyo'],
+      ),
+    ),
+  });
 
   @override
   void watch(String target) {}
@@ -130,6 +157,53 @@ void main() {
   tearDown(() {
     container.dispose();
     stats.dispose();
+  });
+
+  testWidgets('verified dashboard pill keeps the connected label', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final verifiedContainer = ProviderContainer(
+      parent: container,
+      overrides: [
+        runTimeProvider.overrideWithBuild((_, _) => 1),
+        isStartProvider.overrideWithValue(true),
+        networkSettingProvider.overrideWithBuild(
+          (_, _) => const NetworkProps(systemProxy: true),
+        ),
+        routeTrackerProvider.overrideWithBuild(
+          (_, _) => const RouteState(
+            coreEpoch: 1,
+            routeVersion: 1,
+            hostEpoch: 1,
+            proxied: true,
+            synced: true,
+            live: true,
+          ),
+        ),
+        selectionCheckProvider.overrideWithBuild(
+          (_, _) => SelectionVerdict.consistent,
+        ),
+        outboundIpProbeProvider.overrideWith(_VerifiedIpProbe.new),
+      ],
+    );
+    addTearDown(verifiedContainer.dispose);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: verifiedContainer,
+        child: const TestApp(
+          locale: Locale('zh', 'CN'),
+          child: BusinessDashboardView(platform: SupportPlatform.Windows),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('已连接 · 出口已校验'), findsOneWidget);
+    expect(find.text('出口校验通过'), findsNothing);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
   });
 
   testWidgets('unsafe outbound warning restores rule mode', (tester) async {
