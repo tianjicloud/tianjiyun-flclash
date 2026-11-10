@@ -3,9 +3,12 @@ import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/proxies/list.dart';
 import 'package:fl_clash/views/proxies/business_browser.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -172,37 +175,14 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
     final businessDesktopSearch =
         businessDesktop && MediaQuery.sizeOf(context).width >= 900;
     final groups = ref.watch(proxiesTabStateProvider).groups;
-    final testingGroups = ref.watch(delayTestingGroupsProvider);
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
     final isLoading = ref.watch(loadingProvider(LoadingTag.proxies));
     final picker = widget.picker;
     final primaryAction = businessDesktop
         ? null
         : _buildPrimaryAction(business: business);
     final desktopActions = businessDesktop
-        ? [
-            IconButtonData(
-              glyph: AppGlyphs.sort,
-              tooltip: context.appLocalizations.sort,
-              isSelected: style.sortType == ProxiesSortType.delay,
-              onPressed: () => _updateStyle(
-                (state) => state.copyWith(
-                  sortType: state.sortType == ProxiesSortType.delay
-                      ? ProxiesSortType.none
-                      : ProxiesSortType.delay,
-                ),
-              ),
-            ),
-            IconButtonData(
-              glyph: AppGlyphs.bolt,
-              tooltip: context.appLocalizations.delayTest,
-              isLoading: testingGroups.isNotEmpty,
-              onPressed: groups.isEmpty
-                  ? null
-                  : () => ref
-                        .read(proxiesActionProvider.notifier)
-                        .delayTestGroups(groups),
-            ),
-          ]
+        ? <IconButtonData>[]
         : [
             if (_isTab && !picker)
               IconButtonData(
@@ -219,12 +199,57 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
       primaryAction: primaryAction,
       searchActions: [?primaryAction],
       iconActions: desktopActions,
-      menuItems: picker ? const [] : _buildMenuItems(context, style),
+      menuItems: picker || businessDesktopSearch
+          ? const []
+          : _buildMenuItems(context, style),
       title: business
           ? context.appLocalizations.businessLines
           : context.appLocalizations.proxies,
       titleWidget: businessDesktopSearch
           ? _BusinessProxyTitle(onSearch: _onSearch)
+          : null,
+      actions: businessDesktopSearch
+          ? [
+              BusinessSecondaryButton(
+                label: context.appLocalizations.businessSortByDelay,
+                width: 99 * textScale,
+                onPressed: () => _updateStyle(
+                  (state) => state.copyWith(
+                    sortType: state.sortType == ProxiesSortType.delay
+                        ? ProxiesSortType.none
+                        : ProxiesSortType.delay,
+                  ),
+                ),
+              ),
+              BusinessPrimaryButton(
+                label: context.appLocalizations.businessTestAll,
+                width: 86 * textScale,
+                onPressed: groups.isEmpty
+                    ? null
+                    : () => ref
+                          .read(proxiesActionProvider.notifier)
+                          .delayTestGroups(groups),
+              ),
+              PopupAnchor(
+                targetBuilder: (open) => IconButton(
+                  tooltip: context.appLocalizations.more,
+                  onPressed: open,
+                  style: ButtonStyle.from(
+                    shape: AppShape.md,
+                    fixedSize: const Size(34, 34),
+                    minimumSize: const Size(34, 34),
+                    maximumSize: const Size(34, 34),
+                    padding: EdgeInsets.zero,
+                    tapTargetSize: TapTargetSize.shrinkWrap,
+                  ),
+                  icon: const GlyphIcon(AppGlyphs.more),
+                ),
+                popupBuilder: (_) => PopupMenu(
+                  maxVisibleItems: 7,
+                  items: _buildMenuItems(context, style),
+                ),
+              ),
+            ]
           : null,
       searchState: businessDesktopSearch
           ? null
@@ -245,20 +270,44 @@ class _BusinessProxyTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
     return Row(
-      mainAxisSize: MainAxisSize.min,
-      spacing: 16,
       children: [
         Text(
           context.appLocalizations.businessLines,
           style: AppTextStyle.pageTitle.of(context),
         ),
-        SizedBox(
-          width: 240,
-          child: SearchField(
+        const Spacer(),
+        DecoratedBox(
+          decoration: ShapeDecoration(
+            color: context.colorScheme.brightness == Brightness.dark
+                ? context.colorScheme.surfaceContainer
+                : const Color(0xFFFFFFFF),
+            shape: RoundedSuperellipseBorder(
+              side: BorderSide(
+                color: context.colorScheme.brightness == Brightness.dark
+                    ? BusinessPalette.secondaryButtonDarkStroke
+                    : BusinessPalette.searchStroke,
+                width: 0.5,
+              ),
+              borderRadius: AppRadius.full,
+            ),
+            shadows: [
+              const BoxShadow(
+                color: BusinessPalette.searchShadow,
+                blurRadius: 3,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+          child: SizedBox(
+            width: 240 * textScale,
             height: 34,
-            hintText: context.appLocalizations.search,
-            onChanged: onSearch,
+            child: SearchField(
+              height: 34,
+              hintText: context.appLocalizations.businessSearchHint,
+              onChanged: onSearch,
+            ),
           ),
         ),
       ],

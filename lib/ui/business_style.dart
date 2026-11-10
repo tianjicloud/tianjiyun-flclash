@@ -22,6 +22,9 @@ abstract final class BusinessPalette {
   static const sidebarSelection = Color(0xFFFFFFFF);
   static const sidebarSelectionShadow = Color(0x140E1726);
   static const sidebarLight = Color(0xFFF7F8FA);
+  static const hintBackground = Color(0xFFF4F8FF);
+  static const searchStroke = Color(0x120E1726);
+  static const searchShadow = Color(0x0A0E1726);
   static const sidebarDarkOverlay = Color(0x8C0A0F2B);
   static const heroChipText = Color(0xFF2D3748);
   static const connected = Color(0xFF0E8A5F);
@@ -123,6 +126,15 @@ abstract final class BusinessPalette {
       brightness == Brightness.dark ? idleOrbitPlateDark : idleOrbitPlate;
 }
 
+abstract final class BusinessShadow {
+  static BoxShadow selectedLine(Color color) => BoxShadow(
+    color: color.withValues(alpha: 0.35),
+    offset: const Offset(0, 12),
+    blurRadius: (28 / 2 - 0.5) / 0.57735,
+    spreadRadius: -12,
+  );
+}
+
 Color businessDelayColor(ColorScheme colorScheme, int? delay) {
   if (delay == null) return colorScheme.onSurfaceVariant;
   return delay >= 0 && delay < 80
@@ -214,6 +226,16 @@ abstract final class BusinessText {
         leading: mobile ? 18 : 20,
         weight: FontWeight.w600,
       );
+
+  static TextStyle cardDelay(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 15,
+    leading: 18,
+    weight: FontWeight.w600,
+  ).toJetBrainsMono;
+
+  static TextStyle inlineIp(BuildContext context) =>
+      AppTextStyle.custom(context, size: 12, leading: 16).toJetBrainsMono;
 
   static TextStyle quickName(
     BuildContext context, {
@@ -429,6 +451,7 @@ abstract final class BusinessText {
 
 /// The design's per-surface corner values, which one card token cannot carry.
 abstract final class BusinessRadius {
+  static const linesDesktop = 18.0;
   static const code = 5.0;
   static const brandMobile = 6.0;
   static const heroDesktop = 18.0;

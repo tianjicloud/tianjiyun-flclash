@@ -1230,7 +1230,7 @@
   "businessConnectedUnverified": "연결됨 · 출구 확인 안 됨",
   "businessConnectedAbnormal": "연결됨 · 문제가 있습니다",
   "businessConnectedProbeFailed": "연결됨 · 출구 확인 실패",
-  "businessExitVerified": "연결됨 · 출구 검증됨",
+  "businessExitVerified": "출구 확인 완료",
   "businessMonthTraffic": "이번 달 트래픽",
   "businessProxyTraffic": "프록시",
   "businessMainlandDirect": "중국 본토 직접 연결",
@@ -1290,5 +1290,29 @@
   "outboundModeDescription": "일반적으로 ‘규칙’을 유지하세요. 전역은 중국 본토 트래픽도 프록시로 보내고, 직접 연결은 모든 회선을 사용할 수 없게 합니다.",
   "outboundModeGlobalWarning": "전역 모드가 활성화되어 있습니다",
   "outboundModeDirectWarning": "직접 연결 모드가 활성화되어 있습니다",
-  "outboundModeRestoreRule": "규칙으로 복원"
+  "outboundModeRestoreRule": "규칙으로 복원",
+  "businessLineSelectionHint": "수동 선택이 우선합니다. 선택한 회선이 출구가 되며 전환 후 출구 IP를 확인합니다. 불일치하면 이유를 표시합니다.",
+  "businessResidentialLockedHint": "가정용 회선 그룹은 “{name}”에 잠겨 있습니다. 가정용 회선에서 변경하세요.",
+  "businessLocked": "잠김",
+  "businessExitVerifiedDetail": "선택한 “{name}”과 출구 {ip}가 일치",
+  "businessSearchHint": "회선 이름 또는 지역 검색",
+  "businessExitVerifiedShort": "출구 확인 완료",
+  "businessCurrentLineState": "현재: {name} · {status}",
+  "businessSortByDelay": "지연 시간순 정렬",
+  "businessTestAll": "모두 측정",
+  "@businessExitVerifiedDetail": {
+    "placeholders": {
+      "name": {},
+      "ip": {}
+    }
+  },
+  "businessGroupHeader": "그룹",
+  "businessDelayTimeout": "시간 초과",
+  "businessRecheck": "다시 확인",
+  "businessMultiplier": "배율 {value}×",
+  "@businessMultiplier": {
+    "placeholders": {
+      "value": {}
+    }
+  }
 }

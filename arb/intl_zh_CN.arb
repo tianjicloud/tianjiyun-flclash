@@ -1230,7 +1230,7 @@
   "businessConnectedUnverified": "已连接 · 出口未通过校验",
   "businessConnectedAbnormal": "已连接 · 有异常",
   "businessConnectedProbeFailed": "已连接 · 出口检测失败",
-  "businessExitVerified": "已连接 · 出口已校验",
+  "businessExitVerified": "出口校验通过",
   "businessMonthTraffic": "本月流量",
   "businessProxyTraffic": "代理",
   "businessMainlandDirect": "大陆直连",
@@ -1290,5 +1290,29 @@
   "outboundModeDescription": "一般保持「规则」。全局会让大陆流量也走代理，直连会让所有线路失效。",
   "outboundModeGlobalWarning": "当前为全局模式",
   "outboundModeDirectWarning": "当前为直连模式",
-  "outboundModeRestoreRule": "恢复规则"
+  "outboundModeRestoreRule": "恢复规则",
+  "businessLineSelectionHint": "手动选择优先：选中哪条，出口就是哪条。切换后会自动校验出口 IP，不一致会直接写明原因。",
+  "businessResidentialLockedHint": "家宽分组已锁定到「{name}」，在家宽线路里更换。",
+  "businessLocked": "锁定",
+  "businessExitVerifiedDetail": "所选「{name}」与实际出口 {ip} 一致",
+  "businessSearchHint": "搜索线路名或地区",
+  "businessExitVerifiedShort": "出口已校验",
+  "businessCurrentLineState": "当前：{name} · {status}",
+  "businessSortByDelay": "按延迟排序",
+  "businessTestAll": "全部测速",
+  "@businessExitVerifiedDetail": {
+    "placeholders": {
+      "name": {},
+      "ip": {}
+    }
+  },
+  "businessGroupHeader": "分组",
+  "businessDelayTimeout": "超时",
+  "businessRecheck": "重新校验",
+  "businessMultiplier": "倍率 {value}×",
+  "@businessMultiplier": {
+    "placeholders": {
+      "value": {}
+    }
+  }
 }

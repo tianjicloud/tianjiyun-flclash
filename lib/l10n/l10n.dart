@@ -7668,7 +7668,8 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one:
+          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -10507,10 +10508,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Connected · Exit verified`
+  /// `Exit verified`
   String get businessExitVerified {
     return Intl.message(
-      'Connected · Exit verified',
+      'Exit verified',
       name: 'businessExitVerified',
       desc: '',
       args: [],
@@ -10799,6 +10800,131 @@ class AppLocalizations {
       name: 'outboundModeRestoreRule',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Manual selection takes priority: the selected line is the exit. After switching, the exit IP is checked and any mismatch includes its reason.`
+  String get businessLineSelectionHint {
+    return Intl.message(
+      'Manual selection takes priority: the selected line is the exit. After switching, the exit IP is checked and any mismatch includes its reason.',
+      name: 'businessLineSelectionHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The home broadband group is locked to “{name}”. Change it in the home broadband lines.`
+  String businessResidentialLockedHint(Object name) {
+    return Intl.message(
+      'The home broadband group is locked to “$name”. Change it in the home broadband lines.',
+      name: 'businessResidentialLockedHint',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `Locked`
+  String get businessLocked {
+    return Intl.message('Locked', name: 'businessLocked', desc: '', args: []);
+  }
+
+  /// `Selected “{name}” matches exit {ip}`
+  String businessExitVerifiedDetail(Object name, Object ip) {
+    return Intl.message(
+      'Selected “$name” matches exit $ip',
+      name: 'businessExitVerifiedDetail',
+      desc: '',
+      args: [name, ip],
+    );
+  }
+
+  /// `Search line name or region`
+  String get businessSearchHint {
+    return Intl.message(
+      'Search line name or region',
+      name: 'businessSearchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit verified`
+  String get businessExitVerifiedShort {
+    return Intl.message(
+      'Exit verified',
+      name: 'businessExitVerifiedShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current: {name} · {status}`
+  String businessCurrentLineState(Object name, Object status) {
+    return Intl.message(
+      'Current: $name · $status',
+      name: 'businessCurrentLineState',
+      desc: '',
+      args: [name, status],
+    );
+  }
+
+  /// `Sort by delay`
+  String get businessSortByDelay {
+    return Intl.message(
+      'Sort by delay',
+      name: 'businessSortByDelay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Test all`
+  String get businessTestAll {
+    return Intl.message(
+      'Test all',
+      name: 'businessTestAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Groups`
+  String get businessGroupHeader {
+    return Intl.message(
+      'Groups',
+      name: 'businessGroupHeader',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Timeout`
+  String get businessDelayTimeout {
+    return Intl.message(
+      'Timeout',
+      name: 'businessDelayTimeout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify again`
+  String get businessRecheck {
+    return Intl.message(
+      'Verify again',
+      name: 'businessRecheck',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rate {value}×`
+  String businessMultiplier(Object value) {
+    return Intl.message(
+      'Rate $value×',
+      name: 'businessMultiplier',
+      desc: '',
+      args: [value],
     );
   }
 }

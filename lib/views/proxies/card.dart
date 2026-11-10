@@ -118,11 +118,11 @@ class ProxyCard extends ConsumerWidget {
 
   Widget _buildBusinessContent(BuildContext context) {
     final region = _businessName();
-    final delayText = _DelayText(
-      proxy: proxy,
-      testUrl: testUrl,
-      alignment: Alignment.centerRight,
-    );
+    final multiplier = RegExp(
+      r'\b(\d+(?:\.\d+)?)x\b',
+      caseSensitive: false,
+    ).firstMatch(proxy.name)?.group(1);
+    final delayText = _BusinessDelayText(proxy: proxy, testUrl: testUrl);
     final chipStyle = AppTextStyle.caption1
         .of(context)
         .copyWith(color: context.colorScheme.onSurfaceVariant);
@@ -137,26 +137,26 @@ class ProxyCard extends ConsumerWidget {
             if (region.code case final code?) RegionCodeBadge(code: code),
             Expanded(
               child: EmojiText(
-                region.name,
+                region.name.replaceAll(
+                  RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false),
+                  '',
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: BusinessText.cardTitle(context),
               ),
             ),
-            delayText,
+            Align(alignment: Alignment.centerRight, child: delayText),
           ],
         ),
         const SizedBox(height: 8),
-        Wrap(
-          spacing: 6,
-          runSpacing: 4,
-          children: [
-            if (proxy.providerName case final provider?
-                when provider.isNotEmpty)
-              _ProxyMetaChip(label: provider, style: chipStyle),
-            _ProxyMetaChip(label: proxy.type, style: chipStyle),
-          ],
-        ),
+        if (multiplier != null)
+          _ProxyMetaChip(
+            label: context.appLocalizations.businessMultiplier(multiplier),
+            style: chipStyle,
+          )
+        else
+          const SizedBox(height: 22),
       ],
     );
   }
@@ -181,9 +181,18 @@ class ProxyCard extends ConsumerWidget {
     required bool inUse,
     required bool pinned,
     required bool addable,
+    required bool businessStyle,
   }) {
     final appLocalizations = context.appLocalizations;
     return [
+      if (businessStyle)
+        PopupMenuItem(
+          glyph: AppGlyphs.bolt,
+          label: appLocalizations.delayTest,
+          onPressed: () => ref.read(proxiesActionProvider.notifier).delayTest([
+            proxy,
+          ], testUrl),
+        ),
       if (groupType == GroupType.Selector)
         PopupMenuItem(
           glyph: AppGlyphs.checkCircle,
@@ -268,6 +277,61 @@ class ProxyCard extends ConsumerWidget {
             (profile) => profile?.type == ProfileType.custom,
           ),
         );
+        final card = Card(
+          radius: businessStyle ? AppCorner.md : AppCorner.lg,
+          shape: businessStyle
+              ? const RoundedSuperellipseBorder(
+                  side: BorderSide.none,
+                  borderRadius: AppRadius.md,
+                )
+              : null,
+          enterActionsOnRight: true,
+          key: key,
+          onPressed: () => _handleSelect(ref),
+          isSelected: inUse,
+          padding: businessStyle
+              ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
+              : const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: businessStyle
+                ? [_buildBusinessContent(context)]
+                : [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 4,
+                      children: [
+                        Expanded(child: proxyNameText),
+                        if (pinned)
+                          SelectionBadge(glyph: Glyphs.pin, tonal: !inUse)
+                        else if (inUse)
+                          const SelectionBadge(),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    details,
+                  ],
+          ),
+        );
+        final selectedCard = businessStyle && inUse
+            ? DecoratedBox(
+                decoration: ShapeDecoration(
+                  shadows: [BusinessShadow.selectedLine(BusinessPalette.blue)],
+                  shape: AppShape.md,
+                ),
+                child: DecoratedBox(
+                  position: DecorationPosition.foreground,
+                  decoration: const ShapeDecoration(
+                    shape: RoundedSuperellipseBorder(
+                      side: BorderSide(color: BusinessPalette.blue, width: 2),
+                      borderRadius: AppRadius.md,
+                    ),
+                  ),
+                  child: card,
+                ),
+              )
+            : card;
         return ContextMenuRegion(
           menuItems: _menuItems(
             context,
@@ -275,51 +339,47 @@ class ProxyCard extends ConsumerWidget {
             inUse: inUse,
             pinned: pinned,
             addable: _isAddableToLocal(proxy, isCustomProfile: isCustomProfile),
+            businessStyle: businessStyle,
           ),
-          child: Card(
-            radius: AppCorner.lg,
-            shape: businessStyle
-                ? RoundedSuperellipseBorder(
-                    side: BorderSide(
-                      color: inUse
-                          ? BusinessPalette.blue
-                          : const Color(0xFFDCE1E7),
-                      width: inUse ? 2 : 1,
-                    ),
-                    borderRadius: AppRadius.lg,
-                  )
-                : null,
-            enterActionsOnRight: true,
-            key: key,
-            onPressed: () => _handleSelect(ref),
-            isSelected: inUse,
-            padding: businessStyle
-                ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
-                : const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: businessStyle
-                  ? [_buildBusinessContent(context)]
-                  : [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 4,
-                        children: [
-                          Expanded(child: proxyNameText),
-                          if (pinned)
-                            SelectionBadge(glyph: Glyphs.pin, tonal: !inUse)
-                          else if (inUse)
-                            const SelectionBadge(),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      details,
-                    ],
-            ),
-          ),
+          child: Semantics(selected: inUse, child: selectedCard),
         );
       },
+    );
+  }
+}
+
+class _BusinessDelayText extends ConsumerWidget {
+  const _BusinessDelayText({required this.proxy, required this.testUrl});
+
+  final Proxy proxy;
+  final String? testUrl;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final delay = ref.watch(
+      delayProvider(proxyName: proxy.name, testUrl: testUrl),
+    );
+    final phase = ref.watch(
+      delayTestPhaseProvider(proxyName: proxy.name, testUrl: testUrl),
+    );
+    final color = delay != null && delay <= 0
+        ? context.colorScheme.error
+        : businessDelayColor(context.colorScheme, delay);
+    final label = switch ((phase, delay)) {
+      (DelayTestPhase.running || DelayTestPhase.queued, _) => '…',
+      (_, null) => '—',
+      (_, final value?) when value > 0 => '$value ms',
+      _ => context.appLocalizations.businessDelayTimeout,
+    };
+    return Text(
+      label,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style:
+          (delay != null && delay <= 0
+                  ? AppTextStyle.footnote.of(context, emphasized: true)
+                  : BusinessText.cardDelay(context))
+              .copyWith(color: color),
     );
   }
 }

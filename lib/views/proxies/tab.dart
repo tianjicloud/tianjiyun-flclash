@@ -5,7 +5,6 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/providers/providers.dart';
-import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -257,7 +256,7 @@ class ProxyGroupView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final proxies = group.all;
     final itemHeight = businessStyle
-        ? max(getItemHeight(cardType), _businessCardExtent(context))
+        ? 80 * MediaQuery.textScalerOf(context).scale(1)
         : getItemHeight(cardType);
     return Scrollbar(
       controller: controller,
@@ -266,14 +265,14 @@ class ProxyGroupView extends ConsumerWidget {
         key: _getPageStorageKey(ref),
         controller: controller,
         padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
+          left: businessStyle ? 0 : 16,
+          right: businessStyle ? 0 : 16,
           bottom: 16 + context.bottomInset,
         ),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
-          mainAxisSpacing: proxyGridSpacing,
-          crossAxisSpacing: 8,
+          mainAxisSpacing: businessStyle ? 12 : proxyGridSpacing,
+          crossAxisSpacing: businessStyle ? 12 : 8,
           mainAxisExtent: itemHeight,
         ),
         itemCount: proxies.length,
@@ -292,25 +291,4 @@ class ProxyGroupView extends ConsumerWidget {
       ),
     );
   }
-}
-
-double _businessCardExtent(BuildContext context) {
-  final titleHeight = _measureTextHeight(
-    context,
-    BusinessText.cardTitle(context),
-  );
-  final metadataHeight =
-      _measureTextHeight(context, AppTextStyle.caption1.of(context)) + 6;
-  return 24 + titleHeight + 8 + (metadataHeight * 2) + 4;
-}
-
-double _measureTextHeight(BuildContext context, TextStyle style) {
-  final painter = TextPainter(
-    text: TextSpan(text: 'X', style: style),
-    textDirection: Directionality.of(context),
-    textScaler: MediaQuery.textScalerOf(context),
-  )..layout();
-  final height = painter.height;
-  painter.dispose();
-  return height;
 }

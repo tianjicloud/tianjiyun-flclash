@@ -1230,7 +1230,7 @@
   "businessConnectedUnverified": "Conectado · Salida sin verificar",
   "businessConnectedAbnormal": "Conectado · Se detectó un problema",
   "businessConnectedProbeFailed": "Conectado · Falló la comprobación de salida",
-  "businessExitVerified": "Conectado · Salida verificada",
+  "businessExitVerified": "Salida verificada",
   "businessMonthTraffic": "Tráfico del mes",
   "businessProxyTraffic": "Proxy",
   "businessMainlandDirect": "Conexión directa a China continental",
@@ -1290,5 +1290,29 @@
   "outboundModeDescription": "Normalmente, mantén «Reglas». El modo global también envía el tráfico de China continental por el proxy; el modo directo desactiva todas las líneas.",
   "outboundModeGlobalWarning": "El modo global está activo",
   "outboundModeDirectWarning": "El modo directo está activo",
-  "outboundModeRestoreRule": "Restaurar reglas"
+  "outboundModeRestoreRule": "Restaurar reglas",
+  "businessLineSelectionHint": "La selección manual tiene prioridad: la línea elegida será la salida. Se comprobará su IP al cambiar y se indicará el motivo si no coincide.",
+  "businessResidentialLockedHint": "El grupo residencial está bloqueado en «{name}». Cámbialo en las líneas residenciales.",
+  "businessLocked": "Bloqueado",
+  "businessExitVerifiedDetail": "La línea « {name} » coincide con la salida {ip}",
+  "businessSearchHint": "Buscar nombre de línea o región",
+  "businessExitVerifiedShort": "Salida verificada",
+  "businessCurrentLineState": "Actual: {name} · {status}",
+  "businessSortByDelay": "Ordenar por latencia",
+  "businessTestAll": "Probar todo",
+  "@businessExitVerifiedDetail": {
+    "placeholders": {
+      "name": {},
+      "ip": {}
+    }
+  },
+  "businessGroupHeader": "Grupos",
+  "businessDelayTimeout": "Tiempo agotado",
+  "businessRecheck": "Verificar de nuevo",
+  "businessMultiplier": "Multiplicador {value}×",
+  "@businessMultiplier": {
+    "placeholders": {
+      "value": {}
+    }
+  }
 }

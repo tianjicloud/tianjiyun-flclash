@@ -1230,7 +1230,7 @@
   "businessConnectedUnverified": "接続済み · 出口未検証",
   "businessConnectedAbnormal": "接続済み · 異常があります",
   "businessConnectedProbeFailed": "接続済み · 出口の確認に失敗",
-  "businessExitVerified": "接続済み · 出口検証済み",
+  "businessExitVerified": "出口を確認しました",
   "businessMonthTraffic": "今月の通信量",
   "businessProxyTraffic": "プロキシ",
   "businessMainlandDirect": "中国本土直通",
@@ -1290,5 +1290,29 @@
   "outboundModeDescription": "通常は「ルール」のままにしてください。グローバルでは中国本土の通信もプロキシ経由になり、直接接続ではすべての回線が使えなくなります。",
   "outboundModeGlobalWarning": "グローバルモードが有効です",
   "outboundModeDirectWarning": "直接接続モードが有効です",
-  "outboundModeRestoreRule": "ルールに戻す"
+  "outboundModeRestoreRule": "ルールに戻す",
+  "businessLineSelectionHint": "手動選択が優先されます。選択した回線が出口になり、切替後に出口 IP を確認します。不一致の場合は理由を表示します。",
+  "businessResidentialLockedHint": "ホーム回線グループは「{name}」に固定されています。ホーム回線で変更してください。",
+  "businessLocked": "固定",
+  "businessExitVerifiedDetail": "選択した「{name}」と出口 {ip} が一致",
+  "businessSearchHint": "回線名または地域を検索",
+  "businessExitVerifiedShort": "出口を確認済み",
+  "businessCurrentLineState": "現在：{name} · {status}",
+  "businessSortByDelay": "遅延順に並べ替え",
+  "businessTestAll": "すべて測定",
+  "@businessExitVerifiedDetail": {
+    "placeholders": {
+      "name": {},
+      "ip": {}
+    }
+  },
+  "businessGroupHeader": "グループ",
+  "businessDelayTimeout": "タイムアウト",
+  "businessRecheck": "再確認",
+  "businessMultiplier": "倍率 {value}×",
+  "@businessMultiplier": {
+    "placeholders": {
+      "value": {}
+    }
+  }
 }

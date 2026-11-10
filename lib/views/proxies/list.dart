@@ -384,26 +384,34 @@ class _GroupSliverState extends ConsumerState<_GroupSliver>
   }
 
   Widget _buildRows(double extent) {
-    final rows = widget.group.all.chunks(widget.columns).toList();
+    final rowCount =
+        (widget.group.all.length + widget.columns - 1) ~/ widget.columns;
     return SliverFixedExtentList(
       itemExtent: extent,
       delegate: SliverChildBuilderDelegate(
-        (context, index) => _buildRow(context, rows[index]),
-        childCount: rows.length,
+        (context, index) => _buildRow(context, _proxiesInRow(index)),
+        childCount: rowCount,
         addAutomaticKeepAlives: false,
       ),
     );
   }
 
+  List<Proxy> _proxiesInRow(int index) {
+    final start = index * widget.columns;
+    final end = min(start + widget.columns, widget.group.all.length);
+    return widget.group.all.sublist(start, end);
+  }
+
   /// The card reaches up behind the header's rounded bottom corners, so the
   /// two read as one while the rows unfold or fold.
   Widget _buildUnfoldingRows(double extent, ShapeDecoration decoration) {
-    final rows = widget.group.all.chunks(widget.columns).toList();
+    final rowCount =
+        (widget.group.all.length + widget.columns - 1) ~/ widget.columns;
     final visible = min(
-      rows.length.toDouble(),
+      rowCount.toDouble(),
       MediaQuery.sizeOf(context).height / extent,
     );
-    final count = min(rows.length, visible.floor() + 1);
+    final count = min(rowCount, visible.floor() + 1);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -426,10 +434,10 @@ class _GroupSliverState extends ConsumerState<_GroupSliver>
                   visibleCount: visible,
                   child: SizedBox(
                     height: extent,
-                    child: _buildRow(context, rows[index]),
+                    child: _buildRow(context, _proxiesInRow(index)),
                   ),
                 ),
-              if (count == rows.length) const SizedBox(height: _lastRowGrowth),
+              if (count == rowCount) const SizedBox(height: _lastRowGrowth),
             ],
           ),
         ),

@@ -1230,7 +1230,7 @@
   "businessConnectedUnverified": "Подключено · Выход не проверен",
   "businessConnectedAbnormal": "Подключено · Есть проблема",
   "businessConnectedProbeFailed": "Подключено · Не удалось проверить выход",
-  "businessExitVerified": "Подключено · Выход проверен",
+  "businessExitVerified": "Выход проверен",
   "businessMonthTraffic": "Трафик за месяц",
   "businessProxyTraffic": "Прокси",
   "businessMainlandDirect": "Прямое подключение к материковому Китаю",
@@ -1290,5 +1290,29 @@
   "outboundModeDescription": "Обычно оставляйте режим «Правила». Глобальный режим направляет через прокси и трафик материкового Китая, а прямой режим отключает все прокси-линии.",
   "outboundModeGlobalWarning": "Включён глобальный режим",
   "outboundModeDirectWarning": "Включён прямой режим",
-  "outboundModeRestoreRule": "Вернуть правила"
+  "outboundModeRestoreRule": "Вернуть правила",
+  "businessLineSelectionHint": "Ручной выбор имеет приоритет: выбранная линия становится выходом. После переключения IP выхода проверяется; при несовпадении будет указана причина.",
+  "businessResidentialLockedHint": "Домашняя группа закреплена за «{name}». Измените её в списке домашних линий.",
+  "businessLocked": "Закреплено",
+  "businessExitVerifiedDetail": "Выбранная линия «{name}» совпадает с выходом {ip}",
+  "businessSearchHint": "Поиск линии или региона",
+  "businessExitVerifiedShort": "Выход проверен",
+  "businessCurrentLineState": "Сейчас: {name} · {status}",
+  "businessSortByDelay": "Сортировать по задержке",
+  "businessTestAll": "Проверить все",
+  "@businessExitVerifiedDetail": {
+    "placeholders": {
+      "name": {},
+      "ip": {}
+    }
+  },
+  "businessGroupHeader": "Группы",
+  "businessDelayTimeout": "Тайм-аут",
+  "businessRecheck": "Проверить снова",
+  "businessMultiplier": "Коэффициент {value}×",
+  "@businessMultiplier": {
+    "placeholders": {
+      "value": {}
+    }
+  }
 }
