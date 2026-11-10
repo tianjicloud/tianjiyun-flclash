@@ -473,6 +473,34 @@ abstract final class BusinessText {
     weight: FontWeight.w600,
   ).copyWith(fontFeatures: _tabular).toJetBrainsMono;
 
+  static TextStyle diagnosticsCount(
+    BuildContext context, {
+    required bool mobile,
+  }) => AppTextStyle.custom(
+    context,
+    size: mobile ? 22 : 20,
+    leading: mobile ? 28 : 24,
+    weight: FontWeight.w700,
+  ).copyWith(fontFeatures: _tabular);
+
+  static TextStyle diagnosticsCountLabel(
+    BuildContext context, {
+    required bool mobile,
+  }) => AppTextStyle.custom(
+    context,
+    size: mobile ? 13 : 12,
+    leading: mobile ? 18 : 16,
+  );
+
+  static TextStyle diagnosticsCheckTitle(
+    BuildContext context, {
+    required bool mobile,
+  }) => AppTextStyle.custom(
+    context,
+    size: mobile ? 15 : 13,
+    leading: mobile ? 20 : 18,
+  );
+
   static TextStyle quickLineDelay(BuildContext context) => AppTextStyle.custom(
     context,
     size: 12,

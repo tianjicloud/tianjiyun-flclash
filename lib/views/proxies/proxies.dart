@@ -194,6 +194,7 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
               ),
           ];
     return Scaffold(
+      businessTitleInset: business,
       isLoading: isLoading,
       resizeToAvoidBottomInset: false,
       primaryAction: primaryAction,

@@ -63,24 +63,29 @@ class DiagnosticsView extends ConsumerWidget {
                 onRun: () => refreshDiagnostics(ref),
                 isLoading: isLoading,
                 showRunButton: false,
+                mobileLayout: ViewScope.isMobileOf(context),
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + context.bottomInset),
-            child: FilledButton(
-              onPressed: isLoading ? null : () => refreshDiagnostics(ref),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 8,
-                children: [
-                  if (isLoading) const ActivityIndicator(),
-                  Text(
-                    hasResult
-                        ? context.appLocalizations.diagnosticsRunAgain
-                        : context.appLocalizations.diagnosticsStart,
-                  ),
-                ],
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: FilledButton(
+                onPressed: isLoading ? null : () => refreshDiagnostics(ref),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
+                  children: [
+                    if (isLoading) const ActivityIndicator(),
+                    Text(
+                      hasResult
+                          ? context.appLocalizations.diagnosticsRunAgain
+                          : context.appLocalizations.diagnosticsStart,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -96,11 +101,13 @@ class DiagnosticsPanel extends ConsumerStatefulWidget {
     required this.onRun,
     this.isLoading = false,
     this.showRunButton = true,
+    this.mobileLayout = false,
   });
 
   final VoidCallback onRun;
   final bool isLoading;
   final bool showRunButton;
+  final bool mobileLayout;
 
   @override
   ConsumerState<DiagnosticsPanel> createState() => _DiagnosticsPanelState();
@@ -204,6 +211,56 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
         .where((check) => check.result == DiagnosticResult.failed)
         .length;
     final unverified = checks.length - passed - failed;
+    final counts = Row(
+      spacing: 8,
+      children: [
+        Expanded(
+          child: _DiagnosticCount(
+            value: passed,
+            label: strings.diagnosticsPassed,
+            result: DiagnosticResult.passed,
+            mobile: widget.mobileLayout,
+          ),
+        ),
+        Expanded(
+          child: _DiagnosticCount(
+            value: failed,
+            label: strings.diagnosticsFailed,
+            result: DiagnosticResult.failed,
+            mobile: widget.mobileLayout,
+          ),
+        ),
+        Expanded(
+          child: _DiagnosticCount(
+            value: unverified,
+            label: strings.diagnosticsUnverified,
+            result: DiagnosticResult.unverified,
+            mobile: widget.mobileLayout,
+          ),
+        ),
+      ],
+    );
+    if (widget.mobileLayout) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 12,
+        children: [
+          counts,
+          Card(
+            radius: AppCorner.xl,
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (var index = 0; index < checks.length; index++) ...[
+                  _DiagnosticRow(check: checks[index], mobile: true),
+                  if (index < checks.length - 1) const Divider(height: 1),
+                ],
+              ],
+            ),
+          ),
+        ],
+      );
+    }
     return Card(
       radius: AppCorner.xl,
       padding: const EdgeInsets.all(22),
@@ -229,32 +286,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
             ],
           ),
           const SizedBox(height: 14),
-          Row(
-            spacing: 8,
-            children: [
-              Expanded(
-                child: _DiagnosticCount(
-                  value: passed,
-                  label: strings.diagnosticsPassed,
-                  result: DiagnosticResult.passed,
-                ),
-              ),
-              Expanded(
-                child: _DiagnosticCount(
-                  value: failed,
-                  label: strings.diagnosticsFailed,
-                  result: DiagnosticResult.failed,
-                ),
-              ),
-              Expanded(
-                child: _DiagnosticCount(
-                  value: unverified,
-                  label: strings.diagnosticsUnverified,
-                  result: DiagnosticResult.unverified,
-                ),
-              ),
-            ],
-          ),
+          counts,
           const SizedBox(height: 10),
           for (final check in checks) _DiagnosticRow(check: check),
         ],
@@ -403,11 +435,13 @@ class _DiagnosticCount extends StatelessWidget {
     required this.value,
     required this.label,
     required this.result,
+    required this.mobile,
   });
 
   final int value;
   final String label;
   final DiagnosticResult result;
+  final bool mobile;
 
   @override
   Widget build(BuildContext context) {
@@ -418,19 +452,28 @@ class _DiagnosticCount extends StatelessWidget {
         shape: AppShape.md,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: mobile ? 12 : 10,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '$value',
-              style: BusinessText.mobileMetric(context).copyWith(color: color),
+              style: BusinessText.diagnosticsCount(
+                context,
+                mobile: mobile,
+              ).copyWith(color: color),
             ),
             Text(
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyle.footnote.of(context),
+              style: BusinessText.diagnosticsCountLabel(
+                context,
+                mobile: mobile,
+              ),
             ),
           ],
         ),
@@ -440,9 +483,10 @@ class _DiagnosticCount extends StatelessWidget {
 }
 
 class _DiagnosticRow extends StatelessWidget {
-  const _DiagnosticRow({required this.check});
+  const _DiagnosticRow({required this.check, this.mobile = false});
 
   final _DiagnosticCheck check;
+  final bool mobile;
 
   @override
   Widget build(BuildContext context) {
@@ -458,36 +502,51 @@ class _DiagnosticRow extends StatelessWidget {
       DiagnosticResult.failed => strings.diagnosticsFailed,
       DiagnosticResult.unverified => strings.diagnosticsUnverified,
     };
+    final content = Row(
+      crossAxisAlignment: mobile
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      spacing: 10,
+      children: [
+        SizedBox.square(
+          dimension: 22,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Center(child: GlyphIcon(glyph, size: 13, color: color)),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            check.title,
+            style: BusinessText.diagnosticsCheckTitle(context, mobile: mobile),
+          ),
+        ),
+        Text(
+          check.result == DiagnosticResult.unverified &&
+                  check.detail != null &&
+                  check.detail != strings.servicePending &&
+                  check.detail != status
+              ? '${strings.diagnosticsUnverified}（${check.detail}）'
+              : status,
+          style: BusinessText.metaLabel(context).copyWith(color: color),
+        ),
+      ],
+    );
+    if (mobile) {
+      return SizedBox(
+        height: 52,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: content,
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 10,
-        children: [
-          SizedBox.square(
-            dimension: 22,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
-              ),
-              child: Center(child: GlyphIcon(glyph, size: 13, color: color)),
-            ),
-          ),
-          Expanded(
-            child: Text(check.title, style: BusinessText.toggleTitle(context)),
-          ),
-          Text(
-            check.result == DiagnosticResult.unverified &&
-                    check.detail != null &&
-                    check.detail != strings.servicePending &&
-                    check.detail != status
-                ? '${strings.diagnosticsUnverified}（${check.detail}）'
-                : status,
-            style: BusinessText.metaLabel(context).copyWith(color: color),
-          ),
-        ],
-      ),
+      child: content,
     );
   }
 }

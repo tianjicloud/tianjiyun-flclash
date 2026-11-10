@@ -117,6 +117,7 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
         final spacing = cardSpacingOf(context, ref.watch(viewModeProvider));
         final picker = widget.picker;
         return Scaffold(
+          businessTitleInset: business,
           isLoading: isLoading,
           title: business && !picker
               ? appLocalizations.businessSubscriptions

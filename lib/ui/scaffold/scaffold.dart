@@ -52,6 +52,7 @@ class Scaffold extends StatefulWidget {
   final bool opaqueAppBar;
   final String? title;
   final Widget? titleWidget;
+  final bool businessTitleInset;
   final List<PopupMenuItem> titleMenuItems;
   final bool isLoading;
   final List<Widget>? actions;
@@ -92,6 +93,7 @@ class Scaffold extends StatefulWidget {
     this.opaqueAppBar = false,
     this.title,
     this.titleWidget,
+    this.businessTitleInset = false,
     this.titleMenuItems = const [],
     this.actions,
     this.backAction,
@@ -542,21 +544,28 @@ class ScaffoldState extends State<Scaffold>
   }
 
   Widget _buildTitle({required bool compact}) {
+    final title =
+        widget.titleWidget ??
+        (widget.titleMenuItems.isEmpty
+            ? Text(widget.title!)
+            : PopupAnchor(
+                placement: PopupPlacement.overAnchorStart,
+                bare: true,
+                targetBuilder: (open) => _TitleMenuButton(
+                  title: widget.title!,
+                  compact: compact,
+                  onPressed: open,
+                ),
+                popupBuilder: (_) => PopupMenu(items: widget.titleMenuItems),
+              ));
     return BarItemPresence.title(
       child:
-          widget.titleWidget ??
-          (widget.titleMenuItems.isEmpty
-              ? Text(widget.title!)
-              : PopupAnchor(
-                  placement: PopupPlacement.overAnchorStart,
-                  bare: true,
-                  targetBuilder: (open) => _TitleMenuButton(
-                    title: widget.title!,
-                    compact: compact,
-                    onPressed: open,
-                  ),
-                  popupBuilder: (_) => PopupMenu(items: widget.titleMenuItems),
-                )),
+          !widget.businessTitleInset || compact || ViewScope.isMobileOf(context)
+          ? title
+          : Padding(
+              padding: const EdgeInsetsDirectional.only(start: 13),
+              child: title,
+            ),
     );
   }
 

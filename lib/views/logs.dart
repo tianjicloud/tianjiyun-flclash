@@ -130,6 +130,7 @@ class _LogsViewState extends ConsumerState<LogsView>
       builder: (context, body) {
         final pinned = !ViewScope.isMobileOf(context);
         return Scaffold(
+          businessTitleInset: true,
           keywords: pinned ? null : _filters.keywordsOf(pinned: false),
           menuItems: _filters.menuItems(context, pinned: pinned),
           searchState: AppBarSearchState(onSearch: _listController.search),

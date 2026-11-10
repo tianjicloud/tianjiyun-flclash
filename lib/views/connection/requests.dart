@@ -126,9 +126,10 @@ class _RequestsViewState extends ConsumerState<RequestsView>
         final pinned = !ViewScope.isMobileOf(context);
         final businessMobile = isBusiness && !pinned;
         return Scaffold(
+          businessTitleInset: isBusiness,
           title: pinned || businessMobile ? null : _labelOf(_feed),
           titleWidget: pinned
-              ? _buildTitleWidget(context, isBusiness: isBusiness)
+              ? _buildTitleWidget(context)
               : businessMobile
               ? Text(
                   context.appLocalizations.connectionsAndRequests,
@@ -271,32 +272,28 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     RequestFeed.live => context.appLocalizations.running,
   };
 
-  Widget _buildTitleWidget(BuildContext context, {required bool isBusiness}) {
-    return Padding(
-      padding: EdgeInsets.only(left: isBusiness ? 12 : 0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 12,
-        children: [
-          Text(
-            context.appLocalizations.connections,
-            style: AppTextStyle.pageTitle.of(context, emphasized: true),
-          ),
-          ValueListenableBuilder<TrackerInfosState>(
-            valueListenable: _live,
-            builder: (context, state, _) {
-              final count = state.trackerInfos.length;
-              return _RequestFeedSelector(
-                value: _feed,
-                liveLabel:
-                    '${context.appLocalizations.liveConnections} · $count',
-                recentLabel: context.appLocalizations.recentRequests,
-                onChanged: _selectFeed,
-              );
-            },
-          ),
-        ],
-      ),
+  Widget _buildTitleWidget(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 12,
+      children: [
+        Text(
+          context.appLocalizations.connections,
+          style: AppTextStyle.pageTitle.of(context, emphasized: true),
+        ),
+        ValueListenableBuilder<TrackerInfosState>(
+          valueListenable: _live,
+          builder: (context, state, _) {
+            final count = state.trackerInfos.length;
+            return _RequestFeedSelector(
+              value: _feed,
+              liveLabel: '${context.appLocalizations.liveConnections} · $count',
+              recentLabel: context.appLocalizations.recentRequests,
+              onChanged: _selectFeed,
+            );
+          },
+        ),
+      ],
     );
   }
 

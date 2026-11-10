@@ -53,17 +53,15 @@ class BusinessDashboardView extends ConsumerWidget {
     return BusinessAppearance(
       child: Builder(
         builder: (context) => Scaffold(
+          businessTitleInset: !mobile,
           backgroundColor: DashboardColors.of(context).page,
           opaqueAppBar: context.colorScheme.brightness == Brightness.light,
           title: mobile ? null : appLocalizations.dashboard,
           titleWidget: mobile
               ? const _MobileBrandTitle()
-              : Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 13),
-                  child: Text(
-                    appLocalizations.dashboard,
-                    style: BusinessText.pageTitle(context),
-                  ),
+              : Text(
+                  appLocalizations.dashboard,
+                  style: BusinessText.pageTitle(context),
                 ),
           actions: [
             if (mobile) ...[
