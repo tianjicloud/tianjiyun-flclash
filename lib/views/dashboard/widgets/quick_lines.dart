@@ -7,9 +7,9 @@ import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/ui/ui.dart';
-import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/line_data.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
+import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,16 +25,20 @@ class QuickLines extends ConsumerWidget {
     final lines = dashboardLines(ref);
     if (lines.length < 2) return const SizedBox.shrink();
     final density = DashboardDensityScope.of(context);
+    final connected = ref.watch(isStartProvider) && !ref.watch(suspendProvider);
     final header = Row(
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
       children: [
         Text(
           context.appLocalizations.quickLines,
-          style: BusinessText.cardTitle(
-            context,
-            mobile: !density.isDesktop,
-          ).copyWith(color: context.colorScheme.onSurface),
+          style: density.isDesktop
+              ? BusinessText.cardTitle(
+                  context,
+                ).copyWith(color: context.colorScheme.onSurface)
+              : BusinessText.quickSectionTitle(
+                  context,
+                ).copyWith(color: context.colorScheme.onSurface),
         ),
         const Spacer(),
         PressRegion(
@@ -50,15 +54,15 @@ class QuickLines extends ConsumerWidget {
               spacing: 2,
               children: [
                 Text(
-                  context.appLocalizations.proxies,
+                  context.appLocalizations.businessAllLines,
                   style: BusinessText.quickMetaMobile(
                     context,
-                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ).copyWith(color: BusinessPalette.residentialChipText),
                 ),
-                GlyphIcon(
+                const GlyphIcon(
                   AppGlyphs.chevronForward,
                   size: 14,
-                  color: context.colorScheme.onSurfaceVariant,
+                  color: BusinessPalette.residentialChipText,
                 ),
               ],
             ),
@@ -70,6 +74,7 @@ class QuickLines extends ConsumerWidget {
       for (final line in lines)
         _QuickLineCard(
           line: line,
+          connected: connected,
           onTap: line.residential
               ? onChooseResidential
               : () => unawaited(
@@ -100,16 +105,16 @@ class QuickLines extends ConsumerWidget {
             }
             final scale = MediaQuery.textScalerOf(context).scale(1);
             if (constraints.maxWidth / scale < 340) {
-              return Column(spacing: 11, children: cards);
+              return Column(spacing: 10, children: cards);
             }
             return Column(
-              spacing: 11,
+              spacing: 10,
               children: [
                 for (var index = 0; index < cards.length; index += 2)
                   IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      spacing: 11,
+                      spacing: 10,
                       children: [
                         Expanded(child: cards[index]),
                         if (index + 1 < cards.length)
@@ -129,9 +134,14 @@ class QuickLines extends ConsumerWidget {
 }
 
 class _QuickLineCard extends StatelessWidget {
-  const _QuickLineCard({required this.line, required this.onTap});
+  const _QuickLineCard({
+    required this.line,
+    required this.connected,
+    required this.onTap,
+  });
 
   final DashboardLine line;
+  final bool connected;
   final VoidCallback onTap;
 
   @override
@@ -140,39 +150,53 @@ class _QuickLineCard extends StatelessWidget {
     final density = DashboardDensityScope.of(context);
     final mobile = !density.isDesktop;
     final delay = line.delay;
-    final delayColor = colorScheme.delayColor(delay);
-    final regionName = _regionNameFromFlag(line.displayName);
+    final delayColor = businessDelayColor(colorScheme, delay);
+    final parsedRegion = _regionNameFromFlag(line.displayName);
+    final regionName = (
+      code: line.countryCode ?? parsedRegion.code,
+      name: parsedRegion.name,
+    );
     final meta = [
       if (!mobile) line.type.toUpperCase(),
       if (line.rate case final rate?)
-        '${context.appLocalizations.lineRate} ${rate.toStringAsFixed(2)}x',
-      if (mobile && line.current) context.appLocalizations.residentialSelected,
-    ].join(' · ');
+        mobile
+            ? '· ${rate.toStringAsFixed(1)}×'
+            : '${context.appLocalizations.lineRate} ${rate.toStringAsFixed(2)}x',
+      if (mobile && line.current)
+        connected
+            ? '· ${context.appLocalizations.businessCurrent}'
+            : '· ${context.appLocalizations.businessSelected}',
+    ].join(mobile ? ' ' : ' · ');
     final compact = density.isCompact;
     final cardHeight = mobile
-        ? 64.0
+        ? 66.0
         : compact
         ? 72.0
         : 92.0;
-    return DashboardCard(
+    final card = DashboardCard(
       onTap: onTap,
       semanticLabel: line.name,
       radius: mobile ? BusinessRadius.quickMobile : BusinessRadius.quickDesktop,
       side: line.current
-          ? const BorderSide(color: BusinessPalette.accent, width: 1.5)
+          ? const BorderSide(color: BusinessPalette.accent, width: 2)
           : BorderSide.none,
+      shadows: line.current
+          ? DashboardShadows.accentGlow(color: BusinessPalette.blue)
+          : null,
       padding: EdgeInsetsDirectional.fromSTEB(
-        mobile ? 14 : 18,
-        mobile ? 12 : 16,
-        mobile ? 14 : 18,
-        mobile ? 11 : 15,
+        mobile ? 12 : 18,
+        mobile ? 11 : 16,
+        mobile ? 12 : 18,
+        mobile ? 10 : 15,
       ),
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: cardHeight - (mobile ? 23 : 31)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: mobile
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.start,
           spacing: mobile
               ? 4
               : compact
@@ -238,6 +262,8 @@ class _QuickLineCard extends StatelessWidget {
             ),
             if (mobile)
               Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 6,
                 children: [
                   if (delay != null && delay >= 0)
                     Text.rich(
@@ -245,14 +271,13 @@ class _QuickLineCard extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: '$delay',
-                            style: BusinessText.quickDelay(
+                            style: BusinessText.quickLineDelay(
                               context,
-                              mobile: true,
                             ).copyWith(color: delayColor),
                           ),
                           TextSpan(
                             text: ' ms',
-                            style: BusinessText.quickUnit(context, mobile: true)
+                            style: BusinessText.quickLineDelay(context)
                                 .copyWith(
                                   color: context.colorScheme.onSurfaceVariant,
                                 ),
@@ -273,18 +298,14 @@ class _QuickLineCard extends StatelessWidget {
                         context,
                       ).copyWith(color: context.colorScheme.onSurfaceVariant),
                     ),
-                  const Spacer(),
                   if (meta.isNotEmpty)
-                    Flexible(
-                      child: Text(
-                        meta,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: BusinessText.quickMetaMobile(
-                          context,
-                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
-                      ),
+                    Text(
+                      meta,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: BusinessText.quickMetaMobile(
+                        context,
+                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
                     ),
                 ],
               )
@@ -303,10 +324,15 @@ class _QuickLineCard extends StatelessWidget {
         ),
       ),
     );
+    return card;
   }
 }
 
 ({String? code, String name}) _regionNameFromFlag(String name) {
+  final prefix = RegExp(r'^([A-Z]{2})\s*[·|—-]\s*(.+)$').firstMatch(name);
+  if (prefix != null) {
+    return (code: prefix.group(1), name: prefix.group(2)!);
+  }
   final runes = name.runes.toList();
   var start = 0;
   while (start < runes.length &&

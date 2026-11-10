@@ -187,7 +187,10 @@ void main() {
         name: '🏠 家宽',
         type: GroupType.Selector,
         hidden: false,
-        all: [Proxy(name: '🇯🇵 东京家宽 · 01', type: 'URLTest')],
+        all: [
+          Proxy(name: '🇯🇵 东京家宽 · 01', type: 'URLTest'),
+          Proxy(name: '🇯🇵 东京家宽 · 02', type: 'anytls'),
+        ],
       ),
       Group(
         name: '🇯🇵 东京家宽 · 01',
@@ -235,6 +238,6 @@ void main() {
     expect(find.byType(OutboundModeInline), findsOneWidget);
     expect(find.byType(QuickLines), findsOneWidget);
     expect(find.text('常用线路'), findsOneWidget);
-    expect(find.textContaining('香港01', findRichText: true), findsWidgets);
+    expect(find.textContaining('东京家宽', findRichText: true), findsWidgets);
   });
 }

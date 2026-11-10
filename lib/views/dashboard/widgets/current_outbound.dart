@@ -11,6 +11,7 @@ import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/ui/app_background.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
@@ -182,7 +183,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           ? appLocalizations.businessExitVerified
           : isStart
           ? appLocalizations.running
-          : appLocalizations.notRunning;
+          : appLocalizations.businessNotConnected;
       final statusTone = connectingStatus || suspended
           ? colors.warn
           : failed
@@ -191,10 +192,15 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           ? colors.ok
           : colorScheme.onSurfaceVariant;
       final toggle = _StartToggle(
-        size: density.isDesktop ? 184 : 164,
+        size: density.isDesktop
+            ? 184
+            : isStart
+            ? 164
+            : 180,
         enabled: hasProfile,
         running: isStart,
         suspended: suspended,
+        pulseEnabled: density.isDesktop,
         ringColor: ringColor,
         showLabel: density.isDesktop,
         idleLabel: density.isDesktop ? null : appLocalizations.start,
@@ -255,7 +261,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                     centered: true,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: isStart ? 6 : 12),
                 Center(child: toggle),
                 if (isStart) ...[
                   const SizedBox(height: 10),
@@ -268,6 +274,9 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                     line: line,
                     onRefresh: () => _refresh(ipInfo?.ip),
                   ),
+                ] else ...[
+                  const SizedBox(height: 12),
+                  const _BusinessIdlePrompt(),
                 ],
                 if (showSelection) ...[
                   const SizedBox(height: 12),
@@ -278,7 +287,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
       final businessContent = density.isDesktop
           ? content
           : ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 219),
+              constraints: BoxConstraints(minHeight: isStart ? 336 : 311),
               child: content,
             );
       return DashboardCard(
@@ -299,7 +308,12 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
             Padding(
               padding: density.isDesktop
                   ? const EdgeInsetsDirectional.fromSTEB(26, 13, 26, 13)
-                  : const EdgeInsetsDirectional.fromSTEB(20, 18, 20, 18),
+                  : EdgeInsetsDirectional.fromSTEB(
+                      20,
+                      isStart ? 18 : 22,
+                      20,
+                      18,
+                    ),
               child: businessContent,
             ),
           ],
@@ -526,7 +540,7 @@ class _BusinessStatusLine extends StatelessWidget {
     final label = checking
         ? '$text · ${context.appLocalizations.checkingExit}'
         : text;
-    return Row(
+    final status = Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: centered
           ? MainAxisAlignment.center
@@ -537,17 +551,80 @@ class _BusinessStatusLine extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: ShapeDecoration(color: tone, shape: AppShape.circle),
+            decoration: ShapeDecoration(
+              color: text == context.appLocalizations.businessNotConnected
+                  ? BusinessPalette.disconnectedForegroundFor(
+                      context.colorScheme.brightness,
+                    )
+                  : tone,
+              shape: AppShape.circle,
+            ),
           ),
         Flexible(
           child: Text(
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: BusinessText.heroStatus(
-              context,
-            ).copyWith(color: context.colorScheme.onSurfaceVariant),
+            style: BusinessText.heroStatus(context).copyWith(
+              color: text == context.appLocalizations.businessNotConnected
+                  ? BusinessPalette.disconnectedForegroundFor(
+                      context.colorScheme.brightness,
+                    )
+                  : centered
+                  ? BusinessPalette.connectedForegroundFor(
+                      context.colorScheme.brightness,
+                    )
+                  : context.colorScheme.onSurfaceVariant,
+            ),
           ),
+        ),
+      ],
+    );
+    if (!centered) return status;
+    final connected = text != context.appLocalizations.businessNotConnected;
+    return Container(
+      padding: const EdgeInsetsDirectional.fromSTEB(11, 4, 11, 4),
+      decoration: ShapeDecoration(
+        color: connected
+            ? BusinessPalette.connectedContainerFor(
+                context.colorScheme.brightness,
+              )
+            : BusinessPalette.disconnectedContainerFor(
+                context.colorScheme.brightness,
+              ),
+        shape: AppShape.full,
+      ),
+      child: status,
+    );
+  }
+}
+
+class _BusinessIdlePrompt extends ConsumerWidget {
+  const _BusinessIdlePrompt();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final line = currentDashboardLine(ref);
+    if (line == null) return const SizedBox.shrink();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          context.appLocalizations.businessTapToConnect,
+          style: BusinessText.residentialExit(
+            context,
+            mobile: true,
+          ).copyWith(color: context.colorScheme.onSurface),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          context.appLocalizations.businessConnectVia(line.displayName),
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: BusinessText.mobileCardHeading(
+            context,
+          ).copyWith(color: context.colorScheme.onSurfaceVariant),
         ),
       ],
     );
@@ -659,7 +736,7 @@ class _BusinessHeroDetails extends ConsumerWidget {
                   value: delay != null
                       ? _CellText(
                           '$delay ms',
-                          color: DashboardColors.of(context).ok,
+                          color: businessDelayColor(context.colorScheme, delay),
                         )
                       : const _Placeholder(),
                 ),
@@ -728,19 +805,22 @@ class _MobileConnectedSummary extends ConsumerWidget {
           loading: active && loading,
           large: true,
         ),
+        Container(height: 1, color: DashboardColors.of(context).tone),
         Row(
+          spacing: 8,
           children: [
             Expanded(
               child: _MobileMetric(
                 label: context.appLocalizations.delay,
                 value: delay == null ? null : '$delay ms',
+                color: businessDelayColor(context.colorScheme, delay),
                 active: active,
               ),
             ),
             Expanded(
               child: _MobileMetric(
                 label: context.appLocalizations.download,
-                value: speed.down.traffic.show,
+                value: '${speed.down.traffic.value} ${speed.down.traffic.unit}',
                 suffix: '/s',
                 active: active,
               ),
@@ -748,7 +828,7 @@ class _MobileConnectedSummary extends ConsumerWidget {
             Expanded(
               child: _MobileMetric(
                 label: context.appLocalizations.upload,
-                value: speed.up.traffic.show,
+                value: '${speed.up.traffic.value} ${speed.up.traffic.unit}',
                 suffix: '/s',
                 active: active,
               ),
@@ -765,6 +845,7 @@ class _MobileMetric extends StatelessWidget {
     required this.label,
     required this.value,
     required this.active,
+    this.color,
     this.suffix = '',
   });
 
@@ -772,18 +853,23 @@ class _MobileMetric extends StatelessWidget {
   final String? value;
   final String suffix;
   final bool active;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Text(label, style: DashboardText.label(context)),
-      Text(
-        active && value != null ? '$value$suffix' : '—',
-        style: BusinessText.quickDelay(context, mobile: true).copyWith(
-          color: active
-              ? context.colorScheme.onSurface
-              : context.colorScheme.onSurfaceVariant,
+      Text(label, style: BusinessText.mobileMetricLabel(context)),
+      FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          active && value != null ? '$value$suffix' : '—',
+          maxLines: 1,
+          style: BusinessText.mobileMetric(context).copyWith(
+            color: active
+                ? color ?? context.colorScheme.onSurface
+                : context.colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     ],
@@ -819,7 +905,9 @@ class _BusinessIp extends StatelessWidget {
     }
     if (info != null) {
       return Align(
-        alignment: AlignmentDirectional.centerStart,
+        alignment: BusinessTheme.of(context) && size == 30
+            ? Alignment.center
+            : AlignmentDirectional.centerStart,
         child: Tooltip(
           message: context.appLocalizations.details(
             context.appLocalizations.outboundIp,
@@ -856,7 +944,9 @@ class _BusinessIp extends StatelessWidget {
       );
     }
     return Align(
-      alignment: AlignmentDirectional.centerStart,
+      alignment: BusinessTheme.of(context) && size == 30
+          ? Alignment.center
+          : AlignmentDirectional.centerStart,
       child: SkeletonText(width: size * 3.2, style: style),
     );
   }
@@ -891,23 +981,26 @@ class _BusinessChips extends StatelessWidget {
       if (quality != null) ...[
         DashboardChip(
           label: quality.type == IpType.residential
-              ? context.appLocalizations.businessResidentialBroadband
+              ? business && large
+                    ? context.appLocalizations.businessResidentialShort
+                    : context.appLocalizations.businessResidentialBroadband
               : quality.type.label(context),
           tone: quality.type == IpType.residential
               ? DashboardChipTone.residential
               : DashboardChipTone.idle,
           large: business ? false : large,
         ),
-        DashboardChip(
-          label:
-              '${context.appLocalizations.ipQualityShort} ${quality.level.label(context)}',
-          tone: switch (quality.level) {
-            IpQualityLevel.good => DashboardChipTone.ok,
-            IpQualityLevel.normal => DashboardChipTone.idle,
-            IpQualityLevel.risky => DashboardChipTone.warn,
-          },
-          large: business ? false : large,
-        ),
+        if (!business || !large)
+          DashboardChip(
+            label:
+                '${context.appLocalizations.ipQualityShort} ${quality.level.label(context)}',
+            tone: switch (quality.level) {
+              IpQualityLevel.good => DashboardChipTone.ok,
+              IpQualityLevel.normal => DashboardChipTone.idle,
+              IpQualityLevel.risky => DashboardChipTone.warn,
+            },
+            large: business ? false : large,
+          ),
         if (quality.organization case final organization?
             when organization.isNotEmpty)
           DashboardChip(label: organization, large: business ? false : large)
@@ -922,7 +1015,12 @@ class _BusinessChips extends StatelessWidget {
           large: large,
         ),
     ];
-    return Wrap(spacing: 6, runSpacing: 6, children: chips);
+    return Wrap(
+      alignment: business && large ? WrapAlignment.center : WrapAlignment.start,
+      spacing: 6,
+      runSpacing: 6,
+      children: chips,
+    );
   }
 }
 
@@ -1472,6 +1570,7 @@ class _StartToggle extends ConsumerStatefulWidget {
     required this.running,
     required this.suspended,
     this.ringColor,
+    this.pulseEnabled = true,
     this.showLabel = true,
     this.idleLabel,
   });
@@ -1481,6 +1580,7 @@ class _StartToggle extends ConsumerStatefulWidget {
   final bool running;
   final bool suspended;
   final Color? ringColor;
+  final bool pulseEnabled;
   final bool showLabel;
 
   /// Replaces the start label while stopped, for the design's "tap to start".
@@ -1532,6 +1632,7 @@ class _StartToggleState extends ConsumerState<_StartToggle>
   void _syncPulse() {
     final idle =
         BusinessTheme.of(context) &&
+        widget.pulseEnabled &&
         widget.enabled &&
         !widget.running &&
         !widget.suspended &&
@@ -1648,9 +1749,21 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                           painter: OrbitPainter(
                             color: widget.ringColor ?? animatedColor ?? color,
                             primary: BusinessPalette.blue,
+                            idleCore: DashboardColors.of(context).card,
+                            idleStroke: colorScheme.outlineVariant.withValues(
+                              alpha: 0.65,
+                            ),
+                            idleShadow: colorScheme.shadow.withValues(
+                              alpha: 0.12,
+                            ),
+                            idlePlate: BusinessPalette.idleOrbitPlateFor(
+                              colorScheme.brightness,
+                            ),
                             focused: _focused,
                             running: widget.running,
-                            pulse: _pulseController.isAnimating
+                            pulse:
+                                widget.pulseEnabled &&
+                                    _pulseController.isAnimating
                                 ? _pulseController.value
                                 : null,
                           ),
@@ -1664,7 +1777,7 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                                 size: size * 0.22,
                                 color: widget.running
                                     ? Colors.white
-                                    : const Color(0xFF0E1726),
+                                    : BusinessPalette.blue,
                                 fill: 0,
                               ),
                             ),

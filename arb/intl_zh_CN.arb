@@ -1237,5 +1237,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "businessNotConnected": "未连接",
+  "businessTapToConnect": "轻点连接",
+  "businessConnectVia": "将从「{line}」出去",
+  "businessVpnPermission": "首次连接需要允许 VPN 权限",
+  "businessMonthUsed": "本月已用",
+  "businessAiServices": "ChatGPT · Claude",
+  "businessExpiryNotice": "套餐 {date}到期，续费后线路不中断",
+  "businessSelected": "已选",
+  "businessCurrent": "当前",
+  "businessResidentialShort": "住宅",
+  "businessCheckedAt": "{time} 检测",
+  "@businessCheckedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "businessExpiryDateShort": "{month} 月 {day} 日",
+  "@businessExpiryDateShort": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "businessAllLines": "全部线路"
 }

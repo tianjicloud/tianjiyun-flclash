@@ -33,6 +33,7 @@ import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 const _businessMaxWidth = 1284.0;
 
@@ -164,6 +165,7 @@ class _BusinessBody extends ConsumerWidget {
                 QuickLines(
                   onChooseResidential: () => showResidentialExitSheet(context),
                 ),
+              if (mobile) const _MobileExpiryNotice(),
               if (density.isDesktop) ...[
                 if (needsTakeover)
                   Text(
@@ -227,7 +229,7 @@ class _BusinessBody extends ConsumerWidget {
                         ? const [
                             RepaintBoundary(
                               child: _CardMinHeight(
-                                minHeight: 120,
+                                minHeight: 110,
                                 child: MobileUsageCard(),
                               ),
                             ),
@@ -315,8 +317,8 @@ class _MobileBrandTitle extends StatelessWidget {
               maxLines: 1,
               style: AppTextStyle.custom(
                 context,
-                size: 16,
-                leading: 20,
+                size: 18,
+                leading: 22,
                 weight: FontWeight.w700,
               ),
             ),
@@ -442,8 +444,10 @@ class _MobileNotice extends ConsumerWidget {
         ? updateLabel
         : '${context.appLocalizations.profileDaysLeft(daysLeft)} · ${context.appLocalizations.renew}';
     if (label == null) return const SizedBox.shrink();
+    final soon = daysLeft != null && daysLeft <= 7;
+    final dark = context.colorScheme.brightness == Brightness.dark;
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 130),
+      constraints: const BoxConstraints(maxWidth: 210),
       child: Tooltip(
         message: daysLeft == null
             ? label
@@ -453,20 +457,102 @@ class _MobileNotice extends ConsumerWidget {
           overlay: PressRegion.hoverOverlay,
           onTap: daysLeft == null ? null : () => showProfilesSheet(context),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-            decoration: const ShapeDecoration(
-              color: BusinessPalette.sidebarSelection,
-              shape: AppShape.full,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: ShapeDecoration(
+              color: soon
+                  ? BusinessPalette.warningContainerFor(
+                      context.colorScheme.brightness,
+                    )
+                  : dark
+                  ? BusinessPalette.noticeDark
+                  : BusinessPalette.sidebarSelection,
+              shape: AppShape.full.copyWith(
+                side: BorderSide(
+                  color: soon
+                      ? BusinessPalette.warningContainerFor(
+                          context.colorScheme.brightness,
+                        )
+                      : context.colorScheme.outlineVariant,
+                ),
+              ),
             ),
             child: Text(
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: BusinessText.notice(
-                context,
-              ).copyWith(color: BusinessPalette.heroChipText),
+              style: BusinessText.notice(context).copyWith(
+                color: soon
+                    ? BusinessPalette.warningForegroundFor(
+                        context.colorScheme.brightness,
+                      )
+                    : dark
+                    ? context.colorScheme.onSurface
+                    : BusinessPalette.heroChipText,
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MobileExpiryNotice extends ConsumerWidget {
+  const _MobileExpiryNotice();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final expiry = ref
+        .watch(currentProfileProvider)
+        ?.subscriptionInfo
+        ?.expireDate;
+    if (expiry == null || expiry.difference(DateTime.now()).inDays > 7) {
+      return const SizedBox.shrink();
+    }
+    final locale = Localizations.localeOf(context);
+    final date = locale.languageCode == 'zh'
+        ? context.appLocalizations.businessExpiryDateShort(
+            expiry.month,
+            expiry.day,
+          )
+        : DateFormat.MMMd(locale.toString()).format(expiry);
+    final strings = context.appLocalizations;
+    final brightness = context.colorScheme.brightness;
+    return PressRegion(
+      shape: AppShape.all(BusinessPalette.cardRadius),
+      overlay: PressRegion.hoverOverlay,
+      onTap: () => showProfilesSheet(context),
+      child: Container(
+        padding: const EdgeInsetsDirectional.fromSTEB(14, 11, 14, 11),
+        decoration: ShapeDecoration(
+          color: BusinessPalette.expiryContainerFor(brightness),
+          shape: AppShape.all(BusinessPalette.cardRadius).copyWith(
+            side: BorderSide(
+              color: BusinessPalette.expiryBorderFor(brightness),
+            ),
+          ),
+        ),
+        child: Row(
+          spacing: 8,
+          children: [
+            Expanded(
+              child: Text(
+                strings.businessExpiryNotice(date),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BusinessText.actionLabel(context).copyWith(
+                  color: BusinessPalette.expiryForegroundFor(brightness),
+                ),
+              ),
+            ),
+            Text(
+              strings.renew,
+              style: BusinessText.actionLabel(context, emphasized: true)
+                  .copyWith(
+                    color: BusinessPalette.warningForegroundFor(brightness),
+                  ),
+            ),
+          ],
         ),
       ),
     );

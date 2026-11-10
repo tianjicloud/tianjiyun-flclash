@@ -18,6 +18,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import 'card.dart';
 
@@ -144,15 +145,18 @@ class BusinessAIStatusCard extends StatelessWidget {
     final strings = context.appLocalizations;
     return DashboardCard(
       semanticLabel: strings.serviceStatus,
-      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+      radius: BusinessPalette.cardRadius,
+      padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 14, 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 10,
+        spacing: 4,
         children: [
-          DashboardCardHeader(
-            glyph: AppGlyphs.verified,
-            title: strings.serviceStatus,
+          Text(
+            strings.businessAiServiceLabel,
+            style: BusinessText.mobileCardHeading(
+              context,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
           const BusinessAIStatusStrip(compact: true),
         ],
@@ -204,7 +208,7 @@ class _BusinessAIStatusStripState extends ConsumerState<BusinessAIStatusStrip>
   @override
   Widget build(BuildContext context) {
     final enabled = ref.watch(enabledServiceTargetsProvider).toSet();
-    final shown = _targets.where(enabled.contains).toList();
+    final shown = _targets.take(2).where(enabled.contains).toList();
     _syncShown(shown.toSet());
     final state = ref.watch(serviceStatusProvider);
     final route = ref.watch(routeTrackerProvider);
@@ -219,25 +223,43 @@ class _BusinessAIStatusStripState extends ConsumerState<BusinessAIStatusStrip>
     if (widget.compact) {
       final running = ref.watch(isStartProvider);
       final suspended = ref.watch(suspendProvider);
-      final available = running && !suspended
-          ? shown.where((target) {
-              final entry = state.entryOf(target);
-              return phaseOf(entry) == ProbePhase.fresh &&
-                  entry.value?.status == ServiceProbeStatus.available;
-            }).length
-          : 0;
-      final statuses = shown
-          .map((target) {
-            final entry = state.entryOf(target);
-            final service = _ServiceView(target, entry, phaseOf(entry));
-            final status = !running
-                ? context.appLocalizations.servicePending
-                : suspended
-                ? context.appLocalizations.suspended
-                : service.statusOf(context).$1;
-            return '${target.label}: $status';
-          })
-          .join(' · ');
+      final entries = [for (final target in shown) state.entryOf(target)];
+      final checks = [
+        for (final (index, target) in shown.indexed)
+          _ServiceView(target, entries[index], phaseOf(entries[index])),
+      ];
+      final allAvailable =
+          running &&
+          !suspended &&
+          checks.isNotEmpty &&
+          checks.every(
+            (service) =>
+                service.phase == ProbePhase.fresh &&
+                service.check?.status == ServiceProbeStatus.available,
+          );
+      final hasResult = checks.any((service) => service.check != null);
+      final status = allAvailable
+          ? '${context.appLocalizations.businessAiServices} · ${context.appLocalizations.serviceAvailable}'
+          : !hasResult
+          ? context.appLocalizations.servicePending
+          : checks
+                .map((service) {
+                  final label = _statusOf(
+                    context,
+                    service.check,
+                    service.phase,
+                  ).$1;
+                  return '${service.target.label}: $label';
+                })
+                .join(' · ');
+      final checkedAt = checks
+          .map((service) => service.check?.checkedAt)
+          .whereType<DateTime>()
+          .fold<DateTime?>(
+            null,
+            (latest, value) =>
+                latest == null || value.isAfter(latest) ? value : latest,
+          );
       return PressRegion(
         onTap: () => showServiceStatusSheet(context),
         shape: AppShape.sm,
@@ -247,22 +269,29 @@ class _BusinessAIStatusStripState extends ConsumerState<BusinessAIStatusStrip>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            spacing: 5,
+            spacing: 4,
             children: [
               Text(
-                '$available / ${shown.length} ${context.appLocalizations.serviceAvailable}',
+                status,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: BusinessText.quickMetaMobile(context),
+                style: BusinessText.mobileCardValue(context).copyWith(
+                  color: allAvailable
+                      ? DashboardColors.of(context).ok
+                      : context.colorScheme.onSurfaceVariant,
+                ),
               ),
-              Text(
-                statuses.isEmpty
-                    ? context.appLocalizations.servicePending
-                    : statuses,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: DashboardText.label(context),
-              ),
+              if (checkedAt != null)
+                Text(
+                  context.appLocalizations.businessCheckedAt(
+                    DateFormat('HH:mm').format(checkedAt),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: BusinessText.mobileCardHeading(
+                    context,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
             ],
           ),
         ),

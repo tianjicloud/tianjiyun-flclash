@@ -30,264 +30,273 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m3(count, skipped) =>
       "${count} por añadir, ${skipped} omitidos por ya existir";
 
-  static String m4(date) => "Vence el ${date}";
+  static String m4(time) => "Comprobado a las ${time}";
 
-  static String m5(time) => "Suscripción actualizada ${time}";
+  static String m5(line) => "El tráfico saldrá por «${line}»";
 
-  static String m6(percent) => "${percent} % usado";
+  static String m6(date) => "Vence el ${date}";
 
-  static String m7(detail) => "No se pudieron borrar los datos: ${detail}";
+  static String m7(month, day) => "${day}/${month}";
 
-  static String m8(code) =>
+  static String m8(date) =>
+      "El plan vence el ${date}. Renueva para mantener tus líneas";
+
+  static String m9(time) => "Suscripción actualizada ${time}";
+
+  static String m10(percent) => "${percent} % usado";
+
+  static String m11(detail) => "No se pudieron borrar los datos: ${detail}";
+
+  static String m12(code) =>
       "Windows se negó a ejecutar TianjiCloudCore.exe (error ${code}). Una directiva de control de aplicaciones, como Smart App Control o AppLocker, bloquea los programas sin firmar; permite 天机云 en esa directiva o desactívala e inténtalo de nuevo.";
 
-  static String m9(name) =>
+  static String m13(name) =>
       "La app no pudo terminar de iniciarse dos veces seguidas. Para romper el ciclo, se ha deseleccionado el perfil ${name} y se ha omitido la configuración automática. Puedes volver a seleccionarlo en cualquier momento.";
 
-  static String m10(url) => "¿Quieres crear un perfil a partir de ${url}?";
+  static String m14(url) => "¿Quieres crear un perfil a partir de ${url}?";
 
-  static String m11(count, label) =>
+  static String m15(count, label) =>
       "${Intl.plural(count, one: 'Se descartó 1 regla SUB-RULE, porque los perfiles personalizados no admiten subreglas', other: 'Se descartaron ${label} reglas SUB-RULE, porque los perfiles personalizados no admiten subreglas')}";
 
-  static String m12(message) =>
+  static String m16(message) =>
       "El núcleo no puede interpretar este proxy: ${message}";
 
-  static String m13(proxy, target) =>
+  static String m17(proxy, target) =>
       "${proxy} marca a través de ${target}, que lleva de vuelta a ${proxy}, por lo que la marcación entra en bucle";
 
-  static String m14(name) =>
+  static String m18(name) =>
       "El nombre ${name} ya lo usa otro proxy o grupo de proxies";
 
-  static String m15(path) =>
+  static String m19(path) =>
       "Los grupos de proxies se referencian entre sí en bucle: ${path}";
 
-  static String m16(name) =>
+  static String m20(name) =>
       "El respaldo si está vacío debe ser un proxy, pero ${name} no existe o es un grupo de proxies";
 
-  static String m17(name, message) =>
+  static String m21(name, message) =>
       "${name} no es una expresión regular válida: ${message}";
 
-  static String m18(name) => "El proxy de marcación ${name} no existe";
+  static String m22(name) => "El proxy de marcación ${name} no existe";
 
-  static String m19(names) =>
+  static String m23(names) =>
       "Estos proveedores de proxies no existen: ${names}";
 
-  static String m20(names) => "Estos proxies o políticas no existen: ${names}";
+  static String m24(names) => "Estos proxies o políticas no existen: ${names}";
 
-  static String m21(name) =>
+  static String m25(name) =>
       "${name} es un nombre de política integrada y no se puede usar aquí";
 
-  static String m22(count) =>
+  static String m26(count) =>
       "${count} elementos tienen problemas, y aplicar este perfil puede fallar";
 
-  static String m23(count) =>
+  static String m27(count) =>
       "${Intl.plural(count, one: 'hace 1 día', other: 'hace ${count} días')}";
 
-  static String m24(count) => "${Intl.plural(count, other: 'hace ${count} d')}";
+  static String m28(count) => "${Intl.plural(count, other: 'hace ${count} d')}";
 
-  static String m25(label) =>
+  static String m29(label) =>
       "¿Seguro que quieres eliminar los elementos seleccionados (${label})?";
 
-  static String m26(label) =>
+  static String m30(label) =>
       "¿Seguro que quieres eliminar este elemento (${label})?";
 
-  static String m27(label) => "Detalles de ${label}";
+  static String m31(label) => "Detalles de ${label}";
 
-  static String m28(name) =>
+  static String m32(name) =>
       "La marcación a través de ${name} lleva de vuelta al proxy que lo usa, por lo que se detuvo la conexión";
 
-  static String m29(label) => "${label} no puede estar vacío";
+  static String m33(label) => "${label} no puede estar vacío";
 
-  static String m30(label) => "${label} ya existe";
+  static String m34(label) => "${label} ya existe";
 
-  static String m31(count) => "${count} elementos fallaron. Toca para ver";
+  static String m35(count) => "${count} elementos fallaron. Toca para ver";
 
-  static String m32(label, message) => "${label}: ${message}";
+  static String m36(label, message) => "${label}: ${message}";
 
-  static String m33(name) => "${name} ya está actualizado";
+  static String m37(name) => "${name} ya está actualizado";
 
-  static String m34(name) => "${name} actualizado";
-
-  static String m35(count) =>
-      "${Intl.plural(count, one: '1 grupo', other: '${count} grupos')}";
-
-  static String m36(count) => "${count} sin respuesta";
-
-  static String m37(action) =>
-      "Ya lo usa “${action}”. Al guardar, pasará a este.";
-
-  static String m38(modifiers) =>
-      "Incluye al menos una de estas teclas: ${modifiers}";
+  static String m38(name) => "${name} actualizado";
 
   static String m39(count) =>
+      "${Intl.plural(count, one: '1 grupo', other: '${count} grupos')}";
+
+  static String m40(count) => "${count} sin respuesta";
+
+  static String m41(action) =>
+      "Ya lo usa “${action}”. Al guardar, pasará a este.";
+
+  static String m42(modifiers) =>
+      "Incluye al menos una de estas teclas: ${modifiers}";
+
+  static String m43(count) =>
       "${Intl.plural(count, one: 'hace 1 hora', other: 'hace ${count} horas')}";
 
-  static String m40(count) => "${Intl.plural(count, other: 'hace ${count} h')}";
+  static String m44(count) => "${Intl.plural(count, other: 'hace ${count} h')}";
 
-  static String m41(encoding) =>
+  static String m45(encoding) =>
       "No se pudo decodificar ${encoding}, así que se muestran los datos tal como se enviaron.";
 
-  static String m42(memory, body) =>
+  static String m46(memory, body) =>
       "Los registros más antiguos se eliminan primero al alcanzar este número u ocupar ${memory} de memoria. De cada cuerpo se conservan solo los primeros ${body}.";
 
-  static String m43(invalid, total) => "${invalid} de ${total} no válidos";
+  static String m47(invalid, total) => "${invalid} de ${total} no válidos";
 
-  static String m44(target) => "${target} no es una política válida";
+  static String m48(target) => "${target} no es una política válida";
 
-  static String m45(proxyName) => "${proxyName} no es un proxy válido";
+  static String m49(proxyName) => "${proxyName} no es un proxy válido";
 
-  static String m46(providerName) =>
+  static String m50(providerName) =>
       "${providerName} no es un proveedor de proxies válido";
 
-  static String m47(ruleSet) => "${ruleSet} no es un conjunto de reglas válido";
+  static String m51(ruleSet) => "${ruleSet} no es un conjunto de reglas válido";
 
-  static String m48(subRule) => "${subRule} no es una SUB_RULE válida";
+  static String m52(subRule) => "${subRule} no es una SUB_RULE válida";
 
-  static String m49(count) =>
+  static String m53(count) =>
       "${Intl.plural(count, one: '1 elemento', other: '${count} elementos')}";
 
-  static String m50(line, message) => "Línea ${line}: ${message}";
+  static String m54(line, message) => "Línea ${line}: ${message}";
 
-  static String m51(appName) =>
+  static String m55(appName) =>
       "1. Abre Ajustes del sistema > Privacidad y seguridad\n2. Elige Servicios de localización\n3. Busca ${appName} en la lista y márcalo\n\nCuando termines, vuelve a la app para continuar. Gracias por tu colaboración.";
 
-  static String m52(label, max) =>
+  static String m56(label, max) =>
       "${label} debe tener como máximo ${max} caracteres";
 
-  static String m53(size) => "Liberado: ${size}";
+  static String m57(size) => "Liberado: ${size}";
 
-  static String m54(count) =>
+  static String m58(count) =>
       "${Intl.plural(count, one: 'hace 1 minuto', other: 'hace ${count} minutos')}";
 
-  static String m55(count) =>
+  static String m59(count) =>
       "${Intl.plural(count, other: 'hace ${count} min')}";
 
-  static String m56(fileName) =>
+  static String m60(fileName) =>
       "Se guardó ${fileName} en Descargas. Instálalo en Ajustes › Seguridad › Cifrado y credenciales › Instalar un certificado › Certificado de CA.";
 
-  static String m57(command) =>
+  static String m61(command) =>
       "Chrome y Firefox tienen sus propios almacenes de certificados, que necesitan certutil: ${command}";
 
-  static String m58(host) =>
+  static String m62(host) =>
       "¿Añadir ${host} a la lista de nombres de host? 天机云 podrá leer lo que se le envíe, incluidas cookies y contraseñas.";
 
-  static String m59(host) =>
+  static String m63(host) =>
       "¿Añadir -${host} al principio de la lista de nombres de host? El host ya no se descifrará nunca.";
 
-  static String m60(size) => "El archivo supera los ${size} MB";
+  static String m64(size) => "El archivo supera los ${size} MB";
 
-  static String m61(stores) => "Aún no está en: ${stores}";
-
-  static String m62(name) =>
-      "Los scripts de ${name} han cambiado y se ha desactivado";
-
-  static String m63(system) =>
-      "Escrito para ${system}; algunas líneas pueden no coincidir con las apps de este dispositivo.";
-
-  static String m64(name) =>
-      "No se pudo quitar el certificado antiguo, ${name}. Quítalo tú de las raíces de confianza.";
-
-  static String m65(name) =>
-      "El certificado antiguo, ${name}, sigue entre los certificados de confianza del sistema. Permite el acceso root a 天机云 en tu gestor de root y vuelve a generarlo, o elimina allí el módulo «TianjiCloud MITM CA» y reinicia.";
+  static String m65(stores) => "Aún no está en: ${stores}";
 
   static String m66(name) =>
+      "Los scripts de ${name} han cambiado y se ha desactivado";
+
+  static String m67(system) =>
+      "Escrito para ${system}; algunas líneas pueden no coincidir con las apps de este dispositivo.";
+
+  static String m68(name) =>
+      "No se pudo quitar el certificado antiguo, ${name}. Quítalo tú de las raíces de confianza.";
+
+  static String m69(name) =>
+      "El certificado antiguo, ${name}, sigue entre los certificados de confianza del sistema. Permite el acceso root a 天机云 en tu gestor de root y vuelve a generarlo, o elimina allí el módulo «TianjiCloud MITM CA» y reinicia.";
+
+  static String m70(name) =>
       "Quita el certificado antiguo, ${name}, en Ajustes › Seguridad › Cifrado y credenciales › Credenciales de confianza › Usuario, y después instala el nuevo.";
 
-  static String m67(section) => "La sección [${section}] no es compatible";
+  static String m71(section) => "La sección [${section}] no es compatible";
 
-  static String m68(count) =>
+  static String m72(count) =>
       "${Intl.plural(count, one: 'hace 1 mes', other: 'hace ${count} meses')}";
 
-  static String m69(count) => "${Intl.plural(count, other: 'hace ${count} m')}";
-
-  static String m70(code) =>
-      "El servidor denegó el acceso (HTTP ${code}). Puede que el enlace haya caducado o que las credenciales sean incorrectas";
-
-  static String m71(code) => "El servidor rechazó la solicitud (HTTP ${code})";
-
-  static String m72(code) =>
-      "No se encontró nada en esta dirección (HTTP ${code}). Comprueba que la URL sea correcta";
-
-  static String m73(detail) => "Falló la solicitud de red: ${detail}";
+  static String m73(count) => "${Intl.plural(count, other: 'hace ${count} m')}";
 
   static String m74(code) =>
+      "El servidor denegó el acceso (HTTP ${code}). Puede que el enlace haya caducado o que las credenciales sean incorrectas";
+
+  static String m75(code) => "El servidor rechazó la solicitud (HTTP ${code})";
+
+  static String m76(code) =>
+      "No se encontró nada en esta dirección (HTTP ${code}). Comprueba que la URL sea correcta";
+
+  static String m77(detail) => "Falló la solicitud de red: ${detail}";
+
+  static String m78(code) =>
       "El servidor tuvo un problema (HTTP ${code}). Inténtalo de nuevo más tarde";
 
-  static String m75(label) => "Aún no hay ningún elemento (${label})";
+  static String m79(label) => "Aún no hay ningún elemento (${label})";
 
-  static String m76(label, min, max) =>
+  static String m80(label, min, max) =>
       "${label} debe estar entre ${min} y ${max}";
 
-  static String m77(label) => "${label} debe ser un número";
+  static String m81(label) => "${label} debe ser un número";
 
-  static String m78(count) => "Importado · ${count} nodos";
+  static String m82(count) => "Importado · ${count} nodos";
 
-  static String m79(label) => "${label} debe estar entre 1024 y 49151";
+  static String m83(label) => "${label} debe estar entre 1024 y 49151";
 
-  static String m80(port) => "Puerto ${port}";
+  static String m84(port) => "Puerto ${port}";
 
-  static String m81(days) =>
+  static String m85(days) =>
       "${Intl.plural(days, one: 'Queda 1 día', other: 'Quedan ${days} días')}";
 
-  static String m82(date, days) =>
+  static String m86(date, days) =>
       "Vence el ${date}, ${Intl.plural(days, one: 'queda 1 día', other: 'quedan ${days} días')}";
 
-  static String m83(time) => "Actualizado ${time}";
+  static String m87(time) => "Actualizado ${time}";
 
-  static String m84(label, profiles) =>
+  static String m88(label, profiles) =>
       "${label} sigue en uso en ${profiles}, que dejarán de funcionar correctamente si se elimina. ¿Seguro que quieres eliminarlo?";
 
-  static String m85(count, label) =>
+  static String m89(count, label) =>
       "${Intl.plural(count, one: '1 proxy', other: '${label} proxies')}";
 
-  static String m86(name, count) => "${name} y otros (${count} proxies)";
+  static String m90(name, count) => "${name} y otros (${count} proxies)";
 
-  static String m87(removed) =>
+  static String m91(removed) =>
       "Se eliminarán estos proxies: ${removed}. Una línea cuyo nombre cambió cuenta como un proxy nuevo, y los perfiles personalizados que mencionen los eliminados los marcarán como ausentes. ¿Aplicar de todos modos?";
 
-  static String m88(removed, added) =>
+  static String m92(removed, added) =>
       "Se eliminarán estos proxies: ${removed}. Se añadirán estos: ${added}. Una línea cuyo nombre cambió cuenta como un proxy nuevo, y los perfiles personalizados que mencionen los eliminados los marcarán como ausentes. ¿Aplicar de todos modos?";
 
-  static String m89(label) =>
+  static String m93(label) =>
       "${label} sigue mencionado por reglas, grupos de proxies, proxies de marcación, DNS o NTP de este perfil, que dejarán de funcionar si se elimina. ¿Seguro que quieres eliminarlo?";
 
-  static String m90(count, label) =>
+  static String m94(count, label) =>
       "${Intl.plural(count, one: '1 grupo de proxies', other: '${label} grupos de proxies')}";
 
-  static String m91(count, label) =>
+  static String m95(count, label) =>
       "${Intl.plural(count, one: '1 regla', other: '${label} reglas')}";
 
-  static String m92(appName) => "${appName} (Modo seguro)";
+  static String m96(appName) => "${appName} (Modo seguro)";
 
-  static String m93(count) =>
+  static String m97(count) =>
       "${Intl.plural(count, one: '1 segundo', other: '${count} segundos')}";
 
-  static String m94(count) => "${count} en vigor";
+  static String m98(count) => "${count} en vigor";
 
-  static String m95(count) =>
+  static String m99(count) =>
       "${Intl.plural(count, one: '1 problema', other: '${count} problemas')}";
 
-  static String m96(count) =>
+  static String m100(count) =>
       "${Intl.plural(count, one: '1 ajuste', other: '${count} ajustes')}";
 
-  static String m97(link) => "No se pudo leer ningún proxy de ${link}";
+  static String m101(link) => "No se pudo leer ningún proxy de ${link}";
 
-  static String m98(label) => "${label} debe ser un solo elemento";
+  static String m102(label) => "${label} debe ser un solo elemento";
 
-  static String m99(value) => "Pico: ${value}";
+  static String m103(value) => "Pico: ${value}";
 
-  static String m100(value) => "Total: ${value}";
+  static String m104(value) => "Total: ${value}";
 
-  static String m101(transport) => "Encabezados ${transport}";
+  static String m105(transport) => "Encabezados ${transport}";
 
-  static String m102(label) => "${label} debe ser una URL";
+  static String m106(label) => "${label} debe ser una URL";
 
-  static String m103(date) => "Válido hasta el ${date}";
+  static String m107(date) => "Válido hasta el ${date}";
 
-  static String m104(count) =>
+  static String m108(count) =>
       "${Intl.plural(count, one: 'hace 1 año', other: 'hace ${count} años')}";
 
-  static String m105(count) =>
+  static String m109(count) =>
       "${Intl.plural(count, other: 'hace ${count} a')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -473,10 +482,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAiServiceLabel": MessageLookupByLibrary.simpleMessage(
       "Servicios de IA",
     ),
+    "businessAiServices": MessageLookupByLibrary.simpleMessage(
+      "ChatGPT · Claude",
+    ),
+    "businessAllLines": MessageLookupByLibrary.simpleMessage(
+      "Todas las líneas",
+    ),
+    "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Cambiar línea"),
+    "businessConnectVia": m5,
     "businessConnectedDisconnect": MessageLookupByLibrary.simpleMessage(
       "Conectado · pulsa para desconectar",
     ),
+    "businessCurrent": MessageLookupByLibrary.simpleMessage("Actual"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "IP de salida actual",
     ),
@@ -488,7 +506,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
       "Conectado · Salida verificada",
     ),
-    "businessExpiryDate": m4,
+    "businessExpiryDate": m6,
+    "businessExpiryDateShort": m7,
+    "businessExpiryNotice": m8,
     "businessHome": MessageLookupByLibrary.simpleMessage("Inicio"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "No se pudo completar el cambio. Reinténtalo.",
@@ -512,10 +532,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage(
       "Tráfico del mes",
     ),
+    "businessMonthUsed": MessageLookupByLibrary.simpleMessage("Usado este mes"),
+    "businessNotConnected": MessageLookupByLibrary.simpleMessage(
+      "Sin conexión",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Salida"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(
       "Banda ancha residencial",
+    ),
+    "businessResidentialShort": MessageLookupByLibrary.simpleMessage(
+      "Residencial",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "Solo cambia la línea predeterminada. La IA y el streaming conservan sus reglas, al igual que las conexiones directas y los bloqueos.",
@@ -523,6 +550,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "El enrutamiento inteligente no está activo. Esta línea predeterminada no se está usando.",
     ),
+    "businessSelected": MessageLookupByLibrary.simpleMessage("Seleccionado"),
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "La suscripción o el modo cambió. Abre de nuevo la selección.",
     ),
@@ -532,9 +560,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSubscriptionDetails": MessageLookupByLibrary.simpleMessage(
       "Detalles de la suscripción",
     ),
-    "businessSubscriptionUpdatedAt": m5,
+    "businessSubscriptionUpdatedAt": m9,
     "businessSubscriptions": MessageLookupByLibrary.simpleMessage(
       "Suscripciones",
+    ),
+    "businessTapToConnect": MessageLookupByLibrary.simpleMessage(
+      "Toca para conectar",
     ),
     "businessTrafficScope": MessageLookupByLibrary.simpleMessage(
       "Tráfico de este mes solo en este dispositivo",
@@ -545,7 +576,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "Interfaz de red virtual (TUN)",
     ),
-    "businessUsagePercent": m6,
+    "businessUsagePercent": m10,
+    "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
+      "Permite el acceso a VPN al conectarte por primera vez",
+    ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Dominios excluidos"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Los dominios excluidos solo se aplican mientras el proxy del sistema esté activado.",
@@ -606,7 +640,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
       "Esto elimina todos los perfiles, ajustes y datos locales, y luego cierra la app. Ábrela de nuevo para empezar de cero.",
     ),
-    "clearDataFailed": m7,
+    "clearDataFailed": m11,
     "clearDnsCache": MessageLookupByLibrary.simpleMessage(
       "Borrar la caché DNS",
     ),
@@ -699,41 +733,41 @@ class MessageLookup extends MessageLookupByLibrary {
       "Copiado correctamente",
     ),
     "core": MessageLookupByLibrary.simpleMessage("Núcleo"),
-    "coreBlockedByPolicyTip": m8,
+    "coreBlockedByPolicyTip": m12,
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
       "Smart App Control de Windows bloqueó TianjiCloudCore.exe porque no está firmado. Abre Seguridad de Windows → Control de aplicaciones y navegador → Configuración de Smart App Control, elige Desactivado y vuelve a iniciar 天机云. Smart App Control no se puede volver a activar sin reinstalar Windows.",
     ),
     "coreStatus": MessageLookupByLibrary.simpleMessage("Estado del núcleo"),
     "country": MessageLookupByLibrary.simpleMessage("Región"),
     "crashDetected": MessageLookupByLibrary.simpleMessage("Fallo detectado"),
-    "crashDetectedTip": m9,
+    "crashDetectedTip": m13,
     "crashTest": MessageLookupByLibrary.simpleMessage("Prueba de fallo"),
     "create": MessageLookupByLibrary.simpleMessage("Crear"),
-    "createProfileFromUrlTip": m10,
+    "createProfileFromUrlTip": m14,
     "creationTime": MessageLookupByLibrary.simpleMessage("Fecha de creación"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Contiene el botón de inicio y no se puede quitar",
     ),
     "custom": MessageLookupByLibrary.simpleMessage("Personalizado"),
     "customColor": MessageLookupByLibrary.simpleMessage("Color personalizado"),
-    "customImportDroppedSubRules": m11,
-    "customIssueCoreRejected": m12,
-    "customIssueDialerLoop": m13,
-    "customIssueDuplicateName": m14,
+    "customImportDroppedSubRules": m15,
+    "customIssueCoreRejected": m16,
+    "customIssueDialerLoop": m17,
+    "customIssueDuplicateName": m18,
     "customIssueEmptyName": MessageLookupByLibrary.simpleMessage(
       "El nombre está vacío",
     ),
-    "customIssueGroupLoop": m15,
-    "customIssueInvalidEmptyFallback": m16,
-    "customIssueInvalidFilter": m17,
-    "customIssueMissingDialer": m18,
-    "customIssueMissingProviders": m19,
-    "customIssueMissingProxies": m20,
+    "customIssueGroupLoop": m19,
+    "customIssueInvalidEmptyFallback": m20,
+    "customIssueInvalidFilter": m21,
+    "customIssueMissingDialer": m22,
+    "customIssueMissingProviders": m23,
+    "customIssueMissingProxies": m24,
     "customIssueNoProxySource": MessageLookupByLibrary.simpleMessage(
       "No hay proxies ni proveedores de proxies seleccionados, por lo que el núcleo rechaza este grupo",
     ),
-    "customIssueReservedName": m21,
-    "customIssuesSummary": m22,
+    "customIssueReservedName": m25,
+    "customIssuesSummary": m26,
     "customProfile": MessageLookupByLibrary.simpleMessage("Personalizado"),
     "customResources": MessageLookupByLibrary.simpleMessage("Personalizado"),
     "cut": MessageLookupByLibrary.simpleMessage("Cortar"),
@@ -745,8 +779,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "databaseWriteFailedTip": MessageLookupByLibrary.simpleMessage(
       "No se pudo guardar el cambio; se ha revertido",
     ),
-    "daysAgo": m23,
-    "daysAgoShort": m24,
+    "daysAgo": m27,
+    "daysAgoShort": m28,
     "daysUnit": MessageLookupByLibrary.simpleMessage("días"),
     "decryptUntrusted": MessageLookupByLibrary.simpleMessage(
       "Descifrar sin confianza local",
@@ -768,8 +802,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tiempo de espera de la prueba de latencia",
     ),
     "delete": MessageLookupByLibrary.simpleMessage("Eliminar"),
-    "deleteMultipTip": m25,
-    "deleteTip": m26,
+    "deleteMultipTip": m29,
+    "deleteTip": m30,
     "desc": MessageLookupByLibrary.simpleMessage(
       "Un cliente proxy multiplataforma basado en ClashMeta, sencillo de usar, de código abierto y sin anuncios.",
     ),
@@ -780,7 +814,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "destinationIPASN": MessageLookupByLibrary.simpleMessage(
       "ASN de la IP de destino",
     ),
-    "details": m27,
+    "details": m31,
     "detectionTip": MessageLookupByLibrary.simpleMessage(
       "Depende de una API de terceros; solo con fines informativos",
     ),
@@ -806,7 +840,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sin comprobar",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Proxy de marcación"),
-    "dialerProxyLoopStopped": m28,
+    "dialerProxyLoopStopped": m32,
     "dialog": MessageLookupByLibrary.simpleMessage("Diálogo"),
     "direct": MessageLookupByLibrary.simpleMessage("Directo"),
     "directNameserverDesc": MessageLookupByLibrary.simpleMessage(
@@ -963,7 +997,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "emptyFallback": MessageLookupByLibrary.simpleMessage(
       "Respaldo si está vacío",
     ),
-    "emptyTip": m29,
+    "emptyTip": m33,
     "en": MessageLookupByLibrary.simpleMessage("Inglés"),
     "enabled": MessageLookupByLibrary.simpleMessage("Activado"),
     "entries": MessageLookupByLibrary.simpleMessage(" entradas"),
@@ -992,7 +1026,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "excludeUid": MessageLookupByLibrary.simpleMessage(
       "ID de usuario excluidos",
     ),
-    "existsTip": m30,
+    "existsTip": m34,
     "exit": MessageLookupByLibrary.simpleMessage("Salir"),
     "exitFullScreen": MessageLookupByLibrary.simpleMessage(
       "Salir de pantalla completa",
@@ -1024,8 +1058,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "externalLink": MessageLookupByLibrary.simpleMessage("Enlace externo"),
     "extraLarge": MessageLookupByLibrary.simpleMessage("Muy grande"),
     "fade": MessageLookupByLibrary.simpleMessage("Fundido"),
-    "failedCount": m31,
-    "failedItem": m32,
+    "failedCount": m35,
+    "failedItem": m36,
     "fakeipFilter": MessageLookupByLibrary.simpleMessage("Filtro Fake-IP"),
     "fakeipFilterDesc": MessageLookupByLibrary.simpleMessage(
       "Estos dominios reciben su IP real en lugar de una Fake-IP. En modo whitelist, solo ellos reciben Fake-IP.",
@@ -1085,8 +1119,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Generar certificado",
     ),
     "geoResources": MessageLookupByLibrary.simpleMessage("Geo"),
-    "geoSkipped": m33,
-    "geoUpdated": m34,
+    "geoSkipped": m37,
+    "geoUpdated": m38,
     "geodataLoader": MessageLookupByLibrary.simpleMessage(
       "Modo geo de poca memoria",
     ),
@@ -1101,9 +1135,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "grid": MessageLookupByLibrary.simpleMessage("Cuadrícula"),
     "groupBy": MessageLookupByLibrary.simpleMessage("Agrupar por"),
-    "groupCount": m35,
+    "groupCount": m39,
     "groupCountUnit": MessageLookupByLibrary.simpleMessage("grupos"),
-    "groupTimeoutCount": m36,
+    "groupTimeoutCount": m40,
     "hasCacheChange": MessageLookupByLibrary.simpleMessage(
       "¿Guardar los cambios en la caché?",
     ),
@@ -1129,21 +1163,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "hopInterval": MessageLookupByLibrary.simpleMessage("Intervalo de salto"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
     "hostname": MessageLookupByLibrary.simpleMessage("Nombre de host"),
-    "hotkeyConflictWith": m37,
+    "hotkeyConflictWith": m41,
     "hotkeyDesc": MessageLookupByLibrary.simpleMessage(
       "Los atajos globales funcionan incluso con la ventana oculta. Toca una acción para grabar su combinación de teclas.",
     ),
     "hotkeyManagement": MessageLookupByLibrary.simpleMessage(
       "Gestión de atajos",
     ),
-    "hotkeyNeedsModifier": m38,
+    "hotkeyNeedsModifier": m42,
     "hotkeyNotSet": MessageLookupByLibrary.simpleMessage("Sin asignar"),
     "hotkeyUnavailable": MessageLookupByLibrary.simpleMessage(
       "No registrado; puede que otra app lo esté usando",
     ),
     "hours": MessageLookupByLibrary.simpleMessage("horas"),
-    "hoursAgo": m39,
-    "hoursAgoShort": m40,
+    "hoursAgo": m43,
+    "hoursAgoShort": m44,
     "http2": MessageLookupByLibrary.simpleMessage("HTTP/2"),
     "httpBodyNotKept": MessageLookupByLibrary.simpleMessage(
       "No se registró por falta de memoria.",
@@ -1154,7 +1188,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "httpBodyTruncated": MessageLookupByLibrary.simpleMessage(
       "Solo se registró el comienzo de este cuerpo.",
     ),
-    "httpBodyUndecoded": m41,
+    "httpBodyUndecoded": m45,
     "httpCapture": MessageLookupByLibrary.simpleMessage("Captura HTTP"),
     "httpCaptureDesc": MessageLookupByLibrary.simpleMessage(
       "Registra las solicitudes a los hosts indicados en Nombre de host, para verlas en los detalles de la conexión. Los registros solo se guardan en memoria.",
@@ -1162,7 +1196,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "httpCaptureLimit": MessageLookupByLibrary.simpleMessage(
       "Máximo de registros",
     ),
-    "httpCaptureLimitDesc": m42,
+    "httpCaptureLimitDesc": m46,
     "httpCaptureNoHosts": MessageLookupByLibrary.simpleMessage(
       "No hay ningún host indicado, así que no se registra nada. Añade hosts en Nombre de host, en la página MITM, o desde los detalles de una conexión.",
     ),
@@ -1297,21 +1331,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidNetworkContent": MessageLookupByLibrary.simpleMessage(
       "Solo se admite tcp o udp",
     ),
-    "invalidOfCount": m43,
-    "invalidPolicy": m44,
+    "invalidOfCount": m47,
+    "invalidPolicy": m48,
     "invalidPortRangeContent": MessageLookupByLibrary.simpleMessage(
       "Introduce un puerto o un rango como 443 u 8000-9000",
     ),
     "invalidProfileQrcode": MessageLookupByLibrary.simpleMessage(
       "Este código QR no contiene un enlace de perfil",
     ),
-    "invalidProxy": m45,
-    "invalidProxyProvider": m46,
+    "invalidProxy": m49,
+    "invalidProxyProvider": m50,
     "invalidRangeContent": MessageLookupByLibrary.simpleMessage(
       "Introduce números o rangos como 80 u 8000-9000, separados por /",
     ),
-    "invalidRuleSet": m47,
-    "invalidSubRule": m48,
+    "invalidRuleSet": m51,
+    "invalidSubRule": m52,
     "ipAddress": MessageLookupByLibrary.simpleMessage("Dirección IP"),
     "ipAsn": MessageLookupByLibrary.simpleMessage("ASN"),
     "ipFlagAbuser": MessageLookupByLibrary.simpleMessage("Historial de abusos"),
@@ -1353,7 +1387,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ipv6Timeout": MessageLookupByLibrary.simpleMessage(
       "Tiempo de espera IPv6 (ms)",
     ),
-    "itemsCount": m49,
+    "itemsCount": m53,
     "ja": MessageLookupByLibrary.simpleMessage("Japonés"),
     "justNow": MessageLookupByLibrary.simpleMessage("Ahora mismo"),
     "keepAliveIdle": MessageLookupByLibrary.simpleMessage(
@@ -1376,7 +1410,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "layout": MessageLookupByLibrary.simpleMessage("Diseño"),
     "light": MessageLookupByLibrary.simpleMessage("Claro"),
-    "lineIssueTip": m50,
+    "lineIssueTip": m54,
     "lineRate": MessageLookupByLibrary.simpleMessage("Tasa"),
     "lineWrap": MessageLookupByLibrary.simpleMessage("Ajuste de línea"),
     "link": MessageLookupByLibrary.simpleMessage("Enlace"),
@@ -1408,7 +1442,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "El sistema requiere el permiso de ubicación para leer el nombre de la red Wi-Fi. En Android elige “Permitir todo el tiempo”; de lo contrario, no se podrá leer el nombre de la red Wi-Fi mientras la app esté en segundo plano.",
     ),
-    "locationPermissionGuide": m51,
+    "locationPermissionGuide": m55,
     "locationPermissionRequired": MessageLookupByLibrary.simpleMessage(
       "Se requiere permiso de ubicación",
     ),
@@ -1440,7 +1474,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "matchTarget": MessageLookupByLibrary.simpleMessage("MATCH-TARGET"),
     "matchedRules": MessageLookupByLibrary.simpleMessage("Reglas aplicadas"),
     "maxFailedTimes": MessageLookupByLibrary.simpleMessage("Máximo de fallos"),
-    "maxLengthTip": m52,
+    "maxLengthTip": m56,
     "maximize": MessageLookupByLibrary.simpleMessage("Maximizar"),
     "memoryAppResident": MessageLookupByLibrary.simpleMessage(
       "Memoria residente",
@@ -1470,7 +1504,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Memoria que usan la app y el núcleo",
     ),
     "memoryReleased": MessageLookupByLibrary.simpleMessage("Memoria liberada"),
-    "memoryReleasedSize": m53,
+    "memoryReleasedSize": m57,
     "messageTest": MessageLookupByLibrary.simpleMessage("Prueba de mensaje"),
     "messageTestTip": MessageLookupByLibrary.simpleMessage(
       "Esto es un mensaje.",
@@ -1481,8 +1515,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Minimizar al salir",
     ),
     "minutes": MessageLookupByLibrary.simpleMessage("minutos"),
-    "minutesAgo": m54,
-    "minutesAgoShort": m55,
+    "minutesAgo": m58,
+    "minutesAgoShort": m59,
     "mitm": MessageLookupByLibrary.simpleMessage("MITM"),
     "mitmAddLocalFile": MessageLookupByLibrary.simpleMessage(
       "Añadir un archivo local",
@@ -1506,23 +1540,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "mitmCertificateLinuxTip": MessageLookupByLibrary.simpleMessage(
       "Los navegadores Flatpak necesitan que importes el certificado exportado a mano.",
     ),
-    "mitmCertificateSavedTip": m56,
-    "mitmCertutilMissing": m57,
+    "mitmCertificateSavedTip": m60,
+    "mitmCertutilMissing": m61,
     "mitmClientRefusedCertificate": MessageLookupByLibrary.simpleMessage(
       "El cliente rechazó el certificado. Instala la CA o excluye este host si la app fija su certificado.",
     ),
     "mitmDecryptHost": MessageLookupByLibrary.simpleMessage(
       "Descifrar este host",
     ),
-    "mitmDecryptHostTip": m58,
+    "mitmDecryptHostTip": m62,
     "mitmEnableTip": MessageLookupByLibrary.simpleMessage(
       "天机云 podrá leer todo lo que se envíe a los hosts descifrados, incluidas cookies y contraseñas. Actívalo solo para los hosts que quieras reescribir.",
     ),
     "mitmExcludeHost": MessageLookupByLibrary.simpleMessage(
       "Excluir del descifrado",
     ),
-    "mitmExcludeHostTip": m59,
-    "mitmFileTooLarge": m60,
+    "mitmExcludeHostTip": m63,
+    "mitmFileTooLarge": m64,
     "mitmHostnameDesc": MessageLookupByLibrary.simpleMessage(
       "Un - al principio excluye un host, y decide la primera coincidencia.",
     ),
@@ -1535,7 +1569,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mitmInstallUserCaTip": MessageLookupByLibrary.simpleMessage(
       "No se detectó root: el certificado solo puede instalarse como certificado de usuario. Solo se descifran las apps que confían en certificados de usuario, sobre todo los navegadores; las demás fallan en los hosts que indiques, así que no indiques sus hosts. Desde Android 11 terminas la instalación tú mismo en los ajustes del sistema.",
     ),
-    "mitmMissingStores": m61,
+    "mitmMissingStores": m65,
     "mitmModule": MessageLookupByLibrary.simpleMessage("Módulo"),
     "mitmModuleInvalid": MessageLookupByLibrary.simpleMessage(
       "No es un módulo de Surge, un plugin de Loon, un fragmento de Quantumult X ni una sobrescritura de Stash",
@@ -1543,13 +1577,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "mitmModuleRulesDesc": MessageLookupByLibrary.simpleMessage(
       "Las reglas de enrutamiento van antes que las del perfil.",
     ),
-    "mitmModuleScriptsChanged": m62,
-    "mitmModuleSystemTip": m63,
+    "mitmModuleScriptsChanged": m66,
+    "mitmModuleSystemTip": m67,
     "mitmModules": MessageLookupByLibrary.simpleMessage("Módulos"),
     "mitmNewModule": MessageLookupByLibrary.simpleMessage("Nuevo módulo"),
-    "mitmOldCertificateLeftTip": m64,
-    "mitmOldSystemCertificateLeftTip": m65,
-    "mitmRemoveOldCertificateTip": m66,
+    "mitmOldCertificateLeftTip": m68,
+    "mitmOldSystemCertificateLeftTip": m69,
+    "mitmRemoveOldCertificateTip": m70,
     "mitmRootPendingReboot": MessageLookupByLibrary.simpleMessage(
       "El certificado se aplicará después de reiniciar el dispositivo.",
     ),
@@ -1605,7 +1639,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mitmSkipScriptType": MessageLookupByLibrary.simpleMessage(
       "Este tipo de script no es compatible",
     ),
-    "mitmSkipSection": m67,
+    "mitmSkipSection": m71,
     "mitmSkipSetting": MessageLookupByLibrary.simpleMessage(
       "Este ajuste no es compatible",
     ),
@@ -1633,8 +1667,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "mode": MessageLookupByLibrary.simpleMessage("Modo"),
     "monochromeIcon": MessageLookupByLibrary.simpleMessage("Icono monocromo"),
     "monochromeScheme": MessageLookupByLibrary.simpleMessage("Monocromo"),
-    "monthsAgo": m68,
-    "monthsAgoShort": m69,
+    "monthsAgo": m72,
+    "monthsAgoShort": m73,
     "more": MessageLookupByLibrary.simpleMessage("Más"),
     "name": MessageLookupByLibrary.simpleMessage("Nombre"),
     "nameserverDesc": MessageLookupByLibrary.simpleMessage(
@@ -1647,8 +1681,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Barra inferior",
     ),
     "network": MessageLookupByLibrary.simpleMessage("Red"),
-    "networkAccessDeniedError": m70,
-    "networkBadResponseError": m71,
+    "networkAccessDeniedError": m74,
+    "networkBadResponseError": m75,
     "networkCancelledError": MessageLookupByLibrary.simpleMessage(
       "Se canceló la solicitud",
     ),
@@ -1659,13 +1693,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se pudo resolver la dirección del servidor. Comprueba que la URL sea correcta y que el DNS funcione",
     ),
     "networkName": MessageLookupByLibrary.simpleMessage("Nombre de la red"),
-    "networkNotFoundError": m72,
+    "networkNotFoundError": m76,
     "networkRateLimitedError": MessageLookupByLibrary.simpleMessage(
       "Demasiadas solicitudes (HTTP 429). Espera un momento e inténtalo de nuevo",
     ),
-    "networkRequestFailed": m73,
+    "networkRequestFailed": m77,
     "networkSecret": MessageLookupByLibrary.simpleMessage("Clave de la red"),
-    "networkServerError": m74,
+    "networkServerError": m78,
     "networkSpeed": MessageLookupByLibrary.simpleMessage("Velocidad de red"),
     "networkTakeover": MessageLookupByLibrary.simpleMessage(
       "Control del tráfico",
@@ -1708,9 +1742,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "nullProfileDesc": MessageLookupByLibrary.simpleMessage(
       "Añade un perfil para empezar",
     ),
-    "nullTip": m75,
-    "numberRangeTip": m76,
-    "numberTip": m77,
+    "nullTip": m79,
+    "numberRangeTip": m80,
+    "numberTip": m81,
     "obfs": MessageLookupByLibrary.simpleMessage("Ofuscación"),
     "obfsHost": MessageLookupByLibrary.simpleMessage("Host de ofuscación"),
     "obfsMode": MessageLookupByLibrary.simpleMessage("Modo de ofuscación"),
@@ -1784,7 +1818,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "No se puede acceder a la dirección de suscripción",
     ),
-    "onboardingImported": m78,
+    "onboardingImported": m82,
     "onboardingImporting": MessageLookupByLibrary.simpleMessage(
       "Obteniendo suscripción…",
     ),
@@ -1887,8 +1921,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Introduce un puerto diferente",
     ),
     "portHopping": MessageLookupByLibrary.simpleMessage("Salto de puertos"),
-    "portTip": m79,
-    "portValue": m80,
+    "portTip": m83,
+    "portValue": m84,
     "ports": MessageLookupByLibrary.simpleMessage("Puertos"),
     "preSharedKey": MessageLookupByLibrary.simpleMessage("Clave precompartida"),
     "preferred": MessageLookupByLibrary.simpleMessage("Preferido"),
@@ -1924,8 +1958,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Introduce el intervalo de actualización automática",
         ),
-    "profileDaysLeft": m81,
-    "profileExpiresIn": m82,
+    "profileDaysLeft": m85,
+    "profileExpiresIn": m86,
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "El perfil se ha modificado. ¿Desactivar la actualización automática?",
     ),
@@ -1938,7 +1972,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Se aplica solo a este perfil y tiene prioridad sobre las entradas de sobrescritura de TUN de los ajustes de red.",
     ),
-    "profileUpdatedAt": m83,
+    "profileUpdatedAt": m87,
     "profileUrlInvalidValidationDesc": MessageLookupByLibrary.simpleMessage(
       "Introduce una URL de perfil válida",
     ),
@@ -1955,26 +1989,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocolVersion": MessageLookupByLibrary.simpleMessage(
       "Versión del protocolo",
     ),
-    "providerInUse": m84,
+    "providerInUse": m88,
     "providerUrlTip": MessageLookupByLibrary.simpleMessage(
       "Solo se admiten proveedores remotos",
     ),
     "providers": MessageLookupByLibrary.simpleMessage("Recursos externos"),
     "proxies": MessageLookupByLibrary.simpleMessage("Proxies"),
-    "proxiesCount": m85,
-    "proxiesProfileLabel": m86,
-    "proxiesRemovedTip": m87,
-    "proxiesReplacedTip": m88,
+    "proxiesCount": m89,
+    "proxiesProfileLabel": m90,
+    "proxiesRemovedTip": m91,
+    "proxiesReplacedTip": m92,
     "proxyChains": MessageLookupByLibrary.simpleMessage("Cadena de proxies"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("Grupo de proxies"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage(
       "El grupo de proxies está vacío",
     ),
-    "proxyGroupInUse": m89,
+    "proxyGroupInUse": m93,
     "proxyGroupsAfterStart": MessageLookupByLibrary.simpleMessage(
       "Los grupos aparecen aquí cuando se inicia el núcleo",
     ),
-    "proxyGroupsCount": m90,
+    "proxyGroupsCount": m94,
     "proxyProviders": MessageLookupByLibrary.simpleMessage(
       "Proveedores de proxies",
     ),
@@ -2320,14 +2354,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "La regla debe empezar con un tipo admitido, por ejemplo DOMAIN,example.com,DIRECT",
     ),
     "rules": MessageLookupByLibrary.simpleMessage("Reglas"),
-    "rulesCount": m91,
+    "rulesCount": m95,
     "runTime": MessageLookupByLibrary.simpleMessage("Tiempo de ejecución"),
     "running": MessageLookupByLibrary.simpleMessage("En ejecución"),
     "runtimeConfig": MessageLookupByLibrary.simpleMessage(
       "Configuración de ejecución",
     ),
     "safeMode": MessageLookupByLibrary.simpleMessage("Modo seguro"),
-    "safeModeAppTitle": m92,
+    "safeModeAppTitle": m96,
     "saturation": MessageLookupByLibrary.simpleMessage("Saturación"),
     "save": MessageLookupByLibrary.simpleMessage("Guardar"),
     "saveChanges": MessageLookupByLibrary.simpleMessage(
@@ -2358,9 +2392,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "search": MessageLookupByLibrary.simpleMessage("Buscar"),
     "seconds": MessageLookupByLibrary.simpleMessage("segundos"),
-    "secondsCount": m93,
+    "secondsCount": m97,
     "secretKey": MessageLookupByLibrary.simpleMessage("Clave"),
-    "sectionsInEffect": m94,
+    "sectionsInEffect": m98,
     "select": MessageLookupByLibrary.simpleMessage("Seleccionar"),
     "selectAll": MessageLookupByLibrary.simpleMessage("Seleccionar todo"),
     "selectRuleSet": MessageLookupByLibrary.simpleMessage(
@@ -2416,7 +2450,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Escanea el código con la cámara del teléfono y pega el enlace en la página que se abre. Ambos dispositivos deben estar en la misma red.",
     ),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
-    "serviceAbnormalCount": m95,
+    "serviceAbnormalCount": m99,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
       "Todo disponible",
     ),
@@ -2452,8 +2486,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "settingEntries": MessageLookupByLibrary.simpleMessage("ajustes"),
     "settings": MessageLookupByLibrary.simpleMessage("Ajustes"),
-    "settingsCount": m96,
-    "shareLinkUnreadable": m97,
+    "settingsCount": m100,
+    "shareLinkUnreadable": m101,
     "shareLinksInvalid": MessageLookupByLibrary.simpleMessage(
       "No se pudo leer ningún proxy de los enlaces",
     ),
@@ -2473,7 +2507,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "singleShareLinkOnly": MessageLookupByLibrary.simpleMessage(
       "Introduce aquí un solo enlace; para varios, usa la edición rápida de la lista",
     ),
-    "singleValueTip": m98,
+    "singleValueTip": m102,
     "size": MessageLookupByLibrary.simpleMessage("Tamaño"),
     "skipCertVerify": MessageLookupByLibrary.simpleMessage(
       "Omitir verificación de certificado",
@@ -2599,7 +2633,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficOtherDirect": MessageLookupByLibrary.simpleMessage(
       "Directo (región sin confirmar)",
     ),
-    "trafficPeak": m99,
+    "trafficPeak": m103,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(
       "Ahorrado este mes",
     ),
@@ -2612,10 +2646,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficStatsScope": MessageLookupByLibrary.simpleMessage(
       "Solo este dispositivo, este mes. Se cuenta el tráfico capturado por la aplicación.",
     ),
-    "trafficTotal": m100,
+    "trafficTotal": m104,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Uso de tráfico"),
     "transport": MessageLookupByLibrary.simpleMessage("Transporte"),
-    "transportHeaders": m101,
+    "transportHeaders": m105,
     "trustCertificate": MessageLookupByLibrary.simpleMessage(
       "Confiar en el certificado",
     ),
@@ -2678,7 +2712,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("Reescritura de URL"),
-    "urlTip": m102,
+    "urlTip": m106,
     "useHosts": MessageLookupByLibrary.simpleMessage("Usar hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage(
       "Usar hosts del sistema",
@@ -2687,7 +2721,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "usedTraffic": MessageLookupByLibrary.simpleMessage("Tráfico usado"),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("Usuario"),
-    "validUntil": m103,
+    "validUntil": m107,
     "value": MessageLookupByLibrary.simpleMessage("Valor"),
     "view": MessageLookupByLibrary.simpleMessage("Ver"),
     "viewAll": MessageLookupByLibrary.simpleMessage("Ver todo"),
@@ -2707,8 +2741,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "Escribir en el sistema también ajusta el reloj del sistema; Android lo ignora.",
     ),
-    "yearsAgo": m104,
-    "yearsAgoShort": m105,
+    "yearsAgo": m108,
+    "yearsAgoShort": m109,
     "yes": MessageLookupByLibrary.simpleMessage("Sí"),
     "zhCN": MessageLookupByLibrary.simpleMessage("Chino simplificado"),
   };

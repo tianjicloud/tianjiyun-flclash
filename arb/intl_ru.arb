@@ -1237,5 +1237,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "businessNotConnected": "Не подключено",
+  "businessTapToConnect": "Нажмите, чтобы подключиться",
+  "businessConnectVia": "Трафик пойдёт через «{line}»",
+  "businessVpnPermission": "При первом подключении разрешите VPN",
+  "businessMonthUsed": "Использовано за месяц",
+  "businessAiServices": "ChatGPT · Claude",
+  "businessExpiryNotice": "План истекает {date}. Продлите его, чтобы сохранить линии",
+  "businessSelected": "Выбрано",
+  "businessCurrent": "Текущий",
+  "businessResidentialShort": "Резидентский",
+  "businessCheckedAt": "Проверено в {time}",
+  "@businessCheckedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "businessExpiryDateShort": "{day}.{month}",
+  "@businessExpiryDateShort": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "businessAllLines": "Все линии"
 }

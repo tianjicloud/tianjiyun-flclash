@@ -41,6 +41,7 @@ class DashboardCard extends StatelessWidget {
     this.clipBehavior = Clip.none,
     this.side = BorderSide.none,
     this.radius,
+    this.shadows,
     required this.child,
   });
 
@@ -51,6 +52,7 @@ class DashboardCard extends StatelessWidget {
   /// Overrides the density's card corner where the design gives the surface
   /// its own value.
   final double? radius;
+  final List<BoxShadow>? shadows;
 
   /// Drawn over the content, which may bleed to the card's edge.
   final BorderSide side;
@@ -96,9 +98,11 @@ class DashboardCard extends StatelessWidget {
             ? cardColor.withValues(alpha: density.isDesktop ? 0.62 : 0.66)
             : cardColor,
         shape: shape,
-        shadows: business && context.colorScheme.brightness == Brightness.dark
-            ? const []
-            : DashboardShadows.e1(context),
+        shadows:
+            shadows ??
+            (business && context.colorScheme.brightness == Brightness.dark
+                ? const []
+                : DashboardShadows.e1(context)),
       ),
       foregroundDecoration: border == BorderSide.none
           ? null

@@ -1237,5 +1237,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "businessNotConnected": "未接続",
+  "businessTapToConnect": "タップして接続",
+  "businessConnectVia": "「{line}」経由で接続します",
+  "businessVpnPermission": "初回接続時に VPN の許可が必要です",
+  "businessMonthUsed": "今月の使用量",
+  "businessAiServices": "ChatGPT · Claude",
+  "businessExpiryNotice": "プランは {date} に終了します。更新すると回線を継続できます",
+  "businessSelected": "選択中",
+  "businessCurrent": "現在",
+  "businessResidentialShort": "住宅",
+  "businessCheckedAt": "{time} に確認",
+  "@businessCheckedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "businessExpiryDateShort": "{month}月{day}日",
+  "@businessExpiryDateShort": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "businessAllLines": "すべての回線"
 }

@@ -1237,5 +1237,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "businessNotConnected": "Non connecté",
+  "businessTapToConnect": "Touchez pour vous connecter",
+  "businessConnectVia": "Le trafic passera par « {line} »",
+  "businessVpnPermission": "Autorisez le VPN lors de la première connexion",
+  "businessMonthUsed": "Utilisé ce mois-ci",
+  "businessAiServices": "ChatGPT · Claude",
+  "businessExpiryNotice": "Le forfait expire le {date}. Renouvelez-le pour garder vos lignes",
+  "businessSelected": "Sélectionné",
+  "businessCurrent": "Actuel",
+  "businessResidentialShort": "Résidentiel",
+  "businessCheckedAt": "Vérifié à {time}",
+  "@businessCheckedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "businessExpiryDateShort": "{day}/{month}",
+  "@businessExpiryDateShort": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "businessAllLines": "Toutes les lignes"
 }

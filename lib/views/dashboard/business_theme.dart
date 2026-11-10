@@ -48,6 +48,10 @@ class OrbitPainter extends CustomPainter {
   const OrbitPainter({
     required this.color,
     required this.primary,
+    required this.idleCore,
+    required this.idleStroke,
+    required this.idleShadow,
+    required this.idlePlate,
     required this.focused,
     required this.running,
     this.pulse,
@@ -55,6 +59,10 @@ class OrbitPainter extends CustomPainter {
 
   final Color color;
   final Color primary;
+  final Color idleCore;
+  final Color idleStroke;
+  final Color idleShadow;
+  final Color idlePlate;
   final bool focused;
   final bool running;
   final double? pulse;
@@ -64,13 +72,24 @@ class OrbitPainter extends CustomPainter {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2;
     final tickStart = radius * 0.86;
-    final tickEnd = radius * 0.98;
+    final tickEnd = radius * 0.95;
     final ballRadius = radius * 0.71;
     if (running) {
       canvas.drawCircle(
         center,
         radius * 0.84,
         Paint()..color = primary.withValues(alpha: 0.08),
+      );
+    } else {
+      final plate = Rect.fromCircle(center: center, radius: radius);
+      canvas.drawCircle(
+        center,
+        radius,
+        Paint()
+          ..shader = RadialGradient(
+            colors: [idlePlate, idlePlate.withValues(alpha: 0)],
+            stops: const [0.82, 1],
+          ).createShader(plate),
       );
     }
     if (pulse case final pulse? when pulse < 0.3) {
@@ -86,7 +105,7 @@ class OrbitPainter extends CustomPainter {
     }
     final tick = Paint()
       ..color = color.withValues(alpha: focused ? 0.96 : 0.78)
-      ..strokeWidth = math.max(1.4, radius * 0.025)
+      ..strokeWidth = math.max(1.2, radius * 0.022)
       ..strokeCap = StrokeCap.round;
     for (var i = 0; i < 48; i++) {
       final angle = i * math.pi / 24 - math.pi / 2;
@@ -98,6 +117,15 @@ class OrbitPainter extends CustomPainter {
       );
     }
     final ball = Rect.fromCircle(center: center, radius: ballRadius);
+    if (!running) {
+      canvas.drawCircle(
+        center + Offset(0, radius * 0.06),
+        ballRadius,
+        Paint()
+          ..color = idleShadow
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, radius * 0.09),
+      );
+    }
     if (running) {
       canvas.drawCircle(
         center,
@@ -111,7 +139,7 @@ class OrbitPainter extends CustomPainter {
       center,
       ballRadius,
       Paint()
-        ..color = running ? primary : BusinessPalette.onBlue
+        ..color = running ? primary : idleCore
         ..shader = running
             ? RadialGradient(
                 center: const Alignment(0, -0.44),
@@ -141,11 +169,9 @@ class OrbitPainter extends CustomPainter {
       center,
       ballRadius,
       Paint()
-        ..color = running
-            ? Colors.white.withValues(alpha: 0.16)
-            : const Color(0xFF98A2AD).withValues(alpha: 0.35)
+        ..color = running ? Colors.white.withValues(alpha: 0.16) : idleStroke
         ..style = PaintingStyle.stroke
-        ..strokeWidth = running ? 1 : 1.2,
+        ..strokeWidth = running ? 1 : 0.5,
     );
   }
 
@@ -155,5 +181,9 @@ class OrbitPainter extends CustomPainter {
       focused != oldDelegate.focused ||
       running != oldDelegate.running ||
       primary != oldDelegate.primary ||
+      idleCore != oldDelegate.idleCore ||
+      idleStroke != oldDelegate.idleStroke ||
+      idleShadow != oldDelegate.idleShadow ||
+      idlePlate != oldDelegate.idlePlate ||
       pulse != oldDelegate.pulse;
 }

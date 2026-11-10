@@ -1237,5 +1237,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "businessNotConnected": "Sin conexión",
+  "businessTapToConnect": "Toca para conectar",
+  "businessConnectVia": "El tráfico saldrá por «{line}»",
+  "businessVpnPermission": "Permite el acceso a VPN al conectarte por primera vez",
+  "businessMonthUsed": "Usado este mes",
+  "businessAiServices": "ChatGPT · Claude",
+  "businessExpiryNotice": "El plan vence el {date}. Renueva para mantener tus líneas",
+  "businessSelected": "Seleccionado",
+  "businessCurrent": "Actual",
+  "businessResidentialShort": "Residencial",
+  "businessCheckedAt": "Comprobado a las {time}",
+  "@businessCheckedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "businessExpiryDateShort": "{day}/{month}",
+  "@businessExpiryDateShort": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "businessAllLines": "Todas las líneas"
 }

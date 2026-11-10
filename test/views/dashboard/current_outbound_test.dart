@@ -543,7 +543,7 @@ void main() {
 
       expect(find.text(_ip), findsOneWidget);
       expect(find.text('GB'), findsOneWidget);
-      expect(find.text('Residential'), findsOneWidget);
+      expect(find.text('Residential'), findsWidgets);
       expect(_chip(tester, 'Quality Good').tone, DashboardChipTone.ok);
       expect(find.text('Example Broadband'), findsOneWidget);
       expect(find.text('Status'), findsOneWidget);
@@ -941,7 +941,7 @@ void main() {
           .single;
       expect(painter().color, const Color(0xFF98A2AD));
       expect(tester.widget<Text>(find.text(_ip)).maxLines, 1);
-      expect(find.text('Residential broadband'), findsOneWidget);
+      expect(find.text('Residential'), findsOneWidget);
       final action =
           container.read(setupActionProvider.notifier) as _RecordingSetupAction;
       await tester.tap(find.byTooltip('Connected · Click to disconnect'));
@@ -952,7 +952,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
       expect(action.requests, [false]);
       expect(painter().color, const Color(0xFF98A2AD));
-      expect(painter().pulse, isNotNull);
+      expect(painter().pulse, isNull);
       await tester.tap(find.byTooltip('Start'));
       await tester.pumpAndSettle();
       expect(action.requests, [false, true]);
@@ -1009,9 +1009,8 @@ void main() {
 
       await tester.tap(find.text(_ip));
       await tester.pumpAndSettle();
-      expect(find.text('Residential broadband'), findsOneWidget);
-      expect(find.text('Residential'), findsOneWidget);
-      Navigator.of(tester.element(find.text('Residential'))).pop();
+      expect(find.text('Residential'), findsWidgets);
+      Navigator.of(tester.element(find.text('Residential').last)).pop();
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     });

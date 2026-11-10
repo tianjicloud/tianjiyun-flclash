@@ -217,12 +217,12 @@ void main() {
     final dockBar = find.byKey(const ValueKey('business-navigation-dock-bar'));
     final dockRect = tester.getRect(dockBar);
     expect(dockRect.width, 390);
-    expect(dockRect.height, 58);
+    expect(dockRect.height, 72);
     expect(dockRect.bottom, 844);
     final insetContext = tester.element(
       find.byKey(const ValueKey('bottom-content')),
     );
-    expect(BottomInsetScope.of(insetContext), 58);
+    expect(BottomInsetScope.of(insetContext), 72);
     expect(find.text('Orders'), findsNothing);
     expect(find.text('Tianji Plan'), findsNothing);
 

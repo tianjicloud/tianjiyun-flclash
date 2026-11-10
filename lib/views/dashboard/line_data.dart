@@ -10,6 +10,7 @@ class DashboardLine {
     required this.groupName,
     required this.name,
     required this.displayName,
+    this.countryCode,
     required this.type,
     required this.delay,
     required this.current,
@@ -21,6 +22,7 @@ class DashboardLine {
   final String groupName;
   final String name;
   final String displayName;
+  final String? countryCode;
   final String type;
   final int? delay;
   final bool current;
@@ -77,7 +79,9 @@ List<DashboardLine> dashboardLines(WidgetRef ref, {int limit = 4}) {
   final byName = {for (final group in groups) group.name: group};
   final delays = ref.watch(delaysAtLastTestBatchProvider);
   final testUrl = ref.watch(realTestUrlProvider());
-  final host = _hostOf(ref, groups);
+  final host = policy.active
+      ? groups.getGroup(tianjiResidentialRootName) ?? _hostOf(ref, groups)
+      : _hostOf(ref, groups);
   if (host == null) return const [];
   final selected = ref.watch(selectedProxyNameProvider(host.name));
   final lines = <DashboardLine>[];
@@ -100,11 +104,14 @@ List<DashboardLine> dashboardLines(WidgetRef ref, {int limit = 4}) {
         residentialGroup || policy.choices.contains(member.name);
     final ownRate = _rateOf(member.name);
     final parsed = ownRate ?? _rateOf(resolved);
+    final name = ownRate?.name ?? member.name;
+    final countryCode = _countryCodeOf(name);
     lines.add(
       DashboardLine(
         groupName: host.name,
         name: member.name,
-        displayName: ownRate?.name ?? member.name,
+        displayName: _displayNameOf(name),
+        countryCode: countryCode,
         type: type,
         delay: delays[testUrl]?[resolved],
         residential: residential,
@@ -150,10 +157,12 @@ DashboardLine? currentDashboardLine(WidgetRef ref) {
         if (type.isEmpty) return null;
         final ownRate = _rateOf(member.name);
         final parsed = ownRate ?? _rateOf(resolved);
+        final name = ownRate?.name ?? member.name;
         return DashboardLine(
           groupName: group.name,
           name: member.name,
-          displayName: ownRate?.name ?? member.name,
+          displayName: _displayNameOf(name),
+          countryCode: _countryCodeOf(name),
           type: type,
           delay: delays[testUrl]?[resolved],
           current: true,
@@ -176,10 +185,12 @@ DashboardLine? currentDashboardLine(WidgetRef ref) {
       if (type.isEmpty) return null;
       final ownRate = _rateOf(member.name);
       final parsed = ownRate ?? _rateOf(resolved);
+      final name = ownRate?.name ?? member.name;
       return DashboardLine(
         groupName: group.name,
         name: member.name,
-        displayName: ownRate?.name ?? member.name,
+        displayName: _displayNameOf(name),
+        countryCode: _countryCodeOf(name),
         type: type,
         delay: delays[testUrl]?[resolved],
         current: true,
@@ -189,3 +200,9 @@ DashboardLine? currentDashboardLine(WidgetRef ref) {
   }
   return null;
 }
+
+String? _countryCodeOf(String name) =>
+    RegExp(r'^([A-Z]{2})\s*[·|—-]\s*').firstMatch(name)?.group(1);
+
+String _displayNameOf(String name) =>
+    name.replaceFirst(RegExp(r'^[A-Z]{2}\s*[·|—-]\s*'), '');

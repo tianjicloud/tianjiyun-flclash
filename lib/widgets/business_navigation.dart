@@ -20,7 +20,7 @@ const _compactSidebarWidth = 56.0;
 const _sidebarRowShape = RoundedSuperellipseBorder(
   borderRadius: BorderRadius.all(Radius.circular(10)),
 );
-const _dockHeight = 58.0;
+const _dockHeight = 72.0;
 
 String _navigationLabel(
   BuildContext context,
@@ -487,7 +487,9 @@ class BusinessNavigationDock extends StatelessWidget {
     return SizedBox(
       height: _dockHeight + bottom,
       child: Surface(
-        color: context.colorScheme.chromeSurface,
+        color: context.colorScheme.brightness == Brightness.light
+            ? BusinessPalette.dockLight
+            : BusinessPalette.dockDark,
         shape: Border(top: Divider.createBorderSide(context)),
         child: Padding(
           padding: EdgeInsets.only(bottom: bottom),
@@ -529,7 +531,7 @@ class _BusinessDockItem extends StatelessWidget {
     final dark = context.colorScheme.brightness == Brightness.dark;
     final color = selected
         ? (dark
-              ? BusinessPalette.sidebarDarkSelected
+              ? BusinessPalette.sidebarDarkSelectedAccent
               : context.colorScheme.onSurface)
         : (dark
               ? BusinessPalette.sidebarDarkMuted
@@ -551,16 +553,42 @@ class _BusinessDockItem extends StatelessWidget {
                 IconTheme.merge(
                   data: IconThemeData(
                     size: 20,
-                    color: selected ? context.colorScheme.primary : color,
+                    color: selected
+                        ? (dark
+                              ? BusinessPalette.sidebarDarkSelectedAccent
+                              : context.colorScheme.primary)
+                        : color,
                   ),
-                  child: AnimatedGlyph(glyph: item.glyph, filled: selected),
+                  child: Container(
+                    width: 56,
+                    height: 30,
+                    decoration: ShapeDecoration(
+                      color: selected
+                          ? dark
+                                ? BusinessPalette.sidebarDarkSelectedBackground
+                                : BusinessPalette.residentialChip
+                          : Colors.transparent,
+                      shape: AppShape.full,
+                    ),
+                    child: Center(
+                      child: AnimatedGlyph(
+                        glyph: item.label == PageLabel.tools
+                            ? AppGlyphs.sliders
+                            : item.glyph,
+                        filled: selected,
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 3),
+                const SizedBox(height: 4),
                 Text(
                   _navigationLabel(context, item.label, mobile: true),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: BusinessText.dockLabel(context).copyWith(color: color),
+                  style: BusinessText.dockLabel(
+                    context,
+                    selected: selected,
+                  ).copyWith(color: color),
                 ),
               ],
             ),

@@ -65,15 +65,10 @@ class DashboardColors {
           ? BusinessPalette.connected
           : colorScheme.success,
       okContainer: business
-          ? Color.alphaBlend(
-              BusinessPalette.connected.withValues(alpha: 0.10),
-              card,
-            )
+          ? BusinessPalette.connectedContainerFor(colorScheme.brightness)
           : colorScheme.successContainer,
       onOkContainer: business
-          ? businessDark
-                ? const Color(0xFF34E0B0)
-                : BusinessPalette.connectedText
+          ? BusinessPalette.connectedForegroundFor(colorScheme.brightness)
           : colorScheme.onSuccessContainer,
       brandContainer: business
           ? Color.alphaBlend(
@@ -154,6 +149,21 @@ abstract final class DashboardShadows {
     blurRadius: _blur(cssBlur),
     spreadRadius: spread,
   );
+
+  static List<BoxShadow> accentGlow({required Color color}) => [
+    BoxShadow(
+      color: color.withValues(alpha: 0.24),
+      offset: const Offset(0, 8),
+      blurRadius: _blur(28),
+      spreadRadius: -4,
+    ),
+    BoxShadow(
+      color: color.withValues(alpha: 0.16),
+      offset: const Offset(0, 3),
+      blurRadius: _blur(16),
+      spreadRadius: -2,
+    ),
+  ];
 
   static double _blur(double cssBlur) =>
       cssBlur <= 1 ? 0 : (cssBlur / 2 - 0.5) / 0.57735;

@@ -359,7 +359,7 @@ class RemainingTrafficCard extends ConsumerWidget {
     return DashboardCard(
       semanticLabel: strings.mobileRemainingTraffic,
       radius: BusinessRadius.metricMobile,
-      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+      padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 14, 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -413,29 +413,30 @@ class MobileUsageCard extends ConsumerWidget {
     final used = usage.used.traffic;
     return DashboardCard(
       semanticLabel: strings.trafficStats,
-      radius: BusinessRadius.metricMobile,
-      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+      radius: BusinessPalette.cardRadius,
+      padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 14, 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 8,
+        spacing: 6,
         children: [
-          DashboardCardHeader(
-            glyph: AppGlyphs.dataUsage,
-            title: strings.trafficStats,
+          Text(
+            strings.businessMonthUsed,
+            style: BusinessText.mobileCardHeading(
+              context,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
           Text.rich(
             TextSpan(
               children: [
                 TextSpan(
                   text: used.value,
-                  style: BusinessText.dataBig(context, mobile: true),
+                  style: BusinessText.mobileUsageValue(context),
                 ),
                 TextSpan(
-                  text: ' ${used.unit} / ${dashboardTraffic(usage.total)}',
-                  style: BusinessText.dataBigUnit(
+                  text: ' / ${dashboardTraffic(usage.total)}',
+                  style: BusinessText.mobileUsageUnit(
                     context,
-                    mobile: true,
                   ).copyWith(color: context.colorScheme.onSurfaceVariant),
                 ),
               ],

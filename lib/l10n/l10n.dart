@@ -10506,6 +10506,131 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Not connected`
+  String get businessNotConnected {
+    return Intl.message(
+      'Not connected',
+      name: 'businessNotConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap to connect`
+  String get businessTapToConnect {
+    return Intl.message(
+      'Tap to connect',
+      name: 'businessTapToConnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic will exit through “{line}”`
+  String businessConnectVia(Object line) {
+    return Intl.message(
+      'Traffic will exit through “$line”',
+      name: 'businessConnectVia',
+      desc: '',
+      args: [line],
+    );
+  }
+
+  /// `Allow VPN permission on first connection`
+  String get businessVpnPermission {
+    return Intl.message(
+      'Allow VPN permission on first connection',
+      name: 'businessVpnPermission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used this month`
+  String get businessMonthUsed {
+    return Intl.message(
+      'Used this month',
+      name: 'businessMonthUsed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ChatGPT · Claude`
+  String get businessAiServices {
+    return Intl.message(
+      'ChatGPT · Claude',
+      name: 'businessAiServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plan expires {date}; renew to keep your lines active`
+  String businessExpiryNotice(Object date) {
+    return Intl.message(
+      'Plan expires $date; renew to keep your lines active',
+      name: 'businessExpiryNotice',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Selected`
+  String get businessSelected {
+    return Intl.message(
+      'Selected',
+      name: 'businessSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current`
+  String get businessCurrent {
+    return Intl.message('Current', name: 'businessCurrent', desc: '', args: []);
+  }
+
+  /// `Residential`
+  String get businessResidentialShort {
+    return Intl.message(
+      'Residential',
+      name: 'businessResidentialShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checked at {time}`
+  String businessCheckedAt(String time) {
+    return Intl.message(
+      'Checked at $time',
+      name: 'businessCheckedAt',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `{month}/{day}`
+  String businessExpiryDateShort(int month, int day) {
+    return Intl.message(
+      '$month/$day',
+      name: 'businessExpiryDateShort',
+      desc: '',
+      args: [month, day],
+    );
+  }
+
+  /// `All lines`
+  String get businessAllLines {
+    return Intl.message(
+      'All lines',
+      name: 'businessAllLines',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
