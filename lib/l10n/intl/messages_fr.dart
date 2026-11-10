@@ -983,14 +983,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Le mode développeur est activé.",
     ),
-    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Échec"),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Non réussi"),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Réussi"),
-    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage(
-      "Lancer le diagnostic",
-    ),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Relancer"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Vérification de la sortie du chemin par défaut",
     ),
+    "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Démarrer"),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "Diagnostic rapide",
     ),
@@ -998,7 +997,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Les contrôles de sortie DNS, WebRTC du navigateur et NTP ne sont pas disponibles.",
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
-      "Non vérifié",
+      "Non vérifiable",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Proxy de connexion"),
     "dialerProxyLoopStopped": m37,
@@ -1196,6 +1195,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportFile": MessageLookupByLibrary.simpleMessage("Exporter le fichier"),
     "exportHar": MessageLookupByLibrary.simpleMessage("Exporter en HAR"),
     "exportLogs": MessageLookupByLibrary.simpleMessage("Exporter les journaux"),
+    "exportShort": MessageLookupByLibrary.simpleMessage("Exporter"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage(
       "Exportation réussie",
     ),
@@ -1444,9 +1444,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificat installé",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Ce système masque la liste des apps installées tant que l’autorisation n’est pas accordée. Accordez-la pour configurer le proxy par app.",
     ),
@@ -1613,6 +1614,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Autorisation de localisation requise",
     ),
     "log": MessageLookupByLibrary.simpleMessage("Journal"),
+    "logFilterError": MessageLookupByLibrary.simpleMessage("Erreur"),
+    "logFilterInfo": MessageLookupByLibrary.simpleMessage("Info"),
+    "logFilterWarning": MessageLookupByLibrary.simpleMessage("Avertissement"),
     "logLevel": MessageLookupByLibrary.simpleMessage(
       "Niveau de journalisation",
     ),
@@ -1624,6 +1628,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsAndDiagnostics": MessageLookupByLibrary.simpleMessage(
       "Journaux et diagnostic",
     ),
+    "logsRunning": MessageLookupByLibrary.simpleMessage("Journaux d’exécution"),
     "logsTest": MessageLookupByLibrary.simpleMessage("Test des journaux"),
     "loopback": MessageLookupByLibrary.simpleMessage(
       "Exemption de bouclage UWP",
@@ -1971,9 +1976,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "L’importation a échoué",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Impossible d’atteindre l’adresse d’abonnement",
     ),

@@ -197,6 +197,22 @@ abstract final class BusinessText {
   static TextStyle metaLabel(BuildContext context) =>
       AppTextStyle.custom(context, size: 12, leading: 16);
 
+  static TextStyle logTimestamp(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 12,
+    leading: 18,
+  ).copyWith(color: context.colorScheme.onSurfaceVariant).toJetBrainsMono;
+
+  static TextStyle logLevel(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 11,
+    leading: 18,
+    weight: FontWeight.w700,
+  ).toJetBrainsMono;
+
+  static TextStyle logBody(BuildContext context) =>
+      AppTextStyle.custom(context, size: 12.5, leading: 18).toJetBrainsMono;
+
   static TextStyle metaValue(BuildContext context) => AppTextStyle.custom(
     context,
     size: 15,

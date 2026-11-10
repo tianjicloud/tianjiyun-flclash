@@ -906,14 +906,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Developer mode is enabled.",
     ),
-    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Failed"),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Not passed"),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Passed"),
-    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage(
-      "Run diagnostics",
-    ),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Run again"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Default route exit verification",
     ),
+    "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Start"),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "One-click diagnostics",
     ),
@@ -921,7 +920,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "DNS exit, browser WebRTC and NTP checks are not available.",
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
-      "Not checked",
+      "Could not check",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Dialer proxy"),
     "dialerProxyLoopStopped": m37,
@@ -1111,6 +1110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportFile": MessageLookupByLibrary.simpleMessage("Export file"),
     "exportHar": MessageLookupByLibrary.simpleMessage("Export HAR"),
     "exportLogs": MessageLookupByLibrary.simpleMessage("Export logs"),
+    "exportShort": MessageLookupByLibrary.simpleMessage("Export"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage("Export successful"),
     "extend": MessageLookupByLibrary.simpleMessage("Extend"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Extend mode"),
@@ -1337,9 +1337,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificate installed",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -1494,6 +1495,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Location permission required",
     ),
     "log": MessageLookupByLibrary.simpleMessage("Log"),
+    "logFilterError": MessageLookupByLibrary.simpleMessage("Error"),
+    "logFilterInfo": MessageLookupByLibrary.simpleMessage("Info"),
+    "logFilterWarning": MessageLookupByLibrary.simpleMessage("Warning"),
     "logLevel": MessageLookupByLibrary.simpleMessage("Log level"),
     "logcat": MessageLookupByLibrary.simpleMessage("Logcat"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
@@ -1503,6 +1507,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsAndDiagnostics": MessageLookupByLibrary.simpleMessage(
       "Logs and diagnostics",
     ),
+    "logsRunning": MessageLookupByLibrary.simpleMessage("Runtime logs"),
     "logsTest": MessageLookupByLibrary.simpleMessage("Logs test"),
     "loopback": MessageLookupByLibrary.simpleMessage("UWP loopback exemption"),
     "loose": MessageLookupByLibrary.simpleMessage("Loose"),
@@ -1830,9 +1835,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Import failed",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Can’t reach the subscription address",
     ),

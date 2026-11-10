@@ -970,14 +970,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "El modo desarrollador está activado.",
     ),
-    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Fallido"),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("No superado"),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Correcto"),
-    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage(
-      "Ejecutar diagnóstico",
-    ),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Repetir"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Verificación de salida de la ruta predeterminada",
     ),
+    "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Iniciar"),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "Diagnóstico rápido",
     ),
@@ -985,7 +984,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "No están disponibles las comprobaciones de salida DNS, WebRTC del navegador y NTP.",
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
-      "Sin comprobar",
+      "No se pudo comprobar",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Proxy de marcación"),
     "dialerProxyLoopStopped": m37,
@@ -1189,6 +1188,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportFile": MessageLookupByLibrary.simpleMessage("Exportar archivo"),
     "exportHar": MessageLookupByLibrary.simpleMessage("Exportar HAR"),
     "exportLogs": MessageLookupByLibrary.simpleMessage("Exportar registros"),
+    "exportShort": MessageLookupByLibrary.simpleMessage("Exportar"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage(
       "Exportación completada",
     ),
@@ -1431,9 +1431,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificado instalado",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Este sistema oculta la lista de apps instaladas hasta que se concede el permiso. Autorízalo para configurar el proxy por app.",
     ),
@@ -1600,6 +1601,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Se requiere permiso de ubicación",
     ),
     "log": MessageLookupByLibrary.simpleMessage("Registro"),
+    "logFilterError": MessageLookupByLibrary.simpleMessage("Error"),
+    "logFilterInfo": MessageLookupByLibrary.simpleMessage("Información"),
+    "logFilterWarning": MessageLookupByLibrary.simpleMessage("Advertencia"),
     "logLevel": MessageLookupByLibrary.simpleMessage("Nivel de registro"),
     "logcat": MessageLookupByLibrary.simpleMessage("Logcat"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
@@ -1608,6 +1612,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logs": MessageLookupByLibrary.simpleMessage("Registros"),
     "logsAndDiagnostics": MessageLookupByLibrary.simpleMessage(
       "Registros y diagnóstico",
+    ),
+    "logsRunning": MessageLookupByLibrary.simpleMessage(
+      "Registros de ejecución",
     ),
     "logsTest": MessageLookupByLibrary.simpleMessage("Prueba de registros"),
     "loopback": MessageLookupByLibrary.simpleMessage(
@@ -1964,9 +1971,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "No se pudo importar",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "No se puede acceder a la dirección de suscripción",
     ),

@@ -10,6 +10,9 @@ import 'package:fl_clash/providers/selection_check.dart';
 import 'package:fl_clash/providers/selection_verification.dart';
 import 'package:fl_clash/providers/service_status.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,6 +49,7 @@ class DiagnosticsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = _isLoading(ref);
+    final hasResult = _hasDiagnosticResult(ref);
     return Scaffold(
       title: context.appLocalizations.diagnosticsTitle,
       body: Column(
@@ -71,7 +75,11 @@ class DiagnosticsView extends ConsumerWidget {
                 spacing: 8,
                 children: [
                   if (isLoading) const ActivityIndicator(),
-                  Text(context.appLocalizations.diagnosticsRunAgain),
+                  Text(
+                    hasResult
+                        ? context.appLocalizations.diagnosticsRunAgain
+                        : context.appLocalizations.diagnosticsStart,
+                  ),
                 ],
               ),
             ),
@@ -126,6 +134,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
     final widget = this.widget;
     final strings = context.appLocalizations;
     final isLoading = widget.isLoading || _isLoading(ref);
+    final hasResult = _hasDiagnosticResult(ref);
     final starting = ref.watch(isStartProvider);
     final active = starting && !ref.watch(suspendProvider);
     final coreStatus = ref.watch(coreStatusProvider);
@@ -153,7 +162,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
         detail: switch ((active, coreStatus)) {
           (true, CoreStatus.connected) => strings.connected,
           (true, CoreStatus.disconnected) => strings.disconnected,
-          _ => strings.servicePending,
+          _ => null,
         },
       ),
       _DiagnosticCheck(
@@ -168,9 +177,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
         result: active
             ? _selectionResult(selection)
             : DiagnosticResult.unverified,
-        detail: active
-            ? _selectionDetail(strings, selection)
-            : strings.servicePending,
+        detail: active ? _selectionDetail(strings, selection) : null,
       ),
       _DiagnosticCheck(
         title: strings.outboundIp,
@@ -179,7 +186,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
             ? outbound.value?.ip
             : outboundResult == DiagnosticResult.failed
             ? strings.serviceFailed
-            : strings.servicePending,
+            : null,
       ),
       for (final target in _diagnosticServices)
         _serviceCheck(
@@ -199,7 +206,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
     final unverified = checks.length - passed - failed;
     return Card(
       radius: AppCorner.xl,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -208,24 +215,20 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
               Expanded(
                 child: Text(
                   strings.diagnosticsTitle,
-                  style: AppTextStyle.title3.of(context, emphasized: true),
+                  style: BusinessText.cardTitle(context),
                 ),
               ),
               if (widget.showRunButton)
-                FilledButton(
+                BusinessPrimaryButton(
+                  label: hasResult
+                      ? strings.diagnosticsRunAgain
+                      : strings.diagnosticsStart,
+                  width: 122,
                   onPressed: isLoading ? null : widget.onRun,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 8,
-                    children: [
-                      if (isLoading) const ActivityIndicator(),
-                      Text(strings.diagnosticsRunAgain),
-                    ],
-                  ),
                 ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Row(
             spacing: 8,
             children: [
@@ -252,15 +255,8 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           for (final check in checks) _DiagnosticRow(check: check),
-          const SizedBox(height: 12),
-          Text(
-            strings.diagnosticsUnavailableNotice,
-            style: AppTextStyle.footnote
-                .of(context)
-                .copyWith(color: context.colorScheme.onSurfaceVariant),
-          ),
         ],
       ),
     );
@@ -271,6 +267,15 @@ bool _isLoading(WidgetRef ref) {
   final services = ref.watch(serviceStatusProvider);
   return _diagnosticServices.any(services.isLoading) ||
       ref.watch(outboundIpProbeProvider).isLoading(routedOutbound);
+}
+
+bool _hasDiagnosticResult(WidgetRef ref) {
+  final services = ref.watch(serviceStatusProvider);
+  final outbound = ref.watch(outboundIpProbeProvider);
+  return _diagnosticServices.any(
+        (target) => services.entryOf(target).phase != ProbePhase.empty,
+      ) ||
+      outbound.entryOf(routedOutbound).phase != ProbePhase.empty;
 }
 
 _DiagnosticCheck _serviceCheck(
@@ -291,14 +296,14 @@ _DiagnosticCheck _serviceCheck(
   final detail = result == DiagnosticResult.failed && !fresh
       ? strings.serviceFailed
       : check == null
-      ? strings.servicePending
+      ? null
       : _serviceStatusLabel(strings, check.status);
   final delay = check?.delay;
   return _DiagnosticCheck(
     title: target.label,
     result: result,
     detail: !fresh && result != DiagnosticResult.failed
-        ? strings.servicePending
+        ? detail
         : delay == null
         ? detail
         : '$detail · $delay ms',
@@ -413,15 +418,13 @@ class _DiagnosticCount extends StatelessWidget {
         shape: AppShape.md,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '$value',
-              style: AppTextStyle.title3
-                  .of(context, emphasized: true)
-                  .copyWith(color: color),
+              style: BusinessText.mobileMetric(context).copyWith(color: color),
             ),
             Text(
               label,
@@ -456,7 +459,7 @@ class _DiagnosticRow extends StatelessWidget {
       DiagnosticResult.unverified => strings.diagnosticsUnverified,
     };
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
@@ -472,25 +475,16 @@ class _DiagnosticRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(check.title, style: AppTextStyle.body.of(context)),
-                if (check.detail != null)
-                  Text(
-                    check.detail!,
-                    style: AppTextStyle.footnote
-                        .of(context)
-                        .copyWith(color: context.colorScheme.onSurfaceVariant),
-                  ),
-              ],
-            ),
+            child: Text(check.title, style: BusinessText.toggleTitle(context)),
           ),
           Text(
-            status,
-            style: AppTextStyle.footnote
-                .of(context, emphasized: true)
-                .copyWith(color: color),
+            check.result == DiagnosticResult.unverified &&
+                    check.detail != null &&
+                    check.detail != strings.servicePending &&
+                    check.detail != status
+                ? '${strings.diagnosticsUnverified}（${check.detail}）'
+                : status,
+            style: BusinessText.metaLabel(context).copyWith(color: color),
           ),
         ],
       ),

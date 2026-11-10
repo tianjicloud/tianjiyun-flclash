@@ -945,14 +945,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Режим разработчика включён.",
     ),
-    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Ошибка"),
+    "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Не пройдено"),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Пройдено"),
-    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage(
-      "Запустить диагностику",
-    ),
+    "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Повторить"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Проверка выхода маршрута по умолчанию",
     ),
+    "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Начать"),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "Быстрая диагностика",
     ),
@@ -960,7 +959,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Проверки выхода DNS, WebRTC браузера и NTP недоступны.",
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
-      "Не проверено",
+      "Не удалось проверить",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage(
       "Прокси для подключения",
@@ -1162,6 +1161,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportFile": MessageLookupByLibrary.simpleMessage("Экспорт файла"),
     "exportHar": MessageLookupByLibrary.simpleMessage("Экспорт HAR"),
     "exportLogs": MessageLookupByLibrary.simpleMessage("Экспорт логов"),
+    "exportShort": MessageLookupByLibrary.simpleMessage("Экспорт"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage("Экспорт выполнен"),
     "extend": MessageLookupByLibrary.simpleMessage("Расширение"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Режим расширения"),
@@ -1396,9 +1396,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Сертификат установлен",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -1557,6 +1558,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Требуется разрешение на геолокацию",
     ),
     "log": MessageLookupByLibrary.simpleMessage("Лог"),
+    "logFilterError": MessageLookupByLibrary.simpleMessage("Ошибки"),
+    "logFilterInfo": MessageLookupByLibrary.simpleMessage("Информация"),
+    "logFilterWarning": MessageLookupByLibrary.simpleMessage("Предупреждения"),
     "logLevel": MessageLookupByLibrary.simpleMessage("Уровень логов"),
     "logcat": MessageLookupByLibrary.simpleMessage("Захват логов"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
@@ -1566,6 +1570,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsAndDiagnostics": MessageLookupByLibrary.simpleMessage(
       "Логи и диагностика",
     ),
+    "logsRunning": MessageLookupByLibrary.simpleMessage("Журнал работы"),
     "logsTest": MessageLookupByLibrary.simpleMessage("Тест логов"),
     "loopback": MessageLookupByLibrary.simpleMessage(
       "Снятие ограничения loopback для UWP",
@@ -1917,9 +1922,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Не удалось импортировать",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Не удаётся подключиться к адресу подписки",
     ),

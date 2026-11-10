@@ -130,7 +130,9 @@ void main() {
     expect(hintFinder(), findsNothing);
   });
 
-  testWidgets('a one-line log is only as tall as its content', (tester) async {
+  testWidgets('a one-line log stays compact and shows its payload', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const TestApp(
         child: HostScaffold(
@@ -146,10 +148,8 @@ void main() {
     );
 
     final item = tester.getRect(find.byType(LogItem));
-    final header = tester.getRect(find.byType(RecordHeader));
-    final body = tester.getRect(find.byType(SelectableText));
-    expect(header.top - item.top, 10);
-    expect(item.bottom - body.bottom, 12);
+    expect(item.height, 34);
+    expect(find.text('short'), findsOneWidget);
   });
 
   testWidgets('tapping the level reports it for filtering', (tester) async {
@@ -172,7 +172,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('warning'));
+    await tester.tap(find.text('WARN'));
 
     expect(clicked, const RecordFilter(RecordFacetKind.level, 'warning'));
   });

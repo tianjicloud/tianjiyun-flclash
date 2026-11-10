@@ -2721,6 +2721,11 @@ class AppLocalizations {
     return Intl.message('Export logs', name: 'exportLogs', desc: '', args: []);
   }
 
+  /// `Export`
+  String get exportShort {
+    return Intl.message('Export', name: 'exportShort', desc: '', args: []);
+  }
+
   /// `Export successful`
   String get exportSuccess {
     return Intl.message(
@@ -6144,6 +6149,36 @@ class AppLocalizations {
     return Intl.message('DNS queries', name: 'dnsQueries', desc: '', args: []);
   }
 
+  /// `Runtime logs`
+  String get logsRunning {
+    return Intl.message(
+      'Runtime logs',
+      name: 'logsRunning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Info`
+  String get logFilterInfo {
+    return Intl.message('Info', name: 'logFilterInfo', desc: '', args: []);
+  }
+
+  /// `Warning`
+  String get logFilterWarning {
+    return Intl.message(
+      'Warning',
+      name: 'logFilterWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get logFilterError {
+    return Intl.message('Error', name: 'logFilterError', desc: '', args: []);
+  }
+
   /// `Record type`
   String get recordType {
     return Intl.message('Record type', name: 'recordType', desc: '', args: []);
@@ -7678,8 +7713,7 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one:
-          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -10408,14 +10442,19 @@ class AppLocalizations {
     );
   }
 
-  /// `Run diagnostics`
+  /// `Run again`
   String get diagnosticsRunAgain {
     return Intl.message(
-      'Run diagnostics',
+      'Run again',
       name: 'diagnosticsRunAgain',
       desc: '',
       args: [],
     );
+  }
+
+  /// `Start`
+  String get diagnosticsStart {
+    return Intl.message('Start', name: 'diagnosticsStart', desc: '', args: []);
   }
 
   /// `Passed`
@@ -10428,20 +10467,20 @@ class AppLocalizations {
     );
   }
 
-  /// `Failed`
+  /// `Not passed`
   String get diagnosticsFailed {
     return Intl.message(
-      'Failed',
+      'Not passed',
       name: 'diagnosticsFailed',
       desc: '',
       args: [],
     );
   }
 
-  /// `Not checked`
+  /// `Could not check`
   String get diagnosticsUnverified {
     return Intl.message(
-      'Not checked',
+      'Could not check',
       name: 'diagnosticsUnverified',
       desc: '',
       args: [],

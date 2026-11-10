@@ -122,7 +122,7 @@ void main() {
     );
   });
 
-  testWidgets('shows real checks and marks unsupported checks unavailable', (
+  testWidgets('shows real checks without unsupported-check notices', (
     tester,
   ) async {
     final container = ProviderContainer(
@@ -141,8 +141,8 @@ void main() {
     expect(find.text('Default route exit verification'), findsOneWidget);
     expect(
       find.text('DNS exit, browser WebRTC and NTP checks are not available.'),
-      findsOneWidget,
+      findsNothing,
     );
-    expect(find.text('Run diagnostics'), findsOneWidget);
+    expect(find.text('Start'), findsOneWidget);
   });
 }

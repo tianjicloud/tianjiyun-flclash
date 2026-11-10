@@ -5,8 +5,11 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
-import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/views/diagnostics.dart';
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
 import 'package:fl_clash/views/dns_queries.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -48,12 +51,23 @@ class LogsView extends ConsumerStatefulWidget {
 
 class _LogsViewState extends ConsumerState<LogsView>
     with RouteMotionHoldMixin<LogsView> {
+  var _showDns = false;
   final _listController = LogListController();
   final _filters = RecordFilterController<Log>(facets: logFacets);
   late final ScrollController _scrollController;
   late final _physics = FollowEndScrollPhysics(
     isFollowing: () => _listController.value.autoScrollToEnd,
   );
+
+  LogLevel? get _selectedLevel {
+    for (final filter in _filters.filters) {
+      if (filter.kind != RecordFacetKind.level) continue;
+      for (final level in LogLevel.values) {
+        if (filter.value == level.name) return level;
+      }
+    }
+    return null;
+  }
 
   @override
   void initState() {
@@ -66,16 +80,6 @@ class _LogsViewState extends ConsumerState<LogsView>
     ref.listenManual(logsProvider.select((state) => state.revision), (_, _) {
       updateLogsThrottler();
     });
-  }
-
-  List<IconButtonData> _buildActions() {
-    return [
-      IconButtonData(
-        glyph: AppGlyphs.export,
-        tooltip: context.appLocalizations.exportLogs,
-        onPressed: _handleExport,
-      ),
-    ];
   }
 
   @override
@@ -126,8 +130,7 @@ class _LogsViewState extends ConsumerState<LogsView>
       builder: (context, body) {
         final pinned = !ViewScope.isMobileOf(context);
         return Scaffold(
-          iconActions: _buildActions(),
-          keywords: _filters.keywordsOf(pinned: pinned),
+          keywords: pinned ? null : _filters.keywordsOf(pinned: false),
           menuItems: _filters.menuItems(context, pinned: pinned),
           searchState: AppBarSearchState(onSearch: _listController.search),
           title: context.appLocalizations.logsAndDiagnostics,
@@ -158,24 +161,26 @@ class _LogsViewState extends ConsumerState<LogsView>
             if (!system.isDesktop || constraints.maxWidth < 1000) {
               return feed;
             }
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 14,
-              children: [
-                SizedBox(
-                  width: 430,
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(
-                      top: context.contentTopPadding,
-                      bottom: 16 + context.bottomInset,
-                    ),
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                28,
+                context.contentTopPadding,
+                28,
+                24 + context.bottomInset,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 14,
+                children: [
+                  SizedBox(
+                    width: 430,
                     child: DiagnosticsPanel(
                       onRun: () => refreshDiagnostics(ref),
                     ),
                   ),
-                ),
-                Expanded(child: _logCard(context, feed)),
-              ],
+                  Expanded(child: _logCard(context, feed)),
+                ],
+              ),
             );
           },
         );
@@ -185,46 +190,89 @@ class _LogsViewState extends ConsumerState<LogsView>
 
   Widget _logCard(BuildContext context, Widget feed) {
     final appLocalizations = context.appLocalizations;
-    return Padding(
-      padding: EdgeInsets.only(
-        top: context.contentTopPadding,
-        bottom: 16 + context.bottomInset,
-      ),
-      child: Card(
-        radius: AppCorner.xl,
-        padding: EdgeInsets.zero,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 12, 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      appLocalizations.logs,
-                      style: AppTextStyle.subheadline.of(context),
+    return Card(
+      radius: AppCorner.xl,
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 10, 12, 10),
+            child: Row(
+              children: [
+                BusinessSegmented<bool>(
+                  height: 30,
+                  items: [
+                    BusinessSegment(
+                      value: false,
+                      label: appLocalizations.logsRunning,
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
+                    BusinessSegment(
+                      value: true,
+                      label: appLocalizations.dnsQueries,
+                    ),
+                  ],
+                  selected: _showDns,
+                  onSelected: (value) {
+                    if (value) {
                       BaseNavigator.push(context, const DnsQueriesView());
-                    },
-                    child: Text(appLocalizations.dnsQueries),
-                  ),
-                ],
-              ),
+                    }
+                    setState(() => _showDns = value);
+                  },
+                ),
+                const Spacer(),
+                BusinessSegmented<LogLevel?>(
+                  height: 30,
+                  items: [
+                    BusinessSegment(value: null, label: appLocalizations.all),
+                    BusinessSegment(
+                      value: LogLevel.info,
+                      label: appLocalizations.logFilterInfo,
+                    ),
+                    BusinessSegment(
+                      value: LogLevel.warning,
+                      label: appLocalizations.logFilterWarning,
+                    ),
+                    BusinessSegment(
+                      value: LogLevel.error,
+                      label: appLocalizations.logFilterError,
+                    ),
+                  ],
+                  selected: _selectedLevel,
+                  onSelected: (level) {
+                    for (final item in LogLevel.values) {
+                      _filters.remove(
+                        RecordFilter(RecordFacetKind.level, item.name),
+                      );
+                    }
+                    if (level != null) {
+                      _filters.add(
+                        RecordFilter(RecordFacetKind.level, level.name),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(width: 4),
+                BusinessSecondaryButton(
+                  label: appLocalizations.exportShort,
+                  width: 62,
+                  height: 30,
+                  onPressed: _handleExport,
+                ),
+              ],
             ),
-            const Divider(height: 1),
-            Expanded(child: feed),
-          ],
-        ),
+          ),
+          const Divider(height: 1),
+          Expanded(child: feed),
+        ],
       ),
     );
   }
 
   Widget _buildList(BuildContext context, LogsState state, List<Log> logs) {
     final padding = EdgeInsets.only(
-      top: context.contentTopPadding,
+      top: system.isDesktop && MediaQuery.sizeOf(context).width >= 1000
+          ? 8
+          : context.contentTopPadding,
       bottom: 16 + context.bottomInset,
     );
     return Align(
@@ -253,7 +301,9 @@ class _LogsViewState extends ConsumerState<LogsView>
             padding: padding,
             items: logs,
             keyOf: ObjectKey.new,
-            gap: recordListGap,
+            gap: system.isDesktop && MediaQuery.sizeOf(context).width >= 1000
+                ? 1
+                : recordListGap,
             estimatedItemExtent: recordListEstimatedExtent,
             itemBuilder: (log, _, _) => MemoBuilder(
               inputs: [log],
@@ -273,79 +323,73 @@ class LogItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tone = switch (log.logLevel) {
-      LogLevel.warning => RecordTone.warning,
-      LogLevel.error => RecordTone.error,
-      LogLevel.info || LogLevel.debug || LogLevel.silent => RecordTone.neutral,
+    final warning = log.logLevel == LogLevel.warning;
+    final error = log.logLevel == LogLevel.error;
+    final brightness = context.colorScheme.brightness;
+    final background = warning
+        ? brightness == Brightness.dark
+              ? Color.alphaBlend(
+                  BusinessPalette.warning.withValues(alpha: 0.12),
+                  context.colorScheme.surfaceContainer,
+                )
+              : BusinessPalette.warningContainerFor(brightness)
+        : error
+        ? brightness == Brightness.dark
+              ? Color.alphaBlend(
+                  context.colorScheme.error.withValues(alpha: 0.12),
+                  context.colorScheme.surfaceContainer,
+                )
+              : context.colorScheme.errorContainer.withValues(alpha: 0.28)
+        : null;
+    final levelColor = warning
+        ? BusinessPalette.warningForegroundFor(brightness)
+        : error
+        ? context.colorScheme.error
+        : BusinessPalette.residentialChipText;
+    final level = switch (log.logLevel) {
+      LogLevel.warning => 'WARN',
+      _ => log.logLevel.name.toUpperCase(),
     };
-    final payload = log.parsed;
-    return RecordListItem(
-      onTap: () {},
-      header: RecordHeader(
-        children: [
-          RecordTimestamp(log.dateTime),
-          RecordLabel(
-            label: log.logLevel.name,
-            tone: tone,
-            onPressed: () => RecordFilterScope.add(
-              context,
-              RecordFilter(RecordFacetKind.level, log.logLevel.name),
+    return DecoratedBox(
+      decoration: ShapeDecoration(color: background, shape: AppShape.sm),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 10, 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 8,
+          children: [
+            SizedBox(
+              width: 64,
+              child: Text(
+                log.dateTime,
+                style: BusinessText.logTimestamp(context),
+                maxLines: 1,
+              ),
             ),
-          ),
-        ],
-      ),
-      body: _LogBody(payload: payload, errorColor: tone.accentColor(context)),
-    );
-  }
-}
-
-class _LogBody extends StatelessWidget {
-  final LogPayload payload;
-  final Color? errorColor;
-
-  const _LogBody({required this.payload, this.errorColor});
-
-  String get _sourceText => [
-    payload.tag,
-    if (payload.route case final route?) ...[route.source, route.sourceDetail],
-  ].where((text) => text.isNotEmpty).join('  ·  ');
-
-  @override
-  Widget build(BuildContext context) {
-    final styles = RecordTextStyles.of(context);
-    final route = payload.route;
-    if (route == null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SelectableText(payload.message, style: styles.primary),
-          if (payload.tag.isNotEmpty)
-            Text(payload.tag, style: styles.secondary),
-        ],
-      );
-    }
-    return SelectableText.rich(
-      TextSpan(
-        children: [
-          TextSpan(text: route.destination, style: styles.title),
-          if (route.error.isNotEmpty)
-            TextSpan(
-              text: '\n${route.error}',
-              style: styles.secondary.copyWith(color: errorColor),
+            SizedBox(
+              width: 44,
+              child: GestureDetector(
+                onTap: () => RecordFilterScope.add(
+                  context,
+                  RecordFilter(RecordFacetKind.level, log.logLevel.name),
+                ),
+                child: Text(
+                  level,
+                  style: BusinessText.logLevel(
+                    context,
+                  ).copyWith(color: levelColor),
+                ),
+              ),
             ),
-          const TextSpan(text: '\n'),
-          if (route.rule.isNotEmpty) ...[
-            TextSpan(text: route.rule, style: styles.secondary),
-            TextSpan(text: ' \u2192 ', style: styles.secondary.toJetBrainsMono),
+            Expanded(
+              child: Text(
+                log.payload,
+                style: BusinessText.logBody(context),
+                softWrap: true,
+              ),
+            ),
           ],
-          TextSpan(
-            text: route.proxy,
-            style: AppTextStyle.footnote
-                .of(context, emphasized: true)
-                .copyWith(color: context.colorScheme.primary),
-          ),
-          TextSpan(text: '\n$_sourceText', style: styles.secondary),
-        ],
+        ),
       ),
     );
   }
