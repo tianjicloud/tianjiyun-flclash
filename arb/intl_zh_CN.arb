@@ -988,6 +988,11 @@
   "installCertificate": "安装到系统",
   "installCertificateSuccess": "证书已安装",
   "validUntil": "有效期至 {date}",
+  "businessExpiryDate": "{date} 到期",
+  "businessCurrentExitIp": "当前出口 IP",
+  "businessCurrentLine": "当前线路",
+  "businessLockedExit": "已锁定出口",
+  "businessConnectedDisconnect": "已连接 · 点击断开",
   "mitmCertificateExportTip": "导出后在要解密的设备上信任此证书。",
   "mitmTrustReady": "已信任",
   "mitmTrustUntrusted": "未完全信任",
@@ -1212,5 +1217,25 @@
   "diagnosticsUnverified": "未检测",
   "diagnosticsUnavailableNotice": "暂不提供 DNS 出口、浏览器 WebRTC 和 NTP 检测。",
   "diagnosticsSelection": "默认路径出口校验",
-  "businessExitVerified": "已连接 · 出口已校验"
+  "businessExitVerified": "已连接 · 出口已校验",
+  "businessMonthTraffic": "本月流量",
+  "businessProxyTraffic": "代理",
+  "businessMainlandDirect": "大陆直连",
+  "businessSubscriptionUpdatedAt": "订阅更新于 {time}",
+  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessTrafficScope": "仅本设备本月统计",
+  "businessResidentialBroadband": "住宅宽带",
+  "businessTunTitle": "虚拟网卡（TUN）",
+  "businessAiServiceLabel": "AI 服务",
+  "businessOutboundLabel": "出站",
+  "businessSubscriptionDetails": "订阅详情",
+  "businessUsagePercent": "已用 {percent}%",
+  "businessTunCaption": "接管所有应用流量",
+  "@businessUsagePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  }
 }

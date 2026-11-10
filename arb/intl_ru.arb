@@ -988,6 +988,11 @@
   "installCertificate": "Установить в систему",
   "installCertificateSuccess": "Сертификат установлен",
   "validUntil": "Действителен до {date}",
+  "businessExpiryDate": "Срок истекает {date}",
+  "businessCurrentExitIp": "Текущий внешний IP",
+  "businessCurrentLine": "Текущий маршрут",
+  "businessLockedExit": "Выход закреплён",
+  "businessConnectedDisconnect": "Подключено · нажмите для отключения",
   "mitmCertificateExportTip": "Экспортируйте его и добавьте в доверенные на устройствах, трафик которых нужно расшифровывать.",
   "mitmTrustReady": "Доверенный",
   "mitmTrustUntrusted": "Доверие неполное",
@@ -1212,5 +1217,25 @@
   "diagnosticsUnverified": "Не проверено",
   "diagnosticsUnavailableNotice": "Проверки выхода DNS, WebRTC браузера и NTP недоступны.",
   "diagnosticsSelection": "Проверка выхода маршрута по умолчанию",
-  "businessExitVerified": "Подключено · Выход проверен"
+  "businessExitVerified": "Подключено · Выход проверен",
+  "businessMonthTraffic": "Трафик за месяц",
+  "businessProxyTraffic": "Прокси",
+  "businessMainlandDirect": "Прямое подключение к материковому Китаю",
+  "businessSubscriptionUpdatedAt": "Подписка обновлена {time}",
+  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessTrafficScope": "Трафик за месяц только на этом устройстве",
+  "businessResidentialBroadband": "Домашний широкополосный доступ",
+  "businessTunTitle": "Виртуальный сетевой интерфейс (TUN)",
+  "businessAiServiceLabel": "Сервисы ИИ",
+  "businessOutboundLabel": "Выход",
+  "businessSubscriptionDetails": "Сведения о подписке",
+  "businessUsagePercent": "Использовано {percent}%",
+  "businessTunCaption": "Маршрутизировать трафик всех приложений",
+  "@businessUsagePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  }
 }

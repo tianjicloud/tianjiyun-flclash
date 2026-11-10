@@ -17,7 +17,6 @@ import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart';
-import 'package:fl_clash/views/dashboard/widgets/core_status_button.dart';
 import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
 import 'package:fl_clash/views/diagnostics.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
@@ -55,16 +54,20 @@ class BusinessDashboardView extends ConsumerWidget {
           titleWidget: mobile
               ? const _MobileBrandTitle()
               : Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 18),
+                  padding: const EdgeInsetsDirectional.only(start: 13),
                   child: Text(
                     appLocalizations.dashboard,
                     style: BusinessText.pageTitle(context),
                   ),
                 ),
           actions: [
-            if (mobile) const _MobileNotice() else const _DesktopBarStatus(),
-            const UpdateStatusButton(),
-            if (!mobile && coreLib == null) const CoreStatusButton(),
+            if (mobile) ...[
+              const _MobileNotice(),
+              const UpdateStatusButton(),
+            ] else ...[
+              const _DesktopBarStatus(),
+              const UpdateStatusButton(),
+            ],
           ],
           body: LayoutBuilder(
             builder: (context, constraints) {
@@ -118,11 +121,11 @@ class _BusinessBody extends ConsumerWidget {
         ? 13.0
         : density.isCompact
         ? 14.0
-        : 16.0;
+        : 14.0;
     final padding = EdgeInsetsDirectional.fromSTEB(
-      mobile ? 18 : 34,
-      mobile ? context.appBarInset - 23 : context.appBarInset - 9,
-      mobile ? 18 : 34,
+      mobile ? 18 : 29,
+      mobile ? context.appBarInset - 23 : context.appBarInset - 18,
+      mobile ? 18 : 29,
       (mobile ? 18 : 24) + context.bottomInset,
     );
     return SingleChildScrollView(
@@ -137,9 +140,17 @@ class _BusinessBody extends ConsumerWidget {
             spacing: gap,
             children: [
               UpdateStatusSlot(gap: gap),
-              const RepaintBoundary(child: CurrentOutboundCard()),
+              if (density.isDesktop)
+                SizedBox(
+                  height: 236 * scale,
+                  child: const RepaintBoundary(child: CurrentOutboundCard()),
+                )
+              else
+                const RepaintBoundary(child: CurrentOutboundCard()),
               if (ref.watch(scenePolicyProvider).available)
-                const SceneBar()
+                density.isDesktop
+                    ? SizedBox(height: 60 * scale, child: const SceneBar())
+                    : const SceneBar()
               else ...[
                 if (ref
                         .watch(currentProfileProvider)
@@ -198,7 +209,10 @@ class _BusinessBody extends ConsumerWidget {
                     );
                   },
                 ),
-                _ControlBar(platform: platform),
+                SizedBox(
+                  height: 72 * scale,
+                  child: _ControlBar(platform: platform),
+                ),
               ] else ...[
                 if (needsTakeover)
                   Text(
@@ -349,34 +363,54 @@ class _DesktopBarStatus extends ConsumerWidget {
         : verified
         ? DashboardColors.of(context).ok
         : context.colorScheme.onSurfaceVariant;
+    final dashboardColors = DashboardColors.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: 12,
       children: [
         if (updated != null)
           Text(
-            strings.profileUpdatedAt(updated.getLastUpdateTimeDesc(context)),
+            strings.businessSubscriptionUpdatedAt(
+              updated.getLastUpdateTimeDesc(context),
+            ),
             style: BusinessText.quickMetaMobile(
               context,
             ).copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-          decoration: const ShapeDecoration(
-            color: Color(0xFFEEF1F4),
+          decoration: ShapeDecoration(
+            color: verified
+                ? dashboardColors.okContainer
+                : dashboardColors.tone,
             shape: AppShape.full,
           ),
-          child: Text(
-            verified
-                ? strings.businessExitVerified
-                : connecting
-                ? strings.connecting
-                : suspended
-                ? strings.suspended
-                : running
-                ? strings.running
-                : strings.notRunning,
-            style: BusinessText.quickMetaMobile(context).copyWith(color: tone),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 6,
+            children: [
+              if (verified)
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: ShapeDecoration(
+                    color: dashboardColors.ok,
+                    shape: AppShape.circle,
+                  ),
+                ),
+              Text(
+                verified
+                    ? strings.businessExitVerified
+                    : connecting
+                    ? strings.connecting
+                    : suspended
+                    ? strings.suspended
+                    : running
+                    ? strings.running
+                    : strings.notRunning,
+                style: BusinessText.metaLabel(context).copyWith(color: tone),
+              ),
+            ],
           ),
         ),
       ],
@@ -421,7 +455,7 @@ class _MobileNotice extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: const ShapeDecoration(
-              color: Color(0xFFFFFFFF),
+              color: BusinessPalette.sidebarSelection,
               shape: AppShape.full,
             ),
             child: Text(
@@ -430,7 +464,7 @@ class _MobileNotice extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
               style: BusinessText.notice(
                 context,
-              ).copyWith(color: const Color(0xFF2D3748)),
+              ).copyWith(color: BusinessPalette.heroChipText),
             ),
           ),
         ),
@@ -491,9 +525,9 @@ class _TakeoverRow extends StatelessWidget {
   }
 }
 
-/// The desktop home's bottom strip: outbound mode on the left and the
-/// takeover switches on the right, inside one card, so the page ends with
-/// a single control surface instead of two rows of separate cards.
+/// The desktop home's bottom strip: the takeover switches, AI service status
+/// and diagnostics in one card, so the page ends with a single control
+/// surface instead of a row of separate cards.
 class _ControlBar extends StatelessWidget {
   const _ControlBar({required this.platform});
 
@@ -502,43 +536,70 @@ class _ControlBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final density = DashboardDensityScope.of(context);
-    final blocks = DashboardWidget.networkTakeover.platforms.contains(platform)
+    final hasTakeover = DashboardWidget.networkTakeover.platforms.contains(
+      platform,
+    );
+    final blocks = hasTakeover
         ? const [
-            NetworkTakeoverBlock(TakeoverSwitch.systemProxy),
-            NetworkTakeoverBlock(TakeoverSwitch.tun),
+            NetworkTakeoverBlock(TakeoverSwitch.systemProxy, showIcon: false),
+            NetworkTakeoverBlock(TakeoverSwitch.tun, showIcon: false),
           ]
         : const [VpnBlock()];
     final strings = context.appLocalizations;
     return DashboardCard(
       semanticLabel: strings.serviceStatus,
-      radius: BusinessRadius.control,
-      padding: EdgeInsets.symmetric(horizontal: density.isCompact ? 14 : 18),
+      radius: BusinessPalette.cardRadius,
+      padding: EdgeInsets.symmetric(
+        horizontal: density.isCompact ? 14 : 18,
+        vertical: 0,
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final blockWidth = density.isCompact ? 188.0 : 214.0;
-          final blockWidgets = [
-            for (final block in blocks)
-              SizedBox(width: blockWidth, child: block),
-          ];
-          final diagnostics = TonalButton(
-            size: TonalButtonSize.bar,
-            glyph: AppGlyphs.logs,
+          final blockWidgets = [...blocks];
+          final diagnostics = BusinessSecondaryButton(
             label: strings.diagnosticsTitle,
+            width: 86,
             onPressed: () => Navigator.of(
               context,
             ).push(PagedSheetRoute(builder: (_) => const DiagnosticsView())),
           );
-          if (constraints.maxWidth / DashboardDensityScope.scaleOf(context) >=
-              900) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: 48 * DashboardDensityScope.scaleOf(context),
+          final aiServices = Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 14,
+            children: [
+              Text(
+                strings.businessAiServiceLabel,
+                style: BusinessText.toggleTitle(context),
               ),
+              const Flexible(child: BusinessAIStatusStrip()),
+            ],
+          );
+          if (constraints.maxWidth / DashboardDensityScope.scaleOf(context) >=
+              950) {
+            return SizedBox(
+              width: constraints.maxWidth,
               child: Row(
-                spacing: 14,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ...blockWidgets,
-                  const Expanded(child: BusinessAIStatusStrip()),
+                  if (hasTakeover) ...[
+                    blockWidgets[0],
+                    const SizedBox(width: 22),
+                    _controlDivider(context),
+                    const SizedBox(width: 22),
+                    blockWidgets[1],
+                    const SizedBox(width: 22),
+                    _controlDivider(context),
+                    const SizedBox(width: 22),
+                  ] else ...[
+                    ...blockWidgets,
+                    const SizedBox(width: 22),
+                  ],
+                  Expanded(
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: aiServices,
+                    ),
+                  ),
                   diagnostics,
                 ],
               ),
@@ -548,17 +609,19 @@ class _ControlBar extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              ...blockWidgets,
-              const BusinessAIStatusStrip(),
-              diagnostics,
-            ],
+            children: [...blockWidgets, aiServices, diagnostics],
           );
         },
       ),
     );
   }
 }
+
+Widget _controlDivider(BuildContext context) => SizedBox(
+  width: 1,
+  height: 28,
+  child: ColoredBox(color: context.colorScheme.outlineVariant),
+);
 
 class BusinessLineCard extends ConsumerWidget {
   const BusinessLineCard({super.key});
@@ -764,172 +827,227 @@ class ResidentialExitCard extends ConsumerWidget {
     return DashboardCard(
       semanticLabel: appLocalizations.residentialTitle,
       side: BorderSide.none,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          DashboardCardHeader(
-            glyph: AppGlyphs.vpn,
-            title: appLocalizations.residentialTitle,
-            leading: [
-              if (applying)
-                DashboardChip(
-                  label: appLocalizations.residentialApplying,
-                  tone: DashboardChipTone.warn,
-                )
-              else if (missing || failed)
-                DashboardChip(
-                  label: appLocalizations.residentialUnavailable,
-                  tone: DashboardChipTone.warn,
-                )
-              else if (policy.active)
-                DashboardChip(
-                  label: appLocalizations.residentialSelected,
-                  tone: DashboardChipTone.ok,
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          if (!catalogReady) ...[
-            Text(
-              appLocalizations.residentialLoadingCatalog,
-              style: DashboardText.rowTitle(context),
+      child: LayoutBuilder(
+        builder: (context, constraints) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: BusinessTheme.of(context)
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.spaceBetween,
+          children: [
+            DashboardCardHeader(
+              glyph: BusinessTheme.of(context) ? null : AppGlyphs.vpn,
+              title: appLocalizations.residentialTitle,
+              trailing: BusinessTheme.of(context) && policy.active
+                  ? [
+                      DashboardChip(
+                        label: appLocalizations.businessLockedExit,
+                        tone: DashboardChipTone.primary,
+                      ),
+                    ]
+                  : const [],
+              leading: [
+                if (applying)
+                  DashboardChip(
+                    label: appLocalizations.residentialApplying,
+                    tone: DashboardChipTone.warn,
+                  )
+                else if (missing || failed)
+                  DashboardChip(
+                    label: appLocalizations.residentialUnavailable,
+                    tone: DashboardChipTone.warn,
+                  ),
+              ],
             ),
-            const SizedBox(height: 6),
-            Text(appLocalizations.residentialLoadingCatalogDesc, style: label),
-          ] else if (noPlan) ...[
-            Text(
-              appLocalizations.residentialNoPlan,
-              style: DashboardText.rowTitle(context),
-            ),
-            const SizedBox(height: 6),
-            Text(appLocalizations.residentialNoPlanDesc, style: label),
-            const SizedBox(height: 14),
-            FilledButton(
-              onPressed: () => showProfilesSheet(context),
-              child: Text(appLocalizations.residentialManageSubscription),
-            ),
-          ] else if (missing) ...[
-            Text(
-              policy.configuredExit ?? '',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: DashboardText.figure(
-                context,
-                AppTextStyle.title2,
-                color: warn,
+            const SizedBox(height: 12),
+            if (!catalogReady) ...[
+              Text(
+                appLocalizations.residentialLoadingCatalog,
+                style: DashboardText.rowTitle(context),
               ),
-            ),
-            const SizedBox(height: 6),
-            Text(appLocalizations.residentialMissing, style: label),
-            const SizedBox(height: 6),
-            Text(appLocalizations.residentialMissingDesc, style: label),
-            const SizedBox(height: 14),
-            _ExitActions(
-              applying: applying,
-              onChoose: () => showResidentialExitSheet(context),
-              onClear: () => unawaited(
-                ref.read(residentialActionProvider.notifier).clear(),
-              ),
-            ),
-          ] else if (policy.active) ...[
-            EmojiText(
-              policy.selectedExit ?? '',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: BusinessText.residentialExit(
-                context,
-                mobile: !DashboardDensityScope.of(context).isDesktop,
-              ),
-            ),
-            if (failed) ...[
               const SizedBox(height: 6),
               Text(
-                appLocalizations.residentialApplyFailed,
-                style: label.copyWith(color: warn),
+                appLocalizations.residentialLoadingCatalogDesc,
+                style: label,
               ),
-              const SizedBox(height: 10),
+            ] else if (noPlan) ...[
+              Text(
+                appLocalizations.residentialNoPlan,
+                style: DashboardText.rowTitle(context),
+              ),
+              const SizedBox(height: 6),
+              Text(appLocalizations.residentialNoPlanDesc, style: label),
+              const SizedBox(height: 14),
+              FilledButton(
+                onPressed: () => showProfilesSheet(context),
+                child: Text(appLocalizations.residentialManageSubscription),
+              ),
+            ] else if (missing) ...[
+              Text(
+                policy.configuredExit ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: DashboardText.figure(
+                  context,
+                  AppTextStyle.title2,
+                  color: warn,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(appLocalizations.residentialMissing, style: label),
+              const SizedBox(height: 6),
+              Text(appLocalizations.residentialMissingDesc, style: label),
+              const SizedBox(height: 14),
+              _ExitActions(
+                applying: applying,
+                onChoose: () => showResidentialExitSheet(context),
+                onClear: () => unawaited(
+                  ref.read(residentialActionProvider.notifier).clear(),
+                ),
+              ),
+            ] else if (policy.active) ...[
+              if (BusinessTheme.of(context))
+                Row(
+                  spacing: 10,
+                  children: [
+                    if (ref.watch(
+                          outboundIpProbeProvider.select(
+                            (state) => state
+                                .entryOf(routedOutbound)
+                                .value
+                                ?.countryCode,
+                          ),
+                        )
+                        case final code? when code.isNotEmpty)
+                      Container(
+                        width: 34,
+                        height: 24,
+                        alignment: Alignment.center,
+                        decoration: ShapeDecoration(
+                          color: BusinessPalette.deep,
+                          shape: AppShape.all(BusinessRadius.code),
+                        ),
+                        child: Text(
+                          code,
+                          style: BusinessText.countryCode(
+                            context,
+                          ).copyWith(color: Colors.white),
+                        ),
+                      ),
+                    Expanded(
+                      child: EmojiText(
+                        policy.selectedExit ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BusinessText.residentialExit(context),
+                      ),
+                    ),
+                  ],
+                )
+              else
+                EmojiText(
+                  policy.selectedExit ?? '',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: BusinessText.residentialExit(
+                    context,
+                    mobile: !DashboardDensityScope.of(context).isDesktop,
+                  ),
+                ),
+              if (failed) ...[
+                const SizedBox(height: 6),
+                Text(
+                  appLocalizations.residentialApplyFailed,
+                  style: label.copyWith(color: warn),
+                ),
+                const SizedBox(height: 10),
+                FilledButton(
+                  onPressed: applying
+                      ? null
+                      : () => unawaited(
+                          ref.read(residentialActionProvider.notifier).retry(),
+                        ),
+                  child: Text(appLocalizations.retry),
+                ),
+              ] else if (resetFailed) ...[
+                const SizedBox(height: 6),
+                Text(
+                  appLocalizations.residentialResetFailed,
+                  style: label.copyWith(color: warn),
+                ),
+                const SizedBox(height: 10),
+                FilledButton(
+                  onPressed: applying
+                      ? null
+                      : () => unawaited(
+                          ref.read(residentialActionProvider.notifier).retry(),
+                        ),
+                  child: Text(appLocalizations.retry),
+                ),
+              ] else if (applying) ...[
+                const SizedBox(height: 6),
+                Text(appLocalizations.residentialPending, style: label),
+              ] else
+                const SizedBox(height: 10),
+            ] else ...[
+              Text(
+                appLocalizations.residentialSubscriptionPolicy,
+                style: DashboardText.rowTitle(context),
+              ),
+              const SizedBox(height: 6),
+              Text(appLocalizations.residentialUsingSubscription, style: label),
+              if (applying) ...[
+                const SizedBox(height: 6),
+                Text(appLocalizations.residentialPending, style: label),
+              ] else if (failed) ...[
+                const SizedBox(height: 6),
+                Text(
+                  appLocalizations.residentialApplyFailed,
+                  style: label.copyWith(color: warn),
+                ),
+                const SizedBox(height: 10),
+                FilledButton(
+                  onPressed: () => unawaited(
+                    ref.read(residentialActionProvider.notifier).retry(),
+                  ),
+                  child: Text(appLocalizations.retry),
+                ),
+              ],
+              const SizedBox(height: 14),
               FilledButton(
                 onPressed: applying
                     ? null
-                    : () => unawaited(
-                        ref.read(residentialActionProvider.notifier).retry(),
-                      ),
-                child: Text(appLocalizations.retry),
-              ),
-            ] else if (resetFailed) ...[
-              const SizedBox(height: 6),
-              Text(
-                appLocalizations.residentialResetFailed,
-                style: label.copyWith(color: warn),
-              ),
-              const SizedBox(height: 10),
-              FilledButton(
-                onPressed: applying
-                    ? null
-                    : () => unawaited(
-                        ref.read(residentialActionProvider.notifier).retry(),
-                      ),
-                child: Text(appLocalizations.retry),
-              ),
-            ] else if (applying) ...[
-              const SizedBox(height: 6),
-              Text(appLocalizations.residentialPending, style: label),
-            ] else
-              const SizedBox(height: 10),
-          ] else ...[
-            Text(
-              appLocalizations.residentialSubscriptionPolicy,
-              style: DashboardText.rowTitle(context),
-            ),
-            const SizedBox(height: 6),
-            Text(appLocalizations.residentialUsingSubscription, style: label),
-            if (applying) ...[
-              const SizedBox(height: 6),
-              Text(appLocalizations.residentialPending, style: label),
-            ] else if (failed) ...[
-              const SizedBox(height: 6),
-              Text(
-                appLocalizations.residentialApplyFailed,
-                style: label.copyWith(color: warn),
-              ),
-              const SizedBox(height: 10),
-              FilledButton(
-                onPressed: () => unawaited(
-                  ref.read(residentialActionProvider.notifier).retry(),
-                ),
-                child: Text(appLocalizations.retry),
+                    : () => showResidentialExitSheet(context),
+                child: Text(appLocalizations.residentialChoose),
               ),
             ],
-            const SizedBox(height: 14),
-            FilledButton(
-              onPressed: applying
-                  ? null
-                  : () => showResidentialExitSheet(context),
-              child: Text(appLocalizations.residentialChoose),
-            ),
-          ],
-          if (policy.active && !missing) ...[
-            const SizedBox(height: 14),
-            Text(
-              policy.bulkBypass
-                  ? appLocalizations.residentialBulkBypass
-                  : appLocalizations.residentialBulkUnconfirmed,
-              style: label,
-            ),
-          ],
-          if (policy.active && !missing) ...[
-            const SizedBox(height: 14),
-            _ExitActions(
-              applying: applying,
-              onChoose: () => showResidentialExitSheet(context),
-              onClear: () => unawaited(
-                ref.read(residentialActionProvider.notifier).clear(),
+            if (policy.active && !missing) ...[
+              SizedBox(height: BusinessTheme.of(context) ? 10 : 14),
+              Text(
+                policy.bulkBypass
+                    ? appLocalizations.residentialBulkBypass
+                    : appLocalizations.residentialBulkUnconfirmed,
+                maxLines: BusinessTheme.of(context) ? 2 : null,
+                overflow: BusinessTheme.of(context)
+                    ? TextOverflow.ellipsis
+                    : null,
+                style: label,
               ),
-            ),
+            ],
+            if (policy.active && !missing) ...[
+              if (BusinessTheme.of(context) && constraints.hasBoundedHeight)
+                const Spacer(),
+              SizedBox(height: BusinessTheme.of(context) ? 4 : 14),
+              _ExitActions(
+                applying: applying,
+                onChoose: () => showResidentialExitSheet(context),
+                onClear: () => unawaited(
+                  ref.read(residentialActionProvider.notifier).clear(),
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -949,24 +1067,19 @@ class _ExitActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    final compactButtonStyle = ButtonStyle.from(
-      minimumSize: const Size(0, 36),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      tapTargetSize: TapTargetSize.shrinkWrap,
-    );
     return Wrap(
       spacing: 12,
       runSpacing: 8,
       children: [
-        FilledButton(
+        BusinessPrimaryButton(
+          label: appLocalizations.residentialChange,
+          width: 86,
           onPressed: applying ? null : onChoose,
-          style: compactButtonStyle,
-          child: Text(appLocalizations.residentialChange),
         ),
-        TextButton(
+        BusinessSecondaryButton(
+          label: appLocalizations.residentialUseSubscription,
+          width: 99,
           onPressed: applying ? null : onClear,
-          style: compactButtonStyle,
-          child: Text(appLocalizations.residentialUseSubscription),
         ),
       ],
     );

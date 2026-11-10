@@ -941,10 +941,10 @@ void main() {
           .single;
       expect(painter().color, const Color(0xFF98A2AD));
       expect(tester.widget<Text>(find.text(_ip)).maxLines, 1);
-      expect(find.text('Residential'), findsOneWidget);
+      expect(find.text('Residential broadband'), findsOneWidget);
       final action =
           container.read(setupActionProvider.notifier) as _RecordingSetupAction;
-      await tester.tap(find.byTooltip('Stop'));
+      await tester.tap(find.byTooltip('Connected · Click to disconnect'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 80));
       expect(painter().color, isNot(BusinessPalette.accent));
@@ -1009,8 +1009,9 @@ void main() {
 
       await tester.tap(find.text(_ip));
       await tester.pumpAndSettle();
-      expect(find.text('Residential'), findsNWidgets(2));
-      Navigator.of(tester.element(find.text('Residential').last)).pop();
+      expect(find.text('Residential broadband'), findsOneWidget);
+      expect(find.text('Residential'), findsOneWidget);
+      Navigator.of(tester.element(find.text('Residential'))).pop();
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     });

@@ -13,8 +13,7 @@ class BusinessSegment<T> {
   final Glyph? glyph;
 }
 
-/// The design's segmented pill: one translucent track, each option a full pill
-/// that takes the blue-violet gradient when selected.
+/// A compact segmented control with a neutral track and raised selection.
 class BusinessSegmented<T> extends StatelessWidget {
   const BusinessSegmented({
     super.key,
@@ -49,8 +48,11 @@ class BusinessSegmented<T> extends StatelessWidget {
       ],
     );
     return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: ShapeDecoration(color: colors.tone2, shape: AppShape.full),
+      padding: EdgeInsets.all(mobile ? 4 : 2),
+      decoration: ShapeDecoration(
+        color: colors.tone2,
+        shape: AppShape.all(BusinessRadius.navItem),
+      ),
       child: row,
     );
   }
@@ -70,7 +72,7 @@ class BusinessSegmented<T> extends StatelessWidget {
       onTap: onSelected == null ? null : () => onSelected!(item.value),
       child: Container(
         height: height,
-        padding: EdgeInsets.symmetric(horizontal: mobile ? 7 : 15),
+        padding: EdgeInsets.symmetric(horizontal: mobile ? 7 : 9),
         decoration: ShapeDecoration(
           color: isSelected ? context.colorScheme.surface : null,
           shape: AppShape.full,

@@ -13,10 +13,12 @@ void main() {
     tester,
   ) async {
     final colors = <Color>[];
+    final primaries = <Color>[];
     final markers = <bool>[];
     Widget sample() => Builder(
       builder: (context) {
         colors.add(Theme.of(context).colorScheme.surface);
+        primaries.add(Theme.of(context).colorScheme.primary);
         markers.add(BusinessTheme.of(context));
         return const SizedBox();
       },
@@ -38,6 +40,7 @@ void main() {
       ),
     );
     expect(colors, [scheme.surface, scheme.surface, scheme.surface]);
+    expect(primaries, [scheme.primary, BusinessPalette.blue, scheme.primary]);
     expect(markers, [false, true, false]);
   });
 

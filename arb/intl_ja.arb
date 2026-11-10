@@ -988,6 +988,11 @@
   "installCertificate": "システムにインストール",
   "installCertificateSuccess": "証明書をインストールしました",
   "validUntil": "有効期限 {date}",
+  "businessExpiryDate": "{date} に期限切れ",
+  "businessCurrentExitIp": "現在の出口 IP",
+  "businessCurrentLine": "現在の回線",
+  "businessLockedExit": "出口を固定",
+  "businessConnectedDisconnect": "接続中 · クリックして切断",
   "mitmCertificateExportTip": "エクスポートして、復号したいデバイスで信頼してください。",
   "mitmTrustReady": "信頼済み",
   "mitmTrustUntrusted": "完全には信頼されていません",
@@ -1212,5 +1217,25 @@
   "diagnosticsUnverified": "未検査",
   "diagnosticsUnavailableNotice": "DNS 出口、ブラウザーの WebRTC、NTP の検査は利用できません。",
   "diagnosticsSelection": "既定経路の出口検証",
-  "businessExitVerified": "接続済み · 出口検証済み"
+  "businessExitVerified": "接続済み · 出口検証済み",
+  "businessMonthTraffic": "今月の通信量",
+  "businessProxyTraffic": "プロキシ",
+  "businessMainlandDirect": "中国本土直通",
+  "businessSubscriptionUpdatedAt": "サブスクリプション更新 {time}",
+  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessTrafficScope": "今月の通信量（このデバイスのみ）",
+  "businessResidentialBroadband": "住宅用ブロードバンド",
+  "businessTunTitle": "仮想ネットワークインターフェイス（TUN）",
+  "businessAiServiceLabel": "AI サービス",
+  "businessOutboundLabel": "出力",
+  "businessSubscriptionDetails": "サブスクリプションの詳細",
+  "businessUsagePercent": "{percent}% 使用済み",
+  "businessTunCaption": "すべてのアプリ通信を処理",
+  "@businessUsagePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  }
 }

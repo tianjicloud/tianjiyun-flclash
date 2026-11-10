@@ -115,7 +115,6 @@ class ProfilesCard extends ConsumerWidget {
     final sync = profile != null && profile.type == ProfileType.url
         ? _SyncButton(profile: profile)
         : null;
-    final manageLabel = appLocalizations.residentialManageSubscription;
     final renewLabel = appLocalizations.renew;
     final nameRow = Row(
       children: [
@@ -153,10 +152,10 @@ class ProfilesCard extends ConsumerWidget {
             ? BusinessRadius.metricMobile
             : BusinessRadius.dataDesktop,
         padding: EdgeInsetsDirectional.fromSTEB(
-          mobile ? 15 : 22,
           mobile ? 15 : 20,
-          mobile ? 15 : 22,
+          mobile ? 15 : 18,
           mobile ? 15 : 20,
+          mobile ? 15 : 18,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -166,12 +165,26 @@ class ProfilesCard extends ConsumerWidget {
             Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: mobile ? 8 : 12,
+              spacing: mobile ? 8 : 8,
               children: [
-                DashboardCardHeader(
-                  glyph: AppGlyphs.profiles,
-                  title: cardTitle,
-                  trailing: [?sync],
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        appLocalizations.businessSubscriptions,
+                        style: BusinessText.cardTitle(context),
+                      ),
+                    ),
+                    if (profile != null)
+                      Text(
+                        profile.realLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BusinessText.metaLabel(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                  ],
                 ),
                 if (expiry != null)
                   Text(
@@ -185,12 +198,14 @@ class ProfilesCard extends ConsumerWidget {
                   )
                 else
                   nameRow,
-                for (final text in [
-                  if (expiry != null) appLocalizations.validUntil(expiry.show),
-                  ?usageText,
-                ])
+                if (expiry != null || usageText != null)
                   Text(
-                    text,
+                    [
+                      if (expiry != null)
+                        appLocalizations.businessExpiryDate(expiry.show),
+                      ?usageText,
+                    ].join(' · '),
+                    maxLines: 1,
                     style: BusinessText.dataBody(
                       context,
                       mobile: mobile,
@@ -201,31 +216,18 @@ class ProfilesCard extends ConsumerWidget {
             ),
             Row(
               children: [
-                FilledButton(
-                  onPressed: () => dialogs.openUrl(userPanelUrl),
-                  child: Text(renewLabel),
+                BusinessSecondaryButton(
+                  label: appLocalizations.businessSubscriptionDetails,
+                  width: 86,
+                  onPressed: () => _openProfile(context, profile),
                 ),
-                const SizedBox(width: 4),
-                for (final action in <(String, VoidCallback)>[
-                  (
-                    appLocalizations.subscriptionDetails,
-                    () => _openProfile(context, profile),
-                  ),
-                  (manageLabel, () => dialogs.openUrl(userPanelUrl)),
-                ])
-                  Expanded(
-                    child: Tooltip(
-                      message: action.$1,
-                      child: TextButton(
-                        onPressed: action.$2,
-                        child: Text(
-                          action.$1,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ),
+                const SizedBox(width: 8),
+                const Spacer(),
+                BusinessPrimaryButton(
+                  label: renewLabel,
+                  width: 60,
+                  onPressed: () => dialogs.openUrl(userPanelUrl),
+                ),
               ],
             ),
           ],
@@ -319,6 +321,9 @@ class _MetricBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = BusinessTheme.of(context)
+        ? BusinessPalette.blue
+        : context.colorScheme.primary;
     return Container(
       height: 7,
       decoration: ShapeDecoration(
@@ -329,9 +334,9 @@ class _MetricBar extends StatelessWidget {
         alignment: AlignmentDirectional.centerStart,
         widthFactor: fraction.clamp(0.0, 1.0),
         child: Container(
-          decoration: const ShapeDecoration(
+          decoration: ShapeDecoration(
             gradient: LinearGradient(
-              colors: [BusinessPalette.blue, BusinessPalette.connected],
+              colors: [primary, BusinessPalette.connected],
             ),
             shape: AppShape.full,
           ),

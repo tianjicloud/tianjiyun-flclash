@@ -1,9 +1,9 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/providers/providers.dart';
-import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -233,9 +233,10 @@ class VpnTile extends ConsumerWidget {
 /// A takeover switch in the design's bottom control bar: icon, title, state
 /// and switch in one inline block, with the same real actions as the tile.
 class NetworkTakeoverBlock extends ConsumerWidget {
-  const NetworkTakeoverBlock(this.kind, {super.key});
+  const NetworkTakeoverBlock(this.kind, {super.key, this.showIcon = true});
 
   final TakeoverSwitch kind;
+  final bool showIcon;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -252,6 +253,8 @@ class NetworkTakeoverBlock extends ConsumerWidget {
               patchClashConfigProvider.select((state) => state.mixedPort),
             ),
           )
+        : BusinessTheme.of(context) && !showIcon
+        ? appLocalizations.businessTunCaption
         : value
         ? appLocalizations.enabled
         : appLocalizations.disabled;
@@ -264,11 +267,16 @@ class NetworkTakeoverBlock extends ConsumerWidget {
               .update((state) => state.copyWith.tun(enable: next));
     return _TakeoverBlockBody(
       glyph: systemProxy ? AppGlyphs.shuffle : AppGlyphs.vpn,
-      title: _titleOf(context, kind),
+      title:
+          BusinessTheme.of(context) && !showIcon && kind == TakeoverSwitch.tun
+          ? appLocalizations.businessTunTitle
+          : _titleOf(context, kind),
       subtitle: subtitle,
       value: value,
       onTap: () => change(!value),
       onChanged: change,
+      showIcon: showIcon,
+      compactSwitch: !showIcon,
     );
   }
 }
@@ -301,6 +309,8 @@ class _TakeoverBlockBody extends StatelessWidget {
     required this.value,
     required this.onTap,
     required this.onChanged,
+    this.showIcon = true,
+    this.compactSwitch = false,
   });
 
   final Glyph glyph;
@@ -309,68 +319,77 @@ class _TakeoverBlockBody extends StatelessWidget {
   final bool value;
   final VoidCallback onTap;
   final ValueChanged<bool> onChanged;
+  final bool showIcon;
+  final bool compactSwitch;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
+    final text = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: BusinessText.toggleTitle(
+            context,
+          ).copyWith(color: colorScheme.onSurface),
+        ),
+        Text(
+          subtitle,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: BusinessText.toggleSub(
+            context,
+          ).copyWith(color: colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
     return PressRegion(
       shape: AppShape.md,
       overlay: PressRegion.hoverOverlay,
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+        padding: EdgeInsets.symmetric(
+          horizontal: showIcon ? 10 : 0,
+          vertical: 8,
+        ),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
-          spacing: 11,
+          mainAxisSize: showIcon ? MainAxisSize.max : MainAxisSize.min,
+          spacing: showIcon ? 11 : 14,
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: ShapeDecoration(
-                color: Color.alphaBlend(
-                  colorScheme.primary.withValues(alpha: value ? 0.28 : 0.16),
-                  BusinessPalette.deep,
-                ),
-                shape: AppShape.sm,
-              ),
-              child: Center(
-                child: GlyphIcon(
-                  glyph,
-                  size: 17,
-                  color: value
-                      ? const Color(0xFFAEB9FF)
-                      : colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BusinessText.toggleTitle(
-                      context,
-                    ).copyWith(color: colorScheme.onSurface),
+            if (showIcon)
+              Container(
+                width: 32,
+                height: 32,
+                decoration: ShapeDecoration(
+                  color: Color.alphaBlend(
+                    (BusinessTheme.of(context)
+                            ? BusinessPalette.blue
+                            : colorScheme.primary)
+                        .withValues(alpha: value ? 0.28 : 0.16),
+                    BusinessPalette.deep,
                   ),
-                  Text(
-                    subtitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BusinessText.toggleSub(
-                      context,
-                    ).copyWith(color: colorScheme.onSurfaceVariant),
+                  shape: AppShape.sm,
+                ),
+                child: Center(
+                  child: GlyphIcon(
+                    glyph,
+                    size: 17,
+                    color: value
+                        ? BusinessPalette.activeGlyph
+                        : colorScheme.onSurfaceVariant,
                   ),
-                ],
+                ),
               ),
-            ),
+            if (showIcon) Expanded(child: text) else text,
             DashboardSwitch(
               value: value,
               onChanged: onChanged,
               semanticLabel: title,
+              compact: compactSwitch,
             ),
           ],
         ),
@@ -406,7 +425,11 @@ class VpnCard extends ConsumerWidget {
             shape: enabled
                 ? MaterialShapes.cookie6Sided
                 : MaterialShapes.circle,
-            color: enabled ? colorScheme.primary : colors.tone,
+            color: enabled
+                ? BusinessTheme.of(context)
+                      ? BusinessPalette.blue
+                      : colorScheme.primary
+                : colors.tone,
             size: _iconSize,
             child: GlyphIcon(
               AppGlyphs.vpn,

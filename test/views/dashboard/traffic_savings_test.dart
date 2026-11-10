@@ -105,7 +105,7 @@ void main() {
       ),
     );
     await pumpCard(tester, const Size(400, 800), business: true);
-    expect(find.text('VPN'), findsOneWidget);
+    expect(find.text('Proxy'), findsOneWidget);
     expect(find.text('Mainland direct'), findsOneWidget);
     expect(find.text('Direct (region unconfirmed)'), findsOneWidget);
     expect(find.text(_traffic(60)), findsOneWidget);

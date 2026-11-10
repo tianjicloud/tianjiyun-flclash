@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:fl_clash/ui/business_style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prism_ui/prism_ui.dart';
+import 'package:fl_clash/ui/business_style.dart';
 
 export 'package:fl_clash/ui/business_style.dart'
     show BusinessPalette, BusinessRadius, BusinessText;
@@ -27,18 +27,34 @@ class BusinessAppearance extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => BusinessTheme(child: child);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Theme(
+      data: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          primary: BusinessPalette.blue,
+          onPrimary: BusinessPalette.onBlue,
+          primaryContainer: BusinessPalette.residentialChip,
+          onPrimaryContainer: BusinessPalette.residentialChipText,
+          surfaceTint: BusinessPalette.blue,
+        ),
+      ),
+      child: BusinessTheme(child: child),
+    );
+  }
 }
 
 class OrbitPainter extends CustomPainter {
   const OrbitPainter({
     required this.color,
+    required this.primary,
     required this.focused,
     required this.running,
     this.pulse,
   });
 
   final Color color;
+  final Color primary;
   final bool focused;
   final bool running;
   final double? pulse;
@@ -50,6 +66,13 @@ class OrbitPainter extends CustomPainter {
     final tickStart = radius * 0.86;
     final tickEnd = radius * 0.98;
     final ballRadius = radius * 0.71;
+    if (running) {
+      canvas.drawCircle(
+        center,
+        radius * 0.84,
+        Paint()..color = primary.withValues(alpha: 0.08),
+      );
+    }
     if (pulse case final pulse? when pulse < 0.3) {
       final wave = pulse / 0.3;
       canvas.drawCircle(
@@ -80,7 +103,7 @@ class OrbitPainter extends CustomPainter {
         center,
         ballRadius + radius * 0.04,
         Paint()
-          ..color = BusinessPalette.blue.withValues(alpha: 0.08)
+          ..color = primary.withValues(alpha: 0.08)
           ..maskFilter = MaskFilter.blur(BlurStyle.normal, radius * 0.07),
       );
     }
@@ -88,17 +111,17 @@ class OrbitPainter extends CustomPainter {
       center,
       ballRadius,
       Paint()
-        ..color = running ? BusinessPalette.blue : const Color(0xFFFFFFFF)
+        ..color = running ? primary : BusinessPalette.onBlue
         ..shader = running
-            ? const RadialGradient(
-                center: Alignment(0, -0.44),
+            ? RadialGradient(
+                center: const Alignment(0, -0.44),
                 radius: 1.12,
                 colors: [
-                  Color(0xFF5B8FFF),
-                  Color(0xFF0A55F5),
-                  Color(0xFF0842C2),
+                  Color.lerp(primary, Colors.white, 0.38)!,
+                  primary,
+                  Color.lerp(primary, Colors.black, 0.22)!,
                 ],
-                stops: [0, 0.52, 1],
+                stops: const [0, 0.52, 1],
               ).createShader(ball)
             : null,
     );
@@ -131,5 +154,6 @@ class OrbitPainter extends CustomPainter {
       color != oldDelegate.color ||
       focused != oldDelegate.focused ||
       running != oldDelegate.running ||
+      primary != oldDelegate.primary ||
       pulse != oldDelegate.pulse;
 }

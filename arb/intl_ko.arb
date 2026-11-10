@@ -988,6 +988,11 @@
   "installCertificate": "시스템에 설치",
   "installCertificateSuccess": "인증서를 설치했습니다",
   "validUntil": "{date}까지 유효",
+  "businessExpiryDate": "{date} 만료",
+  "businessCurrentExitIp": "현재 출구 IP",
+  "businessCurrentLine": "현재 회선",
+  "businessLockedExit": "출구 고정됨",
+  "businessConnectedDisconnect": "연결됨 · 클릭하여 연결 해제",
   "mitmCertificateExportTip": "내보낸 뒤 복호화할 기기에서 신뢰하도록 설정하세요.",
   "mitmTrustReady": "신뢰됨",
   "mitmTrustUntrusted": "완전히 신뢰되지 않음",
@@ -1212,5 +1217,25 @@
   "diagnosticsUnverified": "미검사",
   "diagnosticsUnavailableNotice": "DNS 출구, 브라우저 WebRTC 및 NTP 검사는 제공되지 않습니다.",
   "diagnosticsSelection": "기본 경로 출구 검증",
-  "businessExitVerified": "연결됨 · 출구 검증됨"
+  "businessExitVerified": "연결됨 · 출구 검증됨",
+  "businessMonthTraffic": "이번 달 트래픽",
+  "businessProxyTraffic": "프록시",
+  "businessMainlandDirect": "중국 본토 직접 연결",
+  "businessSubscriptionUpdatedAt": "구독 업데이트 {time}",
+  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessTrafficScope": "이번 달 이 기기에서만 집계",
+  "businessResidentialBroadband": "가정용 광대역",
+  "businessTunTitle": "가상 네트워크 인터페이스(TUN)",
+  "businessAiServiceLabel": "AI 서비스",
+  "businessOutboundLabel": "아웃바운드",
+  "businessSubscriptionDetails": "구독 세부정보",
+  "businessUsagePercent": "{percent}% 사용",
+  "businessTunCaption": "모든 앱 트래픽 처리",
+  "@businessUsagePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -16,6 +16,8 @@ class DashboardColors {
     required this.ok,
     required this.okContainer,
     required this.onOkContainer,
+    required this.brandContainer,
+    required this.onBrandContainer,
     required this.warn,
     required this.warnContainer,
     required this.onWarnContainer,
@@ -64,15 +66,26 @@ class DashboardColors {
           : colorScheme.success,
       okContainer: business
           ? Color.alphaBlend(
-              BusinessPalette.connected.withValues(alpha: 0.12),
+              BusinessPalette.connected.withValues(alpha: 0.10),
               card,
             )
           : colorScheme.successContainer,
       onOkContainer: business
           ? businessDark
                 ? const Color(0xFF34E0B0)
-                : const Color(0xFF07543B)
+                : BusinessPalette.connectedText
           : colorScheme.onSuccessContainer,
+      brandContainer: business
+          ? Color.alphaBlend(
+              BusinessPalette.blue.withValues(
+                alpha: businessDark ? 0.22 : 0.12,
+              ),
+              card,
+            )
+          : colorScheme.primaryContainer,
+      onBrandContainer: business
+          ? BusinessPalette.blue
+          : colorScheme.onPrimaryContainer,
       warn: businessDark
           ? const Color(0xFFFFC24D)
           : business
@@ -101,6 +114,8 @@ class DashboardColors {
   final Color ok;
   final Color okContainer;
   final Color onOkContainer;
+  final Color brandContainer;
+  final Color onBrandContainer;
   final Color warn;
   final Color warnContainer;
   final Color onWarnContainer;
@@ -128,13 +143,25 @@ abstract final class DashboardShadows {
     spreadRadius: spread,
   );
 
+  static BoxShadow _businessLightShadow(
+    double alpha,
+    double y,
+    double cssBlur, [
+    double spread = 0,
+  ]) => BoxShadow(
+    color: BusinessPalette.deep.withValues(alpha: alpha),
+    offset: Offset(0, y),
+    blurRadius: _blur(cssBlur),
+    spreadRadius: spread,
+  );
+
   static double _blur(double cssBlur) =>
       cssBlur <= 1 ? 0 : (cssBlur / 2 - 0.5) / 0.57735;
 
   static final _e1Light = [
-    _shadow(0x0D, 0.5, 1),
-    _shadow(0x0A, 2, 6),
-    _shadow(0x17, 12, 32, -6),
+    _businessLightShadow(0.07, 0, 0, 0.5),
+    _businessLightShadow(0.04, 1, 2),
+    _businessLightShadow(0.12, 10, 28, -10),
   ];
 
   static final _e1Dark = [_shadow(0x80, 1, 2), _shadow(0x8C, 10, 28, -6)];

@@ -168,14 +168,16 @@ void main() {
     expect(usage, findsOneWidget);
     expect(tester.widget<Text>(usage).overflow, isNot(TextOverflow.ellipsis));
     final renew = find.text('Renew');
-    final details = find.text('Details');
-    final manage = find.text('Manage subscription');
+    final details = find.text('Subscription details');
+    expect(find.text('Manage subscription'), findsNothing);
     expect(
       tester.getCenter(renew).dy,
       closeTo(tester.getCenter(details).dy, 1),
     );
-    expect(tester.getCenter(renew).dy, closeTo(tester.getCenter(manage).dy, 1));
-    expect(tester.getCenter(renew).dx, lessThan(tester.getCenter(details).dx));
+    expect(
+      tester.getCenter(renew).dx,
+      greaterThan(tester.getCenter(details).dx),
+    );
     expect(tester.takeException(), isNull);
   });
 

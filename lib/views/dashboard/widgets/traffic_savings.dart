@@ -28,12 +28,12 @@ class TrafficSavingsCard extends ConsumerWidget {
             final colors = DashboardColors.of(context);
             final entries = [
               (
-                appLocalizations.vpnTraffic,
+                appLocalizations.businessProxyTraffic,
                 summary.monthProxy,
-                context.colorScheme.primary,
+                BusinessPalette.blue,
               ),
               (
-                appLocalizations.mainlandDirect,
+                appLocalizations.businessMainlandDirect,
                 summary.monthMainlandDirect,
                 colors.ok,
               ),
@@ -68,7 +68,7 @@ class TrafficSavingsCard extends ConsumerWidget {
             );
             final legend = Column(
               mainAxisSize: MainAxisSize.min,
-              spacing: 9,
+              spacing: 6,
               children: [
                 for (final (label, bytes, color) in entries)
                   Row(
@@ -106,26 +106,23 @@ class TrafficSavingsCard extends ConsumerWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 10,
+              spacing: 6,
               children: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: 12,
+                  spacing: 6,
                   children: [
                     Row(
                       children: [
                         Expanded(
                           child: DashboardCardHeader(
-                            glyph: AppGlyphs.dataUsage,
-                            title: appLocalizations.trafficStats,
+                            title: appLocalizations.businessMonthTraffic,
                           ),
                         ),
                         Text(
                           dashboardTraffic(total),
-                          style: BusinessText.metaValue(
-                            context,
-                          ).toJetBrainsMono,
+                          style: BusinessText.trafficTotal(context),
                         ),
                       ],
                     ),
@@ -134,7 +131,7 @@ class TrafficSavingsCard extends ConsumerWidget {
                   ],
                 ),
                 Text(
-                  appLocalizations.trafficStatsScope,
+                  appLocalizations.businessTrafficScope,
                   style: DashboardText.label(context),
                 ),
               ],

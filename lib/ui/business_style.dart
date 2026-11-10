@@ -6,19 +6,38 @@ import 'fonts.dart';
 
 abstract final class BusinessPalette {
   static const blue = Color(0xFF0A55F5);
-  static const violet = Color(0xFF6A4BD8);
+  static const onBlue = Color(0xFFFFFFFF);
   static const accent = blue;
   static const page = Color(0xFFF2F2F7);
   static const deep = Color(0xFF0E1726);
   static const secondary = Color(0xFF56616F);
-  static const purple = Color(0xFF6A4BD8);
-  static const connected = Color(0xFF0B6E4B);
+  static const sidebarSecondary = Color(0xFF4A5568);
+  static const sidebarDarkSecondary = Color(0xFFB9C0E4);
+  static const sidebarDarkSelected = Color(0xFFEDF0FF);
+  static const activeGlyph = Color(0xFFAEB9FF);
+  static const sidebarDarkBackground = Color(0xFF1A2330);
+  static const sidebarDarkMuted = Color(0xFF8E97C4);
+  static const sidebarSelection = Color(0xFFFFFFFF);
+  static const sidebarSelectionShadow = Color(0x140E1726);
+  static const sidebarLight = Color(0xFFF7F8FA);
+  static const sidebarDarkOverlay = Color(0x8C0A0F2B);
+  static const heroChipText = Color(0xFF2D3748);
+  static const connected = Color(0xFF0E8A5F);
+  static const connectedText = Color(0xFF0B6E4B);
+  static const residentialChip = Color(0xFFE6EEFE);
+  static const residentialChipText = Color(0xFF0842C2);
+  static const secondaryButtonTop = Color(0xFFFFFFFF);
+  static const secondaryButtonBottom = Color(0xFFF6F7F9);
+  static const secondaryButtonDarkTop = Color(0xFF27313E);
+  static const secondaryButtonDarkBottom = Color(0xFF1A2330);
+  static const secondaryButtonStroke = Color(0x240E1726);
+  static const secondaryButtonDarkStroke = Color(0x407E8A98);
   static const warning = Color(0xFFA15C00);
   static const error = Color(0xFFB42335);
   static const cardRadius = 18.0;
   static const buttonRadius = 16.0;
-  static const gradient = LinearGradient(
-    colors: [Color(0xFF2E6DFF), blue],
+  static LinearGradient gradient(ColorScheme scheme) => LinearGradient(
+    colors: [Color.lerp(blue, Colors.white, 0.12)!, blue],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
@@ -45,8 +64,8 @@ abstract final class BusinessText {
       AppTextStyle.custom(
         context,
         size: math.min(size, 46),
-        leading: math.min(size, 46) * 1.08,
-        weight: FontWeight.w800,
+        leading: math.min(size, 46),
+        weight: FontWeight.w600,
       ).copyWith(letterSpacing: -0.3, fontFeatures: _tabular).toJetBrainsMono;
 
   static TextStyle heroStatus(BuildContext context) => AppTextStyle.custom(
@@ -55,6 +74,20 @@ abstract final class BusinessText {
     leading: 18,
     weight: FontWeight.w500,
   );
+
+  static TextStyle heroSpeed(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 20,
+    leading: 24,
+    weight: FontWeight.w600,
+  ).toJetBrainsMono;
+
+  static TextStyle countryCode(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 11,
+    leading: 14,
+    weight: FontWeight.w600,
+  ).toJetBrainsMono;
 
   static TextStyle metaLabel(BuildContext context) =>
       AppTextStyle.custom(context, size: 12, leading: 16);
@@ -65,6 +98,27 @@ abstract final class BusinessText {
     leading: 20,
     weight: FontWeight.w600,
   );
+
+  static TextStyle trafficTotal(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 22,
+    leading: 26,
+    weight: FontWeight.w600,
+  ).toJetBrainsMono;
+
+  static TextStyle actionLabel(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 13,
+    leading: 18,
+    weight: FontWeight.w500,
+  );
+
+  static TextStyle heroMetaValue(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 14,
+    leading: 18,
+    weight: FontWeight.w600,
+  ).copyWith(fontFeatures: _tabular);
 
   static TextStyle cardTitle(BuildContext context, {bool mobile = false}) =>
       AppTextStyle.custom(
@@ -136,7 +190,7 @@ abstract final class BusinessText {
         context,
         size: mobile ? 23 : 30,
         leading: mobile ? 28 : 36,
-        weight: FontWeight.w800,
+        weight: FontWeight.w700,
       ).copyWith(fontFeatures: _tabular);
 
   static TextStyle dataBigUnit(BuildContext context, {bool mobile = false}) =>
@@ -176,8 +230,13 @@ abstract final class BusinessText {
   static TextStyle sidebarTagline(BuildContext context) =>
       AppTextStyle.custom(context, size: 11, leading: 14);
 
-  static TextStyle sidebarNav(BuildContext context) =>
-      AppTextStyle.custom(context, size: 14.5, leading: 20);
+  static TextStyle sidebarNav(BuildContext context, {bool selected = false}) =>
+      AppTextStyle.custom(
+        context,
+        size: 14,
+        leading: 20,
+        weight: selected ? FontWeight.w600 : FontWeight.w400,
+      );
 
   static TextStyle sidebarAccount(BuildContext context) => AppTextStyle.custom(
     context,
@@ -197,7 +256,7 @@ abstract final class BusinessText {
   );
 
   static TextStyle controlLabel(BuildContext context) =>
-      AppTextStyle.custom(context, size: 13, leading: 18);
+      AppTextStyle.custom(context, size: 12, leading: 16);
 
   static TextStyle controlValue(BuildContext context) => AppTextStyle.custom(
     context,
@@ -233,6 +292,7 @@ abstract final class BusinessText {
 
 /// The design's per-surface corner values, which one card token cannot carry.
 abstract final class BusinessRadius {
+  static const code = 5.0;
   static const brandMobile = 6.0;
   static const heroDesktop = 18.0;
   static const heroMobile = 18.0;

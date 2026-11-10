@@ -462,7 +462,7 @@ class DashboardConnectedButton extends StatelessWidget {
                       ? null
                       : Color.lerp(background, colorScheme.primary, amount),
                   gradient: BusinessTheme.of(context) && selected
-                      ? BusinessPalette.gradient
+                      ? BusinessPalette.gradient(colorScheme)
                       : null,
                   shape: shape,
                 ),
@@ -484,7 +484,131 @@ class DashboardConnectedButton extends StatelessWidget {
   }
 }
 
-enum DashboardChipTone { idle, ok, warn }
+class BusinessPrimaryButton extends StatelessWidget {
+  const BusinessPrimaryButton({
+    super.key,
+    required this.label,
+    required this.width,
+    required this.onPressed,
+  });
+
+  final String label;
+  final double width;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: onPressed,
+      style: ButtonStyle.from(
+        backgroundColor: Colors.transparent,
+        foregroundColor: context.colorScheme.onPrimary,
+        disabledForegroundColor: context.colorScheme.onSurfaceVariant,
+        shape: AppShape.full,
+        fixedSize: Size(width, 34),
+        minimumSize: Size(width, 34),
+        maximumSize: Size(width, 34),
+        padding: EdgeInsets.zero,
+        tapTargetSize: TapTargetSize.shrinkWrap,
+        backgroundBuilder: (context, states, child) => DecoratedBox(
+          decoration: ShapeDecoration(
+            gradient: states.contains(WidgetState.disabled)
+                ? LinearGradient(
+                    colors: [
+                      DashboardColors.of(context).tone2,
+                      DashboardColors.of(context).tone2,
+                    ],
+                  )
+                : BusinessPalette.gradient(context.colorScheme),
+            shape: AppShape.full,
+          ),
+          child: child,
+        ),
+      ),
+      child: Text(
+        label,
+        style: BusinessText.actionLabel(
+          context,
+        ).copyWith(color: context.colorScheme.onPrimary),
+      ),
+    );
+  }
+}
+
+class BusinessSecondaryButton extends StatelessWidget {
+  const BusinessSecondaryButton({
+    super.key,
+    required this.label,
+    required this.width,
+    required this.onPressed,
+  });
+
+  final String label;
+  final double width;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = context.colorScheme.brightness == Brightness.dark;
+    const shape = AppShape.full;
+    return FilledButton(
+      onPressed: onPressed,
+      style: ButtonStyle.from(
+        backgroundColor: Colors.transparent,
+        foregroundColor: dark
+            ? context.colorScheme.onSurface
+            : BusinessPalette.deep,
+        shape: shape,
+        fixedSize: Size(width, 34),
+        minimumSize: Size(width, 34),
+        maximumSize: Size(width, 34),
+        padding: EdgeInsets.zero,
+        tapTargetSize: TapTargetSize.shrinkWrap,
+        pressLook: PressLook.ink,
+        backgroundBuilder: (context, states, child) => DecoratedBox(
+          decoration: ShapeDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: dark
+                  ? const [
+                      BusinessPalette.secondaryButtonDarkTop,
+                      BusinessPalette.secondaryButtonDarkBottom,
+                    ]
+                  : const [
+                      BusinessPalette.secondaryButtonTop,
+                      BusinessPalette.secondaryButtonBottom,
+                    ],
+            ),
+            shape: AppShape.all(AppCorner.full).copyWith(
+              side: BorderSide(
+                color: dark
+                    ? BusinessPalette.secondaryButtonDarkStroke
+                    : BusinessPalette.secondaryButtonStroke,
+                width: 0.5,
+              ),
+            ),
+            shadows: const [
+              BoxShadow(
+                color: BusinessPalette.secondaryButtonStroke,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+          child: child,
+        ),
+      ),
+      child: Text(
+        label,
+        style: BusinessText.actionLabel(context).copyWith(
+          color: dark ? context.colorScheme.onSurface : BusinessPalette.deep,
+        ),
+      ),
+    );
+  }
+}
+
+enum DashboardChipTone { idle, ok, warn, primary, residential }
 
 class DashboardChip extends StatelessWidget {
   const DashboardChip({
@@ -508,7 +632,25 @@ class DashboardChip extends StatelessWidget {
       DashboardChipTone.idle => (colors.tone, colorScheme.onSurfaceVariant),
       DashboardChipTone.ok => (colors.okContainer, colors.onOkContainer),
       DashboardChipTone.warn => (colors.warnContainer, colors.onWarnContainer),
+      DashboardChipTone.primary => (
+        colors.brandContainer,
+        colors.onBrandContainer,
+      ),
+      DashboardChipTone.residential => (
+        BusinessTheme.of(context) && colorScheme.brightness == Brightness.light
+            ? BusinessPalette.residentialChip
+            : colors.brandContainer,
+        BusinessTheme.of(context) && colorScheme.brightness == Brightness.light
+            ? BusinessPalette.residentialChipText
+            : colors.onBrandContainer,
+      ),
     };
+    final chipForeground =
+        BusinessTheme.of(context) &&
+            colorScheme.brightness == Brightness.light &&
+            tone == DashboardChipTone.idle
+        ? BusinessPalette.heroChipText
+        : foreground;
     return Container(
       height:
           (large ? 28.0 : 24.0) *
@@ -529,13 +671,16 @@ class DashboardChip extends StatelessWidget {
               ),
               child: const SizedBox.square(dimension: 6),
             ),
-          Text(
-            label,
-            maxLines: 1,
-            style: AppTextStyle.caption1
-                .of(context, emphasized: true)
-                .toTabular
-                .copyWith(color: foreground),
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyle.caption1
+                  .of(context, emphasized: true)
+                  .toTabular
+                  .copyWith(color: chipForeground),
+            ),
           ),
         ],
       ),
@@ -683,11 +828,13 @@ class DashboardSwitch extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.semanticLabel,
+    this.compact = false,
   });
 
   final bool value;
   final ValueChanged<bool>? onChanged;
   final String? semanticLabel;
+  final bool compact;
 
   /// A switch lays out past its track, which would set every row's height.
   static const trackWidth = Switch.trackWidth;
@@ -695,15 +842,18 @@ class DashboardSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: trackWidth,
-      height: Switch.trackHeight,
-      child: OverflowBox(
-        maxWidth: double.infinity,
-        maxHeight: double.infinity,
-        child: Switch(
-          value: value,
-          onChanged: onChanged,
-          semanticLabel: semanticLabel,
+      width: compact ? 40 : trackWidth,
+      height: compact ? 24 : Switch.trackHeight,
+      child: Transform.scale(
+        scale: compact ? 40 / trackWidth : 1,
+        child: OverflowBox(
+          maxWidth: double.infinity,
+          maxHeight: double.infinity,
+          child: Switch(
+            value: value,
+            onChanged: onChanged,
+            semanticLabel: semanticLabel,
+          ),
         ),
       ),
     );

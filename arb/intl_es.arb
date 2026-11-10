@@ -988,6 +988,11 @@
   "installCertificate": "Instalar en el sistema",
   "installCertificateSuccess": "Certificado instalado",
   "validUntil": "Válido hasta el {date}",
+  "businessExpiryDate": "Vence el {date}",
+  "businessCurrentExitIp": "IP de salida actual",
+  "businessCurrentLine": "Línea actual",
+  "businessLockedExit": "Salida bloqueada",
+  "businessConnectedDisconnect": "Conectado · pulsa para desconectar",
   "mitmCertificateExportTip": "Expórtalo y confía en él en los dispositivos que quieras descifrar.",
   "mitmTrustReady": "De confianza",
   "mitmTrustUntrusted": "Sin confianza completa",
@@ -1212,5 +1217,25 @@
   "diagnosticsUnverified": "Sin comprobar",
   "diagnosticsUnavailableNotice": "No están disponibles las comprobaciones de salida DNS, WebRTC del navegador y NTP.",
   "diagnosticsSelection": "Verificación de salida de la ruta predeterminada",
-  "businessExitVerified": "Conectado · Salida verificada"
+  "businessExitVerified": "Conectado · Salida verificada",
+  "businessMonthTraffic": "Tráfico del mes",
+  "businessProxyTraffic": "Proxy",
+  "businessMainlandDirect": "Conexión directa a China continental",
+  "businessSubscriptionUpdatedAt": "Suscripción actualizada {time}",
+  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessTrafficScope": "Tráfico de este mes solo en este dispositivo",
+  "businessResidentialBroadband": "Banda ancha residencial",
+  "businessTunTitle": "Interfaz de red virtual (TUN)",
+  "businessAiServiceLabel": "Servicios de IA",
+  "businessOutboundLabel": "Salida",
+  "businessSubscriptionDetails": "Detalles de la suscripción",
+  "businessUsagePercent": "{percent} % usado",
+  "businessTunCaption": "Enrutar el tráfico de todas las aplicaciones",
+  "@businessUsagePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  }
 }

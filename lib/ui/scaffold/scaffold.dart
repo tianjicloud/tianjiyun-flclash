@@ -145,6 +145,17 @@ class ScaffoldState extends State<Scaffold>
   var _searchFillsBar = true;
   var _searchDocked = false;
   var _sorting = false;
+  var _scrolledUnder = false;
+
+  bool _trackScrolledUnder(ScrollNotification notification) {
+    if (notification.depth == 0 && notification.metrics.axis == Axis.vertical) {
+      final scrolledUnder = notification.metrics.extentBefore > 0;
+      if (scrolledUnder != _scrolledUnder) {
+        setState(() => _scrolledUnder = scrolledUnder);
+      }
+    }
+    return false;
+  }
 
   bool get _isSearch {
     return _appBarState.value?.query != null;
@@ -826,7 +837,7 @@ class ScaffoldState extends State<Scaffold>
         return _buildAppBarWrap(appBar, barSearch: barSearch);
       },
     );
-    if (!widget.opaqueAppBar) return bar;
+    if (!widget.opaqueAppBar || !_scrolledUnder) return bar;
     return PreferredSize(
       preferredSize: bar.preferredSize,
       child: DecoratedBox(
@@ -864,7 +875,10 @@ class ScaffoldState extends State<Scaffold>
         !ScaffoldSurface.of(context).isModal;
     final scaffold = PrismScaffold(
       bar: _buildAppBar(backAction, form),
-      body: SortModeScope(sorting: _sorting, child: widget.body),
+      body: NotificationListener<ScrollNotification>(
+        onNotification: _trackScrolledUnder,
+        child: SortModeScope(sorting: _sorting, child: widget.body),
+      ),
       headerListenable: keywords,
       headerBuilder: keywords == null
           ? null

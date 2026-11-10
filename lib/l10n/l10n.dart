@@ -7668,8 +7668,7 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one:
-          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -8220,6 +8219,56 @@ class AppLocalizations {
       name: 'validUntil',
       desc: '',
       args: [date],
+    );
+  }
+
+  /// `Expires {date}`
+  String businessExpiryDate(Object date) {
+    return Intl.message(
+      'Expires $date',
+      name: 'businessExpiryDate',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Current exit IP`
+  String get businessCurrentExitIp {
+    return Intl.message(
+      'Current exit IP',
+      name: 'businessCurrentExitIp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current line`
+  String get businessCurrentLine {
+    return Intl.message(
+      'Current line',
+      name: 'businessCurrentLine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit locked`
+  String get businessLockedExit {
+    return Intl.message(
+      'Exit locked',
+      name: 'businessLockedExit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected · Click to disconnect`
+  String get businessConnectedDisconnect {
+    return Intl.message(
+      'Connected · Click to disconnect',
+      name: 'businessConnectedDisconnect',
+      desc: '',
+      args: [],
     );
   }
 
@@ -10333,6 +10382,126 @@ class AppLocalizations {
     return Intl.message(
       'Connected · Exit verified',
       name: 'businessExitVerified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This month`
+  String get businessMonthTraffic {
+    return Intl.message(
+      'This month',
+      name: 'businessMonthTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy`
+  String get businessProxyTraffic {
+    return Intl.message(
+      'Proxy',
+      name: 'businessProxyTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mainland direct`
+  String get businessMainlandDirect {
+    return Intl.message(
+      'Mainland direct',
+      name: 'businessMainlandDirect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription updated {time}`
+  String businessSubscriptionUpdatedAt(String time) {
+    return Intl.message(
+      'Subscription updated $time',
+      name: 'businessSubscriptionUpdatedAt',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `Traffic this month on this device only`
+  String get businessTrafficScope {
+    return Intl.message(
+      'Traffic this month on this device only',
+      name: 'businessTrafficScope',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Residential broadband`
+  String get businessResidentialBroadband {
+    return Intl.message(
+      'Residential broadband',
+      name: 'businessResidentialBroadband',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Virtual network interface (TUN)`
+  String get businessTunTitle {
+    return Intl.message(
+      'Virtual network interface (TUN)',
+      name: 'businessTunTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AI services`
+  String get businessAiServiceLabel {
+    return Intl.message(
+      'AI services',
+      name: 'businessAiServiceLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Outbound`
+  String get businessOutboundLabel {
+    return Intl.message(
+      'Outbound',
+      name: 'businessOutboundLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription details`
+  String get businessSubscriptionDetails {
+    return Intl.message(
+      'Subscription details',
+      name: 'businessSubscriptionDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{percent}% used`
+  String businessUsagePercent(int percent) {
+    return Intl.message(
+      '$percent% used',
+      name: 'businessUsagePercent',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `Route all app traffic`
+  String get businessTunCaption {
+    return Intl.message(
+      'Route all app traffic',
+      name: 'businessTunCaption',
       desc: '',
       args: [],
     );

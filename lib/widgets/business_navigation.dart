@@ -9,6 +9,7 @@ import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,7 @@ import 'package:prism_ui/prism_ui.dart';
 const _expandedSidebarWidth = 220.0;
 const _compactSidebarWidth = 56.0;
 const _sidebarRowShape = RoundedSuperellipseBorder(
-  borderRadius: BorderRadius.all(Radius.circular(13)),
+  borderRadius: BorderRadius.all(Radius.circular(10)),
 );
 const _dockHeight = 58.0;
 
@@ -63,7 +64,7 @@ class BusinessNavigationSidebar extends ConsumerWidget {
     final dark = context.colorScheme.brightness == Brightness.dark;
     final hasWallpaper = AppBackgroundScope.hasImage(context);
     final width = expanded ? _expandedSidebarWidth : _compactSidebarWidth;
-    final horizontalInset = expanded ? 16.0 : 8.0;
+    final horizontalInset = expanded ? 12.5 : 8.0;
     return SizedBox(
       width: width,
       child: DecoratedBox(
@@ -71,8 +72,8 @@ class BusinessNavigationSidebar extends ConsumerWidget {
           color: hasWallpaper
               ? Colors.transparent
               : dark
-              ? const Color(0x8C0A0F2B)
-              : const Color(0xFFF7F8FA),
+              ? BusinessPalette.sidebarDarkOverlay
+              : BusinessPalette.sidebarLight,
           shape: const RoundedSuperellipseBorder(),
         ),
         child: Padding(
@@ -184,7 +185,7 @@ class _BusinessBrand extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: BusinessText.sidebarBrand(context).copyWith(
                     color: dark
-                        ? const Color(0xFFEDF0FF)
+                        ? BusinessPalette.sidebarDarkSelected
                         : context.colorScheme.onSurface,
                   ),
                 ),
@@ -194,8 +195,9 @@ class _BusinessBrand extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: BusinessText.sidebarTagline(context).copyWith(
                     color: dark
-                        ? const Color(0xFFB9C0E4)
+                        ? BusinessPalette.sidebarDarkSecondary
                         : context.colorScheme.onSurfaceVariant,
+                    letterSpacing: 1.6,
                   ),
                 ),
               ],
@@ -243,7 +245,7 @@ class _SidebarToggle extends StatelessWidget {
                   Glyphs.sidebar(expanded ? 1 : 0),
                   size: 20,
                   color: dark
-                      ? const Color(0xFFB9C0E4)
+                      ? BusinessPalette.sidebarDarkSecondary
                       : context.colorScheme.onSurfaceVariant,
                 ),
               ),
@@ -272,10 +274,12 @@ class _BusinessSidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = context.colorScheme.brightness == Brightness.dark;
     final foreground = selected
-        ? (dark ? const Color(0xFFEDF0FF) : context.colorScheme.onSurface)
+        ? (dark
+              ? BusinessPalette.sidebarDarkSelected
+              : context.colorScheme.onSurface)
         : (dark
-              ? const Color(0xFFB9C0E4)
-              : context.colorScheme.onSurfaceVariant);
+              ? BusinessPalette.sidebarDarkSecondary
+              : BusinessPalette.sidebarSecondary);
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Semantics(
@@ -299,22 +303,27 @@ class _BusinessSidebarItem extends StatelessWidget {
                       child: DecoratedBox(
                         decoration: ShapeDecoration(
                           color: dark
-                              ? const Color(0xFF1A2330)
-                              : const Color(0xFFFFFFFF),
+                              ? BusinessPalette.sidebarDarkBackground
+                              : BusinessPalette.sidebarSelection,
                           shape: RoundedSuperellipseBorder(
-                            side: BorderSide(
-                              color: dark
-                                  ? const Color(0xFF2A3442)
-                                  : const Color(0xFFDCE1E7),
-                            ),
                             borderRadius: _sidebarRowShape.borderRadius,
                           ),
+                          shadows: dark
+                              ? const []
+                              : const [
+                                  BoxShadow(
+                                    color:
+                                        BusinessPalette.sidebarSelectionShadow,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
                         ),
                       ),
                     ),
                   Padding(
                     padding: EdgeInsetsDirectional.only(
-                      start: expanded ? 12 : 0,
+                      start: expanded ? 10 : 0,
                       end: expanded ? 8 : 0,
                     ),
                     child: Row(
@@ -325,7 +334,9 @@ class _BusinessSidebarItem extends StatelessWidget {
                         IconTheme.merge(
                           data: IconThemeData(
                             size: 20,
-                            color: selected ? BusinessPalette.blue : foreground,
+                            color: selected
+                                ? context.colorScheme.primary
+                                : foreground,
                           ),
                           child: AnimatedGlyph(
                             glyph: item.glyph,
@@ -333,7 +344,7 @@ class _BusinessSidebarItem extends StatelessWidget {
                           ),
                         ),
                         if (expanded) ...[
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Text(
                               _navigationLabel(context, item.label),
@@ -341,6 +352,7 @@ class _BusinessSidebarItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: BusinessText.sidebarNav(
                                 context,
+                                selected: selected,
                               ).copyWith(color: foreground),
                             ),
                           ),
@@ -377,83 +389,76 @@ class _SubscriptionSummary extends StatelessWidget {
         : context.appLocalizations.profileDaysLeft(daysLeft);
     return DecoratedBox(
       decoration: ShapeDecoration(
-        color: dark ? const Color(0xFF1A2330) : const Color(0xFFFFFFFF),
-        shape: AppShape.lg,
+        color: dark
+            ? BusinessPalette.sidebarDarkBackground
+            : BusinessPalette.sidebarSelection,
+        shape: AppShape.all(BusinessPalette.cardRadius),
         shadows: dark
             ? const []
             : const [
                 BoxShadow(
-                  color: Color(0x140E1726),
+                  color: BusinessPalette.sidebarSelectionShadow,
                   blurRadius: 12,
                   offset: Offset(0, 4),
                 ),
               ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(12),
         child: Tooltip(
           message: '${profile.realLabel} · $remaining',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                profile.realLabel,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: BusinessText.sidebarAccount(context).copyWith(
-                  color: dark
-                      ? const Color(0xFFEDF0FF)
-                      : const Color(0xFF0E1726),
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                remaining,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: BusinessText.sidebarAccountSub(context).copyWith(
-                  color: dark
-                      ? const Color(0xFFB9C0E4)
-                      : const Color(0xFF56616F),
-                ),
-              ),
-              if (usage != null) ...[
-                const SizedBox(height: 2),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 66),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Text(
-                  '${(usage * 100).round()}% ${context.appLocalizations.usedShort}',
+                  profile.realLabel,
                   maxLines: 1,
-                  style: BusinessText.sidebarAccountSub(context).copyWith(
+                  overflow: TextOverflow.ellipsis,
+                  style: BusinessText.sidebarAccount(context).copyWith(
                     color: dark
-                        ? const Color(0xFFB9C0E4)
-                        : const Color(0xFF56616F),
+                        ? BusinessPalette.sidebarDarkSelected
+                        : BusinessPalette.deep,
                   ),
                 ),
-                const SizedBox(height: 9),
-                SizedBox(
-                  height: 6,
-                  child: DecoratedBox(
-                    decoration: const ShapeDecoration(
-                      color: Color(0xFFEEF1F4),
-                      shape: AppShape.full,
-                    ),
-                    child: Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: FractionallySizedBox(
-                        widthFactor: usage,
-                        heightFactor: 1,
-                        child: const DecoratedBox(
-                          decoration: ShapeDecoration(
-                            color: BusinessPalette.blue,
-                            shape: AppShape.full,
+                Text(
+                  usage == null
+                      ? remaining
+                      : '$remaining · ${context.appLocalizations.businessUsagePercent((usage * 100).round())}',
+                  style: BusinessText.sidebarAccountSub(context).copyWith(
+                    color: dark
+                        ? BusinessPalette.sidebarDarkSecondary
+                        : BusinessPalette.secondary,
+                  ),
+                ),
+                if (usage != null)
+                  SizedBox(
+                    height: 8,
+                    child: DecoratedBox(
+                      decoration: ShapeDecoration(
+                        color: DashboardColors.of(context).track,
+                        shape: AppShape.full,
+                      ),
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: FractionallySizedBox(
+                          widthFactor: usage,
+                          heightFactor: 1,
+                          child: DecoratedBox(
+                            decoration: ShapeDecoration(
+                              color: context.colorScheme.primary,
+                              shape: AppShape.full,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -523,9 +528,11 @@ class _BusinessDockItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = context.colorScheme.brightness == Brightness.dark;
     final color = selected
-        ? (dark ? const Color(0xFFEDF0FF) : context.colorScheme.onSurface)
+        ? (dark
+              ? BusinessPalette.sidebarDarkSelected
+              : context.colorScheme.onSurface)
         : (dark
-              ? const Color(0xFF8E97C4)
+              ? BusinessPalette.sidebarDarkMuted
               : context.colorScheme.onSurfaceVariant);
     return Semantics(
       button: true,
@@ -544,7 +551,7 @@ class _BusinessDockItem extends StatelessWidget {
                 IconTheme.merge(
                   data: IconThemeData(
                     size: 20,
-                    color: selected ? BusinessPalette.blue : color,
+                    color: selected ? context.colorScheme.primary : color,
                   ),
                   child: AnimatedGlyph(glyph: item.glyph, filled: selected),
                 ),

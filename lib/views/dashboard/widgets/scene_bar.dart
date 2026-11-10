@@ -28,36 +28,22 @@ class SceneBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final density = DashboardDensityScope.of(context);
     final mobile = !density.isDesktop;
+    final scale = DashboardDensityScope.scaleOf(context);
     final policy = ref.watch(scenePolicyProvider);
-    final residential = ref.watch(residentialPolicyProvider);
     final applyState = ref.watch(sceneActionProvider);
     final applying = applyState.applying && applyState.matches(_profileId(ref));
     final failed = applyState.failed && applyState.matches(_profileId(ref));
     final segment = _SceneSegment(policy: policy, applying: applying);
-    final label = Row(
-      mainAxisSize: MainAxisSize.min,
-      spacing: 8,
-      children: [
-        GlyphIcon(
-          AppGlyphs.sliders,
-          size: 16,
-          color: context.colorScheme.onSurfaceVariant,
-        ),
-        Text(
-          context.appLocalizations.scene,
-          style: BusinessText.controlLabel(
-            context,
-          ).copyWith(color: context.colorScheme.onSurfaceVariant),
-        ),
-      ],
+    final label = _sectionLabel(context.appLocalizations.scene, context);
+    final outboundLabel = _sectionLabel(
+      context.appLocalizations.businessOutboundLabel,
+      context,
     );
     final note = failed
         ? context.appLocalizations.residentialApplyFailed
         : policy.suspended
         ? context.appLocalizations.sceneSuspended
-        : residential.bulkBypass
-        ? context.appLocalizations.sceneNote
-        : context.appLocalizations.residentialBulkUnconfirmed;
+        : context.appLocalizations.sceneNote;
     if (mobile) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -91,20 +77,12 @@ class SceneBar extends ConsumerWidget {
     }
     return DashboardCard(
       semanticLabel: context.appLocalizations.scene,
-      radius: mobile ? BusinessRadius.sceneMobile : BusinessRadius.sceneDesktop,
+      radius: mobile ? BusinessRadius.sceneMobile : BusinessPalette.cardRadius,
       padding: EdgeInsetsDirectional.fromSTEB(
         mobile ? 14 : 18,
-        mobile
-            ? 11
-            : density.isCompact
-            ? 8
-            : 13,
+        mobile ? 11 : 13,
         mobile ? 14 : 18,
-        mobile
-            ? 11
-            : density.isCompact
-            ? 8
-            : 13,
+        mobile ? 11 : 13,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -112,7 +90,7 @@ class SceneBar extends ConsumerWidget {
             note,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.start,
             style: BusinessText.sceneNote(context).copyWith(
               color: failed
                   ? context.colorScheme.error
@@ -127,25 +105,43 @@ class SceneBar extends ConsumerWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 label,
-                IntrinsicWidth(child: segment),
-                const IntrinsicWidth(child: OutboundModeInline()),
-                SizedBox(width: constraints.maxWidth, child: noteText),
+                SizedBox(width: 156 * scale, child: segment),
+                outboundLabel,
+                SizedBox(width: 170 * scale, child: const OutboundModeInline()),
+                SizedBox(
+                  width: constraints.maxWidth,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(start: 38 * scale),
+                    child: noteText,
+                  ),
+                ),
               ],
             );
           }
           return Row(
-            spacing: 14,
             children: [
               label,
-              IntrinsicWidth(child: segment),
+              const SizedBox(width: 14),
+              SizedBox(width: 156 * scale, child: segment),
+              const SizedBox(width: 14),
               Expanded(child: noteText),
-              const IntrinsicWidth(child: OutboundModeInline()),
+              const SizedBox(width: 14),
+              outboundLabel,
+              const SizedBox(width: 14),
+              SizedBox(width: 170 * scale, child: const OutboundModeInline()),
             ],
           );
         },
       ),
     );
   }
+
+  Widget _sectionLabel(String value, BuildContext context) => Text(
+    value,
+    style: BusinessText.controlLabel(
+      context,
+    ).copyWith(color: context.colorScheme.onSurfaceVariant),
+  );
 
   int? _profileId(WidgetRef ref) => ref.read(currentProfileProvider)?.id;
 }
@@ -170,9 +166,9 @@ class _SceneSegment extends ConsumerWidget {
           ? null
           : (scene) =>
                 unawaited(ref.read(sceneActionProvider.notifier).select(scene)),
-      height: mobile ? 34 : 38,
+      height: mobile ? 34 : 30,
       mobile: mobile,
-      expand: mobile,
+      expand: true,
     );
   }
 }

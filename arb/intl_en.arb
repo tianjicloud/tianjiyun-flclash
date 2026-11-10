@@ -988,6 +988,11 @@
   "installCertificate": "Install to system",
   "installCertificateSuccess": "Certificate installed",
   "validUntil": "Valid until {date}",
+  "businessExpiryDate": "Expires {date}",
+  "businessCurrentExitIp": "Current exit IP",
+  "businessCurrentLine": "Current line",
+  "businessLockedExit": "Exit locked",
+  "businessConnectedDisconnect": "Connected · Click to disconnect",
   "mitmCertificateExportTip": "Export it and trust it on the devices you want to decrypt.",
   "mitmTrustReady": "Trusted",
   "mitmTrustUntrusted": "Not fully trusted",
@@ -1212,5 +1217,25 @@
   "diagnosticsUnverified": "Not checked",
   "diagnosticsUnavailableNotice": "DNS exit, browser WebRTC and NTP checks are not available.",
   "diagnosticsSelection": "Default route exit verification",
-  "businessExitVerified": "Connected · Exit verified"
+  "businessExitVerified": "Connected · Exit verified",
+  "businessMonthTraffic": "This month",
+  "businessProxyTraffic": "Proxy",
+  "businessMainlandDirect": "Mainland direct",
+  "businessSubscriptionUpdatedAt": "Subscription updated {time}",
+  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessTrafficScope": "Traffic this month on this device only",
+  "businessResidentialBroadband": "Residential broadband",
+  "businessTunTitle": "Virtual network interface (TUN)",
+  "businessAiServiceLabel": "AI services",
+  "businessOutboundLabel": "Outbound",
+  "businessSubscriptionDetails": "Subscription details",
+  "businessUsagePercent": "{percent}% used",
+  "businessTunCaption": "Route all app traffic",
+  "@businessUsagePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  }
 }

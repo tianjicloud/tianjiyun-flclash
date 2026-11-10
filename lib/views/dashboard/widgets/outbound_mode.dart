@@ -105,16 +105,12 @@ class OutboundModeInline extends ConsumerWidget {
     return BusinessSegmented<Mode>(
       items: [
         for (final item in Mode.values)
-          BusinessSegment(
-            value: item,
-            label: item.label,
-            glyph: _glyphOf(item),
-          ),
+          BusinessSegment(value: item, label: item.label),
       ],
       selected: mode,
       onSelected: (item) => _changeMode(ref, item),
-      height: mobile ? 34 : 38,
-      expand: mobile,
+      height: mobile ? 34 : 30,
+      expand: true,
       mobile: mobile,
     );
   }
