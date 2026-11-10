@@ -38,7 +38,6 @@ void main() {
           currentIndex: 0,
           expanded: true,
           onSelected: (_) {},
-          onToggle: null,
           windowControls: Size.zero,
         ),
       ),

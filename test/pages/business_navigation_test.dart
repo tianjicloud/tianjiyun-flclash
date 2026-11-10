@@ -153,6 +153,44 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('business sidebar width follows the window without a toggle', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final container = _container(_profile(business: true));
+    addTearDown(container.dispose);
+    _setSize(tester, container, const Size(1200, 800));
+    container
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(sidebarExpanded: false));
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(includeNavigatorKey: false, child: HomePage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final sidebar = find.byType(BusinessNavigationSidebar);
+    expect(tester.getSize(sidebar).width, 220);
+    expect(find.byTooltip('Collapse'), findsNothing);
+    expect(find.byTooltip('Expand'), findsNothing);
+
+    tester.view.physicalSize = const Size(800, 800);
+    container.read(viewSizeProvider.notifier).value = const Size(800, 800);
+    await tester.pumpAndSettle();
+    expect(tester.getSize(sidebar).width, 56);
+    expect(find.byTooltip('Collapse'), findsNothing);
+    expect(find.byTooltip('Expand'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('business-sidebar-dashboard')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('business sidebar leaves the shared wallpaper visible', (
     tester,
   ) async {

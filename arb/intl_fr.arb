@@ -1235,7 +1235,13 @@
   "businessProxyTraffic": "Proxy",
   "businessMainlandDirect": "Connexion directe à la Chine continentale",
   "businessSubscriptionUpdatedAt": "Abonnement mis à jour {time}",
-  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "@businessSubscriptionUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "businessTrafficScope": "Trafic du mois sur cet appareil uniquement",
   "businessResidentialBroadband": "Haut débit résidentiel",
   "businessTunTitle": "Interface réseau virtuelle (TUN)",
@@ -1280,5 +1286,9 @@
       }
     }
   },
-  "businessAllLines": "Toutes les lignes"
+  "businessAllLines": "Toutes les lignes",
+  "outboundModeDescription": "Gardez généralement le mode « Règles ». Le mode global fait aussi passer le trafic de Chine continentale par le proxy ; le mode direct désactive toutes les lignes.",
+  "outboundModeGlobalWarning": "Le mode global est actif",
+  "outboundModeDirectWarning": "Le mode direct est actif",
+  "outboundModeRestoreRule": "Rétablir les règles"
 }

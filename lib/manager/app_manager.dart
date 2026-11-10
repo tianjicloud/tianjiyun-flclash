@@ -164,31 +164,22 @@ class _Sidebar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final canExpand = canExpandSidebar(viewMode);
-    final sidebarExpanded = ref.watch(
-      appSettingProvider.select((state) => state.sidebarExpanded),
-    );
+    final sidebarExpanded = business
+        ? viewMode == ViewMode.desktop
+        : ref.watch(
+            appSettingProvider.select((state) => state.sidebarExpanded),
+          );
     final version = ref.watch(versionProvider);
     final windowControls = windowControlsOverSidebar(
       isMacOS: system.isMacOS,
       version: version,
     );
-    if (business && canExpand) {
+    if (business && viewMode != ViewMode.mobile) {
       return BusinessNavigationSidebar(
         items: items,
         currentIndex: currentIndex,
         expanded: canExpand && sidebarExpanded,
         onSelected: onSelected,
-        onToggle: canExpand
-            ? () {
-                ref
-                    .read(appSettingProvider.notifier)
-                    .update(
-                      (state) => state.copyWith(
-                        sidebarExpanded: !state.sidebarExpanded,
-                      ),
-                    );
-              }
-            : null,
         windowControls: windowControls,
       );
     }
@@ -200,7 +191,7 @@ class _Sidebar extends ConsumerWidget {
       selectedIndex: currentIndex,
       expanded: canExpand && sidebarExpanded,
       onSelected: onSelected,
-      onToggle: canExpand
+      onToggle: !business && canExpand
           ? () {
               ref
                   .read(appSettingProvider.notifier)
@@ -261,7 +252,7 @@ class AppSidebarContainer extends ConsumerWidget {
     final isBusiness = isTianjiSubscriptionProfile(
       ref.watch(currentProfileProvider),
     );
-    final customBusinessSidebar = isBusiness && canExpandSidebar(viewMode);
+    final customBusinessSidebar = isBusiness && viewMode != ViewMode.mobile;
     void onSelected(int index) {
       _handleToPage(ref, navigationItems[index].label);
     }

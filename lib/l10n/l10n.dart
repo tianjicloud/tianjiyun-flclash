@@ -10761,6 +10761,46 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Usually keep “Rule”. Global also proxies mainland traffic; Direct disables all proxy lines.`
+  String get outboundModeDescription {
+    return Intl.message(
+      'Usually keep “Rule”. Global also proxies mainland traffic; Direct disables all proxy lines.',
+      name: 'outboundModeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Global mode is active`
+  String get outboundModeGlobalWarning {
+    return Intl.message(
+      'Global mode is active',
+      name: 'outboundModeGlobalWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Direct mode is active`
+  String get outboundModeDirectWarning {
+    return Intl.message(
+      'Direct mode is active',
+      name: 'outboundModeDirectWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore Rule`
+  String get outboundModeRestoreRule {
+    return Intl.message(
+      'Restore Rule',
+      name: 'outboundModeRestoreRule',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

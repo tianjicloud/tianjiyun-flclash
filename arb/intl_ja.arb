@@ -1235,7 +1235,13 @@
   "businessProxyTraffic": "プロキシ",
   "businessMainlandDirect": "中国本土直通",
   "businessSubscriptionUpdatedAt": "サブスクリプション更新 {time}",
-  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "@businessSubscriptionUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "businessTrafficScope": "今月の通信量（このデバイスのみ）",
   "businessResidentialBroadband": "住宅用ブロードバンド",
   "businessTunTitle": "仮想ネットワークインターフェイス（TUN）",
@@ -1280,5 +1286,9 @@
       }
     }
   },
-  "businessAllLines": "すべての回線"
+  "businessAllLines": "すべての回線",
+  "outboundModeDescription": "通常は「ルール」のままにしてください。グローバルでは中国本土の通信もプロキシ経由になり、直接接続ではすべての回線が使えなくなります。",
+  "outboundModeGlobalWarning": "グローバルモードが有効です",
+  "outboundModeDirectWarning": "直接接続モードが有効です",
+  "outboundModeRestoreRule": "ルールに戻す"
 }

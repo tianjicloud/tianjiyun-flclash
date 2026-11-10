@@ -1497,6 +1497,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundExit": MessageLookupByLibrary.simpleMessage("출구"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("아웃바운드 IP"),
     "outboundMode": MessageLookupByLibrary.simpleMessage("아웃바운드 모드"),
+    "outboundModeDescription": MessageLookupByLibrary.simpleMessage(
+      "일반적으로 ‘규칙’을 유지하세요. 전역은 중국 본토 트래픽도 프록시로 보내고, 직접 연결은 모든 회선을 사용할 수 없게 합니다.",
+    ),
+    "outboundModeDirectWarning": MessageLookupByLibrary.simpleMessage(
+      "직접 연결 모드가 활성화되어 있습니다",
+    ),
+    "outboundModeGlobalWarning": MessageLookupByLibrary.simpleMessage(
+      "전역 모드가 활성화되어 있습니다",
+    ),
+    "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage("규칙으로 복원"),
     "overrideDestination": MessageLookupByLibrary.simpleMessage("대상 덮어쓰기"),
     "overrideEntries": MessageLookupByLibrary.simpleMessage("덮어쓰기 항목"),
     "overview": MessageLookupByLibrary.simpleMessage("개요"),

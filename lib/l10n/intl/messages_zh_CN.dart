@@ -1373,6 +1373,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundExit": MessageLookupByLibrary.simpleMessage("出口"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("出站 IP"),
     "outboundMode": MessageLookupByLibrary.simpleMessage("出站模式"),
+    "outboundModeDescription": MessageLookupByLibrary.simpleMessage(
+      "一般保持「规则」。全局会让大陆流量也走代理，直连会让所有线路失效。",
+    ),
+    "outboundModeDirectWarning": MessageLookupByLibrary.simpleMessage(
+      "当前为直连模式",
+    ),
+    "outboundModeGlobalWarning": MessageLookupByLibrary.simpleMessage(
+      "当前为全局模式",
+    ),
+    "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage("恢复规则"),
     "overrideDestination": MessageLookupByLibrary.simpleMessage("覆盖目标地址"),
     "overrideEntries": MessageLookupByLibrary.simpleMessage("覆写项"),
     "overview": MessageLookupByLibrary.simpleMessage("概览"),

@@ -1235,7 +1235,13 @@
   "businessProxyTraffic": "Proxy",
   "businessMainlandDirect": "Mainland direct",
   "businessSubscriptionUpdatedAt": "Subscription updated {time}",
-  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "@businessSubscriptionUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "businessTrafficScope": "Traffic this month on this device only",
   "businessResidentialBroadband": "Residential broadband",
   "businessTunTitle": "Virtual network interface (TUN)",
@@ -1280,5 +1286,9 @@
       }
     }
   },
-  "businessAllLines": "All lines"
+  "businessAllLines": "All lines",
+  "outboundModeDescription": "Usually keep “Rule”. Global also proxies mainland traffic; Direct disables all proxy lines.",
+  "outboundModeGlobalWarning": "Global mode is active",
+  "outboundModeDirectWarning": "Direct mode is active",
+  "outboundModeRestoreRule": "Restore Rule"
 }

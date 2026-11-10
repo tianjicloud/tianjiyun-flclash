@@ -1910,6 +1910,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundExit": MessageLookupByLibrary.simpleMessage("Salida"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("IP de salida"),
     "outboundMode": MessageLookupByLibrary.simpleMessage("Modo de salida"),
+    "outboundModeDescription": MessageLookupByLibrary.simpleMessage(
+      "Normalmente, mantén «Reglas». El modo global también envía el tráfico de China continental por el proxy; el modo directo desactiva todas las líneas.",
+    ),
+    "outboundModeDirectWarning": MessageLookupByLibrary.simpleMessage(
+      "El modo directo está activo",
+    ),
+    "outboundModeGlobalWarning": MessageLookupByLibrary.simpleMessage(
+      "El modo global está activo",
+    ),
+    "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage(
+      "Restaurar reglas",
+    ),
     "overrideDestination": MessageLookupByLibrary.simpleMessage(
       "Sobrescribir destino",
     ),

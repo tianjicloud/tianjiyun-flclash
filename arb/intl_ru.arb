@@ -1235,7 +1235,13 @@
   "businessProxyTraffic": "Прокси",
   "businessMainlandDirect": "Прямое подключение к материковому Китаю",
   "businessSubscriptionUpdatedAt": "Подписка обновлена {time}",
-  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "@businessSubscriptionUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "businessTrafficScope": "Трафик за месяц только на этом устройстве",
   "businessResidentialBroadband": "Домашний широкополосный доступ",
   "businessTunTitle": "Виртуальный сетевой интерфейс (TUN)",
@@ -1280,5 +1286,9 @@
       }
     }
   },
-  "businessAllLines": "Все линии"
+  "businessAllLines": "Все линии",
+  "outboundModeDescription": "Обычно оставляйте режим «Правила». Глобальный режим направляет через прокси и трафик материкового Китая, а прямой режим отключает все прокси-линии.",
+  "outboundModeGlobalWarning": "Включён глобальный режим",
+  "outboundModeDirectWarning": "Включён прямой режим",
+  "outboundModeRestoreRule": "Вернуть правила"
 }

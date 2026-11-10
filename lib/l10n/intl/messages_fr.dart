@@ -1914,6 +1914,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundExit": MessageLookupByLibrary.simpleMessage("Sortie"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("IP sortante"),
     "outboundMode": MessageLookupByLibrary.simpleMessage("Mode sortant"),
+    "outboundModeDescription": MessageLookupByLibrary.simpleMessage(
+      "Gardez généralement le mode « Règles ». Le mode global fait aussi passer le trafic de Chine continentale par le proxy ; le mode direct désactive toutes les lignes.",
+    ),
+    "outboundModeDirectWarning": MessageLookupByLibrary.simpleMessage(
+      "Le mode direct est actif",
+    ),
+    "outboundModeGlobalWarning": MessageLookupByLibrary.simpleMessage(
+      "Le mode global est actif",
+    ),
+    "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage(
+      "Rétablir les règles",
+    ),
     "overrideDestination": MessageLookupByLibrary.simpleMessage(
       "Remplacer la destination",
     ),

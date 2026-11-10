@@ -1235,7 +1235,13 @@
   "businessProxyTraffic": "프록시",
   "businessMainlandDirect": "중국 본토 직접 연결",
   "businessSubscriptionUpdatedAt": "구독 업데이트 {time}",
-  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "@businessSubscriptionUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "businessTrafficScope": "이번 달 이 기기에서만 집계",
   "businessResidentialBroadband": "가정용 광대역",
   "businessTunTitle": "가상 네트워크 인터페이스(TUN)",
@@ -1280,5 +1286,9 @@
       }
     }
   },
-  "businessAllLines": "모든 회선"
+  "businessAllLines": "모든 회선",
+  "outboundModeDescription": "일반적으로 ‘규칙’을 유지하세요. 전역은 중국 본토 트래픽도 프록시로 보내고, 직접 연결은 모든 회선을 사용할 수 없게 합니다.",
+  "outboundModeGlobalWarning": "전역 모드가 활성화되어 있습니다",
+  "outboundModeDirectWarning": "직접 연결 모드가 활성화되어 있습니다",
+  "outboundModeRestoreRule": "규칙으로 복원"
 }

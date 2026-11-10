@@ -1519,6 +1519,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundExit": MessageLookupByLibrary.simpleMessage("出口"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("アウトバウンド IP"),
     "outboundMode": MessageLookupByLibrary.simpleMessage("アウトバウンドモード"),
+    "outboundModeDescription": MessageLookupByLibrary.simpleMessage(
+      "通常は「ルール」のままにしてください。グローバルでは中国本土の通信もプロキシ経由になり、直接接続ではすべての回線が使えなくなります。",
+    ),
+    "outboundModeDirectWarning": MessageLookupByLibrary.simpleMessage(
+      "直接接続モードが有効です",
+    ),
+    "outboundModeGlobalWarning": MessageLookupByLibrary.simpleMessage(
+      "グローバルモードが有効です",
+    ),
+    "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage("ルールに戻す"),
     "overrideDestination": MessageLookupByLibrary.simpleMessage("宛先を上書き"),
     "overrideEntries": MessageLookupByLibrary.simpleMessage("上書き項目"),
     "overview": MessageLookupByLibrary.simpleMessage("概要"),

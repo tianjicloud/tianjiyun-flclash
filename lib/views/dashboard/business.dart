@@ -222,6 +222,8 @@ class _BusinessBody extends ConsumerWidget {
                       const SceneUnavailableCard(),
                     if (density.isDesktop) const _OutboundModeFallback(),
                   ],
+                  if (mobile && platform == SupportPlatform.Android)
+                    const BusinessOutboundModeWarning(),
                   if (!density.isDesktop)
                     QuickLines(
                       onChooseResidential: () =>
@@ -644,27 +646,7 @@ class _TakeoverRow extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 8,
-        children: [
-          DashboardCard(
-            semanticLabel: context.appLocalizations.outboundMode,
-            padding: EdgeInsets.symmetric(
-              horizontal: dashboardCardPadding(density).left,
-              vertical: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 8,
-              children: [
-                Text(
-                  context.appLocalizations.outboundMode,
-                  style: DashboardText.cardTitle(context),
-                ),
-                const OutboundModeInline(),
-              ],
-            ),
-          ),
-          ...tiles,
-        ],
+        children: [...tiles],
       );
     }
     return SizedBox(
@@ -673,6 +655,57 @@ class _TakeoverRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 16,
         children: [for (final tile in tiles) Expanded(child: tile)],
+      ),
+    );
+  }
+}
+
+class BusinessOutboundModeWarning extends ConsumerWidget {
+  const BusinessOutboundModeWarning({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(
+      patchClashConfigProvider.select((state) => state.mode),
+    );
+    if (mode == Mode.rule) return const SizedBox.shrink();
+    final strings = context.appLocalizations;
+    return Container(
+      padding: const EdgeInsetsDirectional.fromSTEB(14, 8, 6, 8),
+      decoration: ShapeDecoration(
+        color: BusinessPalette.exitBannerBackgroundFor(
+          context.colorScheme.brightness,
+        ),
+        shape: AppShape.all(BusinessRadius.heroDesktop).copyWith(
+          side: BorderSide(
+            color: BusinessPalette.exitBannerStrokeFor(
+              context.colorScheme.brightness,
+            ),
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          const GlyphIcon(
+            AppGlyphs.warning,
+            size: 18,
+            color: BusinessPalette.warning,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              mode == Mode.global
+                  ? strings.outboundModeGlobalWarning
+                  : strings.outboundModeDirectWarning,
+              style: BusinessText.cardTitle(context),
+            ),
+          ),
+          TextButton(
+            onPressed: () =>
+                ref.read(setupActionProvider.notifier).changeMode(Mode.rule),
+            child: Text(strings.outboundModeRestoreRule),
+          ),
+        ],
       ),
     );
   }

@@ -1781,6 +1781,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundExit": MessageLookupByLibrary.simpleMessage("Exit"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("Outbound IP"),
     "outboundMode": MessageLookupByLibrary.simpleMessage("Outbound mode"),
+    "outboundModeDescription": MessageLookupByLibrary.simpleMessage(
+      "Usually keep “Rule”. Global also proxies mainland traffic; Direct disables all proxy lines.",
+    ),
+    "outboundModeDirectWarning": MessageLookupByLibrary.simpleMessage(
+      "Direct mode is active",
+    ),
+    "outboundModeGlobalWarning": MessageLookupByLibrary.simpleMessage(
+      "Global mode is active",
+    ),
+    "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage(
+      "Restore Rule",
+    ),
     "overrideDestination": MessageLookupByLibrary.simpleMessage(
       "Override destination",
     ),

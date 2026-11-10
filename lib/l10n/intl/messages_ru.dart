@@ -1869,6 +1869,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundMode": MessageLookupByLibrary.simpleMessage(
       "Режим исходящего трафика",
     ),
+    "outboundModeDescription": MessageLookupByLibrary.simpleMessage(
+      "Обычно оставляйте режим «Правила». Глобальный режим направляет через прокси и трафик материкового Китая, а прямой режим отключает все прокси-линии.",
+    ),
+    "outboundModeDirectWarning": MessageLookupByLibrary.simpleMessage(
+      "Включён прямой режим",
+    ),
+    "outboundModeGlobalWarning": MessageLookupByLibrary.simpleMessage(
+      "Включён глобальный режим",
+    ),
+    "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage(
+      "Вернуть правила",
+    ),
     "overrideDestination": MessageLookupByLibrary.simpleMessage(
       "Подменять адрес назначения",
     ),

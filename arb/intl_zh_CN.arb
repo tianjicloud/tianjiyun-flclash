@@ -1235,7 +1235,13 @@
   "businessProxyTraffic": "代理",
   "businessMainlandDirect": "大陆直连",
   "businessSubscriptionUpdatedAt": "订阅更新于 {time}",
-  "@businessSubscriptionUpdatedAt": {"placeholders": {"time": {"type": "String"}}},
+  "@businessSubscriptionUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "businessTrafficScope": "仅本设备本月统计",
   "businessResidentialBroadband": "住宅宽带",
   "businessTunTitle": "虚拟网卡（TUN）",
@@ -1280,5 +1286,9 @@
       }
     }
   },
-  "businessAllLines": "全部线路"
+  "businessAllLines": "全部线路",
+  "outboundModeDescription": "一般保持「规则」。全局会让大陆流量也走代理，直连会让所有线路失效。",
+  "outboundModeGlobalWarning": "当前为全局模式",
+  "outboundModeDirectWarning": "当前为直连模式",
+  "outboundModeRestoreRule": "恢复规则"
 }

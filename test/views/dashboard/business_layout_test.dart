@@ -12,6 +12,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
+import 'package:fl_clash/views/config/advanced.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
 import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
@@ -131,6 +132,50 @@ void main() {
     stats.dispose();
   });
 
+  testWidgets('unsafe outbound warning restores rule mode', (tester) async {
+    container
+        .read(patchClashConfigProvider.notifier)
+        .update((state) => state.copyWith(mode: Mode.global));
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(
+          locale: Locale('en'),
+          child: BusinessOutboundModeWarning(),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Global mode is active'), findsOneWidget);
+    await tester.tap(find.text('Restore Rule'));
+    await tester.pump();
+    expect(container.read(patchClashConfigProvider).mode, Mode.rule);
+    expect(find.text('Global mode is active'), findsNothing);
+  });
+
+  testWidgets('Android advanced settings can change outbound mode', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(
+          locale: Locale('en'),
+          child: AdvancedConfigView(isAndroid: true),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(OutboundModeInline), findsOneWidget);
+    await tester.tap(find.text('Global'));
+    await tester.pump();
+    expect(container.read(patchClashConfigProvider).mode, Mode.global);
+  });
+
   for (final brightness in Brightness.values) {
     for (final (width, scale) in [
       (1000.0, 1.0),
@@ -182,12 +227,14 @@ void main() {
             ),
           );
           await tester.pump();
-          expect(find.byType(OutboundModeInline), findsOneWidget);
           final mobile = width / scale < 640;
           if (mobile) {
+            expect(find.byType(OutboundModeInline), findsNothing);
+            expect(find.byType(OutboundModeCard), findsNothing);
             expect(find.byType(MobileUsageCard), findsOneWidget);
             expect(find.byType(BusinessAIStatusCard), findsOneWidget);
           } else {
+            expect(find.byType(OutboundModeInline), findsOneWidget);
             expect(find.byType(TrafficSavingsCard), findsOneWidget);
           }
           expect(tester.takeException(), isNull);

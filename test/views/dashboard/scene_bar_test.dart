@@ -235,7 +235,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(tester.takeException(), isNull);
     expect(find.byType(SceneBar), findsOneWidget);
-    expect(find.byType(OutboundModeInline), findsOneWidget);
+    expect(find.byType(OutboundModeInline), findsNothing);
     expect(find.byType(QuickLines), findsOneWidget);
     expect(find.text('常用线路'), findsOneWidget);
     expect(find.textContaining('东京家宽', findRichText: true), findsWidgets);

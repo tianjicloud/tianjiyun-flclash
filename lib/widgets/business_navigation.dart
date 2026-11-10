@@ -47,7 +47,6 @@ class BusinessNavigationSidebar extends ConsumerWidget {
     required this.currentIndex,
     required this.expanded,
     required this.onSelected,
-    required this.onToggle,
     required this.windowControls,
   });
 
@@ -55,7 +54,6 @@ class BusinessNavigationSidebar extends ConsumerWidget {
   final int currentIndex;
   final bool expanded;
   final ValueChanged<int> onSelected;
-  final VoidCallback? onToggle;
   final Size windowControls;
 
   @override
@@ -88,10 +86,7 @@ class BusinessNavigationSidebar extends ConsumerWidget {
             children: [
               SizedBox(height: windowControls.height),
               if (expanded) ...[
-                _BusinessBrand(
-                  onToggle: onToggle,
-                  brandName: context.appLocalizations.brandName,
-                ),
+                _BusinessBrand(brandName: context.appLocalizations.brandName),
                 const SizedBox(height: 22),
                 Expanded(
                   child: FocusTraversalGroup(
@@ -120,12 +115,6 @@ class BusinessNavigationSidebar extends ConsumerWidget {
                 ),
                 if (profile != null) _SubscriptionSummary(profile: profile),
               ] else ...[
-                if (onToggle != null)
-                  Align(
-                    alignment: AlignmentDirectional.center,
-                    child: _SidebarToggle(expanded: false, onTap: onToggle!),
-                  ),
-                const SizedBox(height: 12),
                 Expanded(
                   child: FocusTraversalGroup(
                     child: Shortcuts(
@@ -161,9 +150,8 @@ class BusinessNavigationSidebar extends ConsumerWidget {
 }
 
 class _BusinessBrand extends StatelessWidget {
-  const _BusinessBrand({required this.onToggle, required this.brandName});
+  const _BusinessBrand({required this.brandName});
 
-  final VoidCallback? onToggle;
   final String brandName;
 
   @override
@@ -203,55 +191,7 @@ class _BusinessBrand extends StatelessWidget {
               ],
             ),
           ),
-          if (onToggle != null) ...[
-            const SizedBox(width: 4),
-            _SidebarToggle(expanded: true, onTap: onToggle!),
-          ],
         ],
-      ),
-    );
-  }
-}
-
-class _SidebarToggle extends StatelessWidget {
-  const _SidebarToggle({required this.expanded, required this.onTap});
-
-  final bool expanded;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final dark = context.colorScheme.brightness == Brightness.dark;
-    return Semantics(
-      button: true,
-      label: expanded
-          ? context.appLocalizations.showLess
-          : context.appLocalizations.showMore,
-      child: FocusRing(
-        shape: _sidebarRowShape,
-        child: Tooltip(
-          message: expanded
-              ? context.appLocalizations.showLess
-              : context.appLocalizations.showMore,
-          child: PressRegion(
-            onTap: onTap,
-            shape: _sidebarRowShape,
-            overlay: PressRegion.hoverOverlay,
-            child: SizedBox(
-              height: 28,
-              width: 28,
-              child: Center(
-                child: GlyphIcon(
-                  Glyphs.sidebar(expanded ? 1 : 0),
-                  size: 20,
-                  color: dark
-                      ? BusinessPalette.sidebarDarkSecondary
-                      : context.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -286,81 +226,84 @@ class _BusinessSidebarItem extends StatelessWidget {
         button: true,
         selected: selected,
         label: _navigationLabel(context, item.label),
-        child: FocusRing(
-          shape: _sidebarRowShape,
-          child: PressRegion(
-            onTap: onTap,
+        child: Tooltip(
+          message: _navigationLabel(context, item.label),
+          child: FocusRing(
             shape: _sidebarRowShape,
-            overlay: PressRegion.hoverOverlay,
-            child: SizedBox(
-              key: ValueKey('business-sidebar-${item.label.name}'),
-              height: 38,
-              child: Stack(
-                alignment: AlignmentDirectional.centerStart,
-                children: [
-                  if (selected)
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: ShapeDecoration(
-                          color: dark
-                              ? BusinessPalette.sidebarDarkBackground
-                              : BusinessPalette.sidebarSelection,
-                          shape: RoundedSuperellipseBorder(
-                            borderRadius: _sidebarRowShape.borderRadius,
+            child: PressRegion(
+              onTap: onTap,
+              shape: _sidebarRowShape,
+              overlay: PressRegion.hoverOverlay,
+              child: SizedBox(
+                key: ValueKey('business-sidebar-${item.label.name}'),
+                height: 38,
+                child: Stack(
+                  alignment: AlignmentDirectional.centerStart,
+                  children: [
+                    if (selected)
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: ShapeDecoration(
+                            color: dark
+                                ? BusinessPalette.sidebarDarkBackground
+                                : BusinessPalette.sidebarSelection,
+                            shape: RoundedSuperellipseBorder(
+                              borderRadius: _sidebarRowShape.borderRadius,
+                            ),
+                            shadows: dark
+                                ? const []
+                                : const [
+                                    BoxShadow(
+                                      color: BusinessPalette
+                                          .sidebarSelectionShadow,
+                                      blurRadius: 8,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
                           ),
-                          shadows: dark
-                              ? const []
-                              : const [
-                                  BoxShadow(
-                                    color:
-                                        BusinessPalette.sidebarSelectionShadow,
-                                    blurRadius: 8,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
                         ),
                       ),
-                    ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.only(
-                      start: expanded ? 10 : 0,
-                      end: expanded ? 8 : 0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: expanded
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        IconTheme.merge(
-                          data: IconThemeData(
-                            size: 20,
-                            color: selected
-                                ? context.colorScheme.primary
-                                : foreground,
-                          ),
-                          child: AnimatedGlyph(
-                            glyph: item.glyph,
-                            filled: selected,
-                          ),
-                        ),
-                        if (expanded) ...[
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              _navigationLabel(context, item.label),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: BusinessText.sidebarNav(
-                                context,
-                                selected: selected,
-                              ).copyWith(color: foreground),
+                    Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start: expanded ? 10 : 0,
+                        end: expanded ? 8 : 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: expanded
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
+                        children: [
+                          IconTheme.merge(
+                            data: IconThemeData(
+                              size: 20,
+                              color: selected
+                                  ? context.colorScheme.primary
+                                  : foreground,
+                            ),
+                            child: AnimatedGlyph(
+                              glyph: item.glyph,
+                              filled: selected,
                             ),
                           ),
+                          if (expanded) ...[
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                _navigationLabel(context, item.label),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: BusinessText.sidebarNav(
+                                  context,
+                                  selected: selected,
+                                ).copyWith(color: foreground),
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

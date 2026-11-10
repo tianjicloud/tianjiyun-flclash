@@ -94,7 +94,9 @@ class OutboundModeCard extends ConsumerWidget {
 /// The mode switch without its card, for rows that already live inside one
 /// (the scene bar, the bottom control bar).
 class OutboundModeInline extends ConsumerWidget {
-  const OutboundModeInline({super.key});
+  const OutboundModeInline({super.key, this.height});
+
+  final double? height;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -109,7 +111,7 @@ class OutboundModeInline extends ConsumerWidget {
       ],
       selected: mode,
       onSelected: (item) => _changeMode(ref, item),
-      height: mobile ? 34 : 30,
+      height: height ?? (mobile ? 34 : 30),
       expand: true,
       mobile: mobile,
     );

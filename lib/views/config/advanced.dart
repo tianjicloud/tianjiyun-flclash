@@ -9,17 +9,23 @@ import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/views/config/providers.dart';
 import 'package:fl_clash/views/config/scripts.dart';
 import 'package:fl_clash/views/profiles/custom/custom_proxies.dart';
+import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'rules.dart';
 
 class AdvancedConfigView extends StatelessWidget {
-  const AdvancedConfigView({super.key});
+  const AdvancedConfigView({super.key, this.isAndroid});
+
+  final bool? isAndroid;
 
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
+    final isAndroid = this.isAndroid ?? system.isAndroid;
     final items = [
+      if (isAndroid) const _OutboundModeItem(),
       ListItem.open(
         title: Text(appLocalizations.network),
         leading: const GlyphIcon(AppGlyphs.key),
@@ -84,6 +90,35 @@ class AdvancedConfigView extends StatelessWidget {
           generateSection(
             title: appLocalizations.customResources,
             items: customItems,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OutboundModeItem extends ConsumerWidget {
+  const _OutboundModeItem();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    return ListItem(
+      minVerticalPadding: 12,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.outboundMode),
+          Text(
+            l10n.outboundModeDescription,
+            style: context.listSubtitleStyle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          const SizedBox(
+            width: double.infinity,
+            child: OutboundModeInline(height: 28),
           ),
         ],
       ),
