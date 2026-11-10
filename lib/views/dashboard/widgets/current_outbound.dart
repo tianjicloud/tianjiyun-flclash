@@ -14,6 +14,7 @@ import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/line_data.dart';
 import 'package:fl_clash/views/dashboard/probe_start_hold.dart';
@@ -138,17 +139,28 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           : null;
       final line = currentDashboardLine(ref);
       final checking = phase == ProbePhase.probing || qualityLoading;
+      final tunEnabled = ref.watch(
+        patchClashConfigProvider.select((value) => value.tun.enable),
+      );
+      final tunAuthorized =
+          ref.watch(authorizedTunEnableProvider) ==
+          TunAuthorizationState.authorized;
       final captured =
           ref.watch(
             networkSettingProvider.select((value) => value.systemProxy),
           ) ||
-          ref.watch(
-            patchClashConfigProvider.select((value) => value.tun.enable),
-          );
+          tunEnabled;
       final route = ref.watch(routeTrackerProvider);
       final stamp = entry.stamp;
-      final exitAbnormal =
-          isStart && coreStatus == CoreStatus.connected && failed;
+      final exitWarning = businessExitWarningKind(
+        active: isStart,
+        coreConnected: coreStatus == CoreStatus.connected,
+        probeFailed: failed,
+        tunEnabled: tunEnabled,
+        tunAuthorized: tunAuthorized,
+      );
+      final exitAbnormal = exitWarning != null;
+      final showBusinessSelection = showSelection && !exitAbnormal;
       final verifiedExit = isVerifiedOutbound(
         active: active,
         captured: captured,
@@ -161,9 +173,10 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
       final ringColor = switch ((checking, failed, verdict)) {
         _ when connectingStatus => BusinessPalette.blue,
         _ when !isStart => const Color(0xFF98A2AD),
+        _ when exitAbnormal => BusinessPalette.exitWarningForegroundFor(
+          colorScheme.brightness,
+        ),
         _ when suspended => colors.warn,
-        (_, true, _) when exitAbnormal =>
-          BusinessPalette.exitWarningForegroundFor(colorScheme.brightness),
         (
           _,
           _,
@@ -178,24 +191,30 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         _ => const Color(0xFF98A2AD),
       };
       final statusText = density.isDesktop
-          ? exitAbnormal
-                ? appLocalizations.businessConnectedProbeFailed
-                : appLocalizations.businessCurrentExitIp
+          ? switch (exitWarning) {
+              BusinessExitWarningKind.probeFailed =>
+                appLocalizations.businessConnectedProbeFailed,
+              BusinessExitWarningKind.tunUnauthorized =>
+                appLocalizations.businessConnectedUnverified,
+              _ => appLocalizations.businessCurrentExitIp,
+            }
           : connectingStatus
           ? appLocalizations.connecting
+          : exitWarning == BusinessExitWarningKind.probeFailed
+          ? appLocalizations.businessConnectedProbeFailed
+          : exitWarning == BusinessExitWarningKind.tunUnauthorized
+          ? appLocalizations.businessConnectedUnverified
           : suspended
           ? appLocalizations.suspended
           : verifiedExit
           ? appLocalizations.businessExitVerified
-          : exitAbnormal
-          ? appLocalizations.businessConnectedProbeFailed
           : isStart
           ? appLocalizations.running
           : appLocalizations.businessNotConnected;
-      final statusTone = connectingStatus || suspended
-          ? colors.warn
-          : exitAbnormal
+      final statusTone = exitAbnormal
           ? BusinessPalette.exitWarningForegroundFor(colorScheme.brightness)
+          : connectingStatus || suspended
+          ? colors.warn
           : failed
           ? colorScheme.error
           : verifiedExit
@@ -230,12 +249,12 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         onRefresh: () => _refresh(ipInfo?.ip),
         line: line,
         exitName: exitName,
-        showSelection: showSelection,
+        showSelection: showBusinessSelection,
       );
       final content = density.isDesktop
           ? ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: 210 + (showSelection ? 84 : 0),
+                minHeight: 210 + (showBusinessSelection ? 84 : 0),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -289,7 +308,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                   const SizedBox(height: 12),
                   const _BusinessIdlePrompt(),
                 ],
-                if (showSelection) ...[
+                if (showBusinessSelection) ...[
                   const SizedBox(height: 12),
                   const SelectionNotice(),
                 ],
@@ -552,7 +571,8 @@ class _BusinessStatusLine extends StatelessWidget {
         ? '$text · ${context.appLocalizations.checkingExit}'
         : text;
     final warning =
-        text == context.appLocalizations.businessConnectedProbeFailed;
+        text == context.appLocalizations.businessConnectedProbeFailed ||
+        text == context.appLocalizations.businessConnectedUnverified;
     final status = Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: centered
@@ -565,8 +585,7 @@ class _BusinessStatusLine extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: ShapeDecoration(
-              color:
-                  text == context.appLocalizations.businessConnectedProbeFailed
+              color: warning
                   ? BusinessPalette.exitWarningForegroundFor(
                       context.colorScheme.brightness,
                     )
@@ -584,8 +603,7 @@ class _BusinessStatusLine extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: BusinessText.heroStatus(context).copyWith(
-              color:
-                  text == context.appLocalizations.businessConnectedProbeFailed
+              color: warning
                   ? BusinessPalette.exitWarningForegroundFor(
                       context.colorScheme.brightness,
                     )

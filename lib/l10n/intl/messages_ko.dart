@@ -387,6 +387,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ChatGPT · Claude",
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("모든 회선"),
+    "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("가상 어댑터 승인"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
     "businessConnectVia": m5,
@@ -399,11 +400,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
       "연결됨 · 출구 확인 실패",
     ),
+    "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
+      "연결됨 · 출구 확인 안 됨",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("현재"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("현재 출구 IP"),
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("현재 회선"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("스마트 라우팅 활성화"),
+    "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
+      "실제 출구가 선택한 회선과 일치하지 않습니다",
+    ),
+    "businessExitProbeDescription": MessageLookupByLibrary.simpleMessage(
+      "출구 확인 결과가 없습니다. 프록시는 계속 작동 중일 수 있습니다. 다시 확인하거나 진단을 실행해 보세요.",
+    ),
+    "businessExitProbeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "출구를 확인할 수 없습니다",
+    ),
+    "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
+      "가상 어댑터가 아직 승인되지 않았습니다. 터미널과 일부 앱은 프록시를 거치지 않아 로컬 IP가 표시됩니다. 한 번 승인하면 해결됩니다.",
+    ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
       "연결됨 · 출구 검증됨",
     ),
@@ -460,6 +476,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "가상 네트워크 인터페이스(TUN)",
     ),
     "businessUsagePercent": m10,
+    "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("진단 보기"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "처음 연결할 때 VPN 권한을 허용해야 합니다",
     ),

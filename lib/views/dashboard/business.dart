@@ -10,10 +10,12 @@ import 'package:fl_clash/features/features.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
+import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/providers/selection_check.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart';
@@ -99,6 +101,26 @@ class _BusinessBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final started = ref.watch(isStartProvider);
+    final coreConnected = ref.watch(coreStatusProvider) == CoreStatus.connected;
+    final outboundEntry = ref.watch(
+      outboundIpProbeProvider.select((state) => state.entryOf(routedOutbound)),
+    );
+    final tunEnabled = ref.watch(
+      patchClashConfigProvider.select((state) => state.tun.enable),
+    );
+    final tunAuthorized =
+        ref.watch(authorizedTunEnableProvider) ==
+        TunAuthorizationState.authorized;
+    final warningKind = businessExitWarningKind(
+      active: started,
+      coreConnected: coreConnected,
+      probeFailed:
+          outboundEntry.phase == ProbePhase.failed &&
+          outboundEntry.value == null,
+      tunEnabled: tunEnabled,
+      tunAuthorized: tunAuthorized,
+    );
     final needsTakeover =
         DashboardWidget.networkTakeover.platforms.contains(platform) &&
         ref.watch(isStartProvider) &&
@@ -138,129 +160,174 @@ class _BusinessBody extends ConsumerWidget {
           constraints: BoxConstraints(maxWidth: _businessMaxWidth * scale),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: gap,
             children: [
-              UpdateStatusSlot(gap: gap),
-              if (density.isDesktop)
-                SizedBox(
-                  height: 236 * scale,
-                  child: const RepaintBoundary(child: CurrentOutboundCard()),
-                )
-              else
-                const RepaintBoundary(child: CurrentOutboundCard()),
-              if (ref.watch(scenePolicyProvider).available)
-                density.isDesktop
-                    ? SizedBox(height: 60 * scale, child: const SceneBar())
-                    : const SceneBar()
-              else ...[
-                if (ref
-                        .watch(currentProfileProvider)
-                        ?.overrides
-                        .sceneNoticeDismissed !=
-                    true)
-                  const SceneUnavailableCard(),
-                if (density.isDesktop) const _OutboundModeFallback(),
-              ],
-              if (!density.isDesktop)
-                QuickLines(
-                  onChooseResidential: () => showResidentialExitSheet(context),
-                ),
-              if (mobile) const _MobileExpiryNotice(),
-              if (density.isDesktop) ...[
-                if (needsTakeover)
-                  Text(
-                    context.appLocalizations.residentialCaptureOff,
-                    style: DashboardText.label(
-                      context,
-                    ).copyWith(color: DashboardColors.of(context).warn),
-                  ),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final lineCard = _CardMinHeight(
-                      minHeight: 214 * scale,
-                      child: const BusinessLineCard(),
-                    );
-                    final trafficCard = _CardMinHeight(
-                      minHeight: 214 * scale,
-                      child: const TrafficSavingsCard(),
-                    );
-                    final profileCard = _CardMinHeight(
-                      minHeight: 214 * scale,
-                      child: ProfilesCard(
-                        title: context.appLocalizations.subscriptionInfo,
-                      ),
-                    );
-                    if (constraints.maxWidth / scale < 820) {
-                      return Column(
-                        spacing: gap,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _EqualHeightRow(
-                            spacing: gap,
-                            flexes: const [1, 1],
-                            children: [lineCard, trafficCard],
+              AnimatedSize(
+                alignment: Alignment.topCenter,
+                duration: context.motionDuration(commonDuration),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: warningKind == null ? 0 : gap,
+                  children: [
+                    if (warningKind != null)
+                      BusinessExitWarningBanner(
+                        kind: warningKind,
+                        onRetry: () => ref
+                            .read(outboundIpProbeProvider.notifier)
+                            .refresh(const [routedOutbound]),
+                        onAuthorize: () async {
+                          try {
+                            await ref
+                                .read(setupActionProvider.notifier)
+                                .applyProfile(force: true);
+                          } catch (error) {
+                            dialogs.showBanner(
+                              error.toString(),
+                              level: BannerLevel.error,
+                            );
+                          }
+                        },
+                        onDiagnostics: () => Navigator.of(context).push(
+                          PagedSheetRoute(
+                            builder: (_) => const DiagnosticsView(),
                           ),
-                          profileCard,
-                        ],
-                      );
-                    }
-                    return _EqualHeightRow(
-                      spacing: gap,
-                      flexes: const [1, 1, 1],
-                      children: [lineCard, trafficCard, profileCard],
-                    );
-                  },
+                        ),
+                      ),
+                    UpdateStatusSlot(gap: gap),
+                  ],
                 ),
-                SizedBox(
-                  height: 72 * scale,
-                  child: _ControlBar(platform: platform),
-                ),
-              ] else ...[
-                if (needsTakeover)
-                  Text(
-                    context.appLocalizations.residentialCaptureOff,
-                    style: DashboardText.label(
-                      context,
-                    ).copyWith(color: DashboardColors.of(context).warn),
-                  ),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final cards = hasMobileMetrics
-                        ? const [
-                            RepaintBoundary(
-                              child: _CardMinHeight(
-                                minHeight: 110,
-                                child: MobileUsageCard(),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: gap,
+                children: [
+                  if (density.isDesktop)
+                    SizedBox(
+                      height: 236 * scale,
+                      child: const RepaintBoundary(
+                        child: CurrentOutboundCard(),
+                      ),
+                    )
+                  else
+                    const RepaintBoundary(child: CurrentOutboundCard()),
+                  if (ref.watch(scenePolicyProvider).available)
+                    density.isDesktop
+                        ? SizedBox(height: 60 * scale, child: const SceneBar())
+                        : const SceneBar()
+                  else ...[
+                    if (ref
+                            .watch(currentProfileProvider)
+                            ?.overrides
+                            .sceneNoticeDismissed !=
+                        true)
+                      const SceneUnavailableCard(),
+                    if (density.isDesktop) const _OutboundModeFallback(),
+                  ],
+                  if (!density.isDesktop)
+                    QuickLines(
+                      onChooseResidential: () =>
+                          showResidentialExitSheet(context),
+                    ),
+                  if (mobile) const _MobileExpiryNotice(),
+                  if (density.isDesktop) ...[
+                    if (needsTakeover)
+                      Text(
+                        context.appLocalizations.residentialCaptureOff,
+                        style: DashboardText.label(
+                          context,
+                        ).copyWith(color: DashboardColors.of(context).warn),
+                      ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final lineCard = _CardMinHeight(
+                          minHeight: 214 * scale,
+                          child: const BusinessLineCard(),
+                        );
+                        final trafficCard = _CardMinHeight(
+                          minHeight: 214 * scale,
+                          child: const TrafficSavingsCard(),
+                        );
+                        final profileCard = _CardMinHeight(
+                          minHeight: 214 * scale,
+                          child: ProfilesCard(
+                            title: context.appLocalizations.subscriptionInfo,
+                          ),
+                        );
+                        if (constraints.maxWidth / scale < 820) {
+                          return Column(
+                            spacing: gap,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              _EqualHeightRow(
+                                spacing: gap,
+                                flexes: const [1, 1],
+                                children: [lineCard, trafficCard],
                               ),
-                            ),
-                            RepaintBoundary(child: BusinessAIStatusCard()),
-                          ]
-                        : [
-                            const RepaintBoundary(child: TrafficSavingsCard()),
-                            RepaintBoundary(
-                              child: ProfilesCard(
-                                title:
-                                    context.appLocalizations.subscriptionInfo,
-                              ),
-                            ),
-                          ];
-                    if (constraints.maxWidth / scale < 350) {
-                      return Column(
-                        spacing: gap,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: cards,
-                      );
-                    }
-                    return _EqualHeightRow(
-                      spacing: gap,
-                      flexes: const [1, 1],
-                      children: cards,
-                    );
-                  },
-                ),
-              ],
-              if (!density.isDesktop)
-                _TakeoverRow(platform: platform, density: density),
+                              profileCard,
+                            ],
+                          );
+                        }
+                        return _EqualHeightRow(
+                          spacing: gap,
+                          flexes: const [1, 1, 1],
+                          children: [lineCard, trafficCard, profileCard],
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 72 * scale,
+                      child: _ControlBar(platform: platform),
+                    ),
+                  ] else ...[
+                    if (needsTakeover)
+                      Text(
+                        context.appLocalizations.residentialCaptureOff,
+                        style: DashboardText.label(
+                          context,
+                        ).copyWith(color: DashboardColors.of(context).warn),
+                      ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final cards = hasMobileMetrics
+                            ? const [
+                                RepaintBoundary(
+                                  child: _CardMinHeight(
+                                    minHeight: 110,
+                                    child: MobileUsageCard(),
+                                  ),
+                                ),
+                                RepaintBoundary(child: BusinessAIStatusCard()),
+                              ]
+                            : [
+                                const RepaintBoundary(
+                                  child: TrafficSavingsCard(),
+                                ),
+                                RepaintBoundary(
+                                  child: ProfilesCard(
+                                    title: context
+                                        .appLocalizations
+                                        .subscriptionInfo,
+                                  ),
+                                ),
+                              ];
+                        if (constraints.maxWidth / scale < 350) {
+                          return Column(
+                            spacing: gap,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: cards,
+                          );
+                        }
+                        return _EqualHeightRow(
+                          spacing: gap,
+                          flexes: const [1, 1],
+                          children: cards,
+                        );
+                      },
+                    ),
+                  ],
+                  if (!density.isDesktop)
+                    _TakeoverRow(platform: platform, density: density),
+                ],
+              ),
             ],
           ),
         ),

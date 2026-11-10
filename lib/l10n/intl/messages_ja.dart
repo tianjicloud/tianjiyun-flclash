@@ -391,6 +391,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ChatGPT · Claude",
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("すべての回線"),
+    "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("仮想アダプターを承認"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
     "businessConnectVia": m5,
@@ -403,12 +404,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
       "接続済み · 出口の確認に失敗",
     ),
+    "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
+      "接続済み · 出口未検証",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("現在"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("現在の出口 IP"),
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("現在の回線"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("現在のノード"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "スマートルーティングを有効化",
+    ),
+    "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
+      "実際の出口が選択した回線と一致しません",
+    ),
+    "businessExitProbeDescription": MessageLookupByLibrary.simpleMessage(
+      "出口チェックの結果がありません。プロキシは動作中の可能性があります。再確認するか、診断を実行してください。",
+    ),
+    "businessExitProbeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "出口を確認できません",
+    ),
+    "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
+      "仮想アダプターが未承認です。ターミナルや一部のアプリはプロキシを経由せず、ローカル IP が表示されます。一度承認すると解決します。",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
       "接続済み · 出口検証済み",
@@ -464,6 +480,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "仮想ネットワークインターフェイス（TUN）",
     ),
     "businessUsagePercent": m10,
+    "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("診断を見る"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "初回接続時に VPN の許可が必要です",
     ),

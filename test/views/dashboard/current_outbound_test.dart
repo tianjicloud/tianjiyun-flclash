@@ -859,6 +859,52 @@ void main() {
     });
   });
 
+  testWidgets('shows a fresh IP while TUN is unauthorized', (tester) async {
+    await tester.pumpWidget(
+      TestApp(
+        locale: const Locale('en'),
+        overrides: [
+          profilesProvider.overrideWithValue(const [_profile]),
+          runTimeProvider.overrideWithBuild((_, _) => 42),
+          coreStatusProvider.overrideWithValue(CoreStatus.connected),
+          suspendProvider.overrideWithValue(false),
+          patchClashConfigProvider.overrideWithBuild(
+            (_, _) => const PatchClashConfig(tun: Tun(enable: true)),
+          ),
+          authorizedTunEnableProvider.overrideWithBuild(
+            (_, _) => TunAuthorizationState.none,
+          ),
+          outboundIpProbeProvider.overrideWith(
+            () => _RingIps(
+              const ProbeEntry(
+                phase: ProbePhase.fresh,
+                value: IpInfo(ip: _ip, countryCode: 'GB'),
+              ),
+            ),
+          ),
+          ipQualityProvider.overrideWith((_, _) async => _residential),
+        ],
+        child: const BusinessAppearance(
+          child: HostScaffold(
+            body: DashboardDensityScope(
+              density: DashboardDensity.standard,
+              scale: 1,
+              child: CurrentOutboundCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(find.text(_ip), findsOneWidget);
+    expect(find.text('GB'), findsOneWidget);
+    expect(find.text('Example Broadband'), findsOneWidget);
+    expect(find.byType(SkeletonText), findsNothing);
+    expect(find.byType(SkeletonPill), findsNothing);
+  });
+
   group('the start button', () {
     late ProviderContainer container;
 

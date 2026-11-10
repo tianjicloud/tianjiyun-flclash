@@ -7668,7 +7668,8 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one:
+          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -10372,6 +10373,76 @@ class AppLocalizations {
     return Intl.message(
       'Default route exit verification',
       name: 'diagnosticsSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to confirm exit for now`
+  String get businessExitProbeUnavailable {
+    return Intl.message(
+      'Unable to confirm exit for now',
+      name: 'businessExitProbeUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The exit check returned no result. The proxy may still be working. Retry or run diagnostics to see why.`
+  String get businessExitProbeDescription {
+    return Intl.message(
+      'The exit check returned no result. The proxy may still be working. Retry or run diagnostics to see why.',
+      name: 'businessExitProbeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your selected line does not match the actual exit`
+  String get businessExitMismatch {
+    return Intl.message(
+      'Your selected line does not match the actual exit',
+      name: 'businessExitMismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The virtual adapter has not been authorized. Terminals and some apps are not using the proxy, so they see your local IP. Authorize it once to fix this.`
+  String get businessExitTunDescription {
+    return Intl.message(
+      'The virtual adapter has not been authorized. Terminals and some apps are not using the proxy, so they see your local IP. Authorize it once to fix this.',
+      name: 'businessExitTunDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Authorize virtual adapter`
+  String get businessAuthorizeTun {
+    return Intl.message(
+      'Authorize virtual adapter',
+      name: 'businessAuthorizeTun',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View diagnostics`
+  String get businessViewDiagnostics {
+    return Intl.message(
+      'View diagnostics',
+      name: 'businessViewDiagnostics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected · Exit not verified`
+  String get businessConnectedUnverified {
+    return Intl.message(
+      'Connected · Exit not verified',
+      name: 'businessConnectedUnverified',
       desc: '',
       args: [],
     );

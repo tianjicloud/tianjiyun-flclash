@@ -377,6 +377,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ChatGPT · Claude",
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("全部线路"),
+    "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("授权虚拟网卡"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("更换线路"),
     "businessConnectVia": m5,
@@ -389,11 +390,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
       "已连接 · 出口检测失败",
     ),
+    "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
+      "已连接 · 出口未通过校验",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("当前"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("当前出口 IP"),
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("当前线路"),
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("当前节点"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("启用智能分流"),
+    "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
+      "实际出口与所选线路不一致",
+    ),
+    "businessExitProbeDescription": MessageLookupByLibrary.simpleMessage(
+      "出口检测没有返回结果，代理可能仍在工作。可以重新检测，或运行诊断查看原因。",
+    ),
+    "businessExitProbeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "暂时无法确认出口",
+    ),
+    "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
+      "虚拟网卡还没有授权，终端和部分应用没有经过代理，它们看到的是你的本地 IP。授权一次即可修复。",
+    ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage("已连接 · 出口已校验"),
     "businessExpiryDate": m6,
     "businessExpiryDateShort": m7,
@@ -436,6 +452,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTunCaption": MessageLookupByLibrary.simpleMessage("接管所有应用流量"),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage("虚拟网卡（TUN）"),
     "businessUsagePercent": m10,
+    "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("查看诊断"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "首次连接需要允许 VPN 权限",
     ),

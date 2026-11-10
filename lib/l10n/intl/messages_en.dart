@@ -453,6 +453,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ChatGPT · Claude",
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("All lines"),
+    "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
+      "Authorize virtual adapter",
+    ),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
     "businessConnectVia": m5,
@@ -465,6 +468,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
       "Connected · Exit check failed",
     ),
+    "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
+      "Connected · Exit not verified",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Current"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "Current exit IP",
@@ -473,6 +479,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Current node"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Enable smart routing",
+    ),
+    "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
+      "Your selected line does not match the actual exit",
+    ),
+    "businessExitProbeDescription": MessageLookupByLibrary.simpleMessage(
+      "The exit check returned no result. The proxy may still be working. Retry or run diagnostics to see why.",
+    ),
+    "businessExitProbeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Unable to confirm exit for now",
+    ),
+    "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
+      "The virtual adapter has not been authorized. Terminals and some apps are not using the proxy, so they see your local IP. Authorize it once to fix this.",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
       "Connected · Exit verified",
@@ -544,6 +562,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Virtual network interface (TUN)",
     ),
     "businessUsagePercent": m10,
+    "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(
+      "View diagnostics",
+    ),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "Allow VPN permission on first connection",
     ),
@@ -1198,10 +1219,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificate installed",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -1692,10 +1712,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Import failed",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Can’t reach the subscription address",
     ),

@@ -488,6 +488,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAllLines": MessageLookupByLibrary.simpleMessage(
       "Todas las líneas",
     ),
+    "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
+      "Autorizar adaptador virtual",
+    ),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Cambiar línea"),
     "businessConnectVia": m5,
@@ -500,6 +503,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
       "Conectado · Falló la comprobación de salida",
     ),
+    "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
+      "Conectado · Salida sin verificar",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Actual"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "IP de salida actual",
@@ -508,6 +514,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nodo actual"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Activar enrutamiento inteligente",
+    ),
+    "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
+      "La salida real no coincide con la línea seleccionada",
+    ),
+    "businessExitProbeDescription": MessageLookupByLibrary.simpleMessage(
+      "La comprobación de salida no devolvió resultados. Es posible que el proxy siga funcionando. Vuelve a intentarlo o ejecuta el diagnóstico.",
+    ),
+    "businessExitProbeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "No se pudo confirmar la salida",
+    ),
+    "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
+      "El adaptador virtual no está autorizado. La terminal y algunas aplicaciones no pasan por el proxy y ven tu IP local. Autorízalo una vez para corregirlo.",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
       "Conectado · Salida verificada",
@@ -583,6 +601,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Interfaz de red virtual (TUN)",
     ),
     "businessUsagePercent": m10,
+    "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(
+      "Ver diagnóstico",
+    ),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "Permite el acceso a VPN al conectarte por primera vez",
     ),
@@ -1283,10 +1304,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificado instalado",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Este sistema oculta la lista de apps instaladas hasta que se concede el permiso. Autorízalo para configurar el proxy por app.",
     ),
@@ -1817,10 +1837,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "No se pudo importar",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "No se puede acceder a la dirección de suscripción",
     ),

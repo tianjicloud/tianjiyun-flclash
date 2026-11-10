@@ -484,6 +484,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAllLines": MessageLookupByLibrary.simpleMessage(
       "Toutes les lignes",
     ),
+    "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
+      "Autoriser l’adaptateur",
+    ),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage(
       "Changer de ligne",
@@ -498,6 +501,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
       "Connecté · Vérification de la sortie échouée",
     ),
+    "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
+      "Connecté · Sortie non vérifiée",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Actuel"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "IP de sortie actuel",
@@ -508,6 +514,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nœud actuel"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Activer le routage intelligent",
+    ),
+    "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
+      "La sortie réelle ne correspond pas à la ligne choisie",
+    ),
+    "businessExitProbeDescription": MessageLookupByLibrary.simpleMessage(
+      "La vérification de la sortie n’a rien renvoyé. Le proxy fonctionne peut-être toujours. Réessayez ou lancez le diagnostic.",
+    ),
+    "businessExitProbeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Impossible de confirmer la sortie",
+    ),
+    "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
+      "L’adaptateur virtuel n’est pas autorisé. Le terminal et certaines applications contournent le proxy et voient votre IP locale. Autorisez-le une fois pour corriger cela.",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
       "Connecté · Sortie vérifiée",
@@ -585,6 +603,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Interface réseau virtuelle (TUN)",
     ),
     "businessUsagePercent": m10,
+    "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(
+      "Voir le diagnostic",
+    ),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "Autorisez le VPN lors de la première connexion",
     ),
@@ -1291,10 +1312,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificat installé",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Ce système masque la liste des apps installées tant que l’autorisation n’est pas accordée. Accordez-la pour configurer le proxy par app.",
     ),
@@ -1819,10 +1839,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "L’importation a échoué",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Impossible d’atteindre l’adresse d’abonnement",
     ),

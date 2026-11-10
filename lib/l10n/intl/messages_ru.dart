@@ -471,6 +471,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ChatGPT · Claude",
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("Все линии"),
+    "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
+      "Авторизовать адаптер",
+    ),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
     "businessConnectVia": m5,
@@ -483,6 +486,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
       "Подключено · Не удалось проверить выход",
     ),
+    "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
+      "Подключено · Выход не проверен",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Текущий"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "Текущий внешний IP",
@@ -493,6 +499,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Текущий узел"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Включить умную маршрутизацию",
+    ),
+    "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
+      "Фактический выход не совпадает с выбранной линией",
+    ),
+    "businessExitProbeDescription": MessageLookupByLibrary.simpleMessage(
+      "Проверка выхода не вернула результат. Прокси может продолжать работать. Повторите проверку или запустите диагностику.",
+    ),
+    "businessExitProbeUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Не удалось подтвердить выход",
+    ),
+    "businessExitTunDescription": MessageLookupByLibrary.simpleMessage(
+      "Виртуальный адаптер не авторизован. Терминал и некоторые приложения обходят прокси и видят ваш локальный IP. Авторизуйте его один раз, чтобы исправить это.",
     ),
     "businessExitVerified": MessageLookupByLibrary.simpleMessage(
       "Подключено · Выход проверен",
@@ -568,6 +586,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Виртуальный сетевой интерфейс (TUN)",
     ),
     "businessUsagePercent": m10,
+    "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(
+      "Открыть диагностику",
+    ),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "При первом подключении разрешите VPN",
     ),
@@ -1252,10 +1273,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Сертификат установлен",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -1774,10 +1794,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Не удалось импортировать",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Не удаётся подключиться к адресу подписки",
     ),
