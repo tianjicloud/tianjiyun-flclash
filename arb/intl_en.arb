@@ -1403,5 +1403,10 @@
     }
   },
   "zzRenewUpgradeShort": "Renew / upgrade",
-  "zzRemainingDayUnit": "days"
+  "zzRemainingDayUnit": "days",
+  "connectionSearchHint": "Search domain, app, or rule",
+  "all": "All",
+  "closeAllConnections": "Close all connections",
+  "connectionSummary": "Total {count} connections · Download {download} · Upload {upload} · Select a row to view the full chain and matched rule",
+  "connectionBlockedLabel": "Blocked"
 }

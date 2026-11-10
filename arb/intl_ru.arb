@@ -173,7 +173,7 @@
   "init": "Инициализация",
   "infiniteTime": "Бессрочно",
   "connections": "Соединения",
-  "liveConnections": "Активные соединения",
+  "liveConnections": "Активные подключения",
   "inbound": "Входящие",
   "intranetIP": "Внутренний IP",
   "view": "Просмотр",
@@ -343,7 +343,7 @@
   "iconStylePlain": "Без подложки",
   "iconStyleHidden": "Скрыто",
   "filter": "Фильтр",
-  "groupBy": "Группировка",
+  "groupBy": "Группировать",
   "hideTimeoutProxies": "Скрывать прокси с таймаутом",
   "stackMode": "Режим стека",
   "network": "Сеть",
@@ -1403,5 +1403,10 @@
     }
   },
   "zzRenewUpgradeShort": "Продлить / улучшить",
-  "zzRemainingDayUnit": "дн."
+  "zzRemainingDayUnit": "дн.",
+  "connectionSearchHint": "Поиск домена, приложения или правила",
+  "all": "Все",
+  "closeAllConnections": "Закрыть все подключения",
+  "connectionSummary": "Всего подключений: {count} · Загрузка {download} · Отправка {upload} · Выберите строку, чтобы увидеть цепочку и совпавшее правило",
+  "connectionBlockedLabel": "Заблокировано"
 }

@@ -173,7 +173,7 @@
   "init": "初期化",
   "infiniteTime": "無期限",
   "connections": "接続",
-  "liveConnections": "リアルタイム接続",
+  "liveConnections": "ライブ接続",
   "inbound": "インバウンド",
   "intranetIP": "イントラネットIP",
   "view": "表示",
@@ -343,7 +343,7 @@
   "iconStylePlain": "背景なし",
   "iconStyleHidden": "非表示",
   "filter": "フィルター",
-  "groupBy": "分類",
+  "groupBy": "グループ",
   "hideTimeoutProxies": "タイムアウトしたプロキシを隠す",
   "stackMode": "スタックモード",
   "network": "ネットワーク",
@@ -1403,5 +1403,10 @@
     }
   },
   "zzRenewUpgradeShort": "更新 / アップグレード",
-  "zzRemainingDayUnit": "日"
+  "zzRemainingDayUnit": "日",
+  "connectionSearchHint": "ドメイン、アプリ、ルールを検索",
+  "all": "すべて",
+  "closeAllConnections": "すべての接続を閉じる",
+  "connectionSummary": "合計 {count} 件の接続 · ダウンロード {download} · アップロード {upload} · 行を選択すると全経路と一致したルールを表示",
+  "connectionBlockedLabel": "ブロック済み"
 }

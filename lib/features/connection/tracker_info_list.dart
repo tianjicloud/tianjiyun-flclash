@@ -155,10 +155,24 @@ class TrackerInfoAnimatedList extends StatelessWidget {
         scrollCacheExtent: cacheExtent,
         items: trackerInfos,
         keyOf: (trackerInfo) => trackerInfo.id,
-        estimatedItemExtent: table?.rowHeight ?? recordListEstimatedExtent,
-        separator: table == null ? const SizedBox(height: recordListGap) : null,
+        estimatedItemExtent: table == null
+            ? recordListEstimatedExtent
+            : table.rowHeight + (table.cardSurface ? 1 : 0),
+        separator: table == null
+            ? const SizedBox(height: recordListGap)
+            : table.cardSurface
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: ColoredBox(
+                  color: context.colorScheme.outlineVariant,
+                  child: const SizedBox(height: 1),
+                ),
+              )
+            : null,
         itemBuilder: (itemContext, trackerInfo) {
-          final striped = positions[trackerInfo.id]?.isOdd ?? false;
+          final striped = table?.cardSurface == true
+              ? false
+              : positions[trackerInfo.id]?.isOdd ?? false;
           return MemoBuilder(
             key: Key(trackerInfo.id),
             // A live row reads its age off the clock, which moves on its own.
@@ -259,12 +273,14 @@ class _TrackerInfoGroupedListState
       grouping: grouping,
       controller: widget.controller,
       padding: widget.padding,
-      estimatedItemExtent: table?.rowHeight ?? recordListEstimatedExtent,
+      estimatedItemExtent: table == null
+          ? recordListEstimatedExtent
+          : table.rowHeight + (table.cardSurface ? 1 : 0),
       leadingOf: (group) => showIcon && group.key.isNotEmpty
           ? PackageIcon(packageName: group.key, size: 24)
           : null,
       trailingOf: isLive ? (group) => _buildSpeed(context, group.items) : null,
-      itemBuilder: (_, trackerInfo, index) {
+      itemBuilder: (itemContext, trackerInfo, index) {
         final striped = index.isOdd;
         return MemoBuilder(
           key: Key(trackerInfo.id),
@@ -286,6 +302,21 @@ class _TrackerInfoGroupedListState
               onClose: onClose,
               latest: () => _latest(trackerInfo),
             );
+            if (table?.cardSurface == true) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  row,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: ColoredBox(
+                      color: itemContext.colorScheme.outlineVariant,
+                      child: const SizedBox(height: 1),
+                    ),
+                  ),
+                ],
+              );
+            }
             return table == null
                 ? Padding(
                     padding: const EdgeInsets.only(top: recordListGap),

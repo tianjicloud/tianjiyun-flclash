@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/core/method.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -9,9 +10,13 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final _connectionCardShape = AppShape.all(18);
 
 class RequestsView extends ConsumerStatefulWidget {
   final ScrollController? scrollController;
@@ -102,6 +107,83 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final isBusiness =
+        BusinessTheme.of(context) ||
+        isTianjiSubscriptionProfile(ref.watch(currentProfileProvider));
+    final body = RecordFilterScope(
+      onFilter: _filters.add,
+      child: ListenableBuilder(
+        listenable: _filters,
+        builder: (_, _) => _buildBody(isBusiness: isBusiness),
+      ),
+    );
+    return ListenableBuilder(
+      listenable: Listenable.merge([_filters, _filters.options]),
+      child: body,
+      builder: (context, body) {
+        final pinned = !ViewScope.isMobileOf(context);
+        return Scaffold(
+          title: pinned ? null : _labelOf(_feed),
+          titleWidget: pinned
+              ? _buildTitleWidget(context, isBusiness: isBusiness)
+              : null,
+          searchState: pinned ? null : AppBarSearchState(onSearch: _search),
+          keywords: pinned ? null : _filters.keywordsOf(pinned: false),
+          actions: _feed == RequestFeed.live && pinned
+              ? [
+                  TonalButton(
+                    size: TonalButtonSize.compact,
+                    label: context.appLocalizations.closeAllConnections,
+                    onPressed: () => _liveFeed.currentState?.closeAll(),
+                  ),
+                ]
+              : const [],
+          iconActions: !pinned ? _buildActions() : const [],
+          menuItems: _filters.menuItems(context, pinned: pinned),
+          body: AppBarClearance(
+            child: Column(
+              children: [
+                if (pinned)
+                  _buildControls(context, horizontalInset: isBusiness ? 28 : 16)
+                else
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+                    child: _buildMobileFeedSelector(context),
+                  ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: pinned && isBusiness && _feed == RequestFeed.live
+                          ? 28
+                          : 0,
+                      right: pinned && isBusiness && _feed == RequestFeed.live
+                          ? 28
+                          : 0,
+                      bottom: pinned && isBusiness && _feed == RequestFeed.live
+                          ? 12
+                          : 0,
+                    ),
+                    child: body!,
+                  ),
+                ),
+                if (_feed == RequestFeed.live)
+                  ValueListenableBuilder<TrackerInfosState>(
+                    valueListenable: _live,
+                    builder: (context, _, _) => _buildLiveSummary(
+                      context,
+                      pinned && isBusiness ? 28 : 16,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   List<IconButtonData> _buildActions() {
     if (_feed != RequestFeed.live) {
       return const [];
@@ -115,69 +197,18 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     ];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final body = RecordFilterScope(
-      onFilter: _filters.add,
-      child: ListenableBuilder(
-        listenable: _filters,
-        builder: (_, _) => _buildBody(),
+  Widget _buildMobileFeedSelector(BuildContext context) {
+    return ValueListenableBuilder<TrackerInfosState>(
+      valueListenable: _live,
+      builder: (context, _, _) => SegmentedControl<RequestFeed>(
+        key: const ValueKey('requestFeedSelector'),
+        segments: [
+          (RequestFeed.live, context.appLocalizations.running),
+          (RequestFeed.recent, context.appLocalizations.recentRequests),
+        ],
+        value: _feed,
+        onChanged: _selectFeed,
       ),
-    );
-    return ListenableBuilder(
-      listenable: Listenable.merge([_filters, _filters.options]),
-      child: body,
-      builder: (context, body) {
-        final pinned = !ViewScope.isMobileOf(context);
-        return Scaffold(
-          title: _labelOf(_feed),
-          titleMenuItems: _buildFeedMenu(),
-          searchState: AppBarSearchState(onSearch: _search),
-          keywords: _filters.keywordsOf(pinned: pinned),
-          iconActions: _buildActions(),
-          menuItems: _filters.menuItems(context, pinned: pinned),
-          body: AppBarClearance(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ValueListenableBuilder<TrackerInfosState>(
-                          valueListenable: _live,
-                          builder: (context, _, _) =>
-                              SegmentedControl<RequestFeed>(
-                                key: const ValueKey('requestFeedSelector'),
-                                segments: [
-                                  (
-                                    RequestFeed.live,
-                                    context.appLocalizations.running,
-                                  ),
-                                  (
-                                    RequestFeed.recent,
-                                    context.appLocalizations.recentRequests,
-                                  ),
-                                ],
-                                value: _feed,
-                                onChanged: _selectFeed,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(child: body!),
-                if (_feed == RequestFeed.live)
-                  ValueListenableBuilder<TrackerInfosState>(
-                    valueListenable: _live,
-                    builder: (context, _, _) => _buildLiveSummary(context),
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -186,16 +217,205 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     RequestFeed.live => context.appLocalizations.running,
   };
 
-  List<PopupMenuItem> _buildFeedMenu() => [
-    for (final feed in RequestFeed.values)
-      PopupMenuItem(
-        label: _labelOf(feed),
-        checked: feed == _feed,
-        onPressed: () => _selectFeed(feed),
+  Widget _buildTitleWidget(BuildContext context, {required bool isBusiness}) {
+    return Padding(
+      padding: EdgeInsets.only(left: isBusiness ? 12 : 0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 12,
+        children: [
+          Text(
+            context.appLocalizations.connections,
+            style: AppTextStyle.pageTitle.of(context, emphasized: true),
+          ),
+          ValueListenableBuilder<TrackerInfosState>(
+            valueListenable: _live,
+            builder: (context, state, _) {
+              final count = state.trackerInfos.length;
+              return _RequestFeedSelector(
+                value: _feed,
+                liveLabel:
+                    '${context.appLocalizations.liveConnections} · $count',
+                recentLabel: context.appLocalizations.recentRequests,
+                onChanged: _selectFeed,
+              );
+            },
+          ),
+        ],
       ),
-  ];
+    );
+  }
 
-  Widget _buildLiveSummary(BuildContext context) {
+  Widget _buildControls(
+    BuildContext context, {
+    required double horizontalInset,
+  }) {
+    final options = _filters.options.value;
+    final networkOptions = options[RecordFacetKind.network] ?? const <String>[];
+    final ruleOptions = options[RecordFacetKind.rule] ?? const <String>[];
+    final proxyOptions = options[RecordFacetKind.proxy] ?? const <String>[];
+    return LayoutBuilder(
+      builder: (context, constraints) => Padding(
+        padding: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 10),
+        child: constraints.maxWidth < 760
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 8,
+                children: [
+                  _searchField(context, width: double.infinity),
+                  _filterBar(
+                    context,
+                    networkOptions,
+                    ruleOptions,
+                    proxyOptions,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 8,
+                    children: [
+                      Text(
+                        context.appLocalizations.groupBy,
+                        style: AppTextStyle.footnote
+                            .of(context)
+                            .copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                      _groupingSelector(),
+                    ],
+                  ),
+                ],
+              )
+            : Row(
+                spacing: 8,
+                children: [
+                  _searchField(context, width: 280),
+                  Expanded(
+                    child: _filterBar(
+                      context,
+                      networkOptions,
+                      ruleOptions,
+                      proxyOptions,
+                    ),
+                  ),
+                  Text(
+                    context.appLocalizations.groupBy,
+                    style: AppTextStyle.footnote
+                        .of(context)
+                        .copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ),
+                  _groupingSelector(),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _searchField(BuildContext context, {required double width}) {
+    return SizedBox(
+      width: width,
+      height: 34,
+      child: SearchField(
+        height: 34,
+        fill: context.raisedSurfaceLevel.colorOf(context.colorScheme),
+        hintText: context.appLocalizations.connectionSearchHint,
+        onChanged: _search,
+      ),
+    );
+  }
+
+  Widget _filterBar(
+    BuildContext context,
+    List<String> networkOptions,
+    List<String> ruleOptions,
+    List<String> proxyOptions,
+  ) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: ValueListenableBuilder<RecordFilterState>(
+        valueListenable: _filters,
+        builder: (context, state, _) => Row(
+          spacing: 6,
+          children: [
+            _filterChip(
+              context.appLocalizations.all,
+              selected: state.filters.isEmpty,
+              onPressed: () {
+                for (final filter in [..._filters.filters]) {
+                  _filters.remove(filter);
+                }
+              },
+            ),
+            for (final network in networkOptions)
+              _filterChip(
+                _filters.facetOf(RecordFacetKind.network)?.label(network) ??
+                    network,
+                selected: state.filters.contains(
+                  RecordFilter(RecordFacetKind.network, network),
+                ),
+                onPressed: () => _filters.toggle(
+                  RecordFilter(RecordFacetKind.network, network),
+                ),
+              ),
+            for (final rule in ruleOptions)
+              _filterChip(
+                _filters.facetOf(RecordFacetKind.rule)?.label(rule) ?? rule,
+                selected: state.filters.contains(
+                  RecordFilter(RecordFacetKind.rule, rule),
+                ),
+                onPressed: () =>
+                    _filters.toggle(RecordFilter(RecordFacetKind.rule, rule)),
+              ),
+            for (final proxy in proxyOptions)
+              _filterChip(
+                _filters.facetOf(RecordFacetKind.proxy)?.label(proxy) ?? proxy,
+                selected: state.filters.contains(
+                  RecordFilter(RecordFacetKind.proxy, proxy),
+                ),
+                onPressed: () =>
+                    _filters.toggle(RecordFilter(RecordFacetKind.proxy, proxy)),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _groupingSelector() => _RequestGroupingSelector(
+    value: _filters.value.grouping ?? RecordGrouping.app,
+    onChanged: _filters.setGrouping,
+  );
+
+  Widget _filterChip(
+    String label, {
+    required bool selected,
+    required VoidCallback onPressed,
+  }) {
+    final colorScheme = context.colorScheme;
+    return PressSurface(
+      fill: selected
+          ? colorScheme.onSurface
+          : context.raisedSurfaceLevel.colorOf(colorScheme),
+      shape: AppShape.full,
+      onPressed: onPressed,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: SizedBox(
+        height: 30,
+        child: Center(
+          child: Text(
+            label,
+            style: AppTextStyle.footnote
+                .of(context, emphasized: true)
+                .copyWith(
+                  color: selected ? colorScheme.surface : colorScheme.onSurface,
+                ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLiveSummary(BuildContext context, double horizontalInset) {
     final connections = _live.value.trackerInfos;
     var download = 0;
     var upload = 0;
@@ -204,12 +424,20 @@ class _RequestsViewState extends ConsumerState<RequestsView>
       upload += connection.uploadSpeed ?? 0;
     }
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 6, 16, 12 + context.bottomInset),
+      padding: EdgeInsets.fromLTRB(
+        horizontalInset,
+        6,
+        horizontalInset,
+        12 + context.bottomInset,
+      ),
       child: Align(
         alignment: AlignmentDirectional.centerStart,
         child: Text(
-          '${connections.length} ${context.appLocalizations.connections} · '
-          '↓ ${download.traffic.show}/s · ↑ ${upload.traffic.show}/s',
+          context.appLocalizations.connectionSummary(
+            connections.length,
+            '${trackerTrafficText(download)}/s',
+            '${trackerTrafficText(upload)}/s',
+          ),
           style: AppTextStyle.footnote
               .of(context)
               .copyWith(color: context.colorScheme.onSurfaceVariant),
@@ -218,7 +446,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody({required bool isBusiness}) {
     return switch (_feed) {
       RequestFeed.recent => _RecentFeed(
         listController: _recent,
@@ -232,8 +460,65 @@ class _RequestsViewState extends ConsumerState<RequestsView>
         filters: _filters,
         scrollController: widget.scrollController,
         connectionsReader: widget.connectionsReader,
+        isBusiness: isBusiness,
       ),
     };
+  }
+}
+
+class _RequestFeedSelector extends StatelessWidget {
+  final RequestFeed value;
+  final String liveLabel;
+  final String recentLabel;
+  final ValueChanged<RequestFeed> onChanged;
+
+  const _RequestFeedSelector({
+    required this.value,
+    required this.liveLabel,
+    required this.recentLabel,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BusinessSegmented<RequestFeed>(
+      selected: value,
+      height: 28,
+      items: [
+        BusinessSegment(value: RequestFeed.live, label: liveLabel),
+        BusinessSegment(value: RequestFeed.recent, label: recentLabel),
+      ],
+      onSelected: onChanged,
+      key: const ValueKey('requestFeedSelector'),
+    );
+  }
+}
+
+class _RequestGroupingSelector extends StatelessWidget {
+  final RecordGrouping value;
+  final ValueChanged<RecordGrouping?> onChanged;
+
+  const _RequestGroupingSelector({
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BusinessSegmented<RecordGrouping>(
+      selected: value,
+      height: 28,
+      items: [
+        for (final grouping in RecordGrouping.values)
+          BusinessSegment(
+            value: grouping,
+            label: grouping == RecordGrouping.host
+                ? context.appLocalizations.domain
+                : grouping.label,
+          ),
+      ],
+      onSelected: onChanged,
+    );
   }
 }
 
@@ -374,6 +659,7 @@ class _LiveFeed extends ConsumerStatefulWidget {
   final RecordFilterController<TrackerInfo> filters;
   final ScrollController? scrollController;
   final Future<List<TrackerInfo>> Function()? connectionsReader;
+  final bool isBusiness;
 
   const _LiveFeed({
     super.key,
@@ -381,6 +667,7 @@ class _LiveFeed extends ConsumerStatefulWidget {
     required this.filters,
     required this.scrollController,
     required this.connectionsReader,
+    required this.isBusiness,
   });
 
   @override
@@ -515,11 +802,17 @@ class _LiveFeedState extends ConsumerState<_LiveFeed>
           child: RecordTableFrame<TrackerInfo>(
             tableId: 'connections',
             items: connections,
-            columnsOf: (width) =>
-                trackerInfoColumns(context, width: width, isLive: true),
+            cardSurface: widget.isBusiness,
+            cardShape: widget.isBusiness ? _connectionCardShape : null,
+            columnsOf: (width) => trackerInfoColumns(
+              context,
+              width: width,
+              isLive: true,
+              isBusiness: widget.isBusiness,
+            ),
             builder: (context, table, connections) {
               final padding = EdgeInsets.only(
-                top: context.contentTopPadding,
+                top: table?.cardSurface == true ? 0 : context.contentTopPadding,
                 bottom: 16 + context.bottomInset,
               );
               final detailTitle = appLocalizations.details(

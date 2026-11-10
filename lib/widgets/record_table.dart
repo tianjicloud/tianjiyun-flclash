@@ -133,12 +133,14 @@ class RecordTable<T> {
   final List<TableColumn> layouts;
   final List<double> widths;
   final double rowHeight;
+  final bool cardSurface;
 
   const RecordTable._({
     required this.columns,
     required this.layouts,
     required this.widths,
     required this.rowHeight,
+    required this.cardSurface,
   });
 
   List<Widget> cellsOf(BuildContext context, T item) => [
@@ -155,6 +157,8 @@ class RecordTableFrame<T> extends ConsumerStatefulWidget {
 
   /// Whether the list shows [items] bottom up, its last item on top.
   final bool reverse;
+  final bool cardSurface;
+  final ShapeBorder? cardShape;
   final List<RecordColumn<T>> Function(double width) columnsOf;
   final Widget Function(
     BuildContext context,
@@ -168,6 +172,8 @@ class RecordTableFrame<T> extends ConsumerStatefulWidget {
     required this.tableId,
     required this.items,
     this.reverse = false,
+    this.cardSurface = false,
+    this.cardShape,
     required this.columnsOf,
     required this.builder,
   });
@@ -191,14 +197,17 @@ class _RecordTableFrameState<T> extends ConsumerState<RecordTableFrame<T>>
     if (width < _recordTableMinWidth) {
       return null;
     }
-    final rowHeight =
-        MediaQuery.textScalerOf(context).scale(_recordCellLineHeight) +
-        _recordRowPadding * 2;
+    final rowHeight = widget.cardSurface
+        ? 44.0
+        : MediaQuery.textScalerOf(context).scale(_recordCellLineHeight) +
+              _recordRowPadding * 2;
     // Rows are memoized on the table, so a refresh must get the same one.
     final inputs = (
       width,
       columnWidths,
       rowHeight,
+      widget.cardSurface,
+      MediaQuery.textScalerOf(context),
       Localizations.localeOf(context),
       Theme.of(context),
     );
@@ -214,10 +223,11 @@ class _RecordTableFrameState<T> extends ConsumerState<RecordTableFrame<T>>
       layouts: layouts,
       widths: tableColumnWidths(
         layouts,
-        width - _recordTableMargin * 2,
+        width - (widget.cardSurface ? 28 : _recordTableMargin * 2),
         columnWidths,
       ),
       rowHeight: rowHeight,
+      cardSurface: widget.cardSurface,
     );
   }
 
@@ -235,6 +245,34 @@ class _RecordTableFrameState<T> extends ConsumerState<RecordTableFrame<T>>
           _sort,
           reverse: widget.reverse,
         );
+        final content = Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _RecordTableHeader(
+              table: table,
+              sort: _sort,
+              onSort: (column) =>
+                  setState(() => _sort = nextRecordSort(_sort, column)),
+              onResize: (boundary, delta) =>
+                  resizeColumn(table.layouts, table.widths, boundary, delta),
+              onResizeEnd: saveColumnWidths,
+              onReset: resetColumnWidths,
+            ),
+            Expanded(
+              child: Builder(
+                builder: (context) => widget.builder(context, table, items),
+              ),
+            ),
+          ],
+        );
+        final body = table.cardSurface
+            ? Surface(
+                color: context.raisedSurfaceLevel.colorOf(context.colorScheme),
+                shape: widget.cardShape ?? AppShape.xl,
+                clipBehavior: Clip.antiAlias,
+                child: content,
+              )
+            : content;
         return Padding(
           padding: EdgeInsets.only(top: context.contentTopPadding),
           child: MediaQuery.removePadding(
@@ -242,34 +280,7 @@ class _RecordTableFrameState<T> extends ConsumerState<RecordTableFrame<T>>
             removeTop: true,
             child: FloatingBarScope(
               inset: 0,
-              child: TopInsetScope(
-                inset: 4,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _RecordTableHeader(
-                      table: table,
-                      sort: _sort,
-                      onSort: (column) =>
-                          setState(() => _sort = nextRecordSort(_sort, column)),
-                      onResize: (boundary, delta) => resizeColumn(
-                        table.layouts,
-                        table.widths,
-                        boundary,
-                        delta,
-                      ),
-                      onResizeEnd: saveColumnWidths,
-                      onReset: resetColumnWidths,
-                    ),
-                    Expanded(
-                      child: Builder(
-                        builder: (context) =>
-                            widget.builder(context, table, items),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: TopInsetScope(inset: 4, child: body),
             ),
           ),
         );
@@ -298,46 +309,52 @@ class _RecordTableHeader<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
-    final height =
-        MediaQuery.textScalerOf(context).scale(_recordHeaderLineHeight) +
-        _recordRowPadding * 2;
+    final height = table.cardSurface
+        ? 38.0
+        : MediaQuery.textScalerOf(context).scale(_recordHeaderLineHeight) +
+              _recordRowPadding * 2;
     final labelStyle = AppTextStyle.caption1.of(context, emphasized: true);
     final style = labelStyle.copyWith(
       color: colorScheme.onSurfaceVariant,
       height: _recordHeaderLineHeight / labelStyle.fontSize!,
     );
+    final cells = TableColumnResizer(
+      columns: table.layouts,
+      widths: table.widths,
+      onResize: onResize,
+      onResizeEnd: onResizeEnd,
+      onReset: onReset,
+      child: TableCells(
+        columns: table.layouts,
+        widths: table.widths,
+        height: height,
+        inset: 0,
+        cells: [
+          for (final column in table.columns)
+            RecordHeaderCell(
+              label: column.layout.label,
+              end: column.layout.end,
+              style: style,
+              inset: table.cardSurface ? 4 : _recordCellInset,
+              descending: sort?.columnId == column.id ? sort?.descending : null,
+              onTap: column.sortKey == null ? null : () => onSort(column),
+            ),
+        ],
+      ),
+    );
+    if (table.cardSurface) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: cells,
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: _recordTableMargin),
       child: Surface(
         color: context.raisedSurfaceLevel.colorOf(colorScheme),
         shape: AppShape.all(AppCorner.fit(height)),
         clipBehavior: Clip.antiAlias,
-        child: TableColumnResizer(
-          columns: table.layouts,
-          widths: table.widths,
-          onResize: onResize,
-          onResizeEnd: onResizeEnd,
-          onReset: onReset,
-          child: TableCells(
-            columns: table.layouts,
-            widths: table.widths,
-            height: height,
-            inset: 0,
-            cells: [
-              for (final column in table.columns)
-                RecordHeaderCell(
-                  label: column.layout.label,
-                  end: column.layout.end,
-                  style: style,
-                  inset: _recordCellInset,
-                  descending: sort?.columnId == column.id
-                      ? sort?.descending
-                      : null,
-                  onTap: column.sortKey == null ? null : () => onSort(column),
-                ),
-            ],
-          ),
-        ),
+        child: cells,
       ),
     );
   }
@@ -438,11 +455,19 @@ class RecordTableRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
-    final style = AppTextStyle.subheadline.of(context);
-    final shape = AppShape.all(AppCorner.fit(table.rowHeight));
+    final style = table.cardSurface
+        ? AppTextStyle.footnote.of(context)
+        : AppTextStyle.subheadline.of(context);
+    final shape = table.cardSurface
+        ? AppShape.none
+        : AppShape.all(AppCorner.fit(table.rowHeight));
     final level = striped ? context.raisedSurfaceLevel : context.surfaceLevel;
     final row = PressSurface(
-      fill: striped ? level.colorOf(colorScheme) : Colors.transparent,
+      fill: table.cardSurface
+          ? Colors.transparent
+          : striped
+          ? level.colorOf(colorScheme)
+          : Colors.transparent,
       shape: shape,
       childFills: true,
       onPressed: onTap,
@@ -454,15 +479,29 @@ class RecordTableRow extends StatelessWidget {
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        child: TableCells(
-          columns: table.layouts,
-          widths: table.widths,
-          height: table.rowHeight,
-          inset: _recordCellInset,
-          cells: cells,
-        ),
+        child: table.cardSurface
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: TableCells(
+                  columns: table.layouts,
+                  widths: table.widths,
+                  height: table.rowHeight,
+                  inset: 4,
+                  cells: cells,
+                ),
+              )
+            : TableCells(
+                columns: table.layouts,
+                widths: table.widths,
+                height: table.rowHeight,
+                inset: _recordCellInset,
+                cells: cells,
+              ),
       ),
     );
+    if (table.cardSurface) {
+      return row;
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: _recordTableMargin),
       child: SurfaceScope(level: level, child: row),
@@ -473,16 +512,27 @@ class RecordTableRow extends StatelessWidget {
 class RecordCellText extends StatelessWidget {
   final String text;
   final bool muted;
+  final bool mono;
 
-  const RecordCellText(this.text, {super.key, this.muted = false});
+  const RecordCellText(
+    this.text, {
+    super.key,
+    this.muted = false,
+    this.mono = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text.isEmpty ? '—' : text,
-      style: muted
-          ? TextStyle(color: context.colorScheme.onSurfaceVariant)
-          : null,
+      style:
+          (mono ? AppTextStyle.footnote.of(context).toJetBrainsMono : null)
+              ?.copyWith(
+                color: muted ? context.colorScheme.onSurfaceVariant : null,
+              ) ??
+          (muted
+              ? TextStyle(color: context.colorScheme.onSurfaceVariant)
+              : null),
     );
   }
 }

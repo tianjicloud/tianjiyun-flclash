@@ -7658,8 +7658,7 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one:
-          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -11236,6 +11235,51 @@ class AppLocalizations {
   /// `days`
   String get zzRemainingDayUnit {
     return Intl.message('days', name: 'zzRemainingDayUnit', desc: '', args: []);
+  }
+
+  /// `Search domain, app, or rule`
+  String get connectionSearchHint {
+    return Intl.message(
+      'Search domain, app, or rule',
+      name: 'connectionSearchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get all {
+    return Intl.message('All', name: 'all', desc: '', args: []);
+  }
+
+  /// `Close all connections`
+  String get closeAllConnections {
+    return Intl.message(
+      'Close all connections',
+      name: 'closeAllConnections',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total {count} connections · Download {download} · Upload {upload} · Select a row to view the full chain and matched rule`
+  String connectionSummary(Object count, Object download, Object upload) {
+    return Intl.message(
+      'Total $count connections · Download $download · Upload $upload · Select a row to view the full chain and matched rule',
+      name: 'connectionSummary',
+      desc: '',
+      args: [count, download, upload],
+    );
+  }
+
+  /// `Blocked`
+  String get connectionBlockedLabel {
+    return Intl.message(
+      'Blocked',
+      name: 'connectionBlockedLabel',
+      desc: '',
+      args: [],
+    );
   }
 }
 

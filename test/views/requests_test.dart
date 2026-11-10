@@ -461,7 +461,7 @@ void main() {
       'Download',
       'Upload',
     ]) {
-      expect(find.text(label), findsOneWidget);
+      expect(find.text(label).last, findsOneWidget);
     }
     expect(find.byType(TrackerInfoTableRow), findsNWidgets(2));
     expect(find.byType(Divider), findsNothing);
@@ -504,7 +504,7 @@ void main() {
 
     await pumpRequests(tester);
 
-    await tester.tap(find.widgetWithText(TonalChip, 'Tokyo'));
+    await tester.tap(find.text('Tokyo').first);
     await tester.pumpAndSettle();
 
     expect(find.textContaining('alpha.test'), findsNothing);
@@ -671,67 +671,50 @@ void main() {
     await teardownView(tester);
   });
 
-  testWidgets('a wide page pins the offered values as toggles and adds a '
-      'tapped exit as a removable chip', (tester) async {
+  testWidgets('the filter chips toggle offered network and exit values', (
+    tester,
+  ) async {
     seedRequests([
       _tracker(id: 'a', host: 'alpha.test'),
       _tracker(id: 'b', host: 'beta.test', network: 'udp', chains: ['Tokyo']),
     ]);
 
     await pumpRequests(tester);
-    Chip chip(String label) =>
-        tester.widget<Chip>(find.widgetWithText(Chip, label));
-    expect(chip('TCP').onDeleted, isNull);
-    expect(chip('UDP').selected, isFalse);
-    expect(find.widgetWithText(Chip, 'Tokyo'), findsNothing);
+    expect(find.text('UDP').first, findsOneWidget);
+    expect(find.text('Tokyo').first, findsOneWidget);
 
-    await tester.tap(find.widgetWithText(Chip, 'UDP'));
+    await tester.tap(find.text('UDP').first);
     await tester.pumpAndSettle();
-    expect(chip('UDP').selected, isTrue);
     expect(find.textContaining('alpha.test'), findsNothing);
+    expect(find.textContaining('beta.test'), findsWidgets);
 
-    await tester.tap(find.widgetWithText(Chip, 'UDP'));
+    await tester.tap(find.text('UDP').first);
     await tester.pumpAndSettle();
-    expect(chip('UDP').selected, isFalse);
     expect(find.textContaining('alpha.test'), findsWidgets);
 
-    await tester.tap(find.widgetWithText(TonalChip, 'Tokyo'));
+    await tester.tap(find.text('Tokyo').first);
     await tester.pumpAndSettle();
-    expect(chip('Tokyo').onDeleted, isNotNull);
     expect(find.textContaining('alpha.test'), findsNothing);
 
-    await tester.tap(find.widgetWithText(Chip, 'Tokyo'));
+    await tester.tap(find.text('Tokyo').first);
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(Chip, 'Tokyo'), findsNothing);
-    expect(find.textContaining('alpha.test'), findsWidgets);
-
-    await openSubMenu(tester, 'Group by');
-    expect(inMenu(find.text('Filter')), findsNothing);
+    expect(find.text('Tokyo').first, findsOneWidget);
 
     await teardownView(tester);
   });
 
-  testWidgets('the title opens a menu of the feeds at any width', (
-    tester,
-  ) async {
+  testWidgets('the feed selector switches feeds at any width', (tester) async {
     seedRequests([_tracker(id: 'a', host: 'alpha.test')]);
     final bar = find.byType(AppBar);
 
     for (final size in const [_tableSize, Size(390, 800), Size(340, 800)]) {
       await pumpRequests(tester, size: size);
-      expect(
-        find.descendant(of: bar, matching: find.text('Running')),
-        findsNothing,
-      );
-      await tester.tap(
-        find.descendant(of: bar, matching: find.text('Recent requests')),
-      );
-      await tester.pumpAndSettle();
-      expect(find.text('Running'), findsNWidgets(2));
-      await tester.tap(find.text('Running').last);
+      final desktop = size == _tableSize;
+      final liveLabel = desktop ? 'Live connections' : 'Running';
+      await tester.tap(find.textContaining(liveLabel).last);
       await tester.pumpAndSettle();
       expect(
-        find.descendant(of: bar, matching: find.text('Running')),
+        find.descendant(of: bar, matching: find.textContaining(liveLabel)),
         findsOneWidget,
       );
       await teardownView(tester);

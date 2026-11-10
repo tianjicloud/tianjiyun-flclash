@@ -343,7 +343,7 @@
   "iconStylePlain": "纯图标",
   "iconStyleHidden": "隐藏",
   "filter": "筛选",
-  "groupBy": "分类",
+  "groupBy": "按",
   "hideTimeoutProxies": "隐藏超时代理",
   "stackMode": "栈模式",
   "network": "网络",
@@ -1403,5 +1403,10 @@
     }
   },
   "zzRenewUpgradeShort": "续费 / 升级",
-  "zzRemainingDayUnit": "天"
+  "zzRemainingDayUnit": "天",
+  "connectionSearchHint": "搜索域名、应用或规则",
+  "all": "全部",
+  "closeAllConnections": "关闭全部连接",
+  "connectionSummary": "共 {count} 条连接 · 下载 {download} · 上传 {upload} · 选中一行可查看完整链路与命中规则",
+  "connectionBlockedLabel": "已拦截"
 }

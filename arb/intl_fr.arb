@@ -343,7 +343,7 @@
   "iconStylePlain": "Simples",
   "iconStyleHidden": "Masquées",
   "filter": "Filtrer",
-  "groupBy": "Regrouper par",
+  "groupBy": "Grouper par",
   "hideTimeoutProxies": "Masquer les proxys expirés",
   "stackMode": "Mode de pile",
   "network": "Réseau",
@@ -1403,5 +1403,10 @@
     }
   },
   "zzRenewUpgradeShort": "Renouveler / améliorer",
-  "zzRemainingDayUnit": "jours"
+  "zzRemainingDayUnit": "jours",
+  "connectionSearchHint": "Rechercher un domaine, une app ou une règle",
+  "all": "Tout",
+  "closeAllConnections": "Fermer toutes les connexions",
+  "connectionSummary": "Total : {count} connexions · Téléchargement {download} · Envoi {upload} · Sélectionnez une ligne pour voir la chaîne et la règle correspondante",
+  "connectionBlockedLabel": "Bloqué"
 }

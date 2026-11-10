@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 
@@ -14,9 +15,65 @@ List<RecordColumn<TrackerInfo>> trackerInfoColumns(
   BuildContext context, {
   required double width,
   required bool isLive,
+  bool isBusiness = false,
 }) {
   final appLocalizations = context.appLocalizations;
   final wide = width >= recordWideTableWidth;
+  if (isLive && isBusiness) {
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
+    return [
+      RecordColumn(
+        TableColumn('process', appLocalizations.app, width: 120),
+        cell: (_, info) => RecordCellText(info.metadata.process),
+        sortKey: (info) => info.metadata.process.toLowerCase(),
+      ),
+      RecordColumn(
+        TableColumn('target', appLocalizations.target, flex: 1.9),
+        cell: (_, info) => TrackerTargetText(info, mono: true),
+        sortKey: (info) => info.title.toLowerCase(),
+      ),
+      RecordColumn(
+        TableColumn('rule', appLocalizations.rule, flex: 1),
+        cell: (context, info) => TrackerRuleChip(trackerInfo: info),
+        sortKey: (info) => '${info.rule} ${info.rulePayload}'.toLowerCase(),
+      ),
+      RecordColumn(
+        TableColumn('exit', appLocalizations.outboundExit, width: 140),
+        cell: (context, info) => _ExitText(
+          exit: _isRejected(info)
+              ? appLocalizations.connectionBlockedLabel
+              : info.chains.lastOrNull ?? '',
+        ),
+        sortKey: (info) => (info.chains.lastOrNull ?? '').toLowerCase(),
+      ),
+      _amountColumn(
+        'download',
+        appLocalizations.download,
+        (info) => info.download,
+        width: 104 * textScale,
+        speedOf: (info) => info.downloadSpeed ?? 0,
+      ),
+      _amountColumn(
+        'upload',
+        appLocalizations.upload,
+        (info) => info.upload,
+        width: 96 * textScale,
+        speedOf: (info) => info.uploadSpeed ?? 0,
+      ),
+      RecordColumn(
+        TableColumn(
+          'duration',
+          appLocalizations.duration,
+          width: 84 * textScale,
+          end: true,
+        ),
+        cell: (_, info) =>
+            RecordCellText(_connectionDuration(info), mono: true),
+        sortKey: (info) => -info.start.microsecondsSinceEpoch,
+        descendingFirst: true,
+      ),
+    ];
+  }
   // A live table spends its first extra width on the totals.
   final detailed = wide && (!isLive || width >= _fullLiveTableWidth);
   double totalWidth(String label) => max(88, recordHeaderWidth(context, label));
@@ -126,19 +183,58 @@ RecordColumn<TrackerInfo> _amountColumn(
   int Function(TrackerInfo info) amountOf, {
   double width = 100,
   bool perSecond = false,
+  int Function(TrackerInfo info)? speedOf,
 }) {
   return RecordColumn(
     TableColumn(id, label, width: width, end: true),
     cell: (_, info) {
       final amount = amountOf(info);
-      return RecordCellText(
-        perSecond ? '${amount.traffic.show}/s' : amount.traffic.show,
+      final value = speedOf == null
+          ? amount.traffic.show
+          : trackerTrafficText(amount);
+      final cell = RecordCellText(
+        perSecond ? '$value/s' : value,
         muted: perSecond && amount == 0,
+        mono: speedOf != null,
       );
+      final speed = speedOf?.call(info);
+      return speed == null
+          ? cell
+          : Tooltip(message: '${trackerTrafficText(speed)}/s', child: cell);
     },
     sortKey: amountOf,
     descendingFirst: true,
   );
+}
+
+String trackerTrafficText(int amount) {
+  final value = amount.traffic.show;
+  final match = RegExp(r'^([\d.]+)(.*)$').firstMatch(value);
+  if (match == null || match.group(2)!.isEmpty) {
+    return value;
+  }
+  return '${match.group(1)} ${match.group(2)}';
+}
+
+bool _isRejected(TrackerInfo trackerInfo) =>
+    trackerInfo.rule.toUpperCase() == 'REJECT';
+
+String _connectionDuration(TrackerInfo trackerInfo) {
+  if (_isRejected(trackerInfo) ||
+      trackerInfo.start.millisecondsSinceEpoch == 0) {
+    return '—';
+  }
+  final duration = DateTime.now().difference(trackerInfo.start);
+  if (duration.isNegative) {
+    return '00:00';
+  }
+  String twoDigits(int value) => value.toString().padLeft(2, '0');
+  final minutes = duration.inMinutes;
+  final seconds = duration.inSeconds % 60;
+  if (duration.inHours > 0) {
+    return '${duration.inHours}:${twoDigits(minutes % 60)}:${twoDigits(seconds)}';
+  }
+  return '${twoDigits(minutes)}:${twoDigits(seconds)}';
 }
 
 String trackerDurationText(Duration duration) {
@@ -188,6 +284,27 @@ class TrackerInfoTableRow extends StatelessWidget {
   }
 }
 
+class _ExitText extends StatelessWidget {
+  final String exit;
+
+  const _ExitText({required this.exit});
+
+  @override
+  Widget build(BuildContext context) {
+    return PressRegion(
+      onTap:
+          exit.isEmpty ||
+              exit == context.appLocalizations.connectionBlockedLabel
+          ? null
+          : () => RecordFilterScope.add(
+              context,
+              RecordFilter(RecordFacetKind.proxy, exit),
+            ),
+      child: RecordCellText(exit),
+    );
+  }
+}
+
 class _ExitChip extends StatelessWidget {
   final String exit;
 
@@ -211,33 +328,103 @@ class _ExitChip extends StatelessWidget {
   }
 }
 
-class TrackerTargetText extends StatelessWidget {
+class TrackerRuleChip extends StatelessWidget {
   final TrackerInfo trackerInfo;
 
-  const TrackerTargetText(this.trackerInfo, {super.key});
+  const TrackerRuleChip({super.key, required this.trackerInfo});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+    final strings = context.appLocalizations;
+    final (
+      label,
+      fill,
+      foreground,
+    ) = trackerInfo.rule == strings.businessAiServiceLabel
+        ? (
+            strings.businessAiServiceLabel,
+            colors.primaryContainer,
+            colors.onPrimaryContainer,
+          )
+        : trackerInfo.rule == strings.businessMainlandDirect
+        ? (
+            strings.businessMainlandDirect,
+            BusinessPalette.connectedContainerFor(colors.brightness),
+            BusinessPalette.connectedForegroundFor(colors.brightness),
+          )
+        : _isRejected(trackerInfo)
+        ? (
+            strings.connectionBlockedLabel,
+            colors.errorContainer,
+            colors.onErrorContainer,
+          )
+        : (
+            trackerInfo.rule,
+            context.raisedSurfaceLevel.colorOf(colors),
+            colors.onSurfaceVariant,
+          );
+    return Container(
+      height: 22,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: ShapeDecoration(color: fill, shape: AppShape.full),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: AppTextStyle.caption1
+            .of(context, emphasized: true)
+            .copyWith(color: foreground),
+      ),
+    );
+  }
+}
+
+class TrackerTargetText extends StatelessWidget {
+  final TrackerInfo trackerInfo;
+  final bool mono;
+
+  const TrackerTargetText(this.trackerInfo, {super.key, this.mono = false});
 
   @override
   Widget build(BuildContext context) {
     final port = trackerInfo.metadata.destinationPort;
-    final target = Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(text: trackerInfo.title),
-          if (port.isNotEmpty)
+    final target = port.isEmpty
+        ? trackerInfo.title
+        : '${trackerInfo.title}:$port';
+    final text = mono
+        ? Text(
+            target,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyle.footnote
+                .of(context)
+                .toJetBrainsMono
+                .copyWith(color: context.colorScheme.onSurface),
+          )
+        : Text.rich(
             TextSpan(
-              text: ':$port',
-              style: TextStyle(color: context.colorScheme.onSurfaceVariant),
+              children: [
+                TextSpan(text: trackerInfo.title),
+                if (port.isNotEmpty)
+                  TextSpan(
+                    text: ':$port',
+                    style: TextStyle(
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
-    );
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          );
     if (!trackerInfo.metadata.mitm) {
-      return target;
+      return text;
     }
     return Row(
       spacing: 6,
       children: [
-        Flexible(child: target),
+        Flexible(child: text),
         const RecordLabel(label: 'MITM'),
       ],
     );

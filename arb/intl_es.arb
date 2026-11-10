@@ -173,7 +173,7 @@
   "init": "Inicio",
   "infiniteTime": "No caduca",
   "connections": "Conexiones",
-  "liveConnections": "Conexiones activas",
+  "liveConnections": "Conexiones en vivo",
   "inbound": "Entrada",
   "intranetIP": "IP de intranet",
   "view": "Ver",
@@ -1403,5 +1403,10 @@
     }
   },
   "zzRenewUpgradeShort": "Renovar / mejorar",
-  "zzRemainingDayUnit": "días"
+  "zzRemainingDayUnit": "días",
+  "connectionSearchHint": "Buscar dominio, aplicación o regla",
+  "all": "Todo",
+  "closeAllConnections": "Cerrar todas las conexiones",
+  "connectionSummary": "Total: {count} conexiones · Descarga {download} · Subida {upload} · Selecciona una fila para ver la ruta completa y la regla coincidente",
+  "connectionBlockedLabel": "Bloqueado"
 }

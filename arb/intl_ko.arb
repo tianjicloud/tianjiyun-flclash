@@ -343,7 +343,7 @@
   "iconStylePlain": "기본",
   "iconStyleHidden": "숨김",
   "filter": "필터",
-  "groupBy": "분류",
+  "groupBy": "그룹 기준",
   "hideTimeoutProxies": "시간 초과된 프록시 숨기기",
   "stackMode": "스택 모드",
   "network": "네트워크",
@@ -1403,5 +1403,10 @@
     }
   },
   "zzRenewUpgradeShort": "갱신 / 업그레이드",
-  "zzRemainingDayUnit": "일"
+  "zzRemainingDayUnit": "일",
+  "connectionSearchHint": "도메인, 앱 또는 규칙 검색",
+  "all": "전체",
+  "closeAllConnections": "모든 연결 닫기",
+  "connectionSummary": "총 {count}개 연결 · 다운로드 {download} · 업로드 {upload} · 행을 선택하면 전체 체인과 일치 규칙을 확인할 수 있습니다",
+  "connectionBlockedLabel": "차단됨"
 }
