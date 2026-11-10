@@ -9608,6 +9608,36 @@ class AppLocalizations {
     );
   }
 
+  /// `Choose residential exit`
+  String get residentialExitSheetTitle {
+    return Intl.message(
+      'Choose residential exit',
+      name: 'residentialExitSheetTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AI and groups that require a proxy follow the selected route.`
+  String get residentialExitSheetSubtitle {
+    return Intl.message(
+      'AI and groups that require a proxy follow the selected route.',
+      name: 'residentialExitSheetSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use {name}`
+  String residentialUseExit(String name) {
+    return Intl.message(
+      'Use $name',
+      name: 'residentialUseExit',
+      desc: '',
+      args: [name],
+    );
+  }
+
   /// `Selected`
   String get residentialSelected {
     return Intl.message(
@@ -10218,6 +10248,16 @@ class AppLocalizations {
     return Intl.message('Lines', name: 'businessLines', desc: '', args: []);
   }
 
+  /// `Test speed`
+  String get businessDelayTestShort {
+    return Intl.message(
+      'Test speed',
+      name: 'businessDelayTestShort',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Subscriptions`
   String get businessSubscriptions {
     return Intl.message(
@@ -10808,6 +10848,16 @@ class AppLocalizations {
     return Intl.message(
       'Manual selection takes priority: the selected line is the exit. After switching, the exit IP is checked and any mismatch includes its reason.',
       name: 'businessLineSelectionHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected line is the exit; its exit IP is checked after switching.`
+  String get businessLineSelectionHintShort {
+    return Intl.message(
+      'The selected line is the exit; its exit IP is checked after switching.',
+      name: 'businessLineSelectionHintShort',
       desc: '',
       args: [],
     );

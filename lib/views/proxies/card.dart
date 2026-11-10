@@ -56,6 +56,7 @@ class ProxyCard extends ConsumerWidget {
   final ProxyCardType type;
   final String? testUrl;
   final bool businessStyle;
+  final bool businessMobile;
 
   const ProxyCard({
     super.key,
@@ -65,6 +66,7 @@ class ProxyCard extends ConsumerWidget {
     required this.groupType,
     required this.type,
     this.businessStyle = false,
+    this.businessMobile = false,
   });
 
   Measure get measure => globalState.measure;
@@ -157,6 +159,57 @@ class ProxyCard extends ConsumerWidget {
           )
         else
           const SizedBox(height: 22),
+      ],
+    );
+  }
+
+  Widget _buildBusinessMobileContent(
+    BuildContext context, {
+    required bool selected,
+  }) {
+    final region = _businessName();
+    final multiplier = RegExp(
+      r'\b(\d+(?:\.\d+)?)x\b',
+      caseSensitive: false,
+    ).firstMatch(proxy.name)?.group(1);
+    return Row(
+      children: [
+        if (region.code case final code?) ...[
+          RegionCodeBadge(code: code),
+          const SizedBox(width: 10),
+        ],
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              EmojiText(
+                region.name.replaceAll(
+                  RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false),
+                  '',
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BusinessText.linesNodeTitle(
+                  context,
+                  emphasized: selected,
+                ),
+              ),
+              const SizedBox(height: 3),
+              if (multiplier != null)
+                _ProxyMetaChip(
+                  label: context.appLocalizations.businessMultiplier(
+                    multiplier,
+                  ),
+                  style: AppTextStyle.caption1.of(context),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        _BusinessDelayText(proxy: proxy, testUrl: testUrl),
+        const SizedBox(width: 14),
+        _BusinessRadio(selected: selected),
       ],
     );
   }
@@ -278,8 +331,17 @@ class ProxyCard extends ConsumerWidget {
           ),
         );
         final card = Card(
-          radius: businessStyle ? AppCorner.md : AppCorner.lg,
-          shape: businessStyle
+          radius: businessMobile
+              ? AppCorner.none
+              : businessStyle
+              ? AppCorner.md
+              : AppCorner.lg,
+          shape: businessMobile
+              ? const RoundedSuperellipseBorder(
+                  side: BorderSide.none,
+                  borderRadius: AppRadius.none,
+                )
+              : businessStyle
               ? const RoundedSuperellipseBorder(
                   side: BorderSide.none,
                   borderRadius: AppRadius.md,
@@ -288,14 +350,26 @@ class ProxyCard extends ConsumerWidget {
           enterActionsOnRight: true,
           key: key,
           onPressed: () => _handleSelect(ref),
-          isSelected: inUse,
-          padding: businessStyle
+          isSelected: businessMobile ? false : inUse,
+          padding: businessMobile
+              ? const EdgeInsets.symmetric(horizontal: 16)
+              : businessStyle
               ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
               : const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: businessStyle
+            children: businessMobile
+                ? [
+                    SizedBox(
+                      height: 68,
+                      child: _buildBusinessMobileContent(
+                        context,
+                        selected: inUse,
+                      ),
+                    ),
+                  ]
+                : businessStyle
                 ? [_buildBusinessContent(context)]
                 : [
                     Row(
@@ -314,7 +388,7 @@ class ProxyCard extends ConsumerWidget {
                   ],
           ),
         );
-        final selectedCard = businessStyle && inUse
+        final selectedCard = businessStyle && inUse && !businessMobile
             ? DecoratedBox(
                 decoration: ShapeDecoration(
                   shadows: [BusinessShadow.selectedLine(BusinessPalette.blue)],
@@ -382,6 +456,43 @@ class _BusinessDelayText extends ConsumerWidget {
               .copyWith(color: color),
     );
   }
+}
+
+class _BusinessRadio extends StatelessWidget {
+  const _BusinessRadio({required this.selected});
+
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: selected ? BusinessPalette.blue : Colors.transparent,
+      shape: RoundedSuperellipseBorder(
+        side: BorderSide(
+          color: selected
+              ? BusinessPalette.blue
+              : context.colorScheme.outlineVariant,
+          width: 2,
+        ),
+        borderRadius: AppRadius.full,
+      ),
+    ),
+    child: SizedBox(
+      width: 22,
+      height: 22,
+      child: selected
+          ? const Center(
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: BusinessPalette.onBlue,
+                  shape: CircleBorder(),
+                ),
+                child: SizedBox(width: 8, height: 8),
+              ),
+            )
+          : null,
+    ),
+  );
 }
 
 class _ProxyMetaChip extends StatelessWidget {

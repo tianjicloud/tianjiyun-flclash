@@ -13,6 +13,8 @@ import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/providers/selection_check.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
+import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
@@ -1273,8 +1275,14 @@ class _ExitActions extends StatelessWidget {
 }
 
 Future<void> showResidentialExitSheet(BuildContext context) {
+  final choices = ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(residentialPolicyProvider).choices.length;
+  final detent = (0.32 + choices * 0.088).clamp(0.36, 0.76).toDouble();
   return showSheet<void>(
     context: context,
+    props: SheetProps(detents: [detent]),
     builder: (_) => BusinessTheme.of(context)
         ? const BusinessAppearance(child: _ResidentialExitSheet())
         : const _ResidentialExitSheet(),
@@ -1288,28 +1296,258 @@ class _ResidentialExitSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
     final policy = ref.watch(residentialPolicyProvider);
-    return SelectionSheet<String>(
-      title: appLocalizations.residentialTitle,
-      sections: [
-        SelectionSection(
-          label: policy.active
-              ? policy.bulkBypass
-                    ? appLocalizations.residentialBulkBypass
-                    : appLocalizations.residentialBulkUnconfirmed
-              : null,
-          items: policy.choices,
+    final selectedName = policy.selectedExit;
+    final selectedLabel = selectedName == null
+        ? appLocalizations.residentialChoose
+        : appLocalizations.residentialUseExit(
+            _cleanResidentialName(selectedName),
+          );
+    final note = policy.active
+        ? policy.bulkBypass
+              ? appLocalizations.residentialBulkBypass
+              : appLocalizations.residentialBulkUnconfirmed
+        : appLocalizations.residentialSubscriptionPolicy;
+    return Scaffold(
+      titleWidget: Text(
+        appLocalizations.residentialExitSheetTitle,
+        style: AppTextStyle.title2.of(context, emphasized: true),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 54, 16, 16 + context.bottomInset),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                appLocalizations.residentialExitSheetSubtitle,
+                style: AppTextStyle.caption1
+                    .of(context)
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
+              const SizedBox(height: 16),
+              if (policy.choices.isEmpty)
+                Center(child: Text(appLocalizations.residentialNoPlan))
+              else
+                for (var index = 0; index < policy.choices.length; index++) ...[
+                  if (index > 0) const SizedBox(height: 8),
+                  _ResidentialExitChoice(
+                    item: policy.choices[index],
+                    selected: policy.choices[index] == selectedName,
+                    onPressed: () {
+                      final item = policy.choices[index];
+                      Navigator.of(context).pop();
+                      unawaited(
+                        ref
+                            .read(residentialActionProvider.notifier)
+                            .select(item),
+                      );
+                    },
+                  ),
+                ],
+              const SizedBox(height: 10),
+              DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: context.colorScheme.surfaceContainerLow,
+                  shape: AppShape.md.copyWith(
+                    side: BorderSide(color: context.colorScheme.outlineVariant),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    note,
+                    style: AppTextStyle.footnote
+                        .of(context)
+                        .copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: BusinessSecondaryButton(
+                      label: appLocalizations.residentialUseSubscription,
+                      width: 160,
+                      height: 48,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        unawaited(
+                          ref.read(residentialActionProvider.notifier).clear(),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: BusinessPrimaryButton(
+                      label: selectedLabel,
+                      width: 160,
+                      height: 48,
+                      onPressed: selectedName == null
+                          ? null
+                          : () {
+                              Navigator.of(context).pop();
+                              unawaited(
+                                ref
+                                    .read(residentialActionProvider.notifier)
+                                    .select(selectedName),
+                              );
+                            },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ],
-      labelBuilder: (item) => item,
-      selectedOf: (_) => policy.selectedExit,
-      emptyLabel: appLocalizations.residentialNoPlan,
-      onSelected: (item) {
-        Navigator.of(context).pop();
-        unawaited(ref.read(residentialActionProvider.notifier).select(item));
-      },
+      ),
     );
   }
 }
+
+class _ResidentialExitChoice extends ConsumerWidget {
+  const _ResidentialExitChoice({
+    required this.item,
+    required this.selected,
+    required this.onPressed,
+  });
+
+  final String item;
+  final bool selected;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final delay = ref.watch(
+      delayProvider(proxyName: item, testUrl: ref.watch(realTestUrlProvider())),
+    );
+    final codeAndName = _residentialRegion(item);
+    return PressRegion(
+      onTap: onPressed,
+      shape: AppShape.md,
+      overlay: PressRegion.hoverOverlay,
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: context.colorScheme.surface,
+          shape: RoundedSuperellipseBorder(
+            side: BorderSide(
+              color: selected
+                  ? BusinessPalette.blue
+                  : context.colorScheme.outlineVariant,
+              width: selected ? 2 : 1,
+            ),
+            borderRadius: AppRadius.md,
+          ),
+        ),
+        child: SizedBox(
+          height: 72,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              spacing: 10,
+              children: [
+                if (codeAndName.code case final code?)
+                  RegionCodeBadge(code: code),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        codeAndName.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BusinessText.linesNodeTitle(
+                          context,
+                          emphasized: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  delay != null && delay > 0 ? '$delay ms' : '—',
+                  style: BusinessText.cardDelay(context).copyWith(
+                    color: businessDelayColor(context.colorScheme, delay),
+                  ),
+                ),
+                _ResidentialRadio(selected: selected),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ResidentialRadio extends StatelessWidget {
+  const _ResidentialRadio({required this.selected});
+
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: selected ? BusinessPalette.blue : Colors.transparent,
+      shape: RoundedSuperellipseBorder(
+        side: BorderSide(
+          color: selected
+              ? BusinessPalette.blue
+              : context.colorScheme.outlineVariant,
+          width: 2,
+        ),
+        borderRadius: AppRadius.full,
+      ),
+    ),
+    child: SizedBox(
+      width: 22,
+      height: 22,
+      child: selected
+          ? const Center(
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: BusinessPalette.onBlue,
+                  shape: CircleBorder(),
+                ),
+                child: SizedBox(width: 8, height: 8),
+              ),
+            )
+          : null,
+    ),
+  );
+}
+
+({String? code, String name}) _residentialRegion(String value) {
+  final asciiCode = RegExp(r'^([A-Z]{2})\s*·\s*(.*)$').firstMatch(value);
+  if (asciiCode != null) {
+    return (
+      code: asciiCode.group(1),
+      name: _cleanResidentialName(asciiCode.group(2) ?? value),
+    );
+  }
+  final runes = value.runes.toList();
+  if (runes.length < 2 ||
+      runes[0] < 0x1F1E6 ||
+      runes[0] > 0x1F1FF ||
+      runes[1] < 0x1F1E6 ||
+      runes[1] > 0x1F1FF) {
+    return (code: null, name: _cleanResidentialName(value));
+  }
+  return (
+    code: String.fromCharCodes([
+      runes[0] - 0x1F1E6 + 65,
+      runes[1] - 0x1F1E6 + 65,
+    ]),
+    name: _cleanResidentialName(String.fromCharCodes(runes.skip(2))),
+  );
+}
+
+String _cleanResidentialName(String value) => value
+    .replaceAll(RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false), '')
+    .trim();
 
 class _CardMinHeight extends StatelessWidget {
   const _CardMinHeight({required this.minHeight, required this.child});

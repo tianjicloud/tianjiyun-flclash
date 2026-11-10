@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prism_ui/prism_ui.dart';
 
@@ -14,9 +15,16 @@ class RegionCodeBadge extends StatelessWidget {
     final width = math.max(30.0, code.length * 6.5 * scale + 12);
     final height = math.max(20.0, 15 * scale);
     return DecoratedBox(
-      decoration: const ShapeDecoration(
-        color: Color(0xFF0E1726),
-        shape: AppShape.sm,
+      decoration: ShapeDecoration(
+        color: context.colorScheme.brightness == Brightness.dark
+            ? context.colorScheme.surfaceContainerHighest
+            : BusinessPalette.deep,
+        shape: RoundedSuperellipseBorder(
+          side: context.colorScheme.brightness == Brightness.dark
+              ? BorderSide(color: context.colorScheme.outlineVariant)
+              : BorderSide.none,
+          borderRadius: AppRadius.sm,
+        ),
       ),
       child: SizedBox(
         width: width,

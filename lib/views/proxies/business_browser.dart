@@ -13,6 +13,8 @@ import 'package:fl_clash/providers/selection_verification.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart';
+import 'package:fl_clash/views/dashboard/business.dart'
+    show showResidentialExitSheet;
 import 'package:fl_clash/views/proxies/tab.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -136,34 +138,70 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                           : getProxiesColumns(math.max(width - 32, 0), layout),
                       cardType: cardType,
                       businessStyle: true,
+                      businessMobile: !desktop,
                     ),
                   );
             if (!desktop) {
-              return Padding(
-                padding: EdgeInsets.only(top: top),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 48,
-                      child: PrismListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: groups.length,
-                        gap: 8,
-                        itemBuilder: (_, index) => SizedBox(
-                          width: 180,
-                          child: _GroupChoice(
-                            group: groups[index],
-                            selected: groups[index].name == selected?.name,
-                            onTap: () => _selectGroup(groups[index].name),
-                            compact: true,
+              return Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: top),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 74,
+                          child: PrismListView(
+                            padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: groups.length,
+                            gap: 8,
+                            itemBuilder: (_, index) {
+                              final group = groups[index];
+                              final locked =
+                                  group.name == tianjiResidentialRootName;
+                              return _MobileGroupChip(
+                                group: group,
+                                selected: group.name == selected?.name,
+                                locked: locked,
+                                onTap: () {
+                                  if (locked) {
+                                    showResidentialExitSheet(context);
+                                  } else {
+                                    _selectGroup(group.name);
+                                  }
+                                },
+                              );
+                            },
                           ),
                         ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: _SelectionHint(compact: true),
+                        ),
+                        const SizedBox(height: 8),
+                        Expanded(child: content),
+                      ],
+                    ),
+                  ),
+                  PositionedDirectional(
+                    end: 20,
+                    bottom: 16 + context.bottomInset,
+                    child: Tooltip(
+                      message: context.appLocalizations.delayTest,
+                      child: BusinessPrimaryButton(
+                        label: context.appLocalizations.businessDelayTestShort,
+                        width: 96,
+                        height: 52,
+                        glyph: AppGlyphs.bolt,
+                        onPressed: selected == null
+                            ? null
+                            : () => ref
+                                  .read(proxiesActionProvider.notifier)
+                                  .delayTestPageGroup(selected.name),
                       ),
                     ),
-                    Expanded(child: content),
-                  ],
-                ),
+                  ),
+                ],
               );
             }
             return Padding(
@@ -266,13 +304,11 @@ class _GroupChoice extends StatelessWidget {
     required this.group,
     required this.selected,
     required this.onTap,
-    this.compact = false,
   });
 
   final Group group;
   final bool selected;
   final VoidCallback onTap;
-  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -310,9 +346,9 @@ class _GroupChoice extends StatelessWidget {
                   : const [],
             ),
             child: SizedBox(
-              height: compact ? 38 : 44,
+              height: 44,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: compact ? 12 : 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
                     Expanded(
@@ -361,8 +397,69 @@ class _GroupChoice extends StatelessWidget {
   }
 }
 
+class _MobileGroupChip extends StatelessWidget {
+  const _MobileGroupChip({
+    required this.group,
+    required this.selected,
+    required this.locked,
+    required this.onTap,
+  });
+
+  final Group group;
+  final bool selected;
+  final bool locked;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = context.colorScheme.brightness == Brightness.dark;
+    return PressRegion(
+      onTap: onTap,
+      shape: AppShape.full,
+      overlay: PressRegion.hoverOverlay,
+      child: Center(
+        child: DecoratedBox(
+          decoration: ShapeDecoration(
+            color: selected
+                ? BusinessPalette.deep
+                : dark
+                ? context.colorScheme.surfaceContainerHigh
+                : context.colorScheme.surface,
+            shape: AppShape.full,
+          ),
+          child: SizedBox(
+            height: 34,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 6,
+                children: [
+                  if (locked) const GlyphIcon(AppGlyphs.lock, size: 12),
+                  Text(
+                    _cleanGroupName(group.name),
+                    style: AppTextStyle.caption1
+                        .of(context, emphasized: selected)
+                        .copyWith(
+                          color: selected
+                              ? BusinessPalette.onBlue
+                              : context.colorScheme.onSurface,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _SelectionHint extends StatelessWidget {
-  const _SelectionHint();
+  const _SelectionHint({this.compact = false});
+
+  final bool compact;
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
@@ -376,24 +473,27 @@ class _SelectionHint extends StatelessWidget {
       shape: AppShape.all(BusinessRadius.linesDesktop),
     ),
     child: SizedBox(
-      height: 45,
+      height: compact ? 40 : 45,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: compact ? 12 : 16),
         child: Row(
-          spacing: 10,
+          spacing: compact ? 6 : 10,
           children: [
             GlyphIcon(
               AppGlyphs.info,
+              size: compact ? 20 : null,
               color: context.colorScheme.brightness == Brightness.dark
                   ? BusinessPalette.activeGlyph
                   : BusinessPalette.blue,
             ),
             Expanded(
               child: Text(
-                context.appLocalizations.businessLineSelectionHint,
+                compact
+                    ? context.appLocalizations.businessLineSelectionHintShort
+                    : context.appLocalizations.businessLineSelectionHint,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyle.footnote
+                style: (compact ? AppTextStyle.caption1 : AppTextStyle.footnote)
                     .of(context)
                     .copyWith(
                       color: context.colorScheme.brightness == Brightness.dark

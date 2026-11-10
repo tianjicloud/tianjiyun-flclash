@@ -178,7 +178,7 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
     final textScale = MediaQuery.textScalerOf(context).scale(1);
     final isLoading = ref.watch(loadingProvider(LoadingTag.proxies));
     final picker = widget.picker;
-    final primaryAction = businessDesktop
+    final primaryAction = businessDesktop || (business && isMobile)
         ? null
         : _buildPrimaryAction(business: business);
     final desktopActions = businessDesktop
@@ -197,7 +197,7 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
       isLoading: isLoading,
       resizeToAvoidBottomInset: false,
       primaryAction: primaryAction,
-      searchActions: [?primaryAction],
+      searchActions: business && isMobile ? const [] : [?primaryAction],
       iconActions: desktopActions,
       menuItems: picker || businessDesktopSearch
           ? const []

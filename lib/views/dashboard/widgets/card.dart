@@ -494,11 +494,15 @@ class BusinessPrimaryButton extends StatelessWidget {
     required this.label,
     required this.width,
     required this.onPressed,
+    this.height = 34,
+    this.glyph,
   });
 
   final String label;
   final double width;
   final VoidCallback? onPressed;
+  final double height;
+  final Glyph? glyph;
 
   @override
   Widget build(BuildContext context) {
@@ -509,9 +513,9 @@ class BusinessPrimaryButton extends StatelessWidget {
         foregroundColor: context.colorScheme.onPrimary,
         disabledForegroundColor: context.colorScheme.onSurfaceVariant,
         shape: AppShape.full,
-        fixedSize: Size(width, 34),
-        minimumSize: Size(width, 34),
-        maximumSize: Size(width, 34),
+        fixedSize: Size(width, height),
+        minimumSize: Size(width, height),
+        maximumSize: Size(width, height),
         padding: EdgeInsets.zero,
         tapTargetSize: TapTargetSize.shrinkWrap,
         backgroundBuilder: (context, states, child) => DecoratedBox(
@@ -529,12 +533,30 @@ class BusinessPrimaryButton extends StatelessWidget {
           child: child,
         ),
       ),
-      child: Text(
-        label,
-        style: BusinessText.actionLabel(
-          context,
-        ).copyWith(color: context.colorScheme.onPrimary),
-      ),
+      child: glyph == null
+          ? Text(
+              label,
+              style: BusinessText.actionLabel(
+                context,
+              ).copyWith(color: context.colorScheme.onPrimary),
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 6,
+              children: [
+                GlyphIcon(glyph!, fill: 1, size: 16),
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.actionLabel(
+                      context,
+                    ).copyWith(color: context.colorScheme.onPrimary),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
@@ -545,11 +567,13 @@ class BusinessSecondaryButton extends StatelessWidget {
     required this.label,
     required this.width,
     required this.onPressed,
+    this.height = 34,
   });
 
   final String label;
   final double width;
   final VoidCallback? onPressed;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -563,9 +587,9 @@ class BusinessSecondaryButton extends StatelessWidget {
             ? context.colorScheme.onSurface
             : BusinessPalette.deep,
         shape: shape,
-        fixedSize: Size(width, 34),
-        minimumSize: Size(width, 34),
-        maximumSize: Size(width, 34),
+        fixedSize: Size(width, height),
+        minimumSize: Size(width, height),
+        maximumSize: Size(width, height),
         padding: EdgeInsets.zero,
         tapTargetSize: TapTargetSize.shrinkWrap,
         pressLook: PressLook.ink,

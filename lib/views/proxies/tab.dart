@@ -232,6 +232,7 @@ class ProxyGroupView extends ConsumerWidget {
   final int columns;
   final ProxyCardType cardType;
   final bool businessStyle;
+  final bool businessMobile;
 
   const ProxyGroupView({
     super.key,
@@ -240,6 +241,7 @@ class ProxyGroupView extends ConsumerWidget {
     required this.columns,
     required this.cardType,
     this.businessStyle = false,
+    this.businessMobile = false,
   });
 
   PageStorageKey _getPageStorageKey(WidgetRef ref) {
@@ -255,9 +257,43 @@ class ProxyGroupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final proxies = group.all;
-    final itemHeight = businessStyle
+    final itemHeight = businessMobile
+        ? 68.0
+        : businessStyle
         ? 80 * MediaQuery.textScalerOf(context).scale(1)
         : getItemHeight(cardType);
+    if (businessMobile) {
+      return PrismListView(
+        key: _getPageStorageKey(ref),
+        controller: controller,
+        padding: EdgeInsets.only(bottom: 86 + context.bottomInset),
+        itemCount: proxies.length,
+        itemExtent: 69,
+        itemBuilder: (_, index) {
+          final proxy = proxies[index];
+          return Column(
+            children: [
+              SizedBox(
+                height: 68,
+                child: ProxyCard(
+                  groupName: group.name,
+                  testUrl: group.testUrl,
+                  proxy: proxy,
+                  groupType: group.type,
+                  type: cardType,
+                  businessStyle: true,
+                  businessMobile: true,
+                ),
+              ),
+              ColoredBox(
+                color: context.colorScheme.onSurface.withValues(alpha: 0.14),
+                child: const SizedBox(height: 1),
+              ),
+            ],
+          );
+        },
+      );
+    }
     return Scrollbar(
       controller: controller,
       thumbVisibility: true,

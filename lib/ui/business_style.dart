@@ -234,6 +234,16 @@ abstract final class BusinessText {
     weight: FontWeight.w600,
   ).toJetBrainsMono;
 
+  static TextStyle linesNodeTitle(
+    BuildContext context, {
+    required bool emphasized,
+  }) => AppTextStyle.custom(
+    context,
+    size: 15,
+    leading: 19,
+    weight: emphasized ? FontWeight.w600 : FontWeight.w400,
+  );
+
   static TextStyle inlineIp(BuildContext context) =>
       AppTextStyle.custom(context, size: 12, leading: 16).toJetBrainsMono;
 
