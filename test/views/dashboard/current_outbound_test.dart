@@ -228,7 +228,11 @@ void main() {
             isStartProvider.overrideWithValue(running),
             runTimeProvider.overrideWithValue(running ? 1 : null),
             suspendProvider.overrideWithValue(false),
-            coreStatusProvider.overrideWithValue(CoreStatus.disconnected),
+            coreStatusProvider.overrideWithValue(
+              running && phase == ProbePhase.failed
+                  ? CoreStatus.connected
+                  : CoreStatus.disconnected,
+            ),
             networkSettingProvider.overrideWithBuild(
               (_, _) => const NetworkProps(systemProxy: true),
             ),
@@ -453,6 +457,7 @@ void main() {
           profilesProvider.overrideWithValue(const [_profile]),
           isStartProvider.overrideWithValue(true),
           suspendProvider.overrideWithValue(false),
+          coreStatusProvider.overrideWithValue(CoreStatus.connected),
           selectionCheckProvider.overrideWithBuild(
             (_, _) => SelectionVerdict.untouched,
           ),
@@ -471,7 +476,16 @@ void main() {
     );
     await tester.pump(const Duration(seconds: 6));
     expect(tester.takeException(), isNull);
+    expect(find.text('Connected · Exit check failed'), findsOneWidget);
     expect(find.text('Check failed'), findsOneWidget);
+    expect(find.text('Check again'), findsOneWidget);
+    expect(find.widgetWithText(TextButton, 'Check again'), findsOneWidget);
+    final orbit = tester.widget<CustomPaint>(
+      find.byWidgetPredicate(
+        (widget) => widget is CustomPaint && widget.painter is OrbitPainter,
+      ),
+    );
+    expect((orbit.painter! as OrbitPainter).color, BusinessPalette.warning);
     await tester.tap(find.widgetWithText(TextButton, 'Check again'));
     expect(probe.refreshed, [routedOutbound]);
   });

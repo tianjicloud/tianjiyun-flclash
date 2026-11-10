@@ -38,6 +38,7 @@ abstract final class BusinessPalette {
   static const secondaryButtonStroke = Color(0x240E1726);
   static const secondaryButtonDarkStroke = Color(0x407E8A98);
   static const warning = Color(0xFFA15C00);
+  static const exitWarningDark = Color(0xFFF2B44C);
   static const warningBackground = Color(0xFFFDF1E3);
   static const warningText = Color(0xFF8A4B00);
   static const warningTextDark = Color(0xFFFFCB75);
@@ -82,6 +83,9 @@ abstract final class BusinessPalette {
 
   static Color warningForegroundFor(Brightness brightness) =>
       brightness == Brightness.dark ? warningTextDark : warningText;
+
+  static Color exitWarningForegroundFor(Brightness brightness) =>
+      brightness == Brightness.dark ? exitWarningDark : warning;
 
   static Color expiryContainerFor(Brightness brightness) =>
       brightness == Brightness.dark ? expiryBackgroundDark : expiryBackground;

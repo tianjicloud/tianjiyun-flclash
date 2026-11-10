@@ -1217,6 +1217,8 @@
   "diagnosticsUnverified": "Non vérifié",
   "diagnosticsUnavailableNotice": "Les contrôles de sortie DNS, WebRTC du navigateur et NTP ne sont pas disponibles.",
   "diagnosticsSelection": "Vérification de la sortie du chemin par défaut",
+  "businessConnectedAbnormal": "Connecté · Anomalie détectée",
+  "businessConnectedProbeFailed": "Connecté · Vérification de la sortie échouée",
   "businessExitVerified": "Connecté · Sortie vérifiée",
   "businessMonthTraffic": "Trafic du mois",
   "businessProxyTraffic": "Proxy",

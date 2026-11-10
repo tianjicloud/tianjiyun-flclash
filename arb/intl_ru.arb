@@ -1217,6 +1217,8 @@
   "diagnosticsUnverified": "Не проверено",
   "diagnosticsUnavailableNotice": "Проверки выхода DNS, WebRTC браузера и NTP недоступны.",
   "diagnosticsSelection": "Проверка выхода маршрута по умолчанию",
+  "businessConnectedAbnormal": "Подключено · Есть проблема",
+  "businessConnectedProbeFailed": "Подключено · Не удалось проверить выход",
   "businessExitVerified": "Подключено · Выход проверен",
   "businessMonthTraffic": "Трафик за месяц",
   "businessProxyTraffic": "Прокси",

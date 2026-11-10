@@ -1217,6 +1217,8 @@
   "diagnosticsUnverified": "Not checked",
   "diagnosticsUnavailableNotice": "DNS exit, browser WebRTC and NTP checks are not available.",
   "diagnosticsSelection": "Default route exit verification",
+  "businessConnectedAbnormal": "Connected · Issue detected",
+  "businessConnectedProbeFailed": "Connected · Exit check failed",
   "businessExitVerified": "Connected · Exit verified",
   "businessMonthTraffic": "This month",
   "businessProxyTraffic": "Proxy",

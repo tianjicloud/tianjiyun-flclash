@@ -1217,6 +1217,8 @@
   "diagnosticsUnverified": "未検査",
   "diagnosticsUnavailableNotice": "DNS 出口、ブラウザーの WebRTC、NTP の検査は利用できません。",
   "diagnosticsSelection": "既定経路の出口検証",
+  "businessConnectedAbnormal": "接続済み · 異常があります",
+  "businessConnectedProbeFailed": "接続済み · 出口の確認に失敗",
   "businessExitVerified": "接続済み · 出口検証済み",
   "businessMonthTraffic": "今月の通信量",
   "businessProxyTraffic": "プロキシ",

@@ -99,8 +99,8 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
     );
     final isStart = ref.watch(isStartProvider);
     final suspended = isStart && ref.watch(suspendProvider);
-    final connectingStatus =
-        ref.watch(coreStatusProvider) == CoreStatus.connecting;
+    final coreStatus = ref.watch(coreStatusProvider);
+    final connectingStatus = coreStatus == CoreStatus.connecting;
     final rootAccess =
         mitmFeature && (ref.watch(rootAccessProvider).value ?? false);
     final entry = ref.watch(
@@ -127,6 +127,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         : (appLocalizations.notRunning, DashboardChipTone.idle);
     final verdict = ref.watch(selectionCheckProvider);
     final showSelection =
+        !failed &&
         (isStart || !BusinessTheme.of(context)) &&
         verdict != SelectionVerdict.untouched &&
         verdict != SelectionVerdict.consistent;
@@ -146,6 +147,8 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           );
       final route = ref.watch(routeTrackerProvider);
       final stamp = entry.stamp;
+      final exitAbnormal =
+          isStart && coreStatus == CoreStatus.connected && failed;
       final verifiedExit = isVerifiedOutbound(
         active: active,
         captured: captured,
@@ -159,7 +162,8 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         _ when connectingStatus => BusinessPalette.blue,
         _ when !isStart => const Color(0xFF98A2AD),
         _ when suspended => colors.warn,
-        (_, true, _) => colors.warn,
+        (_, true, _) when exitAbnormal =>
+          BusinessPalette.exitWarningForegroundFor(colorScheme.brightness),
         (
           _,
           _,
@@ -174,18 +178,24 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         _ => const Color(0xFF98A2AD),
       };
       final statusText = density.isDesktop
-          ? appLocalizations.businessCurrentExitIp
+          ? exitAbnormal
+                ? appLocalizations.businessConnectedProbeFailed
+                : appLocalizations.businessCurrentExitIp
           : connectingStatus
           ? appLocalizations.connecting
           : suspended
           ? appLocalizations.suspended
           : verifiedExit
           ? appLocalizations.businessExitVerified
+          : exitAbnormal
+          ? appLocalizations.businessConnectedProbeFailed
           : isStart
           ? appLocalizations.running
           : appLocalizations.businessNotConnected;
       final statusTone = connectingStatus || suspended
           ? colors.warn
+          : exitAbnormal
+          ? BusinessPalette.exitWarningForegroundFor(colorScheme.brightness)
           : failed
           ? colorScheme.error
           : verifiedExit
@@ -201,7 +211,8 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         running: isStart,
         suspended: suspended,
         pulseEnabled: density.isDesktop,
-        ringColor: ringColor,
+        ringColor: exitAbnormal ? null : ringColor,
+        abnormal: exitAbnormal,
         showLabel: density.isDesktop,
         idleLabel: density.isDesktop ? null : appLocalizations.start,
       );
@@ -540,6 +551,8 @@ class _BusinessStatusLine extends StatelessWidget {
     final label = checking
         ? '$text · ${context.appLocalizations.checkingExit}'
         : text;
+    final warning =
+        text == context.appLocalizations.businessConnectedProbeFailed;
     final status = Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: centered
@@ -547,12 +560,17 @@ class _BusinessStatusLine extends StatelessWidget {
           : MainAxisAlignment.start,
       spacing: 8,
       children: [
-        if (centered)
+        if (centered || warning)
           Container(
             width: 8,
             height: 8,
             decoration: ShapeDecoration(
-              color: text == context.appLocalizations.businessNotConnected
+              color:
+                  text == context.appLocalizations.businessConnectedProbeFailed
+                  ? BusinessPalette.exitWarningForegroundFor(
+                      context.colorScheme.brightness,
+                    )
+                  : text == context.appLocalizations.businessNotConnected
                   ? BusinessPalette.disconnectedForegroundFor(
                       context.colorScheme.brightness,
                     )
@@ -566,7 +584,12 @@ class _BusinessStatusLine extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: BusinessText.heroStatus(context).copyWith(
-              color: text == context.appLocalizations.businessNotConnected
+              color:
+                  text == context.appLocalizations.businessConnectedProbeFailed
+                  ? BusinessPalette.exitWarningForegroundFor(
+                      context.colorScheme.brightness,
+                    )
+                  : text == context.appLocalizations.businessNotConnected
                   ? BusinessPalette.disconnectedForegroundFor(
                       context.colorScheme.brightness,
                     )
@@ -580,12 +603,16 @@ class _BusinessStatusLine extends StatelessWidget {
         ),
       ],
     );
-    if (!centered) return status;
+    if (!centered && !warning) return status;
     final connected = text != context.appLocalizations.businessNotConnected;
     return Container(
       padding: const EdgeInsetsDirectional.fromSTEB(11, 4, 11, 4),
       decoration: ShapeDecoration(
-        color: connected
+        color: warning
+            ? BusinessPalette.warningContainerFor(
+                context.colorScheme.brightness,
+              )
+            : connected
             ? BusinessPalette.connectedContainerFor(
                 context.colorScheme.brightness,
               )
@@ -934,7 +961,13 @@ class _BusinessIp extends StatelessWidget {
             context.appLocalizations.serviceFailed,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: style.copyWith(color: colorScheme.error),
+            style: AppTextStyle.body
+                .of(context)
+                .copyWith(
+                  color: BusinessPalette.exitWarningForegroundFor(
+                    colorScheme.brightness,
+                  ),
+                ),
           ),
           TextButton(
             onPressed: onRefresh,
@@ -1176,7 +1209,13 @@ class _ExitRow extends StatelessWidget {
             appLocalizations.serviceFailed,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: style.copyWith(color: colorScheme.error),
+            style: AppTextStyle.body
+                .of(context)
+                .copyWith(
+                  color: BusinessPalette.exitWarningForegroundFor(
+                    colorScheme.brightness,
+                  ),
+                ),
           )
         : SkeletonText(width: 140, style: style);
     return Row(
@@ -1570,6 +1609,7 @@ class _StartToggle extends ConsumerStatefulWidget {
     required this.running,
     required this.suspended,
     this.ringColor,
+    this.abnormal = false,
     this.pulseEnabled = true,
     this.showLabel = true,
     this.idleLabel,
@@ -1580,6 +1620,7 @@ class _StartToggle extends ConsumerStatefulWidget {
   final bool running;
   final bool suspended;
   final Color? ringColor;
+  final bool abnormal;
   final bool pulseEnabled;
   final bool showLabel;
 
@@ -1712,11 +1753,15 @@ class _StartToggleState extends ConsumerState<_StartToggle>
           ? BusinessPalette.secondary
           : connecting || widget.suspended
           ? BusinessPalette.warning
+          : widget.abnormal
+          ? BusinessPalette.exitWarningForegroundFor(colorScheme.brightness)
           : widget.running
           ? BusinessPalette.blue
           : BusinessPalette.accent;
       final label = connecting
           ? appLocalizations.connecting
+          : widget.abnormal
+          ? appLocalizations.businessConnectedAbnormal
           : widget.running && !widget.suspended
           ? appLocalizations.businessConnectedDisconnect
           : !widget.running && !widget.suspended && widget.idleLabel != null
@@ -1760,7 +1805,7 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                               colorScheme.brightness,
                             ),
                             focused: _focused,
-                            running: widget.running,
+                            running: widget.running && !widget.abnormal,
                             pulse:
                                 widget.pulseEnabled &&
                                     _pulseController.isAnimating
@@ -1775,7 +1820,11 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                                     ? AppGlyphs.wifiOff
                                     : AppGlyphs.power,
                                 size: size * 0.22,
-                                color: widget.running
+                                color: widget.abnormal
+                                    ? BusinessPalette.exitWarningForegroundFor(
+                                        colorScheme.brightness,
+                                      )
+                                    : widget.running
                                     ? Colors.white
                                     : BusinessPalette.blue,
                                 fill: 0,

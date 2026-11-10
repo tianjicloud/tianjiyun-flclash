@@ -456,8 +456,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
     "businessConnectVia": m5,
+    "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
+      "Connected · Issue detected",
+    ),
     "businessConnectedDisconnect": MessageLookupByLibrary.simpleMessage(
       "Connected · Click to disconnect",
+    ),
+    "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
+      "Connected · Exit check failed",
     ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Current"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(

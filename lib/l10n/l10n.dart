@@ -10377,6 +10377,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Connected · Issue detected`
+  String get businessConnectedAbnormal {
+    return Intl.message(
+      'Connected · Issue detected',
+      name: 'businessConnectedAbnormal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected · Exit check failed`
+  String get businessConnectedProbeFailed {
+    return Intl.message(
+      'Connected · Exit check failed',
+      name: 'businessConnectedProbeFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Connected · Exit verified`
   String get businessExitVerified {
     return Intl.message(

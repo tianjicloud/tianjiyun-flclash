@@ -380,8 +380,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("更换线路"),
     "businessConnectVia": m5,
+    "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
+      "已连接 · 有异常",
+    ),
     "businessConnectedDisconnect": MessageLookupByLibrary.simpleMessage(
       "已连接 · 点击断开",
+    ),
+    "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
+      "已连接 · 出口检测失败",
     ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("当前"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("当前出口 IP"),

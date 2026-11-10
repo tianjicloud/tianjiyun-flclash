@@ -390,8 +390,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
     "businessConnectVia": m5,
+    "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
+      "연결됨 · 문제가 있습니다",
+    ),
     "businessConnectedDisconnect": MessageLookupByLibrary.simpleMessage(
       "연결됨 · 클릭하여 연결 해제",
+    ),
+    "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
+      "연결됨 · 출구 확인 실패",
     ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("현재"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("현재 출구 IP"),

@@ -394,8 +394,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
     "businessConnectVia": m5,
+    "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
+      "接続済み · 異常があります",
+    ),
     "businessConnectedDisconnect": MessageLookupByLibrary.simpleMessage(
       "接続中 · クリックして切断",
+    ),
+    "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
+      "接続済み · 出口の確認に失敗",
     ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("現在"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("現在の出口 IP"),

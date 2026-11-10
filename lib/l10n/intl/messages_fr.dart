@@ -489,8 +489,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Changer de ligne",
     ),
     "businessConnectVia": m5,
+    "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
+      "Connecté · Anomalie détectée",
+    ),
     "businessConnectedDisconnect": MessageLookupByLibrary.simpleMessage(
       "Connecté · cliquer pour déconnecter",
+    ),
+    "businessConnectedProbeFailed": MessageLookupByLibrary.simpleMessage(
+      "Connecté · Vérification de la sortie échouée",
     ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Actuel"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(

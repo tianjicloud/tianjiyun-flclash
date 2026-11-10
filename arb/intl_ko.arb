@@ -1217,6 +1217,8 @@
   "diagnosticsUnverified": "미검사",
   "diagnosticsUnavailableNotice": "DNS 출구, 브라우저 WebRTC 및 NTP 검사는 제공되지 않습니다.",
   "diagnosticsSelection": "기본 경로 출구 검증",
+  "businessConnectedAbnormal": "연결됨 · 문제가 있습니다",
+  "businessConnectedProbeFailed": "연결됨 · 출구 확인 실패",
   "businessExitVerified": "연결됨 · 출구 검증됨",
   "businessMonthTraffic": "이번 달 트래픽",
   "businessProxyTraffic": "프록시",

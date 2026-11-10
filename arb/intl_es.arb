@@ -1217,6 +1217,8 @@
   "diagnosticsUnverified": "Sin comprobar",
   "diagnosticsUnavailableNotice": "No están disponibles las comprobaciones de salida DNS, WebRTC del navegador y NTP.",
   "diagnosticsSelection": "Verificación de salida de la ruta predeterminada",
+  "businessConnectedAbnormal": "Conectado · Se detectó un problema",
+  "businessConnectedProbeFailed": "Conectado · Falló la comprobación de salida",
   "businessExitVerified": "Conectado · Salida verificada",
   "businessMonthTraffic": "Tráfico del mes",
   "businessProxyTraffic": "Proxy",

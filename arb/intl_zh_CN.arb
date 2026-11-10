@@ -1217,6 +1217,8 @@
   "diagnosticsUnverified": "未检测",
   "diagnosticsUnavailableNotice": "暂不提供 DNS 出口、浏览器 WebRTC 和 NTP 检测。",
   "diagnosticsSelection": "默认路径出口校验",
+  "businessConnectedAbnormal": "已连接 · 有异常",
+  "businessConnectedProbeFailed": "已连接 · 出口检测失败",
   "businessExitVerified": "已连接 · 出口已校验",
   "businessMonthTraffic": "本月流量",
   "businessProxyTraffic": "代理",
