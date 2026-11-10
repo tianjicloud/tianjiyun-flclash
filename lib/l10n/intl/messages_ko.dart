@@ -497,6 +497,49 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("연결 안 됨"),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("아웃바운드"),
+    "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "자동 업데이트",
+    ),
+    "businessProfileAddClipboardRecognized":
+        MessageLookupByLibrary.simpleMessage(
+          "클립보드에서 Tianji Cloud 구독 링크를 찾았습니다.",
+        ),
+    "businessProfileAddCustomDescription": MessageLookupByLibrary.simpleMessage(
+      "기존 구독에 규칙 추가",
+    ),
+    "businessProfileAddCustomTitle": MessageLookupByLibrary.simpleMessage(
+      "사용자 지정 구성",
+    ),
+    "businessProfileAddFileDescription": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "businessProfileAddFileTitle": MessageLookupByLibrary.simpleMessage(
+      "로컬 파일",
+    ),
+    "businessProfileAddLinkDescription": MessageLookupByLibrary.simpleMessage(
+      "사용자 패널에서 복사",
+    ),
+    "businessProfileAddLinkTitle": MessageLookupByLibrary.simpleMessage(
+      "구독 링크",
+    ),
+    "businessProfileAddMoreOptions": MessageLookupByLibrary.simpleMessage(
+      "추가 옵션",
+    ),
+    "businessProfileAddNameHint": MessageLookupByLibrary.simpleMessage(
+      "비워 두면 구독의 요금제 이름을 사용합니다",
+    ),
+    "businessProfileAddNameLabel": MessageLookupByLibrary.simpleMessage(
+      "이름(선택 사항)",
+    ),
+    "businessProfileAddSubmit": MessageLookupByLibrary.simpleMessage("가져와서 검증"),
+    "businessProfileAddTitle": MessageLookupByLibrary.simpleMessage("구독 추가"),
+    "businessProfileAddUrlHint": MessageLookupByLibrary.simpleMessage(
+      "구독 링크 붙여넣기",
+    ),
+    "businessProfileAddUrlLabel": MessageLookupByLibrary.simpleMessage("구독 링크"),
+    "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "가져오기 전에 먼저 검증합니다. 파싱에 실패해도 현재 프로필을 덮어쓰지 않습니다.",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("프록시"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("다시 확인"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

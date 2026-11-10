@@ -579,6 +579,55 @@ class MessageLookup extends MessageLookupByLibrary {
       "Not connected",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Outbound"),
+    "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "Auto-update",
+    ),
+    "businessProfileAddClipboardRecognized":
+        MessageLookupByLibrary.simpleMessage(
+          "Tianji Cloud subscription link detected in the clipboard.",
+        ),
+    "businessProfileAddCustomDescription": MessageLookupByLibrary.simpleMessage(
+      "Add rules to an existing subscription",
+    ),
+    "businessProfileAddCustomTitle": MessageLookupByLibrary.simpleMessage(
+      "Custom configuration",
+    ),
+    "businessProfileAddFileDescription": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "businessProfileAddFileTitle": MessageLookupByLibrary.simpleMessage(
+      "Local file",
+    ),
+    "businessProfileAddLinkDescription": MessageLookupByLibrary.simpleMessage(
+      "Copy from the user panel",
+    ),
+    "businessProfileAddLinkTitle": MessageLookupByLibrary.simpleMessage(
+      "Subscription link",
+    ),
+    "businessProfileAddMoreOptions": MessageLookupByLibrary.simpleMessage(
+      "More options",
+    ),
+    "businessProfileAddNameHint": MessageLookupByLibrary.simpleMessage(
+      "Leave blank to use the plan name in the subscription",
+    ),
+    "businessProfileAddNameLabel": MessageLookupByLibrary.simpleMessage(
+      "Name (optional)",
+    ),
+    "businessProfileAddSubmit": MessageLookupByLibrary.simpleMessage(
+      "Import and verify",
+    ),
+    "businessProfileAddTitle": MessageLookupByLibrary.simpleMessage(
+      "Add subscription",
+    ),
+    "businessProfileAddUrlHint": MessageLookupByLibrary.simpleMessage(
+      "Paste subscription link",
+    ),
+    "businessProfileAddUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "Subscription link",
+    ),
+    "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "The import is validated first. A parsing failure will not replace the active profile.",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Verify again"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

@@ -25,6 +25,7 @@ class _RecordingProfilesAction extends ProfilesAction {
     String link, {
     String? label,
     String ageSecretKey = '',
+    Duration? autoUpdateDuration,
   }) async {
     singles.add(link);
     ageSecretKeys.add(ageSecretKey);

@@ -386,6 +386,7 @@ class ProfilesAction extends _$ProfilesAction {
     String link, {
     String? label,
     String ageSecretKey = '',
+    Duration? autoUpdateDuration,
   }) async {
     _showProfiles();
     final profile = await globalState.loadingRun(
@@ -402,7 +403,11 @@ class ProfilesAction extends _$ProfilesAction {
       title: currentAppLocalizations.addProfile,
     );
     if (profile != null) {
-      putProfile(profile);
+      putProfile(
+        autoUpdateDuration == null
+            ? profile
+            : profile.copyWith(autoUpdateDuration: autoUpdateDuration),
+      );
     }
   }
 

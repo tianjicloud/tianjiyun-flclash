@@ -606,6 +606,55 @@ class MessageLookup extends MessageLookupByLibrary {
       "Не подключено",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Выход"),
+    "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "Автообновление",
+    ),
+    "businessProfileAddClipboardRecognized":
+        MessageLookupByLibrary.simpleMessage(
+          "В буфере обнаружена ссылка на подписку Tianji Cloud.",
+        ),
+    "businessProfileAddCustomDescription": MessageLookupByLibrary.simpleMessage(
+      "Добавить правила к существующей подписке",
+    ),
+    "businessProfileAddCustomTitle": MessageLookupByLibrary.simpleMessage(
+      "Своя конфигурация",
+    ),
+    "businessProfileAddFileDescription": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "businessProfileAddFileTitle": MessageLookupByLibrary.simpleMessage(
+      "Локальный файл",
+    ),
+    "businessProfileAddLinkDescription": MessageLookupByLibrary.simpleMessage(
+      "Скопируйте из панели пользователя",
+    ),
+    "businessProfileAddLinkTitle": MessageLookupByLibrary.simpleMessage(
+      "Ссылка подписки",
+    ),
+    "businessProfileAddMoreOptions": MessageLookupByLibrary.simpleMessage(
+      "Дополнительные параметры",
+    ),
+    "businessProfileAddNameHint": MessageLookupByLibrary.simpleMessage(
+      "Оставьте пустым, чтобы использовать название плана из подписки",
+    ),
+    "businessProfileAddNameLabel": MessageLookupByLibrary.simpleMessage(
+      "Название (необязательно)",
+    ),
+    "businessProfileAddSubmit": MessageLookupByLibrary.simpleMessage(
+      "Импортировать и проверить",
+    ),
+    "businessProfileAddTitle": MessageLookupByLibrary.simpleMessage(
+      "Добавить подписку",
+    ),
+    "businessProfileAddUrlHint": MessageLookupByLibrary.simpleMessage(
+      "Вставьте ссылку подписки",
+    ),
+    "businessProfileAddUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "Ссылка подписки",
+    ),
+    "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "При импорте сначала выполняется проверка. Ошибка разбора не заменит активный профиль.",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Прокси"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Проверить снова"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

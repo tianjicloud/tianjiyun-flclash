@@ -10372,6 +10372,166 @@ class AppLocalizations {
     );
   }
 
+  /// `Add subscription`
+  String get businessProfileAddTitle {
+    return Intl.message(
+      'Add subscription',
+      name: 'businessProfileAddTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription link`
+  String get businessProfileAddLinkTitle {
+    return Intl.message(
+      'Subscription link',
+      name: 'businessProfileAddLinkTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy from the user panel`
+  String get businessProfileAddLinkDescription {
+    return Intl.message(
+      'Copy from the user panel',
+      name: 'businessProfileAddLinkDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local file`
+  String get businessProfileAddFileTitle {
+    return Intl.message(
+      'Local file',
+      name: 'businessProfileAddFileTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `.yaml / .yml`
+  String get businessProfileAddFileDescription {
+    return Intl.message(
+      '.yaml / .yml',
+      name: 'businessProfileAddFileDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom configuration`
+  String get businessProfileAddCustomTitle {
+    return Intl.message(
+      'Custom configuration',
+      name: 'businessProfileAddCustomTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add rules to an existing subscription`
+  String get businessProfileAddCustomDescription {
+    return Intl.message(
+      'Add rules to an existing subscription',
+      name: 'businessProfileAddCustomDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription link`
+  String get businessProfileAddUrlLabel {
+    return Intl.message(
+      'Subscription link',
+      name: 'businessProfileAddUrlLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name (optional)`
+  String get businessProfileAddNameLabel {
+    return Intl.message(
+      'Name (optional)',
+      name: 'businessProfileAddNameLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paste subscription link`
+  String get businessProfileAddUrlHint {
+    return Intl.message(
+      'Paste subscription link',
+      name: 'businessProfileAddUrlHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Leave blank to use the plan name in the subscription`
+  String get businessProfileAddNameHint {
+    return Intl.message(
+      'Leave blank to use the plan name in the subscription',
+      name: 'businessProfileAddNameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto-update`
+  String get businessProfileAddAutoUpdate {
+    return Intl.message(
+      'Auto-update',
+      name: 'businessProfileAddAutoUpdate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `More options`
+  String get businessProfileAddMoreOptions {
+    return Intl.message(
+      'More options',
+      name: 'businessProfileAddMoreOptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import and verify`
+  String get businessProfileAddSubmit {
+    return Intl.message(
+      'Import and verify',
+      name: 'businessProfileAddSubmit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The import is validated first. A parsing failure will not replace the active profile.`
+  String get businessProfileAddValidationNote {
+    return Intl.message(
+      'The import is validated first. A parsing failure will not replace the active profile.',
+      name: 'businessProfileAddValidationNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tianji Cloud subscription link detected in the clipboard.`
+  String get businessProfileAddClipboardRecognized {
+    return Intl.message(
+      'Tianji Cloud subscription link detected in the clipboard.',
+      name: 'businessProfileAddClipboardRecognized',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Large traffic bypasses residential automatically; mainland traffic stays direct`
   String get sceneDailyBypass {
     return Intl.message(

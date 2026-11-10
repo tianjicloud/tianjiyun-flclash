@@ -503,6 +503,55 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("未接続"),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出力"),
+    "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "自動更新",
+    ),
+    "businessProfileAddClipboardRecognized":
+        MessageLookupByLibrary.simpleMessage(
+          "クリップボードから Tianji Cloud のリンクを検出しました",
+        ),
+    "businessProfileAddCustomDescription": MessageLookupByLibrary.simpleMessage(
+      "既存のサブスクリプションにルールを追加",
+    ),
+    "businessProfileAddCustomTitle": MessageLookupByLibrary.simpleMessage(
+      "カスタム設定",
+    ),
+    "businessProfileAddFileDescription": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "businessProfileAddFileTitle": MessageLookupByLibrary.simpleMessage(
+      "ローカルファイル",
+    ),
+    "businessProfileAddLinkDescription": MessageLookupByLibrary.simpleMessage(
+      "ユーザーパネルからコピー",
+    ),
+    "businessProfileAddLinkTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションリンク",
+    ),
+    "businessProfileAddMoreOptions": MessageLookupByLibrary.simpleMessage(
+      "その他のオプション",
+    ),
+    "businessProfileAddNameHint": MessageLookupByLibrary.simpleMessage(
+      "空欄の場合はサブスクリプション内のプラン名を使用",
+    ),
+    "businessProfileAddNameLabel": MessageLookupByLibrary.simpleMessage(
+      "名前（任意）",
+    ),
+    "businessProfileAddSubmit": MessageLookupByLibrary.simpleMessage(
+      "インポートして検証",
+    ),
+    "businessProfileAddTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションを追加",
+    ),
+    "businessProfileAddUrlHint": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションリンクを貼り付け",
+    ),
+    "businessProfileAddUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションリンク",
+    ),
+    "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "インポート時に検証します。解析に失敗しても現在の設定は上書きされません。",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("プロキシ"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("再確認"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

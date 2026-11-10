@@ -475,6 +475,41 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("未连接"),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出站"),
+    "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "自动更新",
+    ),
+    "businessProfileAddClipboardRecognized":
+        MessageLookupByLibrary.simpleMessage("已从剪贴板识别到天机云订阅链接"),
+    "businessProfileAddCustomDescription": MessageLookupByLibrary.simpleMessage(
+      "在已有订阅上加规则",
+    ),
+    "businessProfileAddCustomTitle": MessageLookupByLibrary.simpleMessage(
+      "自定义配置",
+    ),
+    "businessProfileAddFileDescription": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "businessProfileAddFileTitle": MessageLookupByLibrary.simpleMessage("本地文件"),
+    "businessProfileAddLinkDescription": MessageLookupByLibrary.simpleMessage(
+      "从用户面板复制",
+    ),
+    "businessProfileAddLinkTitle": MessageLookupByLibrary.simpleMessage("订阅链接"),
+    "businessProfileAddMoreOptions": MessageLookupByLibrary.simpleMessage(
+      "更多选项",
+    ),
+    "businessProfileAddNameHint": MessageLookupByLibrary.simpleMessage(
+      "留空则使用订阅里的套餐名",
+    ),
+    "businessProfileAddNameLabel": MessageLookupByLibrary.simpleMessage(
+      "名称（可选）",
+    ),
+    "businessProfileAddSubmit": MessageLookupByLibrary.simpleMessage("导入并校验"),
+    "businessProfileAddTitle": MessageLookupByLibrary.simpleMessage("添加订阅"),
+    "businessProfileAddUrlHint": MessageLookupByLibrary.simpleMessage("粘贴订阅链接"),
+    "businessProfileAddUrlLabel": MessageLookupByLibrary.simpleMessage("订阅链接"),
+    "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "导入后会先校验；解析失败不会覆盖你正在用的配置。",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("代理"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("重新校验"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

@@ -623,6 +623,55 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sin conexión",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Salida"),
+    "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "Actualización automática",
+    ),
+    "businessProfileAddClipboardRecognized":
+        MessageLookupByLibrary.simpleMessage(
+          "Se detectó un enlace de suscripción de Tianji Cloud en el portapapeles.",
+        ),
+    "businessProfileAddCustomDescription": MessageLookupByLibrary.simpleMessage(
+      "Añadir reglas a una suscripción existente",
+    ),
+    "businessProfileAddCustomTitle": MessageLookupByLibrary.simpleMessage(
+      "Configuración personalizada",
+    ),
+    "businessProfileAddFileDescription": MessageLookupByLibrary.simpleMessage(
+      ".yaml / .yml",
+    ),
+    "businessProfileAddFileTitle": MessageLookupByLibrary.simpleMessage(
+      "Archivo local",
+    ),
+    "businessProfileAddLinkDescription": MessageLookupByLibrary.simpleMessage(
+      "Copiar desde el panel de usuario",
+    ),
+    "businessProfileAddLinkTitle": MessageLookupByLibrary.simpleMessage(
+      "Enlace de suscripción",
+    ),
+    "businessProfileAddMoreOptions": MessageLookupByLibrary.simpleMessage(
+      "Más opciones",
+    ),
+    "businessProfileAddNameHint": MessageLookupByLibrary.simpleMessage(
+      "Déjalo vacío para usar el nombre del plan de la suscripción",
+    ),
+    "businessProfileAddNameLabel": MessageLookupByLibrary.simpleMessage(
+      "Nombre (opcional)",
+    ),
+    "businessProfileAddSubmit": MessageLookupByLibrary.simpleMessage(
+      "Importar y verificar",
+    ),
+    "businessProfileAddTitle": MessageLookupByLibrary.simpleMessage(
+      "Añadir suscripción",
+    ),
+    "businessProfileAddUrlHint": MessageLookupByLibrary.simpleMessage(
+      "Pega el enlace de suscripción",
+    ),
+    "businessProfileAddUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "Enlace de suscripción",
+    ),
+    "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
+      "La importación se valida primero. Un error de análisis no sustituirá el perfil activo.",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage(
       "Verificar de nuevo",

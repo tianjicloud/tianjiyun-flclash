@@ -11,7 +11,11 @@ import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/views/profiles/custom/custom.dart';
 import 'package:fl_clash/views/profiles/extend/extend.dart';
 import 'package:fl_clash/views/profiles/add.dart'
-    show AddProfileMenu, addProfileFromQrCode;
+    show
+        AddProfileMenu,
+        ProfileAddSource,
+        addProfileFromQrCode,
+        showBusinessProfileAddDialog;
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show
         BusinessPrimaryButton,
@@ -406,9 +410,11 @@ class _BusinessProfilesList extends ConsumerWidget {
                 : _BusinessImportHintCard(
                     onClipboardImport: () => _importClipboard(context, ref),
                     onChooseFile: () => unawaited(
-                      ref
-                          .read(profilesActionProvider.notifier)
-                          .addProfileFormFile(),
+                      showBusinessProfileAddDialog(
+                        context,
+                        ref,
+                        source: ProfileAddSource.file,
+                      ),
                     ),
                   ),
           ),
@@ -880,6 +886,16 @@ Future<void> _importClipboard(BuildContext context, WidgetRef ref) async {
     dialogs.showBanner(
       context.appLocalizations.invalidLinkTip,
       level: BannerLevel.error,
+    );
+    return;
+  }
+  if (!context.isMobileView &&
+      isTianjiSubscriptionProfile(ref.read(currentProfileProvider))) {
+    await showBusinessProfileAddDialog(
+      context,
+      ref,
+      source: ProfileAddSource.link,
+      url: url,
     );
     return;
   }
