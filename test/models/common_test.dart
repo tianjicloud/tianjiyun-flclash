@@ -202,12 +202,36 @@ void main() {
   group('IpInfo parsers', () {
     test('parse supported response shapes', () {
       expect(
-        IpInfo.fromIpInfoIoJson({'ip': '1.1.1.1', 'country': 'US'}),
-        const IpInfo(ip: '1.1.1.1', countryCode: 'US'),
+        IpInfo.fromIpInfoIoJson({
+          'ip': '1.1.1.1',
+          'country': 'US',
+          'city': 'New York',
+          'region': 'NY',
+        }),
+        const IpInfo(
+          ip: '1.1.1.1',
+          countryCode: 'US',
+          city: 'New York',
+          region: 'NY',
+        ),
       );
       expect(
-        IpInfo.fromIdentMeJson({'ip': '2.2.2.2', 'cc': 'JP'}),
-        const IpInfo(ip: '2.2.2.2', countryCode: 'JP'),
+        IpInfo.fromIdentMeJson({'ip': '2.2.2.2', 'cc': 'JP', 'city': 'Minato'}),
+        const IpInfo(ip: '2.2.2.2', countryCode: 'JP', city: 'Minato'),
+      );
+      expect(
+        IpInfo.fromIpWhoIsJson({
+          'ip': '3.3.3.3',
+          'country_code': 'JP',
+          'city': 'Tokyo',
+          'region': 'Tokyo',
+        }),
+        const IpInfo(
+          ip: '3.3.3.3',
+          countryCode: 'JP',
+          city: 'Tokyo',
+          region: 'Tokyo',
+        ),
       );
       expect(
         IpInfo.fromGeoJsJson({'ip': '4.4.4.4', 'country_code': 'DE'}),
@@ -224,10 +248,20 @@ void main() {
         IpInfo.fromIpQueryJson({
           'ip': '203.0.113.9',
           'isp': {'asn': 'AS64500', 'org': '', 'isp': 'Example'},
-          'location': {'country': 'United Kingdom', 'country_code': 'GB'},
+          'location': {
+            'country': 'United Kingdom',
+            'country_code': 'GB',
+            'city': 'London',
+            'state': 'England',
+          },
           'risk': {'is_datacenter': false},
         }),
-        const IpInfo(ip: '203.0.113.9', countryCode: 'GB'),
+        const IpInfo(
+          ip: '203.0.113.9',
+          countryCode: 'GB',
+          city: 'London',
+          region: 'England',
+        ),
       );
     });
 

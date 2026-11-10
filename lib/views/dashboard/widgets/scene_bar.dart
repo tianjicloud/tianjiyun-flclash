@@ -8,6 +8,7 @@ import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
+import 'package:fl_clash/l10n/l10n.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +22,23 @@ String _sceneLabel(BuildContext context, SceneKind scene) => switch (scene) {
   SceneKind.watch => context.appLocalizations.sceneWatch,
 };
 
+String sceneNoteFor(
+  AppLocalizations l10n, {
+  required SceneKind? scene,
+  required bool bulkBypass,
+  required bool suspended,
+  required bool unconfirmed,
+}) {
+  if (suspended) return l10n.sceneSuspended;
+  final note = switch (scene) {
+    SceneKind.daily => bulkBypass ? l10n.sceneDailyBypass : l10n.sceneDailyNote,
+    SceneKind.ai => l10n.sceneAiNote,
+    SceneKind.watch => l10n.sceneWatchNote,
+    null => l10n.sceneDailyNote,
+  };
+  return unconfirmed ? '$note · ${l10n.sceneUnconfirmed}' : note;
+}
+
 class SceneBar extends ConsumerWidget {
   const SceneBar({super.key});
 
@@ -30,6 +48,7 @@ class SceneBar extends ConsumerWidget {
     final mobile = !density.isDesktop;
     final scale = DashboardDensityScope.scaleOf(context);
     final policy = ref.watch(scenePolicyProvider);
+    final residential = ref.watch(residentialPolicyProvider);
     final applyState = ref.watch(sceneActionProvider);
     final applying = applyState.applying && applyState.matches(_profileId(ref));
     final failed = applyState.failed && applyState.matches(_profileId(ref));
@@ -39,11 +58,17 @@ class SceneBar extends ConsumerWidget {
       context.appLocalizations.businessOutboundLabel,
       context,
     );
-    final note = failed
-        ? context.appLocalizations.residentialApplyFailed
-        : policy.suspended
+    final note = policy.suspended
         ? context.appLocalizations.sceneSuspended
-        : context.appLocalizations.sceneNote;
+        : failed
+        ? context.appLocalizations.residentialApplyFailed
+        : sceneNoteFor(
+            context.appLocalizations,
+            scene: policy.current,
+            bulkBypass: residential.bulkBypass,
+            suspended: false,
+            unconfirmed: policy.unconfirmed,
+          );
     if (mobile) {
       return Column(
         mainAxisSize: MainAxisSize.min,

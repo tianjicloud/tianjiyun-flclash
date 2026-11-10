@@ -6,6 +6,27 @@ import 'package:fl_clash/providers/residential.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+class SceneUnconfirmedState {
+  const SceneUnconfirmedState({this.profileId, this.value = false});
+
+  final int? profileId;
+  final bool value;
+}
+
+class SceneUnconfirmed extends Notifier<SceneUnconfirmedState> {
+  @override
+  SceneUnconfirmedState build() => const SceneUnconfirmedState();
+
+  void set({required int? profileId, required bool unconfirmed}) {
+    state = SceneUnconfirmedState(profileId: profileId, value: unconfirmed);
+  }
+}
+
+final sceneUnconfirmedProvider =
+    NotifierProvider<SceneUnconfirmed, SceneUnconfirmedState>(
+      SceneUnconfirmed.new,
+    );
+
 /// What the scene switch can honestly show for the current profile: whether
 /// the subscription carries the scene pivot at all, and which scene the
 /// saved pick names. Apply state lives in the scene action's own state.
@@ -14,6 +35,7 @@ class ScenePolicy {
     required this.available,
     required this.current,
     required this.suspended,
+    this.unconfirmed = false,
   });
 
   final bool available;
@@ -22,6 +44,7 @@ class ScenePolicy {
   /// A residential exit owns the profile: scene picks stay stored but the
   /// assembly skips the scene transform until the exit is released.
   final bool suspended;
+  final bool unconfirmed;
 }
 
 /// Scene availability mirrors the residential policy's catalog discipline:
@@ -45,9 +68,11 @@ final scenePolicyProvider = Provider<ScenePolicy>((ref) {
         );
   }
   final stored = profile?.overrides.scene;
+  final application = ref.watch(sceneUnconfirmedProvider);
   return ScenePolicy(
     available: available,
     current: current ?? sceneKindOfSelection(stored),
     suspended: isResidentialPolicyActive(profile),
+    unconfirmed: application.profileId == profile?.id && application.value,
   );
 });

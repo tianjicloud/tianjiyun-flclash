@@ -1883,10 +1883,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("변경 사항을 저장하시겠습니까?"),
     "scene": MessageLookupByLibrary.simpleMessage("장면"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneDaily": MessageLookupByLibrary.simpleMessage("일상"),
-    "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "대용량 트래픽은 주거용 출구를 자동으로 우회 · 중국 본토 트래픽은 직접 연결 · 주거용 출구 적용 중에는 장면이 일시 중지됩니다",
+    "sceneAiNote": MessageLookupByLibrary.simpleMessage(
+      "AI 서비스는 AI 모드 경로를 이용하고 중국 본토 트래픽은 직접 연결",
     ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("일상"),
+    "sceneDailyBypass": MessageLookupByLibrary.simpleMessage(
+      "대용량 트래픽은 주거용 회선을 자동으로 우회하고 중국 본토 트래픽은 직접 연결",
+    ),
+    "sceneDailyNote": MessageLookupByLibrary.simpleMessage("중국 본토 트래픽은 직접 연결"),
     "sceneSuspended": MessageLookupByLibrary.simpleMessage(
       "가정용 회선 모드에서 시나리오 전환 일시 중지",
     ),
@@ -1894,7 +1898,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "이 구독에는 아직 장면 그룹이 없습니다. 지원팀에 문의하거나 프록시 페이지에서 라우팅을 관리하세요.",
     ),
+    "sceneUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "일부 규칙을 전환하지 못했습니다",
+    ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("시청"),
+    "sceneWatchNote": MessageLookupByLibrary.simpleMessage(
+      "스트리밍은 시청 모드 경로를 이용하고 중국 본토 트래픽은 직접 연결",
+    ),
     "script": MessageLookupByLibrary.simpleMessage("스크립트"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "스크립트 모드: 확장 스크립트로 프로필 전체를 다시 작성합니다",

@@ -13,6 +13,7 @@ typedef BuiltProfile = ({
   String yaml,
   String md5,
   ConfigCounts counts,
+  bool sceneUnconfirmed,
   SetupBase? base,
 });
 
@@ -533,7 +534,13 @@ class SetupAction extends _$SetupAction {
         : null;
     final profileId = setupState.profileId;
     if (profileId == null) {
-      return (yaml: '', md5: '', counts: configCountsOf(const {}), base: null);
+      return (
+        yaml: '',
+        md5: '',
+        counts: configCountsOf(const {}),
+        sceneUnconfirmed: false,
+        base: null,
+      );
     }
     final defaultUA = globalState.packageInfo.ua;
     final networkSetting = ref.read(
@@ -612,7 +619,13 @@ class SetupAction extends _$SetupAction {
       ),
     );
     if (profileBase == null) {
-      return (yaml: res.yaml, md5: res.md5, counts: res.counts, base: null);
+      return (
+        yaml: res.yaml,
+        md5: res.md5,
+        counts: res.counts,
+        sceneUnconfirmed: res.sceneUnconfirmed,
+        base: null,
+      );
     }
     final (:base, :path) = profileBase;
     return (
@@ -623,6 +636,7 @@ class SetupAction extends _$SetupAction {
         proxies: res.counts.proxies + base.proxies,
         rules: res.counts.rules + base.rules,
       ),
+      sceneUnconfirmed: res.sceneUnconfirmed,
       base: SetupBase(path: path, overlay: res.yaml),
     );
   }
@@ -852,6 +866,12 @@ class SetupAction extends _$SetupAction {
       return rebuildLatest();
     }
     final profileFailed = realProfile == null;
+    ref
+        .read(sceneUnconfirmedProvider.notifier)
+        .set(
+          profileId: profile?.id,
+          unconfirmed: realProfile?.sceneUnconfirmed ?? false,
+        );
     if (profileFailed && residentialActive) {
       await _failClosedResidential();
       return _SetupTaskResult.failed;

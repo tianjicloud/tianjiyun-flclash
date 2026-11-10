@@ -1733,16 +1733,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("是否保存更改？"),
     "scene": MessageLookupByLibrary.simpleMessage("场景"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneDaily": MessageLookupByLibrary.simpleMessage("日常"),
-    "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "大流量自动绕行大带宽节点 · 大陆流量本地直连 · 家宽接管期间场景暂停",
+    "sceneAiNote": MessageLookupByLibrary.simpleMessage(
+      "AI 服务走 AI 模式线路 · 大陆流量本地直连",
     ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("日常"),
+    "sceneDailyBypass": MessageLookupByLibrary.simpleMessage(
+      "大流量自动绕开家宽 · 大陆流量本地直连",
+    ),
+    "sceneDailyNote": MessageLookupByLibrary.simpleMessage("大陆流量本地直连"),
     "sceneSuspended": MessageLookupByLibrary.simpleMessage("家宽模式下，场景切换已暂停"),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage("场景暂不可用"),
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "当前订阅还没有场景分组，联系客服开通，或在代理页手动分流。",
     ),
+    "sceneUnconfirmed": MessageLookupByLibrary.simpleMessage("部分规则未能切换"),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("观影"),
+    "sceneWatchNote": MessageLookupByLibrary.simpleMessage(
+      "流媒体走观影线路 · 大陆流量本地直连",
+    ),
     "script": MessageLookupByLibrary.simpleMessage("脚本"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage("脚本模式，使用扩展脚本改写整个配置"),
     "scrollToSelected": MessageLookupByLibrary.simpleMessage("滚动到已选"),

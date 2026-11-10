@@ -4,6 +4,7 @@ import 'package:fl_clash/common/constant.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 const directOutbound = 'DIRECT';
 const routedOutbound = '';
@@ -172,6 +173,28 @@ final Map<String, IpInfo Function(String)> ipInfoSources = {
   'https://ident.me/json': _json(IpInfo.fromIdentMeJson),
 };
 
+List<String> outboundIpSourceUrls({String? locale}) {
+  final language = _ipWhoLanguage(locale ?? Intl.defaultLocale);
+  return [
+    for (final source in ipInfoSources.keys)
+      if (source == 'https://ipwho.is' && language != null)
+        '$source?lang=$language'
+      else
+        source,
+  ];
+}
+
+String? _ipWhoLanguage(String? locale) =>
+    switch (locale?.replaceAll('_', '-').toLowerCase()) {
+      null || 'en' => 'en',
+      'zh' || 'zh-cn' => 'zh-CN',
+      'ja' => 'ja',
+      'es' => 'es',
+      'fr' => 'fr',
+      'ru' => 'ru',
+      _ => null,
+    };
+
 /// Raw so the route stamp survives; [parseOutboundIp] reads the address.
 Future<OutboundIpResult> lookupOutboundIp(
   CoreController core,
@@ -181,7 +204,7 @@ Future<OutboundIpResult> lookupOutboundIp(
   return core.outboundIp(
     OutboundIpParams(
       proxyName: proxyName,
-      urls: ipInfoSources.keys.toList(),
+      urls: outboundIpSourceUrls(),
       timeout: timeout.inMilliseconds,
     ),
   );
@@ -191,7 +214,7 @@ IpInfo? parseOutboundIp(OutboundIpResult result) {
   if (result.error != null || result.body.isEmpty) {
     return null;
   }
-  final parse = ipInfoSources[result.url];
+  final parse = _ipInfoParserFor(result.url);
   if (parse == null) return null;
   try {
     return parse(result.body);
@@ -200,4 +223,20 @@ IpInfo? parseOutboundIp(OutboundIpResult result) {
   } on TypeError {
     return null;
   }
+}
+
+IpInfo Function(String)? _ipInfoParserFor(String url) {
+  if (ipInfoSources[url] case final parser?) return parser;
+  final uri = Uri.tryParse(url);
+  if (uri == null) return null;
+  for (final entry in ipInfoSources.entries) {
+    final source = Uri.parse(entry.key);
+    if (!source.hasQuery &&
+        source.scheme == uri.scheme &&
+        source.host == uri.host &&
+        source.path == uri.path) {
+      return entry.value;
+    }
+  }
+  return null;
 }

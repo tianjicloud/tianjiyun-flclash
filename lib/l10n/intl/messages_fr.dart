@@ -1312,9 +1312,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificat installé",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "L’autorisation de la liste des apps a été refusée ; les apps installées ne peuvent donc pas être listées. Veuillez l’accorder manuellement dans les réglages du système.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Ce système masque la liste des apps installées tant que l’autorisation n’est pas accordée. Accordez-la pour configurer le proxy par app.",
     ),
@@ -1839,9 +1840,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "L’importation a échoué",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Votre réseau actuel bloque peut-être ce domaine. La page d’état propose des adresses de secours, ou réessayez plus tard.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Impossible d’atteindre l’adresse d’abonnement",
     ),
@@ -2402,9 +2404,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "scene": MessageLookupByLibrary.simpleMessage("Scène"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("IA"),
+    "sceneAiNote": MessageLookupByLibrary.simpleMessage(
+      "Les services d’IA passent par les routes du mode IA ; le trafic vers la Chine continentale reste direct",
+    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Quotidien"),
-    "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "Le gros trafic contourne automatiquement la sortie résidentielle · Le trafic vers la Chine continentale reste direct · Les scènes sont en pause tant qu’une sortie résidentielle est active",
+    "sceneDailyBypass": MessageLookupByLibrary.simpleMessage(
+      "Le trafic volumineux contourne automatiquement la sortie résidentielle ; le trafic vers la Chine continentale reste direct",
+    ),
+    "sceneDailyNote": MessageLookupByLibrary.simpleMessage(
+      "Le trafic vers la Chine continentale reste direct",
     ),
     "sceneSuspended": MessageLookupByLibrary.simpleMessage(
       "Scènes en pause en mode résidentiel",
@@ -2415,7 +2423,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "Cet abonnement n’a pas encore de groupes de scènes. Contactez le support ou gérez le routage depuis la page Proxies.",
     ),
+    "sceneUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Certaines règles n’ont pas pu être basculées",
+    ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
+    "sceneWatchNote": MessageLookupByLibrary.simpleMessage(
+      "Le streaming passe par les routes du mode vidéo ; le trafic vers la Chine continentale reste direct",
+    ),
     "script": MessageLookupByLibrary.simpleMessage("Script"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "Mode script : réécrit tout le profil avec un script d’extension",

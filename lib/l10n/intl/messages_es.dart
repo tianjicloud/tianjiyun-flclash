@@ -1304,9 +1304,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificado instalado",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Este sistema oculta la lista de apps instaladas hasta que se concede el permiso. Autorízalo para configurar el proxy por app.",
     ),
@@ -1837,9 +1838,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "No se pudo importar",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "No se puede acceder a la dirección de suscripción",
     ),
@@ -2394,9 +2396,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "scene": MessageLookupByLibrary.simpleMessage("Escena"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("IA"),
+    "sceneAiNote": MessageLookupByLibrary.simpleMessage(
+      "Los servicios de IA usan las rutas del modo IA; el tráfico a China continental va directo",
+    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Diario"),
-    "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "El tráfico pesado evita automáticamente la salida residencial · El tráfico a China continental va directo · Las escenas se pausan mientras una salida residencial está activa",
+    "sceneDailyBypass": MessageLookupByLibrary.simpleMessage(
+      "El tráfico pesado evita automáticamente la salida residencial; el tráfico a China continental va directo",
+    ),
+    "sceneDailyNote": MessageLookupByLibrary.simpleMessage(
+      "El tráfico a China continental va directo",
     ),
     "sceneSuspended": MessageLookupByLibrary.simpleMessage(
       "Escenas pausadas en modo residencial",
@@ -2407,7 +2415,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "Esta suscripción aún no tiene grupos de escena. Contacta con soporte o gestiona el enrutamiento desde la página Proxies.",
     ),
+    "sceneUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "No se pudieron cambiar algunas reglas",
+    ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("Streaming"),
+    "sceneWatchNote": MessageLookupByLibrary.simpleMessage(
+      "El streaming usa las rutas del modo de vídeo; el tráfico a China continental va directo",
+    ),
     "script": MessageLookupByLibrary.simpleMessage("Script"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "Modo script: reescribe todo el perfil con un script de extensión",

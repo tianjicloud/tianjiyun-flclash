@@ -7668,8 +7668,7 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one:
-          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -9723,16 +9722,6 @@ class AppLocalizations {
     return Intl.message('Quick lines', name: 'quickLines', desc: '', args: []);
   }
 
-  /// `Large traffic bypasses residential automatically · mainland traffic stays direct · scenes pause while a residential exit is active`
-  String get sceneNote {
-    return Intl.message(
-      'Large traffic bypasses residential automatically · mainland traffic stays direct · scenes pause while a residential exit is active',
-      name: 'sceneNote',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Subscription policy`
   String get residentialSubscriptionPolicy {
     return Intl.message(
@@ -10293,6 +10282,56 @@ class AppLocalizations {
     return Intl.message(
       'Imports are validated first. A parsing failure does not replace the active profile.',
       name: 'profileAddValidationNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Large traffic bypasses residential automatically; mainland traffic stays direct`
+  String get sceneDailyBypass {
+    return Intl.message(
+      'Large traffic bypasses residential automatically; mainland traffic stays direct',
+      name: 'sceneDailyBypass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mainland traffic stays direct`
+  String get sceneDailyNote {
+    return Intl.message(
+      'Mainland traffic stays direct',
+      name: 'sceneDailyNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AI services use AI mode routes; mainland traffic stays direct`
+  String get sceneAiNote {
+    return Intl.message(
+      'AI services use AI mode routes; mainland traffic stays direct',
+      name: 'sceneAiNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Streaming uses Watch routes; mainland traffic stays direct`
+  String get sceneWatchNote {
+    return Intl.message(
+      'Streaming uses Watch routes; mainland traffic stays direct',
+      name: 'sceneWatchNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Some rules could not be switched`
+  String get sceneUnconfirmed {
+    return Intl.message(
+      'Some rules could not be switched',
+      name: 'sceneUnconfirmed',
       desc: '',
       args: [],
     );

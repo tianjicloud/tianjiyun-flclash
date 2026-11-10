@@ -1273,9 +1273,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Сертификат установлен",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -1794,9 +1795,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Не удалось импортировать",
     ),
-    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
-      "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
-    ),
+    "onboardingFailureUnreachableDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
+        ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Не удаётся подключиться к адресу подписки",
     ),
@@ -2335,9 +2337,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("Сохранить изменения?"),
     "scene": MessageLookupByLibrary.simpleMessage("Сценарий"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
+    "sceneAiNote": MessageLookupByLibrary.simpleMessage(
+      "Сервисы ИИ используют маршруты режима ИИ; трафик в материковый Китай идёт напрямую",
+    ),
     "sceneDaily": MessageLookupByLibrary.simpleMessage("Обычный"),
-    "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "Тяжёлый трафик автоматически идёт через широкополосные узлы · Трафик в материковый Китай — напрямую · Сценарии на паузе, пока активен жилой выход",
+    "sceneDailyBypass": MessageLookupByLibrary.simpleMessage(
+      "Большой трафик автоматически обходит домашний канал; трафик в материковый Китай идёт напрямую",
+    ),
+    "sceneDailyNote": MessageLookupByLibrary.simpleMessage(
+      "Трафик в материковый Китай идёт напрямую",
     ),
     "sceneSuspended": MessageLookupByLibrary.simpleMessage(
       "Сценарии приостановлены в домашнем режиме",
@@ -2348,7 +2356,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "В этой подписке пока нет групп сценариев. Обратитесь в поддержку или настройте маршрутизацию на странице прокси.",
     ),
+    "sceneUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Не все правила удалось переключить",
+    ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("Видео"),
+    "sceneWatchNote": MessageLookupByLibrary.simpleMessage(
+      "Стриминг использует маршруты режима просмотра; трафик в материковый Китай идёт напрямую",
+    ),
     "script": MessageLookupByLibrary.simpleMessage("Скрипт"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "Режим скрипта: переписывает весь профиль скриптом расширения",

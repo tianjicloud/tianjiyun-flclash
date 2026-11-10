@@ -88,7 +88,12 @@ ClashConfig _buildClashConfig(Map<String, dynamic> configMap) {
 
 typedef ConfigCounts = ({int groups, int proxies, int rules});
 
-typedef RealProfile = ({String yaml, String md5, ConfigCounts counts});
+typedef RealProfile = ({
+  String yaml,
+  String md5,
+  ConfigCounts counts,
+  bool sceneUnconfirmed,
+});
 
 /// Counts what the Core was handed, not what the profile file declares.
 ConfigCounts configCountsOf(Map<Object?, Object?> config) {
@@ -126,6 +131,7 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
   final addedRules = data.addedRules;
   final appendSystemDns = data.appendSystemDns;
   final defaultUA = data.defaultUA;
+  var sceneUnconfirmed = false;
   String getProvidersFilePathInner(String type, String key) {
     return join(
       profilesPath,
@@ -390,7 +396,9 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
         ? null
         : sceneKindOfSelection(sceneName);
     if (sceneKind != null) {
-      rawConfig = applyScene(config: rawConfig, scene: sceneKind).config;
+      final application = applyScene(config: rawConfig, scene: sceneKind);
+      rawConfig = application.config;
+      sceneUnconfirmed = application.unconfirmed;
     }
     rawConfig = applyManualSelections(rawConfig, data.manualSelections);
   }
@@ -405,7 +413,12 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
     );
   }
   final yaml = await _encodeYaml(Map<String, dynamic>.from(rawConfig));
-  return (yaml: yaml, md5: yaml.toMd5(), counts: configCountsOf(rawConfig));
+  return (
+    yaml: yaml,
+    md5: yaml.toMd5(),
+    counts: configCountsOf(rawConfig),
+    sceneUnconfirmed: sceneUnconfirmed,
+  );
 }
 
 typedef ShakingStoreArgs = ({

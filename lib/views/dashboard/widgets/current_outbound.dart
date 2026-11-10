@@ -6,6 +6,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
 import 'package:fl_clash/features/ip_quality/labels.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/providers/ip_quality.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -38,6 +39,22 @@ const _ipMask = '*****';
 const _decorationGrowth = 0.12;
 
 const _decorationTurn = 2 * math.pi / 12;
+
+String? outboundLocationLabel({
+  required String? countryCode,
+  required String? city,
+  required bool desktop,
+}) {
+  if (countryCode == null || countryCode.isEmpty) return null;
+  if (city == null || city.isEmpty) return countryCode;
+  return desktop ? '$countryCode · $city' : '$countryCode $city';
+}
+
+String businessResidentialLabel(
+  AppLocalizations l10n, {
+  required bool desktop,
+}) =>
+    desktop ? l10n.businessResidentialBroadband : l10n.businessResidentialShort;
 
 bool isVerifiedOutbound({
   required bool active,
@@ -1024,17 +1041,25 @@ class _BusinessChips extends StatelessWidget {
       return const SizedBox.shrink();
     }
     final code = info?.countryCode;
-    final country = code == null || code.isEmpty
+    final city = info?.city;
+    final desktop = DashboardDensityScope.of(context).isDesktop;
+    final location = outboundLocationLabel(
+      countryCode: code,
+      city: city,
+      desktop: desktop,
+    );
+    final country = location == null
         ? null
-        : DashboardChip(label: code, large: false);
+        : DashboardChip(label: location, large: false);
     final chips = <Widget>[
       ?country,
       if (quality != null) ...[
         DashboardChip(
           label: quality.type == IpType.residential
-              ? business && large
-                    ? context.appLocalizations.businessResidentialShort
-                    : context.appLocalizations.businessResidentialBroadband
+              ? businessResidentialLabel(
+                  context.appLocalizations,
+                  desktop: desktop,
+                )
               : quality.type.label(context),
           tone: quality.type == IpType.residential
               ? DashboardChipTone.residential

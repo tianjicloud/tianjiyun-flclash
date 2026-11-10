@@ -4014,7 +4014,7 @@ as String,
 /// @nodoc
 mixin _$IpInfo {
 
- String get ip; String get countryCode;
+ String get ip; String get countryCode; String? get city; String? get region;
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -4026,20 +4026,20 @@ $IpInfoCopyWith<IpInfo> get copyWith => _$IpInfoCopyWithImpl<IpInfo>(this as IpI
 @override
 bool operator ==(Object other) {
   final _this = this as IpInfo;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is IpInfo&&(identical(other.ip, _this.ip) || other.ip == _this.ip)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is IpInfo&&(identical(other.ip, _this.ip) || other.ip == _this.ip)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.city, _this.city) || other.city == _this.city)&&(identical(other.region, _this.region) || other.region == _this.region));
 }
 
 
 @override
 int get hashCode {
   final _this = this as IpInfo;
-  return Object.hash(runtimeType,_this.ip,_this.countryCode);
+  return Object.hash(runtimeType,_this.ip,_this.countryCode,_this.city,_this.region);
 }
 
 @override
 String toString() {
   final _this = this as IpInfo;
-  return 'IpInfo(ip: ${_this.ip}, countryCode: ${_this.countryCode})';
+  return 'IpInfo(ip: ${_this.ip}, countryCode: ${_this.countryCode}, city: ${_this.city}, region: ${_this.region})';
 }
 
 
@@ -4050,7 +4050,7 @@ abstract mixin class $IpInfoCopyWith<$Res>  {
   factory $IpInfoCopyWith(IpInfo value, $Res Function(IpInfo) _then) = _$IpInfoCopyWithImpl;
 @useResult
 $Res call({
- String ip, String countryCode
+ String ip, String countryCode, String? city, String? region
 });
 
 
@@ -4067,11 +4067,13 @@ class _$IpInfoCopyWithImpl<$Res>
 
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? ip = null,Object? countryCode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? ip = null,Object? countryCode = null,Object? city = freezed,Object? region = freezed,}) {
   return _then(IpInfo(
 ip: null == ip ? _self.ip : ip // ignore: cast_nullable_to_non_nullable
 as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
-as String,
+as String,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,region: freezed == region ? _self.region : region // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -4156,10 +4158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String ip,  String countryCode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String ip,  String countryCode,  String? city,  String? region)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _IpInfo() when $default != null:
-return $default(_that.ip,_that.countryCode);case _:
+return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
   return orElse();
 
 }
@@ -4177,10 +4179,10 @@ return $default(_that.ip,_that.countryCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String ip,  String countryCode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String ip,  String countryCode,  String? city,  String? region)  $default,) {final _that = this;
 switch (_that) {
 case _IpInfo():
-return $default(_that.ip,_that.countryCode);case _:
+return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -4197,10 +4199,10 @@ return $default(_that.ip,_that.countryCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String ip,  String countryCode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String ip,  String countryCode,  String? city,  String? region)?  $default,) {final _that = this;
 switch (_that) {
 case _IpInfo() when $default != null:
-return $default(_that.ip,_that.countryCode);case _:
+return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
   return null;
 
 }
@@ -4212,11 +4214,13 @@ return $default(_that.ip,_that.countryCode);case _:
 
 
 class _IpInfo implements IpInfo {
-  const _IpInfo({required this.ip, required this.countryCode});
+  const _IpInfo({required this.ip, required this.countryCode, this.city, this.region});
   
 
 @override final  String ip;
 @override final  String countryCode;
+@override final  String? city;
+@override final  String? region;
 
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
@@ -4228,18 +4232,18 @@ _$IpInfoCopyWith<_IpInfo> get copyWith => __$IpInfoCopyWithImpl<_IpInfo>(this, _
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _IpInfo&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _IpInfo&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.city, city) || other.city == city)&&(identical(other.region, region) || other.region == region));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,ip,countryCode);
+    return Object.hash(runtimeType,ip,countryCode,city,region);
 }
 
 @override
 String toString() {
-    return 'IpInfo(ip: $ip, countryCode: $countryCode)';
+    return 'IpInfo(ip: $ip, countryCode: $countryCode, city: $city, region: $region)';
 }
 
 
@@ -4250,7 +4254,7 @@ abstract mixin class _$IpInfoCopyWith<$Res> implements $IpInfoCopyWith<$Res> {
   factory _$IpInfoCopyWith(_IpInfo value, $Res Function(_IpInfo) _then) = __$IpInfoCopyWithImpl;
 @override @useResult
 $Res call({
- String ip, String countryCode
+ String ip, String countryCode, String? city, String? region
 });
 
 
@@ -4267,11 +4271,13 @@ class __$IpInfoCopyWithImpl<$Res>
 
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? ip = null,Object? countryCode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? ip = null,Object? countryCode = null,Object? city = freezed,Object? region = freezed,}) {
   return _then(_IpInfo(
 ip: null == ip ? _self.ip : ip // ignore: cast_nullable_to_non_nullable
 as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
-as String,
+as String,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,region: freezed == region ? _self.region : region // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -1913,16 +1913,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("変更を保存しますか？"),
     "scene": MessageLookupByLibrary.simpleMessage("シーン"),
     "sceneAi": MessageLookupByLibrary.simpleMessage("AI"),
-    "sceneDaily": MessageLookupByLibrary.simpleMessage("日常"),
-    "sceneNote": MessageLookupByLibrary.simpleMessage(
-      "大容量通信は広帯域ノードへ自動迂回 · 中国本土向けは直接接続 · 住宅回線の適用中はシーンが一時停止します",
+    "sceneAiNote": MessageLookupByLibrary.simpleMessage(
+      "AI サービスは AI モードの経路を使用し、中国本土向け通信は直接接続",
     ),
+    "sceneDaily": MessageLookupByLibrary.simpleMessage("日常"),
+    "sceneDailyBypass": MessageLookupByLibrary.simpleMessage(
+      "大容量通信は住宅回線を自動的に迂回し、中国本土向け通信は直接接続",
+    ),
+    "sceneDailyNote": MessageLookupByLibrary.simpleMessage("中国本土向け通信は直接接続"),
     "sceneSuspended": MessageLookupByLibrary.simpleMessage("住宅回線モードではシーン切替を停止"),
     "sceneUnavailable": MessageLookupByLibrary.simpleMessage("シーンは利用できません"),
     "sceneUnavailableDesc": MessageLookupByLibrary.simpleMessage(
       "このサブスクリプションにはシーングループがまだありません。サポートへお問い合わせいただくか、プロキシページで切り替えてください。",
     ),
+    "sceneUnconfirmed": MessageLookupByLibrary.simpleMessage(
+      "一部のルールを切り替えられませんでした",
+    ),
     "sceneWatch": MessageLookupByLibrary.simpleMessage("視聴"),
+    "sceneWatchNote": MessageLookupByLibrary.simpleMessage(
+      "ストリーミングは視聴モードの経路を使用し、中国本土向け通信は直接接続",
+    ),
     "script": MessageLookupByLibrary.simpleMessage("スクリプト"),
     "scriptModeDesc": MessageLookupByLibrary.simpleMessage(
       "スクリプトモード：拡張スクリプトでプロファイル全体を書き換えます",

@@ -602,14 +602,20 @@ extension GroupExt on Group {
 
 @freezed
 abstract class IpInfo with _$IpInfo {
-  const factory IpInfo({required String ip, required String countryCode}) =
-      _IpInfo;
+  const factory IpInfo({
+    required String ip,
+    required String countryCode,
+    String? city,
+    String? region,
+  }) = _IpInfo;
 
   static IpInfo fromIpInfoIoJson(Map<String, dynamic> json) {
     return switch (json) {
       {'ip': final String ip, 'country': final String country} => IpInfo(
         ip: ip,
         countryCode: country,
+        city: _ipLocationField(json, 'city'),
+        region: _ipLocationField(json, 'region'),
       ),
       _ => throw const FormatException('invalid json'),
     };
@@ -626,7 +632,12 @@ abstract class IpInfo with _$IpInfo {
   static IpInfo fromIpSbJson(Map<String, dynamic> json) {
     return switch (json) {
       {'ip': final String ip, 'country_code': final String countryCode} =>
-        IpInfo(ip: ip, countryCode: countryCode),
+        IpInfo(
+          ip: ip,
+          countryCode: countryCode,
+          city: _ipLocationField(json, 'city'),
+          region: _ipLocationField(json, 'region'),
+        ),
       _ => throw const FormatException('invalid json'),
     };
   }
@@ -634,7 +645,12 @@ abstract class IpInfo with _$IpInfo {
   static IpInfo fromIpWhoIsJson(Map<String, dynamic> json) {
     return switch (json) {
       {'ip': final String ip, 'country_code': final String countryCode} =>
-        IpInfo(ip: ip, countryCode: countryCode),
+        IpInfo(
+          ip: ip,
+          countryCode: countryCode,
+          city: _ipLocationField(json, 'city'),
+          region: _ipLocationField(json, 'region'),
+        ),
       _ => throw const FormatException('invalid json'),
     };
   }
@@ -654,6 +670,7 @@ abstract class IpInfo with _$IpInfo {
       {'ip': final String ip, 'cc': final String countryCode} => IpInfo(
         ip: ip,
         countryCode: countryCode,
+        city: _ipLocationField(json, 'city'),
       ),
       _ => throw const FormatException('invalid json'),
     };
@@ -665,7 +682,18 @@ abstract class IpInfo with _$IpInfo {
         'ip': final String ip,
         'location': {'country_code': final String countryCode},
       } =>
-        IpInfo(ip: ip, countryCode: countryCode),
+        IpInfo(
+          ip: ip,
+          countryCode: countryCode,
+          city: _ipLocationField(
+            json['location'] as Map<String, dynamic>,
+            'city',
+          ),
+          region: _ipLocationField(
+            json['location'] as Map<String, dynamic>,
+            'state',
+          ),
+        ),
       _ => throw const FormatException('invalid json'),
     };
   }
@@ -687,6 +715,9 @@ abstract class IpInfo with _$IpInfo {
     };
   }
 }
+
+String? _ipLocationField(Map<String, dynamic> json, String key) =>
+    json[key] is String ? json[key] as String : null;
 
 @freezed
 abstract class HotKeyAction with _$HotKeyAction {

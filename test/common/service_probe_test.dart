@@ -6,6 +6,7 @@ import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCore extends Mock implements CoreHandlerInterface {}
@@ -190,11 +191,30 @@ void main() {
         await lookupOutboundIp(controller, 'HK-01'),
       );
 
-      expect(sent.urls, ipInfoSources.keys.toList());
+      expect(sent.urls, outboundIpSourceUrls());
       expect(sent.proxyName, 'HK-01');
       expect(sent.timeout, outboundIpTimeoutDuration.inMilliseconds);
       expect(ipInfo, const IpInfo(ip: '203.0.113.7', countryCode: 'US'));
     });
+
+    test(
+      'localizes supported IP source names to the current app locale',
+      () async {
+        final previousLocale = Intl.defaultLocale;
+        Intl.defaultLocale = 'zh_CN';
+        addTearDown(() => Intl.defaultLocale = previousLocale);
+        late OutboundIpParams sent;
+        when(() => core.outboundIp(any())).thenAnswer((invocation) async {
+          sent = invocation.positionalArguments.single as OutboundIpParams;
+          return const OutboundIpResult(error: 'not available');
+        });
+
+        await lookupOutboundIp(controller, 'HK-01');
+
+        expect(sent.urls, outboundIpSourceUrls(locale: 'zh_CN'));
+        expect(sent.urls, contains('https://ipwho.is?lang=zh-CN'));
+      },
+    );
 
     test('parses whichever source answered, not just the first', () async {
       when(() => core.outboundIp(any())).thenAnswer(

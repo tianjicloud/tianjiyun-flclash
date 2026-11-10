@@ -64,7 +64,7 @@ void main() {
 
       final params = await asked();
       expect(params.proxyName, isEmpty);
-      expect(params.urls, ipInfoSources.keys.toList());
+      expect(params.urls, outboundIpSourceUrls());
       final entry = container
           .read(outboundIpProbeProvider)
           .entryOf(routedOutbound);
