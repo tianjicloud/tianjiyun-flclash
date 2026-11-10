@@ -81,7 +81,6 @@
   "profileUrlNullValidationDesc": "프로필 URL을 입력하세요",
   "profileUrlInvalidValidationDesc": "올바른 프로필 URL을 입력하세요",
   "autoUpdate": "자동 업데이트",
-  "autoUpdateInterval": "자동 업데이트 간격",
   "profileAutoUpdateIntervalNullValidationDesc": "자동 업데이트 간격을 입력하세요",
   "profileAutoUpdateIntervalInvalidValidationDesc": "올바른 간격을 입력하세요",
   "themeMode": "테마 모드",
@@ -1135,7 +1134,13 @@
   "residentialExitSheetTitle": "주거용 출구 선택",
   "residentialExitSheetSubtitle": "AI 및 프록시가 필요한 그룹은 선택한 경로를 따릅니다.",
   "residentialUseExit": "{name} 사용",
-  "@residentialUseExit": {"placeholders": {"name": {"type": "String"}}},
+  "@residentialUseExit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "residentialSelected": "선택됨",
   "residentialUnavailable": "사용할 수 없음",
   "residentialApplying": "적용 중…",
@@ -1320,5 +1325,83 @@
     "placeholders": {
       "value": {}
     }
-  }
+  },
+  "updateAll": "모두 업데이트",
+  "importSubscription": "구독 가져오기",
+  "inUse": "사용 중",
+  "renewUpgrade": "갱신 / 요금제 업그레이드",
+  "copySubscriptionLink": "구독 링크 복사",
+  "currentUsage": "이번 기간 사용량",
+  "currentExpiry": "만료",
+  "autoUpdateInterval": "자동 업데이트 간격",
+  "residentialOutbound": "가정용 회선",
+  "zzAutoUpdateIntervalLabel": "{count}{unit}마다 자동 업데이트",
+  "@zzAutoUpdateIntervalLabel": {
+    "placeholders": {
+      "count": {},
+      "unit": {}
+    }
+  },
+  "immediateUpdate": "지금 업데이트",
+  "expiredStatus": "만료됨",
+  "subscriptionLink": "구독 링크",
+  "otherProfilesTitle": "기타 구성",
+  "profileSwitchNote": "전환 내용은 즉시 적용됩니다. 파싱에 실패하면 현재 구성을 유지합니다.",
+  "switchProfileShort": "전환",
+  "pasteFromClipboardImport": "클립보드에서 가져오기",
+  "chooseFile": "파일 선택",
+  "zzProfileExpiredDays": "구독 링크 · {count}일 전에 만료",
+  "zzProfileImportedOn": "로컬 파일 · {date} 가져옴",
+  "zzProfileBasedOnOverrides": "현재 구독 기반 · 재정의 규칙 {count}개",
+  "zzProfileImportHint": "클립보드에서 링크를 붙여넣거나 로컬 YAML 파일을 선택하거나 브라우저에서 {scheme}를 열어 링크를 가져올 수 있습니다.",
+  "@zzProfileExpiredDays": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "@zzProfileBasedOnOverrides": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportHint": {
+    "placeholders": {
+      "scheme": {}
+    }
+  },
+  "zzAutoUpdateHours": "{hours}시간마다 자동 업데이트",
+  "zzRemaining": "남은 기간",
+  "zzExpiryDate": "{date} 만료",
+  "zzTotalQuota": "총 {quota}",
+  "zzQuickClipboard": "클립보드",
+  "zzQuickScan": "스캔",
+  "zzQuickLocalFile": "로컬 파일",
+  "@zzAutoUpdateHours": {
+    "placeholders": {
+      "hours": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzExpiryDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzTotalQuota": {
+    "placeholders": {
+      "quota": {
+        "type": "Object"
+      }
+    }
+  },
+  "zzRenewUpgradeShort": "갱신 / 업그레이드",
+  "zzRemainingDayUnit": "일"
 }

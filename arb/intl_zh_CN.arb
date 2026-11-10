@@ -81,7 +81,6 @@
   "profileUrlNullValidationDesc": "请输入配置URL",
   "profileUrlInvalidValidationDesc": "请输入有效配置URL",
   "autoUpdate": "自动更新",
-  "autoUpdateInterval": "自动更新间隔",
   "profileAutoUpdateIntervalNullValidationDesc": "请输入自动更新间隔时间",
   "profileAutoUpdateIntervalInvalidValidationDesc": "请输入有效间隔时间格式",
   "themeMode": "主题模式",
@@ -1135,7 +1134,13 @@
   "residentialExitSheetTitle": "选择家宽出口",
   "residentialExitSheetSubtitle": "AI 与需要代理的分组会跟随所选线路",
   "residentialUseExit": "使用{name}",
-  "@residentialUseExit": {"placeholders": {"name": {"type": "String"}}},
+  "@residentialUseExit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "residentialSelected": "已选择",
   "residentialUnavailable": "不可用",
   "residentialApplying": "正在应用…",
@@ -1320,5 +1325,83 @@
     "placeholders": {
       "value": {}
     }
-  }
+  },
+  "updateAll": "更新全部",
+  "importSubscription": "导入订阅",
+  "inUse": "使用中",
+  "renewUpgrade": "续费 / 升级套餐",
+  "copySubscriptionLink": "复制订阅链接",
+  "currentUsage": "本期已用",
+  "currentExpiry": "到期",
+  "autoUpdateInterval": "自动更新间隔",
+  "residentialOutbound": "住宅出口",
+  "zzAutoUpdateIntervalLabel": "每{count} {unit}自动更新",
+  "@zzAutoUpdateIntervalLabel": {
+    "placeholders": {
+      "count": {},
+      "unit": {}
+    }
+  },
+  "immediateUpdate": "立即更新",
+  "expiredStatus": "已过期",
+  "subscriptionLink": "订阅链接",
+  "otherProfilesTitle": "其他配置",
+  "profileSwitchNote": "切换后立即生效；解析失败时保留当前配置",
+  "switchProfileShort": "切换",
+  "pasteFromClipboardImport": "从剪贴板导入",
+  "chooseFile": "选择文件",
+  "zzProfileExpiredDays": "订阅链接 · 已过期 {count} 天",
+  "zzProfileImportedOn": "本地文件 · {date} 导入",
+  "zzProfileBasedOnOverrides": "基于当前订阅 · {count} 条覆写规则",
+  "zzProfileImportHint": "还可以：从剪贴板粘贴链接、选择本地 YAML 文件，或在浏览器打开 {scheme} 导入链接",
+  "@zzProfileExpiredDays": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "@zzProfileBasedOnOverrides": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportHint": {
+    "placeholders": {
+      "scheme": {}
+    }
+  },
+  "zzAutoUpdateHours": "每 {hours} 小时自动更新",
+  "zzRemaining": "剩余",
+  "zzExpiryDate": "{date} 到期",
+  "zzTotalQuota": "共 {quota}",
+  "zzQuickClipboard": "剪贴板",
+  "zzQuickScan": "扫码",
+  "zzQuickLocalFile": "本地文件",
+  "@zzAutoUpdateHours": {
+    "placeholders": {
+      "hours": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzExpiryDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzTotalQuota": {
+    "placeholders": {
+      "quota": {
+        "type": "Object"
+      }
+    }
+  },
+  "zzRenewUpgradeShort": "续费 / 升级",
+  "zzRemainingDayUnit": "天"
 }

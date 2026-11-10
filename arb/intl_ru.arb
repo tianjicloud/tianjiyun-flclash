@@ -81,7 +81,6 @@
   "profileUrlNullValidationDesc": "Введите URL профиля",
   "profileUrlInvalidValidationDesc": "Введите корректный URL профиля",
   "autoUpdate": "Автообновление",
-  "autoUpdateInterval": "Интервал автообновления",
   "profileAutoUpdateIntervalNullValidationDesc": "Введите интервал автообновления",
   "profileAutoUpdateIntervalInvalidValidationDesc": "Введите корректный интервал",
   "themeMode": "Режим темы",
@@ -1135,7 +1134,13 @@
   "residentialExitSheetTitle": "Выберите домашний выход",
   "residentialExitSheetSubtitle": "AI и группы, которым нужен прокси, будут использовать выбранный маршрут.",
   "residentialUseExit": "Использовать {name}",
-  "@residentialUseExit": {"placeholders": {"name": {"type": "String"}}},
+  "@residentialUseExit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "residentialSelected": "Выбран",
   "residentialUnavailable": "Недоступен",
   "residentialApplying": "Применение…",
@@ -1320,5 +1325,83 @@
     "placeholders": {
       "value": {}
     }
-  }
+  },
+  "updateAll": "Обновить все",
+  "importSubscription": "Импортировать подписку",
+  "inUse": "Используется",
+  "renewUpgrade": "Продлить / сменить план",
+  "copySubscriptionLink": "Копировать ссылку подписки",
+  "currentUsage": "Использовано за период",
+  "currentExpiry": "Истекает",
+  "autoUpdateInterval": "Интервал автообновления",
+  "residentialOutbound": "Домашний выход",
+  "zzAutoUpdateIntervalLabel": "Автообновление каждые {count} {unit}",
+  "@zzAutoUpdateIntervalLabel": {
+    "placeholders": {
+      "count": {},
+      "unit": {}
+    }
+  },
+  "immediateUpdate": "Обновить сейчас",
+  "expiredStatus": "Истекла",
+  "subscriptionLink": "Ссылка подписки",
+  "otherProfilesTitle": "Другие конфигурации",
+  "profileSwitchNote": "Изменения применяются сразу; при ошибке разбора сохраняется текущая конфигурация.",
+  "switchProfileShort": "Переключить",
+  "pasteFromClipboardImport": "Импорт из буфера",
+  "chooseFile": "Выбрать файл",
+  "zzProfileExpiredDays": "Ссылка подписки · истекла {count} дн. назад",
+  "zzProfileImportedOn": "Локальный файл · импортирован {date}",
+  "zzProfileBasedOnOverrides": "На основе текущей подписки · правил переопределения: {count}",
+  "zzProfileImportHint": "Можно вставить ссылку из буфера обмена, выбрать локальный YAML-файл или открыть {scheme} в браузере для импорта ссылки.",
+  "@zzProfileExpiredDays": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "@zzProfileBasedOnOverrides": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportHint": {
+    "placeholders": {
+      "scheme": {}
+    }
+  },
+  "zzAutoUpdateHours": "автообновление каждые {hours} ч",
+  "zzRemaining": "Осталось",
+  "zzExpiryDate": "Истекает {date}",
+  "zzTotalQuota": "Всего {quota}",
+  "zzQuickClipboard": "Буфер обмена",
+  "zzQuickScan": "Сканировать",
+  "zzQuickLocalFile": "Локальный файл",
+  "@zzAutoUpdateHours": {
+    "placeholders": {
+      "hours": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzExpiryDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzTotalQuota": {
+    "placeholders": {
+      "quota": {
+        "type": "Object"
+      }
+    }
+  },
+  "zzRenewUpgradeShort": "Продлить / улучшить",
+  "zzRemainingDayUnit": "дн."
 }

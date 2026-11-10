@@ -276,6 +276,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m114(count) => "${Intl.plural(count, other: '${count}년 전')}";
 
+  static String m115(hours) => "${hours}시간마다 자동 업데이트";
+
+  static String m116(count, unit) => "${count}${unit}마다 자동 업데이트";
+
+  static String m117(date) => "${date} 만료";
+
+  static String m118(count) => "현재 구독 기반 · 재정의 규칙 ${count}개";
+
+  static String m119(count) => "구독 링크 · ${count}일 전에 만료";
+
+  static String m120(scheme) =>
+      "클립보드에서 링크를 붙여넣거나 로컬 YAML 파일을 선택하거나 브라우저에서 ${scheme}를 열어 링크를 가져올 수 있습니다.";
+
+  static String m121(date) => "로컬 파일 · ${date} 가져옴";
+
+  static String m122(quota) => "총 ${quota}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("정보"),
@@ -548,6 +565,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "checkUpdate": MessageLookupByLibrary.simpleMessage("업데이트 확인"),
     "checkUpdateError": MessageLookupByLibrary.simpleMessage("이미 최신 버전입니다"),
     "checkingExit": MessageLookupByLibrary.simpleMessage("출구 확인 중…"),
+    "chooseFile": MessageLookupByLibrary.simpleMessage("파일 선택"),
     "cipher": MessageLookupByLibrary.simpleMessage("암호화 방식"),
     "clearData": MessageLookupByLibrary.simpleMessage("데이터 지우기"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -616,6 +634,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "copyRequest": MessageLookupByLibrary.simpleMessage("요청 복사"),
     "copyResponse": MessageLookupByLibrary.simpleMessage("응답 복사"),
     "copyResponseBody": MessageLookupByLibrary.simpleMessage("응답 본문 복사"),
+    "copySubscriptionLink": MessageLookupByLibrary.simpleMessage("구독 링크 복사"),
     "copySuccess": MessageLookupByLibrary.simpleMessage("복사했습니다"),
     "core": MessageLookupByLibrary.simpleMessage("코어"),
     "coreBlockedByPolicyTip": m16,
@@ -630,9 +649,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("만들기"),
     "createProfileFromUrlTip": m18,
     "creationTime": MessageLookupByLibrary.simpleMessage("생성 시간"),
+    "currentExpiry": MessageLookupByLibrary.simpleMessage("만료"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "시작 버튼이 있어 제거할 수 없습니다",
     ),
+    "currentUsage": MessageLookupByLibrary.simpleMessage("이번 기간 사용량"),
     "custom": MessageLookupByLibrary.simpleMessage("사용자 지정"),
     "customColor": MessageLookupByLibrary.simpleMessage("사용자 지정 색상"),
     "customImportDroppedSubRules": m19,
@@ -851,6 +872,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exitNodes": MessageLookupByLibrary.simpleMessage("출구 노드"),
     "expectedStatus": MessageLookupByLibrary.simpleMessage("예상 상태"),
     "expireTime": MessageLookupByLibrary.simpleMessage("만료 시간"),
+    "expiredStatus": MessageLookupByLibrary.simpleMessage("만료됨"),
     "exportCertificate": MessageLookupByLibrary.simpleMessage("인증서 내보내기"),
     "exportFile": MessageLookupByLibrary.simpleMessage("파일 내보내기"),
     "exportHar": MessageLookupByLibrary.simpleMessage("HAR 내보내기"),
@@ -1015,6 +1037,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ignoreBatteryOptimization": MessageLookupByLibrary.simpleMessage(
       "배터리 최적화 무시",
     ),
+    "immediateUpdate": MessageLookupByLibrary.simpleMessage("지금 업데이트"),
     "import": MessageLookupByLibrary.simpleMessage("가져오기"),
     "importConfigInvalid": MessageLookupByLibrary.simpleMessage(
       "가져올 수 있는 구성 파일이 아닙니다",
@@ -1024,8 +1047,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "importFile": MessageLookupByLibrary.simpleMessage("파일에서 가져오기"),
     "importFromLink": MessageLookupByLibrary.simpleMessage("링크에서 가져오기"),
+    "importSubscription": MessageLookupByLibrary.simpleMessage("구독 가져오기"),
     "importUrl": MessageLookupByLibrary.simpleMessage("URL에서 가져오기"),
     "inProgress": MessageLookupByLibrary.simpleMessage("진행 중"),
+    "inUse": MessageLookupByLibrary.simpleMessage("사용 중"),
     "inbound": MessageLookupByLibrary.simpleMessage("인바운드"),
     "includeInterface": MessageLookupByLibrary.simpleMessage("포함할 인터페이스"),
     "includeInterfaceDesc": MessageLookupByLibrary.simpleMessage(
@@ -1524,6 +1549,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "originalUrl": MessageLookupByLibrary.simpleMessage("원래 URL"),
     "other": MessageLookupByLibrary.simpleMessage("기타"),
     "otherContributors": MessageLookupByLibrary.simpleMessage("기타 기여자"),
+    "otherProfilesTitle": MessageLookupByLibrary.simpleMessage("기타 구성"),
     "outbound": MessageLookupByLibrary.simpleMessage("아웃바운드"),
     "outboundExit": MessageLookupByLibrary.simpleMessage("출구"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("아웃바운드 IP"),
@@ -1544,6 +1570,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "parsePureIp": MessageLookupByLibrary.simpleMessage("순수 IP 분석"),
     "password": MessageLookupByLibrary.simpleMessage("비밀번호"),
     "paste": MessageLookupByLibrary.simpleMessage("붙여넣기"),
+    "pasteFromClipboardImport": MessageLookupByLibrary.simpleMessage(
+      "클립보드에서 가져오기",
+    ),
     "peers": MessageLookupByLibrary.simpleMessage("피어"),
     "pickFromAlbum": MessageLookupByLibrary.simpleMessage("앨범에서 선택"),
     "pinWindow": MessageLookupByLibrary.simpleMessage("창 고정"),
@@ -1603,6 +1632,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "이 프로필에만 적용되며, 추가하지 않은 항목은 기본값을 사용합니다.",
+    ),
+    "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
+      "전환 내용은 즉시 적용됩니다. 파싱에 실패하면 현재 구성을 유지합니다.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "이 프로필에만 적용되며 네트워크 설정의 TUN 덮어쓰기 항목보다 우선합니다.",
@@ -1676,6 +1708,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remove": MessageLookupByLibrary.simpleMessage("제거"),
     "rename": MessageLookupByLibrary.simpleMessage("이름 변경"),
     "renew": MessageLookupByLibrary.simpleMessage("갱신"),
+    "renewUpgrade": MessageLookupByLibrary.simpleMessage("갱신 / 요금제 업그레이드"),
     "replace": MessageLookupByLibrary.simpleMessage("바꾸기"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("모두 바꾸기"),
     "request": MessageLookupByLibrary.simpleMessage("요청"),
@@ -1740,6 +1773,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
       "이 구독에는 현재 사용할 수 있는 주거용 출구가 없습니다. 구독 정책을 계속 사용하거나 구독 패널을 확인하세요.",
     ),
+    "residentialOutbound": MessageLookupByLibrary.simpleMessage("가정용 회선"),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "회선을 전환하는 중입니다. 잠시 기다려 주세요.",
     ),
@@ -2106,11 +2140,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "submit": MessageLookupByLibrary.simpleMessage("제출"),
     "subscriptionDetails": MessageLookupByLibrary.simpleMessage("상세"),
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage("구독 정보"),
+    "subscriptionLink": MessageLookupByLibrary.simpleMessage("구독 링크"),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "sudo 비밀번호를 입력하세요",
     ),
     "suspended": MessageLookupByLibrary.simpleMessage("일시 중지됨…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("프로필 전환"),
+    "switchProfileShort": MessageLookupByLibrary.simpleMessage("전환"),
     "sync": MessageLookupByLibrary.simpleMessage("동기화"),
     "system": MessageLookupByLibrary.simpleMessage("시스템"),
     "systemApp": MessageLookupByLibrary.simpleMessage("시스템 앱"),
@@ -2193,6 +2229,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unnamed": MessageLookupByLibrary.simpleMessage("이름 없음"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("창 고정 해제"),
     "update": MessageLookupByLibrary.simpleMessage("업데이트"),
+    "updateAll": MessageLookupByLibrary.simpleMessage("모두 업데이트"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
       "업데이트를 다운로드할 수 없습니다.",
     ),
@@ -2245,5 +2282,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "yearsAgoShort": m114,
     "yes": MessageLookupByLibrary.simpleMessage("예"),
     "zhCN": MessageLookupByLibrary.simpleMessage("중국어 간체"),
+    "zzAutoUpdateHours": m115,
+    "zzAutoUpdateIntervalLabel": m116,
+    "zzExpiryDate": m117,
+    "zzProfileBasedOnOverrides": m118,
+    "zzProfileExpiredDays": m119,
+    "zzProfileImportHint": m120,
+    "zzProfileImportedOn": m121,
+    "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("클립보드"),
+    "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("로컬 파일"),
+    "zzQuickScan": MessageLookupByLibrary.simpleMessage("스캔"),
+    "zzRemaining": MessageLookupByLibrary.simpleMessage("남은 기간"),
+    "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("일"),
+    "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage("갱신 / 업그레이드"),
+    "zzTotalQuota": m122,
   };
 }

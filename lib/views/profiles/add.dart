@@ -19,21 +19,7 @@ class AddProfileMenu extends ConsumerWidget {
   final Widget Function(PopupOpen open) builder;
 
   Future<void> _toScan(BuildContext context, WidgetRef ref) async {
-    final profilesAction = ref.read(profilesActionProvider.notifier);
-    if (system.isDesktop) {
-      unawaited(profilesAction.addProfileFormQrCode());
-      return;
-    }
-    final url = await BaseNavigator.push(context, const ScanPage());
-    if (url == null) {
-      return;
-    }
-    if (context.mounted) {
-      await whenRouteUncovered(context);
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      unawaited(profilesAction.addProfileFromLink(url));
-    });
+    await addProfileFromQrCode(context, ref);
   }
 
   Future<void> _toAdd(BuildContext context, WidgetRef ref) async {
@@ -42,9 +28,7 @@ class AddProfileMenu extends ConsumerWidget {
       context: context,
       builder: (_) => const _ProfileAddForm(),
     );
-    if (request == null || !context.mounted) {
-      return;
-    }
+    if (request == null || !context.mounted) return;
     switch (request.source) {
       case _ProfileAddSource.link:
         unawaited(
@@ -54,13 +38,10 @@ class AddProfileMenu extends ConsumerWidget {
             ageSecretKey: request.ageSecretKey,
           ),
         );
-        return;
       case _ProfileAddSource.file:
         unawaited(profilesAction.addProfileFormFile());
-        return;
       case _ProfileAddSource.custom:
         _toAddCustom(context, ref);
-        return;
     }
   }
 
@@ -182,6 +163,20 @@ class AddProfileMenu extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<void> addProfileFromQrCode(BuildContext context, WidgetRef ref) async {
+  final profilesAction = ref.read(profilesActionProvider.notifier);
+  if (system.isDesktop) {
+    unawaited(profilesAction.addProfileFormQrCode());
+    return;
+  }
+  final url = await BaseNavigator.push(context, const ScanPage());
+  if (url == null) return;
+  if (context.mounted) await whenRouteUncovered(context);
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    unawaited(profilesAction.addProfileFromLink(url));
+  });
 }
 
 enum _ProfileAddSource { link, file, custom }

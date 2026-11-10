@@ -272,6 +272,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m114(count) => "${count} 年前";
 
+  static String m115(hours) => "${hours} 時間ごとに自動更新";
+
+  static String m116(count, unit) => "${count}${unit}ごとに自動更新";
+
+  static String m117(date) => "${date} に期限切れ";
+
+  static String m118(count) => "現在のサブスクリプションを基に · 上書きルール${count}件";
+
+  static String m119(count) => "サブスクリプションリンク · ${count}日前に期限切れ";
+
+  static String m120(scheme) =>
+      "クリップボードからリンクを貼り付けるか、ローカル YAML ファイルを選択するか、ブラウザーで ${scheme} を開いてリンクをインポートできます。";
+
+  static String m121(date) => "ローカルファイル · ${date}にインポート";
+
+  static String m122(quota) => "合計 ${quota}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("アプリについて"),
@@ -552,6 +569,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "checkUpdate": MessageLookupByLibrary.simpleMessage("更新を確認"),
     "checkUpdateError": MessageLookupByLibrary.simpleMessage("すでに最新バージョンです"),
     "checkingExit": MessageLookupByLibrary.simpleMessage("出口を確認中…"),
+    "chooseFile": MessageLookupByLibrary.simpleMessage("ファイルを選択"),
     "cipher": MessageLookupByLibrary.simpleMessage("暗号方式"),
     "clearData": MessageLookupByLibrary.simpleMessage("データを消去"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -624,6 +642,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "copyRequest": MessageLookupByLibrary.simpleMessage("リクエストをコピー"),
     "copyResponse": MessageLookupByLibrary.simpleMessage("レスポンスをコピー"),
     "copyResponseBody": MessageLookupByLibrary.simpleMessage("レスポンス本文をコピー"),
+    "copySubscriptionLink": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションリンクをコピー",
+    ),
     "copySuccess": MessageLookupByLibrary.simpleMessage("コピーしました"),
     "core": MessageLookupByLibrary.simpleMessage("コア"),
     "coreBlockedByPolicyTip": m16,
@@ -638,9 +659,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("作成"),
     "createProfileFromUrlTip": m18,
     "creationTime": MessageLookupByLibrary.simpleMessage("作成日時"),
+    "currentExpiry": MessageLookupByLibrary.simpleMessage("有効期限"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "起動ボタンがあるため削除できません",
     ),
+    "currentUsage": MessageLookupByLibrary.simpleMessage("今月の使用量"),
     "custom": MessageLookupByLibrary.simpleMessage("カスタム"),
     "customColor": MessageLookupByLibrary.simpleMessage("カスタムカラー"),
     "customImportDroppedSubRules": m19,
@@ -859,6 +882,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exitNodes": MessageLookupByLibrary.simpleMessage("出口ノード"),
     "expectedStatus": MessageLookupByLibrary.simpleMessage("期待するステータス"),
     "expireTime": MessageLookupByLibrary.simpleMessage("有効期限"),
+    "expiredStatus": MessageLookupByLibrary.simpleMessage("期限切れ"),
     "exportCertificate": MessageLookupByLibrary.simpleMessage("証明書をエクスポート"),
     "exportFile": MessageLookupByLibrary.simpleMessage("ファイルをエクスポート"),
     "exportHar": MessageLookupByLibrary.simpleMessage("HAR をエクスポート"),
@@ -1025,6 +1049,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ignoreBatteryOptimization": MessageLookupByLibrary.simpleMessage(
       "電池の最適化を無視",
     ),
+    "immediateUpdate": MessageLookupByLibrary.simpleMessage("今すぐ更新"),
     "import": MessageLookupByLibrary.simpleMessage("インポート"),
     "importConfigInvalid": MessageLookupByLibrary.simpleMessage(
       "このファイルはインポートできる設定ではありません",
@@ -1034,8 +1059,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "importFile": MessageLookupByLibrary.simpleMessage("ファイルからインポート"),
     "importFromLink": MessageLookupByLibrary.simpleMessage("リンクからインポート"),
+    "importSubscription": MessageLookupByLibrary.simpleMessage("サブスクリプションを追加"),
     "importUrl": MessageLookupByLibrary.simpleMessage("URLからインポート"),
     "inProgress": MessageLookupByLibrary.simpleMessage("進行中"),
+    "inUse": MessageLookupByLibrary.simpleMessage("使用中"),
     "inbound": MessageLookupByLibrary.simpleMessage("インバウンド"),
     "includeInterface": MessageLookupByLibrary.simpleMessage("対象インターフェース"),
     "includeInterfaceDesc": MessageLookupByLibrary.simpleMessage(
@@ -1544,6 +1571,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "originalUrl": MessageLookupByLibrary.simpleMessage("元の URL"),
     "other": MessageLookupByLibrary.simpleMessage("その他"),
     "otherContributors": MessageLookupByLibrary.simpleMessage("その他の貢献者"),
+    "otherProfilesTitle": MessageLookupByLibrary.simpleMessage("その他の設定"),
     "outbound": MessageLookupByLibrary.simpleMessage("アウトバウンド"),
     "outboundExit": MessageLookupByLibrary.simpleMessage("出口"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("アウトバウンド IP"),
@@ -1564,6 +1592,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "parsePureIp": MessageLookupByLibrary.simpleMessage("純粋なIPを解析"),
     "password": MessageLookupByLibrary.simpleMessage("パスワード"),
     "paste": MessageLookupByLibrary.simpleMessage("貼り付け"),
+    "pasteFromClipboardImport": MessageLookupByLibrary.simpleMessage(
+      "クリップボードから追加",
+    ),
     "peers": MessageLookupByLibrary.simpleMessage("ピア"),
     "pickFromAlbum": MessageLookupByLibrary.simpleMessage("アルバムから選択"),
     "pinWindow": MessageLookupByLibrary.simpleMessage("最前面に固定"),
@@ -1623,6 +1654,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "このプロファイルにのみ適用されます。追加していない項目はデフォルト値を使用します。",
+    ),
+    "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
+      "切り替えはすぐに反映されます。解析に失敗した場合は現在の設定を維持します。",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "このプロファイルにのみ適用され、ネットワーク設定の TUN 上書き項目より優先されます。",
@@ -1698,6 +1732,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remove": MessageLookupByLibrary.simpleMessage("削除"),
     "rename": MessageLookupByLibrary.simpleMessage("名前を変更"),
     "renew": MessageLookupByLibrary.simpleMessage("更新する"),
+    "renewUpgrade": MessageLookupByLibrary.simpleMessage("更新 / プランをアップグレード"),
     "replace": MessageLookupByLibrary.simpleMessage("置換"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("すべて置換"),
     "request": MessageLookupByLibrary.simpleMessage("リクエスト"),
@@ -1762,6 +1797,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
       "このサブスクリプションには現在利用できる住宅出口がありません。サブスクリプションのポリシーを使うか、サブスクリプションパネルを確認してください。",
     ),
+    "residentialOutbound": MessageLookupByLibrary.simpleMessage("住宅回線"),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "回線を切り替えています。しばらくお待ちください。",
     ),
@@ -2134,9 +2170,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "submit": MessageLookupByLibrary.simpleMessage("送信"),
     "subscriptionDetails": MessageLookupByLibrary.simpleMessage("詳細"),
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage("サブスクリプション情報"),
+    "subscriptionLink": MessageLookupByLibrary.simpleMessage("サブスクリプションリンク"),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage("sudo のパスワードを入力"),
     "suspended": MessageLookupByLibrary.simpleMessage("一時停止中…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("プロファイルを切り替え"),
+    "switchProfileShort": MessageLookupByLibrary.simpleMessage("切替"),
     "sync": MessageLookupByLibrary.simpleMessage("同期"),
     "system": MessageLookupByLibrary.simpleMessage("システム"),
     "systemApp": MessageLookupByLibrary.simpleMessage("システムアプリ"),
@@ -2215,6 +2253,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unnamed": MessageLookupByLibrary.simpleMessage("名称未設定"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("固定を解除"),
     "update": MessageLookupByLibrary.simpleMessage("更新"),
+    "updateAll": MessageLookupByLibrary.simpleMessage("すべて更新"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
       "更新をダウンロードできませんでした。",
     ),
@@ -2269,5 +2308,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "yearsAgoShort": m114,
     "yes": MessageLookupByLibrary.simpleMessage("はい"),
     "zhCN": MessageLookupByLibrary.simpleMessage("簡体字中国語"),
+    "zzAutoUpdateHours": m115,
+    "zzAutoUpdateIntervalLabel": m116,
+    "zzExpiryDate": m117,
+    "zzProfileBasedOnOverrides": m118,
+    "zzProfileExpiredDays": m119,
+    "zzProfileImportHint": m120,
+    "zzProfileImportedOn": m121,
+    "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("クリップボード"),
+    "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("ローカルファイル"),
+    "zzQuickScan": MessageLookupByLibrary.simpleMessage("スキャン"),
+    "zzRemaining": MessageLookupByLibrary.simpleMessage("残り"),
+    "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("日"),
+    "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage("更新 / アップグレード"),
+    "zzTotalQuota": m122,
   };
 }

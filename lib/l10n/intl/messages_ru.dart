@@ -304,6 +304,24 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m114(count) =>
       "${Intl.plural(count, one: '${count} г. назад', few: '${count} г. назад', many: '${count} л. назад', other: '${count} г. назад')}";
 
+  static String m115(hours) => "автообновление каждые ${hours} ч";
+
+  static String m116(count, unit) => "Автообновление каждые ${count} ${unit}";
+
+  static String m117(date) => "Истекает ${date}";
+
+  static String m118(count) =>
+      "На основе текущей подписки · правил переопределения: ${count}";
+
+  static String m119(count) => "Ссылка подписки · истекла ${count} дн. назад";
+
+  static String m120(scheme) =>
+      "Можно вставить ссылку из буфера обмена, выбрать локальный YAML-файл или открыть ${scheme} в браузере для импорта ссылки.";
+
+  static String m121(date) => "Локальный файл · импортирован ${date}";
+
+  static String m122(quota) => "Всего ${quota}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("О программе"),
@@ -680,6 +698,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "У вас уже последняя версия",
     ),
     "checkingExit": MessageLookupByLibrary.simpleMessage("Проверяем выход…"),
+    "chooseFile": MessageLookupByLibrary.simpleMessage("Выбрать файл"),
     "cipher": MessageLookupByLibrary.simpleMessage("Шифр"),
     "clearData": MessageLookupByLibrary.simpleMessage("Очистить данные"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -776,6 +795,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "copyResponseBody": MessageLookupByLibrary.simpleMessage(
       "Копировать тело ответа",
     ),
+    "copySubscriptionLink": MessageLookupByLibrary.simpleMessage(
+      "Копировать ссылку подписки",
+    ),
     "copySuccess": MessageLookupByLibrary.simpleMessage("Скопировано"),
     "core": MessageLookupByLibrary.simpleMessage("Ядро"),
     "coreBlockedByPolicyTip": m16,
@@ -790,8 +812,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("Создать"),
     "createProfileFromUrlTip": m18,
     "creationTime": MessageLookupByLibrary.simpleMessage("Время создания"),
+    "currentExpiry": MessageLookupByLibrary.simpleMessage("Истекает"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Содержит кнопку запуска, удалить нельзя",
+    ),
+    "currentUsage": MessageLookupByLibrary.simpleMessage(
+      "Использовано за период",
     ),
     "custom": MessageLookupByLibrary.simpleMessage("Вручную"),
     "customColor": MessageLookupByLibrary.simpleMessage("Свой цвет"),
@@ -1077,6 +1103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exitNodes": MessageLookupByLibrary.simpleMessage("Выходные узлы"),
     "expectedStatus": MessageLookupByLibrary.simpleMessage("Ожидаемый статус"),
     "expireTime": MessageLookupByLibrary.simpleMessage("Срок действия"),
+    "expiredStatus": MessageLookupByLibrary.simpleMessage("Истекла"),
     "exportCertificate": MessageLookupByLibrary.simpleMessage(
       "Экспортировать сертификат",
     ),
@@ -1271,6 +1298,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ignoreBatteryOptimization": MessageLookupByLibrary.simpleMessage(
       "Игнорировать оптимизацию батареи",
     ),
+    "immediateUpdate": MessageLookupByLibrary.simpleMessage("Обновить сейчас"),
     "import": MessageLookupByLibrary.simpleMessage("Импорт"),
     "importConfigInvalid": MessageLookupByLibrary.simpleMessage(
       "Этот файл не является конфигурацией, которую можно импортировать",
@@ -1280,8 +1308,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "importFile": MessageLookupByLibrary.simpleMessage("Импорт из файла"),
     "importFromLink": MessageLookupByLibrary.simpleMessage("Импорт по ссылке"),
+    "importSubscription": MessageLookupByLibrary.simpleMessage(
+      "Импортировать подписку",
+    ),
     "importUrl": MessageLookupByLibrary.simpleMessage("Импорт по URL"),
     "inProgress": MessageLookupByLibrary.simpleMessage("Выполняется"),
+    "inUse": MessageLookupByLibrary.simpleMessage("Используется"),
     "inbound": MessageLookupByLibrary.simpleMessage("Входящие"),
     "includeInterface": MessageLookupByLibrary.simpleMessage(
       "Включённые интерфейсы",
@@ -1900,6 +1932,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "otherContributors": MessageLookupByLibrary.simpleMessage(
       "Другие участники",
     ),
+    "otherProfilesTitle": MessageLookupByLibrary.simpleMessage(
+      "Другие конфигурации",
+    ),
     "outbound": MessageLookupByLibrary.simpleMessage("Исходящие"),
     "outboundExit": MessageLookupByLibrary.simpleMessage("Выход"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("Исходящий IP"),
@@ -1928,6 +1963,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "parsePureIp": MessageLookupByLibrary.simpleMessage("Разбирать чистые IP"),
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "paste": MessageLookupByLibrary.simpleMessage("Вставить"),
+    "pasteFromClipboardImport": MessageLookupByLibrary.simpleMessage(
+      "Импорт из буфера",
+    ),
     "peers": MessageLookupByLibrary.simpleMessage("Пиры"),
     "pickFromAlbum": MessageLookupByLibrary.simpleMessage("Выбрать из галереи"),
     "pinWindow": MessageLookupByLibrary.simpleMessage(
@@ -2003,6 +2041,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Действует только для этого профиля; не добавленные параметры используют значения по умолчанию.",
+    ),
+    "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
+      "Изменения применяются сразу; при ошибке разбора сохраняется текущая конфигурация.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Действует только для этого профиля и имеет приоритет над переопределяемыми параметрами TUN в настройках сети.",
@@ -2088,6 +2129,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "remove": MessageLookupByLibrary.simpleMessage("Убрать"),
     "rename": MessageLookupByLibrary.simpleMessage("Переименовать"),
     "renew": MessageLookupByLibrary.simpleMessage("Продлить"),
+    "renewUpgrade": MessageLookupByLibrary.simpleMessage(
+      "Продлить / сменить план",
+    ),
     "replace": MessageLookupByLibrary.simpleMessage("Заменить"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("Заменить все"),
     "request": MessageLookupByLibrary.simpleMessage("Запрос"),
@@ -2155,6 +2199,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
       "В этой подписке сейчас нет доступного домашнего выхода. Продолжайте использовать политику подписки или проверьте панель подписки.",
+    ),
+    "residentialOutbound": MessageLookupByLibrary.simpleMessage(
+      "Домашний выход",
     ),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "Переключение линии. Подождите.",
@@ -2606,11 +2653,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage(
       "Информация о подписке",
     ),
+    "subscriptionLink": MessageLookupByLibrary.simpleMessage("Ссылка подписки"),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Введите пароль для sudo",
     ),
     "suspended": MessageLookupByLibrary.simpleMessage("Приостановлено…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("Сменить профиль"),
+    "switchProfileShort": MessageLookupByLibrary.simpleMessage("Переключить"),
     "sync": MessageLookupByLibrary.simpleMessage("Синхронизация"),
     "system": MessageLookupByLibrary.simpleMessage("Система"),
     "systemApp": MessageLookupByLibrary.simpleMessage("Системные приложения"),
@@ -2711,6 +2760,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unnamed": MessageLookupByLibrary.simpleMessage("Без названия"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("Открепить окно"),
     "update": MessageLookupByLibrary.simpleMessage("Обновить"),
+    "updateAll": MessageLookupByLibrary.simpleMessage("Обновить все"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось загрузить обновление.",
     ),
@@ -2775,5 +2825,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "yearsAgoShort": m114,
     "yes": MessageLookupByLibrary.simpleMessage("Да"),
     "zhCN": MessageLookupByLibrary.simpleMessage("Упрощённый китайский"),
+    "zzAutoUpdateHours": m115,
+    "zzAutoUpdateIntervalLabel": m116,
+    "zzExpiryDate": m117,
+    "zzProfileBasedOnOverrides": m118,
+    "zzProfileExpiredDays": m119,
+    "zzProfileImportHint": m120,
+    "zzProfileImportedOn": m121,
+    "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("Буфер обмена"),
+    "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("Локальный файл"),
+    "zzQuickScan": MessageLookupByLibrary.simpleMessage("Сканировать"),
+    "zzRemaining": MessageLookupByLibrary.simpleMessage("Осталось"),
+    "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("дн."),
+    "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage(
+      "Продлить / улучшить",
+    ),
+    "zzTotalQuota": m122,
   };
 }

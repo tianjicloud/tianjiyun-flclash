@@ -81,7 +81,6 @@
   "profileUrlNullValidationDesc": "Please enter the profile URL",
   "profileUrlInvalidValidationDesc": "Please enter a valid profile URL",
   "autoUpdate": "Auto update",
-  "autoUpdateInterval": "Auto-update interval",
   "profileAutoUpdateIntervalNullValidationDesc": "Please enter the auto-update interval",
   "profileAutoUpdateIntervalInvalidValidationDesc": "Please enter a valid interval",
   "themeMode": "Theme mode",
@@ -1135,7 +1134,13 @@
   "residentialExitSheetTitle": "Choose residential exit",
   "residentialExitSheetSubtitle": "AI and groups that require a proxy follow the selected route.",
   "residentialUseExit": "Use {name}",
-  "@residentialUseExit": {"placeholders": {"name": {"type": "String"}}},
+  "@residentialUseExit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "residentialSelected": "Selected",
   "residentialUnavailable": "Unavailable",
   "residentialApplying": "Applying…",
@@ -1320,5 +1325,83 @@
     "placeholders": {
       "value": {}
     }
-  }
+  },
+  "updateAll": "Update all",
+  "importSubscription": "Import subscription",
+  "inUse": "In use",
+  "renewUpgrade": "Renew / upgrade plan",
+  "copySubscriptionLink": "Copy subscription link",
+  "currentUsage": "Current usage",
+  "currentExpiry": "Expires",
+  "autoUpdateInterval": "Auto-update interval",
+  "residentialOutbound": "Residential exit",
+  "zzAutoUpdateIntervalLabel": "Auto update every {count} {unit}",
+  "@zzAutoUpdateIntervalLabel": {
+    "placeholders": {
+      "count": {},
+      "unit": {}
+    }
+  },
+  "immediateUpdate": "Update now",
+  "expiredStatus": "Expired",
+  "subscriptionLink": "Subscription link",
+  "otherProfilesTitle": "Other profiles",
+  "profileSwitchNote": "Changes apply immediately; if parsing fails, the current configuration is kept.",
+  "switchProfileShort": "Switch",
+  "pasteFromClipboardImport": "Import from clipboard",
+  "chooseFile": "Choose file",
+  "zzProfileExpiredDays": "Subscription link · expired {count} days ago",
+  "zzProfileImportedOn": "Local file · imported {date}",
+  "zzProfileBasedOnOverrides": "Based on current subscription · {count} override rules",
+  "zzProfileImportHint": "You can also paste a link from clipboard, choose a local YAML file, or open {scheme} in a browser to import a link.",
+  "@zzProfileExpiredDays": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "@zzProfileBasedOnOverrides": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportHint": {
+    "placeholders": {
+      "scheme": {}
+    }
+  },
+  "zzAutoUpdateHours": "every {hours} hours auto update",
+  "zzRemaining": "Remaining",
+  "zzExpiryDate": "Expires {date}",
+  "zzTotalQuota": "Total {quota}",
+  "zzQuickClipboard": "Clipboard",
+  "zzQuickScan": "Scan",
+  "zzQuickLocalFile": "Local file",
+  "@zzAutoUpdateHours": {
+    "placeholders": {
+      "hours": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzExpiryDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzTotalQuota": {
+    "placeholders": {
+      "quota": {
+        "type": "Object"
+      }
+    }
+  },
+  "zzRenewUpgradeShort": "Renew / upgrade",
+  "zzRemainingDayUnit": "days"
 }

@@ -81,7 +81,6 @@
   "profileUrlNullValidationDesc": "プロファイルのURLを入力してください",
   "profileUrlInvalidValidationDesc": "有効なプロファイルURLを入力してください",
   "autoUpdate": "自動更新",
-  "autoUpdateInterval": "自動更新間隔",
   "profileAutoUpdateIntervalNullValidationDesc": "自動更新間隔を入力してください",
   "profileAutoUpdateIntervalInvalidValidationDesc": "有効な間隔を入力してください",
   "themeMode": "テーマモード",
@@ -1135,7 +1134,13 @@
   "residentialExitSheetTitle": "住宅回線の出口を選択",
   "residentialExitSheetSubtitle": "AI とプロキシが必要なグループは選択した回線を使用します。",
   "residentialUseExit": "{name}を使用",
-  "@residentialUseExit": {"placeholders": {"name": {"type": "String"}}},
+  "@residentialUseExit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "residentialSelected": "選択中",
   "residentialUnavailable": "利用不可",
   "residentialApplying": "適用中…",
@@ -1320,5 +1325,83 @@
     "placeholders": {
       "value": {}
     }
-  }
+  },
+  "updateAll": "すべて更新",
+  "importSubscription": "サブスクリプションを追加",
+  "inUse": "使用中",
+  "renewUpgrade": "更新 / プランをアップグレード",
+  "copySubscriptionLink": "サブスクリプションリンクをコピー",
+  "currentUsage": "今月の使用量",
+  "currentExpiry": "有効期限",
+  "autoUpdateInterval": "自動更新間隔",
+  "residentialOutbound": "住宅回線",
+  "zzAutoUpdateIntervalLabel": "{count}{unit}ごとに自動更新",
+  "@zzAutoUpdateIntervalLabel": {
+    "placeholders": {
+      "count": {},
+      "unit": {}
+    }
+  },
+  "immediateUpdate": "今すぐ更新",
+  "expiredStatus": "期限切れ",
+  "subscriptionLink": "サブスクリプションリンク",
+  "otherProfilesTitle": "その他の設定",
+  "profileSwitchNote": "切り替えはすぐに反映されます。解析に失敗した場合は現在の設定を維持します。",
+  "switchProfileShort": "切替",
+  "pasteFromClipboardImport": "クリップボードから追加",
+  "chooseFile": "ファイルを選択",
+  "zzProfileExpiredDays": "サブスクリプションリンク · {count}日前に期限切れ",
+  "zzProfileImportedOn": "ローカルファイル · {date}にインポート",
+  "zzProfileBasedOnOverrides": "現在のサブスクリプションを基に · 上書きルール{count}件",
+  "zzProfileImportHint": "クリップボードからリンクを貼り付けるか、ローカル YAML ファイルを選択するか、ブラウザーで {scheme} を開いてリンクをインポートできます。",
+  "@zzProfileExpiredDays": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "@zzProfileBasedOnOverrides": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportHint": {
+    "placeholders": {
+      "scheme": {}
+    }
+  },
+  "zzAutoUpdateHours": "{hours} 時間ごとに自動更新",
+  "zzRemaining": "残り",
+  "zzExpiryDate": "{date} に期限切れ",
+  "zzTotalQuota": "合計 {quota}",
+  "zzQuickClipboard": "クリップボード",
+  "zzQuickScan": "スキャン",
+  "zzQuickLocalFile": "ローカルファイル",
+  "@zzAutoUpdateHours": {
+    "placeholders": {
+      "hours": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzExpiryDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzTotalQuota": {
+    "placeholders": {
+      "quota": {
+        "type": "Object"
+      }
+    }
+  },
+  "zzRenewUpgradeShort": "更新 / アップグレード",
+  "zzRemainingDayUnit": "日"
 }

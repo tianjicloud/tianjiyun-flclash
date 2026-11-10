@@ -10,16 +10,25 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/views/profiles/custom/custom.dart';
 import 'package:fl_clash/views/profiles/extend/extend.dart';
+import 'package:fl_clash/views/profiles/add.dart'
+    show AddProfileMenu, addProfileFromQrCode;
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show
+        BusinessPrimaryButton,
+        BusinessSecondaryButton,
+        DashboardChip,
+        DashboardChipTone;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'add.dart';
 import 'edit.dart';
 import 'preview.dart';
 
 const _infoGap = 4.0;
+double _scaledControlWidth(BuildContext context, double width) =>
+    width * MediaQuery.textScalerOf(context).scale(1);
 
 double get _profileItemHeight {
   final measure = globalState.measure;
@@ -68,28 +77,26 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
     _isUpdating = false;
   }
 
-  List<IconButtonData> _buildActions(List<Profile> profiles) {
+  List<IconButtonData> _buildActions(
+    List<Profile> profiles, {
+    required bool business,
+  }) {
     return profiles.isNotEmpty
         ? [
-            IconButtonData(
-              glyph: AppGlyphs.sync,
-              onPressed: () {
-                _updateProfiles(profiles);
-              },
-              tooltip: context.appLocalizations.update,
-            ),
-            IconButtonData(
-              glyph: AppGlyphs.sort,
-              onPressed: () {
-                showSheet(
-                  context: context,
-                  builder: (_) {
-                    return ReorderableProfilesSheet(profiles: profiles);
-                  },
-                );
-              },
-              tooltip: context.appLocalizations.profilesSort,
-            ),
+            if (!business)
+              IconButtonData(
+                glyph: AppGlyphs.sync,
+                onPressed: () {
+                  _updateProfiles(profiles);
+                },
+                tooltip: context.appLocalizations.update,
+              ),
+            if (!business)
+              IconButtonData(
+                glyph: AppGlyphs.sort,
+                onPressed: () => _showProfileSort(context, profiles),
+                tooltip: context.appLocalizations.profilesSort,
+              ),
           ]
         : [];
   }
@@ -104,6 +111,9 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
         final business = isTianjiSubscriptionProfile(
           ref.watch(currentProfileProvider),
         );
+        final mobileView = ref.watch(isMobileViewProvider);
+        final businessDesktop = business && !mobileView;
+        final businessMobile = business && mobileView;
         final spacing = cardSpacingOf(context, ref.watch(viewModeProvider));
         final picker = widget.picker;
         return Scaffold(
@@ -111,16 +121,35 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
           title: business && !picker
               ? appLocalizations.businessSubscriptions
               : appLocalizations.profiles,
-          iconActions: picker ? const [] : _buildActions(state.profiles),
+          iconActions: picker
+              ? const []
+              : _buildActions(state.profiles, business: business),
           actions: state.profiles.isEmpty || picker
               ? null
               : [
-                  AddProfileMenu(
-                    builder: (open) => IconButton(
-                      tooltip: appLocalizations.addProfile,
-                      onPressed: open,
-                      icon: const GlyphIcon(AppGlyphs.addCircle),
+                  if (businessDesktop) ...[
+                    BusinessSecondaryButton(
+                      label: appLocalizations.updateAll,
+                      width: _scaledControlWidth(context, 110),
+                      onPressed: () => _updateProfiles(state.profiles),
                     ),
+                    const SizedBox(width: 8),
+                  ],
+                  AddProfileMenu(
+                    builder: (open) =>
+                        switch ((businessDesktop, businessMobile)) {
+                          (true, _) => BusinessPrimaryButton(
+                            label: '＋ ${appLocalizations.importSubscription}',
+                            width: _scaledControlWidth(context, 126),
+                            onPressed: open,
+                          ),
+                          (_, true) => _MobileImportButton(onPressed: open),
+                          _ => IconButton(
+                            tooltip: appLocalizations.addProfile,
+                            onPressed: open,
+                            icon: const GlyphIcon(AppGlyphs.addCircle),
+                          ),
+                        },
                   ),
                 ],
           body: NullStatusSwitcher(
@@ -142,7 +171,6 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
                 ? _BusinessProfilesList(
                     profiles: state.profiles,
                     currentProfileId: state.currentProfileId,
-                    spacing: spacing,
                   )
                 : _ProfilesGrid(
                     profiles: state.profiles,
@@ -155,6 +183,13 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
       },
     );
   }
+}
+
+void _showProfileSort(BuildContext context, List<Profile> profiles) {
+  showSheet(
+    context: context,
+    builder: (_) => ReorderableProfilesSheet(profiles: profiles),
+  );
 }
 
 class _ProfilesGrid extends ConsumerStatefulWidget {
@@ -282,12 +317,10 @@ class _BusinessProfilesList extends ConsumerWidget {
   const _BusinessProfilesList({
     required this.profiles,
     required this.currentProfileId,
-    required this.spacing,
   });
 
   final List<Profile> profiles;
   final int? currentProfileId;
-  final double spacing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -298,7 +331,8 @@ class _BusinessProfilesList extends ConsumerWidget {
       for (final profile in profiles)
         if (profile.id != current?.id) profile,
     ];
-    final horizontalInset = ref.watch(isMobileViewProvider) ? 16.0 : 24.0;
+    final mobile = ref.watch(isMobileViewProvider);
+    final horizontalInset = mobile ? 16.0 : 24.0;
     return CustomScrollView(
       key: profilesStoreKey,
       slivers: [
@@ -313,33 +347,39 @@ class _BusinessProfilesList extends ConsumerWidget {
               ),
             ),
           ),
-        if (others.isNotEmpty) ...[
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                horizontalInset,
-                24,
-                horizontalInset,
-                10,
-              ),
-              child: Text(
-                context.appLocalizations.other,
-                style: AppTextStyle.headline.of(context, emphasized: true),
+        if (others.isNotEmpty && mobile) ...[
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+            sliver: SliverToBoxAdapter(
+              child: _BusinessOtherProfilesCard(
+                profiles: others,
+                currentProfileId: currentProfileId,
+                mobile: true,
+                onSwitch: (profileId) {
+                  ref.read(currentProfileIdProvider.notifier).value = profileId;
+                },
+                onSort: () => _showProfileSort(context, profiles),
               ),
             ),
           ),
+        ],
+        if (others.isNotEmpty && !mobile) ...[
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: horizontalInset),
-            sliver: SliverPrismList(
-              itemCount: others.length,
-              gap: spacing,
-              itemBuilder: (_, index) => ProfileItem(
-                profile: others[index],
-                groupValue: currentProfileId,
-                businessCompact: true,
-                onChanged: (profileId) {
+            padding: EdgeInsets.fromLTRB(
+              horizontalInset,
+              24,
+              horizontalInset,
+              0,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: _BusinessOtherProfilesCard(
+                profiles: others,
+                currentProfileId: currentProfileId,
+                mobile: false,
+                onSwitch: (profileId) {
                   ref.read(currentProfileIdProvider.notifier).value = profileId;
                 },
+                onSort: () => _showProfileSort(context, profiles),
               ),
             ),
           ),
@@ -348,23 +388,501 @@ class _BusinessProfilesList extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.fromLTRB(
               horizontalInset,
-              16,
+              14,
               horizontalInset,
               20 + context.bottomInset,
             ),
-            child: AddProfileMenu(
-              builder: (open) => TonalButton(
-                size: TonalButtonSize.bar,
-                glyph: AppGlyphs.addCircle,
-                label: context.appLocalizations.addProfile,
-                onPressed: open,
-              ),
-            ),
+            child: mobile
+                ? _MobileQuickImports(
+                    onClipboard: () => _importClipboard(context, ref),
+                    onScan: () => addProfileFromQrCode(context, ref),
+                    onFile: () => unawaited(
+                      ref
+                          .read(profilesActionProvider.notifier)
+                          .addProfileFormFile(),
+                    ),
+                  )
+                : _BusinessImportHintCard(
+                    onClipboardImport: () => _importClipboard(context, ref),
+                    onChooseFile: () => unawaited(
+                      ref
+                          .read(profilesActionProvider.notifier)
+                          .addProfileFormFile(),
+                    ),
+                  ),
           ),
         ),
       ],
     );
   }
+}
+
+const _businessProfileIconRadius = 10.0;
+
+class _BusinessOtherProfilesCard extends StatelessWidget {
+  const _BusinessOtherProfilesCard({
+    required this.profiles,
+    required this.currentProfileId,
+    required this.mobile,
+    required this.onSwitch,
+    required this.onSort,
+  });
+
+  final List<Profile> profiles;
+  final int? currentProfileId;
+  final bool mobile;
+  final ValueChanged<int?> onSwitch;
+  final VoidCallback onSort;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    return Card(
+      radius: BusinessPalette.cardRadius,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Text(
+                l10n.otherProfilesTitle,
+                style: BusinessText.cardTitle(context),
+              ),
+              if (!mobile) ...[
+                const Spacer(),
+                Flexible(
+                  child: Text(
+                    l10n.profileSwitchNote,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                    style: BusinessText.metaLabel(
+                      context,
+                    ).copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                BusinessSecondaryButton(
+                  label: l10n.sort,
+                  width: _scaledControlWidth(context, 60),
+                  height: 34,
+                  onPressed: onSort,
+                ),
+              ],
+            ],
+          ),
+          for (var index = 0; index < profiles.length; index++) ...[
+            if (index > 0)
+              SizedBox(
+                height: 1,
+                child: ColoredBox(color: Divider.colorOf(context)),
+              ),
+            _BusinessOtherProfileRow(
+              profile: profiles[index],
+              currentProfileId: currentProfileId,
+              mobile: mobile,
+              onSwitch: onSwitch,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _BusinessOtherProfileRow extends StatelessWidget {
+  const _BusinessOtherProfileRow({
+    required this.profile,
+    required this.currentProfileId,
+    required this.mobile,
+    required this.onSwitch,
+  });
+
+  final Profile profile;
+  final int? currentProfileId;
+  final bool mobile;
+  final ValueChanged<int?> onSwitch;
+
+  bool get _expired {
+    final expiry = profile.subscriptionInfo?.expireDate;
+    return profile.type == ProfileType.url &&
+        expiry != null &&
+        expiry.isBefore(DateTime.now());
+  }
+
+  String _subtitle(BuildContext context) {
+    final l10n = context.appLocalizations;
+    return switch (profile.type) {
+      ProfileType.url =>
+        _expired
+            ? l10n.zzProfileExpiredDays(
+                DateTime.now()
+                    .difference(profile.subscriptionInfo!.expireDate!)
+                    .inDays,
+              )
+            : l10n.subscriptionLink,
+      ProfileType.file => l10n.zzProfileImportedOn(
+        profile.lastUpdateDate?.show ?? '',
+      ),
+      ProfileType.custom => l10n.zzProfileBasedOnOverrides(
+        profile.overrides.proxyProviders.length,
+      ),
+    };
+  }
+
+  Glyph get _glyph => switch (profile.type) {
+    ProfileType.url => AppGlyphs.link,
+    ProfileType.file => AppGlyphs.importFile,
+    ProfileType.custom => AppGlyphs.sliders,
+  };
+
+  void _edit(BuildContext context) {
+    ProfileItem(
+      profile: profile,
+      groupValue: currentProfileId,
+      onChanged: onSwitch,
+    )._handleEdit(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final expired = _expired;
+    final custom = profile.type == ProfileType.custom;
+    return ListItem(
+      minTileHeight: 65,
+      minVerticalPadding: 0,
+      padding: EdgeInsets.zero,
+      leading: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: colorScheme.surfaceContainerHigh,
+          shape: AppShape.all(_businessProfileIconRadius),
+        ),
+        child: SizedBox.square(
+          dimension: 36,
+          child: Center(
+            child: GlyphIcon(
+              _glyph,
+              size: 18,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      ),
+      title: Text(
+        profile.realLabel,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: BusinessText.cardTitle(context),
+      ),
+      subtitle: Text(
+        _subtitle(context),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: BusinessText.metaLabel(
+          context,
+        ).copyWith(color: colorScheme.onSurfaceVariant),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 8,
+        children: [
+          if (expired)
+            DashboardChip(
+              label: l10n.expiredStatus,
+              tone: DashboardChipTone.warn,
+            ),
+          if (!mobile)
+            BusinessSecondaryButton(
+              label: custom ? l10n.edit : l10n.switchProfileShort,
+              width: _scaledControlWidth(context, 60),
+              onPressed: custom
+                  ? () => _edit(context)
+                  : () => onSwitch(profile.id),
+            )
+          else if (custom)
+            const GlyphIcon(AppGlyphs.chevronForward),
+        ],
+      ),
+      onTap: custom ? () => _edit(context) : () => onSwitch(profile.id),
+    );
+  }
+}
+
+class _BusinessImportHintCard extends StatelessWidget {
+  const _BusinessImportHintCard({
+    required this.onClipboardImport,
+    required this.onChooseFile,
+  });
+
+  final VoidCallback onClipboardImport;
+  final VoidCallback onChooseFile;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    const scheme = 'tianji://';
+    final hint = l10n.zzProfileImportHint(scheme);
+    final schemeStart = hint.indexOf(scheme);
+    final schemeEnd = schemeStart + scheme.length;
+    final textStyle = BusinessText.actionLabel(
+      context,
+    ).copyWith(color: colorScheme.onSurfaceVariant);
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: colorScheme.surfaceContainerHigh,
+        shape: AppShape.all(BusinessPalette.cardRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          spacing: 12,
+          children: [
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    if (schemeStart > 0)
+                      TextSpan(text: hint.substring(0, schemeStart)),
+                    TextSpan(text: scheme, style: textStyle.toJetBrainsMono),
+                    if (schemeEnd < hint.length)
+                      TextSpan(text: hint.substring(schemeEnd)),
+                  ],
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: textStyle,
+              ),
+            ),
+            BusinessSecondaryButton(
+              label: l10n.pasteFromClipboardImport,
+              width: _scaledControlWidth(context, 112),
+              onPressed: onClipboardImport,
+            ),
+            BusinessSecondaryButton(
+              label: l10n.chooseFile,
+              width: _scaledControlWidth(context, 86),
+              onPressed: onChooseFile,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BusinessConnectedChip extends StatelessWidget {
+  const _BusinessConnectedChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final brightness = context.colorScheme.brightness;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: BusinessPalette.connectedContainerFor(brightness),
+        shape: AppShape.full,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+        child: Text(
+          label,
+          style: BusinessText.heroStatus(
+            context,
+          ).copyWith(color: BusinessPalette.connectedForegroundFor(brightness)),
+        ),
+      ),
+    );
+  }
+}
+
+class _MobileSubscriptionMetric extends StatelessWidget {
+  const _MobileSubscriptionMetric({
+    required this.label,
+    required this.value,
+    required this.unit,
+    this.largeUnit = false,
+    this.footnote,
+  });
+
+  final String label;
+  final String value;
+  final String unit;
+  final bool largeUnit;
+  final String? footnote;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: BusinessText.metaLabel(context)),
+        const SizedBox(height: 2),
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: value,
+                style: BusinessText.mobileSubscriptionMetric(context),
+              ),
+              if (unit.isNotEmpty)
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.baseline,
+                  baseline: TextBaseline.alphabetic,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: Text(
+                      unit,
+                      style: largeUnit
+                          ? BusinessText.mobileSubscriptionLargeUnit(context)
+                          : BusinessText.mobileSubscriptionUnit(context),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (footnote != null)
+          Text(
+            footnote!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: BusinessText.metaLabel(
+              context,
+            ).copyWith(color: colorScheme.onSurfaceVariant),
+          ),
+      ],
+    );
+  }
+}
+
+class _SubscriptionProgress extends StatelessWidget {
+  const _SubscriptionProgress({required this.value, required this.height});
+
+  final double value;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: context.colorScheme.surfaceContainerHigh,
+          shape: AppShape.full,
+        ),
+        child: Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: FractionallySizedBox(
+            widthFactor: value.clamp(0, 1),
+            heightFactor: 1,
+            child: const DecoratedBox(
+              decoration: ShapeDecoration(
+                color: BusinessPalette.blue,
+                shape: AppShape.full,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MobileImportButton extends StatelessWidget {
+  const _MobileImportButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: onPressed,
+      style: ButtonStyle.from(
+        backgroundColor: BusinessPalette.deep,
+        foregroundColor: Colors.white,
+        shape: AppShape.full,
+        fixedSize: Size(_scaledControlWidth(context, 92), 34),
+        minimumSize: Size(_scaledControlWidth(context, 92), 34),
+        maximumSize: Size(_scaledControlWidth(context, 92), 34),
+        padding: EdgeInsets.zero,
+        tapTargetSize: TapTargetSize.shrinkWrap,
+      ),
+      child: Text(
+        '＋ ${context.appLocalizations.import}',
+        style: BusinessText.actionLabel(
+          context,
+          emphasized: true,
+        ).copyWith(color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _MobileQuickImports extends StatelessWidget {
+  const _MobileQuickImports({
+    required this.onClipboard,
+    required this.onScan,
+    required this.onFile,
+  });
+
+  final VoidCallback onClipboard;
+  final VoidCallback onScan;
+  final VoidCallback onFile;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final items = <(Glyph, String, VoidCallback)>[
+      (AppGlyphs.paste, l10n.zzQuickClipboard, onClipboard),
+      if (!system.isTV) (AppGlyphs.qrCode, l10n.zzQuickScan, onScan),
+      (AppGlyphs.importFile, l10n.zzQuickLocalFile, onFile),
+    ];
+    return Row(
+      spacing: 8,
+      children: [
+        for (final item in items)
+          Expanded(
+            child: Card(
+              radius: BusinessPalette.buttonRadius,
+              padding: EdgeInsets.zero,
+              onPressed: item.$3,
+              child: SizedBox(
+                height: 74,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 6,
+                  children: [
+                    GlyphIcon(item.$1, size: 20, color: BusinessPalette.blue),
+                    Text(item.$2, style: BusinessText.metaLabel(context)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+Future<void> _importClipboard(BuildContext context, WidgetRef ref) async {
+  final value = await Clipboard.getData(Clipboard.kTextPlain);
+  if (!context.mounted) return;
+  final url = subscriptionUrlFromText(value?.text ?? '');
+  if (url == null) {
+    dialogs.showBanner(
+      context.appLocalizations.invalidLinkTip,
+      level: BannerLevel.error,
+    );
+    return;
+  }
+  unawaited(ref.read(profilesActionProvider.notifier).addProfileFromLink(url));
 }
 
 class _BusinessSubscriptionCard extends ConsumerWidget {
@@ -384,6 +902,7 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
     final usage = info?.usage;
     final used = info == null ? null : info.upload + info.download;
     final isUpdating = ref.watch(isUpdatingProvider(profile.updatingKey));
+    final mobile = ref.watch(isMobileViewProvider);
     final action = ProfileItem(
       profile: profile,
       groupValue: currentProfileId,
@@ -394,7 +913,7 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
       menuItems: isUpdating ? null : action._menuItems(context, ref),
       child: Card(
         radius: BusinessPalette.cardRadius,
-        padding: const EdgeInsets.all(22),
+        padding: EdgeInsets.all(mobile ? 16 : 26),
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.maxWidth >= 900) {
@@ -409,147 +928,193 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                 ref: ref,
               );
             }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            return _buildMobile(
+              context,
+              ref: ref,
+              action: action,
+              info: info,
+              usage: usage,
+              used: used,
+              isUpdating: isUpdating,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMobile(
+    BuildContext context, {
+    required WidgetRef ref,
+    required ProfileItem action,
+    required SubscriptionInfo? info,
+    required double? usage,
+    required int? used,
+    required bool isUpdating,
+  }) {
+    final l10n = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final expire = info?.expireDate;
+    final daysLeft = expire
+        ?.difference(DateTime.now())
+        .inDays
+        .clamp(0, 999999)
+        .toInt();
+    final interval = profile.autoUpdateDuration;
+    final intervalLabel = profile.autoUpdate
+        ? interval.inHours >= 1
+              ? l10n.zzAutoUpdateHours(interval.inHours)
+              : l10n.zzAutoUpdateIntervalLabel(interval.inMinutes, l10n.minutes)
+        : null;
+    final menuItems = [
+      PopupMenuItem(
+        glyph: AppGlyphs.copy,
+        label: l10n.copySubscriptionLink,
+        onPressed: () => action._handleCopyLink(context),
+      ),
+      PopupMenuItem(
+        glyph: AppGlyphs.edit,
+        label: l10n.edit,
+        onPressed: () => action._handleEdit(context),
+      ),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: profile.realLabel),
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: _BusinessConnectedChip(label: l10n.inUse),
+                      ),
+                    ),
+                  ],
+                ),
+                maxLines: 2,
+                style: BusinessText.mobileSubscriptionTitle(context),
+              ),
+            ),
+            PopupAnchor(
+              targetBuilder: (open) => IconButton(
+                tooltip: l10n.more,
+                onPressed: open,
+                icon: const GlyphIcon(AppGlyphs.more),
+              ),
+              popupBuilder: (_) => PopupMenu(items: menuItems),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            if (info?.total case final total? when total > 0)
+              _ProfileMetaChip(
+                label: '${total.traffic.value} ${total.traffic.unit}',
+              ),
+            if (isResidentialPolicyActive(profile))
+              DashboardChip(
+                label: l10n.residentialOutbound,
+                tone: DashboardChipTone.residential,
+              ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _MobileSubscriptionMetric(
+                label: l10n.zzRemaining,
+                value: daysLeft?.toString() ?? '—',
+                unit: l10n.zzRemainingDayUnit,
+                largeUnit: true,
+                footnote: expire == null
+                    ? null
+                    : l10n.zzExpiryDate(expire.show),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _MobileSubscriptionMetric(
+                label: l10n.currentUsage,
+                value: used?.traffic.value ?? '—',
+                unit: used == null ? '' : used.traffic.unit,
+                footnote: info == null
+                    ? null
+                    : l10n.zzTotalQuota(
+                        '${info.total.traffic.value} ${info.total.traffic.unit}',
+                      ),
+              ),
+            ),
+          ],
+        ),
+        if (usage != null) ...[
+          const SizedBox(height: 12),
+          _SubscriptionProgress(value: usage, height: 6),
+        ],
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            LastUpdateTimeText(
+              lastUpdateDate: profile.lastUpdateDate,
+              compact: true,
+              style: BusinessText.metaLabel(
+                context,
+              ).copyWith(color: colorScheme.onSurfaceVariant),
+            ),
+            Text(
+              ' · ',
+              style: BusinessText.metaLabel(
+                context,
+              ).copyWith(color: colorScheme.onSurfaceVariant),
+            ),
+            Flexible(
+              child: Text(
+                intervalLabel ?? l10n.autoUpdate,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BusinessText.metaLabel(
+                  context,
+                ).copyWith(color: colorScheme.onSurfaceVariant),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final buttonWidth = (constraints.maxWidth - 8) / 2;
+            return Row(
+              spacing: 8,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        profile.realLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyle.title2.of(
-                          context,
-                          emphasized: true,
-                        ),
-                      ),
-                    ),
-                    Tooltip(
-                      message: context.appLocalizations.subscriptionDetails,
-                      child: const SelectionBadge(size: 24),
-                    ),
-                  ],
+                BusinessSecondaryButton(
+                  label: l10n.immediateUpdate,
+                  width: buttonWidth,
+                  height: 44,
+                  onPressed: isUpdating
+                      ? null
+                      : () => action.updateProfile(ref),
                 ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _profileTypeLabel(context, profile.type),
-                        style: AppTextStyle.subheadline
-                            .of(context)
-                            .copyWith(color: colorScheme.onSurfaceVariant),
-                      ),
-                    ),
-                    action._buildTrailing(context, isUpdating: isUpdating),
-                  ],
-                ),
-                if (info?.expireDate case final expire?) ...[
-                  const SizedBox(height: 18),
-                  Text(
-                    context.appLocalizations.validUntil(expire.show),
-                    style: AppTextStyle.footnote
-                        .of(context)
-                        .copyWith(color: colorScheme.onSurfaceVariant),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    context.appLocalizations.profileDaysLeft(
-                      expire
-                          .difference(DateTime.now())
-                          .inDays
-                          .clamp(0, 999999)
-                          .toInt(),
-                    ),
-                    style: AppTextStyle.title3.of(context, emphasized: true),
-                  ),
-                ],
-                if (usage != null && used != null && info != null) ...[
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${used.traffic.show} / ${info.total.traffic.show}',
-                          style: AppTextStyle.footnote
-                              .of(context)
-                              .copyWith(color: colorScheme.onSurfaceVariant),
-                        ),
-                      ),
-                      Text(
-                        '${(usage * 100).round()}%',
-                        style: AppTextStyle.footnote
-                            .of(context, emphasized: true)
-                            .copyWith(color: BusinessPalette.blue),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 8,
-                    child: DecoratedBox(
-                      decoration: const ShapeDecoration(
-                        color: Color(0xFFEEF1F4),
-                        shape: AppShape.full,
-                      ),
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: FractionallySizedBox(
-                          widthFactor: usage,
-                          heightFactor: 1,
-                          child: const DecoratedBox(
-                            decoration: ShapeDecoration(
-                              color: BusinessPalette.blue,
-                              shape: AppShape.full,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 20),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    if (profile.type == ProfileType.url)
-                      TonalButton(
-                        size: TonalButtonSize.bar,
-                        glyph: AppGlyphs.link,
-                        label: context.appLocalizations.renew,
-                        onPressed: () => dialogs.openUrl(userPanelUrl),
-                      ),
-                    if (profile.type == ProfileType.url)
-                      TonalButton(
-                        size: TonalButtonSize.bar,
-                        glyph: AppGlyphs.sync,
-                        label: context.appLocalizations.update,
-                        onPressed: isUpdating
-                            ? null
-                            : () => action.updateProfile(ref),
-                      ),
-                    if (profile.type == ProfileType.url)
-                      TonalButton(
-                        size: TonalButtonSize.bar,
-                        glyph: AppGlyphs.copy,
-                        label: context.appLocalizations.copyLink,
-                        onPressed: () => action._handleCopyLink(context),
-                      ),
-                    TonalButton(
-                      size: TonalButtonSize.bar,
-                      glyph: AppGlyphs.edit,
-                      label: context.appLocalizations.edit,
-                      onPressed: () => action._handleEdit(context),
-                    ),
-                  ],
+                BusinessPrimaryButton(
+                  label: l10n.zzRenewUpgradeShort,
+                  width: buttonWidth,
+                  height: 44,
+                  onPressed: () => dialogs.openUrl(userPanelUrl),
                 ),
               ],
             );
           },
         ),
-      ),
+      ],
     );
   }
 
@@ -569,31 +1134,15 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
     final maskedUrl = url != null && url.hasAuthority
         ? '${url.scheme}://${url.host}/••••••••'
         : null;
-    final actions = <Widget>[
-      if (profile.type == ProfileType.url)
-        FilledButton.icon(
-          onPressed: () => dialogs.openUrl(userPanelUrl),
-          icon: const GlyphIcon(AppGlyphs.link, fill: 1),
-          label: Text(l10n.renew),
-        ),
-      if (profile.type == ProfileType.url)
-        OutlinedButton.icon(
-          onPressed: isUpdating ? null : () => action.updateProfile(ref),
-          icon: const GlyphIcon(AppGlyphs.sync),
-          label: Text(l10n.update),
-        ),
-      if (profile.type == ProfileType.url)
-        OutlinedButton.icon(
-          onPressed: () => action._handleCopyLink(context),
-          icon: const GlyphIcon(AppGlyphs.copy),
-          label: Text(l10n.copyLink),
-        ),
-      OutlinedButton.icon(
-        onPressed: () => action._handleEdit(context),
-        icon: const GlyphIcon(AppGlyphs.edit),
-        label: Text(l10n.edit),
-      ),
-    ];
+    final updateInterval = profile.autoUpdateDuration;
+    final intervalLabel = profile.autoUpdate
+        ? updateInterval.inHours >= 1
+              ? l10n.zzAutoUpdateHours(updateInterval.inHours)
+              : l10n.zzAutoUpdateIntervalLabel(
+                  updateInterval.inMinutes,
+                  l10n.minutes,
+                )
+        : null;
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -606,18 +1155,36 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                 Row(
                   spacing: 10,
                   children: [
-                    Expanded(
+                    Flexible(
                       child: Text(
                         profile.realLabel,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTextStyle.title2.of(
-                          context,
-                          emphasized: true,
+                        style: BusinessText.subscriptionTitle(context),
+                      ),
+                    ),
+                    DecoratedBox(
+                      decoration: ShapeDecoration(
+                        color: BusinessPalette.connectedContainerFor(
+                          colorScheme.brightness,
+                        ),
+                        shape: AppShape.full,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 9,
+                          vertical: 3,
+                        ),
+                        child: Text(
+                          l10n.inUse,
+                          style: BusinessText.heroStatus(context).copyWith(
+                            color: BusinessPalette.connectedForegroundFor(
+                              colorScheme.brightness,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    const SelectionBadge(size: 24),
                   ],
                 ),
                 if (maskedUrl != null) ...[
@@ -634,13 +1201,18 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                 ],
                 const SizedBox(height: 12),
                 Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
+                  spacing: 8,
+                  runSpacing: 8,
                   children: [
                     if (info?.total case final total? when total > 0)
-                      _ProfileMetaChip(label: total.traffic.show),
-                    if (profile.type == ProfileType.url)
-                      _ProfileMetaChip(label: l10n.remote),
+                      _ProfileMetaChip(
+                        label: '${total.traffic.value} ${total.traffic.unit}',
+                      ),
+                    if (isResidentialPolicyActive(profile))
+                      DashboardChip(
+                        label: l10n.residentialOutbound,
+                        tone: DashboardChipTone.residential,
+                      ),
                   ],
                 ),
                 const SizedBox(height: 18),
@@ -649,23 +1221,24 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: _ProfileMetric(
-                        label: l10n.trafficUsage,
+                        label: l10n.currentUsage,
                         value: used != null && info != null
-                            ? '${used.traffic.show} / ${info.total.traffic.show}'
+                            ? '${used.traffic.value} / ${info.total.traffic.value} ${info.total.traffic.unit}'
                             : '—',
-                        footnote: usage == null
-                            ? null
-                            : '${(usage * 100).round()}%',
+                        footnote: null,
                         progress: usage,
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: _ProfileMetric(
-                        label: l10n.expireTime,
+                        label: l10n.currentExpiry,
                         value: info == null
                             ? '—'
                             : expire?.show ?? l10n.infiniteTime,
+                        valueStyle: BusinessText.subscriptionSecondaryValue(
+                          context,
+                        ),
                         footnote: expire == null
                             ? null
                             : l10n.profileDaysLeft(
@@ -689,10 +1262,32 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                                 .copyWith(color: colorScheme.onSurfaceVariant),
                           ),
                           const SizedBox(height: 4),
-                          action._buildTrailing(
-                            context,
-                            isUpdating: isUpdating,
+                          AnimatedSwitcher(
+                            duration: context.motionDuration(commonDuration),
+                            child: isUpdating
+                                ? const ActivityIndicator(
+                                    key: ValueKey('updating'),
+                                    size: 24,
+                                  )
+                                : LastUpdateTimeText(
+                                    key: const ValueKey('lastUpdate'),
+                                    lastUpdateDate: profile.lastUpdateDate,
+                                    style:
+                                        BusinessText.subscriptionSecondaryValue(
+                                          context,
+                                        ),
+                                    compact: true,
+                                  ),
                           ),
+                          if (intervalLabel != null)
+                            Text(
+                              intervalLabel,
+                              style: AppTextStyle.footnote
+                                  .of(context)
+                                  .copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
                         ],
                       ),
                     ),
@@ -703,7 +1298,7 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
           ),
           SizedBox(
             width: 1,
-            child: ColoredBox(color: colorScheme.outlineVariant),
+            child: ColoredBox(color: Divider.colorOf(context)),
           ),
           SizedBox(
             width: 200,
@@ -711,7 +1306,30 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 8,
-              children: actions,
+              children: [
+                BusinessPrimaryButton(
+                  label: l10n.renewUpgrade,
+                  width: 200,
+                  onPressed: () => dialogs.openUrl(userPanelUrl),
+                ),
+                BusinessSecondaryButton(
+                  label: l10n.immediateUpdate,
+                  width: 200,
+                  onPressed: isUpdating
+                      ? null
+                      : () => action.updateProfile(ref),
+                ),
+                BusinessSecondaryButton(
+                  label: l10n.copySubscriptionLink,
+                  width: 200,
+                  onPressed: () => action._handleCopyLink(context),
+                ),
+                BusinessSecondaryButton(
+                  label: l10n.edit,
+                  width: 200,
+                  onPressed: () => action._handleEdit(context),
+                ),
+              ],
             ),
           ),
         ],
@@ -724,18 +1342,19 @@ class _ProfileMetric extends StatelessWidget {
   const _ProfileMetric({
     required this.label,
     required this.value,
+    this.valueStyle,
     this.footnote,
     this.progress,
   });
 
   final String label;
   final String value;
+  final TextStyle? valueStyle;
   final String? footnote;
   final double? progress;
 
   @override
   Widget build(BuildContext context) {
-    final dark = context.colorScheme.brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -750,7 +1369,7 @@ class _ProfileMetric extends StatelessWidget {
           value,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyle.title3.of(context, emphasized: true),
+          style: valueStyle ?? BusinessText.subscriptionMetric(context),
         ),
         if (footnote != null) ...[
           const SizedBox(height: 4),
@@ -769,9 +1388,7 @@ class _ProfileMetric extends StatelessWidget {
             height: 8,
             child: DecoratedBox(
               decoration: ShapeDecoration(
-                color: dark
-                    ? context.colorScheme.surfaceContainerHigh
-                    : const Color(0xFFEEF1F4),
+                color: context.colorScheme.surfaceContainerHigh,
                 shape: AppShape.full,
               ),
               child: Align(
@@ -802,34 +1419,8 @@ class _ProfileMetaChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = context.colorScheme.brightness == Brightness.dark;
-    return DecoratedBox(
-      decoration: ShapeDecoration(
-        color: dark
-            ? context.colorScheme.surfaceContainerHigh
-            : const Color(0xFFEEF1F4),
-        shape: AppShape.sm,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-        child: Text(
-          label,
-          style: AppTextStyle.caption1
-              .of(context)
-              .copyWith(color: context.colorScheme.onSurfaceVariant),
-        ),
-      ),
-    );
+    return DashboardChip(label: label, tone: DashboardChipTone.idle);
   }
-}
-
-String _profileTypeLabel(BuildContext context, ProfileType type) {
-  final l10n = context.appLocalizations;
-  return switch (type) {
-    ProfileType.url => l10n.remote,
-    ProfileType.file => l10n.local,
-    ProfileType.custom => l10n.custom,
-  };
 }
 
 class ProfileItem extends ConsumerWidget {

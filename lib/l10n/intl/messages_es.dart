@@ -311,6 +311,26 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m114(count) =>
       "${Intl.plural(count, other: 'hace ${count} a')}";
 
+  static String m115(hours) => "actualización automática cada ${hours} horas";
+
+  static String m116(count, unit) =>
+      "Actualización automática cada ${count} ${unit}";
+
+  static String m117(date) => "Vence ${date}";
+
+  static String m118(count) =>
+      "Basado en la suscripción actual · ${count} reglas sobrescritas";
+
+  static String m119(count) =>
+      "Enlace de suscripción · caducó hace ${count} días";
+
+  static String m120(scheme) =>
+      "También puedes pegar un enlace del portapapeles, elegir un archivo YAML local o abrir ${scheme} en el navegador para importar un enlace.";
+
+  static String m121(date) => "Archivo local · importado el ${date}";
+
+  static String m122(quota) => "Total ${quota}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("Acerca de"),
@@ -705,6 +725,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "checkingExit": MessageLookupByLibrary.simpleMessage(
       "Comprobando la salida…",
     ),
+    "chooseFile": MessageLookupByLibrary.simpleMessage("Elegir archivo"),
     "cipher": MessageLookupByLibrary.simpleMessage("Cifrado"),
     "clearData": MessageLookupByLibrary.simpleMessage("Borrar datos"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -799,6 +820,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "copyResponseBody": MessageLookupByLibrary.simpleMessage(
       "Copiar cuerpo de la respuesta",
     ),
+    "copySubscriptionLink": MessageLookupByLibrary.simpleMessage(
+      "Copiar enlace de suscripción",
+    ),
     "copySuccess": MessageLookupByLibrary.simpleMessage(
       "Copiado correctamente",
     ),
@@ -815,9 +839,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("Crear"),
     "createProfileFromUrlTip": m18,
     "creationTime": MessageLookupByLibrary.simpleMessage("Fecha de creación"),
+    "currentExpiry": MessageLookupByLibrary.simpleMessage("Vence"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Contiene el botón de inicio y no se puede quitar",
     ),
+    "currentUsage": MessageLookupByLibrary.simpleMessage("Uso del periodo"),
     "custom": MessageLookupByLibrary.simpleMessage("Personalizado"),
     "customColor": MessageLookupByLibrary.simpleMessage("Color personalizado"),
     "customImportDroppedSubRules": m19,
@@ -1104,6 +1130,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exitNodes": MessageLookupByLibrary.simpleMessage("Nodos de salida"),
     "expectedStatus": MessageLookupByLibrary.simpleMessage("Estado esperado"),
     "expireTime": MessageLookupByLibrary.simpleMessage("Fecha de vencimiento"),
+    "expiredStatus": MessageLookupByLibrary.simpleMessage("Caducada"),
     "exportCertificate": MessageLookupByLibrary.simpleMessage(
       "Exportar certificado",
     ),
@@ -1302,6 +1329,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ignoreBatteryOptimization": MessageLookupByLibrary.simpleMessage(
       "Ignorar optimización de batería",
     ),
+    "immediateUpdate": MessageLookupByLibrary.simpleMessage("Actualizar ahora"),
     "import": MessageLookupByLibrary.simpleMessage("Importar"),
     "importConfigInvalid": MessageLookupByLibrary.simpleMessage(
       "Este archivo no es una configuración importable",
@@ -1315,8 +1343,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "importFromLink": MessageLookupByLibrary.simpleMessage(
       "Importar desde enlace",
     ),
+    "importSubscription": MessageLookupByLibrary.simpleMessage(
+      "Importar suscripción",
+    ),
     "importUrl": MessageLookupByLibrary.simpleMessage("Importar desde URL"),
     "inProgress": MessageLookupByLibrary.simpleMessage("En curso"),
+    "inUse": MessageLookupByLibrary.simpleMessage("En uso"),
     "inbound": MessageLookupByLibrary.simpleMessage("Entrada"),
     "includeInterface": MessageLookupByLibrary.simpleMessage(
       "Interfaces incluidas",
@@ -1947,6 +1979,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "otherContributors": MessageLookupByLibrary.simpleMessage(
       "Otros colaboradores",
     ),
+    "otherProfilesTitle": MessageLookupByLibrary.simpleMessage(
+      "Otras configuraciones",
+    ),
     "outbound": MessageLookupByLibrary.simpleMessage("Salida"),
     "outboundExit": MessageLookupByLibrary.simpleMessage("Salida"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("IP de salida"),
@@ -1973,6 +2008,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "parsePureIp": MessageLookupByLibrary.simpleMessage("Analizar IP pura"),
     "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
     "paste": MessageLookupByLibrary.simpleMessage("Pegar"),
+    "pasteFromClipboardImport": MessageLookupByLibrary.simpleMessage(
+      "Importar del portapapeles",
+    ),
     "peers": MessageLookupByLibrary.simpleMessage("Pares"),
     "pickFromAlbum": MessageLookupByLibrary.simpleMessage("Elegir del álbum"),
     "pinWindow": MessageLookupByLibrary.simpleMessage("Fijar ventana"),
@@ -2048,6 +2086,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Se aplica solo a este perfil; lo que no añadas usa su valor predeterminado.",
+    ),
+    "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
+      "Los cambios se aplican al instante; si falla el análisis, se conserva la configuración actual.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Se aplica solo a este perfil y tiene prioridad sobre las entradas de sobrescritura de TUN de los ajustes de red.",
@@ -2139,6 +2180,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "remove": MessageLookupByLibrary.simpleMessage("Quitar"),
     "rename": MessageLookupByLibrary.simpleMessage("Renombrar"),
     "renew": MessageLookupByLibrary.simpleMessage("Renovar"),
+    "renewUpgrade": MessageLookupByLibrary.simpleMessage(
+      "Renovar / mejorar plan",
+    ),
     "replace": MessageLookupByLibrary.simpleMessage("Reemplazar"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("Reemplazar todo"),
     "request": MessageLookupByLibrary.simpleMessage("Solicitud"),
@@ -2210,6 +2254,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
       "Esta suscripción no tiene ninguna salida residencial utilizable ahora mismo. Sigue usando la política de la suscripción o revisa el panel de suscripción.",
+    ),
+    "residentialOutbound": MessageLookupByLibrary.simpleMessage(
+      "Salida residencial",
     ),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "Cambiando de línea. Espera un momento.",
@@ -2677,11 +2724,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage(
       "Información de la suscripción",
     ),
+    "subscriptionLink": MessageLookupByLibrary.simpleMessage(
+      "Enlace de suscripción",
+    ),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Introduce tu contraseña para sudo",
     ),
     "suspended": MessageLookupByLibrary.simpleMessage("Suspendido…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("Cambiar de perfil"),
+    "switchProfileShort": MessageLookupByLibrary.simpleMessage("Cambiar"),
     "sync": MessageLookupByLibrary.simpleMessage("Sincronizar"),
     "system": MessageLookupByLibrary.simpleMessage("Sistema"),
     "systemApp": MessageLookupByLibrary.simpleMessage("Apps del sistema"),
@@ -2782,6 +2833,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unnamed": MessageLookupByLibrary.simpleMessage("Sin nombre"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("Desfijar ventana"),
     "update": MessageLookupByLibrary.simpleMessage("Actualizar"),
+    "updateAll": MessageLookupByLibrary.simpleMessage("Actualizar todo"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
       "No se pudo descargar la actualización.",
     ),
@@ -2844,5 +2896,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "yearsAgoShort": m114,
     "yes": MessageLookupByLibrary.simpleMessage("Sí"),
     "zhCN": MessageLookupByLibrary.simpleMessage("Chino simplificado"),
+    "zzAutoUpdateHours": m115,
+    "zzAutoUpdateIntervalLabel": m116,
+    "zzExpiryDate": m117,
+    "zzProfileBasedOnOverrides": m118,
+    "zzProfileExpiredDays": m119,
+    "zzProfileImportHint": m120,
+    "zzProfileImportedOn": m121,
+    "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("Portapapeles"),
+    "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("Archivo local"),
+    "zzQuickScan": MessageLookupByLibrary.simpleMessage("Escanear"),
+    "zzRemaining": MessageLookupByLibrary.simpleMessage("Restantes"),
+    "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("días"),
+    "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage(
+      "Renovar / mejorar",
+    ),
+    "zzTotalQuota": m122,
   };
 }

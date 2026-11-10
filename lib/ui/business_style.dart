@@ -227,6 +227,62 @@ abstract final class BusinessText {
         weight: FontWeight.w600,
       );
 
+  static TextStyle subscriptionTitle(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 20,
+        leading: 24,
+        weight: FontWeight.w700,
+      );
+
+  static TextStyle mobileSubscriptionTitle(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 16,
+        leading: 20,
+        weight: FontWeight.w700,
+      );
+
+  static TextStyle mobileSubscriptionMetric(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 28,
+        leading: 34,
+        weight: FontWeight.w700,
+      ).toJetBrainsMono;
+
+  static TextStyle mobileSubscriptionLargeUnit(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 28,
+        leading: 34,
+        weight: FontWeight.w700,
+      );
+
+  static TextStyle mobileSubscriptionUnit(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 13,
+        leading: 18,
+        weight: FontWeight.w700,
+      );
+
+  static TextStyle subscriptionMetric(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 18,
+        leading: 22,
+        weight: FontWeight.w600,
+      ).toJetBrainsMono;
+
+  static TextStyle subscriptionSecondaryValue(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 16,
+        leading: 20,
+        weight: FontWeight.w700,
+      );
+
   static TextStyle cardDelay(BuildContext context) => AppTextStyle.custom(
     context,
     size: 15,

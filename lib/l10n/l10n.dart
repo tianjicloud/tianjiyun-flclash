@@ -630,16 +630,6 @@ class AppLocalizations {
     return Intl.message('Auto update', name: 'autoUpdate', desc: '', args: []);
   }
 
-  /// `Auto-update interval`
-  String get autoUpdateInterval {
-    return Intl.message(
-      'Auto-update interval',
-      name: 'autoUpdateInterval',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Please enter the auto-update interval`
   String get profileAutoUpdateIntervalNullValidationDesc {
     return Intl.message(
@@ -10976,6 +10966,276 @@ class AppLocalizations {
       desc: '',
       args: [value],
     );
+  }
+
+  /// `Update all`
+  String get updateAll {
+    return Intl.message('Update all', name: 'updateAll', desc: '', args: []);
+  }
+
+  /// `Import subscription`
+  String get importSubscription {
+    return Intl.message(
+      'Import subscription',
+      name: 'importSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In use`
+  String get inUse {
+    return Intl.message('In use', name: 'inUse', desc: '', args: []);
+  }
+
+  /// `Renew / upgrade plan`
+  String get renewUpgrade {
+    return Intl.message(
+      'Renew / upgrade plan',
+      name: 'renewUpgrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy subscription link`
+  String get copySubscriptionLink {
+    return Intl.message(
+      'Copy subscription link',
+      name: 'copySubscriptionLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current usage`
+  String get currentUsage {
+    return Intl.message(
+      'Current usage',
+      name: 'currentUsage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expires`
+  String get currentExpiry {
+    return Intl.message('Expires', name: 'currentExpiry', desc: '', args: []);
+  }
+
+  /// `Auto-update interval`
+  String get autoUpdateInterval {
+    return Intl.message(
+      'Auto-update interval',
+      name: 'autoUpdateInterval',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Residential exit`
+  String get residentialOutbound {
+    return Intl.message(
+      'Residential exit',
+      name: 'residentialOutbound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto update every {count} {unit}`
+  String zzAutoUpdateIntervalLabel(Object count, Object unit) {
+    return Intl.message(
+      'Auto update every $count $unit',
+      name: 'zzAutoUpdateIntervalLabel',
+      desc: '',
+      args: [count, unit],
+    );
+  }
+
+  /// `Update now`
+  String get immediateUpdate {
+    return Intl.message(
+      'Update now',
+      name: 'immediateUpdate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expired`
+  String get expiredStatus {
+    return Intl.message('Expired', name: 'expiredStatus', desc: '', args: []);
+  }
+
+  /// `Subscription link`
+  String get subscriptionLink {
+    return Intl.message(
+      'Subscription link',
+      name: 'subscriptionLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other profiles`
+  String get otherProfilesTitle {
+    return Intl.message(
+      'Other profiles',
+      name: 'otherProfilesTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Changes apply immediately; if parsing fails, the current configuration is kept.`
+  String get profileSwitchNote {
+    return Intl.message(
+      'Changes apply immediately; if parsing fails, the current configuration is kept.',
+      name: 'profileSwitchNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch`
+  String get switchProfileShort {
+    return Intl.message(
+      'Switch',
+      name: 'switchProfileShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import from clipboard`
+  String get pasteFromClipboardImport {
+    return Intl.message(
+      'Import from clipboard',
+      name: 'pasteFromClipboardImport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose file`
+  String get chooseFile {
+    return Intl.message('Choose file', name: 'chooseFile', desc: '', args: []);
+  }
+
+  /// `Subscription link · expired {count} days ago`
+  String zzProfileExpiredDays(Object count) {
+    return Intl.message(
+      'Subscription link · expired $count days ago',
+      name: 'zzProfileExpiredDays',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Local file · imported {date}`
+  String zzProfileImportedOn(Object date) {
+    return Intl.message(
+      'Local file · imported $date',
+      name: 'zzProfileImportedOn',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Based on current subscription · {count} override rules`
+  String zzProfileBasedOnOverrides(Object count) {
+    return Intl.message(
+      'Based on current subscription · $count override rules',
+      name: 'zzProfileBasedOnOverrides',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `You can also paste a link from clipboard, choose a local YAML file, or open {scheme} in a browser to import a link.`
+  String zzProfileImportHint(Object scheme) {
+    return Intl.message(
+      'You can also paste a link from clipboard, choose a local YAML file, or open $scheme in a browser to import a link.',
+      name: 'zzProfileImportHint',
+      desc: '',
+      args: [scheme],
+    );
+  }
+
+  /// `every {hours} hours auto update`
+  String zzAutoUpdateHours(Object hours) {
+    return Intl.message(
+      'every $hours hours auto update',
+      name: 'zzAutoUpdateHours',
+      desc: '',
+      args: [hours],
+    );
+  }
+
+  /// `Remaining`
+  String get zzRemaining {
+    return Intl.message('Remaining', name: 'zzRemaining', desc: '', args: []);
+  }
+
+  /// `Expires {date}`
+  String zzExpiryDate(Object date) {
+    return Intl.message(
+      'Expires $date',
+      name: 'zzExpiryDate',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Total {quota}`
+  String zzTotalQuota(Object quota) {
+    return Intl.message(
+      'Total $quota',
+      name: 'zzTotalQuota',
+      desc: '',
+      args: [quota],
+    );
+  }
+
+  /// `Clipboard`
+  String get zzQuickClipboard {
+    return Intl.message(
+      'Clipboard',
+      name: 'zzQuickClipboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan`
+  String get zzQuickScan {
+    return Intl.message('Scan', name: 'zzQuickScan', desc: '', args: []);
+  }
+
+  /// `Local file`
+  String get zzQuickLocalFile {
+    return Intl.message(
+      'Local file',
+      name: 'zzQuickLocalFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renew / upgrade`
+  String get zzRenewUpgradeShort {
+    return Intl.message(
+      'Renew / upgrade',
+      name: 'zzRenewUpgradeShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `days`
+  String get zzRemainingDayUnit {
+    return Intl.message('days', name: 'zzRemainingDayUnit', desc: '', args: []);
   }
 }
 

@@ -268,6 +268,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m114(count) => "${count} 年前";
 
+  static String m115(hours) => "每 ${hours} 小时自动更新";
+
+  static String m116(count, unit) => "每${count} ${unit}自动更新";
+
+  static String m117(date) => "${date} 到期";
+
+  static String m118(count) => "基于当前订阅 · ${count} 条覆写规则";
+
+  static String m119(count) => "订阅链接 · 已过期 ${count} 天";
+
+  static String m120(scheme) =>
+      "还可以：从剪贴板粘贴链接、选择本地 YAML 文件，或在浏览器打开 ${scheme} 导入链接";
+
+  static String m121(date) => "本地文件 · ${date} 导入";
+
+  static String m122(quota) => "共 ${quota}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("关于"),
@@ -518,6 +535,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
     "checkUpdateError": MessageLookupByLibrary.simpleMessage("当前应用已经是最新版了"),
     "checkingExit": MessageLookupByLibrary.simpleMessage("正在确认出口…"),
+    "chooseFile": MessageLookupByLibrary.simpleMessage("选择文件"),
     "cipher": MessageLookupByLibrary.simpleMessage("加密方式"),
     "clearData": MessageLookupByLibrary.simpleMessage("清除数据"),
     "clearDataAndExitTip": MessageLookupByLibrary.simpleMessage(
@@ -578,6 +596,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "copyRequest": MessageLookupByLibrary.simpleMessage("复制请求"),
     "copyResponse": MessageLookupByLibrary.simpleMessage("复制响应"),
     "copyResponseBody": MessageLookupByLibrary.simpleMessage("复制响应体"),
+    "copySubscriptionLink": MessageLookupByLibrary.simpleMessage("复制订阅链接"),
     "copySuccess": MessageLookupByLibrary.simpleMessage("复制成功"),
     "core": MessageLookupByLibrary.simpleMessage("内核"),
     "coreBlockedByPolicyTip": m16,
@@ -592,7 +611,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("创建"),
     "createProfileFromUrlTip": m18,
     "creationTime": MessageLookupByLibrary.simpleMessage("创建时间"),
+    "currentExpiry": MessageLookupByLibrary.simpleMessage("到期"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage("含启动键，不可移除"),
+    "currentUsage": MessageLookupByLibrary.simpleMessage("本期已用"),
     "custom": MessageLookupByLibrary.simpleMessage("自定义"),
     "customColor": MessageLookupByLibrary.simpleMessage("自定义颜色"),
     "customImportDroppedSubRules": m19,
@@ -791,6 +812,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exitNodes": MessageLookupByLibrary.simpleMessage("出口节点"),
     "expectedStatus": MessageLookupByLibrary.simpleMessage("预期状态"),
     "expireTime": MessageLookupByLibrary.simpleMessage("到期时间"),
+    "expiredStatus": MessageLookupByLibrary.simpleMessage("已过期"),
     "exportCertificate": MessageLookupByLibrary.simpleMessage("导出证书"),
     "exportFile": MessageLookupByLibrary.simpleMessage("导出文件"),
     "exportHar": MessageLookupByLibrary.simpleMessage("导出 HAR"),
@@ -937,6 +959,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "iconStylePlain": MessageLookupByLibrary.simpleMessage("纯图标"),
     "iconUrl": MessageLookupByLibrary.simpleMessage("图标链接"),
     "ignoreBatteryOptimization": MessageLookupByLibrary.simpleMessage("忽略电池优化"),
+    "immediateUpdate": MessageLookupByLibrary.simpleMessage("立即更新"),
     "import": MessageLookupByLibrary.simpleMessage("导入"),
     "importConfigInvalid": MessageLookupByLibrary.simpleMessage("此文件不是可导入的配置"),
     "importConfigReplaceTip": MessageLookupByLibrary.simpleMessage(
@@ -944,8 +967,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "importFile": MessageLookupByLibrary.simpleMessage("通过文件导入"),
     "importFromLink": MessageLookupByLibrary.simpleMessage("从链接导入"),
+    "importSubscription": MessageLookupByLibrary.simpleMessage("导入订阅"),
     "importUrl": MessageLookupByLibrary.simpleMessage("通过URL导入"),
     "inProgress": MessageLookupByLibrary.simpleMessage("进行中"),
+    "inUse": MessageLookupByLibrary.simpleMessage("使用中"),
     "inbound": MessageLookupByLibrary.simpleMessage("入站"),
     "includeInterface": MessageLookupByLibrary.simpleMessage("包含网卡"),
     "includeInterfaceDesc": MessageLookupByLibrary.simpleMessage(
@@ -1398,6 +1423,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "originalUrl": MessageLookupByLibrary.simpleMessage("原 URL"),
     "other": MessageLookupByLibrary.simpleMessage("其他"),
     "otherContributors": MessageLookupByLibrary.simpleMessage("其他贡献者"),
+    "otherProfilesTitle": MessageLookupByLibrary.simpleMessage("其他配置"),
     "outbound": MessageLookupByLibrary.simpleMessage("出站"),
     "outboundExit": MessageLookupByLibrary.simpleMessage("出口"),
     "outboundIp": MessageLookupByLibrary.simpleMessage("出站 IP"),
@@ -1418,6 +1444,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "parsePureIp": MessageLookupByLibrary.simpleMessage("解析纯IP"),
     "password": MessageLookupByLibrary.simpleMessage("密码"),
     "paste": MessageLookupByLibrary.simpleMessage("粘贴"),
+    "pasteFromClipboardImport": MessageLookupByLibrary.simpleMessage("从剪贴板导入"),
     "peers": MessageLookupByLibrary.simpleMessage("初始节点"),
     "pickFromAlbum": MessageLookupByLibrary.simpleMessage("从相册选择"),
     "pinWindow": MessageLookupByLibrary.simpleMessage("窗口置顶"),
@@ -1475,6 +1502,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "仅作用于当前配置，未添加的项使用默认值。",
+    ),
+    "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
+      "切换后立即生效；解析失败时保留当前配置",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "仅作用于当前配置，并优先于网络设置中的虚拟网卡覆写项。",
@@ -1546,6 +1576,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remove": MessageLookupByLibrary.simpleMessage("移除"),
     "rename": MessageLookupByLibrary.simpleMessage("重命名"),
     "renew": MessageLookupByLibrary.simpleMessage("续费"),
+    "renewUpgrade": MessageLookupByLibrary.simpleMessage("续费 / 升级套餐"),
     "replace": MessageLookupByLibrary.simpleMessage("替换"),
     "replaceAll": MessageLookupByLibrary.simpleMessage("全部替换"),
     "request": MessageLookupByLibrary.simpleMessage("请求"),
@@ -1606,6 +1637,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialNoPlanDesc": MessageLookupByLibrary.simpleMessage(
       "当前订阅没有可用的家宽出口。可继续使用订阅策略，或前往订阅面板查看。",
     ),
+    "residentialOutbound": MessageLookupByLibrary.simpleMessage("住宅出口"),
     "residentialPending": MessageLookupByLibrary.simpleMessage("正在切换线路，请稍候。"),
     "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
       "新出口已生效，但旧连接未能关闭，重连前可能仍走旧出口。",
@@ -1930,9 +1962,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "submit": MessageLookupByLibrary.simpleMessage("提交"),
     "subscriptionDetails": MessageLookupByLibrary.simpleMessage("详情"),
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage("订阅信息"),
+    "subscriptionLink": MessageLookupByLibrary.simpleMessage("订阅链接"),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage("输入 sudo 密码"),
     "suspended": MessageLookupByLibrary.simpleMessage("挂起中…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("切换配置"),
+    "switchProfileShort": MessageLookupByLibrary.simpleMessage("切换"),
     "sync": MessageLookupByLibrary.simpleMessage("同步"),
     "system": MessageLookupByLibrary.simpleMessage("系统"),
     "systemApp": MessageLookupByLibrary.simpleMessage("系统应用"),
@@ -2007,6 +2041,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unnamed": MessageLookupByLibrary.simpleMessage("未命名"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("取消置顶"),
     "update": MessageLookupByLibrary.simpleMessage("更新"),
+    "updateAll": MessageLookupByLibrary.simpleMessage("更新全部"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage("无法下载更新。"),
     "updateDownloadStarted": MessageLookupByLibrary.simpleMessage(
       "已开始下载更新，可在首页查看进度",
@@ -2053,5 +2088,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "yearsAgoShort": m114,
     "yes": MessageLookupByLibrary.simpleMessage("是"),
     "zhCN": MessageLookupByLibrary.simpleMessage("中文简体"),
+    "zzAutoUpdateHours": m115,
+    "zzAutoUpdateIntervalLabel": m116,
+    "zzExpiryDate": m117,
+    "zzProfileBasedOnOverrides": m118,
+    "zzProfileExpiredDays": m119,
+    "zzProfileImportHint": m120,
+    "zzProfileImportedOn": m121,
+    "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("剪贴板"),
+    "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("本地文件"),
+    "zzQuickScan": MessageLookupByLibrary.simpleMessage("扫码"),
+    "zzRemaining": MessageLookupByLibrary.simpleMessage("剩余"),
+    "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("天"),
+    "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage("续费 / 升级"),
+    "zzTotalQuota": m122,
   };
 }

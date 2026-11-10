@@ -81,7 +81,6 @@
   "profileUrlNullValidationDesc": "Introduce la URL del perfil",
   "profileUrlInvalidValidationDesc": "Introduce una URL de perfil válida",
   "autoUpdate": "Actualización automática",
-  "autoUpdateInterval": "Intervalo de actualización automática",
   "profileAutoUpdateIntervalNullValidationDesc": "Introduce el intervalo de actualización automática",
   "profileAutoUpdateIntervalInvalidValidationDesc": "Introduce un intervalo válido",
   "themeMode": "Modo del tema",
@@ -1135,7 +1134,13 @@
   "residentialExitSheetTitle": "Elegir salida residencial",
   "residentialExitSheetSubtitle": "La IA y los grupos que necesitan proxy seguirán la ruta seleccionada.",
   "residentialUseExit": "Usar {name}",
-  "@residentialUseExit": {"placeholders": {"name": {"type": "String"}}},
+  "@residentialUseExit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "residentialSelected": "Seleccionada",
   "residentialUnavailable": "No disponible",
   "residentialApplying": "Aplicando…",
@@ -1320,5 +1325,83 @@
     "placeholders": {
       "value": {}
     }
-  }
+  },
+  "updateAll": "Actualizar todo",
+  "importSubscription": "Importar suscripción",
+  "inUse": "En uso",
+  "renewUpgrade": "Renovar / mejorar plan",
+  "copySubscriptionLink": "Copiar enlace de suscripción",
+  "currentUsage": "Uso del periodo",
+  "currentExpiry": "Vence",
+  "autoUpdateInterval": "Intervalo de actualización automática",
+  "residentialOutbound": "Salida residencial",
+  "zzAutoUpdateIntervalLabel": "Actualización automática cada {count} {unit}",
+  "@zzAutoUpdateIntervalLabel": {
+    "placeholders": {
+      "count": {},
+      "unit": {}
+    }
+  },
+  "immediateUpdate": "Actualizar ahora",
+  "expiredStatus": "Caducada",
+  "subscriptionLink": "Enlace de suscripción",
+  "otherProfilesTitle": "Otras configuraciones",
+  "profileSwitchNote": "Los cambios se aplican al instante; si falla el análisis, se conserva la configuración actual.",
+  "switchProfileShort": "Cambiar",
+  "pasteFromClipboardImport": "Importar del portapapeles",
+  "chooseFile": "Elegir archivo",
+  "zzProfileExpiredDays": "Enlace de suscripción · caducó hace {count} días",
+  "zzProfileImportedOn": "Archivo local · importado el {date}",
+  "zzProfileBasedOnOverrides": "Basado en la suscripción actual · {count} reglas sobrescritas",
+  "zzProfileImportHint": "También puedes pegar un enlace del portapapeles, elegir un archivo YAML local o abrir {scheme} en el navegador para importar un enlace.",
+  "@zzProfileExpiredDays": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "@zzProfileBasedOnOverrides": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@zzProfileImportHint": {
+    "placeholders": {
+      "scheme": {}
+    }
+  },
+  "zzAutoUpdateHours": "actualización automática cada {hours} horas",
+  "zzRemaining": "Restantes",
+  "zzExpiryDate": "Vence {date}",
+  "zzTotalQuota": "Total {quota}",
+  "zzQuickClipboard": "Portapapeles",
+  "zzQuickScan": "Escanear",
+  "zzQuickLocalFile": "Archivo local",
+  "@zzAutoUpdateHours": {
+    "placeholders": {
+      "hours": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzExpiryDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "@zzTotalQuota": {
+    "placeholders": {
+      "quota": {
+        "type": "Object"
+      }
+    }
+  },
+  "zzRenewUpgradeShort": "Renovar / mejorar",
+  "zzRemainingDayUnit": "días"
 }
