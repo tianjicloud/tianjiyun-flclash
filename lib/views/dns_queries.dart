@@ -44,8 +44,13 @@ class DnsQueryListController extends ValueNotifier<DnsQueriesState> {
 
 class DnsQueriesView extends ConsumerStatefulWidget {
   final ScrollController? scrollController;
+  final bool embedded;
 
-  const DnsQueriesView({super.key, this.scrollController});
+  const DnsQueriesView({
+    super.key,
+    this.scrollController,
+    this.embedded = false,
+  });
 
   @override
   ConsumerState<DnsQueriesView> createState() => _DnsQueriesViewState();
@@ -135,6 +140,9 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
       listenable: Listenable.merge([_filters, _filters.options]),
       child: body,
       builder: (context, body) {
+        if (widget.embedded) {
+          return body!;
+        }
         final pinned = !ViewScope.isMobileOf(context);
         return Scaffold(
           title: PageLabel.dns.label,

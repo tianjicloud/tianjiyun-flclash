@@ -23,15 +23,18 @@ import 'package:fl_clash/views/config/on_demand.dart';
 import 'package:fl_clash/views/config/providers.dart';
 import 'package:fl_clash/views/config/rules.dart';
 import 'package:fl_clash/views/config/scripts.dart';
+import 'package:fl_clash/views/config/sniffer.dart';
 import 'package:fl_clash/views/config/tun.dart';
 import 'package:fl_clash/views/business_settings_card.dart';
 import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:fl_clash/views/diagnostics.dart';
+import 'package:fl_clash/views/resources.dart';
 import 'package:fl_clash/views/system_service.dart';
 import 'package:fl_clash/views/config/user_agents.dart';
 import 'package:fl_clash/views/dashboard/widgets/service_status.dart';
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/views/hotkey.dart';
 import 'package:fl_clash/views/profiles/custom/custom_proxies.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -305,15 +308,20 @@ class _BusinessMobileTools extends ConsumerWidget {
                     : null,
                 widget: const AccessView(),
               ),
+              ListItem.open(
+                leading: icon(AppGlyphs.dns),
+                title: Text(l10n.businessSettingsDnsResources),
+                widget: _BusinessDnsResourcesPage(navigation: navigation),
+              ),
               Ipv6Item(leading: icon(AppGlyphs.vpn)),
               BypassPrivateRouteItem(
                 title: l10n.businessToolsLocalDirect,
                 leading: icon(AppGlyphs.wifi),
               ),
               setting(
-                l10n.advancedConfig,
+                l10n.businessSettingsNetworkAdvanced,
                 AppGlyphs.wrench,
-                const AdvancedConfigView(isAndroid: true),
+                _BusinessNetworkPage(navigation: navigation),
               ),
             ],
           ),
@@ -362,6 +370,30 @@ class _BusinessMobileTools extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _BusinessDnsResourcesPage extends StatelessWidget {
+  const _BusinessDnsResourcesPage({required this.navigation});
+
+  final List<NavigationItem> navigation;
+
+  @override
+  Widget build(BuildContext context) => BaseScaffold(
+    title: context.appLocalizations.businessSettingsDnsResources,
+    body: _DnsSettingsView(navigation: navigation),
+  );
+}
+
+class _BusinessNetworkPage extends StatelessWidget {
+  const _BusinessNetworkPage({required this.navigation});
+
+  final List<NavigationItem> navigation;
+
+  @override
+  Widget build(BuildContext context) => BaseScaffold(
+    title: context.appLocalizations.businessAdvancedNetworkSettings,
+    body: _BusinessMobileNetworkSettings(navigation: navigation),
+  );
 }
 
 class _BusinessMobileSection extends StatelessWidget {
@@ -866,6 +898,9 @@ class _NetworkSettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.appLocalizations;
+    if (ref.watch(isMobileViewProvider)) {
+      return _BusinessMobileNetworkSettings(navigation: navigation);
+    }
     final authentication = ref.watch(
       networkSettingProvider.select((state) => state.authentication.enable),
     );
@@ -963,6 +998,212 @@ class _NetworkSettingsView extends ConsumerWidget {
   }
 }
 
+class _BusinessMobileNetworkSettings extends ConsumerWidget {
+  const _BusinessMobileNetworkSettings({required this.navigation});
+
+  final List<NavigationItem> navigation;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final profile = ref.watch(currentProfileProvider);
+    final stack = ref.watch(
+      patchClashConfigProvider.select((state) => state.tun.stack),
+    );
+    final mode = ref.watch(
+      patchClashConfigProvider.select((state) => state.dns.enhancedMode),
+    );
+    final vpn = ref.watch(vpnSettingProvider);
+    final wifiRules = ref.watch(excludeSSIDsProvider);
+    final mitmEnabled = ref.watch(
+      patchClashConfigProvider.select((state) => state.mitm.enable),
+    );
+    final developerMode = ref.watch(
+      appSettingProvider.select((state) => state.developerMode),
+    );
+    final sniffing = profile?.overrides.sniffer.enable ?? false;
+    Widget section(String title, List<Widget> items) => Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+            child: Text(
+              title,
+              style: BusinessText.metaLabel(
+                context,
+              ).copyWith(color: context.colorScheme.onSurfaceVariant),
+            ),
+          ),
+          BusinessSettingsCard(items: items),
+        ],
+      ),
+    );
+    Widget value(String text) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (text.isNotEmpty)
+          Text(
+            text,
+            style: BusinessText.metaLabel(
+              context,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
+          ),
+        if (text.isNotEmpty) const SizedBox(width: 5),
+        const DisclosureIndicator(),
+      ],
+    );
+    Widget row(
+      String title,
+      String description,
+      String trailing,
+      Widget page,
+    ) => ListItem.open(
+      title: Text(title, style: BusinessText.dataBody(context)),
+      subtitle: Text(
+        description,
+        style: BusinessText.metaLabel(
+          context,
+        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+      ),
+      trailing: value(trailing),
+      widget: page,
+    );
+    Widget toggle(
+      String title,
+      String description,
+      bool enabled,
+      ValueChanged<bool> onChanged,
+    ) => ListItem(
+      title: Text(title, style: BusinessText.dataBody(context)),
+      subtitle: Text(
+        description,
+        style: BusinessText.metaLabel(
+          context,
+        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+      ),
+      trailing: SizedBox(
+        width: 44,
+        height: 26,
+        child: Transform.scale(
+          scale: 0.84,
+          child: Switch(value: enabled, onChanged: onChanged),
+        ),
+      ),
+      minTileHeight: 64,
+    );
+
+    final stackLabel = switch (stack) {
+      TunStack.gvisor => 'gVisor',
+      TunStack.system => l10n.system,
+      TunStack.mixed => l10n.businessTunStackMixed,
+      TunStack.mips => 'MIPS',
+    };
+    final modeLabel = switch (mode) {
+      DnsMode.fakeIp => 'fake-ip',
+      DnsMode.redirHost => 'redir-host',
+      DnsMode.normal => 'normal',
+      DnsMode.hosts => 'hosts',
+    };
+    return ListView(
+      padding: EdgeInsets.fromLTRB(
+        16,
+        context.sectionsTopPadding,
+        16,
+        context.bottomInset + 20,
+      ),
+      children: [
+        section(l10n.businessVpn, [
+          row(
+            l10n.businessNetworkStack,
+            l10n.businessStackModeDescription,
+            stackLabel,
+            const _TunSettingsView(),
+          ),
+          toggle(
+            l10n.dnsHijacking,
+            l10n.dnsHijackDesc,
+            vpn.dnsHijacking,
+            (value) => ref.read(vpnSettingProvider.notifier).value = vpn
+                .copyWith(dnsHijacking: value),
+          ),
+          toggle(
+            l10n.businessSystemProxyHttp,
+            l10n.businessSystemProxyDescription,
+            vpn.systemProxy,
+            (value) => ref.read(vpnSettingProvider.notifier).value = vpn
+                .copyWith(systemProxy: value),
+          ),
+          toggle(
+            l10n.allowBypass,
+            l10n.businessAllowBypassDescription,
+            vpn.allowBypass,
+            (value) => ref.read(vpnSettingProvider.notifier).value = vpn
+                .copyWith(allowBypass: value),
+          ),
+          row(
+            l10n.businessMoreVpnSettings,
+            l10n.businessMoreVpnDescription,
+            '',
+            const _TunSettingsView(),
+          ),
+        ]),
+        section(l10n.businessDnsAndSniffing, [
+          row(
+            l10n.dnsMode,
+            l10n.businessDnsModeDescription,
+            modeLabel,
+            const DnsView(),
+          ),
+          if (profile != null)
+            row(
+              l10n.sniffer,
+              l10n.businessDomainSniffingDescription,
+              sniffing ? l10n.enabled : l10n.disabled,
+              SnifferView(profile.id),
+            ),
+          if (profile != null)
+            row(
+              l10n.businessOverrideSettings,
+              l10n.businessSubscriptionOverridesDescription,
+              '',
+              DnsView.profile(profile.id),
+            ),
+        ]),
+        section(l10n.other, [
+          row(
+            l10n.businessOnDemandConnection,
+            l10n.excludeSsidsDesc,
+            l10n.businessWifiRulesCount(wifiRules.length),
+            const OnDemandView(business: true),
+          ),
+          row(
+            l10n.businessSettingsRules,
+            l10n.businessRuleOverrideDescription,
+            '',
+            const _RuleSettingsView(),
+          ),
+          if (mitmFeature)
+            row(
+              l10n.mitm,
+              l10n.businessMitmDescription,
+              mitmEnabled ? l10n.enabled : l10n.disabled,
+              MitmView(isAndroid: system.isAndroid, business: true),
+            ),
+          if (developerMode)
+            row(
+              l10n.developerMode,
+              l10n.businessDeveloperDescription,
+              '',
+              const DeveloperView(business: true),
+            ),
+        ]),
+      ],
+    );
+  }
+}
+
 class _BusinessBypassDomainsRow extends ConsumerWidget {
   const _BusinessBypassDomainsRow();
 
@@ -1033,14 +1274,56 @@ class _BusinessBypassDomainsRow extends ConsumerWidget {
   }
 }
 
-class _DnsSettingsView extends ConsumerWidget {
+class _DnsSettingsView extends ConsumerStatefulWidget {
   const _DnsSettingsView({required this.navigation});
 
   final List<NavigationItem> navigation;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_DnsSettingsView> createState() => _DnsSettingsViewState();
+}
+
+class _DnsSettingsViewState extends ConsumerState<_DnsSettingsView> {
+  var _showResources = false;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.appLocalizations;
+    final mobile = ref.watch(isMobileViewProvider);
+    if (mobile) {
+      return Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              16,
+              context.sectionsTopPadding,
+              16,
+              12,
+            ),
+            child: BusinessSegmented<bool>(
+              items: [
+                BusinessSegment(value: false, label: l10n.dnsQueries),
+                BusinessSegment(
+                  value: true,
+                  label: l10n.businessToolsRoutingResources,
+                ),
+              ],
+              selected: _showResources,
+              onSelected: (value) => setState(() => _showResources = value),
+              expand: true,
+              mobile: true,
+              height: 36,
+            ),
+          ),
+          const _BusinessDnsSummary(),
+          Expanded(
+            child: _showResources
+                ? const ResourcesView(embedded: true)
+                : const _BusinessDnsQueriesContent(),
+          ),
+        ],
+      );
+    }
     final dnsState = ref.watch(
       patchClashConfigProvider.select(
         (state) => (dns: state.dns, keys: state.dnsOverrideKeys),
@@ -1058,8 +1341,10 @@ class _DnsSettingsView extends ConsumerWidget {
       if (dnsState.keys.contains(DnsOverrideKey.directNameserver))
         ...dnsState.dns.directNameserver,
     ];
-    final dnsQuery = navigation.where((item) => item.label == PageLabel.dns);
-    final resources = navigation.where(
+    final dnsQuery = widget.navigation.where(
+      (item) => item.label == PageLabel.dns,
+    );
+    final resources = widget.navigation.where(
       (item) => item.label == PageLabel.resources,
     );
     return ListView(
@@ -1114,6 +1399,226 @@ class _DnsSettingsView extends ConsumerWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _BusinessDnsSummary extends ConsumerWidget {
+  const _BusinessDnsSummary();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => (dns: state.dns, keys: state.dnsOverrideKeys),
+      ),
+    );
+    final upstream = [
+      if (state.keys.contains(DnsOverrideKey.nameserver))
+        ...state.dns.nameserver,
+      if (state.keys.contains(DnsOverrideKey.fallback)) ...state.dns.fallback,
+      if (state.keys.contains(DnsOverrideKey.defaultNameserver))
+        ...state.dns.defaultNameserver,
+      if (state.keys.contains(DnsOverrideKey.proxyServerNameserver))
+        ...state.dns.proxyServerNameserver,
+      if (state.keys.contains(DnsOverrideKey.directNameserver))
+        ...state.dns.directNameserver,
+    ];
+    if (!state.keys.contains(DnsOverrideKey.enhancedMode) && upstream.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    final mode = switch (state.dns.enhancedMode) {
+      DnsMode.fakeIp => 'fake-ip',
+      DnsMode.redirHost => 'redir-host',
+      DnsMode.normal => 'normal',
+      DnsMode.hosts => 'hosts',
+    };
+    return SizedBox(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+        child: Row(
+          children: [
+            if (state.keys.contains(DnsOverrideKey.enhancedMode))
+              _DnsSummaryChip(label: mode, primary: true),
+            if (state.keys.contains(DnsOverrideKey.enhancedMode) &&
+                upstream.isNotEmpty)
+              const SizedBox(width: 6),
+            if (upstream.isNotEmpty)
+              _DnsSummaryChip(
+                label:
+                    '${context.appLocalizations.businessOverrideSettings} · ${upstream.length}',
+                source: true,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DnsSummaryChip extends StatelessWidget {
+  const _DnsSummaryChip({
+    required this.label,
+    this.primary = false,
+    this.source = false,
+  });
+
+  final String label;
+  final bool primary;
+  final bool source;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: primary
+          ? context.colorScheme.primaryContainer
+          : context.colorScheme.surface,
+      shape: AppShape.full.copyWith(
+        side: source
+            ? BorderSide(color: context.colorScheme.outlineVariant)
+            : BorderSide.none,
+      ),
+    ),
+    child: SizedBox(
+      height: 20,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Text(
+          label,
+          style: BusinessText.metaLabel(context).copyWith(
+            color: primary
+                ? context.colorScheme.onPrimaryContainer
+                : context.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+class _BusinessDnsQueriesContent extends ConsumerWidget {
+  const _BusinessDnsQueriesContent();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final queries = ref.watch(dnsQueriesProvider).list;
+    if (queries.isEmpty) {
+      return Center(
+        child: Text(
+          context.appLocalizations.nullTip(context.appLocalizations.dnsQueries),
+          style: BusinessText.metaLabel(
+            context,
+          ).copyWith(color: context.colorScheme.onSurfaceVariant),
+        ),
+      );
+    }
+    return ListView(
+      padding: EdgeInsets.fromLTRB(16, 0, 16, context.bottomInset + 20),
+      children: [
+        DecoratedBox(
+          decoration: ShapeDecoration(
+            color: context.colorScheme.surface,
+            shape: AppShape.all(16),
+          ),
+          child: Column(
+            children: [
+              for (var index = 0; index < queries.length; index++) ...[
+                if (index > 0)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: context.colorScheme.outlineVariant,
+                      ),
+                      child: const SizedBox(width: double.infinity, height: 1),
+                    ),
+                  ),
+                _BusinessDnsQueryRow(query: queries[index]),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        const BusinessResourcesPreview(),
+      ],
+    );
+  }
+}
+
+class _BusinessDnsQueryRow extends StatelessWidget {
+  const _BusinessDnsQueryRow({required this.query});
+
+  final DnsQuery query;
+
+  bool get _isFakeIp => query.answers.any((answer) {
+    final parts = answer.split('.').map(int.tryParse).toList();
+    if (parts.length != 4 || parts.any((part) => part == null)) return false;
+    final value =
+        (parts[0]! << 24) | (parts[1]! << 16) | (parts[2]! << 8) | parts[3]!;
+    return value >= 0xC6120000 && value <= 0xC613FFFF;
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final secondary = BusinessText.metaLabel(
+      context,
+    ).copyWith(color: context.colorScheme.onSurfaceVariant);
+    final details = [
+      '${query.time.hour.toString().padLeft(2, '0')}:${query.time.minute.toString().padLeft(2, '0')}',
+      if (query.answers.isNotEmpty) query.answers.join(', '),
+      if (query.delay > 0) '${query.delay}ms',
+    ].join(' · ');
+    return SizedBox(
+      height: 57,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    query.domain,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.dnsDomain(context),
+                  ),
+                  Text(
+                    details,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: secondary.toJetBrainsMono,
+                  ),
+                ],
+              ),
+            ),
+            if (_isFakeIp) ...[
+              const SizedBox(width: 8),
+              DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: context.colorScheme.primaryContainer,
+                  shape: AppShape.full,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  child: Text(
+                    context.appLocalizations.businessDnsProxyResolved,
+                    style: BusinessText.metaLabel(
+                      context,
+                    ).copyWith(color: context.colorScheme.onPrimaryContainer),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }

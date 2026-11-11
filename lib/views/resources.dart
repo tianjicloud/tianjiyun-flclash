@@ -12,6 +12,7 @@ import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/database.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -33,10 +34,101 @@ const _RemoteResources _noResources = (
 );
 
 class ResourcesView extends ConsumerStatefulWidget {
-  const ResourcesView({super.key});
+  const ResourcesView({super.key, this.embedded = false});
+
+  final bool embedded;
 
   @override
   ConsumerState<ResourcesView> createState() => _ResourcesViewState();
+}
+
+class BusinessResourcesPreview extends ConsumerWidget {
+  const BusinessResourcesPreview({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final providers = ref.watch(clashProvidersProvider).value ?? const [];
+    final provider = providers.where((item) => item.isRemote).firstOrNull;
+    return FutureBuilder<List<FileInfo?>>(
+      future: Future.wait([
+        _geoFileInfo(GeoResource.GEOIP),
+        _geoFileInfo(GeoResource.GEOSITE),
+        if (provider != null) provider.fileInfo,
+      ]),
+      builder: (context, snapshot) {
+        final infos = snapshot.data ?? const <FileInfo?>[];
+        final geoInfo = [
+          if (infos.isNotEmpty) infos[0],
+          if (infos.length > 1) infos[1],
+        ].whereType<FileInfo>().toList();
+        final providerInfo = provider != null && infos.length > 2
+            ? infos[2]
+            : null;
+        if (snapshot.connectionState != ConnectionState.done ||
+            (geoInfo.isEmpty && provider == null)) {
+          return const SizedBox.shrink();
+        }
+        final lastUpdate = geoInfo
+            .map((info) => info.lastModified)
+            .whereType<DateTime>()
+            .fold<DateTime?>(
+              null,
+              (latest, date) =>
+                  latest == null || date.isAfter(latest) ? date : latest,
+            );
+        final l10n = context.appLocalizations;
+        return DecoratedBox(
+          decoration: ShapeDecoration(
+            color: context.colorScheme.surface,
+            shape: AppShape.all(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.businessDnsResourcePreview,
+                  style: BusinessText.dnsPreviewTitle(context),
+                ),
+                if (geoInfo.isNotEmpty)
+                  ListItem(
+                    padding: EdgeInsets.zero,
+                    title: Text('GeoIP · GeoSite'),
+                    subtitle: lastUpdate == null
+                        ? null
+                        : Text(lastUpdate.getLastUpdateTimeDesc(context)),
+                    trailing: TextButton(
+                      onPressed: () => globalState.safeRun(() async {
+                        await ref
+                            .read(geoResourceActionProvider.notifier)
+                            .updateGeoResource(GeoResource.GEOIP);
+                        await ref
+                            .read(geoResourceActionProvider.notifier)
+                            .updateGeoResource(GeoResource.GEOSITE);
+                      }),
+                      child: Text(l10n.update),
+                    ),
+                  ),
+                if (provider != null)
+                  ListItem(
+                    padding: EdgeInsets.zero,
+                    title: Text(provider.label),
+                    subtitle: providerInfo?.lastModified == null
+                        ? Text(l10n.ruleProviders)
+                        : Text(
+                            providerInfo!.lastModified!.getLastUpdateTimeDesc(
+                              context,
+                            ),
+                          ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _ResourcesViewState extends ConsumerState<ResourcesView> {
@@ -180,6 +272,88 @@ class _ResourcesViewState extends ConsumerState<ResourcesView> {
       updatingKeysProvider.select((keys) => resourceKeys.any(keys.contains)),
     );
 
+    final body = NullStatusSwitcher(
+      isLoading: resources == null,
+      loadingStatus: const NullStatus(
+        illustration: NullStatusIllustration.data,
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
+              top: context.sectionsTopPadding,
+              bottom: 16 + context.bottomInset,
+            ),
+            sliver: SliverMainAxisGroup(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: generateSection(
+                    items: [
+                      ListItem.toggle(
+                        title: Text(appLocalizations.autoUpdate),
+                        value: autoUpdate,
+                        onChanged: _updateAutoUpdate,
+                      ),
+                      if (autoUpdate)
+                        ListItem(
+                          title: Text(appLocalizations.resourceUpdateInterval),
+                          subtitle: Text(
+                            '$updateInterval ${appLocalizations.hours}',
+                          ),
+                          onTap: _updateInterval,
+                        ),
+                    ],
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: generateSection(
+                    title: appLocalizations.geoResources,
+                    items: [
+                      for (final geoResource in GeoResource.values)
+                        _GeoResourceItem(geoResource, preloaded: _fileInfos),
+                    ],
+                  ),
+                ),
+                generateSliverSection(
+                  title: appLocalizations.iconSets,
+                  items: iconSets,
+                  itemBuilder: (iconSet) =>
+                      _IconSetItem(iconSet, key: ValueKey(iconSet.id)),
+                ),
+                generateSliverSection(
+                  title: appLocalizations.ruleProviders,
+                  items: ruleProviders,
+                  itemBuilder: (provider) => _RuleProviderItem(
+                    provider,
+                    preloaded: _fileInfos,
+                    key: ValueKey(provider.id),
+                  ),
+                ),
+                generateSliverSection(
+                  title: appLocalizations.script,
+                  items: scripts,
+                  itemBuilder: (script) => _ScriptItem(
+                    script,
+                    preloaded: _fileInfos,
+                    key: ValueKey(script.id),
+                  ),
+                ),
+                if (mitmFeature)
+                  generateSliverSection(
+                    title: appLocalizations.mitmModules,
+                    items: modules,
+                    itemBuilder: (module) =>
+                        _ModuleItem(module, key: ValueKey(module.id)),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    if (widget.embedded) {
+      return body;
+    }
     return Scaffold(
       title: appLocalizations.resources,
       iconActions: [
@@ -190,87 +364,7 @@ class _ResourcesViewState extends ConsumerState<ResourcesView> {
           onPressed: _updateAll,
         ),
       ],
-      body: NullStatusSwitcher(
-        isLoading: resources == null,
-        loadingStatus: const NullStatus(
-          illustration: NullStatusIllustration.data,
-        ),
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(
-                top: context.sectionsTopPadding,
-                bottom: 16 + context.bottomInset,
-              ),
-              sliver: SliverMainAxisGroup(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: generateSection(
-                      items: [
-                        ListItem.toggle(
-                          title: Text(appLocalizations.autoUpdate),
-                          value: autoUpdate,
-                          onChanged: _updateAutoUpdate,
-                        ),
-                        if (autoUpdate)
-                          ListItem(
-                            title: Text(
-                              appLocalizations.resourceUpdateInterval,
-                            ),
-                            subtitle: Text(
-                              '$updateInterval ${appLocalizations.hours}',
-                            ),
-                            onTap: _updateInterval,
-                          ),
-                      ],
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: generateSection(
-                      title: appLocalizations.geoResources,
-                      items: [
-                        for (final geoResource in GeoResource.values)
-                          _GeoResourceItem(geoResource, preloaded: _fileInfos),
-                      ],
-                    ),
-                  ),
-                  generateSliverSection(
-                    title: appLocalizations.iconSets,
-                    items: iconSets,
-                    itemBuilder: (iconSet) =>
-                        _IconSetItem(iconSet, key: ValueKey(iconSet.id)),
-                  ),
-                  generateSliverSection(
-                    title: appLocalizations.ruleProviders,
-                    items: ruleProviders,
-                    itemBuilder: (provider) => _RuleProviderItem(
-                      provider,
-                      preloaded: _fileInfos,
-                      key: ValueKey(provider.id),
-                    ),
-                  ),
-                  generateSliverSection(
-                    title: appLocalizations.script,
-                    items: scripts,
-                    itemBuilder: (script) => _ScriptItem(
-                      script,
-                      preloaded: _fileInfos,
-                      key: ValueKey(script.id),
-                    ),
-                  ),
-                  if (mitmFeature)
-                    generateSliverSection(
-                      title: appLocalizations.mitmModules,
-                      items: modules,
-                      itemBuilder: (module) =>
-                          _ModuleItem(module, key: ValueKey(module.id)),
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: body,
     );
   }
 }

@@ -15,6 +15,7 @@ import 'package:fl_clash/views/profiles/extend/extend.dart';
 import 'package:fl_clash/views/profiles/preview.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessPrimaryButton, BusinessSecondaryButton, DashboardCard;
+import 'package:fl_clash/views/business_settings_card.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -423,8 +424,10 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
           ],
         ),
     ];
+    final mobileView = ref.watch(isMobileViewProvider);
     final businessEdit =
-        system.isDesktop && isTianjiSubscriptionProfile(widget.profile);
+        (system.isDesktop || mobileView) &&
+        isTianjiSubscriptionProfile(widget.profile);
     return FocusTraversalGroup(
       policy: PageTraversalPolicy(),
       child: PageFocusScope(
@@ -438,41 +441,60 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
           child: Scaffold(
             title: businessEdit ? null : appLocalizations.edit,
             titleWidget: businessEdit
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).maybePop(),
-                        child: Text(
-                          '${appLocalizations.businessSubscriptions} ›',
-                          style: BusinessText.metaLabel(context).copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
+                ? mobileView
+                      ? Text(
+                          appLocalizations.businessProfileEditTitle,
+                          style: AppTextStyle.custom(
+                            context,
+                            size: 19,
+                            leading: 24,
+                            weight: FontWeight.w700,
                           ),
-                        ),
-                      ),
-                      Text(
-                        appLocalizations.businessProfileEditTitle,
-                        style: BusinessText.pageTitle(context),
-                      ),
-                    ],
-                  )
+                        )
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).maybePop(),
+                              child: Text(
+                                '${appLocalizations.businessSubscriptions} ›',
+                                style: BusinessText.metaLabel(context).copyWith(
+                                  color: context.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              appLocalizations.businessProfileEditTitle,
+                              style: BusinessText.pageTitle(context),
+                            ),
+                          ],
+                        )
                 : null,
             actions: businessEdit
-                ? [
-                    BusinessSecondaryButton(
-                      label: appLocalizations.cancel,
-                      width: 68,
-                      onPressed: () => Navigator.of(context).maybePop(),
-                    ),
-                    BusinessPrimaryButton(
-                      label: appLocalizations.save,
-                      width: 68,
-                      onPressed: _handleConfirm,
-                    ),
-                  ]
+                ? mobileView
+                      ? [
+                          BusinessPrimaryButton(
+                            label: appLocalizations.save,
+                            width: 60,
+                            height: 36,
+                            onPressed: _handleConfirm,
+                          ),
+                        ]
+                      : [
+                          BusinessSecondaryButton(
+                            label: appLocalizations.cancel,
+                            width: 68,
+                            onPressed: () => Navigator.of(context).maybePop(),
+                          ),
+                          BusinessPrimaryButton(
+                            label: appLocalizations.save,
+                            width: 68,
+                            onPressed: _handleConfirm,
+                          ),
+                        ]
                 : null,
-            businessTitleInset: businessEdit,
-            showLeading: !businessEdit,
+            businessTitleInset: businessEdit && !mobileView,
+            showLeading: !businessEdit || mobileView,
             confirmationAction: businessEdit
                 ? null
                 : IconButtonData(
@@ -556,6 +578,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     final counts = activeProfile?.id == widget.profile.id
         ? globalState.lastConfigCounts
         : null;
+    if (ref.watch(isMobileViewProvider)) {
+      return _buildBusinessMobileEditor(issue);
+    }
     Widget fieldLabel(String label) => Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(label, style: BusinessText.cardTitle(context)),
@@ -746,6 +771,153 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       ),
     );
   }
+
+  Widget _buildBusinessMobileEditor(
+    ({_ProfileField field, String message})? issue,
+  ) {
+    final context = this.context;
+    final l10n = context.appLocalizations;
+    final isUrl = widget.profile.type == ProfileType.url;
+    Widget field(String label, Widget child) => Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              label,
+              style: AppTextStyle.custom(
+                context,
+                size: 13,
+                leading: 18,
+                weight: FontWeight.w600,
+              ),
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
+    return ListView(
+      padding: EdgeInsets.fromLTRB(
+        16,
+        context.sectionsTopPadding,
+        16,
+        context.bottomInset + 20,
+      ),
+      children: [
+        if (issue != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: ErrorBanner(message: issue.message),
+          ),
+        field(
+          l10n.name,
+          _BusinessEditInput(
+            controller: _labelController,
+            onChanged: _handleChanged,
+          ),
+        ),
+        if (isUrl)
+          field(
+            l10n.businessProfileAddUrlLabel,
+            _BusinessEditInput(
+              controller: _urlController,
+              obscure: true,
+              onChanged: _handleChanged,
+            ),
+          ),
+        if (isUrl) ...[
+          const SizedBox(height: 16),
+          field(
+            l10n.businessProfileAddAutoUpdate,
+            _BusinessIntervalInput(
+              controller: _autoUpdateDurationController,
+              enabled: _autoUpdate,
+              includeDisabled: true,
+              onChanged: (value) {
+                _setAutoUpdate(value != 'disabled');
+                if (value != 'disabled') _handleChanged(value);
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          BusinessSettingsCard(
+            items: [
+              ListItem(
+                title: Text(l10n.businessProfileEditExtensionTitle),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.itemsCount(_overrideCount),
+                      style: BusinessText.metaLabel(
+                        context,
+                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                    ),
+                    const SizedBox(width: 6),
+                    const GlyphIcon(AppGlyphs.chevronForward),
+                  ],
+                ),
+                onTap: () => BaseNavigator.push(
+                  context,
+                  ExtendView(profileId: widget.profile.id),
+                ),
+              ),
+              ListItem(
+                title: Text(l10n.businessProfileEditRawTitle),
+                trailing: const GlyphIcon(AppGlyphs.chevronForward),
+                onTap: () => BaseNavigator.push(
+                  context,
+                  PreviewProfileView(profile: widget.profile),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: OutlinedButton(
+              onPressed: _handleDeleteProfile,
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(
+                  context.colorScheme.surface,
+                ),
+                side: WidgetStatePropertyAll(
+                  BorderSide(
+                    color: context.colorScheme.error.withValues(alpha: 0.22),
+                  ),
+                ),
+                shape: AppShape.all(14),
+              ),
+              child: Text(
+                l10n.businessProfileEditDelete,
+                style: AppTextStyle.custom(
+                  context,
+                  size: 15,
+                  leading: 20,
+                  weight: FontWeight.w600,
+                ).copyWith(color: context.colorScheme.error),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Center(
+              child: Text(
+                l10n.businessProfileEditDeleteDescription,
+                style: BusinessText.metaLabel(
+                  context,
+                ).copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 class _BusinessEditInput extends StatefulWidget {
@@ -767,7 +939,7 @@ class _BusinessEditInputState extends State<_BusinessEditInput> {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-    height: 44,
+    height: 48,
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: ShapeDecoration(
@@ -819,9 +991,13 @@ class _BusinessIntervalInput extends StatelessWidget {
   const _BusinessIntervalInput({
     required this.controller,
     required this.onChanged,
+    this.enabled = true,
+    this.includeDisabled = false,
   });
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
+  final bool enabled;
+  final bool includeDisabled;
 
   @override
   Widget build(BuildContext context) {
@@ -830,10 +1006,11 @@ class _BusinessIntervalInput extends StatelessWidget {
       targetBuilder: (open) => GestureDetector(
         onTap: open,
         child: Container(
-          height: 44,
+          height: 48,
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: ShapeDecoration(
+            color: context.colorScheme.surface,
             shape: AppShape.all(12).copyWith(
               side: BorderSide(color: context.colorScheme.outlineVariant),
             ),
@@ -842,7 +1019,11 @@ class _BusinessIntervalInput extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  context.appLocalizations.zzAutoUpdateHours(minutes ~/ 60),
+                  enabled
+                      ? context.appLocalizations.zzAutoUpdateHours(
+                          minutes ~/ 60,
+                        )
+                      : context.appLocalizations.disabled,
                   style: BusinessText.dataBody(context),
                 ),
               ),
@@ -853,6 +1034,11 @@ class _BusinessIntervalInput extends StatelessWidget {
       ),
       popupBuilder: (_) => PopupMenu(
         items: [
+          if (includeDisabled)
+            PopupMenuItem(
+              label: context.appLocalizations.disabled,
+              onPressed: () => onChanged('disabled'),
+            ),
           for (final hours in [6, 12, 24, 48])
             PopupMenuItem(
               label: context.appLocalizations.zzAutoUpdateHours(hours),

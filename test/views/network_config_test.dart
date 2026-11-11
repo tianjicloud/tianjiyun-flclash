@@ -130,10 +130,16 @@ void main() {
       await pumpItem(tester, const TunStackItem());
       final initial = container.read(patchClashConfigProvider).tun.stack;
       final target = TunStack.values.firstWhere((item) => item != initial);
+      final targetLabel = switch (target) {
+        TunStack.gvisor => 'gVisor',
+        TunStack.system => currentAppLocalizations.system,
+        TunStack.mixed => currentAppLocalizations.businessTunStackMixed,
+        TunStack.mips => 'MIPS',
+      };
 
       await tester.tap(find.byType(ListRow).first);
       await tester.pumpAndSettle();
-      await tester.tap(find.text(target.name).last);
+      await tester.tap(find.text(targetLabel).last);
       await tester.pumpAndSettle();
 
       expect(container.read(patchClashConfigProvider).tun.stack, target);

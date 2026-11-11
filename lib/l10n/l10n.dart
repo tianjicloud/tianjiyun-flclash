@@ -7863,7 +7863,8 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one:
+          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -13152,6 +13153,211 @@ class AppLocalizations {
     return Intl.message(
       'Reconnect now',
       name: 'businessProxyReconnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DNS and resources`
+  String get businessSettingsDnsResources {
+    return Intl.message(
+      'DNS and resources',
+      name: 'businessSettingsDnsResources',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Advanced Network Settings`
+  String get businessAdvancedNetworkSettings {
+    return Intl.message(
+      'Advanced Network Settings',
+      name: 'businessAdvancedNetworkSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DNS and Sniffing`
+  String get businessDnsAndSniffing {
+    return Intl.message(
+      'DNS and Sniffing',
+      name: 'businessDnsAndSniffing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mixed`
+  String get businessTunStackMixed {
+    return Intl.message(
+      'Mixed',
+      name: 'businessTunStackMixed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy resolved`
+  String get businessDnsProxyResolved {
+    return Intl.message(
+      'Proxy resolved',
+      name: 'businessDnsProxyResolved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Routing resource preview`
+  String get businessDnsResourcePreview {
+    return Intl.message(
+      'Routing resource preview',
+      name: 'businessDnsResourcePreview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wi-Fi rules {count} items`
+  String businessWifiRulesCount(int count) {
+    return Intl.message(
+      'Wi-Fi rules $count items',
+      name: 'businessWifiRulesCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `VPN`
+  String get businessVpn {
+    return Intl.message('VPN', name: 'businessVpn', desc: '', args: []);
+  }
+
+  /// `Choose the network stack used by the VPN.`
+  String get businessStackModeDescription {
+    return Intl.message(
+      'Choose the network stack used by the VPN.',
+      name: 'businessStackModeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Route HTTP traffic through the system proxy.`
+  String get businessSystemProxyDescription {
+    return Intl.message(
+      'Route HTTP traffic through the system proxy.',
+      name: 'businessSystemProxyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow selected apps to connect outside the VPN.`
+  String get businessAllowBypassDescription {
+    return Intl.message(
+      'Allow selected apps to connect outside the VPN.',
+      name: 'businessAllowBypassDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read hostnames from supported network traffic.`
+  String get businessDomainSniffingDescription {
+    return Intl.message(
+      'Read hostnames from supported network traffic.',
+      name: 'businessDomainSniffingDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DNS settings supplied by this subscription.`
+  String get businessSubscriptionOverridesDescription {
+    return Intl.message(
+      'DNS settings supplied by this subscription.',
+      name: 'businessSubscriptionOverridesDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage routing rules and provider overrides.`
+  String get businessRuleOverrideDescription {
+    return Intl.message(
+      'Manage routing rules and provider overrides.',
+      name: 'businessRuleOverrideDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inspect HTTPS traffic with the local certificate.`
+  String get businessMitmDescription {
+    return Intl.message(
+      'Inspect HTTPS traffic with the local certificate.',
+      name: 'businessMitmDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open diagnostics and advanced developer tools.`
+  String get businessDeveloperDescription {
+    return Intl.message(
+      'Open diagnostics and advanced developer tools.',
+      name: 'businessDeveloperDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network stack`
+  String get businessNetworkStack {
+    return Intl.message(
+      'Network stack',
+      name: 'businessNetworkStack',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System proxy (HTTP)`
+  String get businessSystemProxyHttp {
+    return Intl.message(
+      'System proxy (HTTP)',
+      name: 'businessSystemProxyHttp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose how DNS answers are generated.`
+  String get businessDnsModeDescription {
+    return Intl.message(
+      'Choose how DNS answers are generated.',
+      name: 'businessDnsModeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `More VPN settings`
+  String get businessMoreVpnSettings {
+    return Intl.message(
+      'More VPN settings',
+      name: 'businessMoreVpnSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open remaining VPN interface options.`
+  String get businessMoreVpnDescription {
+    return Intl.message(
+      'Open remaining VPN interface options.',
+      name: 'businessMoreVpnDescription',
       desc: '',
       args: [],
     );

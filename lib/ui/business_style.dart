@@ -187,6 +187,20 @@ Color businessDelayColor(ColorScheme colorScheme, int? delay) {
 /// labels sit between steps, so they are named here once instead of repeated
 /// as bare sizes at call sites.
 abstract final class BusinessText {
+  static TextStyle dnsDomain(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 13.5,
+    leading: 18,
+    weight: FontWeight.w500,
+  ).toJetBrainsMono;
+
+  static TextStyle dnsPreviewTitle(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 13,
+    leading: 18,
+    weight: FontWeight.w700,
+  );
+
   static const _tabular = [FontFeature.tabularFigures()];
 
   static TextStyle errorTitle(BuildContext context) => AppTextStyle.custom(
