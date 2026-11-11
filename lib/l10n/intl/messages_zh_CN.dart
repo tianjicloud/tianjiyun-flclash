@@ -451,6 +451,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("测速"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("超时"),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("断开"),
+    "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
+      "尚未配置 DNS 上游覆写。",
+    ),
+    "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNS 服务器"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("启用智能分流"),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage("出口校验通过"),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
@@ -476,6 +480,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("已锁定"),
     "businessHome": MessageLookupByLibrary.simpleMessage("首页"),
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage("点击一行设置或修改快捷键"),
+    "businessIntercept": MessageLookupByLibrary.simpleMessage("拦截"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("条"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage("未能完成线路切换，请重试"),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
@@ -490,9 +495,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "暂未读取到可用线路，请检查订阅。",
     ),
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage("正在读取可用线路…"),
+    "businessLocalPorts": MessageLookupByLibrary.simpleMessage("本地端口"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("锁定"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("已锁定出口"),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage("大陆直连"),
+    "businessManage": MessageLookupByLibrary.simpleMessage("管理"),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage("手动选择"),
     "businessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
       "托盘图标会一直显示连接状态",
@@ -507,6 +514,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "添加 Wi-Fi 网络后，连接到该网络时会暂停应用运行。",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出站"),
+    "businessOverrideSettings": MessageLookupByLibrary.simpleMessage("订阅覆写"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自动更新",
     ),

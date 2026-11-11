@@ -7713,7 +7713,8 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one:
+          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -12267,6 +12268,61 @@ class AppLocalizations {
     return Intl.message(
       'Restore…',
       name: 'businessRestoreAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage`
+  String get businessManage {
+    return Intl.message('Manage', name: 'businessManage', desc: '', args: []);
+  }
+
+  /// `Local ports`
+  String get businessLocalPorts {
+    return Intl.message(
+      'Local ports',
+      name: 'businessLocalPorts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DNS servers`
+  String get businessDnsServers {
+    return Intl.message(
+      'DNS servers',
+      name: 'businessDnsServers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No DNS upstream overrides are configured.`
+  String get businessDnsNoUpstream {
+    return Intl.message(
+      'No DNS upstream overrides are configured.',
+      name: 'businessDnsNoUpstream',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription overrides`
+  String get businessOverrideSettings {
+    return Intl.message(
+      'Subscription overrides',
+      name: 'businessOverrideSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Intercept`
+  String get businessIntercept {
+    return Intl.message(
+      'Intercept',
+      name: 'businessIntercept',
       desc: '',
       args: [],
     );

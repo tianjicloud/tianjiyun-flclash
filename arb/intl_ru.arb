@@ -1515,4 +1515,13 @@
   "businessOnDemandEmpty": "Добавьте сеть Wi-Fi, чтобы при подключении к ней приостанавливать приложение.",
   "businessDisconnect": "Отключить",
   "businessRestoreAction": "Восстановить…"
+,
+  "businessManage": "Управлять"
+,
+  "businessLocalPorts": "Локальные порты",
+  "businessDnsServers": "DNS-серверы",
+  "businessDnsNoUpstream": "Пользовательские DNS-серверы не настроены.",
+  "businessOverrideSettings": "Переопределения подписки"
+,
+  "businessIntercept": "Блокировать"
 }

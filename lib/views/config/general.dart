@@ -70,7 +70,9 @@ class DelayTestTimeoutItem extends ConsumerWidget {
 }
 
 class PortItem extends ConsumerWidget {
-  const PortItem({super.key});
+  const PortItem({super.key, this.business = false});
+
+  final bool business;
 
   Future<void> handleShowPortForm(BuildContext context) async {
     await showFormSheet<void>(
@@ -86,8 +88,34 @@ class PortItem extends ConsumerWidget {
       patchClashConfigProvider.select((state) => state.mixedPort),
     );
     return ListItem(
-      title: Text(appLocalizations.port),
-      subtitle: Text('$mixedPort'),
+      title: Text(
+        business ? appLocalizations.mixedPort : appLocalizations.port,
+      ),
+      subtitle: business ? null : Text('$mixedPort'),
+      trailing: business
+          ? SizedBox(
+              width: 120,
+              height: 32,
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: context.colorScheme.surfaceContainerLow,
+                  shape: AppShape.md,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(
+                      '$mixedPort',
+                      style: AppTextStyle.subheadline
+                          .of(context)
+                          .toJetBrainsMono,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : null,
       onTap: () {
         handleShowPortForm(context);
       },
@@ -250,6 +278,27 @@ class GeneralView extends ConsumerWidget {
     required AppSettingProps Function(AppSettingProps state, bool value) update,
   }) => _appSettingToggle(title: title, select: select, update: update);
 
+  List<Widget> _connectionItems() => [
+    const DelayTestTimeoutItem(),
+    _clashToggle(
+      title: (l) => l.findProcessMode,
+      select: (state) => state.findProcessMode == FindProcessMode.always,
+      update: (state, value) => state.copyWith(
+        findProcessMode: value ? FindProcessMode.always : FindProcessMode.off,
+      ),
+    ),
+    _toggle(
+      title: (l) => l.autoCloseConnections,
+      select: (state) => state.closeConnections,
+      update: (state, value) => state.copyWith(closeConnections: value),
+    ),
+    _toggle(
+      title: (l) => l.onlyStatisticsProxy,
+      select: (state) => state.onlyStatisticsProxy,
+      update: (state, value) => state.copyWith(onlyStatisticsProxy: value),
+    ),
+  ];
+
   List<Widget> _inboundItems({
     required bool authentication,
     required bool externalController,
@@ -278,27 +327,6 @@ class GeneralView extends ConsumerWidget {
       AuthenticationAccountItem(),
       AuthenticationPasswordItem(),
     ],
-  ];
-
-  List<Widget> _connectionItems() => [
-    const DelayTestTimeoutItem(),
-    _clashToggle(
-      title: (l) => l.findProcessMode,
-      select: (state) => state.findProcessMode == FindProcessMode.always,
-      update: (state, value) => state.copyWith(
-        findProcessMode: value ? FindProcessMode.always : FindProcessMode.off,
-      ),
-    ),
-    _toggle(
-      title: (l) => l.autoCloseConnections,
-      select: (state) => state.closeConnections,
-      update: (state, value) => state.copyWith(closeConnections: value),
-    ),
-    _toggle(
-      title: (l) => l.onlyStatisticsProxy,
-      select: (state) => state.onlyStatisticsProxy,
-      update: (state, value) => state.copyWith(onlyStatisticsProxy: value),
-    ),
   ];
 
   List<Widget> _coreItems() => [
@@ -461,11 +489,11 @@ class GeneralView extends ConsumerWidget {
               select: (state) => state.checkCertificate,
               update: (state, value) => state.copyWith(checkCertificate: value),
             ),
+            ..._connectionItems(),
             ..._inboundItems(
               authentication: authentication,
               externalController: externalController,
             ),
-            ..._connectionItems(),
             OverrideSection(
               title: l10n.core,
               spec: _generalOverrideSpec,
@@ -498,6 +526,22 @@ class GeneralView extends ConsumerWidget {
         ? buildVersion
         : globalState.packageInfo.version;
   }
+}
+
+class GeneralOverridesView extends ConsumerWidget {
+  const GeneralOverridesView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => ListView(
+    padding: EdgeInsets.only(bottom: context.bottomInset + 20),
+    children: [
+      OverrideSection(
+        title: context.appLocalizations.general,
+        spec: _generalOverrideSpec,
+        items: [const HostsItem(key: ValueKey(#hosts))],
+      ),
+    ],
+  );
 }
 
 class _SubscriptionUpdateDurationItem extends ConsumerWidget {

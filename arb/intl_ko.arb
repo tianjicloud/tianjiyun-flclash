@@ -1515,4 +1515,13 @@
   "businessOnDemandEmpty": "Wi-Fi 네트워크를 추가하면 연결 시 앱을 일시 중지합니다.",
   "businessDisconnect": "연결 끊기",
   "businessRestoreAction": "복원…"
+,
+  "businessManage": "관리"
+,
+  "businessLocalPorts": "로컬 포트",
+  "businessDnsServers": "DNS 서버",
+  "businessDnsNoUpstream": "설정된 DNS 재정의 서버가 없습니다.",
+  "businessOverrideSettings": "구독 설정 재정의"
+,
+  "businessIntercept": "차단"
 }

@@ -1515,4 +1515,13 @@
   "businessOnDemandEmpty": "Ajoutez un réseau Wi-Fi pour mettre l’application en pause lorsque vous vous y connectez.",
   "businessDisconnect": "Déconnecter",
   "businessRestoreAction": "Restaurer…"
+,
+  "businessManage": "Gérer"
+,
+  "businessLocalPorts": "Ports locaux",
+  "businessDnsServers": "Serveurs DNS",
+  "businessDnsNoUpstream": "Aucun serveur DNS personnalisé n’est configuré.",
+  "businessOverrideSettings": "Remplacements des abonnements"
+,
+  "businessIntercept": "Bloquer"
 }

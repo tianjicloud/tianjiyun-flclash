@@ -547,6 +547,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("Timeout"),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("Disconnect"),
+    "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
+      "No DNS upstream overrides are configured.",
+    ),
+    "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNS servers"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Enable smart routing",
     ),
@@ -584,6 +588,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "Select a row to set or change its shortcut",
     ),
+    "businessIntercept": MessageLookupByLibrary.simpleMessage("Intercept"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("lines"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Could not finish switching lines. Retry.",
@@ -602,11 +607,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "Loading available lines…",
     ),
+    "businessLocalPorts": MessageLookupByLibrary.simpleMessage("Local ports"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("Locked"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("Exit locked"),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Mainland direct",
     ),
+    "businessManage": MessageLookupByLibrary.simpleMessage("Manage"),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage(
       "Manual selection",
     ),
@@ -631,6 +638,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Add a Wi-Fi network to pause the app when you connect to it.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Outbound"),
+    "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
+      "Subscription overrides",
+    ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Auto-update",
     ),
@@ -683,10 +693,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
       "Delete this subscription",
     ),
-    "businessProfileEditDeleteDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Only removes this local configuration. Your Tianji Cloud account and plan are unaffected.",
-        ),
+    "businessProfileEditDeleteDescription": MessageLookupByLibrary.simpleMessage(
+      "Only removes this local configuration. Your Tianji Cloud account and plan are unaffected.",
+    ),
     "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
       "Delete subscription",
     ),
@@ -1543,10 +1552,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificate installed",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -2041,10 +2049,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Import failed",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Your current network may be blocking this domain. The status page has backup addresses, or try again later.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Can’t reach the subscription address",
     ),

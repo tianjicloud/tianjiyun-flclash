@@ -1515,4 +1515,13 @@
   "businessOnDemandEmpty": "Wi-Fiネットワークを追加すると、接続時にアプリを一時停止できます。",
   "businessDisconnect": "切断",
   "businessRestoreAction": "復元…"
+,
+  "businessManage": "管理"
+,
+  "businessLocalPorts": "ローカルポート",
+  "businessDnsServers": "DNSサーバー",
+  "businessDnsNoUpstream": "DNS上書きサーバーは設定されていません。",
+  "businessOverrideSettings": "サブスクリプションの上書き"
+,
+  "businessIntercept": "ブロック"
 }

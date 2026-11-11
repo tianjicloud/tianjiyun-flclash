@@ -593,6 +593,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tiempo agotado",
     ),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
+    "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
+      "No hay servidores DNS personalizados configurados.",
+    ),
+    "businessDnsServers": MessageLookupByLibrary.simpleMessage(
+      "Servidores DNS",
+    ),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Activar enrutamiento inteligente",
     ),
@@ -630,6 +636,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "Selecciona una fila para configurar o cambiar el atajo",
     ),
+    "businessIntercept": MessageLookupByLibrary.simpleMessage("Bloquear"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("líneas"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "No se pudo completar el cambio. Reinténtalo.",
@@ -650,6 +657,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "Cargando líneas disponibles…",
     ),
+    "businessLocalPorts": MessageLookupByLibrary.simpleMessage(
+      "Puertos locales",
+    ),
     "businessLocked": MessageLookupByLibrary.simpleMessage("Bloqueado"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage(
       "Salida bloqueada",
@@ -657,6 +667,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Conexión directa a China continental",
     ),
+    "businessManage": MessageLookupByLibrary.simpleMessage("Gestionar"),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage(
       "Selección manual",
     ),
@@ -681,13 +692,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Añade una red Wi-Fi para pausar la aplicación al conectarte.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Salida"),
+    "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
+      "Ajustes sobrescritos",
+    ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Actualización automática",
     ),
-    "businessProfileAddClipboardRecognized":
-        MessageLookupByLibrary.simpleMessage(
-          "Se detectó un enlace de suscripción de Tianji Cloud en el portapapeles.",
-        ),
+    "businessProfileAddClipboardRecognized": MessageLookupByLibrary.simpleMessage(
+      "Se detectó un enlace de suscripción de Tianji Cloud en el portapapeles.",
+    ),
     "businessProfileAddCustomDescription": MessageLookupByLibrary.simpleMessage(
       "Añadir reglas a una suscripción existente",
     ),
@@ -733,10 +746,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
       "Eliminar esta suscripción",
     ),
-    "businessProfileEditDeleteDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Solo elimina esta configuración local. Tu cuenta y plan de Tianji Cloud no se ven afectados.",
-        ),
+    "businessProfileEditDeleteDescription": MessageLookupByLibrary.simpleMessage(
+      "Solo elimina esta configuración local. Tu cuenta y plan de Tianji Cloud no se ven afectados.",
+    ),
     "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
       "Eliminar suscripción",
     ),
@@ -763,10 +775,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("Abrir"),
     "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("Plan"),
-    "businessProfileEditPreviewDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Vista previa de solo lectura. Usa la configuración personalizada para modificar.",
-        ),
+    "businessProfileEditPreviewDescription": MessageLookupByLibrary.simpleMessage(
+      "Vista previa de solo lectura. Usa la configuración personalizada para modificar.",
+    ),
     "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
       "Este enlace contiene un token personal. No lo compartas.",
     ),
@@ -1641,10 +1652,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Certificado instalado",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "Se denegó el permiso de lista de apps, por lo que no se pueden mostrar las apps instaladas. Concédelo manualmente en los ajustes del sistema.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Este sistema oculta la lista de apps instaladas hasta que se concede el permiso. Autorízalo para configurar el proxy por app.",
     ),
@@ -2181,10 +2191,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "No se pudo importar",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Puede que tu red actual bloquee este dominio. La página de estado tiene direcciones alternativas, o inténtalo más tarde.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "No se puede acceder a la dirección de suscripción",
     ),

@@ -1,6 +1,7 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -19,6 +20,12 @@ import 'package:fl_clash/views/config/on_demand.dart';
 import 'package:fl_clash/views/config/providers.dart';
 import 'package:fl_clash/views/config/rules.dart';
 import 'package:fl_clash/views/config/scripts.dart';
+import 'package:fl_clash/views/config/tun.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton;
+import 'package:fl_clash/views/diagnostics.dart';
 import 'package:fl_clash/views/config/user_agents.dart';
 import 'package:fl_clash/views/dashboard/widgets/service_status.dart';
 import 'package:fl_clash/views/hotkey.dart';
@@ -388,101 +395,616 @@ class _SettingsNavigationItem extends StatelessWidget {
   }
 }
 
-class _RuleSettingsView extends StatelessWidget {
+class _RuleSettingsView extends ConsumerWidget {
   const _RuleSettingsView();
 
   @override
-  Widget build(BuildContext context) => generateSection(
-    title: context.appLocalizations.businessSettingsRules,
-    items: [
-      ListItem.open(
-        title: Text(context.appLocalizations.addedRules),
-        widget: const AddedRulesView(),
-      ),
-      ListItem.open(
-        title: Text(context.appLocalizations.script),
-        widget: const ScriptsView(),
-      ),
-      ListItem.open(
-        title: Text(context.appLocalizations.ruleProviders),
-        widget: const ClashProvidersView(),
-      ),
-      ListItem.open(
-        title: Text(context.appLocalizations.filters),
-        widget: const FiltersView(),
-      ),
-      ListItem.open(
-        title: Text(context.appLocalizations.proxies),
-        widget: const CustomProxiesView(),
-      ),
-    ],
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final rules = ref.watch(globalRulesProvider).value ?? const <Rule>[];
+    final scripts = ref.watch(scriptsProvider).value ?? const <Script>[];
+    final ruleProviders =
+        ref.watch(clashProvidersProvider).value ?? const <ClashProvider>[];
+    final filters = ref.watch(
+      appSettingProvider.select((state) => state.filters),
+    );
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        BusinessSettingsCard(
+          title: '${l10n.global} ${l10n.addedRules} · ${rules.length}',
+          trailing: BusinessPrimaryButton(
+            label: l10n.add,
+            width: 84,
+            height: 32,
+            glyph: AppGlyphs.addCircle,
+            onPressed: () async {
+              final rule = await showFormSheet<Rule>(
+                context: context,
+                builder: (_) => const RuleForm(),
+              );
+              if (rule != null) {
+                ref.read(globalRulesProvider.notifier).put(rule);
+              }
+            },
+          ),
+          items: [
+            for (final rule in rules.take(5)) _RuleSummaryItem(rule: rule),
+            if (rules.length > 5)
+              ListItem(
+                title: Text(
+                  '${l10n.viewAll} ${l10n.itemsCount(rules.length)} ›',
+                ),
+                onTap: () => Navigator.of(
+                  context,
+                ).push(PagedSheetRoute(builder: (_) => const AddedRulesView())),
+              ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.businessOverrideSettings,
+          items: [
+            _BusinessManageRow(
+              title: l10n.general,
+              page: const GeneralOverridesView(),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.script,
+          items: [
+            _BusinessManageRow(
+              title: l10n.script,
+              subtitle: scripts.isEmpty
+                  ? null
+                  : l10n.itemsCount(scripts.length),
+              page: const ScriptsView(),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.ruleProviders,
+          items: [
+            _BusinessManageRow(
+              title: l10n.ruleProviders,
+              subtitle: ruleProviders.isEmpty
+                  ? null
+                  : l10n.itemsCount(ruleProviders.length),
+              page: const ClashProvidersView(),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.filters,
+          items: [
+            _BusinessManageRow(
+              title: l10n.filters,
+              subtitle: filters.isEmpty
+                  ? null
+                  : l10n.itemsCount(filters.length),
+              page: const FiltersView(),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.other,
+          items: [
+            _BusinessManageRow(
+              title: l10n.proxies,
+              page: const CustomProxiesView(),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
-class _NetworkSettingsView extends StatelessWidget {
+class _BusinessManageRow extends StatelessWidget {
+  const _BusinessManageRow({
+    required this.title,
+    required this.page,
+    this.subtitle,
+  });
+
+  final String title;
+  final String? subtitle;
+  final Widget page;
+
+  @override
+  Widget build(BuildContext context) {
+    void open() {
+      Navigator.of(context).push(PagedSheetRoute(builder: (_) => page));
+    }
+
+    return ListItem(
+      title: Text(title),
+      subtitle: subtitle == null ? null : Text(subtitle!),
+      trailing: BusinessSecondaryButton(
+        label: context.appLocalizations.businessManage,
+        width: 86,
+        onPressed: open,
+      ),
+      onTap: open,
+    );
+  }
+}
+
+class _RuleSummaryItem extends StatelessWidget {
+  const _RuleSummaryItem({required this.rule});
+
+  final Rule rule;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final type = rule.ruleAction.value;
+    final content = rule.content ?? rule.ruleProvider ?? rule.subRule ?? '';
+    final target = (rule.ruleTarget ?? '').toUpperCase();
+    final colorScheme = context.colorScheme;
+    final (background, foreground, label) = switch (target) {
+      'DIRECT' => (
+        colorScheme.successContainer,
+        colorScheme.onSuccessContainer,
+        l10n.direct,
+      ),
+      'REJECT' || 'REJECT-DROP' => (
+        colorScheme.errorContainer,
+        colorScheme.onErrorContainer,
+        l10n.businessIntercept,
+      ),
+      _ => (
+        colorScheme.primaryContainer,
+        colorScheme.onPrimaryContainer,
+        rule.ruleTarget ?? '',
+      ),
+    };
+    return ListItem(
+      title: Row(
+        children: [
+          DecoratedBox(
+            decoration: ShapeDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              shape: AppShape.sm,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Text(
+                type,
+                style: AppTextStyle.caption1
+                    .of(context)
+                    .toJetBrainsMono
+                    .copyWith(color: colorScheme.onSurfaceVariant),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              content,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyle.subheadline.of(context).toJetBrainsMono,
+            ),
+          ),
+        ],
+      ),
+      trailing: DecoratedBox(
+        decoration: ShapeDecoration(color: background, shape: AppShape.full),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          child: Text(
+            label,
+            style: AppTextStyle.caption1
+                .of(context, emphasized: true)
+                .copyWith(color: foreground),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NetworkSettingsView extends ConsumerWidget {
   const _NetworkSettingsView({required this.navigation});
 
   final List<NavigationItem> navigation;
 
   @override
-  Widget build(BuildContext context) => generateSection(
-    title: context.appLocalizations.businessSettingsInboundPorts,
-    items: [
-      ListItem.open(
-        title: Text(context.appLocalizations.network),
-        widget: BaseScaffold(
-          title: context.appLocalizations.network,
-          body: const NetworkListView(),
-        ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final authentication = ref.watch(
+      networkSettingProvider.select((state) => state.authentication.enable),
+    );
+    final externalController = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => state.externalController == ExternalControllerStatus.open,
       ),
-      for (final item in navigation.where(
-        (item) => item.label == PageLabel.requests,
-      ))
-        ListItem.open(
-          title: Text(item.label.label),
-          widget: item.builder(context),
+    );
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        BusinessSettingsCard(
+          title: l10n.businessLocalPorts,
+          items: [
+            const PortItem(business: true),
+            ConfigToggleItem(
+              title: (l) => l.allowLan,
+              selector: patchClashConfigProvider.select(
+                (state) => state.allowLan,
+              ),
+              onChanged: (ref, value) => ref
+                  .read(patchClashConfigProvider.notifier)
+                  .update((state) => state.copyWith(allowLan: value)),
+            ),
+            _BusinessManageRow(
+              title: 'IPv6',
+              subtitle: l10n.ipv6Desc,
+              page: const GeneralOverridesView(),
+            ),
+            ConfigToggleItem(
+              title: (l) => l.findProcessMode,
+              selector: patchClashConfigProvider.select(
+                (state) => state.findProcessMode == FindProcessMode.always,
+              ),
+              onChanged: (ref, value) => ref
+                  .read(patchClashConfigProvider.notifier)
+                  .update(
+                    (state) => state.copyWith(
+                      findProcessMode: value
+                          ? FindProcessMode.always
+                          : FindProcessMode.off,
+                    ),
+                  ),
+            ),
+          ],
         ),
-    ],
-  );
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.systemProxy,
+          items: [
+            const SystemProxyItem(),
+            const _BusinessBypassDomainsRow(),
+            if (system.isWindows) const LoopbackItem(),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.other,
+          items: [
+            ConfigToggleItem(
+              title: (l) => l.externalController,
+              selector: patchClashConfigProvider.select(
+                (state) =>
+                    state.externalController == ExternalControllerStatus.open,
+              ),
+              onChanged: (ref, value) => ref
+                  .read(patchClashConfigProvider.notifier)
+                  .update(
+                    (state) => state
+                        .copyWith(
+                          externalController: value
+                              ? ExternalControllerStatus.open
+                              : ExternalControllerStatus.close,
+                        )
+                        .ensureControllerSecret(),
+                  ),
+            ),
+            if (externalController) const ExternalControllerSecretItem(),
+            const AuthenticationItem(),
+            if (authentication) ...const [
+              AuthenticationAccountItem(),
+              AuthenticationPasswordItem(),
+            ],
+            for (final item in navigation.where(
+              (item) => item.label == PageLabel.requests,
+            ))
+              _BusinessManageRow(
+                title: item.label.label,
+                page: item.builder(context),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
-class _DnsSettingsView extends StatelessWidget {
+class _BusinessBypassDomainsRow extends ConsumerWidget {
+  const _BusinessBypassDomainsRow();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final domains = ref.watch(
+      networkSettingProvider.select((state) => state.bypassDomain),
+    );
+    void open() {
+      Navigator.of(context)
+          .push(
+            PagedSheetRoute(
+              builder: (_) => ListEditView(
+                title: l10n.bypassDomain,
+                description: l10n.bypassDomainDesc,
+                items: domains,
+                itemMaxLength: TextInputLimits.domain,
+                titleBuilder: (item) => Text(item),
+              ),
+            ),
+          )
+          .then((result) {
+            if (result is List<String>) {
+              ref
+                  .read(networkSettingProvider.notifier)
+                  .update((state) => state.copyWith(bypassDomain: result));
+            }
+          });
+    }
+
+    return ListItem(
+      title: Text(l10n.bypassDomain),
+      subtitle: domains.isEmpty
+          ? Text(l10n.none)
+          : Wrap(
+              spacing: 6,
+              runSpacing: 5,
+              children: [
+                for (final domain in domains.take(7))
+                  DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: context.colorScheme.surfaceContainerHighest,
+                      shape: AppShape.sm,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      child: Text(
+                        domain,
+                        style: AppTextStyle.caption1
+                            .of(context)
+                            .toJetBrainsMono,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+      trailing: BusinessSecondaryButton(
+        label: '+ ${l10n.add}',
+        width: 86,
+        onPressed: open,
+      ),
+      onTap: open,
+    );
+  }
+}
+
+class _DnsSettingsView extends ConsumerWidget {
   const _DnsSettingsView({required this.navigation});
 
   final List<NavigationItem> navigation;
 
   @override
-  Widget build(BuildContext context) => generateSection(
-    title: 'DNS',
-    items: [
-      ListItem.open(title: const Text('DNS'), widget: const DnsView()),
-      for (final item in navigation.where(
-        (item) =>
-            item.label == PageLabel.dns || item.label == PageLabel.resources,
-      ))
-        ListItem.open(
-          title: Text(item.label.label),
-          widget: item.builder(context),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final dnsState = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => (dns: state.dns, keys: state.dnsOverrideKeys),
+      ),
+    );
+    final upstreams = <String>[
+      if (dnsState.keys.contains(DnsOverrideKey.nameserver))
+        ...dnsState.dns.nameserver,
+      if (dnsState.keys.contains(DnsOverrideKey.fallback))
+        ...dnsState.dns.fallback,
+      if (dnsState.keys.contains(DnsOverrideKey.defaultNameserver))
+        ...dnsState.dns.defaultNameserver,
+      if (dnsState.keys.contains(DnsOverrideKey.proxyServerNameserver))
+        ...dnsState.dns.proxyServerNameserver,
+      if (dnsState.keys.contains(DnsOverrideKey.directNameserver))
+        ...dnsState.dns.directNameserver,
+    ];
+    final dnsQuery = navigation.where((item) => item.label == PageLabel.dns);
+    final resources = navigation.where(
+      (item) => item.label == PageLabel.resources,
+    );
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        BusinessSettingsCard(
+          title: l10n.businessDnsServers,
+          items: [
+            if (upstreams.isEmpty)
+              ListItem(title: Text(l10n.businessDnsNoUpstream)),
+            for (final address in upstreams)
+              ListItem(
+                title: Text(
+                  address,
+                  style: AppTextStyle.footnote.of(context).toJetBrainsMono,
+                ),
+                trailing: _DnsProtocolChip(address: address),
+              ),
+            if (dnsState.keys.contains(DnsOverrideKey.enhancedMode))
+              _BusinessManageRow(
+                title: l10n.dnsMode,
+                subtitle: dnsState.dns.enhancedMode.name,
+                page: const DnsView(),
+              ),
+            if (dnsState.keys.contains(DnsOverrideKey.fakeIpRange))
+              _BusinessManageRow(
+                title: l10n.fakeipRange,
+                subtitle: dnsState.dns.fakeIpRange,
+                page: const DnsView(),
+              ),
+            _BusinessManageRow(
+              title: 'DNS',
+              subtitle: l10n.dnsOverrideDesc,
+              page: const DnsView(),
+            ),
+          ],
         ),
-    ],
-  );
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.other,
+          items: [
+            for (final item in dnsQuery)
+              _BusinessManageRow(
+                title: item.label.label,
+                page: item.builder(context),
+              ),
+            for (final item in resources)
+              _BusinessManageRow(
+                title: item.label.label,
+                page: item.builder(context),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
-class _TunSettingsView extends StatelessWidget {
+class _DnsProtocolChip extends StatelessWidget {
+  const _DnsProtocolChip({required this.address});
+
+  final String address;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalized = address.toLowerCase();
+    final protocol = normalized.startsWith('https://')
+        ? 'DoH'
+        : normalized.startsWith('tls://') || normalized.startsWith('dot://')
+        ? 'DoT'
+        : 'UDP';
+    final colorScheme = context.colorScheme;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: protocol == 'UDP'
+            ? colorScheme.surfaceContainerHighest
+            : colorScheme.primaryContainer,
+        shape: AppShape.full,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        child: Text(
+          protocol,
+          style: AppTextStyle.caption1
+              .of(context, emphasized: true)
+              .copyWith(
+                color: protocol == 'UDP'
+                    ? colorScheme.onSurfaceVariant
+                    : colorScheme.onPrimaryContainer,
+              ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TunSettingsView extends ConsumerWidget {
   const _TunSettingsView();
 
   @override
-  Widget build(BuildContext context) => ListView(
-    padding: EdgeInsets.only(bottom: context.bottomInset + 20),
-    children: [
-      const NetworkOptionsSection(),
-      TunSection(
-        isDesktop: system.isDesktop,
-        isLinux: system.isLinux,
-        isWindows: system.isWindows,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final tunEnabled = ref.watch(
+      patchClashConfigProvider.select((state) => state.tun.enable),
+    );
+    final authorization = ref.watch(authorizedTunEnableProvider);
+    final isUnauthorized =
+        tunEnabled && authorization != TunAuthorizationState.authorized;
+    final isMipsStack = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => state.tun.stack == TunStack.mips,
       ),
-    ],
-  );
+    );
+    final customName = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => state.interfaceNameMode == InterfaceNameMode.custom,
+      ),
+    );
+    final profile = ref.watch(currentProfileProvider);
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(l10n.tun, style: BusinessText.pageTitle(context)),
+              ),
+              SizedBox(
+                width: 190,
+                child: ConfigToggleItem(
+                  title: (l) => tunEnabled ? l.enabled : l.disabled,
+                  selector: patchClashConfigProvider.select(
+                    (state) => state.tun.enable,
+                  ),
+                  onChanged: (ref, value) => ref
+                      .read(patchClashConfigProvider.notifier)
+                      .update((state) => state.copyWith.tun(enable: value)),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (isUnauthorized)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: BusinessExitWarningBanner(
+              kind: BusinessExitWarningKind.tunUnauthorized,
+              onRetry: () {},
+              onAuthorize: () async {
+                try {
+                  await ref
+                      .read(setupActionProvider.notifier)
+                      .applyProfile(force: true);
+                } catch (error) {
+                  dialogs.showBanner(
+                    error.toString(),
+                    level: BannerLevel.error,
+                  );
+                }
+              },
+              onDiagnostics: () => Navigator.of(
+                context,
+              ).push(PagedSheetRoute(builder: (_) => const DiagnosticsView())),
+            ),
+          ),
+        BusinessSettingsCard(
+          title: l10n.tun,
+          items: [
+            const TunStackItem(),
+            if (system.isDesktop) const InterfaceNameModeItem(),
+            if (system.isDesktop && customName) const InterfaceNameItem(),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.routeAddress,
+          items: [
+            if (system.isDesktop)
+              const BypassPrivateRouteItem()
+            else
+              ...tunItems(isMipsStack: isMipsStack),
+            if (profile != null)
+              _BusinessManageRow(
+                title: l10n.businessOverrideSettings,
+                page: TunView(profile.id),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 class _IconAndUaSettingsView extends StatelessWidget {

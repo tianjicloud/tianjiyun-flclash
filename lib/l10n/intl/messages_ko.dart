@@ -467,6 +467,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("속도 측정"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("시간 초과"),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("연결 끊기"),
+    "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
+      "설정된 DNS 재정의 서버가 없습니다.",
+    ),
+    "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNS 서버"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("스마트 라우팅 활성화"),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage("출구 확인 통과"),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
@@ -498,6 +502,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "행을 선택해 단축키를 설정하거나 변경하세요",
     ),
+    "businessIntercept": MessageLookupByLibrary.simpleMessage("차단"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("개 노드"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
@@ -516,11 +521,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "사용 가능한 회선을 불러오는 중…",
     ),
+    "businessLocalPorts": MessageLookupByLibrary.simpleMessage("로컬 포트"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("잠김"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("출구 고정됨"),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "중국 본토 직접 연결",
     ),
+    "businessManage": MessageLookupByLibrary.simpleMessage("관리"),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage("수동 선택"),
     "businessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
       "트레이 아이콘에 연결 상태가 계속 표시됩니다",
@@ -537,6 +544,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Wi-Fi 네트워크를 추가하면 연결 시 앱을 일시 중지합니다.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("아웃바운드"),
+    "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
+      "구독 설정 재정의",
+    ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "자동 업데이트",
     ),

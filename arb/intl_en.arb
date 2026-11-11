@@ -1515,4 +1515,13 @@
   "businessOnDemandEmpty": "Add a Wi-Fi network to pause the app when you connect to it.",
   "businessDisconnect": "Disconnect",
   "businessRestoreAction": "Restore…"
+,
+  "businessManage": "Manage"
+,
+  "businessLocalPorts": "Local ports",
+  "businessDnsServers": "DNS servers",
+  "businessDnsNoUpstream": "No DNS upstream overrides are configured.",
+  "businessOverrideSettings": "Subscription overrides"
+,
+  "businessIntercept": "Intercept"
 }

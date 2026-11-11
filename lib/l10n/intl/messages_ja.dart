@@ -469,6 +469,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("速度測定"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("タイムアウト"),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("切断"),
+    "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
+      "DNS上書きサーバーは設定されていません。",
+    ),
+    "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNSサーバー"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "スマートルーティングを有効化",
     ),
@@ -504,6 +508,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "行を選択してショートカットを設定または変更",
     ),
+    "businessIntercept": MessageLookupByLibrary.simpleMessage("ブロック"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("件"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "回線の切り替えを完了できませんでした。再試行してください。",
@@ -522,9 +527,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "利用可能な回線を読み込み中…",
     ),
+    "businessLocalPorts": MessageLookupByLibrary.simpleMessage("ローカルポート"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("固定"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("出口を固定"),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage("中国本土直通"),
+    "businessManage": MessageLookupByLibrary.simpleMessage("管理"),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage("手動選択"),
     "businessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
       "トレイアイコンに接続状態を常に表示",
@@ -541,6 +548,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Wi-Fiネットワークを追加すると、接続時にアプリを一時停止できます。",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出力"),
+    "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションの上書き",
+    ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自動更新",
     ),

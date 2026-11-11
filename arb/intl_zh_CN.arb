@@ -1515,4 +1515,13 @@
   "businessOnDemandEmpty": "添加 Wi-Fi 网络后，连接到该网络时会暂停应用运行。",
   "businessDisconnect": "断开",
   "businessRestoreAction": "恢复…"
+,
+  "businessManage": "管理"
+,
+  "businessLocalPorts": "本地端口",
+  "businessDnsServers": "DNS 服务器",
+  "businessDnsNoUpstream": "尚未配置 DNS 上游覆写。",
+  "businessOverrideSettings": "订阅覆写"
+,
+  "businessIntercept": "拦截"
 }

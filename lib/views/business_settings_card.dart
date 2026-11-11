@@ -7,10 +7,12 @@ class BusinessSettingsCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.items,
+    this.trailing,
   });
 
   final String title;
   final List<Widget> items;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
@@ -27,7 +29,14 @@ class BusinessSettingsCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-            child: Text(title, style: BusinessText.cardTitle(context)),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(title, style: BusinessText.cardTitle(context)),
+                ),
+                ?trailing,
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           generateGroup(items),

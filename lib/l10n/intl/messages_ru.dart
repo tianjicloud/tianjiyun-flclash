@@ -570,6 +570,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("Тайм-аут"),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("Отключить"),
+    "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
+      "Пользовательские DNS-серверы не настроены.",
+    ),
+    "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNS-серверы"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Включить умную маршрутизацию",
     ),
@@ -609,6 +613,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "Выберите строку, чтобы задать или изменить сочетание клавиш",
     ),
+    "businessIntercept": MessageLookupByLibrary.simpleMessage("Блокировать"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("линий"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось завершить переключение. Повторите попытку.",
@@ -629,6 +634,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "Загрузка доступных линий…",
     ),
+    "businessLocalPorts": MessageLookupByLibrary.simpleMessage(
+      "Локальные порты",
+    ),
     "businessLocked": MessageLookupByLibrary.simpleMessage("Закреплено"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage(
       "Выход закреплён",
@@ -636,6 +644,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Прямое подключение к материковому Китаю",
     ),
+    "businessManage": MessageLookupByLibrary.simpleMessage("Управлять"),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage(
       "Выбор вручную",
     ),
@@ -662,6 +671,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Добавьте сеть Wi-Fi, чтобы при подключении к ней приостанавливать приложение.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Выход"),
+    "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
+      "Переопределения подписки",
+    ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Автообновление",
     ),
@@ -714,10 +726,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
       "Удалить подписку",
     ),
-    "businessProfileEditDeleteDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Удаляется только локальная конфигурация. Аккаунт и тариф Tianji Cloud не затрагиваются.",
-        ),
+    "businessProfileEditDeleteDescription": MessageLookupByLibrary.simpleMessage(
+      "Удаляется только локальная конфигурация. Аккаунт и тариф Tianji Cloud не затрагиваются.",
+    ),
     "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
       "Удалить подписку",
     ),
@@ -746,10 +757,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("Открыть"),
     "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("Тариф"),
-    "businessProfileEditPreviewDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Предпросмотр только для чтения. Для изменений используйте пользовательскую конфигурацию.",
-        ),
+    "businessProfileEditPreviewDescription": MessageLookupByLibrary.simpleMessage(
+      "Предпросмотр только для чтения. Для изменений используйте пользовательскую конфигурацию.",
+    ),
     "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
       "Ссылка содержит личный токен. Не передавайте её другим.",
     ),
@@ -1610,10 +1620,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "installCertificateSuccess": MessageLookupByLibrary.simpleMessage(
       "Сертификат установлен",
     ),
-    "installedAppsPermissionDeniedMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-        ),
+    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
+      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+    ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -2136,10 +2145,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingFailureUnknownTitle": MessageLookupByLibrary.simpleMessage(
       "Не удалось импортировать",
     ),
-    "onboardingFailureUnreachableDescription":
-        MessageLookupByLibrary.simpleMessage(
-          "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
-        ),
+    "onboardingFailureUnreachableDescription": MessageLookupByLibrary.simpleMessage(
+      "Возможно, текущая сеть блокирует этот домен. На странице состояния есть резервные адреса, или попробуйте позже.",
+    ),
     "onboardingFailureUnreachableTitle": MessageLookupByLibrary.simpleMessage(
       "Не удаётся подключиться к адресу подписки",
     ),
