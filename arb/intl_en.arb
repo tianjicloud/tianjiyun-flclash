@@ -1375,6 +1375,12 @@
       "value": {}
     }
   },
+  "businessProvidersTitle": "Proxy sets and rule sets",
+  "businessProxyProviders": "Proxy sets",
+  "businessRuleProviders": "Rule sets",
+  "providerCount": "{count} items",
+  "businessDnsSucceeded": "Success",
+  "businessDnsFailed": "Failed",
   "updateAll": "Update all",
   "importSubscription": "Import subscription",
   "inUse": "In use",

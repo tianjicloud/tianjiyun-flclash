@@ -8,6 +8,10 @@ import 'package:fl_clash/pages/editor.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -351,6 +355,52 @@ class _ClashProvidersViewState extends ConsumerState<ClashProvidersView> {
     );
   }
 
+  Widget _buildBusinessItem(ClashProvider provider) {
+    final type = provider.isRemote
+        ? 'http'
+        : provider.isTextContent
+        ? 'inline'
+        : 'file';
+    final updating = ref.watch(loadingProvider(LoadingTag.ruleProviders));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        provider.label,
+                        style: BusinessText.cardTitle(context),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    _ProviderTypeChip(type: type),
+                  ],
+                ),
+                _RuleSetUpdateTime(provider: provider),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          BusinessSecondaryButton(
+            label: context.appLocalizations.update,
+            width: 64,
+            height: 30,
+            onPressed: updating || !provider.isRemote
+                ? null
+                : () => _put(provider, previous: provider, refresh: true),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildContent(List<ClashProvider> providers, {required bool loading}) {
     final appLocalizations = context.appLocalizations;
     return NullStatusSwitcher(
@@ -384,6 +434,101 @@ class _ClashProvidersViewState extends ConsumerState<ClashProvidersView> {
     final appLocalizations = context.appLocalizations;
     final state = ref.watch(clashProvidersProvider);
     final providers = state.value ?? [];
+    if (BusinessTheme.of(context) && system.isDesktop) {
+      final proxyProviders = ref
+          .watch(providersProvider)
+          .where((provider) => provider.type == 'Proxy')
+          .toList(growable: false);
+      return Scaffold(
+        title: appLocalizations.businessProvidersTitle,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final proxyCard = proxyProviders.isEmpty
+                ? null
+                : BusinessSettingsCard(
+                    title:
+                        '${appLocalizations.businessProxyProviders} · ${proxyProviders.length}',
+                    items: [
+                      for (
+                        var index = 0;
+                        index < proxyProviders.length;
+                        index++
+                      )
+                        _BusinessProxyProviderItem(
+                          provider: proxyProviders[index],
+                        ),
+                    ],
+                  );
+            final ruleCard = providers.isEmpty
+                ? null
+                : BusinessSettingsCard(
+                    title:
+                        '${appLocalizations.businessRuleProviders} · ${providers.length}',
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        PopupAnchor(
+                          targetBuilder: (open) => BusinessSecondaryButton(
+                            label: '＋ ${appLocalizations.add}',
+                            width: 78,
+                            onPressed: open,
+                          ),
+                          popupBuilder: (_) => PopupMenu(
+                            items: [
+                              PopupMenuItem(
+                                glyph: AppGlyphs.compose,
+                                label: appLocalizations.startFromScratch,
+                                onPressed: _handleToEditor,
+                              ),
+                              PopupMenuItem(
+                                glyph: AppGlyphs.cloudDownload,
+                                label: appLocalizations.importUrl,
+                                onPressed: _handleImportFromUrl,
+                              ),
+                              PopupMenuItem(
+                                glyph: AppGlyphs.importFile,
+                                label: appLocalizations.importFile,
+                                onPressed: _handleImportFromFile,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    items: [
+                      for (final provider in providers) ...[
+                        _buildBusinessItem(provider),
+                        if (provider != providers.last)
+                          const SizedBox(height: 16),
+                      ],
+                    ],
+                  );
+            final cards = [?proxyCard, ?ruleCard];
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(
+                left: 20,
+                top: context.sectionsTopPadding + 14,
+                right: 20,
+                bottom: 20 + context.bottomInset,
+              ),
+              child: constraints.maxWidth >= 900 && cards.length > 1
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 16,
+                      children: [
+                        for (final card in cards) Expanded(child: card),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: 16,
+                      children: cards,
+                    ),
+            );
+          },
+        ),
+      );
+    }
     return Scaffold(
       canSort: providers.length > 1,
       isLoading: ref.watch(loadingProvider(LoadingTag.ruleProviders)),
@@ -419,6 +564,108 @@ class _ClashProvidersViewState extends ConsumerState<ClashProvidersView> {
       ],
       body: _buildContent(providers, loading: state.isLoading),
       title: appLocalizations.ruleProviders,
+    );
+  }
+}
+
+class _ProviderTypeChip extends StatelessWidget {
+  const _ProviderTypeChip({required this.type});
+
+  final String type;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: context.colorScheme.surfaceContainerHighest,
+      shape: AppShape.all(AppRadius.sm.topLeft.x),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      child: Text(type, style: BusinessText.proxyProtocol(context)),
+    ),
+  );
+}
+
+class _BusinessProxyProviderItem extends ConsumerWidget {
+  const _BusinessProxyProviderItem({required this.provider});
+
+  final ExternalProvider provider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.appLocalizations;
+    final updating = ref.watch(isUpdatingProvider(provider.updatingKey));
+    final action = ref.read(proxiesActionProvider.notifier);
+    final type = provider.vehicleType.toLowerCase() == 'http'
+        ? 'http'
+        : provider.path == null
+        ? 'inline'
+        : 'file';
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        provider.name,
+                        style: BusinessText.cardTitle(context),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    _ProviderTypeChip(type: type),
+                  ],
+                ),
+                const SizedBox(height: 3),
+                Row(
+                  children: [
+                    Text(
+                      l.providerCount(provider.count),
+                      style: BusinessText.metaLabel(
+                        context,
+                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                    ),
+                    if (provider.updateAt.millisecondsSinceEpoch > 0) ...[
+                      Text(
+                        ' · ',
+                        style: BusinessText.metaLabel(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                      LastUpdateTimeText(lastUpdateDate: provider.updateAt),
+                    ],
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          if (updating)
+            const ActivityIndicator()
+          else
+            BusinessSecondaryButton(
+              label: l.update,
+              width: 64,
+              height: 30,
+              onPressed: provider.vehicleType == 'HTTP'
+                  ? () async {
+                      await globalState.safeRun(
+                        () =>
+                            action.updateProvider(provider, showLoading: true),
+                        silence: false,
+                      );
+                      action.updateGroupsDebounce();
+                    }
+                  : null,
+            ),
+        ],
+      ),
     );
   }
 }

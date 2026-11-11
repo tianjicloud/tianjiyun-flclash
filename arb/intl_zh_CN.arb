@@ -1375,6 +1375,12 @@
       "value": {}
     }
   },
+  "businessProvidersTitle": "代理集与规则集",
+  "businessProxyProviders": "代理集",
+  "businessRuleProviders": "规则集",
+  "providerCount": "{count} 条",
+  "businessDnsSucceeded": "成功",
+  "businessDnsFailed": "失败",
   "updateAll": "更新全部",
   "importSubscription": "导入订阅",
   "inUse": "使用中",

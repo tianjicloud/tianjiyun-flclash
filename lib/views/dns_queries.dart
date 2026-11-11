@@ -4,6 +4,8 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -231,10 +233,11 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
 }
 
 void _showDnsQueryDetail(BuildContext context, DnsQuery dnsQuery) {
+  final business = BusinessTheme.of(context) && system.isDesktop;
   showSheet<void>(
     context: context,
     builder: (_) => Scaffold(
-      body: DnsQueryDetailView(dnsQuery: dnsQuery),
+      body: DnsQueryDetailView(dnsQuery: dnsQuery, business: business),
       title: context.appLocalizations.details('DNS'),
     ),
   );
@@ -424,11 +427,17 @@ class DnsQueryItem extends StatelessWidget {
 
 class DnsQueryDetailView extends StatelessWidget {
   final DnsQuery dnsQuery;
+  final bool business;
 
-  const DnsQueryDetailView({super.key, required this.dnsQuery});
+  const DnsQueryDetailView({
+    super.key,
+    required this.dnsQuery,
+    this.business = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (business) return _buildBusinessDetail(context);
     final appLocalizations = context.appLocalizations;
     final entries = [
       (appLocalizations.time, dnsQuery.time.showFull),
@@ -489,6 +498,132 @@ class DnsQueryDetailView extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildBusinessDetail(BuildContext context) {
+    final l = context.appLocalizations;
+    final rows = <(String, String)>[
+      (l.time, dnsQuery.time.showFull),
+      (l.elapsed, '${dnsQuery.delay} ms'),
+      if (dnsQuery.upstream.isNotEmpty) (l.source, dnsQuery.upstream),
+      if (dnsQuery.rcode.isNotEmpty) (l.responseCode, dnsQuery.rcode),
+      if (dnsQuery.cached) (l.cache, l.yes),
+      for (var index = 0; index < dnsQuery.answers.length; index++)
+        ('${l.answers} ${index + 1}', dnsQuery.answers[index]),
+      if (dnsQuery.error.isNotEmpty) (l.error, dnsQuery.error),
+    ];
+    final brightness = context.colorScheme.brightness;
+    final statusColor = dnsQuery.isFailed
+        ? BusinessPalette.error
+        : BusinessPalette.connectedForegroundFor(brightness);
+    final statusBackground = dnsQuery.isFailed
+        ? context.colorScheme.errorContainer
+        : BusinessPalette.connectedContainerFor(brightness);
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        BusinessSettingsCard(
+          title: '',
+          items: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 4, 18, 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      dnsQuery.domain,
+                      style: BusinessText.customEditorTitle(context)
+                          .toJetBrainsMono
+                          .copyWith(color: context.colorScheme.onSurface),
+                    ),
+                  ),
+                  _DnsDetailBadge(
+                    label: dnsQuery.type,
+                    color: context.colorScheme.surfaceContainerHighest,
+                    foreground: context.colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 8),
+                  _DnsDetailBadge(
+                    label: dnsQuery.isFailed
+                        ? l.businessDnsFailed
+                        : l.businessDnsSucceeded,
+                    color: statusBackground,
+                    foreground: statusColor,
+                  ),
+                ],
+              ),
+            ),
+            for (var index = 0; index < rows.length; index++) ...[
+              if (index > 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: ColoredBox(
+                    color: context.colorScheme.outlineVariant.withValues(
+                      alpha: 0.45,
+                    ),
+                    child: const SizedBox(height: 1),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 12,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        rows[index].$1,
+                        style: BusinessText.metaLabel(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Flexible(
+                      child: SelectableText(
+                        rows[index].$2,
+                        textAlign: TextAlign.end,
+                        style: BusinessText.customRuleContent(context).copyWith(
+                          color: rows[index].$1 == l.error
+                              ? context.colorScheme.error
+                              : context.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _DnsDetailBadge extends StatelessWidget {
+  const _DnsDetailBadge({
+    required this.label,
+    required this.color,
+    required this.foreground,
+  });
+
+  final String label;
+  final Color color;
+  final Color foreground;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(color: color, shape: AppShape.full),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+      child: Text(
+        label,
+        style: BusinessText.metaLabel(context).copyWith(color: foreground),
+      ),
+    ),
+  );
 }
 
 class _DnsQueryHeading extends StatelessWidget {

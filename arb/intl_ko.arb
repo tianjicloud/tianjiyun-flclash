@@ -1375,6 +1375,12 @@
       "value": {}
     }
   },
+  "businessProvidersTitle": "프록시 세트 및 규칙 세트",
+  "businessProxyProviders": "프록시 세트",
+  "businessRuleProviders": "규칙 세트",
+  "providerCount": "{count}개 항목",
+  "businessDnsSucceeded": "성공",
+  "businessDnsFailed": "실패",
   "updateAll": "모두 업데이트",
   "importSubscription": "구독 가져오기",
   "inUse": "사용 중",

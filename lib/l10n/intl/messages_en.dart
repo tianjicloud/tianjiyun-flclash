@@ -257,80 +257,82 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m96(time) => "Updated ${time}";
 
-  static String m97(label, profiles) =>
+  static String m97(count) => "${count} items";
+
+  static String m98(label, profiles) =>
       "${label} is still used by ${profiles}, which will not work properly once it is deleted. Are you sure you want to delete it?";
 
-  static String m98(count, label) =>
+  static String m99(count, label) =>
       "${Intl.plural(count, one: '1 proxy', other: '${label} proxies')}";
 
-  static String m99(name, count) => "${name} and others (${count} proxies)";
+  static String m100(name, count) => "${name} and others (${count} proxies)";
 
-  static String m100(removed) =>
+  static String m101(removed) =>
       "These proxies will be deleted: ${removed}. A line whose name changed counts as a new proxy, and custom profiles naming the deleted ones will flag them as missing. Apply anyway?";
 
-  static String m101(removed, added) =>
+  static String m102(removed, added) =>
       "These proxies will be deleted: ${removed}. These will be added: ${added}. A line whose name changed counts as a new proxy, and custom profiles naming the deleted ones will flag them as missing. Apply anyway?";
 
-  static String m102(label) =>
+  static String m103(label) =>
       "${label} is still named by rules, proxy groups, dialer proxies, DNS or NTP in this profile, which stop working once it is deleted. Are you sure you want to delete it?";
 
-  static String m103(count, label) =>
+  static String m104(count, label) =>
       "${Intl.plural(count, one: '1 proxy group', other: '${label} proxy groups')}";
 
-  static String m104(name) => "Use ${name}";
+  static String m105(name) => "Use ${name}";
 
-  static String m105(count, label) =>
+  static String m106(count, label) =>
       "${Intl.plural(count, one: '1 rule', other: '${label} rules')}";
 
-  static String m106(appName) => "${appName} (Safe mode)";
+  static String m107(appName) => "${appName} (Safe mode)";
 
-  static String m107(count) =>
+  static String m108(count) =>
       "${Intl.plural(count, one: '1 second', other: '${count} seconds')}";
 
-  static String m108(count) => "${count} in effect";
-
-  static String m109(count) =>
-      "${Intl.plural(count, one: '1 issue', other: '${count} issues')}";
+  static String m109(count) => "${count} in effect";
 
   static String m110(count) =>
+      "${Intl.plural(count, one: '1 issue', other: '${count} issues')}";
+
+  static String m111(count) =>
       "${Intl.plural(count, one: '1 setting', other: '${count} settings')}";
 
-  static String m111(link) => "No proxy could be read from ${link}";
+  static String m112(link) => "No proxy could be read from ${link}";
 
-  static String m112(label) => "${label} must be a single item";
+  static String m113(label) => "${label} must be a single item";
 
-  static String m113(value) => "Peak ${value}";
+  static String m114(value) => "Peak ${value}";
 
-  static String m114(value) => "Total ${value}";
+  static String m115(value) => "Total ${value}";
 
-  static String m115(transport) => "${transport} Headers";
+  static String m116(transport) => "${transport} Headers";
 
-  static String m116(label) => "${label} must be a URL";
+  static String m117(label) => "${label} must be a URL";
 
-  static String m117(date) => "Valid until ${date}";
+  static String m118(date) => "Valid until ${date}";
 
-  static String m118(count) =>
+  static String m119(count) =>
       "${Intl.plural(count, one: '1 year ago', other: '${count} years ago')}";
 
-  static String m119(count) => "${Intl.plural(count, other: '${count}y ago')}";
+  static String m120(count) => "${Intl.plural(count, other: '${count}y ago')}";
 
-  static String m120(hours) => "every ${hours} hours auto update";
+  static String m121(hours) => "every ${hours} hours auto update";
 
-  static String m121(count, unit) => "Auto update every ${count} ${unit}";
+  static String m122(count, unit) => "Auto update every ${count} ${unit}";
 
-  static String m122(date) => "Expires ${date}";
+  static String m123(date) => "Expires ${date}";
 
-  static String m123(count) =>
+  static String m124(count) =>
       "Based on current subscription · ${count} override rules";
 
-  static String m124(count) => "Subscription link · expired ${count} days ago";
+  static String m125(count) => "Subscription link · expired ${count} days ago";
 
-  static String m125(scheme) =>
+  static String m126(scheme) =>
       "You can also paste a link from clipboard, choose a local YAML file, or open ${scheme} in a browser to import a link.";
 
-  static String m126(date) => "Local file · imported ${date}";
+  static String m127(date) => "Local file · imported ${date}";
 
-  static String m127(quota) => "Total ${quota}";
+  static String m128(quota) => "Total ${quota}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -564,10 +566,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Developer options",
     ),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("Disconnect"),
+    "businessDnsFailed": MessageLookupByLibrary.simpleMessage("Failed"),
     "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
       "No DNS upstream overrides are configured.",
     ),
     "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNS servers"),
+    "businessDnsSucceeded": MessageLookupByLibrary.simpleMessage("Success"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Enable smart routing",
     ),
@@ -769,10 +773,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage(
       "Reorder subscriptions",
     ),
+    "businessProvidersTitle": MessageLookupByLibrary.simpleMessage(
+      "Proxy sets and rule sets",
+    ),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
       "Proxy card density",
     ),
     "businessProxyIcons": MessageLookupByLibrary.simpleMessage("Proxy icons"),
+    "businessProxyProviders": MessageLookupByLibrary.simpleMessage(
+      "Proxy sets",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Verify again"),
     "businessReplace": MessageLookupByLibrary.simpleMessage("Replace"),
@@ -790,6 +800,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "Smart routing is not active. This default line is not currently in effect.",
     ),
+    "businessRuleProviders": MessageLookupByLibrary.simpleMessage("Rule sets"),
     "businessSearchHint": MessageLookupByLibrary.simpleMessage(
       "Search line name or region",
     ),
@@ -2298,26 +2309,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocol": MessageLookupByLibrary.simpleMessage("Protocol"),
     "protocolParam": MessageLookupByLibrary.simpleMessage("Protocol parameter"),
     "protocolVersion": MessageLookupByLibrary.simpleMessage("Protocol version"),
-    "providerInUse": m97,
+    "providerCount": m97,
+    "providerInUse": m98,
     "providerUrlTip": MessageLookupByLibrary.simpleMessage(
       "Only remote providers are supported",
     ),
     "providers": MessageLookupByLibrary.simpleMessage("External resources"),
     "proxies": MessageLookupByLibrary.simpleMessage("Proxies"),
-    "proxiesCount": m98,
-    "proxiesProfileLabel": m99,
-    "proxiesRemovedTip": m100,
-    "proxiesReplacedTip": m101,
+    "proxiesCount": m99,
+    "proxiesProfileLabel": m100,
+    "proxiesRemovedTip": m101,
+    "proxiesReplacedTip": m102,
     "proxyChains": MessageLookupByLibrary.simpleMessage("Proxy chain"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("Proxy group"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage(
       "Proxy group is empty",
     ),
-    "proxyGroupInUse": m102,
+    "proxyGroupInUse": m103,
     "proxyGroupsAfterStart": MessageLookupByLibrary.simpleMessage(
       "Groups show up here once the core starts",
     ),
-    "proxyGroupsCount": m103,
+    "proxyGroupsCount": m104,
     "proxyProviders": MessageLookupByLibrary.simpleMessage("Proxy providers"),
     "proxyServerNameserverDesc": MessageLookupByLibrary.simpleMessage(
       "Resolves proxy server hostnames only.",
@@ -2459,7 +2471,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialUnavailable": MessageLookupByLibrary.simpleMessage(
       "Unavailable",
     ),
-    "residentialUseExit": m104,
+    "residentialUseExit": m105,
     "residentialUseSubscription": MessageLookupByLibrary.simpleMessage(
       "Use subscription policy",
     ),
@@ -2652,12 +2664,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "The rule must start with a supported type, such as DOMAIN,example.com,DIRECT",
     ),
     "rules": MessageLookupByLibrary.simpleMessage("Rules"),
-    "rulesCount": m105,
+    "rulesCount": m106,
     "runTime": MessageLookupByLibrary.simpleMessage("Run time"),
     "running": MessageLookupByLibrary.simpleMessage("Running"),
     "runtimeConfig": MessageLookupByLibrary.simpleMessage("Runtime config"),
     "safeMode": MessageLookupByLibrary.simpleMessage("Safe mode"),
-    "safeModeAppTitle": m106,
+    "safeModeAppTitle": m107,
     "saturation": MessageLookupByLibrary.simpleMessage("Saturation"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save the changes?"),
@@ -2698,9 +2710,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "seconds": MessageLookupByLibrary.simpleMessage("seconds"),
-    "secondsCount": m107,
+    "secondsCount": m108,
     "secretKey": MessageLookupByLibrary.simpleMessage("Key"),
-    "sectionsInEffect": m108,
+    "sectionsInEffect": m109,
     "select": MessageLookupByLibrary.simpleMessage("Select"),
     "selectAll": MessageLookupByLibrary.simpleMessage("Select all"),
     "selectRuleSet": MessageLookupByLibrary.simpleMessage(
@@ -2752,7 +2764,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Scan the code with your phone\'s camera and paste the link on the page that opens. Both devices need to be on the same network.",
     ),
     "server": MessageLookupByLibrary.simpleMessage("Server"),
-    "serviceAbnormalCount": m109,
+    "serviceAbnormalCount": m110,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
       "All available",
     ),
@@ -2782,8 +2794,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "settingEntries": MessageLookupByLibrary.simpleMessage("settings"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
-    "settingsCount": m110,
-    "shareLinkUnreadable": m111,
+    "settingsCount": m111,
+    "shareLinkUnreadable": m112,
     "shareLinksInvalid": MessageLookupByLibrary.simpleMessage(
       "No proxy could be read from the links",
     ),
@@ -2803,7 +2815,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "singleShareLinkOnly": MessageLookupByLibrary.simpleMessage(
       "Enter one link here; edit several from the quick edit of the list",
     ),
-    "singleValueTip": m112,
+    "singleValueTip": m113,
     "size": MessageLookupByLibrary.simpleMessage("Size"),
     "skipCertVerify": MessageLookupByLibrary.simpleMessage(
       "Skip certificate verification",
@@ -2925,7 +2937,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficOtherDirect": MessageLookupByLibrary.simpleMessage(
       "Direct (region unconfirmed)",
     ),
-    "trafficPeak": m113,
+    "trafficPeak": m114,
     "trafficSavedThisMonth": MessageLookupByLibrary.simpleMessage(
       "Saved this month",
     ),
@@ -2936,10 +2948,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficStatsScope": MessageLookupByLibrary.simpleMessage(
       "This device only, this month. Counts traffic captured by the app.",
     ),
-    "trafficTotal": m114,
+    "trafficTotal": m115,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Traffic usage"),
     "transport": MessageLookupByLibrary.simpleMessage("Transport"),
-    "transportHeaders": m115,
+    "transportHeaders": m116,
     "trustCertificate": MessageLookupByLibrary.simpleMessage(
       "Trust certificate",
     ),
@@ -2999,14 +3011,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBandwidth": MessageLookupByLibrary.simpleMessage("Upload bandwidth"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("URL rewrite"),
-    "urlTip": m116,
+    "urlTip": m117,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "usedShort": MessageLookupByLibrary.simpleMessage("used"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("Used traffic"),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("Username"),
-    "validUntil": m117,
+    "validUntil": m118,
     "value": MessageLookupByLibrary.simpleMessage("Value"),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
@@ -3024,17 +3036,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "Write to system also sets the system clock; Android ignores it.",
     ),
-    "yearsAgo": m118,
-    "yearsAgoShort": m119,
+    "yearsAgo": m119,
+    "yearsAgoShort": m120,
     "yes": MessageLookupByLibrary.simpleMessage("Yes"),
     "zhCN": MessageLookupByLibrary.simpleMessage("Simplified Chinese"),
-    "zzAutoUpdateHours": m120,
-    "zzAutoUpdateIntervalLabel": m121,
-    "zzExpiryDate": m122,
-    "zzProfileBasedOnOverrides": m123,
-    "zzProfileExpiredDays": m124,
-    "zzProfileImportHint": m125,
-    "zzProfileImportedOn": m126,
+    "zzAutoUpdateHours": m121,
+    "zzAutoUpdateIntervalLabel": m122,
+    "zzExpiryDate": m123,
+    "zzProfileBasedOnOverrides": m124,
+    "zzProfileExpiredDays": m125,
+    "zzProfileImportHint": m126,
+    "zzProfileImportedOn": m127,
     "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("Clipboard"),
     "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("Local file"),
     "zzQuickScan": MessageLookupByLibrary.simpleMessage("Scan"),
@@ -3043,6 +3055,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage(
       "Renew / upgrade",
     ),
-    "zzTotalQuota": m127,
+    "zzTotalQuota": m128,
   };
 }

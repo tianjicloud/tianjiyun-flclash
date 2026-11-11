@@ -12,6 +12,10 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/core.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -35,10 +39,13 @@ class _ExternalProvidersSliverState
     final appLocalizations = context.appLocalizations;
     final proxiesAction = ref.read(proxiesActionProvider.notifier);
     final List<UpdatingMessage> messages = [];
+    final providers = BusinessTheme.of(context) && system.isDesktop
+        ? widget.providers.where((provider) => provider.type == 'Proxy')
+        : widget.providers;
     setState(() => _isUpdating = true);
     try {
       await Future.wait(
-        widget.providers.map((provider) async {
+        providers.map((provider) async {
           try {
             await proxiesAction.updateProvider(provider, showLoading: true);
           } catch (error) {
@@ -64,6 +71,33 @@ class _ExternalProvidersSliverState
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     final providers = widget.providers;
+    if (BusinessTheme.of(context) && system.isDesktop) {
+      final proxyProviders = providers
+          .where((provider) => provider.type == 'Proxy')
+          .toList(growable: false);
+      if (proxyProviders.isEmpty) return const SliverToBoxAdapter();
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: BusinessSettingsCard(
+            title: appLocalizations.businessProxyProviders,
+            trailing: BusinessSecondaryButton(
+              label: appLocalizations.updateAll,
+              width: 88,
+              height: 30,
+              onPressed: _isUpdating ? null : _updateProviders,
+            ),
+            items: [
+              for (var index = 0; index < proxyProviders.length; index++) ...[
+                _BusinessProviderRow(provider: proxyProviders[index]),
+                if (index + 1 < proxyProviders.length)
+                  const SizedBox(height: 16),
+              ],
+            ],
+          ),
+        ),
+      );
+    }
     return SliverMainAxisGroup(
       slivers: [
         SliverToBoxAdapter(
@@ -96,6 +130,96 @@ class _ExternalProvidersSliverState
       ],
     );
   }
+}
+
+class _BusinessProviderRow extends ConsumerWidget {
+  const _BusinessProviderRow({required this.provider});
+
+  final ExternalProvider provider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final updating = ref.watch(isUpdatingProvider(provider.updatingKey));
+    final action = ref.read(proxiesActionProvider.notifier);
+    final type = provider.vehicleType.toLowerCase() == 'http'
+        ? 'http'
+        : provider.path == null
+        ? 'inline'
+        : 'file';
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        provider.name,
+                        style: BusinessText.cardTitle(context),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    _ExternalProviderTypeChip(type: type),
+                  ],
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  context.appLocalizations.providerCount(provider.count),
+                  style: BusinessText.metaLabel(
+                    context,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+                if (provider.updateAt.millisecondsSinceEpoch > 0)
+                  LastUpdateTimeText(lastUpdateDate: provider.updateAt),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          if (updating)
+            const ActivityIndicator()
+          else
+            BusinessSecondaryButton(
+              label: context.appLocalizations.update,
+              width: 64,
+              height: 30,
+              onPressed: provider.vehicleType == 'HTTP'
+                  ? () async {
+                      await globalState.safeRun(
+                        () =>
+                            action.updateProvider(provider, showLoading: true),
+                        silence: false,
+                      );
+                      action.updateGroupsDebounce();
+                    }
+                  : null,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ExternalProviderTypeChip extends StatelessWidget {
+  const _ExternalProviderTypeChip({required this.type});
+
+  final String type;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: context.colorScheme.surfaceContainerHighest,
+      shape: AppShape.all(AppRadius.sm.topLeft.x),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      child: Text(type, style: BusinessText.proxyProtocol(context)),
+    ),
+  );
 }
 
 class ProviderItem extends ConsumerStatefulWidget {

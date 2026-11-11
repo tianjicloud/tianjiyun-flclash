@@ -1375,6 +1375,12 @@
       "value": {}
     }
   },
+  "businessProvidersTitle": "Conjuntos de proxy y reglas",
+  "businessProxyProviders": "Conjuntos de proxy",
+  "businessRuleProviders": "Conjuntos de reglas",
+  "providerCount": "{count} elementos",
+  "businessDnsSucceeded": "Correcto",
+  "businessDnsFailed": "Error",
   "updateAll": "Actualizar todo",
   "importSubscription": "Importar suscripción",
   "inUse": "En uso",

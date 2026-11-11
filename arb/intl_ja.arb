@@ -1375,6 +1375,12 @@
       "value": {}
     }
   },
+  "businessProvidersTitle": "プロキシセットとルールセット",
+  "businessProxyProviders": "プロキシセット",
+  "businessRuleProviders": "ルールセット",
+  "providerCount": "{count} 件",
+  "businessDnsSucceeded": "成功",
+  "businessDnsFailed": "失敗",
   "updateAll": "すべて更新",
   "importSubscription": "サブスクリプションを追加",
   "inUse": "使用中",

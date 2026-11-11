@@ -11392,6 +11392,66 @@ class AppLocalizations {
     return Intl.message('Replace', name: 'businessReplace', desc: '', args: []);
   }
 
+  /// `Proxy sets and rule sets`
+  String get businessProvidersTitle {
+    return Intl.message(
+      'Proxy sets and rule sets',
+      name: 'businessProvidersTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy sets`
+  String get businessProxyProviders {
+    return Intl.message(
+      'Proxy sets',
+      name: 'businessProxyProviders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rule sets`
+  String get businessRuleProviders {
+    return Intl.message(
+      'Rule sets',
+      name: 'businessRuleProviders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} items`
+  String providerCount(Object count) {
+    return Intl.message(
+      '$count items',
+      name: 'providerCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Success`
+  String get businessDnsSucceeded {
+    return Intl.message(
+      'Success',
+      name: 'businessDnsSucceeded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed`
+  String get businessDnsFailed {
+    return Intl.message(
+      'Failed',
+      name: 'businessDnsFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Update all`
   String get updateAll {
     return Intl.message('Update all', name: 'updateAll', desc: '', args: []);

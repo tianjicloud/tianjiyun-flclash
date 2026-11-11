@@ -1375,6 +1375,12 @@
       "value": {}
     }
   },
+  "businessProvidersTitle": "Наборы прокси и правил",
+  "businessProxyProviders": "Наборы прокси",
+  "businessRuleProviders": "Наборы правил",
+  "providerCount": "{count} элементов",
+  "businessDnsSucceeded": "Успешно",
+  "businessDnsFailed": "Ошибка",
   "updateAll": "Обновить все",
   "importSubscription": "Импортировать подписку",
   "inUse": "Используется",
