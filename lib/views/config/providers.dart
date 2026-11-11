@@ -601,6 +601,9 @@ class _BusinessProxyProviderItem extends ConsumerWidget {
         : provider.path == null
         ? 'inline'
         : 'file';
+    final metadataStyle = AppTextStyle.caption1
+        .of(context)
+        .copyWith(color: context.colorScheme.onSurfaceVariant);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Row(
@@ -625,20 +628,13 @@ class _BusinessProxyProviderItem extends ConsumerWidget {
                 const SizedBox(height: 3),
                 Row(
                   children: [
-                    Text(
-                      l.providerCount(provider.count),
-                      style: BusinessText.metaLabel(
-                        context,
-                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
-                    ),
+                    Text(l.providerCount(provider.count), style: metadataStyle),
                     if (provider.updateAt.millisecondsSinceEpoch > 0) ...[
-                      Text(
-                        ' · ',
-                        style: BusinessText.metaLabel(
-                          context,
-                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      Text(' · ', style: metadataStyle),
+                      LastUpdateTimeText(
+                        lastUpdateDate: provider.updateAt,
+                        style: metadataStyle,
                       ),
-                      LastUpdateTimeText(lastUpdateDate: provider.updateAt),
                     ],
                   ],
                 ),

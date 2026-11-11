@@ -126,99 +126,104 @@ class _SystemServiceViewState extends ConsumerState<SystemServiceView> {
         brightness,
       ),
     };
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, bottom: 24),
-      child: DecoratedBox(
-        decoration: ShapeDecoration(
-          color: brightness == Brightness.dark
-              ? context.colorScheme.surfaceContainerLow
-              : context.colorScheme.surface,
-          shape: AppShape.all(BusinessPalette.cardRadius),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DecoratedBox(
-                decoration: ShapeDecoration(
-                  color: iconBackground,
-                  shape: AppShape.all(_serviceIconRadius),
-                ),
-                child: SizedBox.square(
-                  dimension: 44,
-                  child: Center(
-                    child: GlyphIcon(
-                      statusGlyph,
-                      size: 22,
-                      color: iconForeground,
+    return Align(
+      alignment: AlignmentDirectional.topStart,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 12, bottom: 24),
+        child: DecoratedBox(
+          decoration: ShapeDecoration(
+            color: brightness == Brightness.dark
+                ? context.colorScheme.surfaceContainerLow
+                : context.colorScheme.surface,
+            shape: AppShape.all(BusinessPalette.cardRadius),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DecoratedBox(
+                  decoration: ShapeDecoration(
+                    color: iconBackground,
+                    shape: AppShape.all(_serviceIconRadius),
+                  ),
+                  child: SizedBox.square(
+                    dimension: 44,
+                    child: Center(
+                      child: GlyphIcon(
+                        statusGlyph,
+                        size: 22,
+                        color: iconForeground,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 1),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            const TextSpan(text: '$appHelperService · '),
-                            TextSpan(
-                              text: _loading ? l10n.loading : statusLabel,
-                              style: TextStyle(
-                                color: _loading ? null : statusColor,
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 1),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              const TextSpan(text: '$appHelperService · '),
+                              TextSpan(
+                                text: _loading ? l10n.loading : statusLabel,
+                                style: TextStyle(
+                                  color: _loading ? null : statusColor,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                          style: BusinessText.systemServiceTitle(context),
                         ),
-                        style: BusinessText.systemServiceTitle(context),
+                        const SizedBox(height: 4),
+                        Text(
+                          l10n.systemServiceDescription,
+                          style: BusinessText.metaLabel(context).copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: _loading ? null : _refresh,
+                      icon: const GlyphIcon(AppGlyphs.refresh, size: 16),
+                      tooltip: l10n.systemServiceRefresh,
+                      style: ButtonStyle.from(
+                        shape: AppShape.circle,
+                        fixedSize: const Size.square(34),
+                        minimumSize: const Size.square(34),
+                        maximumSize: const Size.square(34),
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: TapTargetSize.shrinkWrap,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l10n.systemServiceDescription,
-                        style: BusinessText.metaLabel(
-                          context,
-                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                    ),
+                    if (status != HelperServiceStatus.running) ...[
+                      const SizedBox(height: 8),
+                      BusinessPrimaryButton(
+                        label: status == HelperServiceStatus.notReady
+                            ? l10n.systemServiceInstall
+                            : l10n.systemServiceRepair,
+                        width: 104,
+                        glyph: AppGlyphs.wrench,
+                        onPressed: _installing || _loading ? null : _install,
                       ),
                     ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: _loading ? null : _refresh,
-                    icon: const GlyphIcon(AppGlyphs.refresh, size: 16),
-                    tooltip: l10n.systemServiceRefresh,
-                    style: ButtonStyle.from(
-                      shape: AppShape.circle,
-                      fixedSize: const Size.square(34),
-                      minimumSize: const Size.square(34),
-                      maximumSize: const Size.square(34),
-                      padding: EdgeInsets.zero,
-                      tapTargetSize: TapTargetSize.shrinkWrap,
-                    ),
-                  ),
-                  if (status != HelperServiceStatus.running) ...[
-                    const SizedBox(height: 8),
-                    BusinessPrimaryButton(
-                      label: status == HelperServiceStatus.notReady
-                          ? l10n.systemServiceInstall
-                          : l10n.systemServiceRepair,
-                      width: 104,
-                      glyph: AppGlyphs.wrench,
-                      onPressed: _installing || _loading ? null : _install,
-                    ),
                   ],
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -153,7 +153,7 @@ class AboutView extends ConsumerWidget {
                 children: [
                   Text(
                     appName,
-                    style: AppTextStyle.title2.of(context, emphasized: true),
+                    style: AppTextStyle.title3.of(context, emphasized: true),
                   ),
                   Text(
                     'TIANJI CLOUD',
@@ -336,10 +336,10 @@ class AboutView extends ConsumerWidget {
         items: [
           ListItem(
             minVerticalPadding: 14,
-            leading: const BusinessBrandMark(size: 56),
+            leading: const BusinessBrandMark(size: 64),
             title: Text(
               appName,
-              style: AppTextStyle.title2.of(context, emphasized: true),
+              style: AppTextStyle.title3.of(context, emphasized: true),
             ),
             subtitle: Text(
               version,

@@ -49,19 +49,21 @@ class OnboardingView extends ConsumerWidget {
                 );
               }
               return SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 24,
-                ),
+                padding: useDesktopSplit
+                    ? EdgeInsets.zero
+                    : const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    minHeight: math.max(0, constraints.maxHeight - 48),
+                    minHeight: math.max(
+                      0,
+                      constraints.maxHeight - (useDesktopSplit ? 0 : 48),
+                    ),
                   ),
                   child: useDesktopSplit
                       ? _DesktopOnboardingLayout(
                           state: state,
                           content: _onboardingContent(state),
-                          minHeight: math.max(0, constraints.maxHeight - 48),
+                          minHeight: constraints.maxHeight,
                         )
                       : Center(
                           child: ConstrainedBox(
@@ -125,10 +127,7 @@ class _DesktopOnboardingLayout extends StatelessWidget {
             SizedBox(
               width: 460,
               child: DecoratedBox(
-                decoration: ShapeDecoration(
-                  color: BusinessPalette.deep,
-                  shape: AppShape.all(AppCorner.fit(800)),
-                ),
+                decoration: const BoxDecoration(color: BusinessPalette.deep),
                 child: Padding(
                   padding: const EdgeInsets.all(40),
                   child: Column(
