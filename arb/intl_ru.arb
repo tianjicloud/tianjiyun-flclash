@@ -1602,5 +1602,19 @@
   "businessToolsApplicationCount": "Приложений: {count}",
   "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
   "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
-  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxySelectedOnly": "Проксировать отмеченные приложения",
+  "businessProxySelectedBypass": "Обходить прокси для отмеченных приложений",
+  "businessProxySelectedCount": "Выбрано приложений: {count}",
+  "@businessProxySelectedCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessImportRenew": "Продлить",
+  "businessImportAgain": "Импортировать снова",
+  "businessScanPrompt": "Поместите QR-код подписки в рамку",
+  "businessAppProxyTitle": "Прокси для приложений",
+  "businessProxyCheckedGroup": "Отмечено · {count}",
+  "@businessProxyCheckedGroup": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxyUncheckedGroup": "Не отмечено",
+  "businessProxySearchHint": "Поиск приложений",
+  "businessProxyNextConnection": "Изменения вступят в силу при следующем подключении",
+  "businessProxyReconnect": "Переподключить сейчас"
 }

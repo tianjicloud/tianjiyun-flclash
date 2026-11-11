@@ -1,4 +1,5 @@
 export 'active_polling.dart';
+export 'business_package_icon.dart';
 export 'chip_title.dart';
 export 'config_item.dart';
 export 'icon.dart';

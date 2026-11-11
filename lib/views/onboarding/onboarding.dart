@@ -895,6 +895,50 @@ class _FailedView extends ConsumerWidget {
         pasteAgain,
       ),
     };
+    if (BusinessTheme.of(context) &&
+        context.isMobileView &&
+        failure == ImportFailure.expired) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Center(
+            child: GlyphIcon(
+              AppGlyphs.warning,
+              size: 56,
+              color: BusinessPalette.warning,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.title3.of(context, emphasized: true),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.body
+                .of(context)
+                .copyWith(color: context.colorScheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 32),
+          BusinessPrimaryButton(
+            label: context.appLocalizations.businessImportRenew,
+            width: double.infinity,
+            height: 48,
+            onPressed: primaryAction,
+          ),
+          const SizedBox(height: 12),
+          BusinessSecondaryButton(
+            label: context.appLocalizations.businessImportAgain,
+            width: double.infinity,
+            height: 48,
+            onPressed: secondaryAction,
+          ),
+        ],
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

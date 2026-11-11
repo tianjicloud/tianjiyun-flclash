@@ -13036,6 +13036,126 @@ class AppLocalizations {
       args: [count],
     );
   }
+
+  /// `Only proxy checked apps`
+  String get businessProxySelectedOnly {
+    return Intl.message(
+      'Only proxy checked apps',
+      name: 'businessProxySelectedOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bypass proxy for checked apps`
+  String get businessProxySelectedBypass {
+    return Intl.message(
+      'Bypass proxy for checked apps',
+      name: 'businessProxySelectedBypass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} apps selected`
+  String businessProxySelectedCount(int count) {
+    return Intl.message(
+      '$count apps selected',
+      name: 'businessProxySelectedCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Renew`
+  String get businessImportRenew {
+    return Intl.message(
+      'Renew',
+      name: 'businessImportRenew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import again`
+  String get businessImportAgain {
+    return Intl.message(
+      'Import again',
+      name: 'businessImportAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Place the subscription QR code inside the frame`
+  String get businessScanPrompt {
+    return Intl.message(
+      'Place the subscription QR code inside the frame',
+      name: 'businessScanPrompt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Per-app proxy`
+  String get businessAppProxyTitle {
+    return Intl.message(
+      'Per-app proxy',
+      name: 'businessAppProxyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checked · {count}`
+  String businessProxyCheckedGroup(int count) {
+    return Intl.message(
+      'Checked · $count',
+      name: 'businessProxyCheckedGroup',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Not checked`
+  String get businessProxyUncheckedGroup {
+    return Intl.message(
+      'Not checked',
+      name: 'businessProxyUncheckedGroup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search apps`
+  String get businessProxySearchHint {
+    return Intl.message(
+      'Search apps',
+      name: 'businessProxySearchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Changes take effect on the next connection`
+  String get businessProxyNextConnection {
+    return Intl.message(
+      'Changes take effect on the next connection',
+      name: 'businessProxyNextConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reconnect now`
+  String get businessProxyReconnect {
+    return Intl.message(
+      'Reconnect now',
+      name: 'businessProxyReconnect',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

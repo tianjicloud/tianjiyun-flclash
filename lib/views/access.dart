@@ -7,6 +7,10 @@ import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, DashboardSwitch;
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
@@ -204,6 +208,11 @@ class _AccessViewState extends ConsumerState<AccessView>
         );
   }
 
+  Future<void> _handleReconnect() async {
+    _handleSave();
+    await ref.read(setupActionProvider.notifier).restartVpn();
+  }
+
   Future<void> _exportToClipboard() async {
     await globalState.safeRun(() {
       final currentList = ref.read(
@@ -231,12 +240,20 @@ class _AccessViewState extends ConsumerState<AccessView>
 
   List<PopupMenuItem> _buildMenuItems(
     BuildContext context,
-    AccessControlProps accessControl,
-  ) {
+    AccessControlProps accessControl, {
+    required bool businessMobile,
+    IconButtonData? selectAllAction,
+  }) {
     final appLocalizations = context.appLocalizations;
     String modeText(AccessControlMode mode) => switch (mode) {
-      AccessControlMode.acceptSelected => appLocalizations.whitelistMode,
-      AccessControlMode.rejectSelected => appLocalizations.blacklistMode,
+      AccessControlMode.acceptSelected =>
+        businessMobile
+            ? appLocalizations.businessProxySelectedOnly
+            : appLocalizations.whitelistMode,
+      AccessControlMode.rejectSelected =>
+        businessMobile
+            ? appLocalizations.businessProxySelectedBypass
+            : appLocalizations.blacklistMode,
     };
     return [
       PopupMenuItem(
@@ -304,6 +321,12 @@ class _AccessViewState extends ConsumerState<AccessView>
         glyph: AppGlyphs.moreCircle,
         label: appLocalizations.action,
         subItems: [
+          if (businessMobile && selectAllAction != null)
+            PopupMenuItem(
+              glyph: selectAllAction.glyph,
+              label: selectAllAction.tooltip ?? appLocalizations.selectAll,
+              onPressed: selectAllAction.onPressed,
+            ),
           PopupMenuItem(
             glyph: AppGlyphs.sparkle,
             label: appLocalizations.intelligentSelected,
@@ -364,6 +387,7 @@ class _AccessViewState extends ConsumerState<AccessView>
 
   @override
   Widget build(BuildContext context) {
+    final businessMobile = BusinessTheme.of(context) && context.isMobileView;
     final isLoading = ref.watch(loadingProvider(LoadingTag.access));
     final query = SearchQuery(ref.watch(queryProvider(QueryTag.access)));
     final packages = ref.watch(packagesProvider);
@@ -416,10 +440,28 @@ class _AccessViewState extends ConsumerState<AccessView>
           : null,
       child: Scaffold(
         isLoading: isLoading,
-        searchState: AppBarSearchState(onSearch: _onSearch),
-        searchActions: [?selectAllAction],
-        searchInBar: true,
-        title: context.appLocalizations.appAccessControl,
+        searchState: businessMobile
+            ? null
+            : AppBarSearchState(onSearch: _onSearch),
+        searchActions: businessMobile ? const [] : [?selectAllAction],
+        searchInBar: !businessMobile,
+        title: businessMobile
+            ? context.appLocalizations.businessAppProxyTitle
+            : context.appLocalizations.appAccessControl,
+        actions: businessMobile
+            ? [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 12),
+                  child: DashboardSwitch(
+                    compact: true,
+                    semanticLabel: context.appLocalizations.accessControl,
+                    value: accessControl.enable,
+                    onChanged: (value) =>
+                        _update((state) => state.copyWith(enable: value)),
+                  ),
+                ),
+              ]
+            : null,
         confirmationAction: hasChanges
             ? IconButtonData(
                 glyph: AppGlyphs.check,
@@ -427,10 +469,83 @@ class _AccessViewState extends ConsumerState<AccessView>
                 tooltip: context.appLocalizations.save,
               )
             : null,
-        iconActions: [?selectAllAction],
-        menuItems: _buildMenuItems(context, accessControl),
+        iconActions: businessMobile ? const [] : [?selectAllAction],
+        menuItems: _buildMenuItems(
+          context,
+          accessControl,
+          businessMobile: businessMobile,
+          selectAllAction: selectAllAction,
+        ),
         body: needsInstalledAppsPermission
             ? _buildInstalledAppsPermissionStatus()
+            : businessMobile
+            ? Column(
+                children: [
+                  Expanded(
+                    child: DisabledMask(
+                      status: !accessControl.enable,
+                      child: Column(
+                        children: [
+                          SizedBox(height: context.appBarInset - 18),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                            child: BusinessSegmented<AccessControlMode>(
+                              items: [
+                                BusinessSegment(
+                                  value: AccessControlMode.acceptSelected,
+                                  label: context
+                                      .appLocalizations
+                                      .businessProxySelectedOnly,
+                                ),
+                                BusinessSegment(
+                                  value: AccessControlMode.rejectSelected,
+                                  label: context
+                                      .appLocalizations
+                                      .businessProxySelectedBypass,
+                                ),
+                              ],
+                              selected: accessControl.mode,
+                              expand: true,
+                              mobile: true,
+                              height: 36,
+                              onSelected: (mode) => _update(
+                                (state) => state.copyWith(mode: mode),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                            child: SearchField(
+                              height: 42,
+                              fill:
+                                  context.colorScheme.brightness ==
+                                      Brightness.dark
+                                  ? context.colorScheme.surfaceContainerLow
+                                  : context.colorScheme.surface,
+                              hintText: context
+                                  .appLocalizations
+                                  .businessProxySearchHint,
+                              onChanged: _onSearch,
+                            ),
+                          ),
+                          Expanded(
+                            child: packages.isEmpty || viewPackages.isEmpty
+                                ? _buildContent(
+                                    packages: viewPackages,
+                                    isSearching: query.isNotEmpty,
+                                  )
+                                : _BusinessPackageGroups(
+                                    packages: viewPackages,
+                                    onSelected: _handleSelected,
+                                  ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _BusinessProxyRestartBar(onReconnect: _handleReconnect),
+                ],
+              )
             : FloatingFootBar(
                 bar: _AccessStatus(
                   accessControl: accessControl,
@@ -527,6 +642,146 @@ class _PackageListState extends ConsumerState<_PackageList>
       ),
     );
   }
+}
+
+class _BusinessPackageGroups extends ConsumerWidget {
+  const _BusinessPackageGroups({
+    required this.packages,
+    required this.onSelected,
+  });
+
+  final List<Package> packages;
+  final ValueSetter<String> onSelected;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedNames = ref.watch(
+      accessControlStateProvider.select((state) => state.currentList.toSet()),
+    );
+    final selected = packages
+        .where((package) => selectedNames.contains(package.packageName))
+        .toList();
+    final unselected = packages
+        .where((package) => !selectedNames.contains(package.packageName))
+        .toList();
+    return ListView(
+      padding: EdgeInsets.fromLTRB(16, 0, 16, context.bottomInset + 16),
+      children: [
+        if (selected.isNotEmpty)
+          _BusinessPackageGroup(
+            title: context.appLocalizations.businessProxyCheckedGroup(
+              selected.length,
+            ),
+            packages: selected,
+            selected: true,
+            onSelected: onSelected,
+          ),
+        if (unselected.isNotEmpty)
+          _BusinessPackageGroup(
+            title: context.appLocalizations.businessProxyUncheckedGroup,
+            packages: unselected,
+            selected: false,
+            onSelected: onSelected,
+          ),
+      ],
+    );
+  }
+}
+
+class _BusinessPackageGroup extends StatelessWidget {
+  const _BusinessPackageGroup({
+    required this.title,
+    required this.packages,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String title;
+  final List<Package> packages;
+  final bool selected;
+  final ValueSetter<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+          child: Text(
+            title,
+            style: AppTextStyle.caption1
+                .of(context)
+                .copyWith(color: context.colorScheme.onSurfaceVariant),
+          ),
+        ),
+        ClipRSuperellipse(
+          borderRadius: AppRadius.all(BusinessPalette.cardRadius),
+          child: ColoredBox(
+            color: context.colorScheme.brightness == Brightness.dark
+                ? context.colorScheme.surfaceContainerLow
+                : context.colorScheme.surface,
+            child: Column(
+              children: [
+                for (var index = 0; index < packages.length; index++) ...[
+                  if (index > 0)
+                    SizedBox(
+                      height: 1,
+                      child: ColoredBox(
+                        color: context.colorScheme.outlineVariant,
+                      ),
+                    ),
+                  PackageListItem(
+                    package: packages[index],
+                    value: selected,
+                    onChanged: (_) => onSelected(packages[index].packageName),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _BusinessProxyRestartBar extends StatelessWidget {
+  const _BusinessProxyRestartBar({required this.onReconnect});
+
+  final VoidCallback onReconnect;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.fromLTRB(16, 8, 16, context.bottomInset + 12),
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: ShapeDecoration(
+        color: BusinessPalette.deep,
+        shape: AppShape.all(BusinessPalette.cardRadius),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              context.appLocalizations.businessProxyNextConnection,
+              style: AppTextStyle.footnote
+                  .of(context)
+                  .copyWith(color: BusinessPalette.onBlue),
+            ),
+          ),
+          const SizedBox(width: 12),
+          BusinessPrimaryButton(
+            label: context.appLocalizations.businessProxyReconnect,
+            width: 112,
+            height: 42,
+            onPressed: onReconnect,
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class _AccessStatus extends ConsumerWidget {
@@ -627,16 +882,35 @@ class PackageListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final businessMobile = BusinessTheme.of(context) && context.isMobileView;
     return ListItem.checkbox(
-      leading: PackageIcon(packageName: package.packageName, size: 48),
+      leading: businessMobile
+          ? BusinessPackageIcon(
+              packageName: package.packageName,
+              label: package.label,
+              size: 36,
+            )
+          : PackageIcon(packageName: package.packageName, size: 48),
       title: Text(
         package.label,
-        style: const TextStyle(overflow: TextOverflow.ellipsis),
+        style: businessMobile
+            ? AppTextStyle.subheadline
+                  .of(context)
+                  .copyWith(overflow: TextOverflow.ellipsis)
+            : const TextStyle(overflow: TextOverflow.ellipsis),
         maxLines: 1,
       ),
       subtitle: Text(
         package.packageName,
-        style: const TextStyle(overflow: TextOverflow.ellipsis),
+        style: businessMobile
+            ? AppTextStyle.caption1
+                  .of(context)
+                  .toJetBrainsMono
+                  .copyWith(
+                    overflow: TextOverflow.ellipsis,
+                    color: BusinessPalette.secondary,
+                  )
+            : const TextStyle(overflow: TextOverflow.ellipsis),
         maxLines: 1,
       ),
       value: value,

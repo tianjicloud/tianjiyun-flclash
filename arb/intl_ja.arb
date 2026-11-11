@@ -1602,5 +1602,19 @@
   "businessToolsApplicationCount": "{count} 個のアプリ",
   "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
   "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
-  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxySelectedOnly": "チェックしたアプリのみプロキシ",
+  "businessProxySelectedBypass": "チェックしたアプリはプロキシを迂回",
+  "businessProxySelectedCount": "{count} 個のアプリを選択中",
+  "@businessProxySelectedCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessImportRenew": "更新",
+  "businessImportAgain": "再インポート",
+  "businessScanPrompt": "サブスクリプションの QR コードを枠内に入れてください",
+  "businessAppProxyTitle": "アプリ別プロキシ",
+  "businessProxyCheckedGroup": "選択済み · {count}",
+  "@businessProxyCheckedGroup": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxyUncheckedGroup": "未選択",
+  "businessProxySearchHint": "アプリを検索",
+  "businessProxyNextConnection": "変更は次回の接続時に反映されます",
+  "businessProxyReconnect": "今すぐ再接続"
 }

@@ -1602,5 +1602,19 @@
   "businessToolsApplicationCount": "앱 {count}개",
   "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
   "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
-  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxySelectedOnly": "선택한 앱만 프록시",
+  "businessProxySelectedBypass": "선택한 앱은 프록시 우회",
+  "businessProxySelectedCount": "앱 {count}개 선택됨",
+  "@businessProxySelectedCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessImportRenew": "갱신",
+  "businessImportAgain": "다시 가져오기",
+  "businessScanPrompt": "구독 QR 코드를 프레임 안에 넣으세요",
+  "businessAppProxyTitle": "앱별 프록시",
+  "businessProxyCheckedGroup": "선택됨 · {count}",
+  "@businessProxyCheckedGroup": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxyUncheckedGroup": "선택 안 됨",
+  "businessProxySearchHint": "앱 검색",
+  "businessProxyNextConnection": "변경 사항은 다음 연결부터 적용됩니다",
+  "businessProxyReconnect": "지금 다시 연결"
 }

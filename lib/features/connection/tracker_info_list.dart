@@ -417,21 +417,10 @@ class _BusinessMobileConnectionRow extends StatelessWidget {
     required this.onClose,
   });
 
-  int _stableHash(String value) {
-    var hash = 0x811c9dc5;
-    for (final rune in value.runes) {
-      hash = ((hash ^ rune) * 0x01000193) & 0xffffffff;
-    }
-    return hash;
-  }
-
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
     final process = trackerInfo.metadata.process;
-    final iconColor =
-        BusinessPalette.connectionAppColors[_stableHash(process) %
-            BusinessPalette.connectionAppColors.length];
     final rejected = trackerInfo.rule.toUpperCase() == 'REJECT';
     final exit = rejected
         ? context.appLocalizations.connectionBlockedLabel
@@ -459,35 +448,7 @@ class _BusinessMobileConnectionRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: [
-            SizedBox(
-              width: 40,
-              height: 40,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ClipRSuperellipse(
-                    borderRadius: AppRadius.all(10),
-                    child: ColoredBox(
-                      color: iconColor,
-                      child: Center(
-                        child: Text(
-                          process.isEmpty
-                              ? '?'
-                              : String.fromCharCode(
-                                  process.runes.first,
-                                ).toUpperCase(),
-                          style: AppTextStyle.body
-                              .of(context, emphasized: true)
-                              .copyWith(color: BusinessPalette.onBlue),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (process.isNotEmpty)
-                    PackageIcon(packageName: process, size: 40),
-                ],
-              ),
-            ),
+            BusinessPackageIcon(packageName: process, label: process, size: 40),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -1602,5 +1602,19 @@
   "businessToolsApplicationCount": "{count} apps",
   "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
   "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
-  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxySelectedOnly": "Only proxy checked apps",
+  "businessProxySelectedBypass": "Bypass proxy for checked apps",
+  "businessProxySelectedCount": "{count} apps selected",
+  "@businessProxySelectedCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessImportRenew": "Renew",
+  "businessImportAgain": "Import again",
+  "businessScanPrompt": "Place the subscription QR code inside the frame",
+  "businessAppProxyTitle": "Per-app proxy",
+  "businessProxyCheckedGroup": "Checked · {count}",
+  "@businessProxyCheckedGroup": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxyUncheckedGroup": "Not checked",
+  "businessProxySearchHint": "Search apps",
+  "businessProxyNextConnection": "Changes take effect on the next connection",
+  "businessProxyReconnect": "Reconnect now"
 }

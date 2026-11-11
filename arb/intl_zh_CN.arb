@@ -1602,5 +1602,19 @@
   "businessToolsApplicationCount": "{count} 个应用",
   "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
   "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
-  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxySelectedOnly": "只代理勾选的应用",
+  "businessProxySelectedBypass": "勾选的应用不走代理",
+  "businessProxySelectedCount": "已选 {count} 个应用",
+  "@businessProxySelectedCount": {"placeholders": {"count": {"type": "int"}}},
+  "businessImportRenew": "续费",
+  "businessImportAgain": "重新导入",
+  "businessScanPrompt": "把订阅二维码放进框里",
+  "businessAppProxyTitle": "分应用代理",
+  "businessProxyCheckedGroup": "已勾选 · {count}",
+  "@businessProxyCheckedGroup": {"placeholders": {"count": {"type": "int"}}},
+  "businessProxyUncheckedGroup": "未勾选",
+  "businessProxySearchHint": "搜索应用",
+  "businessProxyNextConnection": "改动会在下次连接时生效",
+  "businessProxyReconnect": "立即重连"
 }

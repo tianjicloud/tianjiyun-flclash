@@ -8,6 +8,9 @@ import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +36,9 @@ const _previewRevealAwaitingFirstFrame = Interval(
 );
 
 class ScanPage extends ConsumerStatefulWidget {
-  const ScanPage({super.key});
+  const ScanPage({super.key, this.cameraPlaceholder = false});
+
+  final bool cameraPlaceholder;
 
   @override
   ConsumerState<ScanPage> createState() => _ScanPageState();
@@ -105,6 +110,7 @@ class _ScanPageState extends ConsumerState<ScanPage>
   // The permission dialog makes Android report `inactive` then `resumed` while
   // the first start is still pending, and a second `start` would throw.
   Future<void> _start() async {
+    if (widget.cameraPlaceholder) return;
     final state = _controller.value;
     if (_leaving || !routeSettled || state.isStarting || state.isRunning) {
       return;
@@ -248,6 +254,7 @@ class _ScanPageState extends ConsumerState<ScanPage>
 
   @override
   Widget build(BuildContext context) {
+    final businessMobile = BusinessTheme.of(context) && context.isMobileView;
     final theme = watchAppTheme(ref, Brightness.dark);
     final appLocalizations = context.appLocalizations;
     final glass = LiquidGlassScope.of(context);
@@ -315,7 +322,12 @@ class _ScanPageState extends ConsumerState<ScanPage>
                               onOpenSettings: _openAppSettings,
                             );
                           }
-                          return _buildScanFrame(theme, layout, hintStyle);
+                          return _buildScanFrame(
+                            theme,
+                            layout,
+                            hintStyle,
+                            businessMobile,
+                          );
                         },
                       ),
                     ),
@@ -338,27 +350,44 @@ class _ScanPageState extends ConsumerState<ScanPage>
                               ),
                             ),
                           ),
-                          actions: genActions([
-                            ElasticPress(
-                              child: AppBarActionButton(
-                                data: IconButtonData(
-                                  glyph: AppGlyphs.photos,
-                                  tooltip: appLocalizations.pickFromAlbum,
-                                  onPressed: _pickFromAlbum,
-                                ),
-                              ),
-                            ),
-                          ], edge: AppBarActionEdge.container),
+                          actions: businessMobile
+                              ? const []
+                              : genActions([
+                                  ElasticPress(
+                                    child: AppBarActionButton(
+                                      data: IconButtonData(
+                                        glyph: AppGlyphs.photos,
+                                        tooltip: appLocalizations.pickFromAlbum,
+                                        onPressed: _pickFromAlbum,
+                                      ),
+                                    ),
+                                  ),
+                                ], edge: AppBarActionEdge.container),
                         ),
                       ),
                     ),
-                    Positioned.fromRect(
-                      rect: layout.torch,
-                      child: TonalButtonTheme(
-                        glass: glass,
-                        child: _TorchButton(controller: _controller),
+                    if (businessMobile)
+                      Positioned(
+                        bottom: max(MediaQuery.paddingOf(context).bottom, 40),
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: BusinessSecondaryButton(
+                            label: appLocalizations.pickFromAlbum,
+                            width: 220,
+                            height: 48,
+                            onPressed: _pickFromAlbum,
+                          ),
+                        ),
+                      )
+                    else
+                      Positioned.fromRect(
+                        rect: layout.torch,
+                        child: TonalButtonTheme(
+                          glass: glass,
+                          child: _TorchButton(controller: _controller),
+                        ),
                       ),
-                    ),
                   ],
                 );
               },
@@ -373,6 +402,7 @@ class _ScanPageState extends ConsumerState<ScanPage>
     ThemeData theme,
     _ScanLayout layout,
     TextStyle hintStyle,
+    bool businessMobile,
   ) {
     final colorScheme = theme.colorScheme;
     final scanWindow = layout.scanWindow;
@@ -412,6 +442,8 @@ class _ScanPageState extends ConsumerState<ScanPage>
               child: Text(
                 invalid
                     ? appLocalizations.invalidProfileQrcode
+                    : businessMobile
+                    ? appLocalizations.businessScanPrompt
                     : appLocalizations.qrcodeDesc,
                 textAlign: TextAlign.center,
                 maxLines: _hintMaxLines,
