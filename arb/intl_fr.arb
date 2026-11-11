@@ -1545,5 +1545,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "overridesLabel": "Remplacements",
+  "intercept": "Bloquer"
 }

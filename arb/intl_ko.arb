@@ -1545,5 +1545,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "overridesLabel": "재정의",
+  "intercept": "차단"
 }

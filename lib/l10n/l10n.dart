@@ -12506,6 +12506,21 @@ class AppLocalizations {
       args: [version],
     );
   }
+
+  /// `Overrides`
+  String get overridesLabel {
+    return Intl.message(
+      'Overrides',
+      name: 'overridesLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Intercept`
+  String get intercept {
+    return Intl.message('Intercept', name: 'intercept', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

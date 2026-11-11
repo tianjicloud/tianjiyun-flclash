@@ -1545,5 +1545,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "overridesLabel": "覆写",
+  "intercept": "拦截"
 }

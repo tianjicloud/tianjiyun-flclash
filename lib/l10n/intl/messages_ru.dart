@@ -1684,6 +1684,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Установленные шрифты",
     ),
     "intelligentSelected": MessageLookupByLibrary.simpleMessage("Умный выбор"),
+    "intercept": MessageLookupByLibrary.simpleMessage("Блокировка"),
     "interfaceName": MessageLookupByLibrary.simpleMessage("Имя интерфейса"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "Исходящий интерфейс",
@@ -2291,6 +2292,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideEntries": MessageLookupByLibrary.simpleMessage(
       "Переопределяемые параметры",
     ),
+    "overridesLabel": MessageLookupByLibrary.simpleMessage("Переопределения"),
     "overview": MessageLookupByLibrary.simpleMessage("Обзор"),
     "parsePureIp": MessageLookupByLibrary.simpleMessage("Разбирать чистые IP"),
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),

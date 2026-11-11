@@ -1353,6 +1353,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "installedFonts": MessageLookupByLibrary.simpleMessage("インストール済みのフォント"),
     "intelligentSelected": MessageLookupByLibrary.simpleMessage("スマート選択"),
+    "intercept": MessageLookupByLibrary.simpleMessage("ブロック"),
     "interfaceName": MessageLookupByLibrary.simpleMessage("インターフェース名"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "アウトバウンドインターフェース",
@@ -1848,6 +1849,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "outboundModeRestoreRule": MessageLookupByLibrary.simpleMessage("ルールに戻す"),
     "overrideDestination": MessageLookupByLibrary.simpleMessage("宛先を上書き"),
     "overrideEntries": MessageLookupByLibrary.simpleMessage("上書き項目"),
+    "overridesLabel": MessageLookupByLibrary.simpleMessage("オーバーライド"),
     "overview": MessageLookupByLibrary.simpleMessage("概要"),
     "parsePureIp": MessageLookupByLibrary.simpleMessage("純粋なIPを解析"),
     "password": MessageLookupByLibrary.simpleMessage("パスワード"),

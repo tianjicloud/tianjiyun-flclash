@@ -410,7 +410,15 @@ class _BusinessRuleRow extends StatelessWidget {
                       ),
                     ),
                     if (issues.isNotEmpty) CustomIssueButton(issues: issues),
-                    DashboardChip(label: target, tone: tone),
+                    DashboardChip(
+                      label: switch (target.toUpperCase()) {
+                        'DIRECT' => context.appLocalizations.direct,
+                        'REJECT' ||
+                        'REJECT-DROP' => context.appLocalizations.intercept,
+                        _ => target,
+                      },
+                      tone: tone,
+                    ),
                     BusinessSecondaryButton(
                       label: context.appLocalizations.edit,
                       width: 64,

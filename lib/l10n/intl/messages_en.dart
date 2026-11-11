@@ -1615,6 +1615,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "intelligentSelected": MessageLookupByLibrary.simpleMessage(
       "Smart selection",
     ),
+    "intercept": MessageLookupByLibrary.simpleMessage("Intercept"),
     "interfaceName": MessageLookupByLibrary.simpleMessage("Interface name"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "Outbound interface",
@@ -2186,6 +2187,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Override destination",
     ),
     "overrideEntries": MessageLookupByLibrary.simpleMessage("Override entries"),
+    "overridesLabel": MessageLookupByLibrary.simpleMessage("Overrides"),
     "overview": MessageLookupByLibrary.simpleMessage("Overview"),
     "parsePureIp": MessageLookupByLibrary.simpleMessage("Parse pure IP"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),

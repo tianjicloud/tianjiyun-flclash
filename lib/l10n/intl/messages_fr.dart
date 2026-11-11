@@ -1730,6 +1730,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "intelligentSelected": MessageLookupByLibrary.simpleMessage(
       "Sélection intelligente",
     ),
+    "intercept": MessageLookupByLibrary.simpleMessage("Bloquer"),
     "interfaceName": MessageLookupByLibrary.simpleMessage("Nom de l’interface"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "Interface sortante",
@@ -2341,6 +2342,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideEntries": MessageLookupByLibrary.simpleMessage(
       "Entrées de remplacement",
     ),
+    "overridesLabel": MessageLookupByLibrary.simpleMessage("Remplacements"),
     "overview": MessageLookupByLibrary.simpleMessage("Aperçu"),
     "parsePureIp": MessageLookupByLibrary.simpleMessage(
       "Analyser les IP seules",

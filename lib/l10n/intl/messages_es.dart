@@ -1719,6 +1719,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "intelligentSelected": MessageLookupByLibrary.simpleMessage(
       "Selección inteligente",
     ),
+    "intercept": MessageLookupByLibrary.simpleMessage("Bloquear"),
     "interfaceName": MessageLookupByLibrary.simpleMessage("Nombre de interfaz"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "Interfaz de salida",
@@ -2336,6 +2337,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideEntries": MessageLookupByLibrary.simpleMessage(
       "Entradas de sobrescritura",
     ),
+    "overridesLabel": MessageLookupByLibrary.simpleMessage("Sobrescrituras"),
     "overview": MessageLookupByLibrary.simpleMessage("Resumen"),
     "parsePureIp": MessageLookupByLibrary.simpleMessage("Analizar IP pura"),
     "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
