@@ -486,7 +486,7 @@ final class SharedStateProvider
   }
 }
 
-String _$sharedStateHash() => r'bad20df240acfd1b384cad3655a58987a992a4ca';
+String _$sharedStateHash() => r'423c9ce3e604ba489e906be6e035d984b629e1d6';
 
 @ProviderFor(vpnRouteAddress)
 final vpnRouteAddressProvider = VpnRouteAddressProvider._();
@@ -3087,7 +3087,7 @@ final class CurrentNavigationItemsStateProvider
 }
 
 String _$currentNavigationItemsStateHash() =>
-    r'c6396c6a5fef5dadb240be5b375ec7f1e9dc4393';
+    r'298223faf08578166afa85f801f012227b8673d3';
 
 @ProviderFor(shownPageLabel)
 final shownPageLabelProvider = ShownPageLabelProvider._();

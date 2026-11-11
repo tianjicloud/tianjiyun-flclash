@@ -138,19 +138,23 @@ List<DashboardLine> dashboardLinesFrom(
   return lines;
 }
 
-DashboardLine? currentDashboardLine(WidgetRef ref) {
-  T watch<T>(ProviderListenable<T> provider) => ref.watch(provider);
-  final groups = ref.watch(currentGroupsStateProvider).value;
+DashboardLine? currentDashboardLine(WidgetRef ref) =>
+    currentDashboardLineFrom(ref.watch);
+
+DashboardLine? currentDashboardLineFrom(
+  T Function<T>(ProviderListenable<T> provider) watch,
+) {
+  final groups = watch(currentGroupsStateProvider).value;
   if (groups.isEmpty) return null;
-  final policy = ref.watch(residentialPolicyProvider);
+  final policy = watch(residentialPolicyProvider);
   final byName = {for (final group in groups) group.name: group};
-  final delays = ref.watch(delaysAtLastTestBatchProvider);
-  final testUrl = ref.watch(realTestUrlProvider());
+  final delays = watch(delaysAtLastTestBatchProvider);
+  final testUrl = watch(realTestUrlProvider());
   final host = _hostOf(watch, groups);
   if (!policy.active && host == null) return null;
   final selected = policy.active
       ? policy.selectedExit
-      : ref.watch(selectedProxyNameProvider(host!.name));
+      : watch(selectedProxyNameProvider(host!.name));
   if (selected == null || selected.isEmpty) return null;
 
   final selectionGroups = policy.active
@@ -163,7 +167,7 @@ DashboardLine? currentDashboardLine(WidgetRef ref) {
         final resolved = target == null
             ? member.name
             : target.getCurrentSelectedName(
-                ref.watch(selectedProxyNameProvider(target.name)) ?? '',
+                watch(selectedProxyNameProvider(target.name)) ?? '',
               );
         final leaf = byName[resolved];
         final type = leaf?.all.firstOrNull?.type ?? member.type;
@@ -191,7 +195,7 @@ DashboardLine? currentDashboardLine(WidgetRef ref) {
       final resolved = target == null
           ? member.name
           : target.getCurrentSelectedName(
-              ref.watch(selectedProxyNameProvider(target.name)) ?? '',
+              watch(selectedProxyNameProvider(target.name)) ?? '',
             );
       final leaf = byName[resolved];
       final type = leaf?.all.firstOrNull?.type ?? member.type;

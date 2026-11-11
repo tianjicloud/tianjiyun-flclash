@@ -48,8 +48,9 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
     private val mutableRunState = MutableStateFlow(RunState.STOPPED)
     private val arbiter = RunIntentArbiter()
 
-    @Volatile
-    private var sharedState = SharedState()
+    private val mutableSharedState = MutableStateFlow(SharedState())
+
+    val sharedState = mutableSharedState.asStateFlow()
 
     @Volatile
     private var pendingVpnPreparation: (() -> Unit)? = null
@@ -108,7 +109,7 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
         if (!isRunRequested) {
             return
         }
-        host.showToast(sharedState.stopTip)
+        host.showToast(sharedState.value.stopTip)
         requestStop().await()
         host.notifyStopped()
     }
@@ -121,7 +122,7 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
     }
 
     fun requestStart(): Deferred<Boolean> {
-        if (isStartedAs(sharedState.vpnOptions)) {
+        if (isStartedAs(sharedState.value.vpnOptions)) {
             return CompletableDeferred(true)
         }
         val outcome = launchStart(createRequest(running = true))
@@ -134,7 +135,7 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
     }
 
     fun syncSharedState(state: SharedState) {
-        sharedState = state
+        mutableSharedState.value = state
         applySharedState()
     }
 
@@ -146,8 +147,8 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
     // toggles this start off instead of racing a second setup against it.
     private suspend fun startFromPreferences() {
         val request = createRequest(running = true)
-        sharedState = host.loadSharedState()
-        if (sharedState.setupParams == null || sharedState.vpnOptions == null) {
+        mutableSharedState.value = host.loadSharedState()
+        if (sharedState.value.setupParams == null || sharedState.value.vpnOptions == null) {
             host.showToast(MISSING_CONFIG_MESSAGE)
             abandon(request)
             return
@@ -182,15 +183,15 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
     }
 
     private fun applySharedState() {
-        host.updateNotificationParams(notificationParams(sharedState))
+        host.updateNotificationParams(notificationParams(sharedState.value))
     }
 
     private suspend fun setupCore(): Boolean {
         applySharedState()
-        host.showToast(sharedState.startTip)
+        host.showToast(sharedState.value.startTip)
         return host.quickSetup(
             initParams(host.homeDirPath, host.sdkInt),
-            Gson().toJson(sharedState.setupParams),
+            Gson().toJson(sharedState.value.setupParams),
         ).fold(
             onSuccess = { message ->
                 if (message.isEmpty()) {
@@ -239,7 +240,7 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
         if (!isCurrent(request)) {
             return false
         }
-        val options = sharedState.vpnOptions ?: return false
+        val options = sharedState.value.vpnOptions ?: return false
         if (!prepareVpn(options)) {
             if (host.app() == null && isCurrent(request)) {
                 host.showToast(VPN_PERMISSION_MESSAGE)
@@ -264,7 +265,7 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
         ) {
             return options
         }
-        host.showToast(sharedState.localNetworkTip)
+        host.showToast(sharedState.value.localNetworkTip)
         return options.copy(stack = FALLBACK_STACK)
     }
 
@@ -373,7 +374,11 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
         )
 
         fun notificationParams(state: SharedState): NotificationParams = NotificationParams(
-            title = state.currentProfileName,
+            title = if (state.currentLineName.isNotEmpty()) {
+                "${state.connectedText} · ${state.currentLineName}"
+            } else {
+                state.currentProfileName
+            },
             stopText = state.stopText,
             onlyStatisticsProxy = state.onlyStatisticsProxy,
             showStopAction = state.showStopAction,

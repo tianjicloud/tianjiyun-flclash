@@ -3,11 +3,13 @@ package com.follow.clash
 import com.follow.clash.models.SharedState
 import io.flutter.embedding.engine.FlutterEngine
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.StateFlow
 
 object ServiceState {
     private val machine = ServiceStateMachine(AndroidServiceStateHost)
 
     val runState = machine.runState
+    val sharedState: StateFlow<SharedState> = machine.sharedState
 
     val isRunRequested: Boolean
         get() = machine.isRunRequested

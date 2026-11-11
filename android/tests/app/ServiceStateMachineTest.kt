@@ -192,6 +192,19 @@ class ServiceStateMachineTest {
     }
 
     @Test
+    fun `notification title includes the connected line when available`() {
+        val params = ServiceStateMachine.notificationParams(
+            SharedState(
+                currentProfileName = "Work",
+                currentLineName = "Tokyo 04",
+                connectedText = "Connected",
+            ),
+        )
+
+        assertEquals("Connected · Tokyo 04", params.title)
+    }
+
+    @Test
     fun `notification params carry the stop action switch`() {
         val params = ServiceStateMachine.notificationParams(
             SharedState(showStopAction = false),

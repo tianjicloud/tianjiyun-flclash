@@ -231,10 +231,15 @@ SharedState sharedState(Ref ref) {
     ),
   );
   final currentProfileName = currentProfile.label;
+  final currentLineName =
+      currentDashboardLineFrom(ref.watch)?.displayName ?? '';
   final selectedMap = currentProfile.selectedMap;
   final onlyStatisticsProxy = appSetting.onlyStatisticsProxy;
   return SharedState(
     currentProfileName: currentProfileName,
+    currentLineName: currentLineName,
+    connectedText: currentAppLocalizations.connected,
+    notConnectedText: currentAppLocalizations.businessNotConnected,
     onlyStatisticsProxy: onlyStatisticsProxy,
     showStopAction: appSetting.showStopAction,
     stopText: currentAppLocalizations.stop,

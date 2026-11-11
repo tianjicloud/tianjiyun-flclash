@@ -11,6 +11,7 @@ import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/dashboard_lines.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:flutter/foundation.dart'

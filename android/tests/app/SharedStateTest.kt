@@ -112,6 +112,18 @@ class SharedStateTest {
     }
 
     @Test
+    fun `dashboard line and localized status text round-trip`() {
+        val state = gson.fromJson(
+            """{"currentLineName":"Tokyo 04","connectedText":"Connected","notConnectedText":"Not connected"}""",
+            SharedState::class.java,
+        )
+
+        assertEquals("Tokyo 04", state.currentLineName)
+        assertEquals("Connected", state.connectedText)
+        assertEquals("Not connected", state.notConnectedText)
+    }
+
+    @Test
     fun `a null json document decodes to null so the caller can fall back`() {
         assertNull(gson.fromJson("null", SharedState::class.java))
         assertNull(gson.fromJson(null as String?, SharedState::class.java))
