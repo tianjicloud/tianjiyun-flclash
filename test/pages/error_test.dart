@@ -31,8 +31,11 @@ void main() {
     await tester.pumpWidget(_screen());
     await tester.pump();
 
-    expect(find.text('Startup failed'), findsOneWidget);
+    expect(find.text("The network core couldn't start"), findsOneWidget);
+    await tester.tap(find.text('Error details'));
+    await tester.pump();
     expect(find.text('Error details'), findsOneWidget);
+    expect(find.byKey(const ValueKey('error-details-chevron')), findsOneWidget);
     expect(find.text('Stack trace'), findsOneWidget);
     expect(
       find.text(StateError('boot failed').toString()),
@@ -54,6 +57,33 @@ void main() {
     }
   });
 
+  testWidgets('explains the occupied core port', (tester) async {
+    await tester.pumpWidget(
+      HostApp(
+        locale: const Locale('zh', 'CN'),
+        home: InitErrorScreen(
+          error: StateError(
+            'listen tcp 127.0.0.1:7890: bind: address already in use',
+          ),
+          stack: _stack,
+          onClearData: () async {},
+          onExit: () async {},
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('网络内核没能启动'), findsOneWidget);
+    expect(
+      find.text('端口 7890 已被其他程序占用，天机云无法监听。你的网络没有被改动，可以正常上网。'),
+      findsOneWidget,
+    );
+    expect(find.text('可以这样解决'), findsOneWidget);
+    expect(find.text('关闭占用 7890 端口的程序后重新打开天机云'), findsOneWidget);
+    expect(find.text('在 设置 → 入站与端口 更换端口'), findsOneWidget);
+    expect(find.byKey(const ValueKey('error-details-chevron')), findsOneWidget);
+  });
+
   testWidgets('the app shell follows the system locale', (tester) async {
     tester.platformDispatcher.localesTestValue = const [Locale('zh', 'CN')];
     addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -68,7 +98,7 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('启动失败'), findsOneWidget);
+    expect(find.text('网络内核没能启动'), findsOneWidget);
   });
 
   testWidgets('copies the error and stack trace to the clipboard', (
@@ -93,7 +123,7 @@ void main() {
 
     await tester.pumpWidget(_screen());
     await tester.pump();
-    await tester.tap(find.text('Copy'));
+    await tester.tap(find.text('Copy error info'));
     await tester.pump();
 
     expect(copied, hasLength(1));

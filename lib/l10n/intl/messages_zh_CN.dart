@@ -454,6 +454,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "已连接 · 出口未通过校验",
     ),
+    "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage("复制错误信息"),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("当前"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("当前出口 IP"),
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("当前线路"),
@@ -480,6 +481,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNS 服务器"),
     "businessDnsSucceeded": MessageLookupByLibrary.simpleMessage("成功"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("启用智能分流"),
+    "businessErrorSolutions": MessageLookupByLibrary.simpleMessage("可以这样解决"),
+    "businessErrorStepChangePort": MessageLookupByLibrary.simpleMessage(
+      "在 设置 → 入站与端口 更换端口",
+    ),
+    "businessErrorStepClosePort": MessageLookupByLibrary.simpleMessage(
+      "关闭占用 7890 端口的程序后重新打开天机云",
+    ),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage("出口校验通过"),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
       "实际出口与所选线路不一致",
@@ -505,6 +513,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessHome": MessageLookupByLibrary.simpleMessage("首页"),
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage("点击一行设置或修改快捷键"),
     "businessIntercept": MessageLookupByLibrary.simpleMessage("拦截"),
+    "businessKernelRestart": MessageLookupByLibrary.simpleMessage("重启内核"),
+    "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
+      "网络内核没能启动",
+    ),
+    "businessKernelUptime": MessageLookupByLibrary.simpleMessage("已运行"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("条"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage("未能完成线路切换，请重试"),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
@@ -564,6 +577,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage("订阅链接"),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出站"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage("订阅覆写"),
+    "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
+      "端口 7890 已被其他程序占用，天机云无法监听。你的网络没有被改动，可以正常上网。",
+    ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自动更新",
     ),

@@ -592,6 +592,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "Conectado · Salida sin verificar",
     ),
+    "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage(
+      "Copiar información del error",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Actual"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "IP de salida actual",
@@ -632,6 +635,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Activar enrutamiento inteligente",
     ),
+    "businessErrorSolutions": MessageLookupByLibrary.simpleMessage(
+      "Prueba estos pasos",
+    ),
+    "businessErrorStepChangePort": MessageLookupByLibrary.simpleMessage(
+      "Cambia el puerto en Ajustes → Entradas y puertos",
+    ),
+    "businessErrorStepClosePort": MessageLookupByLibrary.simpleMessage(
+      "Cierra el programa que usa el puerto 7890 y vuelve a abrir TianjiCloud",
+    ),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
       "Verificación de salida aprobada",
     ),
@@ -667,6 +679,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Selecciona una fila para configurar o cambiar el atajo",
     ),
     "businessIntercept": MessageLookupByLibrary.simpleMessage("Bloquear"),
+    "businessKernelRestart": MessageLookupByLibrary.simpleMessage(
+      "Reiniciar núcleo",
+    ),
+    "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
+      "No se pudo iniciar el núcleo de red",
+    ),
+    "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
+      "Tiempo activo",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("líneas"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "No se pudo completar el cambio. Reinténtalo.",
@@ -751,6 +772,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Salida"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "Ajustes sobrescritos",
+    ),
+    "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
+      "Otro programa está usando el puerto 7890 y TianjiCloud no puede escucharlo. La configuración de red no se ha cambiado; puedes seguir navegando normalmente.",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Actualización automática",

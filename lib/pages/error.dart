@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/l10n/l10n.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -74,11 +77,12 @@ class InitErrorScreen extends StatefulWidget {
 }
 
 class _InitErrorScreenState extends State<InitErrorScreen> {
-  static const _maxContentWidth = 720.0;
+  static const _maxContentWidth = 520.0;
 
   final _notice = ValueNotifier<({String text, bool visible})?>(null);
   Timer? _noticeTimer;
   bool _isExiting = false;
+  bool _detailsExpanded = false;
 
   @override
   void dispose() {
@@ -169,87 +173,193 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    final colorScheme = context.colorScheme;
+    final errorText = widget.error.toString();
+    final portConflict =
+        errorText.contains('7890') &&
+        RegExp(
+          r'(address already in use|address.*in use|bind.*(failed|error)|cannot assign requested address)',
+          caseSensitive: false,
+        ).hasMatch(errorText);
     return Surface(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: context.colorScheme.brightness == Brightness.dark
+          ? BusinessPalette.themePreviewDarkBackground
+          : BusinessPalette.page,
       child: SafeArea(
-        bottom: false,
         child: Column(
           children: [
             Expanded(
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(16, 32, 16, 24),
-                      child: Center(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) => SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 32,
+                        ),
                         child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            maxWidth: _maxContentWidth,
+                          constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight > 64
+                                ? constraints.maxHeight - 64
+                                : 0,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              DecoratedBox(
-                                decoration: ShapeDecoration(
-                                  color: colorScheme.errorContainer,
-                                  shape: AppShape.full,
-                                ),
-                                child: SizedBox.square(
-                                  dimension: 56,
-                                  child: Center(
-                                    child: GlyphIcon(
-                                      AppGlyphs.warning,
-                                      size: 28,
-                                      color: colorScheme.onErrorContainer,
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxWidth: _maxContentWidth,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional.centerStart,
+                                    child: DecoratedBox(
+                                      decoration: ShapeDecoration(
+                                        color:
+                                            BusinessPalette.errorBackgroundFor(
+                                              context.colorScheme.brightness,
+                                            ),
+                                        shape: AppShape.full,
+                                      ),
+                                      child: SizedBox.square(
+                                        dimension: 48,
+                                        child: Center(
+                                          child: GlyphIcon(
+                                            AppGlyphs.warning,
+                                            size: 24,
+                                            color:
+                                                BusinessPalette.errorForegroundFor(
+                                                  context
+                                                      .colorScheme
+                                                      .brightness,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                appLocalizations.initFailed,
-                                style: AppTextStyle.title2.of(
-                                  context,
-                                  emphasized: true,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                appLocalizations.initFailedTip,
-                                style: AppTextStyle.subheadline
-                                    .of(context)
-                                    .copyWith(
-                                      color: colorScheme.onSurfaceVariant,
-                                      height: 1.6,
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    appLocalizations.businessKernelStartFailed,
+                                    style: BusinessText.errorTitle(context),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    portConflict
+                                        ? appLocalizations
+                                              .businessPortConflictTip
+                                        : appLocalizations.initFailedTip,
+                                    style: BusinessText.errorBody(context)
+                                        .copyWith(
+                                          color: BusinessPalette.secondaryFor(
+                                            context.colorScheme.brightness,
+                                          ),
+                                        ),
+                                  ),
+                                  if (portConflict) ...[
+                                    const SizedBox(height: 20),
+                                    _PortSolutionsCard(
+                                      title: appLocalizations
+                                          .businessErrorSolutions,
+                                      steps: [
+                                        appLocalizations
+                                            .businessErrorStepClosePort,
+                                        appLocalizations
+                                            .businessErrorStepChangePort,
+                                      ],
                                     ),
-                              ),
-                              const SizedBox(height: 28),
-                              _ErrorSection(
-                                label: appLocalizations.errorDetails,
-                                text: widget.error.toString(),
-                                backgroundColor: colorScheme.errorContainer,
-                                style: AppTextStyle.subheadline
-                                    .of(context, emphasized: true)
-                                    .copyWith(
-                                      color: colorScheme.onErrorContainer,
+                                  ],
+                                  const SizedBox(height: 16),
+                                  _ErrorCodeRow(
+                                    text: _detailsExpanded
+                                        ? errorText
+                                        : errorText.split('\n').first,
+                                    expanded: _detailsExpanded,
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional.centerStart,
+                                    child: TextButton(
+                                      onPressed: () => setState(
+                                        () => _detailsExpanded =
+                                            !_detailsExpanded,
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        spacing: 6,
+                                        children: [
+                                          Text(appLocalizations.errorDetails),
+                                          GlyphIcon(
+                                            _detailsExpanded
+                                                ? AppGlyphs.chevronUp
+                                                : AppGlyphs.chevronDown,
+                                            key: const ValueKey(
+                                              'error-details-chevron',
+                                            ),
+                                            size: 16,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                              ),
-                              const SizedBox(height: 20),
-                              _ErrorSection(
-                                label: appLocalizations.stackTrace,
-                                text: widget.stack.toString(),
-                                backgroundColor: context.raisedSurfaceLevel
-                                    .colorOf(colorScheme),
-                                style: AppTextStyle.footnote
-                                    .of(context)
-                                    .copyWith(
-                                      color: colorScheme.onSurfaceVariant,
-                                      fontFamily: 'monospace',
-                                      height: 1.5,
+                                  ),
+                                  if (_detailsExpanded) ...[
+                                    Text(
+                                      appLocalizations.stackTrace,
+                                      style: BusinessText.metaLabel(context)
+                                          .copyWith(
+                                            color: BusinessPalette.secondaryFor(
+                                              context.colorScheme.brightness,
+                                            ),
+                                          ),
                                     ),
+                                    const SizedBox(height: 4),
+                                    SelectableText(
+                                      widget.stack.toString(),
+                                      style: BusinessText.errorCode(context)
+                                          .copyWith(
+                                            color: BusinessPalette.secondaryFor(
+                                              context.colorScheme.brightness,
+                                            ),
+                                          ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                  ] else
+                                    const SizedBox(height: 12),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: [
+                                      BusinessPrimaryButton(
+                                        label: appLocalizations
+                                            .businessCopyErrorInfo,
+                                        glyph: AppGlyphs.copy,
+                                        width: 176,
+                                        height: 40,
+                                        onPressed: _copyDetails,
+                                      ),
+                                      BusinessSecondaryButton(
+                                        label: appLocalizations.clearData,
+                                        width: 120,
+                                        height: 40,
+                                        labelColor:
+                                            BusinessPalette.errorForegroundFor(
+                                              context.colorScheme.brightness,
+                                            ),
+                                        onPressed: _isExiting
+                                            ? null
+                                            : _clearData,
+                                      ),
+                                      BusinessSecondaryButton(
+                                        label: appLocalizations.exit,
+                                        width: 88,
+                                        height: 40,
+                                        onPressed: _isExiting ? null : _exit,
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -263,32 +373,6 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
                   ),
                 ],
               ),
-            ),
-            _ErrorActionBar(
-              maxWidth: _maxContentWidth,
-              children: [
-                ElasticButton(
-                  child: TextButton.icon(
-                    onPressed: _isExiting ? null : _clearData,
-                    style: ButtonStyle.from(foregroundColor: colorScheme.error),
-                    icon: const GlyphIcon(AppGlyphs.broom, size: 18),
-                    label: Text(appLocalizations.clearData),
-                  ),
-                ),
-                ElasticButton(
-                  child: OutlinedButton.icon(
-                    onPressed: _copyDetails,
-                    icon: const GlyphIcon(AppGlyphs.copy, size: 18),
-                    label: Text(appLocalizations.copy),
-                  ),
-                ),
-                ElasticButton(
-                  child: FilledButton(
-                    onPressed: _isExiting ? null : _exit,
-                    child: Text(appLocalizations.exit),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
@@ -345,74 +429,93 @@ class _Notice extends StatelessWidget {
   }
 }
 
-class _ErrorSection extends StatelessWidget {
-  final String label;
-  final String text;
-  final Color backgroundColor;
-  final TextStyle? style;
+class _PortSolutionsCard extends StatelessWidget {
+  const _PortSolutionsCard({required this.title, required this.steps});
 
-  const _ErrorSection({
-    required this.label,
-    required this.text,
-    required this.backgroundColor,
-    required this.style,
-  });
+  final String title;
+  final List<String> steps;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          label,
-          style: AppTextStyle.subheadline.of(context, emphasized: true),
-        ),
-        const SizedBox(height: 8),
-        DecoratedBox(
-          decoration: ShapeDecoration(
-            color: backgroundColor,
-            shape: AppShape.xl,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SelectableText(text, style: style),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ErrorActionBar extends StatelessWidget {
-  final double maxWidth;
-  final List<Widget> children;
-
-  const _ErrorActionBar({required this.maxWidth, required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: SurfaceLevel.page.colorOf(context.colorScheme),
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: BusinessPalette.customEditorCardFor(
+        context.colorScheme.brightness,
       ),
-      child: SafeArea(
-        top: false,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-              child: OverflowBar(
-                alignment: MainAxisAlignment.end,
-                spacing: 8,
-                overflowSpacing: 8,
-                overflowAlignment: OverflowBarAlignment.end,
-                children: children,
+      shape: AppShape.all(BusinessRadius.account),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 12,
+        children: [
+          Text(
+            title,
+            style: BusinessText.metaLabel(context).copyWith(
+              color: BusinessPalette.secondaryFor(
+                context.colorScheme.brightness,
               ),
             ),
           ),
+          for (var index = 0; index < steps.length; index++)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: [
+                DecoratedBox(
+                  decoration: ShapeDecoration(
+                    color: context.colorScheme.brightness == Brightness.dark
+                        ? BusinessPalette.themePreviewDarkBackground
+                        : BusinessPalette.themePreviewLightBackground,
+                    shape: AppShape.circle,
+                  ),
+                  child: SizedBox.square(
+                    dimension: 22,
+                    child: Center(
+                      child: Text(
+                        '${index + 1}',
+                        style: BusinessText.errorStep(context),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    steps[index],
+                    style: BusinessText.errorStep(context),
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _ErrorCodeRow extends StatelessWidget {
+  const _ErrorCodeRow({required this.text, required this.expanded});
+
+  final String text;
+  final bool expanded;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: BusinessPalette.errorCodeBackgroundFor(
+        context.colorScheme.brightness,
+      ),
+      shape: AppShape.all(BusinessRadius.account),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      child: SelectableText(
+        text,
+        maxLines: expanded ? null : 1,
+        style: BusinessText.errorCode(context).copyWith(
+          color: BusinessPalette.secondaryFor(context.colorScheme.brightness),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

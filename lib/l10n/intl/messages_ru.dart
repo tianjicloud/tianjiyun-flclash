@@ -569,6 +569,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "Подключено · Выход не проверен",
     ),
+    "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage(
+      "Скопировать сведения об ошибке",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Текущий"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "Текущий внешний IP",
@@ -607,6 +610,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Включить умную маршрутизацию",
     ),
+    "businessErrorSolutions": MessageLookupByLibrary.simpleMessage(
+      "Попробуйте выполнить следующие действия",
+    ),
+    "businessErrorStepChangePort": MessageLookupByLibrary.simpleMessage(
+      "Измените порт в Настройки → Входящие подключения и порты",
+    ),
+    "businessErrorStepClosePort": MessageLookupByLibrary.simpleMessage(
+      "Закройте программу, использующую порт 7890, и снова откройте TianjiCloud",
+    ),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
       "Проверка выхода пройдена",
     ),
@@ -644,6 +656,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выберите строку, чтобы задать или изменить сочетание клавиш",
     ),
     "businessIntercept": MessageLookupByLibrary.simpleMessage("Блокировать"),
+    "businessKernelRestart": MessageLookupByLibrary.simpleMessage(
+      "Перезапустить ядро",
+    ),
+    "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось запустить сетевое ядро",
+    ),
+    "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
+      "Время работы",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("линий"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось завершить переключение. Повторите попытку.",
@@ -730,6 +751,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Выход"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "Переопределения подписки",
+    ),
+    "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
+      "Порт 7890 занят другой программой, поэтому TianjiCloud не может его прослушивать. Сетевые настройки не изменены, вы можете продолжить просмотр сайтов.",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Автообновление",

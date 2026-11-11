@@ -548,6 +548,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "Connected · Exit not verified",
     ),
+    "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage(
+      "Copy error info",
+    ),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("Current"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage(
       "Current exit IP",
@@ -584,6 +587,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Enable smart routing",
     ),
+    "businessErrorSolutions": MessageLookupByLibrary.simpleMessage(
+      "Try these steps",
+    ),
+    "businessErrorStepChangePort": MessageLookupByLibrary.simpleMessage(
+      "Change the port in Settings → Inbound and ports",
+    ),
+    "businessErrorStepClosePort": MessageLookupByLibrary.simpleMessage(
+      "Close the program using port 7890, then reopen TianjiCloud",
+    ),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
       "Exit check passed",
     ),
@@ -619,6 +631,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Select a row to set or change its shortcut",
     ),
     "businessIntercept": MessageLookupByLibrary.simpleMessage("Intercept"),
+    "businessKernelRestart": MessageLookupByLibrary.simpleMessage(
+      "Restart core",
+    ),
+    "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
+      "The network core couldn\'t start",
+    ),
+    "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
+      "Running time",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("lines"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Could not finish switching lines. Retry.",
@@ -697,6 +718,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Outbound"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "Subscription overrides",
+    ),
+    "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
+      "Port 7890 is occupied by another program, so TianjiCloud can\'t listen on it. Your network settings haven\'t been changed; you can continue browsing normally.",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Auto-update",

@@ -472,6 +472,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "接続済み · 出口未検証",
     ),
+    "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage("エラー情報をコピー"),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("現在"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("現在の出口 IP"),
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("現在の回線"),
@@ -501,6 +502,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDnsSucceeded": MessageLookupByLibrary.simpleMessage("成功"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "スマートルーティングを有効化",
+    ),
+    "businessErrorSolutions": MessageLookupByLibrary.simpleMessage(
+      "次の方法をお試しください",
+    ),
+    "businessErrorStepChangePort": MessageLookupByLibrary.simpleMessage(
+      "設定 → インバウンドとポートでポートを変更する",
+    ),
+    "businessErrorStepClosePort": MessageLookupByLibrary.simpleMessage(
+      "ポート 7890 を使用中のプログラムを終了して天機雲を再起動する",
     ),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage(
       "出口確認に成功しました",
@@ -535,6 +545,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "行を選択してショートカットを設定または変更",
     ),
     "businessIntercept": MessageLookupByLibrary.simpleMessage("ブロック"),
+    "businessKernelRestart": MessageLookupByLibrary.simpleMessage("コアを再起動"),
+    "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
+      "ネットワークコアを起動できませんでした",
+    ),
+    "businessKernelUptime": MessageLookupByLibrary.simpleMessage("稼働時間"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("件"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "回線の切り替えを完了できませんでした。再試行してください。",
@@ -603,6 +618,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出力"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションの上書き",
+    ),
+    "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
+      "ポート 7890 は他のプログラムが使用中のため、天機雲は待ち受けできません。ネットワーク設定は変更されていないため、通常どおり閲覧できます。",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自動更新",

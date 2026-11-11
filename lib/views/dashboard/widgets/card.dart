@@ -510,7 +510,7 @@ class BusinessPrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle.from(
         backgroundColor: Colors.transparent,
-        foregroundColor: context.colorScheme.onPrimary,
+        foregroundColor: BusinessPalette.onBlue,
         disabledForegroundColor: context.colorScheme.onSurfaceVariant,
         shape: AppShape.full,
         fixedSize: Size(width, height),
@@ -538,7 +538,7 @@ class BusinessPrimaryButton extends StatelessWidget {
               label,
               style: BusinessText.actionLabel(
                 context,
-              ).copyWith(color: context.colorScheme.onPrimary),
+              ).copyWith(color: BusinessPalette.onBlue),
             )
           : Row(
               mainAxisSize: MainAxisSize.min,
@@ -552,7 +552,7 @@ class BusinessPrimaryButton extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: BusinessText.actionLabel(
                       context,
-                    ).copyWith(color: context.colorScheme.onPrimary),
+                    ).copyWith(color: BusinessPalette.onBlue),
                   ),
                 ),
               ],

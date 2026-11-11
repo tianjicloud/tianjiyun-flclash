@@ -470,6 +470,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "연결됨 · 출구 확인 안 됨",
     ),
+    "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage("오류 정보 복사"),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("현재"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("현재 출구 IP"),
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("현재 회선"),
@@ -498,6 +499,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDnsServers": MessageLookupByLibrary.simpleMessage("DNS 서버"),
     "businessDnsSucceeded": MessageLookupByLibrary.simpleMessage("성공"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("스마트 라우팅 활성화"),
+    "businessErrorSolutions": MessageLookupByLibrary.simpleMessage(
+      "다음 방법을 시도해 보세요",
+    ),
+    "businessErrorStepChangePort": MessageLookupByLibrary.simpleMessage(
+      "설정 → 인바운드 및 포트에서 포트를 변경하세요",
+    ),
+    "businessErrorStepClosePort": MessageLookupByLibrary.simpleMessage(
+      "포트 7890을 사용하는 프로그램을 종료한 뒤 TianjiCloud를 다시 여세요",
+    ),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage("출구 확인 통과"),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
       "실제 출구가 선택한 회선과 일치하지 않습니다",
@@ -529,6 +539,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "행을 선택해 단축키를 설정하거나 변경하세요",
     ),
     "businessIntercept": MessageLookupByLibrary.simpleMessage("차단"),
+    "businessKernelRestart": MessageLookupByLibrary.simpleMessage("코어 재시작"),
+    "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
+      "네트워크 코어를 시작하지 못했습니다",
+    ),
+    "businessKernelUptime": MessageLookupByLibrary.simpleMessage("실행 시간"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("개 노드"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
@@ -597,6 +612,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("아웃바운드"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "구독 설정 재정의",
+    ),
+    "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
+      "포트 7890을 다른 프로그램이 사용 중이라 TianjiCloud가 포트를 열 수 없습니다. 네트워크 설정은 변경되지 않았으므로 계속 인터넷을 사용할 수 있습니다.",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "자동 업데이트",

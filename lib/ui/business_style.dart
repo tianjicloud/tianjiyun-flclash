@@ -85,6 +85,11 @@ abstract final class BusinessPalette {
   static const dockDark = Color(0xF0131921);
   static const noticeDark = Color(0xFF1C2430);
   static const error = Color(0xFFB42335);
+  static const errorBackground = Color(0xFFFCEBED);
+  static const errorBackgroundDark = Color(0xFF362126);
+  static const errorTextDark = Color(0xFFFF8E98);
+  static const errorCodeBackground = Color(0xFFF7F8FA);
+  static const errorCodeBackgroundDark = Color(0xFF131A22);
   static const cardRadius = 18.0;
   static const buttonRadius = 16.0;
   static LinearGradient gradient(ColorScheme scheme) => LinearGradient(
@@ -143,6 +148,20 @@ abstract final class BusinessPalette {
   static Color disconnectedForegroundFor(Brightness brightness) =>
       brightness == Brightness.dark ? disconnectedDark : disconnected;
 
+  static Color errorBackgroundFor(Brightness brightness) =>
+      brightness == Brightness.dark ? errorBackgroundDark : errorBackground;
+
+  static Color errorForegroundFor(Brightness brightness) =>
+      brightness == Brightness.dark ? errorTextDark : error;
+
+  static Color errorCodeBackgroundFor(Brightness brightness) =>
+      brightness == Brightness.dark
+      ? errorCodeBackgroundDark
+      : errorCodeBackground;
+
+  static Color secondaryFor(Brightness brightness) =>
+      brightness == Brightness.dark ? sidebarDarkSecondary : secondary;
+
   static Color idleOrbitPlateFor(Brightness brightness) =>
       brightness == Brightness.dark ? idleOrbitPlateDark : idleOrbitPlate;
 }
@@ -169,6 +188,22 @@ Color businessDelayColor(ColorScheme colorScheme, int? delay) {
 /// as bare sizes at call sites.
 abstract final class BusinessText {
   static const _tabular = [FontFeature.tabularFigures()];
+
+  static TextStyle errorTitle(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 20,
+    leading: 26,
+    weight: FontWeight.w700,
+  );
+
+  static TextStyle errorBody(BuildContext context) =>
+      AppTextStyle.custom(context, size: 14, leading: 20);
+
+  static TextStyle errorStep(BuildContext context) =>
+      AppTextStyle.custom(context, size: 13, leading: 18);
+
+  static TextStyle errorCode(BuildContext context) =>
+      AppTextStyle.custom(context, size: 11, leading: 16).toJetBrainsMono;
 
   static TextStyle pageTitle(BuildContext context) => AppTextStyle.custom(
     context,

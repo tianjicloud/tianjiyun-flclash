@@ -12272,6 +12272,86 @@ class AppLocalizations {
     );
   }
 
+  /// `The network core couldn't start`
+  String get businessKernelStartFailed {
+    return Intl.message(
+      'The network core couldn\'t start',
+      name: 'businessKernelStartFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Port 7890 is occupied by another program, so TianjiCloud can't listen on it. Your network settings haven't been changed; you can continue browsing normally.`
+  String get businessPortConflictTip {
+    return Intl.message(
+      'Port 7890 is occupied by another program, so TianjiCloud can\'t listen on it. Your network settings haven\'t been changed; you can continue browsing normally.',
+      name: 'businessPortConflictTip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try these steps`
+  String get businessErrorSolutions {
+    return Intl.message(
+      'Try these steps',
+      name: 'businessErrorSolutions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Close the program using port 7890, then reopen TianjiCloud`
+  String get businessErrorStepClosePort {
+    return Intl.message(
+      'Close the program using port 7890, then reopen TianjiCloud',
+      name: 'businessErrorStepClosePort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change the port in Settings → Inbound and ports`
+  String get businessErrorStepChangePort {
+    return Intl.message(
+      'Change the port in Settings → Inbound and ports',
+      name: 'businessErrorStepChangePort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy error info`
+  String get businessCopyErrorInfo {
+    return Intl.message(
+      'Copy error info',
+      name: 'businessCopyErrorInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Running time`
+  String get businessKernelUptime {
+    return Intl.message(
+      'Running time',
+      name: 'businessKernelUptime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restart core`
+  String get businessKernelRestart {
+    return Intl.message(
+      'Restart core',
+      name: 'businessKernelRestart',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Virtual adapter TUN`
   String get businessSettingsTun {
     return Intl.message(

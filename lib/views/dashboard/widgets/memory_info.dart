@@ -10,6 +10,8 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/core.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/core_detail.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -85,6 +87,8 @@ Future<MemorySnapshot> _readSnapshot(WidgetRef ref) async {
   );
 }
 
+Future<MemorySnapshot> readMemorySnapshot(WidgetRef ref) => _readSnapshot(ref);
+
 class MemoryInfo extends ConsumerStatefulWidget {
   final MemoryReader? memoryReader;
 
@@ -124,19 +128,27 @@ class _MemoryInfoState extends ConsumerState<MemoryInfo>
 
   // The sheet outlives the card when a resize swaps the dashboard layout, so it
   // reads on its own and the card rests until it closes.
-  Future<void> _showDetail() async {
+  Future<void> _showDetail({bool coreDetail = false}) async {
     if (_detailOpen) {
       return;
     }
     _detailOpen = true;
     stopPolling();
-    await showSheet(
-      context: context,
-      builder: (_) => MemoryDetailSheet(
-        initial: _memoryStateNotifier.value,
-        memoryReader: widget.memoryReader,
-      ),
-    );
+    if (coreDetail) {
+      await Navigator.of(context).push(
+        PagedSheetRoute(
+          builder: (_) => CoreDetailView(memoryReader: widget.memoryReader),
+        ),
+      );
+    } else {
+      await showSheet(
+        context: context,
+        builder: (_) => MemoryDetailSheet(
+          initial: _memoryStateNotifier.value,
+          memoryReader: widget.memoryReader,
+        ),
+      );
+    }
     if (!mounted) {
       return;
     }
@@ -174,7 +186,8 @@ class _MemoryInfoState extends ConsumerState<MemoryInfo>
                     tooltip: appLocalizations.details(
                       appLocalizations.memoryInfo,
                     ),
-                    onPressed: _showDetail,
+                    onPressed: () =>
+                        _showDetail(coreDetail: BusinessTheme.of(context)),
                   ),
                 ),
             ],
