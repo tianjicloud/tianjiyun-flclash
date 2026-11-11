@@ -1547,5 +1547,11 @@
     }
   },
   "overridesLabel": "覆写",
-  "intercept": "拦截"
+  "intercept": "拦截",
+  "extendOverridesScripts": "扩展覆写与脚本",
+  "profilePreviewTitle": "配置预览",
+  "previewReadOnly": "只读",
+  "businessProfilesSortTitle": "调整订阅顺序",
+  "businessProfilesSortDescription": "拖动调整顺序，排在前面的订阅优先显示在仪表盘和托盘中。",
+  "localFile": "本地文件"
 }

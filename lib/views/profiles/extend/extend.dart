@@ -118,7 +118,14 @@ class _ExtendViewState extends ConsumerState<ExtendView> {
       child: ProfileIdProvider(
         profileId: widget.profileId,
         child: Scaffold(
-          title: appLocalizations.extend,
+          title:
+              BusinessTheme.of(context) &&
+                  system.isDesktop &&
+                  isTianjiSubscriptionProfile(
+                    ref.read(profileProvider(widget.profileId)),
+                  )
+              ? appLocalizations.extendOverridesScripts
+              : appLocalizations.extend,
           isLoading: _applying,
           actions: [
             if (hasChanges || _applying)

@@ -1547,5 +1547,11 @@
     }
   },
   "overridesLabel": "Remplacements",
-  "intercept": "Bloquer"
+  "intercept": "Bloquer",
+  "extendOverridesScripts": "Remplacements et scripts d’extension",
+  "profilePreviewTitle": "Aperçu de la configuration",
+  "previewReadOnly": "Lecture seule",
+  "businessProfilesSortTitle": "Réorganiser les abonnements",
+  "businessProfilesSortDescription": "Faites glisser pour changer l’ordre. Les abonnements en tête s’affichent en premier dans le tableau de bord et la barre système.",
+  "localFile": "Fichier local"
 }

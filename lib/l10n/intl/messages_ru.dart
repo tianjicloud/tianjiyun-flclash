@@ -798,6 +798,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "Изменить подписку",
     ),
+    "businessProfilesSortDescription": MessageLookupByLibrary.simpleMessage(
+      "Перетащите подписку, чтобы изменить порядок. Подписки выше отображаются первыми на панели и в трее.",
+    ),
+    "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage(
+      "Изменить порядок подписок",
+    ),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
       "Плотность карточек прокси",
     ),
@@ -1439,6 +1445,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportSuccess": MessageLookupByLibrary.simpleMessage("Экспорт выполнен"),
     "extend": MessageLookupByLibrary.simpleMessage("Расширение"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Режим расширения"),
+    "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
+      "Переопределения и скрипты расширения",
+    ),
     "extendScript": MessageLookupByLibrary.simpleMessage("Скрипт расширения"),
     "externalController": MessageLookupByLibrary.simpleMessage(
       "Внешний контроллер",
@@ -1814,6 +1823,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "loading": MessageLookupByLibrary.simpleMessage("Загрузка…"),
     "local": MessageLookupByLibrary.simpleMessage("Локально"),
+    "localFile": MessageLookupByLibrary.simpleMessage("Локальный файл"),
     "localImage": MessageLookupByLibrary.simpleMessage("Локальное изображение"),
     "localNetworkDeniedTip": MessageLookupByLibrary.simpleMessage(
       "Доступ к локальной сети запрещён: используется стек gvisor, локальная сеть недоступна.",
@@ -2340,6 +2350,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Нажмите сочетание клавиш",
     ),
     "preview": MessageLookupByLibrary.simpleMessage("Предпросмотр"),
+    "previewReadOnly": MessageLookupByLibrary.simpleMessage("Только чтение"),
     "previousMatch": MessageLookupByLibrary.simpleMessage(
       "Предыдущее совпадение",
     ),
@@ -2372,6 +2383,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "Введите название профиля",
+    ),
+    "profilePreviewTitle": MessageLookupByLibrary.simpleMessage(
+      "Предпросмотр конфигурации",
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Действует только для этого профиля; не добавленные параметры используют значения по умолчанию.",

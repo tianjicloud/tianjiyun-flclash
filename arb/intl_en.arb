@@ -1547,5 +1547,11 @@
     }
   },
   "overridesLabel": "Overrides",
-  "intercept": "Intercept"
+  "intercept": "Intercept",
+  "extendOverridesScripts": "Extension overrides and scripts",
+  "profilePreviewTitle": "Configuration preview",
+  "previewReadOnly": "Read-only",
+  "businessProfilesSortTitle": "Reorder subscriptions",
+  "businessProfilesSortDescription": "Drag to change order. Earlier subscriptions appear first in the dashboard and tray.",
+  "localFile": "Local file"
 }

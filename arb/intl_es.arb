@@ -1547,5 +1547,11 @@
     }
   },
   "overridesLabel": "Sobrescrituras",
-  "intercept": "Bloquear"
+  "intercept": "Bloquear",
+  "extendOverridesScripts": "Sobrescrituras y scripts de extensión",
+  "profilePreviewTitle": "Vista previa de la configuración",
+  "previewReadOnly": "Solo lectura",
+  "businessProfilesSortTitle": "Reordenar suscripciones",
+  "businessProfilesSortDescription": "Arrastra para cambiar el orden. Las suscripciones anteriores aparecen primero en el panel y la bandeja.",
+  "localFile": "Archivo local"
 }

@@ -607,6 +607,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "套餐信息",
     ),
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage("编辑订阅"),
+    "businessProfilesSortDescription": MessageLookupByLibrary.simpleMessage(
+      "拖动调整顺序，排在前面的订阅优先显示在仪表盘和托盘中。",
+    ),
+    "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage("调整订阅顺序"),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage("线路卡片密度"),
     "businessProxyIcons": MessageLookupByLibrary.simpleMessage("线路图标"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("代理"),
@@ -1026,6 +1030,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportSuccess": MessageLookupByLibrary.simpleMessage("导出成功"),
     "extend": MessageLookupByLibrary.simpleMessage("扩展"),
     "extendMode": MessageLookupByLibrary.simpleMessage("扩展模式"),
+    "extendOverridesScripts": MessageLookupByLibrary.simpleMessage("扩展覆写与脚本"),
     "extendScript": MessageLookupByLibrary.simpleMessage("扩展脚本"),
     "externalController": MessageLookupByLibrary.simpleMessage("外部控制器"),
     "externalControllerDesc": MessageLookupByLibrary.simpleMessage(
@@ -1307,6 +1312,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "liveConnections": MessageLookupByLibrary.simpleMessage("实时连接"),
     "loading": MessageLookupByLibrary.simpleMessage("加载中…"),
     "local": MessageLookupByLibrary.simpleMessage("本地"),
+    "localFile": MessageLookupByLibrary.simpleMessage("本地文件"),
     "localImage": MessageLookupByLibrary.simpleMessage("本地图片"),
     "localNetworkDeniedTip": MessageLookupByLibrary.simpleMessage(
       "本地网络权限被拒绝：已改用 gvisor 栈，局域网无法访问。",
@@ -1683,6 +1689,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "prerequisites": MessageLookupByLibrary.simpleMessage("前置条件"),
     "pressKeyboard": MessageLookupByLibrary.simpleMessage("请按下组合键"),
     "preview": MessageLookupByLibrary.simpleMessage("预览"),
+    "previewReadOnly": MessageLookupByLibrary.simpleMessage("只读"),
     "previousMatch": MessageLookupByLibrary.simpleMessage("上一个匹配"),
     "privateKey": MessageLookupByLibrary.simpleMessage("私钥"),
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage("私钥密码"),
@@ -1712,6 +1719,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "请输入配置名称",
     ),
+    "profilePreviewTitle": MessageLookupByLibrary.simpleMessage("配置预览"),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "仅作用于当前配置，未添加的项使用默认值。",
     ),

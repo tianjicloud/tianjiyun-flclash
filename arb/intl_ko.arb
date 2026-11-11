@@ -1547,5 +1547,11 @@
     }
   },
   "overridesLabel": "재정의",
-  "intercept": "차단"
+  "intercept": "차단",
+  "extendOverridesScripts": "확장 재정의 및 스크립트",
+  "profilePreviewTitle": "구성 미리보기",
+  "previewReadOnly": "읽기 전용",
+  "businessProfilesSortTitle": "구독 순서 조정",
+  "businessProfilesSortDescription": "드래그하여 순서를 조정하세요. 앞에 있는 구독이 대시보드와 트레이에 먼저 표시됩니다.",
+  "localFile": "로컬 파일"
 }

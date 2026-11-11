@@ -7,7 +7,6 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
-import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/views/profiles/custom/custom.dart';
 import 'package:fl_clash/views/profiles/extend/extend.dart';
 import 'package:fl_clash/views/profiles/add.dart'
@@ -22,6 +21,7 @@ import 'package:fl_clash/views/dashboard/widgets/card.dart'
         BusinessSecondaryButton,
         DashboardChip,
         DashboardChipTone;
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -193,7 +193,10 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
 void _showProfileSort(BuildContext context, List<Profile> profiles) {
   showSheet(
     context: context,
-    builder: (_) => ReorderableProfilesSheet(profiles: profiles),
+    builder: (_) => ReorderableProfilesSheet(
+      profiles: profiles,
+      business: system.isDesktop && BusinessTheme.of(context),
+    ),
   );
 }
 
@@ -1781,8 +1784,13 @@ class _GroupsCountChip extends ConsumerWidget {
 
 class ReorderableProfilesSheet extends ConsumerStatefulWidget {
   final List<Profile> profiles;
+  final bool business;
 
-  const ReorderableProfilesSheet({super.key, required this.profiles});
+  const ReorderableProfilesSheet({
+    super.key,
+    required this.profiles,
+    this.business = false,
+  });
 
   @override
   ConsumerState<ReorderableProfilesSheet> createState() =>
@@ -1816,6 +1824,107 @@ class _ReorderableProfilesSheetState
     );
   }
 
+  Widget _buildBusinessItem(int index, int? currentProfileId) {
+    final position = ItemPosition.get(index, profiles.length);
+    final profile = profiles[index];
+    final l = context.appLocalizations;
+    final (glyph, subtitle) = switch (profile.type) {
+      ProfileType.url => (AppGlyphs.link, l.subscriptionLink),
+      ProfileType.file => (AppGlyphs.importFile, l.localFile),
+      ProfileType.custom => (AppGlyphs.sliders, l.custom),
+    };
+    final isCurrent = profile.id == currentProfileId;
+    return ReorderDragStartListener(
+      key: Key(profile.id.toString()),
+      index: index,
+      child: ItemPositionProvider(
+        position: position,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: DecoratedBox(
+            decoration: ShapeDecoration(
+              color: BusinessPalette.customEditorCardFor(
+                context.colorScheme.brightness,
+              ),
+              shape: AppShape.all(BusinessPalette.cardRadius),
+            ),
+            child: SizedBox(
+              height: 56,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: Row(
+                  spacing: 12,
+                  children: [
+                    SortHandle(index: index),
+                    DecoratedBox(
+                      decoration: ShapeDecoration(
+                        color: context.colorScheme.primaryContainer,
+                        shape: AppShape.all(AppCorner.sm),
+                      ),
+                      child: SizedBox.square(
+                        dimension: 32,
+                        child: Center(
+                          child: GlyphIcon(
+                            glyph,
+                            color: context.colorScheme.onPrimaryContainer,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            profile.realLabel,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          Text(
+                            subtitle,
+                            style: BusinessText.metaLabel(context).copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isCurrent)
+                      DecoratedBox(
+                        decoration: ShapeDecoration(
+                          color: BusinessPalette.connectedContainerFor(
+                            context.colorScheme.brightness,
+                          ),
+                          shape: AppShape.full,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          child: Text(
+                            l.inUse,
+                            style: BusinessText.metaLabel(context).copyWith(
+                              color: BusinessPalette.connectedForegroundFor(
+                                context.colorScheme.brightness,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _handleSave() {
     Navigator.of(context).pop();
     final latest = ref.read(profilesProvider);
@@ -1830,6 +1939,65 @@ class _ReorderableProfilesSheetState
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
+    final business =
+        widget.business || system.isDesktop && BusinessTheme.of(context);
+    final currentProfileId = ref.watch(currentProfileIdProvider);
+    if (business) {
+      return Scaffold(
+        title: appLocalizations.businessProfilesSortTitle,
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 56, 24, 12),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  appLocalizations.businessProfilesSortDescription,
+                  style: BusinessText.metaLabel(
+                    context,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+              ),
+            ),
+            Expanded(
+              child: PrismReorderableListView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                proxyDecorator: (child, index, animation) =>
+                    commonProxyDecorator(
+                      _buildBusinessItem(index, currentProfileId),
+                      index,
+                      animation,
+                    ),
+                onReorderItem: (oldIndex, newIndex) {
+                  setState(() {
+                    profiles = profiles.copyAndReorder(oldIndex, newIndex);
+                  });
+                },
+                itemBuilder: (_, index) =>
+                    _buildBusinessItem(index, currentProfileId),
+                itemCount: profiles.length,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                24,
+                12,
+                24,
+                20 + context.bottomInset,
+              ),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: BusinessPrimaryButton(
+                  label: appLocalizations.done,
+                  width: 100,
+                  onPressed: _handleSave,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     return Scaffold(
       confirmationAction: IconButtonData(
         glyph: AppGlyphs.check,

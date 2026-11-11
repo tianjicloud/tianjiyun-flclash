@@ -667,6 +667,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションを編集",
     ),
+    "businessProfilesSortDescription": MessageLookupByLibrary.simpleMessage(
+      "ドラッグして順序を変更します。先にあるサブスクリプションがダッシュボードとトレイに優先表示されます。",
+    ),
+    "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションの順序を変更",
+    ),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
       "プロキシカードの密度",
     ),
@@ -1146,6 +1152,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportSuccess": MessageLookupByLibrary.simpleMessage("エクスポートが完了しました"),
     "extend": MessageLookupByLibrary.simpleMessage("拡張"),
     "extendMode": MessageLookupByLibrary.simpleMessage("拡張モード"),
+    "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
+      "拡張の上書きとスクリプト",
+    ),
     "extendScript": MessageLookupByLibrary.simpleMessage("拡張スクリプト"),
     "externalController": MessageLookupByLibrary.simpleMessage("外部コントローラー"),
     "externalControllerDesc": MessageLookupByLibrary.simpleMessage(
@@ -1467,6 +1476,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "liveConnections": MessageLookupByLibrary.simpleMessage("ライブ接続"),
     "loading": MessageLookupByLibrary.simpleMessage("読み込み中…"),
     "local": MessageLookupByLibrary.simpleMessage("ローカル"),
+    "localFile": MessageLookupByLibrary.simpleMessage("ローカルファイル"),
     "localImage": MessageLookupByLibrary.simpleMessage("ローカル画像"),
     "localNetworkDeniedTip": MessageLookupByLibrary.simpleMessage(
       "ローカルネットワークの権限が拒否されたため gvisor スタックを使用します。LAN にはアクセスできません。",
@@ -1885,6 +1895,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "prerequisites": MessageLookupByLibrary.simpleMessage("前提条件"),
     "pressKeyboard": MessageLookupByLibrary.simpleMessage("キーの組み合わせを押してください"),
     "preview": MessageLookupByLibrary.simpleMessage("プレビュー"),
+    "previewReadOnly": MessageLookupByLibrary.simpleMessage("読み取り専用"),
     "previousMatch": MessageLookupByLibrary.simpleMessage("前の一致"),
     "privateKey": MessageLookupByLibrary.simpleMessage("秘密鍵"),
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage("秘密鍵のパスフレーズ"),
@@ -1914,6 +1925,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "プロファイル名を入力してください",
     ),
+    "profilePreviewTitle": MessageLookupByLibrary.simpleMessage("設定プレビュー"),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "このプロファイルにのみ適用されます。追加していない項目はデフォルト値を使用します。",
     ),

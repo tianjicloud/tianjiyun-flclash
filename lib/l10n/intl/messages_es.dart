@@ -817,6 +817,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "Editar suscripción",
     ),
+    "businessProfilesSortDescription": MessageLookupByLibrary.simpleMessage(
+      "Arrastra para cambiar el orden. Las suscripciones anteriores aparecen primero en el panel y la bandeja.",
+    ),
+    "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage(
+      "Reordenar suscripciones",
+    ),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
       "Densidad de tarjetas de proxy",
     ),
@@ -1466,6 +1472,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "extend": MessageLookupByLibrary.simpleMessage("Extensión"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Modo de extensión"),
+    "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
+      "Sobrescrituras y scripts de extensión",
+    ),
     "extendScript": MessageLookupByLibrary.simpleMessage("Script de extensión"),
     "externalController": MessageLookupByLibrary.simpleMessage(
       "Controlador externo",
@@ -1855,6 +1864,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "loading": MessageLookupByLibrary.simpleMessage("Cargando…"),
     "local": MessageLookupByLibrary.simpleMessage("Local"),
+    "localFile": MessageLookupByLibrary.simpleMessage("Archivo local"),
     "localImage": MessageLookupByLibrary.simpleMessage("Imagen local"),
     "localNetworkDeniedTip": MessageLookupByLibrary.simpleMessage(
       "Permiso de red local denegado: con la pila gvisor, la LAN no es accesible.",
@@ -2383,6 +2393,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pulsa una combinación de teclas",
     ),
     "preview": MessageLookupByLibrary.simpleMessage("Vista previa"),
+    "previewReadOnly": MessageLookupByLibrary.simpleMessage("Solo lectura"),
     "previousMatch": MessageLookupByLibrary.simpleMessage(
       "Coincidencia anterior",
     ),
@@ -2417,6 +2428,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "Introduce el nombre del perfil",
+    ),
+    "profilePreviewTitle": MessageLookupByLibrary.simpleMessage(
+      "Vista previa de la configuración",
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Se aplica solo a este perfil; lo que no añadas usa su valor predeterminado.",

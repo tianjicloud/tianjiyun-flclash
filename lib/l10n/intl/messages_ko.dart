@@ -655,6 +655,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "요금제 정보",
     ),
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage("구독 편집"),
+    "businessProfilesSortDescription": MessageLookupByLibrary.simpleMessage(
+      "드래그하여 순서를 조정하세요. 앞에 있는 구독이 대시보드와 트레이에 먼저 표시됩니다.",
+    ),
+    "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage(
+      "구독 순서 조정",
+    ),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
       "프록시 카드 밀도",
     ),
@@ -1128,6 +1134,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportSuccess": MessageLookupByLibrary.simpleMessage("내보내기 완료"),
     "extend": MessageLookupByLibrary.simpleMessage("확장"),
     "extendMode": MessageLookupByLibrary.simpleMessage("확장 모드"),
+    "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
+      "확장 재정의 및 스크립트",
+    ),
     "extendScript": MessageLookupByLibrary.simpleMessage("확장 스크립트"),
     "externalController": MessageLookupByLibrary.simpleMessage("외부 컨트롤러"),
     "externalControllerDesc": MessageLookupByLibrary.simpleMessage(
@@ -1443,6 +1452,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "liveConnections": MessageLookupByLibrary.simpleMessage("실시간 연결"),
     "loading": MessageLookupByLibrary.simpleMessage("로드 중…"),
     "local": MessageLookupByLibrary.simpleMessage("로컬"),
+    "localFile": MessageLookupByLibrary.simpleMessage("로컬 파일"),
     "localImage": MessageLookupByLibrary.simpleMessage("로컬 이미지"),
     "localNetworkDeniedTip": MessageLookupByLibrary.simpleMessage(
       "로컬 네트워크 권한이 거부되었습니다. gvisor 스택을 사용하므로 LAN에 연결할 수 없습니다.",
@@ -1855,6 +1865,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "prerequisites": MessageLookupByLibrary.simpleMessage("사전 요건"),
     "pressKeyboard": MessageLookupByLibrary.simpleMessage("키 조합을 누르세요"),
     "preview": MessageLookupByLibrary.simpleMessage("미리보기"),
+    "previewReadOnly": MessageLookupByLibrary.simpleMessage("읽기 전용"),
     "previousMatch": MessageLookupByLibrary.simpleMessage("이전 결과"),
     "privateKey": MessageLookupByLibrary.simpleMessage("개인 키"),
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage("개인 키 암호"),
@@ -1884,6 +1895,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "프로필 이름을 입력하세요",
     ),
+    "profilePreviewTitle": MessageLookupByLibrary.simpleMessage("구성 미리보기"),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "이 프로필에만 적용되며, 추가하지 않은 항목은 기본값을 사용합니다.",
     ),

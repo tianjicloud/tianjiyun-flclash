@@ -1547,5 +1547,11 @@
     }
   },
   "overridesLabel": "Переопределения",
-  "intercept": "Блокировка"
+  "intercept": "Блокировка",
+  "extendOverridesScripts": "Переопределения и скрипты расширения",
+  "profilePreviewTitle": "Предпросмотр конфигурации",
+  "previewReadOnly": "Только чтение",
+  "businessProfilesSortTitle": "Изменить порядок подписок",
+  "businessProfilesSortDescription": "Перетащите подписку, чтобы изменить порядок. Подписки выше отображаются первыми на панели и в трее.",
+  "localFile": "Локальный файл"
 }

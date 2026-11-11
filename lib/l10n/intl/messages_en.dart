@@ -763,6 +763,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "Edit subscription",
     ),
+    "businessProfilesSortDescription": MessageLookupByLibrary.simpleMessage(
+      "Drag to change order. Earlier subscriptions appear first in the dashboard and tray.",
+    ),
+    "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage(
+      "Reorder subscriptions",
+    ),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
       "Proxy card density",
     ),
@@ -1378,6 +1384,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportSuccess": MessageLookupByLibrary.simpleMessage("Export successful"),
     "extend": MessageLookupByLibrary.simpleMessage("Extend"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Extend mode"),
+    "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
+      "Extension overrides and scripts",
+    ),
     "extendScript": MessageLookupByLibrary.simpleMessage("Extend script"),
     "externalController": MessageLookupByLibrary.simpleMessage(
       "External controller",
@@ -1741,6 +1750,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "liveConnections": MessageLookupByLibrary.simpleMessage("Live connections"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading…"),
     "local": MessageLookupByLibrary.simpleMessage("Local"),
+    "localFile": MessageLookupByLibrary.simpleMessage("Local file"),
     "localImage": MessageLookupByLibrary.simpleMessage("Local image"),
     "localNetworkDeniedTip": MessageLookupByLibrary.simpleMessage(
       "Local network permission denied: using the gvisor stack, LAN is unreachable.",
@@ -2229,6 +2239,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Press a key combination",
     ),
     "preview": MessageLookupByLibrary.simpleMessage("Preview"),
+    "previewReadOnly": MessageLookupByLibrary.simpleMessage("Read-only"),
     "previousMatch": MessageLookupByLibrary.simpleMessage("Previous match"),
     "privateKey": MessageLookupByLibrary.simpleMessage("Private key"),
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage(
@@ -2261,6 +2272,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "Please enter the profile name",
+    ),
+    "profilePreviewTitle": MessageLookupByLibrary.simpleMessage(
+      "Configuration preview",
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Applies to this profile only; anything not added uses its default.",

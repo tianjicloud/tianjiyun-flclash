@@ -1547,5 +1547,11 @@
     }
   },
   "overridesLabel": "オーバーライド",
-  "intercept": "ブロック"
+  "intercept": "ブロック",
+  "extendOverridesScripts": "拡張の上書きとスクリプト",
+  "profilePreviewTitle": "設定プレビュー",
+  "previewReadOnly": "読み取り専用",
+  "businessProfilesSortTitle": "サブスクリプションの順序を変更",
+  "businessProfilesSortDescription": "ドラッグして順序を変更します。先にあるサブスクリプションがダッシュボードとトレイに優先表示されます。",
+  "localFile": "ローカルファイル"
 }

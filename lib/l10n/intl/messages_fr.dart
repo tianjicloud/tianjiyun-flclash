@@ -814,6 +814,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "Modifier l’abonnement",
     ),
+    "businessProfilesSortDescription": MessageLookupByLibrary.simpleMessage(
+      "Faites glisser pour changer l’ordre. Les abonnements en tête s’affichent en premier dans le tableau de bord et la barre système.",
+    ),
+    "businessProfilesSortTitle": MessageLookupByLibrary.simpleMessage(
+      "Réorganiser les abonnements",
+    ),
     "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
       "Densité des cartes proxy",
     ),
@@ -1471,6 +1477,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "extend": MessageLookupByLibrary.simpleMessage("Extension"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Mode d’extension"),
+    "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
+      "Remplacements et scripts d’extension",
+    ),
     "extendScript": MessageLookupByLibrary.simpleMessage("Script d’extension"),
     "externalController": MessageLookupByLibrary.simpleMessage(
       "Contrôleur externe",
@@ -1866,6 +1875,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "loading": MessageLookupByLibrary.simpleMessage("Chargement…"),
     "local": MessageLookupByLibrary.simpleMessage("Local"),
+    "localFile": MessageLookupByLibrary.simpleMessage("Fichier local"),
     "localImage": MessageLookupByLibrary.simpleMessage("Image locale"),
     "localNetworkDeniedTip": MessageLookupByLibrary.simpleMessage(
       "Autorisation du réseau local refusée : la pile gvisor est utilisée, le LAN est inaccessible.",
@@ -2394,6 +2404,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Appuyez sur une combinaison de touches",
     ),
     "preview": MessageLookupByLibrary.simpleMessage("Aperçu"),
+    "previewReadOnly": MessageLookupByLibrary.simpleMessage("Lecture seule"),
     "previousMatch": MessageLookupByLibrary.simpleMessage("Résultat précédent"),
     "privateKey": MessageLookupByLibrary.simpleMessage("Clé privée"),
     "privateKeyPassphrase": MessageLookupByLibrary.simpleMessage(
@@ -2428,6 +2439,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "Veuillez saisir le nom du profil",
+    ),
+    "profilePreviewTitle": MessageLookupByLibrary.simpleMessage(
+      "Aperçu de la configuration",
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "S’applique uniquement à ce profil ; tout ce qui n’est pas ajouté utilise la valeur par défaut.",

@@ -12521,6 +12521,61 @@ class AppLocalizations {
   String get intercept {
     return Intl.message('Intercept', name: 'intercept', desc: '', args: []);
   }
+
+  /// `Extension overrides and scripts`
+  String get extendOverridesScripts {
+    return Intl.message(
+      'Extension overrides and scripts',
+      name: 'extendOverridesScripts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Configuration preview`
+  String get profilePreviewTitle {
+    return Intl.message(
+      'Configuration preview',
+      name: 'profilePreviewTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read-only`
+  String get previewReadOnly {
+    return Intl.message(
+      'Read-only',
+      name: 'previewReadOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reorder subscriptions`
+  String get businessProfilesSortTitle {
+    return Intl.message(
+      'Reorder subscriptions',
+      name: 'businessProfilesSortTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Drag to change order. Earlier subscriptions appear first in the dashboard and tray.`
+  String get businessProfilesSortDescription {
+    return Intl.message(
+      'Drag to change order. Earlier subscriptions appear first in the dashboard and tray.',
+      name: 'businessProfilesSortDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local file`
+  String get localFile {
+    return Intl.message('Local file', name: 'localFile', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
