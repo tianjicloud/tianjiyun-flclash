@@ -444,6 +444,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("본문 재작성"),
     "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("밝기"),
+    "businessAboutBackupTitle": MessageLookupByLibrary.simpleMessage("정보 및 백업"),
     "businessAboutPanel": MessageLookupByLibrary.simpleMessage("사용자 패널 및 갱신"),
     "businessAccentColor": MessageLookupByLibrary.simpleMessage("강조 색상"),
     "businessAdvancedNetworkSettings": MessageLookupByLibrary.simpleMessage(
@@ -578,6 +579,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessFollowSystem": MessageLookupByLibrary.simpleMessage("시스템 설정 따르기"),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("그룹"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("잠김"),
+    "businessHelp": MessageLookupByLibrary.simpleMessage("도움말"),
     "businessHome": MessageLookupByLibrary.simpleMessage("홈"),
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "행을 선택해 단축키를 설정하거나 변경하세요",
@@ -590,6 +592,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "네트워크 코어를 시작하지 못했습니다",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage("실행 시간"),
+    "businessLegal": MessageLookupByLibrary.simpleMessage("법률 정보"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("개 노드"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
@@ -608,6 +611,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "사용 가능한 회선을 불러오는 중…",
     ),
+    "businessLocalExport": MessageLookupByLibrary.simpleMessage("로컬 파일로 내보내기"),
     "businessLocalPorts": MessageLookupByLibrary.simpleMessage("로컬 포트"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("잠김"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("출구 고정됨"),
@@ -692,12 +696,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tianji Cloud 구독 링크를 붙여넣으세요",
     ),
     "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage("구독 링크"),
+    "businessOpenSource": MessageLookupByLibrary.simpleMessage("오픈 소스 라이선스"),
+    "businessOpenSourceDescription": MessageLookupByLibrary.simpleMessage(
+      "FlClash 기반 · GPL-3.0",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("아웃바운드"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "구독 설정 재정의",
     ),
     "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
       "포트 7890을 다른 프로그램이 사용 중이라 TianjiCloud가 포트를 열 수 없습니다. 네트워크 설정은 변경되지 않았으므로 계속 인터넷을 사용할 수 있습니다.",
+    ),
+    "businessPrivacyTerms": MessageLookupByLibrary.simpleMessage(
+      "개인정보 처리방침 · 서비스 약관",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "자동 업데이트",
@@ -828,6 +839,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessResidentialLockedHint": m17,
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage("주거용"),
     "businessRestoreAction": MessageLookupByLibrary.simpleMessage("복원…"),
+    "businessRestoreFromFileWebDav": MessageLookupByLibrary.simpleMessage(
+      "파일 또는 WebDAV에서 복원",
+    ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "기본 회선만 변경합니다. AI·스트리밍의 개별 규칙과 직접 연결·차단 규칙은 유지됩니다.",
     ),
@@ -848,6 +862,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "구독 또는 모드가 변경되었습니다. 회선 선택을 다시 여세요.",
     ),
+    "businessServiceNoLogin": MessageLookupByLibrary.simpleMessage("로그인 불필요"),
     "businessSettingsAbout": MessageLookupByLibrary.simpleMessage(
       "Tianji Cloud 정보",
     ),
@@ -922,8 +937,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTrafficScope": MessageLookupByLibrary.simpleMessage(
       "이번 달 이 기기에서만 집계",
     ),
+    "businessTunBypassPrivateDescription": MessageLookupByLibrary.simpleMessage(
+      "프린터, NAS 등 LAN 기기에 직접 접근",
+    ),
     "businessTunCaption": MessageLookupByLibrary.simpleMessage("모든 앱 트래픽 처리"),
+    "businessTunDevice": MessageLookupByLibrary.simpleMessage("어댑터 이름"),
+    "businessTunExcludedRoutes": MessageLookupByLibrary.simpleMessage("제외된 경로"),
+    "businessTunMtu": MessageLookupByLibrary.simpleMessage("MTU"),
+    "businessTunRouteCount": MessageLookupByLibrary.simpleMessage("개 경로"),
+    "businessTunStackGvisorDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP와 UDP가 gVisor 사용자 공간 네트워크 스택 사용",
+    ),
+    "businessTunStackMipsDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP와 UDP가 사용자 공간 네트워크 스택 mipstack 사용",
+    ),
     "businessTunStackMixed": MessageLookupByLibrary.simpleMessage("혼합"),
+    "businessTunStackMixedDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP는 시스템 스택, UDP는 gVisor를 사용해 호환성이 높습니다",
+    ),
+    "businessTunStackSystemDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP와 UDP가 운영체제 네트워크 스택 사용",
+    ),
+    "businessTunTakeoverDescription": MessageLookupByLibrary.simpleMessage(
+      "가상 어댑터가 터미널, 게임, 시스템 프록시를 사용하지 않는 앱을 포함한 모든 앱의 트래픽을 처리합니다. 시스템 서비스는 관리자 권한으로 실행해야 합니다.",
+    ),
+    "businessTunTakeoverMode": MessageLookupByLibrary.simpleMessage(
+      "트래픽 처리 방식",
+    ),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "가상 네트워크 인터페이스(TUN)",
     ),
@@ -936,11 +976,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessUpdateHour12": MessageLookupByLibrary.simpleMessage("12시간마다"),
     "businessUpdateHour6": MessageLookupByLibrary.simpleMessage("6시간마다"),
     "businessUsagePercent": m23,
+    "businessVersion": MessageLookupByLibrary.simpleMessage("버전"),
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("진단 보기"),
     "businessVpn": MessageLookupByLibrary.simpleMessage("VPN"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "처음 연결할 때 VPN 권한을 허용해야 합니다",
     ),
+    "businessWebDavBackup": MessageLookupByLibrary.simpleMessage("WebDAV 백업"),
     "businessWifiRulesCount": m24,
     "bypassDomain": MessageLookupByLibrary.simpleMessage("우회 도메인"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(

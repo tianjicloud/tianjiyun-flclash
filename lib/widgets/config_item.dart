@@ -121,6 +121,7 @@ class ConfigToggleItem extends _ConfigItem<bool> {
     required super.title,
     required super.onChanged,
     super.leading,
+    super.subtitle,
   });
 
   @override
@@ -133,6 +134,7 @@ class ConfigToggleItem extends _ConfigItem<bool> {
     return ListItem.toggle(
       leading: leading,
       title: Text(title(appLocalizations)),
+      subtitle: buildSubtitle(appLocalizations),
       value: value,
       onChanged: (value) => onChanged(ref, value),
     );

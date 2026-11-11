@@ -448,6 +448,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("ボディ書き換え"),
     "brandName": MessageLookupByLibrary.simpleMessage("天機クラウド"),
     "brightness": MessageLookupByLibrary.simpleMessage("明度"),
+    "businessAboutBackupTitle": MessageLookupByLibrary.simpleMessage(
+      "アプリ情報とバックアップ",
+    ),
     "businessAboutPanel": MessageLookupByLibrary.simpleMessage("ユーザーパネルと更新"),
     "businessAccentColor": MessageLookupByLibrary.simpleMessage("アクセントカラー"),
     "businessAdvancedNetworkSettings": MessageLookupByLibrary.simpleMessage(
@@ -584,6 +587,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessFollowSystem": MessageLookupByLibrary.simpleMessage("システムに従う"),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("グループ"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("ロック中"),
+    "businessHelp": MessageLookupByLibrary.simpleMessage("ヘルプ"),
     "businessHome": MessageLookupByLibrary.simpleMessage("ホーム"),
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "行を選択してショートカットを設定または変更",
@@ -596,6 +600,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ネットワークコアを起動できませんでした",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage("稼働時間"),
+    "businessLegal": MessageLookupByLibrary.simpleMessage("法律情報"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("件"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "回線の切り替えを完了できませんでした。再試行してください。",
@@ -613,6 +618,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "利用可能な回線を読み込み中…",
+    ),
+    "businessLocalExport": MessageLookupByLibrary.simpleMessage(
+      "ローカルファイルにエクスポート",
     ),
     "businessLocalPorts": MessageLookupByLibrary.simpleMessage("ローカルポート"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("固定"),
@@ -698,12 +706,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションリンク",
     ),
+    "businessOpenSource": MessageLookupByLibrary.simpleMessage("オープンソースライセンス"),
+    "businessOpenSourceDescription": MessageLookupByLibrary.simpleMessage(
+      "FlClash ベース · GPL-3.0",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出力"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションの上書き",
     ),
     "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
       "ポート 7890 は他のプログラムが使用中のため、天機雲は待ち受けできません。ネットワーク設定は変更されていないため、通常どおり閲覧できます。",
+    ),
+    "businessPrivacyTerms": MessageLookupByLibrary.simpleMessage(
+      "プライバシーポリシー · 利用規約",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自動更新",
@@ -840,6 +855,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessResidentialLockedHint": m17,
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage("住宅"),
     "businessRestoreAction": MessageLookupByLibrary.simpleMessage("復元…"),
+    "businessRestoreFromFileWebDav": MessageLookupByLibrary.simpleMessage(
+      "ファイルまたは WebDAV から復元",
+    ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "既定の回線のみ変更します。AI・動画などの個別ルール、直接接続、ブロックのルールは維持します。",
     ),
@@ -858,6 +876,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションまたはモードが変わりました。回線選択を開き直してください。",
     ),
+    "businessServiceNoLogin": MessageLookupByLibrary.simpleMessage("ログイン不要"),
     "businessSettingsAbout": MessageLookupByLibrary.simpleMessage("天机云について"),
     "businessSettingsAppearance": MessageLookupByLibrary.simpleMessage("外観"),
     "businessSettingsCommon": MessageLookupByLibrary.simpleMessage("よく使う項目"),
@@ -932,8 +951,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTrafficScope": MessageLookupByLibrary.simpleMessage(
       "今月の通信量（このデバイスのみ）",
     ),
+    "businessTunBypassPrivateDescription": MessageLookupByLibrary.simpleMessage(
+      "プリンターや NAS などの LAN 機器へ直接アクセス",
+    ),
     "businessTunCaption": MessageLookupByLibrary.simpleMessage("すべてのアプリ通信を処理"),
+    "businessTunDevice": MessageLookupByLibrary.simpleMessage("アダプター名"),
+    "businessTunExcludedRoutes": MessageLookupByLibrary.simpleMessage("除外ルート"),
+    "businessTunMtu": MessageLookupByLibrary.simpleMessage("MTU"),
+    "businessTunRouteCount": MessageLookupByLibrary.simpleMessage("件"),
+    "businessTunStackGvisorDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP と UDP に gVisor のユーザー空間スタックを使用",
+    ),
+    "businessTunStackMipsDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP と UDP にユーザー空間スタック mipstack を使用",
+    ),
     "businessTunStackMixed": MessageLookupByLibrary.simpleMessage("混合"),
+    "businessTunStackMixedDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP はシステムスタック、UDP は gVisor を使用し、互換性に優れます",
+    ),
+    "businessTunStackSystemDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP と UDP に OS のネットワークスタックを使用",
+    ),
+    "businessTunTakeoverDescription": MessageLookupByLibrary.simpleMessage(
+      "仮想アダプターがターミナル、ゲーム、システムプロキシを使わないアプリを含むすべてのアプリの通信を処理します。システムサービスを管理者権限で実行してください。",
+    ),
+    "businessTunTakeoverMode": MessageLookupByLibrary.simpleMessage(
+      "通信の引き継ぎ方法",
+    ),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "仮想ネットワークインターフェイス（TUN）",
     ),
@@ -946,10 +990,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessUpdateHour12": MessageLookupByLibrary.simpleMessage("12 時間ごと"),
     "businessUpdateHour6": MessageLookupByLibrary.simpleMessage("6 時間ごと"),
     "businessUsagePercent": m23,
+    "businessVersion": MessageLookupByLibrary.simpleMessage("バージョン"),
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("診断を見る"),
     "businessVpn": MessageLookupByLibrary.simpleMessage("VPN"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "初回接続時に VPN の許可が必要です",
+    ),
+    "businessWebDavBackup": MessageLookupByLibrary.simpleMessage(
+      "WebDAV バックアップ",
     ),
     "businessWifiRulesCount": m24,
     "bypassDomain": MessageLookupByLibrary.simpleMessage("除外ドメイン"),

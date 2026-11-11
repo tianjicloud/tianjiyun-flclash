@@ -16,6 +16,10 @@ final systemServiceReadinessNameProvider = Provider<HelperReadinessNameReader>((
   return () async => (await helperClient.readiness()).name;
 });
 
+final systemServiceReadinessProvider = FutureProvider<String>((ref) async {
+  return ref.watch(systemServiceReadinessNameProvider)();
+});
+
 enum HelperServiceStatus { running, notReady, abnormal }
 
 const _serviceIconRadius = 12.0;
@@ -52,7 +56,10 @@ class _SystemServiceViewState extends ConsumerState<SystemServiceView> {
     } catch (_) {
       if (mounted) setState(() => _readinessName = null);
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted) {
+        ref.invalidate(systemServiceReadinessProvider);
+        setState(() => _loading = false);
+      }
     }
   }
 

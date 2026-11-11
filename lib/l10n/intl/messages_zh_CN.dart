@@ -433,6 +433,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body 重写"),
     "brandName": MessageLookupByLibrary.simpleMessage("天机云"),
     "brightness": MessageLookupByLibrary.simpleMessage("亮度"),
+    "businessAboutBackupTitle": MessageLookupByLibrary.simpleMessage("关于与备份"),
     "businessAboutPanel": MessageLookupByLibrary.simpleMessage("用户面板与续费"),
     "businessAccentColor": MessageLookupByLibrary.simpleMessage("强调色"),
     "businessAdvancedNetworkSettings": MessageLookupByLibrary.simpleMessage(
@@ -551,6 +552,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessFollowSystem": MessageLookupByLibrary.simpleMessage("跟随系统"),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("分组"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("已锁定"),
+    "businessHelp": MessageLookupByLibrary.simpleMessage("帮助"),
     "businessHome": MessageLookupByLibrary.simpleMessage("首页"),
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage("点击一行设置或修改快捷键"),
     "businessImportAgain": MessageLookupByLibrary.simpleMessage("重新导入"),
@@ -561,6 +563,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "网络内核没能启动",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage("已运行"),
+    "businessLegal": MessageLookupByLibrary.simpleMessage("法律"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("条"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage("未能完成线路切换，请重试"),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
@@ -575,6 +578,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "暂未读取到可用线路，请检查订阅。",
     ),
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage("正在读取可用线路…"),
+    "businessLocalExport": MessageLookupByLibrary.simpleMessage("导出到本地文件"),
     "businessLocalPorts": MessageLookupByLibrary.simpleMessage("本地端口"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("锁定"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("已锁定出口"),
@@ -653,11 +657,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "粘贴天机云订阅链接",
     ),
     "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage("订阅链接"),
+    "businessOpenSource": MessageLookupByLibrary.simpleMessage("开源许可"),
+    "businessOpenSourceDescription": MessageLookupByLibrary.simpleMessage(
+      "基于 FlClash · GPL-3.0",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出站"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage("订阅覆写"),
     "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
       "端口 7890 已被其他程序占用，天机云无法监听。你的网络没有被改动，可以正常上网。",
     ),
+    "businessPrivacyTerms": MessageLookupByLibrary.simpleMessage("隐私政策 · 服务条款"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自动更新",
     ),
@@ -763,6 +772,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessResidentialLockedHint": m17,
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage("住宅"),
     "businessRestoreAction": MessageLookupByLibrary.simpleMessage("恢复…"),
+    "businessRestoreFromFileWebDav": MessageLookupByLibrary.simpleMessage(
+      "从文件或 WebDAV 恢复",
+    ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "此处只更改默认线路；AI、流媒体等仍按各自规则分流，直连和拦截规则保持不变。",
     ),
@@ -779,6 +791,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "订阅或模式已变化，请重新打开线路选择。",
     ),
+    "businessServiceNoLogin": MessageLookupByLibrary.simpleMessage("无需登录"),
     "businessSettingsAbout": MessageLookupByLibrary.simpleMessage("关于天机云"),
     "businessSettingsAppearance": MessageLookupByLibrary.simpleMessage("外观"),
     "businessSettingsCommon": MessageLookupByLibrary.simpleMessage("常用"),
@@ -845,8 +858,31 @@ class MessageLookup extends MessageLookupByLibrary {
       "简体中文",
     ),
     "businessTrafficScope": MessageLookupByLibrary.simpleMessage("仅本设备本月统计"),
+    "businessTunBypassPrivateDescription": MessageLookupByLibrary.simpleMessage(
+      "打印机、NAS 等局域网设备直接访问",
+    ),
     "businessTunCaption": MessageLookupByLibrary.simpleMessage("接管所有应用流量"),
+    "businessTunDevice": MessageLookupByLibrary.simpleMessage("网卡名称"),
+    "businessTunExcludedRoutes": MessageLookupByLibrary.simpleMessage("排除的路由"),
+    "businessTunMtu": MessageLookupByLibrary.simpleMessage("MTU"),
+    "businessTunRouteCount": MessageLookupByLibrary.simpleMessage("条"),
+    "businessTunStackGvisorDescription": MessageLookupByLibrary.simpleMessage(
+      "由 gVisor 用户态网络栈处理 TCP 和 UDP",
+    ),
+    "businessTunStackMipsDescription": MessageLookupByLibrary.simpleMessage(
+      "由 mipstack 用户态网络栈处理 TCP 和 UDP",
+    ),
     "businessTunStackMixed": MessageLookupByLibrary.simpleMessage("混合"),
+    "businessTunStackMixedDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP 用系统栈、UDP 用 gVisor，兼容性最好",
+    ),
+    "businessTunStackSystemDescription": MessageLookupByLibrary.simpleMessage(
+      "由操作系统网络栈处理 TCP 和 UDP",
+    ),
+    "businessTunTakeoverDescription": MessageLookupByLibrary.simpleMessage(
+      "虚拟网卡接管所有应用（包括终端、游戏、不认系统代理的软件）。需要「系统服务」以管理员权限运行。",
+    ),
+    "businessTunTakeoverMode": MessageLookupByLibrary.simpleMessage("接管方式"),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage("虚拟网卡（TUN）"),
     "businessTypographyLayout": MessageLookupByLibrary.simpleMessage("文字与布局"),
     "businessUpdateAvailable": m22,
@@ -855,11 +891,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessUpdateHour12": MessageLookupByLibrary.simpleMessage("每 12 小时"),
     "businessUpdateHour6": MessageLookupByLibrary.simpleMessage("每 6 小时"),
     "businessUsagePercent": m23,
+    "businessVersion": MessageLookupByLibrary.simpleMessage("版本"),
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("查看诊断"),
     "businessVpn": MessageLookupByLibrary.simpleMessage("VPN"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "首次连接需要允许 VPN 权限",
     ),
+    "businessWebDavBackup": MessageLookupByLibrary.simpleMessage("WebDAV 备份"),
     "businessWifiRulesCount": m24,
     "bypassDomain": MessageLookupByLibrary.simpleMessage("排除域名"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(

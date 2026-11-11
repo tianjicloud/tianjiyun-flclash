@@ -512,6 +512,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Body rewrite"),
     "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("Brightness"),
+    "businessAboutBackupTitle": MessageLookupByLibrary.simpleMessage(
+      "About and backup",
+    ),
     "businessAboutPanel": MessageLookupByLibrary.simpleMessage(
       "User panel and renewal",
     ),
@@ -676,6 +679,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Groups"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("Locked"),
+    "businessHelp": MessageLookupByLibrary.simpleMessage("Help"),
     "businessHome": MessageLookupByLibrary.simpleMessage("Home"),
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "Select a row to set or change its shortcut",
@@ -692,6 +696,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
       "Running time",
     ),
+    "businessLegal": MessageLookupByLibrary.simpleMessage("Legal"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("lines"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Could not finish switching lines. Retry.",
@@ -709,6 +714,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "Loading available lines…",
+    ),
+    "businessLocalExport": MessageLookupByLibrary.simpleMessage(
+      "Export to local file",
     ),
     "businessLocalPorts": MessageLookupByLibrary.simpleMessage("Local ports"),
     "businessLocked": MessageLookupByLibrary.simpleMessage("Locked"),
@@ -805,12 +813,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage(
       "Subscription link",
     ),
+    "businessOpenSource": MessageLookupByLibrary.simpleMessage(
+      "Open-source licenses",
+    ),
+    "businessOpenSourceDescription": MessageLookupByLibrary.simpleMessage(
+      "Based on FlClash · GPL-3.0",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Outbound"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "Subscription overrides",
     ),
     "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
       "Port 7890 is occupied by another program, so TianjiCloud can\'t listen on it. Your network settings haven\'t been changed; you can continue browsing normally.",
+    ),
+    "businessPrivacyTerms": MessageLookupByLibrary.simpleMessage(
+      "Privacy policy · Terms of service",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Auto-update",
@@ -960,6 +977,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Residential",
     ),
     "businessRestoreAction": MessageLookupByLibrary.simpleMessage("Restore…"),
+    "businessRestoreFromFileWebDav": MessageLookupByLibrary.simpleMessage(
+      "Restore from file or WebDAV",
+    ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.",
     ),
@@ -979,6 +999,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelected": MessageLookupByLibrary.simpleMessage("Selected"),
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "The subscription or mode changed. Reopen line selection.",
+    ),
+    "businessServiceNoLogin": MessageLookupByLibrary.simpleMessage(
+      "No login required",
     ),
     "businessSettingsAbout": MessageLookupByLibrary.simpleMessage(
       "About Tianji Cloud",
@@ -1080,10 +1103,37 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTrafficScope": MessageLookupByLibrary.simpleMessage(
       "Traffic this month on this device only",
     ),
+    "businessTunBypassPrivateDescription": MessageLookupByLibrary.simpleMessage(
+      "Access printers, NAS devices, and other LAN devices directly",
+    ),
     "businessTunCaption": MessageLookupByLibrary.simpleMessage(
       "Route all app traffic",
     ),
+    "businessTunDevice": MessageLookupByLibrary.simpleMessage("Adapter name"),
+    "businessTunExcludedRoutes": MessageLookupByLibrary.simpleMessage(
+      "Excluded routes",
+    ),
+    "businessTunMtu": MessageLookupByLibrary.simpleMessage("MTU"),
+    "businessTunRouteCount": MessageLookupByLibrary.simpleMessage("routes"),
+    "businessTunStackGvisorDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP and UDP use the gVisor userspace network stack",
+    ),
+    "businessTunStackMipsDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP and UDP use the mipstack user-space network stack",
+    ),
     "businessTunStackMixed": MessageLookupByLibrary.simpleMessage("Mixed"),
+    "businessTunStackMixedDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP uses the system stack; UDP uses gVisor for broad compatibility",
+    ),
+    "businessTunStackSystemDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP and UDP use the operating system network stack",
+    ),
+    "businessTunTakeoverDescription": MessageLookupByLibrary.simpleMessage(
+      "The virtual adapter takes over all apps, including terminals, games, and apps that ignore the system proxy. The system service must run as administrator.",
+    ),
+    "businessTunTakeoverMode": MessageLookupByLibrary.simpleMessage(
+      "Traffic takeover",
+    ),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "Virtual network interface (TUN)",
     ),
@@ -1100,12 +1150,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Every 6 hours",
     ),
     "businessUsagePercent": m23,
+    "businessVersion": MessageLookupByLibrary.simpleMessage("Version"),
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(
       "View diagnostics",
     ),
     "businessVpn": MessageLookupByLibrary.simpleMessage("VPN"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "Allow VPN permission on first connection",
+    ),
+    "businessWebDavBackup": MessageLookupByLibrary.simpleMessage(
+      "WebDAV backup",
     ),
     "businessWifiRulesCount": m24,
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Bypass domains"),

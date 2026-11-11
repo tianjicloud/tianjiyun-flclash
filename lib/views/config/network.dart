@@ -56,12 +56,14 @@ ConfigToggleItem _networkToggle({
   required bool Function(NetworkProps state) select,
   required _NetworkUpdate<bool> update,
   Widget? leading,
+  ConfigLabel? subtitle,
 }) {
   return ConfigToggleItem(
     title: title,
     selector: networkSettingProvider.select(select),
     onChanged: _networkWriter(update),
     leading: leading,
+    subtitle: subtitle,
   );
 }
 
@@ -175,12 +177,15 @@ class DNSHijackingItem extends ConsumerWidget {
 }
 
 class TunStackItem extends ConsumerWidget {
-  const TunStackItem({super.key});
+  const TunStackItem({super.key, this.title, this.subtitle});
+
+  final ConfigLabel? title;
+  final ConfigLabel? subtitle;
 
   @override
   Widget build(BuildContext context, ref) {
     return ConfigOptionsItem<TunStack>(
-      title: (l) => l.stackMode,
+      title: title ?? ((l) => l.stackMode),
       options: TunStack.values,
       textBuilder: (stack) => switch (stack) {
         TunStack.gvisor => 'gVisor',
@@ -188,6 +193,7 @@ class TunStackItem extends ConsumerWidget {
         TunStack.mixed => context.appLocalizations.businessTunStackMixed,
         TunStack.mips => 'MIPS',
       },
+      subtitle: subtitle,
       selector: patchClashConfigProvider.select((state) => state.tun.stack),
       onChanged: _tunWriter((state, value) => state.copyWith.tun(stack: value)),
     );
@@ -235,10 +241,16 @@ class InterfaceNameItem extends ConsumerWidget {
 }
 
 class BypassPrivateRouteItem extends ConsumerWidget {
-  const BypassPrivateRouteItem({super.key, this.title, this.leading});
+  const BypassPrivateRouteItem({
+    super.key,
+    this.title,
+    this.leading,
+    this.subtitle,
+  });
 
   final String? title;
   final Widget? leading;
+  final ConfigLabel? subtitle;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -247,6 +259,7 @@ class BypassPrivateRouteItem extends ConsumerWidget {
       select: (state) => state.bypassPrivateRoute,
       update: (state, value) => state.copyWith(bypassPrivateRoute: value),
       leading: leading,
+      subtitle: subtitle,
     );
   }
 }

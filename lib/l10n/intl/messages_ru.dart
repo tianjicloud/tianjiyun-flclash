@@ -531,6 +531,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Перезапись тела"),
     "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("Яркость"),
+    "businessAboutBackupTitle": MessageLookupByLibrary.simpleMessage(
+      "О приложении и резервных копиях",
+    ),
     "businessAboutPanel": MessageLookupByLibrary.simpleMessage(
       "Панель пользователя и продление",
     ),
@@ -701,6 +704,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage(
       "Заблокировано",
     ),
+    "businessHelp": MessageLookupByLibrary.simpleMessage("Помощь"),
     "businessHome": MessageLookupByLibrary.simpleMessage("Главная"),
     "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
       "Выберите строку, чтобы задать или изменить сочетание клавиш",
@@ -718,6 +722,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
       "Время работы",
+    ),
+    "businessLegal": MessageLookupByLibrary.simpleMessage(
+      "Правовая информация",
     ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("линий"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
@@ -738,6 +745,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessLinesLoading": MessageLookupByLibrary.simpleMessage(
       "Загрузка доступных линий…",
+    ),
+    "businessLocalExport": MessageLookupByLibrary.simpleMessage(
+      "Экспорт в локальный файл",
     ),
     "businessLocalPorts": MessageLookupByLibrary.simpleMessage(
       "Локальные порты",
@@ -841,12 +851,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage(
       "Ссылка на подписку",
     ),
+    "businessOpenSource": MessageLookupByLibrary.simpleMessage(
+      "Лицензии открытого ПО",
+    ),
+    "businessOpenSourceDescription": MessageLookupByLibrary.simpleMessage(
+      "На основе FlClash · GPL-3.0",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Выход"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "Переопределения подписки",
     ),
     "businessPortConflictTip": MessageLookupByLibrary.simpleMessage(
       "Порт 7890 занят другой программой, поэтому TianjiCloud не может его прослушивать. Сетевые настройки не изменены, вы можете продолжить просмотр сайтов.",
+    ),
+    "businessPrivacyTerms": MessageLookupByLibrary.simpleMessage(
+      "Политика конфиденциальности · Условия обслуживания",
     ),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Автообновление",
@@ -999,6 +1018,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessRestoreAction": MessageLookupByLibrary.simpleMessage(
       "Восстановить…",
     ),
+    "businessRestoreFromFileWebDav": MessageLookupByLibrary.simpleMessage(
+      "Восстановить из файла или WebDAV",
+    ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "Меняется только линия по умолчанию. Правила ИИ, стриминга, прямых соединений и блокировок сохраняются.",
     ),
@@ -1020,6 +1042,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelected": MessageLookupByLibrary.simpleMessage("Выбрано"),
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "Подписка или режим изменились. Откройте выбор линии заново.",
+    ),
+    "businessServiceNoLogin": MessageLookupByLibrary.simpleMessage(
+      "Вход не требуется",
     ),
     "businessSettingsAbout": MessageLookupByLibrary.simpleMessage(
       "О Tianji Cloud",
@@ -1117,10 +1142,37 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTrafficScope": MessageLookupByLibrary.simpleMessage(
       "Трафик за месяц только на этом устройстве",
     ),
+    "businessTunBypassPrivateDescription": MessageLookupByLibrary.simpleMessage(
+      "Прямой доступ к принтерам, NAS и другим устройствам LAN",
+    ),
     "businessTunCaption": MessageLookupByLibrary.simpleMessage(
       "Маршрутизировать трафик всех приложений",
     ),
+    "businessTunDevice": MessageLookupByLibrary.simpleMessage("Имя адаптера"),
+    "businessTunExcludedRoutes": MessageLookupByLibrary.simpleMessage(
+      "Исключённые маршруты",
+    ),
+    "businessTunMtu": MessageLookupByLibrary.simpleMessage("MTU"),
+    "businessTunRouteCount": MessageLookupByLibrary.simpleMessage("маршрутов"),
+    "businessTunStackGvisorDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP и UDP используют пользовательский сетевой стек gVisor",
+    ),
+    "businessTunStackMipsDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP и UDP используют сетевой стек mipstack в пространстве пользователя",
+    ),
     "businessTunStackMixed": MessageLookupByLibrary.simpleMessage("Смешанный"),
+    "businessTunStackMixedDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP использует системный стек, UDP — gVisor; высокая совместимость",
+    ),
+    "businessTunStackSystemDescription": MessageLookupByLibrary.simpleMessage(
+      "TCP и UDP используют сетевой стек ОС",
+    ),
+    "businessTunTakeoverDescription": MessageLookupByLibrary.simpleMessage(
+      "Виртуальный адаптер обрабатывает трафик всех приложений, включая терминалы, игры и приложения без системного прокси. Системная служба должна работать от имени администратора.",
+    ),
+    "businessTunTakeoverMode": MessageLookupByLibrary.simpleMessage(
+      "Перехват трафика",
+    ),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "Виртуальный сетевой интерфейс (TUN)",
     ),
@@ -1137,12 +1189,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Каждые 6 часов",
     ),
     "businessUsagePercent": m23,
+    "businessVersion": MessageLookupByLibrary.simpleMessage("Версия"),
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(
       "Открыть диагностику",
     ),
     "businessVpn": MessageLookupByLibrary.simpleMessage("VPN"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(
       "При первом подключении разрешите VPN",
+    ),
+    "businessWebDavBackup": MessageLookupByLibrary.simpleMessage(
+      "Резервная копия WebDAV",
     ),
     "businessWifiRulesCount": m24,
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Исключённые домены"),

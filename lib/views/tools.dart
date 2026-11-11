@@ -280,10 +280,10 @@ class _BusinessMobileTools extends ConsumerWidget {
                     : null,
                 widget: const DiagnosticsView(),
               ),
-              nav(PageLabel.dns, title: l10n.dnsQueries),
-              nav(
-                PageLabel.resources,
-                title: l10n.businessToolsRoutingResources,
+              ListItem.open(
+                leading: icon(AppGlyphs.dns),
+                title: Text(l10n.businessSettingsDnsResources),
+                widget: _BusinessDnsResourcesPage(navigation: navigation),
               ),
               ListItem.open(
                 leading: icon(AppGlyphs.logs),
@@ -308,20 +308,10 @@ class _BusinessMobileTools extends ConsumerWidget {
                     : null,
                 widget: const AccessView(),
               ),
-              ListItem.open(
-                leading: icon(AppGlyphs.dns),
-                title: Text(l10n.businessSettingsDnsResources),
-                widget: _BusinessDnsResourcesPage(navigation: navigation),
-              ),
               Ipv6Item(leading: icon(AppGlyphs.vpn)),
               BypassPrivateRouteItem(
                 title: l10n.businessToolsLocalDirect,
                 leading: icon(AppGlyphs.wifi),
-              ),
-              setting(
-                l10n.businessSettingsNetworkAdvanced,
-                AppGlyphs.wrench,
-                _BusinessNetworkPage(navigation: navigation),
               ),
             ],
           ),
@@ -347,11 +337,15 @@ class _BusinessMobileTools extends ConsumerWidget {
                 const BackupAndRestore(),
               ),
               setting(
+                l10n.businessAdvancedNetworkSettings,
+                AppGlyphs.wrench,
+                _BusinessNetworkPage(navigation: navigation),
+              ),
+              setting(
                 l10n.about,
                 AppGlyphs.info,
                 const AboutView(business: true),
               ),
-              setting(l10n.general, AppGlyphs.settings, const GeneralView()),
               if (developerMode)
                 setting(
                   l10n.developerMode,
@@ -1534,7 +1528,9 @@ class _BusinessDnsQueriesContent extends ConsumerWidget {
                       child: const SizedBox(width: double.infinity, height: 1),
                     ),
                   ),
-                _BusinessDnsQueryRow(query: queries[index]),
+                _BusinessDnsQueryRow(
+                  query: queries[queries.length - index - 1],
+                ),
               ],
             ],
           ),
@@ -1684,9 +1680,96 @@ class _TunSettingsView extends ConsumerWidget {
       ),
     );
     final profile = ref.watch(currentProfileProvider);
+    final tunOverrideState = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => (tun: state.tunOverride, keys: state.tunOverrideKeys),
+      ),
+    );
+    final profileTunOverrides = profile == null
+        ? null
+        : profile.type == ProfileType.custom
+        ? profile.overrides.overAppTun(
+            tunOverrideState.tun,
+            tunOverrideState.keys,
+          )
+        : ProfileOverrides(
+            tun: tunOverrideState.tun,
+            tunOverrideKeys: tunOverrideState.keys,
+          );
+    final excludedRoutes =
+        profileTunOverrides?.tunOverrideKeys.contains(
+              TunOverrideKey.routeExcludeAddress,
+            ) ==
+            true
+        ? profileTunOverrides!.tun.routeExcludeAddress
+        : null;
+    final mtuOverride =
+        profileTunOverrides?.tunOverrideKeys.contains(TunOverrideKey.mtu) ==
+            true
+        ? profileTunOverrides!.tun.mtu
+        : null;
+    final tun = ref.watch(
+      patchClashConfigProvider.select((state) => state.tun),
+    );
+    final helperReadiness = system.hasHelperService
+        ? ref.watch(systemServiceReadinessProvider)
+        : null;
+    final serviceStatus = helperReadiness?.when(
+      data: (name) => helperServiceStatusForName(name),
+      loading: () => null,
+      error: (_, _) => HelperServiceStatus.abnormal,
+    );
+    final serviceLabel = switch (serviceStatus) {
+      HelperServiceStatus.running => l10n.systemServiceRunning,
+      HelperServiceStatus.notReady => l10n.systemServiceNotInstalled,
+      HelperServiceStatus.abnormal => l10n.systemServiceAbnormal,
+      null => l10n.loading,
+    };
     return ListView(
       padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
       children: [
+        if (system.hasHelperService) ...[
+          PressSurface(
+            fill: context.colorScheme.primaryContainer,
+            shape: AppShape.all(AppCorner.md),
+            onPressed: () => Navigator.of(
+              context,
+            ).push(PagedSheetRoute(builder: (_) => const SystemServiceView())),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.businessTunTakeoverDescription,
+                      style: BusinessText.metaLabel(
+                        context,
+                      ).copyWith(color: context.colorScheme.onPrimaryContainer),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: context.colorScheme.surface,
+                      shape: AppShape.full,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      child: Text(
+                        '${l10n.systemService} · $serviceLabel',
+                        style: BusinessText.metaLabel(context),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
+        ],
         Padding(
           padding: const EdgeInsets.only(bottom: 14),
           child: Row(
@@ -1733,26 +1816,66 @@ class _TunSettingsView extends ConsumerWidget {
             ),
           ),
         BusinessSettingsCard(
-          title: l10n.tun,
+          title: l10n.businessTunTakeoverMode,
           items: [
-            const TunStackItem(),
+            TunStackItem(
+              title: (l) => l.businessNetworkStack,
+              subtitle: (l) => switch (tun.stack) {
+                TunStack.mixed => l.businessTunStackMixedDescription,
+                TunStack.system => l.businessTunStackSystemDescription,
+                TunStack.gvisor => l.businessTunStackGvisorDescription,
+                TunStack.mips => l.businessTunStackMipsDescription,
+              },
+            ),
+            if (system.isDesktop)
+              BypassPrivateRouteItem(
+                subtitle: (l) => l.businessTunBypassPrivateDescription,
+              ),
             if (system.isDesktop) const InterfaceNameModeItem(),
             if (system.isDesktop && customName) const InterfaceNameItem(),
           ],
         ),
         const SizedBox(height: 14),
         BusinessSettingsCard(
-          title: l10n.routeAddress,
           items: [
-            if (system.isDesktop)
-              const BypassPrivateRouteItem()
-            else
-              ...tunItems(isMipsStack: isMipsStack),
-            if (profile != null)
-              _BusinessManageRow(
-                title: l10n.businessOverrideSettings,
-                page: TunView(profile.id),
+            if (!system.isDesktop) ...tunItems(isMipsStack: isMipsStack),
+            if (system.isDesktop) ...[
+              ListItem(
+                title: Text(l10n.businessTunDevice),
+                trailing: Text(
+                  tun.device,
+                  style: AppTextStyle.footnote.of(context).toJetBrainsMono,
+                ),
               ),
+              if (mtuOverride != null)
+                ListItem(
+                  title: Text(l10n.businessTunMtu),
+                  trailing: Text(
+                    '$mtuOverride',
+                    style: AppTextStyle.footnote.of(context).toJetBrainsMono,
+                  ),
+                ),
+              if (profile != null && excludedRoutes != null)
+                ListItem.open(
+                  title: Text(l10n.businessTunExcludedRoutes),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${excludedRoutes.length} ${l10n.businessTunRouteCount}',
+                      ),
+                      const SizedBox(width: 4),
+                      const DisclosureIndicator(),
+                    ],
+                  ),
+                  widget: TunView(profile.id),
+                ),
+              if (profile != null && excludedRoutes == null)
+                _BusinessManageRow(
+                  title: l10n.businessOverrideSettings,
+                  page: TunView(profile.id),
+                ),
+            ],
           ],
         ),
       ],

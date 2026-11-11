@@ -222,8 +222,10 @@ class AboutView extends ConsumerWidget {
       if (ref.watch(isMobileViewProvider)) {
         return _buildBusinessMobile(
           context,
+          ref,
           appLocalizations,
           globalState.packageInfo.version,
+          isLoading,
         );
       }
       return _buildBusinessPage(context, ref, appLocalizations, isLoading);
@@ -321,70 +323,135 @@ class AboutView extends ConsumerWidget {
 
   Widget _buildBusinessMobile(
     BuildContext context,
+    WidgetRef ref,
     AppLocalizations l10n,
     String version,
-  ) => ListView(
-    padding: EdgeInsets.only(
-      left: 16,
-      right: 16,
-      top: 12,
-      bottom: context.bottomInset + 20,
-    ),
-    children: [
-      BusinessSettingsCard(
-        title: l10n.about,
-        items: [
-          ListItem(
-            minVerticalPadding: 14,
-            leading: const BusinessBrandMark(size: 64),
-            title: Text(
-              appName,
-              style: AppTextStyle.title3.of(context, emphasized: true),
-            ),
-            subtitle: Text(
-              version,
-              style: AppTextStyle.subheadline.of(context).toJetBrainsMono,
-            ),
+    bool isLoading,
+  ) {
+    final architecture = Abi.current()
+        .toString()
+        .split('.')
+        .last
+        .split('_')
+        .last;
+    final update = ref.watch(updateDownloadStateProvider);
+    final updateLabel = switch (update) {
+      UpdateReady() => l10n.updateReady,
+      UpdateDownloading() => l10n.downloadingUpdate,
+      null => isLoading ? l10n.loading : null,
+    };
+    const backupPage = BackupAndRestore();
+    return BaseScaffold(
+      title: l10n.businessAboutBackupTitle,
+      body: ListView(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: context.sectionsTopPadding,
+          bottom: context.bottomInset + 20,
+        ),
+        children: [
+          BusinessSettingsCard(
+            items: [
+              ListItem(
+                minVerticalPadding: 14,
+                leading: const BusinessBrandMark(size: 64),
+                title: Text(
+                  appName,
+                  style: AppTextStyle.title3.of(context, emphasized: true),
+                ),
+                subtitle: Text(
+                  '${l10n.businessVersion} $version · $architecture',
+                  style: AppTextStyle.caption1
+                      .of(context)
+                      .copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+                trailing: updateLabel == null
+                    ? null
+                    : Text(
+                        updateLabel,
+                        style: AppTextStyle.caption1
+                            .of(context)
+                            .copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          BusinessSettingsCard(
+            title: l10n.backupAndRestore,
+            items: [
+              ListItem.open(
+                title: Text(l10n.businessWebDavBackup),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.businessBackupNow),
+                    const SizedBox(width: 4),
+                    const DisclosureIndicator(),
+                  ],
+                ),
+                widget: backupPage,
+              ),
+              ListItem.open(
+                title: Text(l10n.businessLocalExport),
+                widget: backupPage,
+              ),
+              ListItem.open(
+                title: Text(l10n.businessRestoreFromFileWebDav),
+                widget: backupPage,
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          BusinessSettingsCard(
+            title: l10n.businessHelp,
+            items: [
+              ListItem(
+                title: Text(l10n.businessAboutPanel),
+                trailing: const DisclosureIndicator(),
+                onTap: () => dialogs.openUrl(userPanelUrl),
+              ),
+              ListItem(
+                title: Text(l10n.serviceStatus),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.businessServiceNoLogin),
+                    const SizedBox(width: 4),
+                    const DisclosureIndicator(),
+                  ],
+                ),
+                onTap: () => dialogs.openUrl(statusPageUrl),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          BusinessSettingsCard(
+            title: l10n.businessLegal,
+            items: [
+              ListItem.open(
+                title: Text(l10n.disclaimer),
+                widget: const DisclaimerView(),
+              ),
+              ListItem.open(
+                title: Text(l10n.businessPrivacyTerms),
+                widget: const DisclaimerView(),
+              ),
+              ListItem(
+                title: Text(l10n.businessOpenSource),
+                subtitle: Text(l10n.businessOpenSourceDescription),
+                trailing: const DisclosureIndicator(),
+                onTap: () => dialogs.openUrl('https://github.com/$repository'),
+              ),
+            ],
           ),
         ],
       ),
-      const SizedBox(height: 14),
-      BusinessSettingsCard(
-        title: l10n.more,
-        items: [
-          _buildBusinessLink(
-            context,
-            title: l10n.businessAboutPanel,
-            subtitle: userPanelUrl,
-            onTap: () => dialogs.openUrl(userPanelUrl),
-          ),
-          _buildBusinessLink(
-            context,
-            title: l10n.serviceStatus,
-            subtitle: statusPageUrl,
-            onTap: () => dialogs.openUrl(statusPageUrl),
-          ),
-          _buildBusinessLink(
-            context,
-            title: l10n.project,
-            subtitle: 'github.com/$repository',
-            onTap: () => dialogs.openUrl('https://github.com/$repository'),
-          ),
-        ],
-      ),
-      const SizedBox(height: 14),
-      BusinessSettingsCard(
-        title: l10n.backupAndRestore,
-        items: [
-          ListItem.open(
-            title: Text(l10n.backupAndRestore),
-            leading: const GlyphIcon(AppGlyphs.cloudSync),
-            widget: const BackupAndRestore(),
-          ),
-        ],
-      ),
-    ],
-  );
+    );
+  }
 }
 
 class _AboutHero extends StatelessWidget {

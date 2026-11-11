@@ -13602,6 +13602,206 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `About and backup`
+  String get businessAboutBackupTitle {
+    return Intl.message(
+      'About and backup',
+      name: 'businessAboutBackupTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get businessVersion {
+    return Intl.message('Version', name: 'businessVersion', desc: '', args: []);
+  }
+
+  /// `Help`
+  String get businessHelp {
+    return Intl.message('Help', name: 'businessHelp', desc: '', args: []);
+  }
+
+  /// `Legal`
+  String get businessLegal {
+    return Intl.message('Legal', name: 'businessLegal', desc: '', args: []);
+  }
+
+  /// `Privacy policy · Terms of service`
+  String get businessPrivacyTerms {
+    return Intl.message(
+      'Privacy policy · Terms of service',
+      name: 'businessPrivacyTerms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open-source licenses`
+  String get businessOpenSource {
+    return Intl.message(
+      'Open-source licenses',
+      name: 'businessOpenSource',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Based on FlClash · GPL-3.0`
+  String get businessOpenSourceDescription {
+    return Intl.message(
+      'Based on FlClash · GPL-3.0',
+      name: 'businessOpenSourceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No login required`
+  String get businessServiceNoLogin {
+    return Intl.message(
+      'No login required',
+      name: 'businessServiceNoLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The virtual adapter takes over all apps, including terminals, games, and apps that ignore the system proxy. The system service must run as administrator.`
+  String get businessTunTakeoverDescription {
+    return Intl.message(
+      'The virtual adapter takes over all apps, including terminals, games, and apps that ignore the system proxy. The system service must run as administrator.',
+      name: 'businessTunTakeoverDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic takeover`
+  String get businessTunTakeoverMode {
+    return Intl.message(
+      'Traffic takeover',
+      name: 'businessTunTakeoverMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MTU`
+  String get businessTunMtu {
+    return Intl.message('MTU', name: 'businessTunMtu', desc: '', args: []);
+  }
+
+  /// `TCP uses the system stack; UDP uses gVisor for broad compatibility`
+  String get businessTunStackMixedDescription {
+    return Intl.message(
+      'TCP uses the system stack; UDP uses gVisor for broad compatibility',
+      name: 'businessTunStackMixedDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TCP and UDP use the operating system network stack`
+  String get businessTunStackSystemDescription {
+    return Intl.message(
+      'TCP and UDP use the operating system network stack',
+      name: 'businessTunStackSystemDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TCP and UDP use the gVisor userspace network stack`
+  String get businessTunStackGvisorDescription {
+    return Intl.message(
+      'TCP and UDP use the gVisor userspace network stack',
+      name: 'businessTunStackGvisorDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TCP and UDP use the mipstack user-space network stack`
+  String get businessTunStackMipsDescription {
+    return Intl.message(
+      'TCP and UDP use the mipstack user-space network stack',
+      name: 'businessTunStackMipsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Access printers, NAS devices, and other LAN devices directly`
+  String get businessTunBypassPrivateDescription {
+    return Intl.message(
+      'Access printers, NAS devices, and other LAN devices directly',
+      name: 'businessTunBypassPrivateDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Adapter name`
+  String get businessTunDevice {
+    return Intl.message(
+      'Adapter name',
+      name: 'businessTunDevice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WebDAV backup`
+  String get businessWebDavBackup {
+    return Intl.message(
+      'WebDAV backup',
+      name: 'businessWebDavBackup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export to local file`
+  String get businessLocalExport {
+    return Intl.message(
+      'Export to local file',
+      name: 'businessLocalExport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore from file or WebDAV`
+  String get businessRestoreFromFileWebDav {
+    return Intl.message(
+      'Restore from file or WebDAV',
+      name: 'businessRestoreFromFileWebDav',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excluded routes`
+  String get businessTunExcludedRoutes {
+    return Intl.message(
+      'Excluded routes',
+      name: 'businessTunExcludedRoutes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `routes`
+  String get businessTunRouteCount {
+    return Intl.message(
+      'routes',
+      name: 'businessTunRouteCount',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
