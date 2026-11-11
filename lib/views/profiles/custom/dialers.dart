@@ -2,14 +2,22 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/business_style.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton, DashboardChip;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomProxyDialersView extends ConsumerWidget {
   final int profileId;
+  final bool embedded;
 
-  const CustomProxyDialersView(this.profileId, {super.key});
+  const CustomProxyDialersView(
+    this.profileId, {
+    super.key,
+    this.embedded = false,
+  });
 
   Future<void> _handleSelect(
     BuildContext context,
@@ -90,6 +98,54 @@ class CustomProxyDialersView extends ConsumerWidget {
             for (final proxy in all)
               if (named.value.contains(proxy.name)) proxy,
           ];
+    if (embedded) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 60,
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            decoration: ShapeDecoration(
+              color: BusinessPalette.customEditorCardFor(
+                context.colorScheme.brightness,
+              ),
+              shape: AppShape.top(BusinessPalette.cardRadius),
+            ),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              appLocalizations.dialerProxy,
+              style: BusinessText.cardTitle(context),
+            ),
+          ),
+          if (proxies != null)
+            for (final (index, proxy) in proxies.indexed)
+              ItemPositionProvider(
+                key: ValueKey(proxy.id),
+                position: ItemPosition.get(index, proxies.length),
+                child: _ProxyDialerItem(
+                  profileId: profileId,
+                  proxy: proxy,
+                  embedded: true,
+                  isLast: index == proxies.length - 1,
+                  onPressed: () => _handleSelect(context, ref, proxy),
+                ),
+              ),
+          if (proxies?.isEmpty ?? false)
+            DecoratedBox(
+              decoration: ShapeDecoration(
+                color: BusinessPalette.customEditorCardFor(
+                  context.colorScheme.brightness,
+                ),
+                shape: AppShape.vertical(
+                  top: AppCorner.none,
+                  bottom: BusinessPalette.cardRadius,
+                ),
+              ),
+              child: const SizedBox(height: 80),
+            ),
+        ],
+      );
+    }
     return Scaffold(
       title: appLocalizations.dialerProxy,
       body: NullStatusSwitcher(
@@ -130,11 +186,15 @@ class _ProxyDialerItem extends ConsumerWidget {
   final int profileId;
   final CustomProxy proxy;
   final VoidCallback onPressed;
+  final bool embedded;
+  final bool isLast;
 
   const _ProxyDialerItem({
     required this.profileId,
     required this.proxy,
     required this.onPressed,
+    this.embedded = false,
+    this.isLast = false,
   });
 
   @override
@@ -150,6 +210,82 @@ class _ProxyDialerItem extends ConsumerWidget {
           ),
         )
         .value;
+    if (embedded) {
+      final host = proxy.definition['server']?.toString() ?? '';
+      final port = proxy.definition['port']?.toString();
+      final address = port == null || port.isEmpty ? host : '$host:$port';
+      return SizedBox(
+        height: 49,
+        child: DecoratedBox(
+          decoration: ShapeDecoration(
+            color: BusinessPalette.customEditorCardFor(
+              context.colorScheme.brightness,
+            ),
+            shape: isLast
+                ? AppShape.vertical(
+                    top: AppCorner.none,
+                    bottom: BusinessPalette.cardRadius,
+                  )
+                : AppShape.none,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Row(
+                    spacing: 12,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              proxy.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: BusinessText.cardTitle(context),
+                            ),
+                            Text(
+                              target == null || target.isEmpty
+                                  ? address
+                                  : target,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: BusinessText.metaLabel(context).copyWith(
+                                color: context.colorScheme.onSurfaceVariant,
+                                fontFamily: 'JetBrainsMono',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      DashboardChip(
+                        label: proxy.type,
+                        labelStyle: BusinessText.proxyProtocol(context),
+                      ),
+                      if (issues.isNotEmpty) CustomIssueButton(issues: issues),
+                      BusinessSecondaryButton(
+                        label: context.appLocalizations.edit,
+                        width: 64,
+                        height: 30,
+                        onPressed: onPressed,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (!isLast)
+                SizedBox(
+                  height: 1,
+                  child: ColoredBox(color: context.colorScheme.outlineVariant),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
     return DecorationListItem(
       invalid: issues.isNotEmpty,
       onPressed: onPressed,

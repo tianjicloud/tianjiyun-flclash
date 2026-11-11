@@ -4,21 +4,33 @@ import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/models/clash_config.dart';
 import 'package:fl_clash/pages/editor.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show
+        BusinessPrimaryButton,
+        BusinessSecondaryButton,
+        DashboardChip,
+        DashboardChipTone;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomRulesView extends ConsumerStatefulWidget {
   final int profileId;
+  final bool embedded;
 
-  const CustomRulesView(this.profileId, {super.key});
+  const CustomRulesView(this.profileId, {super.key, this.embedded = false});
 
   @override
   ConsumerState createState() => _CustomRulesViewState();
 }
 
 class _CustomRulesViewState extends ConsumerState<CustomRulesView> {
+  final _searchTexts = Expando<String>();
+  var _query = SearchQuery('');
+  var _showSearch = false;
+
   int get _profileId => widget.profileId;
 
   void _handleReorder(int oldIndex, int newIndex) {
@@ -136,10 +148,143 @@ class _CustomRulesViewState extends ConsumerState<CustomRulesView> {
     );
   }
 
+  void _handleSearch(String value) {
+    setState(() => _query = SearchQuery(value));
+  }
+
+  Widget _buildEmbedded(BuildContext context, CustomProfileData? profileData) {
+    final appLocalizations = context.appLocalizations;
+    final all = ref.watch(profileRulesProvider(_profileId)).value;
+    final rules = (all ?? const <Rule>[])
+        .whereMatches(_query, (rule) => rule.searchFields, texts: _searchTexts)
+        .toList();
+    final color = BusinessPalette.customEditorCardFor(
+      context.colorScheme.brightness,
+    );
+    Widget rowAt(int index) {
+      final rule = rules[index];
+      final issues = profileData == null
+          ? const <CustomIssue>[]
+          : customRuleIssues(rule, profileData);
+      final row = _BusinessRuleRow(
+        index: index + 1,
+        rule: rule,
+        issues: issues,
+        isLast: index == rules.length - 1,
+        reorderable: _query.isEmpty,
+        onEdit: () => _handleAddOrUpdate(rule: rule),
+      );
+      return ItemPositionProvider(
+        key: ValueKey(rule.id),
+        position: ItemPosition.get(index, rules.length),
+        child: row,
+      );
+    }
+
+    return NullStatusSwitcher(
+      isLoading: all == null,
+      isEmpty: rules.isEmpty,
+      isSearching: _query.isNotEmpty,
+      nullStatus: NullStatus(
+        label: appLocalizations.ruleEmpty,
+        illustration: NullStatusIllustration.data,
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              height: 60,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              decoration: ShapeDecoration(
+                color: color,
+                shape: rules.isEmpty
+                    ? AppShape.all(BusinessPalette.cardRadius)
+                    : AppShape.top(BusinessPalette.cardRadius),
+              ),
+              child: Row(
+                spacing: 8,
+                children: [
+                  Text(
+                    appLocalizations.customRuleCardTitle,
+                    style: BusinessText.cardTitle(context),
+                  ),
+                  const Spacer(),
+                  if (_showSearch)
+                    SizedBox(
+                      width: 180,
+                      child: TextField(
+                        onChanged: _handleSearch,
+                        decoration: InputDecoration(
+                          hintText: appLocalizations.search,
+                        ),
+                      ),
+                    )
+                  else
+                    IconButton(
+                      icon: const GlyphIcon(AppGlyphs.search),
+                      tooltip: appLocalizations.search,
+                      onPressed: () => setState(() => _showSearch = true),
+                    ),
+                  BusinessSecondaryButton(
+                    label: appLocalizations.quickEdit,
+                    width: 92,
+                    onPressed: _handleQuickEdit,
+                  ),
+                  BusinessSecondaryButton(
+                    label: appLocalizations.customRulePresets,
+                    width: 118,
+                    onPressed: _handleQuickActions,
+                  ),
+                  BusinessPrimaryButton(
+                    label: appLocalizations.add,
+                    glyph: AppGlyphs.add,
+                    width: 92,
+                    onPressed: () => _handleAddOrUpdate(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (rules.isEmpty)
+            SliverToBoxAdapter(
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: color,
+                  shape: AppShape.vertical(
+                    top: AppCorner.none,
+                    bottom: BusinessPalette.cardRadius,
+                  ),
+                ),
+                child: const SizedBox(height: 80),
+              ),
+            )
+          else if (_query.isEmpty)
+            SliverPrismReorderableList(
+              itemCount: rules.length,
+              itemBuilder: (_, index) => rowAt(index),
+              itemExtent: 49,
+              proxyDecorator: (child, index, animation) =>
+                  commonProxyDecorator(rowAt(index), index, animation),
+              onReorderItem: _handleReorder,
+            )
+          else
+            SliverPrismList(
+              itemCount: rules.length,
+              itemBuilder: (_, index) => rowAt(index),
+              itemExtent: 49,
+            ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(context) {
     final appLocalizations = context.appLocalizations;
     final profileData = ref.watch(customProfileDataProvider(_profileId));
+    if (widget.embedded) {
+      return _buildEmbedded(context, profileData);
+    }
     return ListEditorPage<Rule, int>(
       title: appLocalizations.rule,
       idOf: (rule) => rule.id,
@@ -179,6 +324,111 @@ class _CustomRulesViewState extends ConsumerState<CustomRulesView> {
       searchFieldsOf: (rule) => rule.searchFields,
       emptyLabel: appLocalizations.ruleEmpty,
       itemExtent: ruleItemHeight,
+    );
+  }
+}
+
+class _BusinessRuleRow extends StatelessWidget {
+  const _BusinessRuleRow({
+    required this.index,
+    required this.rule,
+    required this.issues,
+    required this.isLast,
+    required this.reorderable,
+    required this.onEdit,
+  });
+
+  final int index;
+  final Rule rule;
+  final List<CustomIssue> issues;
+  final bool isLast;
+  final bool reorderable;
+  final VoidCallback onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    final target = rule.ruleTarget ?? '';
+    final tone = switch (target.toUpperCase()) {
+      'DIRECT' || 'COMPATIBLE' => DashboardChipTone.ok,
+      'REJECT' || 'REJECT-DROP' => DashboardChipTone.warn,
+      _ => DashboardChipTone.primary,
+    };
+    return SizedBox(
+      height: 49,
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: BusinessPalette.customEditorCardFor(
+            context.colorScheme.brightness,
+          ),
+          shape: isLast
+              ? AppShape.vertical(
+                  top: AppCorner.none,
+                  bottom: BusinessPalette.cardRadius,
+                )
+              : AppShape.none,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Row(
+                  spacing: 12,
+                  children: [
+                    if (reorderable)
+                      ReorderDragStartListener(
+                        index: index - 1,
+                        child: GlyphIcon(
+                          AppGlyphs.dragHandle,
+                          color: context.colorScheme.onSurfaceVariant,
+                          size: 14,
+                        ),
+                      ),
+                    SizedBox(
+                      width: 28,
+                      child: Text(
+                        index.toString().padLeft(2, '0'),
+                        textAlign: TextAlign.end,
+                        style: BusinessText.proxyProtocol(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 136,
+                      child: DashboardChip(
+                        label: rule.ruleAction.value,
+                        labelStyle: BusinessText.proxyProtocol(context),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        rule.realContent ?? rule.content ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BusinessText.customRuleContent(context),
+                      ),
+                    ),
+                    if (issues.isNotEmpty) CustomIssueButton(issues: issues),
+                    DashboardChip(label: target, tone: tone),
+                    BusinessSecondaryButton(
+                      label: context.appLocalizations.edit,
+                      width: 64,
+                      height: 30,
+                      onPressed: onEdit,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (!isLast)
+              SizedBox(
+                height: 1,
+                child: ColoredBox(color: context.colorScheme.outlineVariant),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

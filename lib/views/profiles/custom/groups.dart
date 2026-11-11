@@ -9,6 +9,9 @@ import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton, DashboardChip;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/scheduler.dart';
@@ -144,8 +147,13 @@ double get _groupRowExtent => globalState.measure.listTwoLineRowHeight;
 /// which belongs to the whole profile.
 class CustomProxyGroupsSection extends ConsumerStatefulWidget {
   final int profileId;
+  final bool embedded;
 
-  const CustomProxyGroupsSection(this.profileId, {super.key});
+  const CustomProxyGroupsSection(
+    this.profileId, {
+    super.key,
+    this.embedded = false,
+  });
 
   @override
   ConsumerState<CustomProxyGroupsSection> createState() =>
@@ -296,6 +304,11 @@ class _CustomProxyGroupsSectionState
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     final proxyGroups = ref.watch(proxyGroupsProvider(widget.profileId)).value;
+    final rules = ref.watch(
+      profileRulesProvider(
+        widget.profileId,
+      ).select((state) => state.value ?? const <Rule>[]),
+    );
     final ids = {...?proxyGroups?.map((proxyGroup) => proxyGroup.id)};
     final selected = _selected.intersection(ids);
     Widget itemAt(int index) {
@@ -325,6 +338,11 @@ class _CustomProxyGroupsSectionState
                 proxyGroup: proxyGroup,
                 isEditing: isEditing,
                 isSelected: isSelected,
+                embedded: widget.embedded,
+                isLast: index == proxyGroups.length - 1,
+                referenceCount: rules
+                    .where((rule) => rule.ruleTarget == proxyGroup.name)
+                    .length,
                 onSelected: () => _handleToggleSelected(proxyGroup.id),
                 onPressed: () => _handleAddOrUpdate(proxyGroup: proxyGroup),
               ),
@@ -349,32 +367,72 @@ class _CustomProxyGroupsSectionState
         child: SliverMainAxisGroup(
           slivers: [
             SliverToBoxAdapter(
-              child: TonalButtonTheme(
-                child: ListHeader(
-                  title: appLocalizations.proxyGroup,
-                  actions: _buildActions(ids, selected),
-                ),
-              ),
+              child: widget.embedded
+                  ? Container(
+                      height: 60,
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      decoration: ShapeDecoration(
+                        color: BusinessPalette.customEditorCardFor(
+                          context.colorScheme.brightness,
+                        ),
+                        shape: proxyGroups?.isEmpty ?? true
+                            ? AppShape.all(BusinessPalette.cardRadius)
+                            : AppShape.top(BusinessPalette.cardRadius),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            appLocalizations.customGroupsLabel,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          const Spacer(),
+                          if (proxyGroups != null && proxyGroups.length > 1)
+                            IconButton(
+                              icon: GlyphIcon(
+                                Glyphs.sort,
+                                color: context.colorScheme.onSurfaceVariant,
+                              ),
+                              tooltip: UiLocalizations.of(context).sort,
+                              isSelected: _sorting,
+                              onPressed: _toggleSorting,
+                            ),
+                          BusinessPrimaryButton(
+                            label: appLocalizations.add,
+                            glyph: AppGlyphs.add,
+                            width: 108,
+                            onPressed: () => _handleAddOrUpdate(),
+                          ),
+                        ],
+                      ),
+                    )
+                  : TonalButtonTheme(
+                      child: ListHeader(
+                        title: appLocalizations.proxyGroup,
+                        actions: _buildActions(ids, selected),
+                      ),
+                    ),
             ),
-            if (proxyGroups != null && proxyGroups.isEmpty)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: NullStatus(
-                    label: appLocalizations.proxyGroupEmpty,
-                    illustration: NullStatusIllustration.data,
-                  ),
-                ),
-              )
-            else if (proxyGroups != null)
-              SliverPrismReorderableList(
-                itemBuilder: (_, index) => itemAt(index),
-                itemCount: proxyGroups.length,
-                itemExtent: _groupRowExtent,
-                proxyDecorator: (child, index, animation) =>
-                    commonProxyDecorator(itemAt(index), index, animation),
-                onReorderItem: _handleReorder,
-              ),
+            SliverToBoxAdapter(
+              child: proxyGroups != null && proxyGroups.isEmpty
+                  ? Padding(
+                      padding: widget.embedded
+                          ? const EdgeInsets.fromLTRB(18, 24, 18, 24)
+                          : const EdgeInsets.symmetric(vertical: 24),
+                      child: NullStatus(
+                        label: appLocalizations.proxyGroupEmpty,
+                        illustration: NullStatusIllustration.data,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            SliverPrismReorderableList(
+              itemBuilder: (_, index) => itemAt(index),
+              itemCount: proxyGroups?.length ?? 0,
+              itemExtent: _groupRowExtent,
+              proxyDecorator: (child, index, animation) =>
+                  commonProxyDecorator(itemAt(index), index, animation),
+              onReorderItem: _handleReorder,
+            ),
           ],
         ),
       ),
@@ -387,6 +445,9 @@ class _ProxyGroupItem extends ConsumerWidget {
   final ProxyGroup proxyGroup;
   final bool isEditing;
   final bool isSelected;
+  final bool embedded;
+  final bool isLast;
+  final int referenceCount;
   final VoidCallback onSelected;
   final VoidCallback onPressed;
 
@@ -395,6 +456,9 @@ class _ProxyGroupItem extends ConsumerWidget {
     required this.proxyGroup,
     required this.isEditing,
     required this.isSelected,
+    required this.embedded,
+    required this.isLast,
+    required this.referenceCount,
     required this.onSelected,
     required this.onPressed,
   });
@@ -410,6 +474,114 @@ class _ProxyGroupItem extends ConsumerWidget {
           ),
         )
         .value;
+    if (embedded) {
+      final members = [
+        if (proxyGroup.includeAllProxies == true)
+          context.appLocalizations.proxies,
+        if (proxyGroup.includeAllProviders == true)
+          context.appLocalizations.providers,
+        ...?proxyGroup.proxies,
+        ...?proxyGroup.use,
+      ];
+      final membersLabel = members.isEmpty
+          ? context.appLocalizations.none
+          : members.length > 3
+          ? context.appLocalizations.customGroupMemberSummary(
+              members.take(3).join(' · '),
+              members.length - 3,
+            )
+          : members.join(' · ');
+      final rowPosition = ItemPositionProvider.of(context)?.position;
+      final shape =
+          rowPosition == ItemPosition.end ||
+              rowPosition == ItemPosition.startAndEnd
+          ? AppShape.vertical(
+              top: AppCorner.none,
+              bottom: BusinessPalette.cardRadius,
+            )
+          : AppShape.none;
+      return SizedBox(
+        height: 49,
+        child: DecoratedBox(
+          decoration: ShapeDecoration(
+            color: isSelected
+                ? context.colorScheme.secondaryContainer
+                : BusinessPalette.customEditorCardFor(
+                    context.colorScheme.brightness,
+                  ),
+            shape: shape,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Row(
+                    spacing: 10,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          spacing: 10,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                proxyGroup.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: BusinessText.cardTitle(context),
+                              ),
+                            ),
+                            DashboardChip(
+                              label: proxyGroup.type.value,
+                              labelStyle: BusinessText.proxyProtocol(context),
+                            ),
+                            Expanded(
+                              child: Text(
+                                membersLabel,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: BusinessText.metaLabel(context).copyWith(
+                                  color: context.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (referenceCount > 0)
+                        DashboardChip(
+                          label: context.appLocalizations.customGroupRuleUsage(
+                            referenceCount,
+                          ),
+                        ),
+                      if (issues.isNotEmpty) CustomIssueButton(issues: issues),
+                      if (isEditing)
+                        Checkbox(
+                          value: isSelected,
+                          isCircle: true,
+                          onChanged: (_) => onSelected(),
+                        )
+                      else
+                        BusinessSecondaryButton(
+                          label: context.appLocalizations.edit,
+                          width: 64,
+                          height: 30,
+                          onPressed: onPressed,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              if (!isLast)
+                SizedBox(
+                  height: 1,
+                  child: ColoredBox(color: context.colorScheme.outlineVariant),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
     return DecorationListItem(
       invalid: issues.isNotEmpty,
       isSelected: isSelected,

@@ -231,6 +231,9 @@ abstract final class BusinessText {
     weight: FontWeight.w600,
   ).copyWith(color: context.colorScheme.onSurfaceVariant).toJetBrainsMono;
 
+  static TextStyle customRuleContent(BuildContext context) =>
+      AppTextStyle.custom(context, size: 13, leading: 18).toJetBrainsMono;
+
   static TextStyle metaLabel(BuildContext context) =>
       AppTextStyle.custom(context, size: 12, leading: 16);
 

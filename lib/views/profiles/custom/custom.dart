@@ -140,6 +140,7 @@ Widget _sectionRow(
 
 class CustomProfileView extends ConsumerStatefulWidget {
   final int profileId;
+  final int initialTabIndex;
 
   /// A new profile is dropped again when it is left as it was created.
   final bool isNew;
@@ -147,6 +148,7 @@ class CustomProfileView extends ConsumerStatefulWidget {
   const CustomProfileView({
     super.key,
     required this.profileId,
+    this.initialTabIndex = 0,
     this.isNew = false,
   });
 
@@ -169,11 +171,15 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
   var _edited = false;
   var _importing = false;
   var _editorTab = _CustomEditorTab.proxies;
-  var _resourceTab = 0;
 
   @override
   void initState() {
     super.initState();
+    _editorTab =
+        _CustomEditorTab.values[widget.initialTabIndex.clamp(
+          0,
+          _CustomEditorTab.values.length - 1,
+        )];
     _setupAction = ref.read(setupActionProvider.notifier);
     _profilesAction = ref.read(profilesActionProvider.notifier);
     _initialProfile = ref.read(profileProvider(widget.profileId));
@@ -365,35 +371,26 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
     _CustomEditorTab.groups => CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: _groups,
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          sliver: CustomProxyGroupsSection(profileId, embedded: true),
         ),
       ],
     ),
-    _CustomEditorTab.rules => CustomRulesView(profileId),
-    _CustomEditorTab.resources => Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-          child: BusinessSegmented<int>(
-            selected: _resourceTab,
-            onSelected: (tab) => setState(() => _resourceTab = tab),
-            items: [
-              BusinessSegment(
-                value: 0,
-                label: context.appLocalizations.providers,
-              ),
-              BusinessSegment(
-                value: 1,
-                label: context.appLocalizations.dialerProxy,
-              ),
+    _CustomEditorTab.rules => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      child: CustomRulesView(profileId, embedded: true),
+    ),
+    _CustomEditorTab.resources => CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
+          sliver: SliverList.list(
+            children: [
+              CustomProvidersView(profileId, embedded: true),
+              const SizedBox(height: 16),
+              CustomProxyDialersView(profileId, embedded: true),
             ],
           ),
-        ),
-        Expanded(
-          child: _resourceTab == 0
-              ? CustomProvidersView(profileId)
-              : CustomProxyDialersView(profileId),
         ),
       ],
     ),

@@ -6,7 +6,10 @@ import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton, DashboardChip;
 import 'package:fl_clash/views/profiles/custom/members.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -14,8 +17,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomProvidersView extends ConsumerWidget {
   final int profileId;
+  final bool embedded;
 
-  const CustomProvidersView(this.profileId, {super.key});
+  const CustomProvidersView(this.profileId, {super.key, this.embedded = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,6 +37,41 @@ class CustomProvidersView extends ConsumerWidget {
           in ref.watch(clashProvidersProvider).value ?? const <ClashProvider>[])
         provider.label: provider,
     };
+    if (embedded) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _BusinessProviderCard(
+            title: appLocalizations.proxyProviders,
+            children: [
+              for (final (index, name) in proxy.indexed)
+                _ProxyProviderItem(
+                  profileId: profileId,
+                  name: name,
+                  profile: profiles[name],
+                  invalid: data != null && !data.proxyProviders.contains(name),
+                  embedded: true,
+                  isLast: index == proxy.length - 1,
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _BusinessProviderCard(
+            title: appLocalizations.ruleProviders,
+            children: [
+              for (final (index, name) in rule.indexed)
+                _RuleProviderItem(
+                  name: name,
+                  provider: ruleProviders[name],
+                  invalid: data != null && !data.ruleProviders.contains(name),
+                  embedded: true,
+                  isLast: index == rule.length - 1,
+                ),
+            ],
+          ),
+        ],
+      );
+    }
     return Scaffold(
       title: appLocalizations.providers,
       body: NullStatusSwitcher(
@@ -83,12 +122,16 @@ class _ProxyProviderItem extends ConsumerWidget {
   final String name;
   final Profile? profile;
   final bool invalid;
+  final bool embedded;
+  final bool isLast;
 
   const _ProxyProviderItem({
     required this.profileId,
     required this.name,
     required this.profile,
     required this.invalid,
+    this.embedded = false,
+    this.isLast = false,
   });
 
   void _handleEdit(BuildContext context, WidgetRef ref) {
@@ -128,6 +171,19 @@ class _ProxyProviderItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lastUpdateDate = profile?.lastUpdateDate;
+    if (embedded) {
+      return _BusinessProviderRow(
+        name: name,
+        kind: context.appLocalizations.proxyProviders,
+        path: profile?.url ?? '',
+        lastUpdateDate: invalid ? null : lastUpdateDate,
+        isLast: isLast,
+        invalidMessage: invalid
+            ? context.appLocalizations.invalidProxyProvider(name)
+            : null,
+        onEdit: invalid ? null : () => _handleEdit(context, ref),
+      );
+    }
     return DecorationListItem(
       invalid: invalid,
       contentPadding: const EdgeInsets.only(left: 16, right: 8),
@@ -160,11 +216,15 @@ class _RuleProviderItem extends StatefulWidget {
   final String name;
   final ClashProvider? provider;
   final bool invalid;
+  final bool embedded;
+  final bool isLast;
 
   const _RuleProviderItem({
     required this.name,
     required this.provider,
     required this.invalid,
+    this.embedded = false,
+    this.isLast = false,
   });
 
   @override
@@ -173,11 +233,13 @@ class _RuleProviderItem extends StatefulWidget {
 
 class _RuleProviderItemState extends State<_RuleProviderItem> {
   late Future<DateTime?> _lastModified;
+  late Future<String?> _path;
 
   @override
   void initState() {
     super.initState();
     _lastModified = _lastModifiedOf(widget.provider);
+    _path = _pathOf(widget.provider);
   }
 
   @override
@@ -185,6 +247,7 @@ class _RuleProviderItemState extends State<_RuleProviderItem> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.provider != widget.provider) {
       _lastModified = _lastModifiedOf(widget.provider);
+      _path = _pathOf(widget.provider);
     }
   }
 
@@ -196,32 +259,191 @@ class _RuleProviderItemState extends State<_RuleProviderItem> {
     return info?.lastModified;
   }
 
+  Future<String?> _pathOf(ClashProvider? provider) async {
+    if (provider == null) {
+      return null;
+    }
+    if (provider.url.isNotEmpty) {
+      return provider.url;
+    }
+    return provider.path;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _lastModified,
-      builder: (context, snapshot) {
-        final lastModified = snapshot.data;
-        return DecorationListItem(
-          invalid: widget.invalid,
-          contentPadding: const EdgeInsets.only(left: 16, right: 8),
-          title: TooltipText(
-            text: Text(
-              widget.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+      future: _path,
+      builder: (context, pathSnapshot) => FutureBuilder(
+        future: _lastModified,
+        builder: (context, snapshot) {
+          final lastModified = snapshot.data;
+          if (widget.embedded) {
+            return _BusinessProviderRow(
+              name: widget.name,
+              kind: widget.provider == null
+                  ? context.appLocalizations.ruleProviders
+                  : '${widget.provider!.format.name} · ${widget.provider!.behavior.name}',
+              path: pathSnapshot.data ?? '',
+              lastUpdateDate: widget.invalid ? null : lastModified,
+              isLast: widget.isLast,
+              invalidMessage: widget.invalid
+                  ? context.appLocalizations.invalidRuleSet(widget.name)
+                  : null,
+            );
+          }
+          return DecorationListItem(
+            invalid: widget.invalid,
+            contentPadding: const EdgeInsets.only(left: 16, right: 8),
+            title: TooltipText(
+              text: Text(
+                widget.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
+            subtitle: lastModified == null
+                ? null
+                : LastUpdateTimeText(lastUpdateDate: lastModified),
+            trailing: widget.invalid
+                ? InfoMessageButton(
+                    message: context.appLocalizations.invalidRuleSet(
+                      widget.name,
+                    ),
+                  )
+                : null,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _BusinessProviderCard extends StatelessWidget {
+  const _BusinessProviderCard({required this.title, required this.children});
+
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = BusinessPalette.customEditorCardFor(
+      context.colorScheme.brightness,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          height: 60,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          decoration: ShapeDecoration(
+            color: color,
+            shape: children.isEmpty
+                ? AppShape.all(BusinessPalette.cardRadius)
+                : AppShape.top(BusinessPalette.cardRadius),
           ),
-          subtitle: lastModified == null
-              ? null
-              : LastUpdateTimeText(lastUpdateDate: lastModified),
-          trailing: widget.invalid
-              ? InfoMessageButton(
-                  message: context.appLocalizations.invalidRuleSet(widget.name),
+          alignment: Alignment.centerLeft,
+          child: Text(title, style: BusinessText.cardTitle(context)),
+        ),
+        ...children,
+      ],
+    );
+  }
+}
+
+class _BusinessProviderRow extends StatelessWidget {
+  const _BusinessProviderRow({
+    required this.name,
+    required this.kind,
+    required this.path,
+    required this.lastUpdateDate,
+    required this.isLast,
+    this.invalidMessage,
+    this.onEdit,
+  });
+
+  final String name;
+  final String kind;
+  final String path;
+  final DateTime? lastUpdateDate;
+  final bool isLast;
+  final String? invalidMessage;
+  final VoidCallback? onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 49,
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: BusinessPalette.customEditorCardFor(
+            context.colorScheme.brightness,
+          ),
+          shape: isLast
+              ? AppShape.vertical(
+                  top: AppCorner.none,
+                  bottom: BusinessPalette.cardRadius,
                 )
-              : null,
-        );
-      },
+              : AppShape.none,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Row(
+                  spacing: 12,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          if (path.isNotEmpty)
+                            Text(
+                              path,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: BusinessText.metaLabel(context).copyWith(
+                                color: context.colorScheme.onSurfaceVariant,
+                                fontFamily: 'JetBrainsMono',
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    DashboardChip(
+                      label: kind,
+                      labelStyle: BusinessText.proxyProtocol(context),
+                    ),
+                    if (lastUpdateDate != null)
+                      LastUpdateTimeText(lastUpdateDate: lastUpdateDate!),
+                    if (invalidMessage case final message?)
+                      InfoMessageButton(message: message)
+                    else if (onEdit != null)
+                      BusinessSecondaryButton(
+                        label: context.appLocalizations.edit,
+                        width: 64,
+                        height: 30,
+                        onPressed: onEdit,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            if (!isLast)
+              SizedBox(
+                height: 1,
+                child: ColoredBox(color: context.colorScheme.outlineVariant),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

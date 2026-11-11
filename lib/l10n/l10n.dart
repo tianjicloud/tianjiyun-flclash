@@ -550,6 +550,46 @@ class AppLocalizations {
     );
   }
 
+  /// `{members} and {count} more`
+  String customGroupMemberSummary(String members, int count) {
+    return Intl.message(
+      '$members and $count more',
+      name: 'customGroupMemberSummary',
+      desc: '',
+      args: [members, count],
+    );
+  }
+
+  /// `Used by {count} rules`
+  String customGroupRuleUsage(int count) {
+    return Intl.message(
+      'Used by $count rules',
+      name: 'customGroupRuleUsage',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `My rules`
+  String get customRuleCardTitle {
+    return Intl.message(
+      'My rules',
+      name: 'customRuleCardTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add from presets`
+  String get customRulePresets {
+    return Intl.message(
+      'Add from presets',
+      name: 'customRulePresets',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Groups`
   String get customGroupsLabel {
     return Intl.message(
