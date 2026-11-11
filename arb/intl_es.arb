@@ -1638,5 +1638,19 @@
   "businessSystemProxyHttp": "Proxy del sistema (HTTP)",
   "businessDnsModeDescription": "Elige cómo se generan las respuestas DNS.",
   "businessMoreVpnSettings": "Más ajustes de VPN",
-  "businessMoreVpnDescription": "Abre el resto de opciones de interfaz VPN."
+  "businessMoreVpnDescription": "Abre el resto de opciones de interfaz VPN.",
+  "businessOnboardingFailedExpiredTitle": "Esta suscripción ha caducado",
+  "businessOnboardingFailedExpiredDescription": "El plan caducó el {date}. Renueva y vuelve a validar el mismo enlace.",
+  "@businessOnboardingFailedExpiredDescription": {"placeholders":{"date":{"type":"String"}}},
+  "businessOnboardingFailedStep": "Paso {step} de {total} · Validar suscripción",
+  "@businessOnboardingFailedStep": {"placeholders":{"step":{"type":"int"},"total":{"type":"int"}}},
+  "businessOnboardingFailedRenew": "Renovar ahora",
+  "businessOnboardingFailedRetry": "Volver a validar",
+  "businessOnboardingFailedChangeLink": "Usar otro enlace de suscripción",
+  "businessOnboardingFailedPastedUrl": "El enlace que pegaste",
+  "businessOnboardingFailedPackage": "Plan",
+  "businessOnboardingFailedStatus": "Estado",
+  "businessOnboardingFailedDays": "Caducó hace {days} días",
+  "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
+  "businessOnboardingFailedRetainedConfig": "Tu configuración anterior se conserva y el cliente puede seguir funcionando."
 }

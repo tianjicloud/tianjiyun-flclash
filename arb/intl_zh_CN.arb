@@ -1638,5 +1638,19 @@
   "businessSystemProxyHttp": "系统代理（HTTP）",
   "businessDnsModeDescription": "选择 DNS 解析与返回结果的方式。",
   "businessMoreVpnSettings": "更多 VPN 设置",
-  "businessMoreVpnDescription": "打开其余虚拟网卡接口选项。"
+  "businessMoreVpnDescription": "打开其余虚拟网卡接口选项。",
+  "businessOnboardingFailedExpiredTitle": "这个订阅已经过期",
+  "businessOnboardingFailedExpiredDescription": "这个套餐已于 {date} 到期。续费后可以重新校验同一订阅链接。",
+  "@businessOnboardingFailedExpiredDescription": {"placeholders":{"date":{"type":"String"}}},
+  "businessOnboardingFailedStep": "第 {step} 步，共 {total} 步 · 校验订阅",
+  "@businessOnboardingFailedStep": {"placeholders":{"step":{"type":"int"},"total":{"type":"int"}}},
+  "businessOnboardingFailedRenew": "去续费",
+  "businessOnboardingFailedRetry": "重新校验",
+  "businessOnboardingFailedChangeLink": "换一个订阅链接",
+  "businessOnboardingFailedPastedUrl": "你粘贴的链接",
+  "businessOnboardingFailedPackage": "套餐",
+  "businessOnboardingFailedStatus": "状态",
+  "businessOnboardingFailedDays": "已过期 {days} 天",
+  "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
+  "businessOnboardingFailedRetainedConfig": "之前的配置已保留，客户端仍可正常使用。"
 }

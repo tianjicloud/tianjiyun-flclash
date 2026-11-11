@@ -1638,5 +1638,19 @@
   "businessSystemProxyHttp": "System proxy (HTTP)",
   "businessDnsModeDescription": "Choose how DNS answers are generated.",
   "businessMoreVpnSettings": "More VPN settings",
-  "businessMoreVpnDescription": "Open remaining VPN interface options."
+  "businessMoreVpnDescription": "Open remaining VPN interface options.",
+  "businessOnboardingFailedExpiredTitle": "This subscription has expired",
+  "businessOnboardingFailedExpiredDescription": "This plan expired on {date}. Renew it, then validate the same link again.",
+  "@businessOnboardingFailedExpiredDescription": {"placeholders":{"date":{"type":"String"}}},
+  "businessOnboardingFailedStep": "Step {step} of {total} · Validate subscription",
+  "@businessOnboardingFailedStep": {"placeholders":{"step":{"type":"int"},"total":{"type":"int"}}},
+  "businessOnboardingFailedRenew": "Renew now",
+  "businessOnboardingFailedRetry": "Revalidate",
+  "businessOnboardingFailedChangeLink": "Use a different subscription link",
+  "businessOnboardingFailedPastedUrl": "The link you pasted",
+  "businessOnboardingFailedPackage": "Plan",
+  "businessOnboardingFailedStatus": "Status",
+  "businessOnboardingFailedDays": "Expired {days} days ago",
+  "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
+  "businessOnboardingFailedRetainedConfig": "Your previous configuration is saved, and the client can continue to work."
 }

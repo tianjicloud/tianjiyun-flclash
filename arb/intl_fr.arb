@@ -1638,5 +1638,19 @@
   "businessSystemProxyHttp": "Proxy système (HTTP)",
   "businessDnsModeDescription": "Choisir comment générer les réponses DNS.",
   "businessMoreVpnSettings": "Plus de paramètres VPN",
-  "businessMoreVpnDescription": "Ouvrir les autres options d’interface VPN."
+  "businessMoreVpnDescription": "Ouvrir les autres options d’interface VPN.",
+  "businessOnboardingFailedExpiredTitle": "Cet abonnement a expiré",
+  "businessOnboardingFailedExpiredDescription": "Cette offre a expiré le {date}. Renouvelez-la, puis validez à nouveau le même lien.",
+  "@businessOnboardingFailedExpiredDescription": {"placeholders":{"date":{"type":"String"}}},
+  "businessOnboardingFailedStep": "Étape {step} sur {total} · Vérifier l’abonnement",
+  "@businessOnboardingFailedStep": {"placeholders":{"step":{"type":"int"},"total":{"type":"int"}}},
+  "businessOnboardingFailedRenew": "Renouveler",
+  "businessOnboardingFailedRetry": "Revérifier",
+  "businessOnboardingFailedChangeLink": "Utiliser un autre lien d’abonnement",
+  "businessOnboardingFailedPastedUrl": "Lien collé",
+  "businessOnboardingFailedPackage": "Offre",
+  "businessOnboardingFailedStatus": "État",
+  "businessOnboardingFailedDays": "Expiré depuis {days} jours",
+  "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
+  "businessOnboardingFailedRetainedConfig": "Votre configuration précédente est conservée et le client peut continuer à fonctionner."
 }

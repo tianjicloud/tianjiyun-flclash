@@ -1638,5 +1638,19 @@
   "businessSystemProxyHttp": "시스템 프록시(HTTP)",
   "businessDnsModeDescription": "DNS 응답 생성 방식을 선택합니다.",
   "businessMoreVpnSettings": "추가 VPN 설정",
-  "businessMoreVpnDescription": "추가 VPN 인터페이스 설정을 엽니다."
+  "businessMoreVpnDescription": "추가 VPN 인터페이스 설정을 엽니다.",
+  "businessOnboardingFailedExpiredTitle": "이 구독은 만료되었습니다",
+  "businessOnboardingFailedExpiredDescription": "이 요금제는 {date}에 만료되었습니다. 갱신한 뒤 같은 링크를 다시 확인하세요.",
+  "@businessOnboardingFailedExpiredDescription": {"placeholders":{"date":{"type":"String"}}},
+  "businessOnboardingFailedStep": "{total}단계 중 {step}단계 · 구독 확인",
+  "@businessOnboardingFailedStep": {"placeholders":{"step":{"type":"int"},"total":{"type":"int"}}},
+  "businessOnboardingFailedRenew": "지금 갱신",
+  "businessOnboardingFailedRetry": "다시 확인",
+  "businessOnboardingFailedChangeLink": "다른 구독 링크 사용",
+  "businessOnboardingFailedPastedUrl": "붙여넣은 링크",
+  "businessOnboardingFailedPackage": "요금제",
+  "businessOnboardingFailedStatus": "상태",
+  "businessOnboardingFailedDays": "만료 후 {days}일",
+  "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
+  "businessOnboardingFailedRetainedConfig": "이전 설정이 보존되어 클라이언트를 계속 사용할 수 있습니다."
 }

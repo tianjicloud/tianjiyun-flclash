@@ -1638,5 +1638,19 @@
   "businessSystemProxyHttp": "Системный прокси (HTTP)",
   "businessDnsModeDescription": "Выбор способа формирования DNS-ответов.",
   "businessMoreVpnSettings": "Другие настройки VPN",
-  "businessMoreVpnDescription": "Открыть остальные параметры интерфейса VPN."
+  "businessMoreVpnDescription": "Открыть остальные параметры интерфейса VPN.",
+  "businessOnboardingFailedExpiredTitle": "Срок действия подписки истёк",
+  "businessOnboardingFailedExpiredDescription": "Срок действия плана истёк {date}. Продлите его и повторно проверьте ту же ссылку.",
+  "@businessOnboardingFailedExpiredDescription": {"placeholders":{"date":{"type":"String"}}},
+  "businessOnboardingFailedStep": "Шаг {step} из {total} · Проверка подписки",
+  "@businessOnboardingFailedStep": {"placeholders":{"step":{"type":"int"},"total":{"type":"int"}}},
+  "businessOnboardingFailedRenew": "Продлить",
+  "businessOnboardingFailedRetry": "Проверить снова",
+  "businessOnboardingFailedChangeLink": "Использовать другую ссылку подписки",
+  "businessOnboardingFailedPastedUrl": "Вставленная ссылка",
+  "businessOnboardingFailedPackage": "План",
+  "businessOnboardingFailedStatus": "Статус",
+  "businessOnboardingFailedDays": "Истёк {days} дн. назад",
+  "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
+  "businessOnboardingFailedRetainedConfig": "Предыдущая конфигурация сохранена, клиент продолжает работать."
 }

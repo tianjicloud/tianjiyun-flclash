@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -38,6 +40,14 @@ class OnboardingView extends ConsumerWidget {
         child: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {
+              if (BusinessTheme.of(context) &&
+                  context.isMobileView &&
+                  state is OnboardingFailed) {
+                return _BusinessFailedMobileView(
+                  failure: state.failure,
+                  url: state.url,
+                );
+              }
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -895,50 +905,6 @@ class _FailedView extends ConsumerWidget {
         pasteAgain,
       ),
     };
-    if (BusinessTheme.of(context) &&
-        context.isMobileView &&
-        failure == ImportFailure.expired) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Center(
-            child: GlyphIcon(
-              AppGlyphs.warning,
-              size: 56,
-              color: BusinessPalette.warning,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.title3.of(context, emphasized: true),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            description,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body
-                .of(context)
-                .copyWith(color: context.colorScheme.onSurfaceVariant),
-          ),
-          const SizedBox(height: 32),
-          BusinessPrimaryButton(
-            label: context.appLocalizations.businessImportRenew,
-            width: double.infinity,
-            height: 48,
-            onPressed: primaryAction,
-          ),
-          const SizedBox(height: 12),
-          BusinessSecondaryButton(
-            label: context.appLocalizations.businessImportAgain,
-            width: double.infinity,
-            height: 48,
-            onPressed: secondaryAction,
-          ),
-        ],
-      );
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -975,6 +941,388 @@ class _FailedView extends ConsumerWidget {
     );
   }
 }
+
+class _BusinessFailedMobileView extends ConsumerWidget {
+  const _BusinessFailedMobileView({required this.failure, this.url});
+
+  final ImportFailure failure;
+  final String? url;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final step = _onboardingActiveStep(OnboardingFailed(failure, url: url));
+    final profiles = ref.watch(profilesProvider);
+    final profile = profiles
+        .where((item) => url != null && item.url == url)
+        .firstOrNull;
+    final info = profile?.subscriptionInfo;
+    final expiryDate = info?.expireDate;
+    final title = failure == ImportFailure.expired
+        ? l10n.businessOnboardingFailedExpiredTitle
+        : switch (failure) {
+            ImportFailure.expired => l10n.onboardingFailureExpiredTitle,
+            ImportFailure.unreachable => l10n.onboardingFailureUnreachableTitle,
+            ImportFailure.empty => l10n.onboardingFailureEmptyTitle,
+            ImportFailure.notSubscription =>
+              l10n.onboardingFailureNotSubscriptionTitle,
+            ImportFailure.unknown => l10n.onboardingFailureUnknownTitle,
+          };
+    final description = failure == ImportFailure.expired && expiryDate != null
+        ? l10n.businessOnboardingFailedExpiredDescription(expiryDate.show)
+        : switch (failure) {
+            ImportFailure.expired => l10n.onboardingFailureExpiredDescription,
+            ImportFailure.unreachable =>
+              l10n.onboardingFailureUnreachableDescription,
+            ImportFailure.empty => l10n.onboardingFailureEmptyDescription,
+            ImportFailure.notSubscription =>
+              l10n.onboardingFailureNotSubscriptionDescription,
+            ImportFailure.unknown => l10n.onboardingFailureUnknownDescription,
+          };
+    void retry() {
+      if (url == null) {
+        ref.read(onboardingProvider.notifier).welcome();
+      } else {
+        unawaited(_importUrl(ref, url!));
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _BusinessFailureProgress(step: step),
+                const SizedBox(height: 40),
+                DecoratedBox(
+                  decoration: ShapeDecoration(
+                    color: BusinessPalette.warningContainerFor(
+                      colorScheme.brightness,
+                    ),
+                    shape: AppShape.all(18),
+                  ),
+                  child: const SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: Center(
+                      child: GlyphIcon(
+                        AppGlyphs.warningCircle,
+                        size: 28,
+                        color: BusinessPalette.warning,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  title,
+                  style: AppTextStyle.custom(
+                    context,
+                    size: 26,
+                    leading: 32,
+                    weight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  description,
+                  style: AppTextStyle.custom(
+                    context,
+                    size: 15,
+                    leading: 25,
+                  ).copyWith(color: colorScheme.onSurfaceVariant),
+                ),
+                const SizedBox(height: 24),
+                _BusinessFailureSubscriptionCard(
+                  url: url,
+                  profile: profile,
+                  expiryDate: expiryDate,
+                ),
+                if (profiles.isNotEmpty) ...[
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    width: double.infinity,
+                    child: DecoratedBox(
+                      decoration: ShapeDecoration(
+                        color: colorScheme.surfaceContainerHighest,
+                        shape: AppShape.all(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 12,
+                        ),
+                        child: Text(
+                          l10n.businessOnboardingFailedRetainedConfig,
+                          style: AppTextStyle.custom(
+                            context,
+                            size: 13,
+                            leading: 19,
+                          ).copyWith(color: colorScheme.onSurfaceVariant),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(20, 8, 20, 12 + context.bottomInset),
+          child: Column(
+            children: [
+              if (failure == ImportFailure.expired && userPanelUrl.isNotEmpty)
+                _BusinessFailureButton(
+                  label: l10n.businessOnboardingFailedRenew,
+                  primary: true,
+                  onPressed: () => dialogs.openUrl(userPanelUrl),
+                ),
+              if (failure == ImportFailure.expired && userPanelUrl.isNotEmpty)
+                const SizedBox(height: 10),
+              _BusinessFailureButton(
+                label: l10n.businessOnboardingFailedRetry,
+                onPressed: retry,
+              ),
+              const SizedBox(height: 2),
+              TextButton(
+                onPressed: () =>
+                    ref.read(onboardingProvider.notifier).welcome(),
+                child: Text(
+                  l10n.businessOnboardingFailedChangeLink,
+                  style: AppTextStyle.custom(
+                    context,
+                    size: 14,
+                    leading: 20,
+                  ).copyWith(color: colorScheme.primary),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _BusinessFailureProgress extends StatelessWidget {
+  const _BusinessFailureProgress({required this.step});
+
+  final int step;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            for (var index = 0; index < 3; index++) ...[
+              if (index > 0) const SizedBox(width: 6),
+              Expanded(
+                child: DecoratedBox(
+                  decoration: ShapeDecoration(
+                    color: index <= step
+                        ? context.colorScheme.primary
+                        : context.colorScheme.outlineVariant,
+                    shape: AppShape.all(2),
+                  ),
+                  child: const SizedBox(height: 4),
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.businessOnboardingFailedStep(step + 1, 3),
+          style: BusinessText.metaLabel(
+            context,
+          ).copyWith(color: context.colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+}
+
+class _BusinessFailureSubscriptionCard extends StatelessWidget {
+  const _BusinessFailureSubscriptionCard({
+    required this.url,
+    required this.profile,
+    required this.expiryDate,
+  });
+
+  final String? url;
+  final Profile? profile;
+  final DateTime? expiryDate;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final info = profile?.subscriptionInfo;
+    final expired = expiryDate != null && expiryDate!.isBefore(DateTime.now());
+    final days = expired ? DateTime.now().difference(expiryDate!).inDays : null;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: context.colorScheme.surface,
+        shape: AppShape.all(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.businessOnboardingFailedPastedUrl,
+              style: BusinessText.metaLabel(
+                context,
+              ).copyWith(color: context.colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              url == null ? '' : maskTianjiSubscriptionUrl(url!),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyle.custom(context, size: 12.5, leading: 18)
+                  .toJetBrainsMono
+                  .copyWith(color: context.colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 14),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: context.colorScheme.outlineVariant,
+              ),
+              child: const SizedBox(width: double.infinity, height: 1),
+            ),
+            if (info != null && profile!.label.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              _BusinessFailureValueRow(
+                label: l10n.businessOnboardingFailedPackage,
+                value: profile!.label,
+              ),
+            ],
+            if (expired && days != null) ...[
+              const SizedBox(height: 8),
+              _BusinessFailureValueRow(
+                label: l10n.businessOnboardingFailedStatus,
+                value: l10n.businessOnboardingFailedDays(days),
+                valueColor: BusinessPalette.warningForegroundFor(
+                  context.colorScheme.brightness,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BusinessFailureValueRow extends StatelessWidget {
+  const _BusinessFailureValueRow({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
+
+  final String label;
+  final String value;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Expanded(
+        child: Text(
+          label,
+          style: AppTextStyle.subheadline
+              .of(context)
+              .copyWith(color: context.colorScheme.onSurfaceVariant),
+        ),
+      ),
+      Text(
+        value,
+        style: AppTextStyle.custom(
+          context,
+          size: 14,
+          leading: 20,
+          weight: FontWeight.w600,
+        ).copyWith(color: valueColor ?? context.colorScheme.onSurface),
+      ),
+    ],
+  );
+}
+
+class _BusinessFailureButton extends StatelessWidget {
+  const _BusinessFailureButton({
+    required this.label,
+    required this.onPressed,
+    this.primary = false,
+  });
+
+  final String label;
+  final VoidCallback onPressed;
+  final bool primary;
+
+  @override
+  Widget build(BuildContext context) {
+    final shape = AppShape.all(14);
+    if (primary) {
+      return FilledButton(
+        onPressed: onPressed,
+        style: ButtonStyle.from(
+          backgroundColor: Colors.transparent,
+          foregroundColor: BusinessPalette.onBlue,
+          shape: shape,
+          fixedSize: const Size(double.infinity, 54),
+          minimumSize: const Size(double.infinity, 54),
+          maximumSize: const Size(double.infinity, 54),
+          padding: EdgeInsets.zero,
+          tapTargetSize: TapTargetSize.shrinkWrap,
+          backgroundBuilder: (context, states, child) => DecoratedBox(
+            decoration: ShapeDecoration(
+              gradient: BusinessPalette.gradient(context.colorScheme),
+              shape: shape,
+            ),
+            child: child,
+          ),
+        ),
+        child: Text(
+          label,
+          style: BusinessText.actionLabel(
+            context,
+          ).copyWith(color: BusinessPalette.onBlue),
+        ),
+      );
+    }
+    return FilledButton(
+      onPressed: onPressed,
+      style: ButtonStyle.from(
+        backgroundColor: context.colorScheme.surface,
+        foregroundColor: context.colorScheme.onSurface,
+        shape: shape,
+        fixedSize: const Size(double.infinity, 54),
+        minimumSize: const Size(double.infinity, 54),
+        maximumSize: const Size(double.infinity, 54),
+        padding: EdgeInsets.zero,
+        tapTargetSize: TapTargetSize.shrinkWrap,
+      ),
+      child: Text(label, style: BusinessText.actionLabel(context)),
+    );
+  }
+}
+
+int _onboardingActiveStep(OnboardingState state) => switch (state) {
+  OnboardingWelcome() || OnboardingDone() => 0,
+  OnboardingConfirm() || OnboardingImporting() || OnboardingFailed() => 1,
+  _ => 2,
+};
 
 class _ConnectView extends ConsumerStatefulWidget {
   const _ConnectView();

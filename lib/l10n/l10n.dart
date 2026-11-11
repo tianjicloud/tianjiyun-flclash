@@ -13362,6 +13362,116 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `This subscription has expired`
+  String get businessOnboardingFailedExpiredTitle {
+    return Intl.message(
+      'This subscription has expired',
+      name: 'businessOnboardingFailedExpiredTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This plan expired on {date}. Renew it, then validate the same link again.`
+  String businessOnboardingFailedExpiredDescription(String date) {
+    return Intl.message(
+      'This plan expired on $date. Renew it, then validate the same link again.',
+      name: 'businessOnboardingFailedExpiredDescription',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Step {step} of {total} · Validate subscription`
+  String businessOnboardingFailedStep(int step, int total) {
+    return Intl.message(
+      'Step $step of $total · Validate subscription',
+      name: 'businessOnboardingFailedStep',
+      desc: '',
+      args: [step, total],
+    );
+  }
+
+  /// `Renew now`
+  String get businessOnboardingFailedRenew {
+    return Intl.message(
+      'Renew now',
+      name: 'businessOnboardingFailedRenew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revalidate`
+  String get businessOnboardingFailedRetry {
+    return Intl.message(
+      'Revalidate',
+      name: 'businessOnboardingFailedRetry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use a different subscription link`
+  String get businessOnboardingFailedChangeLink {
+    return Intl.message(
+      'Use a different subscription link',
+      name: 'businessOnboardingFailedChangeLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The link you pasted`
+  String get businessOnboardingFailedPastedUrl {
+    return Intl.message(
+      'The link you pasted',
+      name: 'businessOnboardingFailedPastedUrl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plan`
+  String get businessOnboardingFailedPackage {
+    return Intl.message(
+      'Plan',
+      name: 'businessOnboardingFailedPackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get businessOnboardingFailedStatus {
+    return Intl.message(
+      'Status',
+      name: 'businessOnboardingFailedStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expired {days} days ago`
+  String businessOnboardingFailedDays(int days) {
+    return Intl.message(
+      'Expired $days days ago',
+      name: 'businessOnboardingFailedDays',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `Your previous configuration is saved, and the client can continue to work.`
+  String get businessOnboardingFailedRetainedConfig {
+    return Intl.message(
+      'Your previous configuration is saved, and the client can continue to work.',
+      name: 'businessOnboardingFailedRetainedConfig',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

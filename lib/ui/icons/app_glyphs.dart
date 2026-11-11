@@ -409,6 +409,12 @@ abstract final class AppGlyphs {
     GlyphCircle(12, 16.2, 1.4, role: GlyphRole.detail, solid: true),
   ]);
 
+  static const warningCircle = Glyph([
+    GlyphCircle(12, 12, 9.25),
+    GlyphPolyline([GlyphVertex(12, 7), GlyphVertex(12, 13)]),
+    GlyphCircle(12, 17, 1, role: GlyphRole.detail, solid: true),
+  ]);
+
   static const error = Glyph([
     GlyphCircle(12, 12, 8.8),
     GlyphPolyline([
