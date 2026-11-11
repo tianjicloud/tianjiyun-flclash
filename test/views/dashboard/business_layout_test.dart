@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:prism_ui/prism_ui.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/common/residential.dart';
@@ -8,6 +10,7 @@ import 'package:fl_clash/common/service_probe.dart' show routedOutbound;
 import 'package:fl_clash/core/traffic/service.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/ip_quality.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/selection_check.dart';
 import 'package:fl_clash/providers/selection_verification.dart';
@@ -187,6 +190,7 @@ void main() {
           (_, _) => SelectionVerdict.consistent,
         ),
         outboundIpProbeProvider.overrideWith(_VerifiedIpProbe.new),
+        ipQualityProvider.overrideWith((_, _) => Completer<IpQuality>().future),
       ],
     );
     addTearDown(verifiedContainer.dispose);
