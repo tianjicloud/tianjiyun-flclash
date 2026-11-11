@@ -15,6 +15,11 @@ import 'package:fl_clash/views/config/sniffer.dart';
 import 'package:fl_clash/views/config/tun.dart';
 import 'package:fl_clash/views/profiles/edit.dart';
 import 'package:fl_clash/views/profiles/preview.dart';
+import 'package:fl_clash/views/profiles/custom/custom_proxies.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,6 +45,66 @@ void _push(BuildContext context, Widget view) {
     return;
   }
   BaseNavigator.push(context, view);
+}
+
+enum _CustomEditorTab { proxies, groups, rules, resources }
+
+class _EditorTabButton extends StatelessWidget {
+  const _EditorTabButton({
+    required this.item,
+    required this.selected,
+    required this.onPressed,
+  });
+
+  final BusinessSegment<_CustomEditorTab> item;
+  final bool selected;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return PressRegion(
+      shape: AppShape.none,
+      overlay: PressRegion.hoverOverlay,
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: IntrinsicWidth(
+          child: SizedBox(
+            height: 42,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    item.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        BusinessText.customEditorTab(
+                          context,
+                          selected: selected,
+                        ).copyWith(
+                          color: selected
+                              ? BusinessPalette.blue
+                              : context.colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: 2,
+                  child: ColoredBox(
+                    color: selected ? BusinessPalette.blue : Colors.transparent,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 Widget _sectionRow(
@@ -103,6 +168,8 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
   List<Object?>? _loadedInputs;
   var _edited = false;
   var _importing = false;
+  var _editorTab = _CustomEditorTab.proxies;
+  var _resourceTab = 0;
 
   @override
   void initState() {
@@ -250,6 +317,88 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
     }
   }
 
+  String _countedLabel(String label, int? count) =>
+      count == null || count <= 0 ? label : '$label · $count';
+
+  Widget _editorTabs(
+    BuildContext context,
+    List<BusinessSegment<_CustomEditorTab>> items,
+  ) => DecoratedBox(
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: context.colorScheme.outlineVariant),
+      ),
+    ),
+    child: Row(
+      spacing: 20,
+      children: [
+        for (final item in items)
+          _EditorTabButton(
+            item: item,
+            selected: _editorTab == item.value,
+            onPressed: () => setState(() => _editorTab = item.value),
+          ),
+      ],
+    ),
+  );
+
+  List<PopupMenuItem> _desktopTitleMenu(AppLocalizations appLocalizations) => [
+    PopupMenuItem(
+      glyph: AppGlyphs.textShort,
+      label: appLocalizations.rename,
+      onPressed: _handleRename,
+    ),
+    PopupMenuItem(
+      glyph: AppGlyphs.cloudDownload,
+      label: appLocalizations.importUrl,
+      onPressed: _handleImportFromUrl,
+    ),
+    PopupMenuItem(
+      glyph: AppGlyphs.importFile,
+      label: appLocalizations.importFile,
+      onPressed: _handleImportFromFile,
+    ),
+  ];
+
+  Widget _desktopTab(int profileId) => switch (_editorTab) {
+    _CustomEditorTab.proxies => const CustomProxiesView(embedded: true),
+    _CustomEditorTab.groups => CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: _groups,
+        ),
+      ],
+    ),
+    _CustomEditorTab.rules => CustomRulesView(profileId),
+    _CustomEditorTab.resources => Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+          child: BusinessSegmented<int>(
+            selected: _resourceTab,
+            onSelected: (tab) => setState(() => _resourceTab = tab),
+            items: [
+              BusinessSegment(
+                value: 0,
+                label: context.appLocalizations.providers,
+              ),
+              BusinessSegment(
+                value: 1,
+                label: context.appLocalizations.dialerProxy,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: _resourceTab == 0
+              ? CustomProvidersView(profileId)
+              : CustomProxyDialersView(profileId),
+        ),
+      ],
+    ),
+  };
+
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
@@ -259,6 +408,21 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
         profileId,
       ).select((state) => state?.realLabel ?? _initialProfile?.realLabel ?? ''),
     );
+    final isBusinessDesktop =
+        BusinessTheme.of(context) &&
+        system.isDesktop &&
+        MediaQuery.sizeOf(context).width >= 900;
+    final proxyCount = ref.watch(customProxiesProvider).value?.length;
+    final groupCount = ref.watch(
+      proxyGroupsProvider(profileId).select((state) => state.value?.length),
+    );
+    final ruleCount = ref.watch(
+      profileRulesProvider(profileId).select((state) => state.value?.length),
+    );
+    final providers = ref.watch(customReferencedProvidersProvider(profileId));
+    final dialerCount = ref.watch(_dialerCount(profileId));
+    final resourceCount =
+        providers.proxy.length + providers.rule.length + dialerCount;
     _loaded =
         _loaded ||
         (ref.watch(
@@ -283,41 +447,90 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
         child: ProfileIdProvider(
           profileId: profileId,
           child: Scaffold(
-            title: label,
+            title: isBusinessDesktop ? null : label,
+            titleWidget: isBusinessDesktop
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${appLocalizations.businessSubscriptions} › $label',
+                            style: BusinessText.metaLabel(context).copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            label,
+                            style: BusinessText.customEditorTitle(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                      PopupAnchor(
+                        placement: PopupPlacement.overAnchorStart,
+                        bare: true,
+                        targetBuilder: (open) => IconButton(
+                          icon: const GlyphIcon(AppGlyphs.chevronDown),
+                          tooltip: label,
+                          onPressed: open,
+                        ),
+                        popupBuilder: (_) => PopupMenu(
+                          items: _desktopTitleMenu(appLocalizations),
+                        ),
+                      ),
+                    ],
+                  )
+                : null,
             titleMenuItems: [
               PopupMenuItem(
                 glyph: AppGlyphs.textShort,
                 label: appLocalizations.rename,
                 onPressed: _handleRename,
               ),
-              PopupMenuItem(
-                glyph: AppGlyphs.eye,
-                label: appLocalizations.runtimeConfig,
-                onPressed: _handlePreview,
-              ),
+              if (!isBusinessDesktop)
+                PopupMenuItem(
+                  glyph: AppGlyphs.eye,
+                  label: appLocalizations.runtimeConfig,
+                  onPressed: _handlePreview,
+                ),
             ],
+            showLeading: !isBusinessDesktop,
+            businessTitleInset: isBusinessDesktop,
             isLoading: _importing,
             actions: [
-              PopupAnchor(
-                targetBuilder: (open) => FilledButton(
-                  onPressed: _loaded && !_importing ? open : null,
-                  child: Text(appLocalizations.import),
+              if (isBusinessDesktop)
+                BusinessSecondaryButton(
+                  label: appLocalizations.customPreviewMerged,
+                  width: 170,
+                  onPressed: _handlePreview,
+                )
+              else
+                PopupAnchor(
+                  targetBuilder: (open) => FilledButton(
+                    onPressed: _loaded && !_importing ? open : null,
+                    child: Text(appLocalizations.import),
+                  ),
+                  popupBuilder: (_) => PopupMenu(
+                    items: [
+                      PopupMenuItem(
+                        glyph: AppGlyphs.cloudDownload,
+                        label: appLocalizations.importUrl,
+                        onPressed: _handleImportFromUrl,
+                      ),
+                      PopupMenuItem(
+                        glyph: AppGlyphs.importFile,
+                        label: appLocalizations.importFile,
+                        onPressed: _handleImportFromFile,
+                      ),
+                    ],
+                  ),
                 ),
-                popupBuilder: (_) => PopupMenu(
-                  items: [
-                    PopupMenuItem(
-                      glyph: AppGlyphs.cloudDownload,
-                      label: appLocalizations.importUrl,
-                      onPressed: _handleImportFromUrl,
-                    ),
-                    PopupMenuItem(
-                      glyph: AppGlyphs.importFile,
-                      label: appLocalizations.importFile,
-                      onPressed: _handleImportFromFile,
-                    ),
-                  ],
-                ),
-              ),
             ],
             body: NullStatusSwitcher(
               isLoading: !_loaded,
@@ -332,6 +545,47 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
                       final sliverPadding = const EdgeInsets.symmetric(
                         horizontal: 16,
                       ).copyWith(bottom: 24 + context.bottomInset);
+                      if (isBusinessDesktop) {
+                        return Column(
+                          children: [
+                            SizedBox(height: context.contentTopPadding),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                              child: _editorTabs(context, [
+                                BusinessSegment(
+                                  value: _CustomEditorTab.proxies,
+                                  label: _countedLabel(
+                                    appLocalizations.proxies,
+                                    proxyCount,
+                                  ),
+                                ),
+                                BusinessSegment(
+                                  value: _CustomEditorTab.groups,
+                                  label: _countedLabel(
+                                    appLocalizations.customGroupsLabel,
+                                    groupCount,
+                                  ),
+                                ),
+                                BusinessSegment(
+                                  value: _CustomEditorTab.rules,
+                                  label: _countedLabel(
+                                    appLocalizations.rules,
+                                    ruleCount,
+                                  ),
+                                ),
+                                BusinessSegment(
+                                  value: _CustomEditorTab.resources,
+                                  label: _countedLabel(
+                                    appLocalizations.customProvidersAndDialers,
+                                    resourceCount,
+                                  ),
+                                ),
+                              ]),
+                            ),
+                            Expanded(child: _desktopTab(profileId)),
+                          ],
+                        );
+                      }
                       if (system.isDesktop && constraints.maxWidth >= 900) {
                         return Row(
                           children: [

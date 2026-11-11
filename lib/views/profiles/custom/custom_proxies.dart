@@ -9,6 +9,13 @@ import 'package:fl_clash/models/models.dart' hide FileInfo;
 import 'package:fl_clash/pages/editor.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_style.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show
+        BusinessPrimaryButton,
+        BusinessSecondaryButton,
+        DashboardChip,
+        DashboardChipTone;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -194,7 +201,9 @@ enum _OptionSection {
 }
 
 class CustomProxiesView extends ConsumerStatefulWidget {
-  const CustomProxiesView({super.key});
+  const CustomProxiesView({super.key, this.embedded = false});
+
+  final bool embedded;
 
   @override
   ConsumerState createState() => _CustomProxiesViewState();
@@ -208,6 +217,7 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
   final _searchTexts = Expando<String>();
   var _query = SearchQuery('');
   var _selected = <int>{};
+  var _showSearch = false;
 
   @override
   void initState() {
@@ -387,7 +397,63 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
     );
   }
 
+  Future<void> _handleImportFromLink() async {
+    final appLocalizations = context.appLocalizations;
+    final core = ref.read(coreHandlerProvider);
+    final definition = await dialogs.showCommonDialog<Map<String, dynamic>>(
+      child: _ShareLinkDialog(
+        initialLink: '',
+        read: (text) async {
+          final definitions = await core.decodeShareLinks([text]);
+          if (definitions.singleOrNull?.length != 1) {
+            throw MessageException(appLocalizations.shareLinksInvalid);
+          }
+          return definitions.single.single;
+        },
+      ),
+    );
+    if (definition != null && mounted) {
+      ref
+          .read(customProxiesProvider.notifier)
+          .put(CustomProxy(id: snowflake.id, definition: definition));
+    }
+  }
+
   Widget _buildNode(
+    CustomProxy proxy, {
+    required Set<int> selected,
+    required ItemPosition position,
+    required List<ProxyGroup> groups,
+    int? dragIndex,
+  }) {
+    final isEditing = selected.isNotEmpty;
+    final isSelected = selected.contains(proxy.id);
+    return MemoBuilder(
+      key: ValueKey(proxy.id),
+      inputs: [proxy, position, dragIndex, isEditing, isSelected, groups],
+      builder: (_) {
+        final item = ItemPositionProvider(
+          position: position,
+          child: _NodeItem(
+            proxy: proxy,
+            isEditing: isEditing,
+            isSelected: isSelected,
+            groupCount: groups
+                .where((group) => group.proxies?.contains(proxy.name) ?? false)
+                .length,
+            onSelected: () => _handleToggleSelected(proxy.id),
+            onPressed: () => _handleAddOrUpdate(proxy: proxy),
+          ),
+        );
+        if (dragIndex == null) {
+          return item;
+        }
+        return ReorderDragStartListener(index: dragIndex, child: item);
+      },
+    );
+  }
+
+  Widget _buildStandardNode(
     CustomProxy proxy, {
     required Set<int> selected,
     required ItemPosition position,
@@ -401,7 +467,7 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
       builder: (_) {
         final item = ItemPositionProvider(
           position: position,
-          child: _NodeItem(
+          child: _StandardNodeItem(
             proxy: proxy,
             isEditing: isEditing,
             isSelected: isSelected,
@@ -409,10 +475,9 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
             onPressed: () => _handleAddOrUpdate(proxy: proxy),
           ),
         );
-        if (dragIndex == null) {
-          return item;
-        }
-        return ReorderDragStartListener(index: dragIndex, child: item);
+        return dragIndex == null
+            ? item
+            : ReorderDragStartListener(index: dragIndex, child: item);
       },
     );
   }
@@ -421,6 +486,14 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     final proxies = ref.watch(customProxiesProvider).value;
+    final profileId = ProfileIdProvider.of(context)?.profileId;
+    final groups = profileId == null
+        ? const <ProxyGroup>[]
+        : ref.watch(
+            proxyGroupsProvider(
+              profileId,
+            ).select((state) => state.value ?? const <ProxyGroup>[]),
+          );
     final all = proxies ?? const <CustomProxy>[];
     final visible = all
         .whereMatches(
@@ -436,72 +509,194 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
     });
     final visibleIds = {for (final proxy in visible) proxy.id};
     final visibleSelected = selected.intersection(visibleIds);
-    return PopGuard(
-      onPop: selected.isEmpty
-          ? null
-          : (_) {
-              setState(() {
-                _selected = {};
-              });
-              return false;
-            },
-      child: Scaffold(
-        title: appLocalizations.proxies,
-        searchState: AppBarSearchState(onSearch: _handleSearch),
-        actions: [
-          if (selected.isEmpty)
-            ListEditorAddAction(
-              onAdd: _handleAddOrUpdate,
-              onQuickEdit: _handleQuickEdit,
+    if (!widget.embedded) {
+      return PopGuard(
+        onPop: selected.isEmpty
+            ? null
+            : (_) {
+                setState(() => _selected = {});
+                return false;
+              },
+        child: Scaffold(
+          title: appLocalizations.proxies,
+          searchState: AppBarSearchState(onSearch: _handleSearch),
+          actions: [
+            if (selected.isEmpty)
+              ListEditorAddAction(
+                onAdd: _handleAddOrUpdate,
+                onQuickEdit: _handleQuickEdit,
+              ),
+          ],
+          selectionActions: selected.isEmpty
+              ? const []
+              : [
+                  IconButtonData(
+                    glyph: AppGlyphs.delete,
+                    onPressed: visibleSelected.isEmpty
+                        ? null
+                        : () => _handleDelete(
+                            visibleSelected,
+                            kept: selected.difference(visibleSelected),
+                          ),
+                    tooltip: appLocalizations.delete,
+                  ),
+                  IconButtonData(
+                    glyph: AppGlyphs.selectAll,
+                    onPressed: () => _handleSelectAll(visibleIds),
+                    tooltip: appLocalizations.selectAll,
+                  ),
+                ],
+          body: NullStatusSwitcher(
+            isLoading: proxies == null,
+            isEmpty: visible.isEmpty,
+            isSearching: _query.isNotEmpty,
+            nullStatus: NullStatus(
+              label: appLocalizations.nullTip(appLocalizations.proxies),
+              illustration: NullStatusIllustration.proxies,
+              action: TonalButton(
+                size: TonalButtonSize.bar,
+                glyph: AppGlyphs.addCircle,
+                label: appLocalizations.add,
+                onPressed: _handleAddOrUpdate,
+              ),
             ),
-        ],
-        selectionActions: selected.isEmpty
-            ? const []
-            : [
-                IconButtonData(
-                  glyph: AppGlyphs.delete,
-                  onPressed: visibleSelected.isEmpty
-                      ? null
-                      : () => _handleDelete(
-                          visibleSelected,
-                          kept: selected.difference(visibleSelected),
-                        ),
-                  tooltip: appLocalizations.delete,
-                ),
-                IconButtonData(
-                  glyph: AppGlyphs.selectAll,
-                  onPressed: () => _handleSelectAll(visibleIds),
-                  tooltip: appLocalizations.selectAll,
-                ),
-              ],
-        body: NullStatusSwitcher(
-          isLoading: proxies == null,
-          isEmpty: visible.isEmpty,
-          isSearching: _query.isNotEmpty,
-          nullStatus: NullStatus(
-            label: appLocalizations.nullTip(appLocalizations.proxies),
-            illustration: NullStatusIllustration.proxies,
-            action: TonalButton(
-              size: TonalButtonSize.bar,
-              glyph: AppGlyphs.addCircle,
-              label: appLocalizations.add,
-              onPressed: _handleAddOrUpdate,
+            child: Builder(
+              builder: (context) => CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: context.contentTopPadding),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(
+                      16,
+                      0,
+                      16,
+                      16 + context.bottomInset,
+                    ),
+                    sliver: reorderable
+                        ? SliverPrismReorderableList(
+                            itemCount: visible.length,
+                            itemBuilder: (_, index) => _buildStandardNode(
+                              visible[index],
+                              selected: selected,
+                              position: ItemPosition.get(index, visible.length),
+                              dragIndex: index,
+                            ),
+                            proxyDecorator: (child, index, animation) =>
+                                commonProxyDecorator(
+                                  _buildStandardNode(
+                                    visible[index],
+                                    selected: selected,
+                                    position: ItemPosition.get(
+                                      index,
+                                      visible.length,
+                                    ),
+                                    dragIndex: index,
+                                  ),
+                                  index,
+                                  animation,
+                                ),
+                            onReorderItem: _handleReorder,
+                          )
+                        : SliverPrismList(
+                            itemCount: visible.length,
+                            itemBuilder: (_, index) => _buildStandardNode(
+                              visible[index],
+                              selected: selected,
+                              position: ItemPosition.get(index, visible.length),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
-          child: Builder(
-            builder: (context) => CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(height: context.contentTopPadding),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.fromLTRB(
-                    16,
-                    0,
-                    16,
-                    16 + context.bottomInset,
+        ),
+      );
+    }
+    final content = NullStatusSwitcher(
+      isLoading: proxies == null,
+      isEmpty: visible.isEmpty,
+      isSearching: _query.isNotEmpty,
+      nullStatus: NullStatus(
+        label: appLocalizations.nullTip(appLocalizations.proxies),
+        illustration: NullStatusIllustration.proxies,
+        action: TonalButton(
+          size: TonalButtonSize.bar,
+          glyph: AppGlyphs.addCircle,
+          label: appLocalizations.add,
+          onPressed: _handleAddOrUpdate,
+        ),
+      ),
+      child: Builder(
+        builder: (context) => CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: widget.embedded ? 12 : context.contentTopPadding,
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(28, 0, 28, 16 + context.bottomInset),
+              sliver: SliverMainAxisGroup(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
+                      decoration: ShapeDecoration(
+                        color: BusinessPalette.customEditorCardFor(
+                          context.colorScheme.brightness,
+                        ),
+                        shape: AppShape.top(BusinessPalette.cardRadius),
+                      ),
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          Text(
+                            appLocalizations.customProxyCardTitle,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          const Spacer(),
+                          if (widget.embedded && selected.isEmpty) ...[
+                            if (_showSearch)
+                              SizedBox(
+                                width: 180,
+                                child: TextField(
+                                  onChanged: _handleSearch,
+                                  decoration: InputDecoration(
+                                    hintText: appLocalizations.search,
+                                  ),
+                                ),
+                              )
+                            else
+                              IconButton(
+                                icon: const GlyphIcon(AppGlyphs.search),
+                                tooltip: appLocalizations.search,
+                                onPressed: () =>
+                                    setState(() => _showSearch = true),
+                              ),
+                            BusinessSecondaryButton(
+                              label: appLocalizations.quickEdit,
+                              width: 92,
+                              onPressed: _handleQuickEdit,
+                            ),
+                          ],
+                          BusinessSecondaryButton(
+                            label: appLocalizations.customImportFromLink,
+                            width: 126,
+                            onPressed: _handleImportFromLink,
+                          ),
+                          BusinessPrimaryButton(
+                            label: appLocalizations.add,
+                            glyph: AppGlyphs.add,
+                            width: 108,
+                            onPressed: _handleAddOrUpdate,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  sliver: reorderable
+                  reorderable
                       ? SliverPrismReorderableList(
                           itemCount: visible.length,
                           itemBuilder: (_, index) => _buildNode(
@@ -509,6 +704,7 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
                             selected: selected,
                             position: ItemPosition.get(index, visible.length),
                             dragIndex: index,
+                            groups: groups,
                           ),
                           proxyDecorator: (child, index, animation) =>
                               commonProxyDecorator(
@@ -520,6 +716,7 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
                                     visible.length,
                                   ),
                                   dragIndex: index,
+                                  groups: groups,
                                 ),
                                 index,
                                 animation,
@@ -532,26 +729,58 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
                             visible[index],
                             selected: selected,
                             position: ItemPosition.get(index, visible.length),
+                            groups: groups,
                           ),
                         ),
-                ),
-              ],
+                  SliverToBoxAdapter(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
+                      decoration: ShapeDecoration(
+                        color: BusinessPalette.customEditorCardFor(
+                          context.colorScheme.brightness,
+                        ),
+                        shape: AppShape.vertical(
+                          top: AppCorner.none,
+                          bottom: BusinessPalette.cardRadius,
+                        ),
+                      ),
+                      child: Text(
+                        appLocalizations.customProxySubscriptionNote,
+                        style: BusinessText.metaLabel(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
+    );
+    return PopGuard(
+      onPop: selected.isEmpty
+          ? null
+          : (_) {
+              setState(() {
+                _selected = {};
+              });
+              return false;
+            },
+      child: content,
     );
   }
 }
 
-class _NodeItem extends ConsumerWidget {
+class _StandardNodeItem extends ConsumerWidget {
   final CustomProxy proxy;
   final bool isEditing;
   final bool isSelected;
   final VoidCallback onSelected;
   final VoidCallback onPressed;
 
-  const _NodeItem({
+  const _StandardNodeItem({
     required this.proxy,
     required this.isEditing,
     required this.isSelected,
@@ -589,6 +818,138 @@ class _NodeItem extends ConsumerWidget {
             onChanged: (_) => onSelected(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _NodeItem extends ConsumerWidget {
+  final CustomProxy proxy;
+  final bool isEditing;
+  final bool isSelected;
+  final int groupCount;
+  final VoidCallback onSelected;
+  final VoidCallback onPressed;
+
+  const _NodeItem({
+    required this.proxy,
+    required this.isEditing,
+    required this.isSelected,
+    required this.groupCount,
+    required this.onSelected,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final issues = ref
+        .watch(
+          customProxyListIssuesProvider.select(
+            (state) => SelectValue(state[proxy.id] ?? const <CustomIssue>[]),
+          ),
+        )
+        .value;
+    final match = RegExp(
+      r'^([A-Z]{2})\s*[·|—-]\s*(.*)$',
+    ).firstMatch(proxy.name);
+    final host = proxy.definition['server']?.toString() ?? '';
+    final port = proxy.definition['port']?.toString();
+    final address = port == null || port.isEmpty ? host : '$host:$port';
+    final addressStyle = BusinessText.metaLabel(context).copyWith(
+      fontFamily: 'JetBrainsMono',
+      color: context.colorScheme.onSurfaceVariant,
+    );
+    return SizedBox(
+      height: 49,
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: isSelected
+              ? context.colorScheme.secondaryContainer
+              : BusinessPalette.customEditorCardFor(
+                  context.colorScheme.brightness,
+                ),
+          shape: AppShape.none,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 76,
+                      child: DashboardChip(
+                        label: proxy.type,
+                        tone: DashboardChipTone.idle,
+                        labelStyle: BusinessText.proxyProtocol(context),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    if (match != null) ...[
+                      Text(
+                        match.group(1)!,
+                        style: BusinessText.countryCode(context),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            match?.group(2) ?? proxy.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          Text(
+                            address,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: addressStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: DashboardChip(
+                        label: groupCount == 0
+                            ? context.appLocalizations.customProxyUnreferenced
+                            : context.appLocalizations.customProxyGroupUsage(
+                                groupCount,
+                              ),
+                        tone: groupCount == 0
+                            ? DashboardChipTone.warn
+                            : DashboardChipTone.idle,
+                      ),
+                    ),
+                    if (issues.isNotEmpty) CustomIssueButton(issues: issues),
+                    if (isEditing)
+                      Checkbox(
+                        value: isSelected,
+                        isCircle: true,
+                        onChanged: (_) => onSelected(),
+                      )
+                    else
+                      BusinessSecondaryButton(
+                        label: context.appLocalizations.edit,
+                        width: 64,
+                        height: 30,
+                        onPressed: onPressed,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 1,
+              child: ColoredBox(color: context.colorScheme.outlineVariant),
+            ),
+          ],
+        ),
       ),
     );
   }

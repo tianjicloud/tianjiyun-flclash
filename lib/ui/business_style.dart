@@ -130,6 +130,11 @@ abstract final class BusinessPalette {
   static Color expiryForegroundFor(Brightness brightness) =>
       brightness == Brightness.dark ? expiryTextDark : expiryText;
 
+  static Color customEditorCardFor(Brightness brightness) =>
+      brightness == Brightness.dark
+      ? themePreviewDarkContent
+      : themePreviewLightContent;
+
   static Color disconnectedContainerFor(Brightness brightness) =>
       brightness == Brightness.dark
       ? disconnectedBackgroundDark
@@ -172,6 +177,24 @@ abstract final class BusinessText {
     weight: FontWeight.w700,
   ).copyWith(letterSpacing: 0.5);
 
+  static TextStyle customEditorTitle(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 18,
+        leading: 22,
+        weight: FontWeight.w700,
+      );
+
+  static TextStyle customEditorTab(
+    BuildContext context, {
+    required bool selected,
+  }) => AppTextStyle.custom(
+    context,
+    size: 13,
+    leading: 18,
+    weight: selected ? FontWeight.w600 : FontWeight.w400,
+  );
+
   static TextStyle heroIp(BuildContext context, {required double size}) =>
       AppTextStyle.custom(
         context,
@@ -200,6 +223,13 @@ abstract final class BusinessText {
     leading: 14,
     weight: FontWeight.w600,
   ).toJetBrainsMono;
+
+  static TextStyle proxyProtocol(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 11,
+    leading: 14,
+    weight: FontWeight.w600,
+  ).copyWith(color: context.colorScheme.onSurfaceVariant).toJetBrainsMono;
 
   static TextStyle metaLabel(BuildContext context) =>
       AppTextStyle.custom(context, size: 12, leading: 16);

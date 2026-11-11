@@ -649,12 +649,14 @@ class DashboardChip extends StatelessWidget {
     this.tone = DashboardChipTone.idle,
     this.dot = false,
     this.large = false,
+    this.labelStyle,
   });
 
   final String label;
   final DashboardChipTone tone;
   final bool dot;
   final bool large;
+  final TextStyle? labelStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -708,10 +710,12 @@ class DashboardChip extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyle.caption1
-                  .of(context, emphasized: true)
-                  .toTabular
-                  .copyWith(color: chipForeground),
+              style:
+                  labelStyle ??
+                  AppTextStyle.caption1
+                      .of(context, emphasized: true)
+                      .toTabular
+                      .copyWith(color: chipForeground),
             ),
           ),
         ],

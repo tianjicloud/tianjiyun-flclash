@@ -540,6 +540,96 @@ class AppLocalizations {
     return Intl.message('Add', name: 'add', desc: '', args: []);
   }
 
+  /// `Add proxy`
+  String get customAddProxy {
+    return Intl.message(
+      'Add proxy',
+      name: 'customAddProxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Groups`
+  String get customGroupsLabel {
+    return Intl.message(
+      'Groups',
+      name: 'customGroupsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Preview merged result`
+  String get customPreviewMerged {
+    return Intl.message(
+      'Preview merged result',
+      name: 'customPreviewMerged',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom proxies`
+  String get customProxyCardTitle {
+    return Intl.message(
+      'Custom proxies',
+      name: 'customProxyCardTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Providers and dialing`
+  String get customProvidersAndDialers {
+    return Intl.message(
+      'Providers and dialing',
+      name: 'customProvidersAndDialers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import from link`
+  String get customImportFromLink {
+    return Intl.message(
+      'Import from link',
+      name: 'customImportFromLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used by {count} groups`
+  String customProxyGroupUsage(int count) {
+    return Intl.message(
+      'Used by $count groups',
+      name: 'customProxyGroupUsage',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Not referenced`
+  String get customProxyUnreferenced {
+    return Intl.message(
+      'Not referenced',
+      name: 'customProxyUnreferenced',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxies from the subscription appear alongside these proxies.`
+  String get customProxySubscriptionNote {
+    return Intl.message(
+      'Proxies from the subscription appear alongside these proxies.',
+      name: 'customProxySubscriptionNote',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Save`
   String get save {
     return Intl.message('Save', name: 'save', desc: '', args: []);
