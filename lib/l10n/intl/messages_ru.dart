@@ -522,6 +522,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Подключаться при запуске",
     ),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("Автотест"),
+    "businessBackupDesc": MessageLookupByLibrary.simpleMessage(
+      "Сохранить профили и настройки приложения в файл.",
+    ),
+    "businessBackupNow": MessageLookupByLibrary.simpleMessage(
+      "Создать резервную копию",
+    ),
     "businessCards": MessageLookupByLibrary.simpleMessage("Карточки"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
@@ -563,6 +569,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Проверить скорость",
     ),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("Тайм-аут"),
+    "businessDisconnect": MessageLookupByLibrary.simpleMessage("Отключить"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Включить умную маршрутизацию",
     ),
@@ -599,6 +606,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Заблокировано",
     ),
     "businessHome": MessageLookupByLibrary.simpleMessage("Главная"),
+    "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
+      "Выберите строку, чтобы задать или изменить сочетание клавиш",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("линий"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось завершить переключение. Повторите попытку.",
@@ -647,6 +657,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
       "Подключение по требованию",
+    ),
+    "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
+      "Добавьте сеть Wi-Fi, чтобы при подключении к ней приостанавливать приложение.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Выход"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
@@ -766,6 +779,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessResidentialLockedHint": m12,
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage(
       "Резидентский",
+    ),
+    "businessRestoreAction": MessageLookupByLibrary.simpleMessage(
+      "Восстановить…",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "Меняется только линия по умолчанию. Правила ИИ, стриминга, прямых соединений и блокировок сохраняются.",

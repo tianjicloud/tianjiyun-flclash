@@ -1507,4 +1507,12 @@
   "businessAutoLaunchTitle": "시작 시 자동 실행",
   "businessAutoRunTitle": "시작 후 자동 연결",
   "businessOnDemandConnection": "필요 시 연결"
+,
+  "businessHotkeyHint": "행을 선택해 단축키를 설정하거나 변경하세요",
+  "businessBackupNow": "지금 백업",
+  "businessBackupDesc": "프로필과 앱 설정을 백업 파일로 저장합니다."
+,
+  "businessOnDemandEmpty": "Wi-Fi 네트워크를 추가하면 연결 시 앱을 일시 중지합니다.",
+  "businessDisconnect": "연결 끊기",
+  "businessRestoreAction": "복원…"
 }

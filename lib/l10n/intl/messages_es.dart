@@ -545,6 +545,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAutoTest": MessageLookupByLibrary.simpleMessage(
       "Prueba automática",
     ),
+    "businessBackupDesc": MessageLookupByLibrary.simpleMessage(
+      "Guarda tus perfiles y ajustes en un archivo de copia.",
+    ),
+    "businessBackupNow": MessageLookupByLibrary.simpleMessage(
+      "Crear copia ahora",
+    ),
     "businessCards": MessageLookupByLibrary.simpleMessage("Tarjetas"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Cambiar línea"),
@@ -586,6 +592,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage(
       "Tiempo agotado",
     ),
+    "businessDisconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Activar enrutamiento inteligente",
     ),
@@ -620,6 +627,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Grupos"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("Bloqueado"),
     "businessHome": MessageLookupByLibrary.simpleMessage("Inicio"),
+    "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
+      "Selecciona una fila para configurar o cambiar el atajo",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("líneas"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "No se pudo completar el cambio. Reinténtalo.",
@@ -666,6 +676,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
       "Conexión bajo demanda",
+    ),
+    "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
+      "Añade una red Wi-Fi para pausar la aplicación al conectarte.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Salida"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
@@ -788,6 +801,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage(
       "Residencial",
     ),
+    "businessRestoreAction": MessageLookupByLibrary.simpleMessage("Restaurar…"),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "Solo cambia la línea predeterminada. La IA y el streaming conservan sus reglas, al igual que las conexiones directas y los bloqueos.",
     ),

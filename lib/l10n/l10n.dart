@@ -12211,6 +12211,66 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Select a row to set or change its shortcut`
+  String get businessHotkeyHint {
+    return Intl.message(
+      'Select a row to set or change its shortcut',
+      name: 'businessHotkeyHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back up now`
+  String get businessBackupNow {
+    return Intl.message(
+      'Back up now',
+      name: 'businessBackupNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save your profiles and app settings to a backup file.`
+  String get businessBackupDesc {
+    return Intl.message(
+      'Save your profiles and app settings to a backup file.',
+      name: 'businessBackupDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a Wi-Fi network to pause the app when you connect to it.`
+  String get businessOnDemandEmpty {
+    return Intl.message(
+      'Add a Wi-Fi network to pause the app when you connect to it.',
+      name: 'businessOnDemandEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disconnect`
+  String get businessDisconnect {
+    return Intl.message(
+      'Disconnect',
+      name: 'businessDisconnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore…`
+  String get businessRestoreAction {
+    return Intl.message(
+      'Restore…',
+      name: 'businessRestoreAction',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -13,12 +13,17 @@ import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/widgets/config_item.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BackupAndRestore extends ConsumerStatefulWidget {
-  const BackupAndRestore({super.key});
+  const BackupAndRestore({super.key, this.business = false});
+
+  final bool business;
 
   @override
   ConsumerState<BackupAndRestore> createState() => _BackupAndRestoreState();
@@ -150,6 +155,104 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
     final appLocalizations = context.appLocalizations;
     final dav = ref.watch(davSettingProvider);
     final isLoading = ref.watch(loadingProvider(LoadingTag.backup_restore));
+    if (widget.business) {
+      return ListView(
+        padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+        children: [
+          BusinessSettingsCard(
+            title: appLocalizations.local,
+            items: [
+              ListItem(
+                title: Text(appLocalizations.backup),
+                subtitle: Text(appLocalizations.businessBackupDesc),
+                trailing: BusinessPrimaryButton(
+                  label: appLocalizations.businessBackupNow,
+                  width: 110,
+                  onPressed: isLoading ? null : _backupOnLocal,
+                ),
+              ),
+              ListItem(
+                title: Text(appLocalizations.restore),
+                subtitle: Text(appLocalizations.businessBackupDesc),
+                trailing: BusinessSecondaryButton(
+                  label: appLocalizations.businessRestoreAction,
+                  width: 100,
+                  onPressed: isLoading ? null : _restoreOnLocal,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          BusinessSettingsCard(
+            title: appLocalizations.remote,
+            items: [
+              if (dav == null)
+                ListItem(
+                  title: Text(appLocalizations.pleaseBindWebDAV),
+                  trailing: BusinessSecondaryButton(
+                    label: appLocalizations.bind,
+                    width: 86,
+                    onPressed: () => _showAddWebDAV(dav),
+                  ),
+                )
+              else ...[
+                ListItem(
+                  title: Text(dav.user),
+                  subtitle: Text(dav.uri.toString()),
+                  trailing: BusinessSecondaryButton(
+                    label: appLocalizations.edit,
+                    width: 86,
+                    onPressed: () => _showAddWebDAV(dav),
+                  ),
+                ),
+                ListItem.input(
+                  title: Text(appLocalizations.file),
+                  subtitle: Text(dav.fileName),
+                  dialogTitle: appLocalizations.file,
+                  value: dav.fileName,
+                  resetValue: defaultDavFileName,
+                  maxLength: TextInputLimits.fileName,
+                  onChanged: (value) => _handleChange(value, ref),
+                ),
+                ListItem(
+                  title: Text(appLocalizations.backup),
+                  trailing: BusinessPrimaryButton(
+                    label: appLocalizations.businessBackupNow,
+                    width: 110,
+                    onPressed: isLoading ? null : _backupOnWebDAV,
+                  ),
+                ),
+                ListItem(
+                  title: Text(appLocalizations.restore),
+                  trailing: BusinessSecondaryButton(
+                    label: appLocalizations.businessRestoreAction,
+                    width: 100,
+                    onPressed: isLoading ? null : _restoreOnWebDAV,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 14),
+          BusinessSettingsCard(
+            title: appLocalizations.other,
+            items: [
+              ConfigOptionsItem<RestoreStrategy>(
+                title: (l) => l.restoreStrategy,
+                options: RestoreStrategy.values,
+                textBuilder: (strategy) => strategy.label,
+                selector: appSettingProvider.select(
+                  (state) => state.restoreStrategy,
+                ),
+                onChanged: (ref, value) => ref
+                    .read(appSettingProvider.notifier)
+                    .update((state) => state.copyWith(restoreStrategy: value)),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
     return Scaffold(
       isLoading: isLoading,
       title: appLocalizations.backupAndRestore,

@@ -1507,4 +1507,12 @@
   "businessAutoLaunchTitle": "开机自动启动",
   "businessAutoRunTitle": "启动后自动连接",
   "businessOnDemandConnection": "按需连接"
+,
+  "businessHotkeyHint": "点击一行设置或修改快捷键",
+  "businessBackupNow": "立即备份",
+  "businessBackupDesc": "将配置和应用设置保存为备份文件。"
+,
+  "businessOnDemandEmpty": "添加 Wi-Fi 网络后，连接到该网络时会暂停应用运行。",
+  "businessDisconnect": "断开",
+  "businessRestoreAction": "恢复…"
 }

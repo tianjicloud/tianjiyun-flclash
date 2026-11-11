@@ -5,6 +5,9 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -98,12 +101,29 @@ void _saveBinding(WidgetRef ref, HotKeyAction binding) {
 }
 
 class HotKeyView extends StatelessWidget {
-  const HotKeyView({super.key});
+  const HotKeyView({super.key, this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     final labels = ShortcutLabels.host();
+    if (business) {
+      return ListView(
+        padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+        children: [
+          BusinessSettingsCard(
+            title: appLocalizations.hotkeyManagement,
+            items: [
+              for (final (_, actions) in _sections(appLocalizations))
+                for (final action in actions)
+                  _HotKeyItem(action: action, labels: labels, business: true),
+            ],
+          ),
+        ],
+      );
+    }
     return BaseScaffold(
       title: appLocalizations.hotkeyManagement,
       body: ListView(
@@ -158,10 +178,15 @@ class _HotKeyIntro extends StatelessWidget {
 }
 
 class _HotKeyItem extends ConsumerWidget {
-  const _HotKeyItem({required this.action, required this.labels});
+  const _HotKeyItem({
+    required this.action,
+    required this.labels,
+    this.business = false,
+  });
 
   final HotAction action;
   final ShortcutLabels labels;
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -172,6 +197,47 @@ class _HotKeyItem extends ConsumerWidget {
       hotKeyFailuresProvider.select((state) => state[action]),
     );
     final key = hotKeyAction.key;
+    if (business) {
+      final keyLabel = key == null
+          ? appLocalizations.hotkeyNotSet
+          : labels.parts(hotKeyAction.modifiers, key).join(' + ');
+      return ListItem(
+        title: Text(action.label),
+        subtitle: Text(failure ?? appLocalizations.businessHotkeyHint),
+        trailing: key == null
+            ? BusinessSecondaryButton(
+                label: appLocalizations.hotkeyNotSet,
+                width: 86,
+                onPressed: () => dialogs.showCommonDialog(
+                  child: HotKeyRecorder(
+                    hotKeyAction: hotKeyAction,
+                    labels: labels,
+                  ),
+                ),
+              )
+            : DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: context.raisedSurfaceLevel.colorOf(
+                    context.colorScheme,
+                  ),
+                  shape: AppShape.sm,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  child: Text(
+                    keyLabel,
+                    style: AppTextStyle.caption1.of(context).toJetBrainsMono,
+                  ),
+                ),
+              ),
+        onTap: () => dialogs.showCommonDialog(
+          child: HotKeyRecorder(hotKeyAction: hotKeyAction, labels: labels),
+        ),
+      );
+    }
     return DecorationListItem(
       contentPadding: EdgeInsets.only(left: 16, right: key == null ? 16 : 6),
       leading: GlyphIcon(_glyphOf(action)),

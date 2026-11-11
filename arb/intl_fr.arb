@@ -1507,4 +1507,12 @@
   "businessAutoLaunchTitle": "Lancer au démarrage",
   "businessAutoRunTitle": "Se connecter au lancement",
   "businessOnDemandConnection": "Connexion à la demande"
+,
+  "businessHotkeyHint": "Sélectionnez une ligne pour définir ou modifier le raccourci",
+  "businessBackupNow": "Sauvegarder maintenant",
+  "businessBackupDesc": "Enregistre vos profils et réglages dans un fichier de sauvegarde."
+,
+  "businessOnDemandEmpty": "Ajoutez un réseau Wi-Fi pour mettre l’application en pause lorsque vous vous y connectez.",
+  "businessDisconnect": "Déconnecter",
+  "businessRestoreAction": "Restaurer…"
 }

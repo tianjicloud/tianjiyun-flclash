@@ -173,19 +173,19 @@ class _BusinessSettingsLayoutState
           'hotkeys',
           l10n.businessSettingsCommon,
           l10n.businessSettingsHotkeys,
-          const HotKeyView(),
+          const HotKeyView(business: true),
         ),
       _SettingsEntry(
         'on-demand',
         l10n.businessSettingsCommon,
         l10n.businessOnDemandConnection,
-        const OnDemandView(),
+        const OnDemandView(business: true),
       ),
       _SettingsEntry(
         'backup',
         l10n.businessSettingsCommon,
         l10n.backupAndRestore,
-        const BackupAndRestore(),
+        const BackupAndRestore(business: true),
       ),
       _SettingsEntry(
         'network',

@@ -503,6 +503,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Connect on launch",
     ),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("Automatic test"),
+    "businessBackupDesc": MessageLookupByLibrary.simpleMessage(
+      "Save your profiles and app settings to a backup file.",
+    ),
+    "businessBackupNow": MessageLookupByLibrary.simpleMessage("Back up now"),
     "businessCards": MessageLookupByLibrary.simpleMessage("Cards"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
@@ -542,6 +546,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Test speed",
     ),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("Timeout"),
+    "businessDisconnect": MessageLookupByLibrary.simpleMessage("Disconnect"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "Enable smart routing",
     ),
@@ -576,6 +581,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Groups"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("Locked"),
     "businessHome": MessageLookupByLibrary.simpleMessage("Home"),
+    "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
+      "Select a row to set or change its shortcut",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("lines"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Could not finish switching lines. Retry.",
@@ -618,6 +626,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
       "On-demand connection",
+    ),
+    "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
+      "Add a Wi-Fi network to pause the app when you connect to it.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Outbound"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
@@ -736,6 +747,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage(
       "Residential",
     ),
+    "businessRestoreAction": MessageLookupByLibrary.simpleMessage("Restore…"),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.",
     ),

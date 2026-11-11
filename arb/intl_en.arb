@@ -1507,4 +1507,12 @@
   "businessAutoLaunchTitle": "Launch at startup",
   "businessAutoRunTitle": "Connect on launch",
   "businessOnDemandConnection": "On-demand connection"
+,
+  "businessHotkeyHint": "Select a row to set or change its shortcut",
+  "businessBackupNow": "Back up now",
+  "businessBackupDesc": "Save your profiles and app settings to a backup file."
+,
+  "businessOnDemandEmpty": "Add a Wi-Fi network to pause the app when you connect to it.",
+  "businessDisconnect": "Disconnect",
+  "businessRestoreAction": "Restore…"
 }

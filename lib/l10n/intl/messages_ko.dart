@@ -431,6 +431,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessAutoRunTitle": MessageLookupByLibrary.simpleMessage("시작 후 자동 연결"),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("자동 테스트"),
+    "businessBackupDesc": MessageLookupByLibrary.simpleMessage(
+      "프로필과 앱 설정을 백업 파일로 저장합니다.",
+    ),
+    "businessBackupNow": MessageLookupByLibrary.simpleMessage("지금 백업"),
     "businessCards": MessageLookupByLibrary.simpleMessage("카드"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
@@ -462,6 +466,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("속도 측정"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("시간 초과"),
+    "businessDisconnect": MessageLookupByLibrary.simpleMessage("연결 끊기"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("스마트 라우팅 활성화"),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage("출구 확인 통과"),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
@@ -490,6 +495,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("그룹"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("잠김"),
     "businessHome": MessageLookupByLibrary.simpleMessage("홈"),
+    "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
+      "행을 선택해 단축키를 설정하거나 변경하세요",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("개 노드"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
@@ -524,6 +532,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("연결 안 됨"),
     "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
       "필요 시 연결",
+    ),
+    "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
+      "Wi-Fi 네트워크를 추가하면 연결 시 앱을 일시 중지합니다.",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("아웃바운드"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
@@ -628,6 +639,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessResidentialLockedHint": m12,
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage("주거용"),
+    "businessRestoreAction": MessageLookupByLibrary.simpleMessage("복원…"),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "기본 회선만 변경합니다. AI·스트리밍의 개별 규칙과 직접 연결·차단 규칙은 유지됩니다.",
     ),

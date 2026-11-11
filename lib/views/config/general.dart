@@ -8,6 +8,7 @@ import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/views/config/override.dart';
 import 'package:fl_clash/views/config/user_agents.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
 import 'package:fl_clash/views/theme_choices.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
@@ -339,7 +340,7 @@ class GeneralView extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
       children: [
-        _BusinessSettingsCard(
+        BusinessSettingsCard(
           title: l10n.businessSettingsStartupWindow,
           items: [
             if (system.isDesktop)
@@ -388,7 +389,7 @@ class GeneralView extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 14),
-        _BusinessSettingsCard(
+        BusinessSettingsCard(
           title: l10n.businessSettingsAppearance,
           items: [
             const Padding(
@@ -398,7 +399,7 @@ class GeneralView extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 14),
-        _BusinessSettingsCard(
+        BusinessSettingsCard(
           title: l10n.update,
           items: [
             const _SubscriptionUpdateDurationItem(),
@@ -432,7 +433,7 @@ class GeneralView extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 14),
-        _BusinessSettingsCard(
+        BusinessSettingsCard(
           title: l10n.advancedConfig,
           items: [
             if (system.isDesktop)
@@ -497,37 +498,6 @@ class GeneralView extends ConsumerWidget {
         ? buildVersion
         : globalState.packageInfo.version;
   }
-}
-
-class _BusinessSettingsCard extends StatelessWidget {
-  const _BusinessSettingsCard({required this.title, required this.items});
-
-  final String title;
-  final List<Widget> items;
-
-  @override
-  Widget build(BuildContext context) => DecoratedBox(
-    decoration: ShapeDecoration(
-      color: context.colorScheme.brightness == Brightness.dark
-          ? context.colorScheme.surfaceContainerLow
-          : context.colorScheme.surface,
-      shape: AppShape.all(BusinessPalette.cardRadius),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-            child: Text(title, style: BusinessText.cardTitle(context)),
-          ),
-          const SizedBox(height: 8),
-          generateGroup(items),
-        ],
-      ),
-    ),
-  );
 }
 
 class _SubscriptionUpdateDurationItem extends ConsumerWidget {

@@ -417,6 +417,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAutoRunDesc": MessageLookupByLibrary.simpleMessage("使用上次的线路与模式"),
     "businessAutoRunTitle": MessageLookupByLibrary.simpleMessage("启动后自动连接"),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("自动测速"),
+    "businessBackupDesc": MessageLookupByLibrary.simpleMessage(
+      "将配置和应用设置保存为备份文件。",
+    ),
+    "businessBackupNow": MessageLookupByLibrary.simpleMessage("立即备份"),
     "businessCards": MessageLookupByLibrary.simpleMessage("卡片"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("更换线路"),
@@ -446,6 +450,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("当前节点"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("测速"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("超时"),
+    "businessDisconnect": MessageLookupByLibrary.simpleMessage("断开"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage("启用智能分流"),
     "businessExitCheckPassed": MessageLookupByLibrary.simpleMessage("出口校验通过"),
     "businessExitMismatch": MessageLookupByLibrary.simpleMessage(
@@ -470,6 +475,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("分组"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("已锁定"),
     "businessHome": MessageLookupByLibrary.simpleMessage("首页"),
+    "businessHotkeyHint": MessageLookupByLibrary.simpleMessage("点击一行设置或修改快捷键"),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("条"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage("未能完成线路切换，请重试"),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
@@ -497,6 +503,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("未连接"),
     "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage("按需连接"),
+    "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
+      "添加 Wi-Fi 网络后，连接到该网络时会暂停应用运行。",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出站"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自动更新",
@@ -582,6 +591,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessResidentialLockedHint": m12,
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage("住宅"),
+    "businessRestoreAction": MessageLookupByLibrary.simpleMessage("恢复…"),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "此处只更改默认线路；AI、流媒体等仍按各自规则分流，直连和拦截规则保持不变。",
     ),

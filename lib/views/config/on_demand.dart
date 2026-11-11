@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -13,11 +14,18 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wifi_ssid/wifi_ssid.dart';
 
 class OnDemandView extends ConsumerStatefulWidget {
-  const OnDemandView({super.key, this.isAndroid, this.isMacOS, this.isWindows});
+  const OnDemandView({
+    super.key,
+    this.isAndroid,
+    this.isMacOS,
+    this.isWindows,
+    this.business = false,
+  });
 
   final bool? isAndroid;
   final bool? isMacOS;
   final bool? isWindows;
+  final bool business;
 
   @override
   ConsumerState createState() => _OnDemandViewState();
@@ -371,10 +379,54 @@ class _OnDemandViewState extends ConsumerState<OnDemandView>
     );
   }
 
+  Widget _buildBusinessPage(List<String> ssids) {
+    final l10n = context.appLocalizations;
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        BusinessSettingsCard(
+          title: l10n.excludeSsids,
+          items: [
+            if (ssids.isEmpty)
+              ListItem(
+                title: Text(l10n.businessOnDemandEmpty),
+                subtitle: Text(l10n.excludeSsidsDesc),
+              ),
+            for (final ssid in ssids)
+              ListItem(
+                title: Text(ssid, maxLines: 1, overflow: TextOverflow.ellipsis),
+                subtitle: Text(l10n.excludeSsidsDesc),
+                trailing: Text(l10n.businessDisconnect),
+                onTap: () => _handleAddOrUpdate(ssid),
+              ),
+            ListItem(
+              title: Text(l10n.addSsid),
+              trailing: TonalButton(
+                label: l10n.add,
+                onPressed: _handleAddOrUpdate,
+              ),
+            ),
+          ],
+        ),
+        if (_needsLocationPermission || _isAndroid) ...[
+          const SizedBox(height: 14),
+          BusinessSettingsCard(
+            title: l10n.other,
+            items: [
+              if (_isAndroid) _buildBatteryOptimizationItem(),
+              if (_needsLocationPermission) _buildLocationPermissionItem(),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final excludeSSIDs = ref.watch(excludeSSIDsProvider);
     final selectedItems = ref.watch(itemsProvider(key));
+    if (widget.business) return _buildBusinessPage(excludeSSIDs);
     return Scaffold(
       body: CustomScrollView(
         slivers: [

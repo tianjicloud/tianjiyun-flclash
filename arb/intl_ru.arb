@@ -1507,4 +1507,12 @@
   "businessAutoLaunchTitle": "Запускать при входе",
   "businessAutoRunTitle": "Подключаться при запуске",
   "businessOnDemandConnection": "Подключение по требованию"
+,
+  "businessHotkeyHint": "Выберите строку, чтобы задать или изменить сочетание клавиш",
+  "businessBackupNow": "Создать резервную копию",
+  "businessBackupDesc": "Сохранить профили и настройки приложения в файл."
+,
+  "businessOnDemandEmpty": "Добавьте сеть Wi-Fi, чтобы при подключении к ней приостанавливать приложение.",
+  "businessDisconnect": "Отключить",
+  "businessRestoreAction": "Восстановить…"
 }

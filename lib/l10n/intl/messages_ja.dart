@@ -431,6 +431,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAutoRunDesc": MessageLookupByLibrary.simpleMessage("前回の回線とモードを使用"),
     "businessAutoRunTitle": MessageLookupByLibrary.simpleMessage("起動後に自動接続"),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("自動テスト"),
+    "businessBackupDesc": MessageLookupByLibrary.simpleMessage(
+      "プロファイルとアプリ設定をバックアップファイルに保存します。",
+    ),
+    "businessBackupNow": MessageLookupByLibrary.simpleMessage("今すぐバックアップ"),
     "businessCards": MessageLookupByLibrary.simpleMessage("カード"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
@@ -464,6 +468,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("現在のノード"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("速度測定"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("タイムアウト"),
+    "businessDisconnect": MessageLookupByLibrary.simpleMessage("切断"),
     "businessEnableRules": MessageLookupByLibrary.simpleMessage(
       "スマートルーティングを有効化",
     ),
@@ -496,6 +501,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("グループ"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("ロック中"),
     "businessHome": MessageLookupByLibrary.simpleMessage("ホーム"),
+    "businessHotkeyHint": MessageLookupByLibrary.simpleMessage(
+      "行を選択してショートカットを設定または変更",
+    ),
     "businessLineCount": MessageLookupByLibrary.simpleMessage("件"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "回線の切り替えを完了できませんでした。再試行してください。",
@@ -528,6 +536,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("未接続"),
     "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
       "オンデマンド接続",
+    ),
+    "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
+      "Wi-Fiネットワークを追加すると、接続時にアプリを一時停止できます。",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出力"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
@@ -640,6 +651,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessResidentialLockedHint": m12,
     "businessResidentialShort": MessageLookupByLibrary.simpleMessage("住宅"),
+    "businessRestoreAction": MessageLookupByLibrary.simpleMessage("復元…"),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
       "既定の回線のみ変更します。AI・動画などの個別ルール、直接接続、ブロックのルールは維持します。",
     ),
