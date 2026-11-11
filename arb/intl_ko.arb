@@ -1586,5 +1586,21 @@
   "systemServiceAbnormal": "비정상",
   "systemServiceInstall": "설치",
   "systemServiceRepair": "복구",
-  "systemServiceRefresh": "새로 고침"
+  "systemServiceRefresh": "새로 고침",
+  "businessToolsBrowse": "보기",
+  "businessToolsConnectionRequests": "연결 및 요청",
+  "businessToolsRuntimeLogs": "실행 로그",
+  "businessToolsGeneral": "일반",
+  "businessToolsLocalDirect": "로컬 네트워크 기기 직접 연결",
+  "businessToolsAppearanceLanguage": "모양 및 언어",
+  "businessToolsRoutingResources": "라우팅 리소스",
+  "businessToolsPerAppProxy": "앱별 프록시",
+  "businessToolsAppearance": "모양",
+  "businessToolsSimplifiedChinese": "중국어 간체",
+  "businessToolsRequestCount": "요청 {count}개",
+  "businessToolsPassedCount": "{count}개 통과",
+  "businessToolsApplicationCount": "앱 {count}개",
+  "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
 }

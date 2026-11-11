@@ -12906,6 +12906,136 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Browse`
+  String get businessToolsBrowse {
+    return Intl.message(
+      'Browse',
+      name: 'businessToolsBrowse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connections and requests`
+  String get businessToolsConnectionRequests {
+    return Intl.message(
+      'Connections and requests',
+      name: 'businessToolsConnectionRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Runtime logs`
+  String get businessToolsRuntimeLogs {
+    return Intl.message(
+      'Runtime logs',
+      name: 'businessToolsRuntimeLogs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General`
+  String get businessToolsGeneral {
+    return Intl.message(
+      'General',
+      name: 'businessToolsGeneral',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect local network devices directly`
+  String get businessToolsLocalDirect {
+    return Intl.message(
+      'Connect local network devices directly',
+      name: 'businessToolsLocalDirect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance and language`
+  String get businessToolsAppearanceLanguage {
+    return Intl.message(
+      'Appearance and language',
+      name: 'businessToolsAppearanceLanguage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Routing resources`
+  String get businessToolsRoutingResources {
+    return Intl.message(
+      'Routing resources',
+      name: 'businessToolsRoutingResources',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Per-app proxy`
+  String get businessToolsPerAppProxy {
+    return Intl.message(
+      'Per-app proxy',
+      name: 'businessToolsPerAppProxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance`
+  String get businessToolsAppearance {
+    return Intl.message(
+      'Appearance',
+      name: 'businessToolsAppearance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Simplified Chinese`
+  String get businessToolsSimplifiedChinese {
+    return Intl.message(
+      'Simplified Chinese',
+      name: 'businessToolsSimplifiedChinese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} requests`
+  String businessToolsRequestCount(int count) {
+    return Intl.message(
+      '$count requests',
+      name: 'businessToolsRequestCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} passed`
+  String businessToolsPassedCount(int count) {
+    return Intl.message(
+      '$count passed',
+      name: 'businessToolsPassedCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} apps`
+  String businessToolsApplicationCount(int count) {
+    return Intl.message(
+      '$count apps',
+      name: 'businessToolsApplicationCount',
+      desc: '',
+      args: [count],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

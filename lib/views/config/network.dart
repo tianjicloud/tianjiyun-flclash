@@ -41,11 +41,13 @@ ConfigToggleItem _vpnToggle({
   required ConfigLabel title,
   required bool Function(VpnProps state) select,
   required _VpnUpdate<bool> update,
+  Widget? leading,
 }) {
   return ConfigToggleItem(
     title: title,
     selector: vpnSettingProvider.select(select),
     onChanged: _vpnWriter(update),
+    leading: leading,
   );
 }
 
@@ -53,11 +55,13 @@ ConfigToggleItem _networkToggle({
   required ConfigLabel title,
   required bool Function(NetworkProps state) select,
   required _NetworkUpdate<bool> update,
+  Widget? leading,
 }) {
   return ConfigToggleItem(
     title: title,
     selector: networkSettingProvider.select(select),
     onChanged: _networkWriter(update),
+    leading: leading,
   );
 }
 
@@ -129,7 +133,9 @@ class SystemProxyItem extends ConsumerWidget {
 }
 
 class Ipv6Item extends ConsumerWidget {
-  const Ipv6Item({super.key});
+  const Ipv6Item({super.key, this.leading});
+
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -137,6 +143,7 @@ class Ipv6Item extends ConsumerWidget {
       title: (l) => 'IPv6',
       select: (state) => state.ipv6,
       update: (state, value) => state.copyWith(ipv6: value),
+      leading: leading,
     );
   }
 }
@@ -223,14 +230,18 @@ class InterfaceNameItem extends ConsumerWidget {
 }
 
 class BypassPrivateRouteItem extends ConsumerWidget {
-  const BypassPrivateRouteItem({super.key});
+  const BypassPrivateRouteItem({super.key, this.title, this.leading});
+
+  final String? title;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context, ref) {
     return _networkToggle(
-      title: (l) => l.bypassPrivateRoute,
+      title: (l) => title ?? l.bypassPrivateRoute,
       select: (state) => state.bypassPrivateRoute,
       update: (state, value) => state.copyWith(bypassPrivateRoute: value),
+      leading: leading,
     );
   }
 }

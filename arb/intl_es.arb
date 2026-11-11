@@ -1586,5 +1586,21 @@
   "systemServiceAbnormal": "Anómalo",
   "systemServiceInstall": "Instalar",
   "systemServiceRepair": "Reparar",
-  "systemServiceRefresh": "Actualizar"
+  "systemServiceRefresh": "Actualizar",
+  "businessToolsBrowse": "Explorar",
+  "businessToolsConnectionRequests": "Conexiones y solicitudes",
+  "businessToolsRuntimeLogs": "Registros de ejecución",
+  "businessToolsGeneral": "General",
+  "businessToolsLocalDirect": "Conectar directamente dispositivos de la red local",
+  "businessToolsAppearanceLanguage": "Apariencia e idioma",
+  "businessToolsRoutingResources": "Recursos de enrutamiento",
+  "businessToolsPerAppProxy": "Proxy por aplicación",
+  "businessToolsAppearance": "Apariencia",
+  "businessToolsSimplifiedChinese": "Chino simplificado",
+  "businessToolsRequestCount": "{count} solicitudes",
+  "businessToolsPassedCount": "{count} aprobadas",
+  "businessToolsApplicationCount": "{count} aplicaciones",
+  "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
 }

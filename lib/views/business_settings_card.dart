@@ -37,12 +37,12 @@ class BusinessWarningBanner extends StatelessWidget {
 class BusinessSettingsCard extends StatelessWidget {
   const BusinessSettingsCard({
     super.key,
-    required this.title,
+    this.title,
     required this.items,
     this.trailing,
   });
 
-  final String title;
+  final String? title;
   final List<Widget> items;
   final Widget? trailing;
 
@@ -59,18 +59,20 @@ class BusinessSettingsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(title, style: BusinessText.cardTitle(context)),
-                ),
-                ?trailing,
-              ],
+          if (title != null && title!.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(title!, style: BusinessText.cardTitle(context)),
+                  ),
+                  ?trailing,
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
+            const SizedBox(height: 8),
+          ],
           generateGroup(items),
         ],
       ),

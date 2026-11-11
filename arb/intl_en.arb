@@ -1586,5 +1586,21 @@
   "systemServiceAbnormal": "Abnormal",
   "systemServiceInstall": "Install",
   "systemServiceRepair": "Repair",
-  "systemServiceRefresh": "Refresh"
+  "systemServiceRefresh": "Refresh",
+  "businessToolsBrowse": "Browse",
+  "businessToolsConnectionRequests": "Connections and requests",
+  "businessToolsRuntimeLogs": "Runtime logs",
+  "businessToolsGeneral": "General",
+  "businessToolsLocalDirect": "Connect local network devices directly",
+  "businessToolsAppearanceLanguage": "Appearance and language",
+  "businessToolsRoutingResources": "Routing resources",
+  "businessToolsPerAppProxy": "Per-app proxy",
+  "businessToolsAppearance": "Appearance",
+  "businessToolsSimplifiedChinese": "Simplified Chinese",
+  "businessToolsRequestCount": "{count} requests",
+  "businessToolsPassedCount": "{count} passed",
+  "businessToolsApplicationCount": "{count} apps",
+  "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
 }

@@ -1586,5 +1586,21 @@
   "systemServiceAbnormal": "異常",
   "systemServiceInstall": "インストール",
   "systemServiceRepair": "修復",
-  "systemServiceRefresh": "更新"
+  "systemServiceRefresh": "更新",
+  "businessToolsBrowse": "閲覧",
+  "businessToolsConnectionRequests": "接続とリクエスト",
+  "businessToolsRuntimeLogs": "実行ログ",
+  "businessToolsGeneral": "一般",
+  "businessToolsLocalDirect": "ローカルネットワーク機器を直接接続",
+  "businessToolsAppearanceLanguage": "外観と言語",
+  "businessToolsRoutingResources": "ルーティングリソース",
+  "businessToolsPerAppProxy": "アプリごとのプロキシ",
+  "businessToolsAppearance": "外観",
+  "businessToolsSimplifiedChinese": "簡体字中国語",
+  "businessToolsRequestCount": "{count} 件",
+  "businessToolsPassedCount": "{count} 項目合格",
+  "businessToolsApplicationCount": "{count} 個のアプリ",
+  "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
 }

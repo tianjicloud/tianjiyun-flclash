@@ -13,6 +13,7 @@ import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/backup_and_restore.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessSecondaryButton;
 import 'package:fl_clash/views/disclaimer.dart';
@@ -218,6 +219,13 @@ class AboutView extends ConsumerWidget {
     final appLocalizations = context.appLocalizations;
     final isLoading = ref.watch(loadingProvider(LoadingTag.checkUpdate));
     if (business) {
+      if (ref.watch(isMobileViewProvider)) {
+        return _buildBusinessMobile(
+          context,
+          appLocalizations,
+          globalState.packageInfo.version,
+        );
+      }
       return _buildBusinessPage(context, ref, appLocalizations, isLoading);
     }
     return Scaffold(
@@ -310,6 +318,73 @@ class AboutView extends ConsumerWidget {
       ),
     );
   }
+
+  Widget _buildBusinessMobile(
+    BuildContext context,
+    AppLocalizations l10n,
+    String version,
+  ) => ListView(
+    padding: EdgeInsets.only(
+      left: 16,
+      right: 16,
+      top: 12,
+      bottom: context.bottomInset + 20,
+    ),
+    children: [
+      BusinessSettingsCard(
+        title: l10n.about,
+        items: [
+          ListItem(
+            minVerticalPadding: 14,
+            leading: const BusinessBrandMark(size: 56),
+            title: Text(
+              appName,
+              style: AppTextStyle.title2.of(context, emphasized: true),
+            ),
+            subtitle: Text(
+              version,
+              style: AppTextStyle.subheadline.of(context).toJetBrainsMono,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 14),
+      BusinessSettingsCard(
+        title: l10n.more,
+        items: [
+          _buildBusinessLink(
+            context,
+            title: l10n.businessAboutPanel,
+            subtitle: userPanelUrl,
+            onTap: () => dialogs.openUrl(userPanelUrl),
+          ),
+          _buildBusinessLink(
+            context,
+            title: l10n.serviceStatus,
+            subtitle: statusPageUrl,
+            onTap: () => dialogs.openUrl(statusPageUrl),
+          ),
+          _buildBusinessLink(
+            context,
+            title: l10n.project,
+            subtitle: 'github.com/$repository',
+            onTap: () => dialogs.openUrl('https://github.com/$repository'),
+          ),
+        ],
+      ),
+      const SizedBox(height: 14),
+      BusinessSettingsCard(
+        title: l10n.backupAndRestore,
+        items: [
+          ListItem.open(
+            title: Text(l10n.backupAndRestore),
+            leading: const GlyphIcon(AppGlyphs.cloudSync),
+            widget: const BackupAndRestore(),
+          ),
+        ],
+      ),
+    ],
+  );
 }
 
 class _AboutHero extends StatelessWidget {

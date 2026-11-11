@@ -1586,5 +1586,21 @@
   "systemServiceAbnormal": "Ошибка",
   "systemServiceInstall": "Установить",
   "systemServiceRepair": "Восстановить",
-  "systemServiceRefresh": "Обновить"
+  "systemServiceRefresh": "Обновить",
+  "businessToolsBrowse": "Обзор",
+  "businessToolsConnectionRequests": "Подключения и запросы",
+  "businessToolsRuntimeLogs": "Журнал работы",
+  "businessToolsGeneral": "Общие",
+  "businessToolsLocalDirect": "Подключать устройства локальной сети напрямую",
+  "businessToolsAppearanceLanguage": "Внешний вид и язык",
+  "businessToolsRoutingResources": "Ресурсы маршрутизации",
+  "businessToolsPerAppProxy": "Прокси для приложений",
+  "businessToolsAppearance": "Внешний вид",
+  "businessToolsSimplifiedChinese": "Упрощённый китайский",
+  "businessToolsRequestCount": "Запросов: {count}",
+  "businessToolsPassedCount": "Пройдено: {count}",
+  "businessToolsApplicationCount": "Приложений: {count}",
+  "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
 }

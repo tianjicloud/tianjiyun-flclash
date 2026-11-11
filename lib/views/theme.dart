@@ -3,12 +3,15 @@ import 'dart:math';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/views/font_family.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
 import 'package:fl_clash/views/theme_choices.dart';
 import 'package:fl_clash/views/theme_preview.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -22,7 +25,13 @@ class ThemeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (business) return const _BusinessThemeView();
+    if (business) {
+      return Consumer(
+        builder: (context, ref, _) => ref.watch(isMobileViewProvider)
+            ? const _BusinessMobileThemeView()
+            : const _BusinessThemeView(),
+      );
+    }
     final appLocalizations = context.appLocalizations;
     return BaseScaffold(
       title: appLocalizations.theme,
@@ -64,6 +73,66 @@ class ThemeView extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BusinessMobileThemeView extends ConsumerWidget {
+  const _BusinessMobileThemeView();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final locale = ref.watch(
+      appSettingProvider.select((state) => state.locale),
+    );
+    String localeLabel(Locale? locale) => switch (locale?.toString()) {
+      null => l10n.businessFollowSystem,
+      'zh_CN' => l10n.businessToolsSimplifiedChinese,
+      _ => locale!.label,
+    };
+    return Scaffold(
+      title: l10n.businessToolsAppearanceLanguage,
+      body: ListView(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: context.sectionsTopPadding,
+          bottom: context.bottomInset + 20,
+        ),
+        children: [
+          _BusinessThemeCard(
+            title: l10n.theme,
+            child: const BusinessThemeChoices(),
+          ),
+          const SizedBox(height: 14),
+          _BusinessThemeCard(
+            title: l10n.businessAccentColor,
+            child: const _PrimaryColorItem(business: true, mobile: true),
+          ),
+          const SizedBox(height: 14),
+          BusinessSettingsCard(
+            title: l10n.language,
+            items: [
+              for (final option in [
+                null,
+                ...AppLocalizations.delegate.supportedLocales,
+              ])
+                ListItem(
+                  title: Text(localeLabel(option)),
+                  trailing: locale == option?.toString()
+                      ? const GlyphIcon(AppGlyphs.check)
+                      : null,
+                  onTap: () => ref
+                      .read(appSettingProvider.notifier)
+                      .update(
+                        (state) => state.copyWith(locale: option?.toString()),
+                      ),
+                ),
+            ],
           ),
         ],
       ),
@@ -281,9 +350,10 @@ class _ThemeModeItem extends ConsumerWidget {
 }
 
 class _PrimaryColorItem extends ConsumerWidget {
-  const _PrimaryColorItem({this.business = false});
+  const _PrimaryColorItem({this.business = false, this.mobile = false});
 
   final bool business;
+  final bool mobile;
 
   Future<void> _handleReset(BuildContext context, WidgetRef ref) async {
     final res = await dialogs.showMessage(
@@ -450,7 +520,10 @@ class _PrimaryColorItem extends ConsumerWidget {
                   ),
                 ),
               _ColorSwatches(
-                colors: [null, ...themeColors.primaryColors],
+                colors: [
+                  null,
+                  ...themeColors.primaryColors.take(mobile ? 4 : 100),
+                ],
                 selected: themeColors.primaryColor,
                 business: business,
                 onSelect: (color) => _update(

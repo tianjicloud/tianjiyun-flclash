@@ -1586,5 +1586,21 @@
   "systemServiceAbnormal": "异常",
   "systemServiceInstall": "安装",
   "systemServiceRepair": "修复",
-  "systemServiceRefresh": "刷新"
+  "systemServiceRefresh": "刷新",
+  "businessToolsBrowse": "查看",
+  "businessToolsConnectionRequests": "连接与请求",
+  "businessToolsRuntimeLogs": "运行日志",
+  "businessToolsGeneral": "通用",
+  "businessToolsLocalDirect": "局域网设备直连",
+  "businessToolsAppearanceLanguage": "外观与语言",
+  "businessToolsRoutingResources": "分流资源",
+  "businessToolsPerAppProxy": "分应用代理",
+  "businessToolsAppearance": "外观",
+  "businessToolsSimplifiedChinese": "简体中文",
+  "businessToolsRequestCount": "{count} 条",
+  "businessToolsPassedCount": "{count} 项通过",
+  "businessToolsApplicationCount": "{count} 个应用",
+  "@businessToolsRequestCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsPassedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@businessToolsApplicationCount": {"placeholders": {"count": {"type": "int"}}}
 }

@@ -1,10 +1,13 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/residential.dart';
+import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/providers/routed_probe.dart';
+import 'package:fl_clash/providers/service_status.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/views/about.dart';
@@ -91,6 +94,12 @@ class _ToolViewState extends ConsumerState<ToolsView> {
       ref.watch(currentProfileProvider),
     );
     final isMobile = ref.watch(isMobileViewProvider);
+    if (business && isMobile) {
+      return _BusinessMobileTools(
+        developerMode: developerMode,
+        navigation: ref.watch(moreToolsSelectorStateProvider).navigationItems,
+      );
+    }
     final items = [
       Consumer(
         builder: (_, ref, _) {
@@ -142,6 +151,236 @@ class _ToolViewState extends ConsumerState<ToolsView> {
       ),
     );
   }
+}
+
+class _BusinessMobileTools extends ConsumerWidget {
+  const _BusinessMobileTools({
+    required this.developerMode,
+    required this.navigation,
+  });
+
+  final bool developerMode;
+  final List<NavigationItem> navigation;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final entries = {for (final item in navigation) item.label: item};
+    final requests = ref.watch(requestsProvider).list.length;
+    final accessList = ref.watch(
+      accessControlStateProvider.select((state) => state.currentList),
+    );
+    final probes = ref.watch(serviceStatusProvider);
+    final diagnosticTargets = [
+      ServiceTarget.chatgpt,
+      ServiceTarget.claude,
+      ServiceTarget.gemini,
+    ];
+    final hasDiagnostics = diagnosticTargets.any(
+      (target) => probes.entryOf(target).phase != ProbePhase.empty,
+    );
+    final passedDiagnostics = diagnosticTargets
+        .where(
+          (target) =>
+              probes.entryOf(target).value?.status ==
+              ServiceProbeStatus.available,
+        )
+        .length;
+    final themeMode = ref.watch(
+      themeSettingProvider.select((state) => state.themeMode),
+    );
+    final locale = getLocaleForString(
+      ref.watch(appSettingProvider.select((state) => state.locale)),
+    );
+    final themeLabel = switch (themeMode) {
+      ThemeMode.system => l10n.businessFollowSystem,
+      ThemeMode.light => l10n.light,
+      ThemeMode.dark => l10n.dark,
+    };
+    final localeLabel = switch (locale?.toString()) {
+      null => l10n.businessFollowSystem,
+      'zh_CN' => l10n.businessToolsSimplifiedChinese,
+      _ => locale!.label,
+    };
+
+    Widget value(String text) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          text,
+          style: BusinessText.metaLabel(
+            context,
+          ).copyWith(color: BusinessPalette.secondary),
+        ),
+        const SizedBox(width: 6),
+        const DisclosureIndicator(),
+      ],
+    );
+
+    Widget icon(Glyph glyph) => DecoratedBox(
+      decoration: ShapeDecoration(
+        color: context.colorScheme.surfaceContainerHighest,
+        shape: AppShape.all(10),
+      ),
+      child: SizedBox(
+        width: 32,
+        height: 32,
+        child: Center(child: GlyphIcon(glyph)),
+      ),
+    );
+
+    Widget nav(PageLabel label, {String? title, String? trailing}) {
+      final item = entries[label];
+      return ListItem.open(
+        leading: icon(item?.glyph ?? AppGlyphs.settings),
+        title: Text(title ?? label.label),
+        trailing: trailing == null ? null : value(trailing),
+        widget: item?.builder(context) ?? const SizedBox.shrink(),
+      );
+    }
+
+    Widget setting(
+      String title,
+      Glyph glyph,
+      Widget page, {
+      String? trailing,
+    }) => ListItem.open(
+      leading: icon(glyph),
+      title: Text(title),
+      trailing: trailing == null ? null : value(trailing),
+      widget: page,
+    );
+
+    return Scaffold(
+      title: l10n.tools,
+      body: ListView(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: context.sectionsTopPadding,
+          bottom: 20 + context.bottomInset,
+        ),
+        children: [
+          _BusinessMobileSection(
+            title: l10n.businessToolsBrowse,
+            items: [
+              nav(
+                PageLabel.requests,
+                title: l10n.businessToolsConnectionRequests,
+                trailing: l10n.businessToolsRequestCount(requests),
+              ),
+              ListItem.open(
+                leading: icon(AppGlyphs.target),
+                title: Text(l10n.diagnosticsTitle),
+                trailing: hasDiagnostics
+                    ? value(l10n.businessToolsPassedCount(passedDiagnostics))
+                    : null,
+                widget: const DiagnosticsView(),
+              ),
+              nav(PageLabel.dns, title: l10n.dnsQueries),
+              nav(
+                PageLabel.resources,
+                title: l10n.businessToolsRoutingResources,
+              ),
+              ListItem.open(
+                leading: icon(AppGlyphs.logs),
+                title: Text(l10n.businessToolsRuntimeLogs),
+                widget:
+                    entries[PageLabel.logs]?.builder(context) ??
+                    const SizedBox.shrink(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          _BusinessMobileSection(
+            title: l10n.network,
+            items: [
+              ListItem.open(
+                leading: icon(AppGlyphs.appsList),
+                title: Text(l10n.businessToolsPerAppProxy),
+                trailing: accessList.isNotEmpty
+                    ? value(
+                        l10n.businessToolsApplicationCount(accessList.length),
+                      )
+                    : null,
+                widget: const AccessView(),
+              ),
+              Ipv6Item(leading: icon(AppGlyphs.vpn)),
+              BypassPrivateRouteItem(
+                title: l10n.businessToolsLocalDirect,
+                leading: icon(AppGlyphs.wifi),
+              ),
+              setting(
+                l10n.advancedConfig,
+                AppGlyphs.wrench,
+                const AdvancedConfigView(isAndroid: true),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          _BusinessMobileSection(
+            title: l10n.businessToolsGeneral,
+            items: [
+              setting(
+                l10n.businessToolsAppearance,
+                AppGlyphs.paintbrush,
+                const ThemeView(business: true),
+                trailing: themeLabel,
+              ),
+              setting(
+                l10n.language,
+                AppGlyphs.language,
+                const ThemeView(business: true),
+                trailing: localeLabel,
+              ),
+              setting(
+                l10n.backupAndRestore,
+                AppGlyphs.cloudSync,
+                const BackupAndRestore(),
+              ),
+              setting(
+                l10n.about,
+                AppGlyphs.info,
+                const AboutView(business: true),
+              ),
+              setting(l10n.general, AppGlyphs.settings, const GeneralView()),
+              if (developerMode)
+                setting(
+                  l10n.developerMode,
+                  AppGlyphs.cpu,
+                  const DeveloperView(),
+                ),
+              if (system.hasHelperService)
+                setting(
+                  l10n.systemService,
+                  AppGlyphs.settings,
+                  const SystemServiceView(),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BusinessMobileSection extends StatelessWidget {
+  const _BusinessMobileSection({required this.title, required this.items});
+
+  final String title;
+  final List<Widget> items;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 4, bottom: 8),
+        child: Text(title, style: BusinessText.metaLabel(context)),
+      ),
+      BusinessSettingsCard(items: items),
+    ],
+  );
 }
 
 class _BusinessSettingsLayout extends ConsumerStatefulWidget {

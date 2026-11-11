@@ -15,65 +15,72 @@ class BusinessThemeChoices extends ConsumerWidget {
     );
     final labels = context.appLocalizations;
     const modes = [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final mode in modes) ...[
-          SizedBox(
-            width: 144,
-            child: PressRegion(
-              onTap: () => ref
-                  .read(themeSettingProvider.notifier)
-                  .update((state) => state.copyWith(themeMode: mode)),
-              shape: AppShape.md,
-              child: DecoratedBox(
-                decoration: ShapeDecoration(
-                  color: context.colorScheme.surface,
-                  shape: RoundedSuperellipseBorder(
-                    side: BorderSide(
-                      color: selected == mode
-                          ? BusinessPalette.blue
-                          : context.colorScheme.outlineVariant,
-                      width: selected == mode ? 2 : 1,
-                    ),
-                    borderRadius: AppRadius.md,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        width: 128,
-                        height: 80,
-                        child: _BusinessThemePreview(mode: mode),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        switch (mode) {
-                          ThemeMode.light => labels.light,
-                          ThemeMode.dark => labels.dark,
-                          ThemeMode.system => labels.businessFollowSystem,
-                        },
-                        style: AppTextStyle.custom(
-                          context,
-                          size: 13,
-                          leading: 18,
-                          weight: selected == mode
-                              ? FontWeight.w600
-                              : FontWeight.w400,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth < 480
+            ? (constraints.maxWidth - 16) / 3
+            : 144.0;
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            for (final mode in modes) ...[
+              SizedBox(
+                width: width,
+                child: PressRegion(
+                  onTap: () => ref
+                      .read(themeSettingProvider.notifier)
+                      .update((state) => state.copyWith(themeMode: mode)),
+                  shape: AppShape.md,
+                  child: DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: context.colorScheme.surface,
+                      shape: RoundedSuperellipseBorder(
+                        side: BorderSide(
+                          color: selected == mode
+                              ? BusinessPalette.blue
+                              : context.colorScheme.outlineVariant,
+                          width: selected == mode ? 2 : 1,
                         ),
+                        borderRadius: AppRadius.md,
                       ),
-                    ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            height: 80,
+                            child: _BusinessThemePreview(mode: mode),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            switch (mode) {
+                              ThemeMode.light => labels.light,
+                              ThemeMode.dark => labels.dark,
+                              ThemeMode.system => labels.businessFollowSystem,
+                            },
+                            style: AppTextStyle.custom(
+                              context,
+                              size: 13,
+                              leading: 18,
+                              weight: selected == mode
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          if (mode != ThemeMode.system) const SizedBox(width: 14),
-        ],
-      ],
+              if (mode != ThemeMode.system) const SizedBox(width: 8),
+            ],
+          ],
+        );
+      },
     );
   }
 }
