@@ -1652,5 +1652,21 @@
   "businessOnboardingFailedStatus": "状態",
   "businessOnboardingFailedDays": "期限切れから {days} 日",
   "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
-  "businessOnboardingFailedRetainedConfig": "以前の設定は保持されており、クライアントは引き続き利用できます。"
+  "businessOnboardingFailedRetainedConfig": "以前の設定は保持されており、クライアントは引き続き利用できます。",
+  "dnsUpstream": "上流 DNS",
+  "dnsResourcesDesktop": "DNS とリソース",
+  "routingResourcesDesktop": "ルーティングリソース",
+  "desktopFakeIpExplanation": "198.18.0.0/16 は fake-IP の割り当て範囲です。実際の DNS 解決は出口側で行われ、ローカル ISP を経由しません。",
+  "dnsHandling": "処理",
+  "recentDnsQueries": "最近の DNS クエリ",
+  "dnsProxyRoute": "プロキシ経由",
+  "desktopResourceUpdateNote": "リソースは {hours} 時間ごとに更新を確認します。ダウンロードに失敗した場合は以前のバージョンを使用します。",
+  "@desktopResourceUpdateNote": {"placeholders":{"hours":{"type":"int"}}},
+  "dnsBlocked": "ブロック済み",
+  "routingResourcesSubtitle": "プロキシ経由と直接接続する通信を決定します",
+  "desktopGeoIpDescription": "IP ロケーションデータベース",
+  "desktopGeoSiteDescription": "ドメイン分類データベース",
+  "desktopAsnDescription": "自律システムデータベース",
+  "desktopRuleSetDescription": "サブスクリプションから配信",
+  "desktopResourceLatest": "最新です"
 }

@@ -5,6 +5,12 @@ import 'package:prism_ui/icons/glyph.dart';
 import 'package:prism_ui/icons/glyphs.dart';
 
 abstract final class AppGlyphs {
+  static const menu = Glyph([
+    GlyphPolyline([GlyphVertex(4, 6), GlyphVertex(20, 6)]),
+    GlyphPolyline([GlyphVertex(4, 12), GlyphVertex(20, 12)]),
+    GlyphPolyline([GlyphVertex(4, 18), GlyphVertex(20, 18)]),
+  ]);
+
   static const dashboard = Glyph([
     GlyphBox(3.5, 3.5, 10.5, 11.5, 2),
     GlyphBox(13.5, 3.5, 20.5, 9.5, 2),

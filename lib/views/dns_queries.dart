@@ -6,6 +6,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/business_settings_card.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -45,11 +46,13 @@ class DnsQueryListController extends ValueNotifier<DnsQueriesState> {
 class DnsQueriesView extends ConsumerStatefulWidget {
   final ScrollController? scrollController;
   final bool embedded;
+  final bool desktopPanel;
 
   const DnsQueriesView({
     super.key,
     this.scrollController,
     this.embedded = false,
+    this.desktopPanel = false,
   });
 
   @override
@@ -64,6 +67,16 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
   late final _physics = FollowEndScrollPhysics(
     isFollowing: () => _listController.value.autoScrollToEnd,
   );
+
+  DnsQueryInitiator? get _selectedInitiator {
+    for (final filter in _filters.filters) {
+      if (filter.kind != RecordFacetKind.initiator) continue;
+      for (final initiator in DnsQueryInitiator.values) {
+        if (initiator.label == filter.value) return initiator;
+      }
+    }
+    return null;
+  }
 
   @override
   void initState() {
@@ -169,7 +182,14 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
       builder: (context, _) {
         final state = _listController.value;
         final dnsQueries = _filters.apply(state.list);
-        return NullStatusSwitcher(
+        final fakeIpEnabled = widget.desktopPanel
+            ? ref.watch(
+                patchClashConfigProvider.select(
+                  (config) => config.dns.enhancedMode == DnsMode.fakeIp,
+                ),
+              )
+            : false;
+        final body = NullStatusSwitcher(
           isEmpty: dnsQueries.isEmpty,
           isSearching: state.isSearching || _filters.isFiltering,
           nullStatus: NullStatus(
@@ -180,8 +200,13 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
             tableId: 'dns',
             items: dnsQueries,
             reverse: true,
-            columnsOf: (width) =>
-                _dnsQueryColumns(context, wide: width >= recordWideTableWidth),
+            minWidth: widget.desktopPanel ? 560 : null,
+            columnsOf: (width) => widget.desktopPanel
+                ? _desktopDnsQueryColumns(context, fakeIpEnabled: fakeIpEnabled)
+                : _dnsQueryColumns(
+                    context,
+                    wide: width >= recordWideTableWidth,
+                  ),
             builder: (context, table, dnsQueries) => Align(
               alignment: Alignment.topCenter,
               child: FloatingScrollbar(
@@ -234,6 +259,82 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
               ),
             ),
           ),
+        );
+        if (!widget.desktopPanel) return body;
+        final fakeIp = ref.watch(
+          patchClashConfigProvider.select(
+            (config) => config.dns.enhancedMode == DnsMode.fakeIp,
+          ),
+        );
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 12, 10),
+              child: Row(
+                children: [
+                  Text(
+                    context.appLocalizations.recentDnsQueries,
+                    style: AppTextStyle.subheadline.of(
+                      context,
+                      emphasized: true,
+                    ),
+                  ),
+                  const Spacer(),
+                  BusinessSegmented<DnsQueryInitiator?>(
+                    height: 30,
+                    items: [
+                      BusinessSegment(
+                        value: null,
+                        label: context.appLocalizations.all,
+                      ),
+                      BusinessSegment(
+                        value: DnsQueryInitiator.app,
+                        label: context.appLocalizations.app,
+                      ),
+                      BusinessSegment(
+                        value: DnsQueryInitiator.proxy,
+                        label: context.appLocalizations.dnsProxyRoute,
+                      ),
+                      BusinessSegment(
+                        value: DnsQueryInitiator.direct,
+                        label: context.appLocalizations.direct,
+                      ),
+                    ],
+                    selected: _selectedInitiator,
+                    onSelected: (initiator) {
+                      for (final filter in _filters.filters) {
+                        if (filter.kind == RecordFacetKind.initiator) {
+                          _filters.remove(filter);
+                        }
+                      }
+                      if (initiator case final initiator?) {
+                        _filters.add(
+                          RecordFilter(
+                            RecordFacetKind.initiator,
+                            initiator.label,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: TopInsetScope(inset: 0, child: body)),
+            if (fakeIp)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    context.appLocalizations.desktopFakeIpExplanation,
+                    style: AppTextStyle.caption1
+                        .of(context)
+                        .copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ),
+          ],
         );
       },
     );
@@ -304,6 +405,55 @@ List<RecordColumn<DnsQuery>> _dnsQueryColumns(
     ),
   ];
 }
+
+List<RecordColumn<DnsQuery>> _desktopDnsQueryColumns(
+  BuildContext context, {
+  required bool fakeIpEnabled,
+}) {
+  final strings = context.appLocalizations;
+  bool blocked(DnsQuery query) => query.error == strings.dnsBlocked;
+  return [
+    RecordColumn(
+      TableColumn('time', strings.time, width: 96),
+      cell: (_, query) =>
+          RecordCellText(query.time.showTime.trim(), muted: true, mono: true),
+      sortKey: (query) => query.time,
+      descendingFirst: true,
+    ),
+    RecordColumn(
+      TableColumn('domain', strings.domain, flex: 1.2),
+      cell: (_, query) => RecordCellText(query.domain, mono: true),
+      sortKey: (query) => query.domain.toLowerCase(),
+    ),
+    RecordColumn(
+      TableColumn('result', strings.result, flex: 1),
+      cell: (_, query) =>
+          RecordCellText(blocked(query) ? '—' : query.summary, mono: true),
+      sortKey: (query) => query.summary.toLowerCase(),
+    ),
+    RecordColumn(
+      TableColumn('handling', strings.dnsHandling, width: 82),
+      cell: (_, query) => blocked(query)
+          ? RecordLabel(label: strings.dnsBlocked, tone: RecordTone.error)
+          : fakeIpEnabled && query.answers.any(_isFakeIpAddress)
+          ? RecordLabel(
+              label: strings.businessDnsProxyResolved,
+              tone: RecordTone.info,
+            )
+          : const RecordCellText(''),
+    ),
+    RecordColumn(
+      TableColumn('elapsed', strings.elapsed, width: 68, end: true),
+      cell: (_, query) =>
+          RecordCellText('${query.delay} ms', muted: true, mono: true),
+      sortKey: (query) => query.delay,
+      descendingFirst: true,
+    ),
+  ];
+}
+
+bool _isFakeIpAddress(String address) =>
+    address.startsWith('198.18.') || address.startsWith('198.19.');
 
 class _DnsKeyword extends StatelessWidget {
   final RecordFilter filter;

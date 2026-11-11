@@ -1652,5 +1652,21 @@
   "businessOnboardingFailedStatus": "Estado",
   "businessOnboardingFailedDays": "Caducó hace {days} días",
   "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
-  "businessOnboardingFailedRetainedConfig": "Tu configuración anterior se conserva y el cliente puede seguir funcionando."
+  "businessOnboardingFailedRetainedConfig": "Tu configuración anterior se conserva y el cliente puede seguir funcionando.",
+  "dnsUpstream": "DNS ascendente",
+  "dnsResourcesDesktop": "DNS y recursos",
+  "routingResourcesDesktop": "Recursos de enrutamiento",
+  "desktopFakeIpExplanation": "198.18.0.0/16 es el rango de mapeo fake-IP; la resolución DNS real se realiza en la salida, sin pasar por el ISP local.",
+  "dnsHandling": "Tratamiento",
+  "recentDnsQueries": "Consultas DNS recientes",
+  "dnsProxyRoute": "Por proxy",
+  "desktopResourceUpdateNote": "Los recursos comprueban si hay actualizaciones cada {hours} horas; si falla una descarga, se conserva la versión anterior.",
+  "@desktopResourceUpdateNote": {"placeholders":{"hours":{"type":"int"}}},
+  "dnsBlocked": "Bloqueado",
+  "routingResourcesSubtitle": "Decide qué tráfico usa el proxy o va directo",
+  "desktopGeoIpDescription": "Base de datos de ubicación IP",
+  "desktopGeoSiteDescription": "Base de datos de categorías de dominio",
+  "desktopAsnDescription": "Base de datos de sistemas autónomos",
+  "desktopRuleSetDescription": "Reglas enviadas por la suscripción",
+  "desktopResourceLatest": "Actualizado"
 }

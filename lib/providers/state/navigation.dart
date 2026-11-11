@@ -28,11 +28,12 @@ NavigationItemsState currentNavigationItemsState(Ref ref) {
     ref.watch(currentProfileProvider),
   );
   if (viewWidth > maxMobileWidth && isBusiness) {
-    const businessDestinations = {
+    final businessDestinations = {
       PageLabel.dashboard,
       PageLabel.proxies,
       PageLabel.profiles,
       PageLabel.requests,
+      if (defaultTargetPlatform != TargetPlatform.windows) PageLabel.dns,
       PageLabel.logs,
       PageLabel.tools,
     };

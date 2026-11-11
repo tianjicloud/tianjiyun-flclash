@@ -13472,6 +13472,136 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Upstream`
+  String get dnsUpstream {
+    return Intl.message('Upstream', name: 'dnsUpstream', desc: '', args: []);
+  }
+
+  /// `DNS & Resources`
+  String get dnsResourcesDesktop {
+    return Intl.message(
+      'DNS & Resources',
+      name: 'dnsResourcesDesktop',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Routing resources`
+  String get routingResourcesDesktop {
+    return Intl.message(
+      'Routing resources',
+      name: 'routingResourcesDesktop',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `198.18.0.0/16 is the fake-IP mapping range; real DNS resolution happens at the exit, outside your local ISP.`
+  String get desktopFakeIpExplanation {
+    return Intl.message(
+      '198.18.0.0/16 is the fake-IP mapping range; real DNS resolution happens at the exit, outside your local ISP.',
+      name: 'desktopFakeIpExplanation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Handling`
+  String get dnsHandling {
+    return Intl.message('Handling', name: 'dnsHandling', desc: '', args: []);
+  }
+
+  /// `Recent DNS queries`
+  String get recentDnsQueries {
+    return Intl.message(
+      'Recent DNS queries',
+      name: 'recentDnsQueries',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy`
+  String get dnsProxyRoute {
+    return Intl.message('Proxy', name: 'dnsProxyRoute', desc: '', args: []);
+  }
+
+  /// `Resources check for updates every {hours} hours; if a download fails, the previous version remains in use.`
+  String desktopResourceUpdateNote(int hours) {
+    return Intl.message(
+      'Resources check for updates every $hours hours; if a download fails, the previous version remains in use.',
+      name: 'desktopResourceUpdateNote',
+      desc: '',
+      args: [hours],
+    );
+  }
+
+  /// `Blocked`
+  String get dnsBlocked {
+    return Intl.message('Blocked', name: 'dnsBlocked', desc: '', args: []);
+  }
+
+  /// `Decides which traffic uses the proxy or goes direct`
+  String get routingResourcesSubtitle {
+    return Intl.message(
+      'Decides which traffic uses the proxy or goes direct',
+      name: 'routingResourcesSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IP location database`
+  String get desktopGeoIpDescription {
+    return Intl.message(
+      'IP location database',
+      name: 'desktopGeoIpDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Domain category database`
+  String get desktopGeoSiteDescription {
+    return Intl.message(
+      'Domain category database',
+      name: 'desktopGeoSiteDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Autonomous system database`
+  String get desktopAsnDescription {
+    return Intl.message(
+      'Autonomous system database',
+      name: 'desktopAsnDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delivered by subscription`
+  String get desktopRuleSetDescription {
+    return Intl.message(
+      'Delivered by subscription',
+      name: 'desktopRuleSetDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Up to date`
+  String get desktopResourceLatest {
+    return Intl.message(
+      'Up to date',
+      name: 'desktopResourceLatest',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

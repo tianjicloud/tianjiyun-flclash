@@ -40,7 +40,7 @@ class Navigation implements NavigationPort {
       NavigationItem(
         glyph: AppGlyphs.dns,
         label: PageLabel.dns,
-        builder: (_) => const DnsQueriesView(),
+        builder: (_) => const DnsResourcesView(),
         modes: [NavigationItemMode.moreFull],
       ),
       NavigationItem(

@@ -1652,5 +1652,21 @@
   "businessOnboardingFailedStatus": "Статус",
   "businessOnboardingFailedDays": "Истёк {days} дн. назад",
   "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
-  "businessOnboardingFailedRetainedConfig": "Предыдущая конфигурация сохранена, клиент продолжает работать."
+  "businessOnboardingFailedRetainedConfig": "Предыдущая конфигурация сохранена, клиент продолжает работать.",
+  "dnsUpstream": "Вышестоящий DNS",
+  "dnsResourcesDesktop": "DNS и ресурсы",
+  "routingResourcesDesktop": "Ресурсы маршрутизации",
+  "desktopFakeIpExplanation": "198.18.0.0/16 — диапазон адресов fake-IP; реальные DNS-запросы выполняются на выходном узле, минуя местного провайдера.",
+  "dnsHandling": "Обработка",
+  "recentDnsQueries": "Последние DNS-запросы",
+  "dnsProxyRoute": "Через прокси",
+  "desktopResourceUpdateNote": "Ресурсы проверяются каждые {hours} ч.; при ошибке загрузки продолжает использоваться предыдущая версия.",
+  "@desktopResourceUpdateNote": {"placeholders":{"hours":{"type":"int"}}},
+  "dnsBlocked": "Заблокировано",
+  "routingResourcesSubtitle": "Определяет, какой трафик идет через прокси, а какой напрямую",
+  "desktopGeoIpDescription": "База данных местоположений IP",
+  "desktopGeoSiteDescription": "База категорий доменов",
+  "desktopAsnDescription": "База данных автономных систем",
+  "desktopRuleSetDescription": "Правила из подписки",
+  "desktopResourceLatest": "Актуально"
 }

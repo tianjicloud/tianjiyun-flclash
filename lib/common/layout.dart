@@ -4,11 +4,14 @@ import 'dart:ui' show Size;
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:flutter/widgets.dart' show BuildContext;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 
 import 'constant.dart';
 
 double getWindowHeaderHeight({required bool isDesktop, required bool isMacOS}) {
   if (!isDesktop) return 0;
+  if (defaultTargetPlatform == TargetPlatform.linux) return 46;
   return isMacOS ? 28 : 32;
 }
 

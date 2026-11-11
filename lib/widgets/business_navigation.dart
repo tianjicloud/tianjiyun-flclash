@@ -10,6 +10,8 @@ import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +38,10 @@ String _navigationLabel(
     PageLabel.logs => l10n.logsAndDiagnostics,
     PageLabel.tools => mobile ? l10n.tools : l10n.settings,
     PageLabel.resources => l10n.resources,
-    PageLabel.dns => l10n.dnsQueries,
+    PageLabel.dns =>
+      defaultTargetPlatform == TargetPlatform.windows
+          ? l10n.dnsQueries
+          : l10n.dnsResourcesDesktop,
   };
 }
 
@@ -60,9 +65,14 @@ class BusinessNavigationSidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(currentProfileProvider);
     final dark = context.colorScheme.brightness == Brightness.dark;
+    final macOS = defaultTargetPlatform == TargetPlatform.macOS;
     final hasWallpaper = AppBackgroundScope.hasImage(context);
     final width = expanded ? _expandedSidebarWidth : _compactSidebarWidth;
-    final horizontalInset = expanded ? 12.5 : 8.0;
+    final horizontalInset = macOS && expanded
+        ? 10.0
+        : expanded
+        ? 12.5
+        : 8.0;
     return SizedBox(
       width: width,
       child: DecoratedBox(
@@ -71,23 +81,37 @@ class BusinessNavigationSidebar extends ConsumerWidget {
               ? Colors.transparent
               : dark
               ? BusinessPalette.sidebarDarkOverlay
+              : macOS
+              ? null
               : BusinessPalette.sidebarLight,
+          gradient: !dark && !hasWallpaper && macOS
+              ? const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromRGBO(247, 248, 251, 0.86),
+                    Color.fromRGBO(239, 242, 247, 0.86),
+                  ],
+                )
+              : null,
           shape: const RoundedSuperellipseBorder(),
         ),
         child: Padding(
           padding: EdgeInsets.fromLTRB(
             horizontalInset,
-            18,
+            macOS ? 14 : 18,
             horizontalInset,
             18,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: windowControls.height),
+              SizedBox(height: macOS ? 38 : windowControls.height),
               if (expanded) ...[
-                _BusinessBrand(brandName: context.appLocalizations.brandName),
-                const SizedBox(height: 22),
+                if (!macOS) ...[
+                  _BusinessBrand(brandName: context.appLocalizations.brandName),
+                  const SizedBox(height: 22),
+                ],
                 Expanded(
                   child: FocusTraversalGroup(
                     child: Shortcuts(
@@ -113,7 +137,18 @@ class BusinessNavigationSidebar extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (profile != null) _SubscriptionSummary(profile: profile),
+                if (macOS) ...[
+                  _MacSidebarFooter(
+                    profile: profile,
+                    onSettings: () {
+                      final settingsIndex = items.indexWhere(
+                        (item) => item.label == PageLabel.tools,
+                      );
+                      if (settingsIndex >= 0) onSelected(settingsIndex);
+                    },
+                  ),
+                ] else if (profile != null)
+                  _SubscriptionSummary(profile: profile),
               ] else ...[
                 Expanded(
                   child: FocusTraversalGroup(
@@ -197,6 +232,62 @@ class _BusinessBrand extends StatelessWidget {
   }
 }
 
+class _MacSidebarFooter extends StatelessWidget {
+  const _MacSidebarFooter({required this.profile, required this.onSettings});
+
+  final Profile? profile;
+  final VoidCallback onSettings;
+
+  @override
+  Widget build(BuildContext context) {
+    final expiry = profile?.subscriptionInfo?.expireDate;
+    final remaining = expiry == null
+        ? context.appLocalizations.unknown
+        : context.appLocalizations.profileDaysLeft(
+            math.max(0, expiry.difference(DateTime.now()).inDays),
+          );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 4, 2, 0),
+      child: Row(
+        children: [
+          const BusinessBrandMark(size: 28),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.appLocalizations.brandName,
+                  style: BusinessText.sidebarBrand(context),
+                ),
+                Text(
+                  remaining,
+                  style: BusinessText.sidebarAccountSub(
+                    context,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            tooltip: context.appLocalizations.settings,
+            onPressed: onSettings,
+            style: const ButtonStyle(
+              fixedSize: Size(28, 28),
+              minimumSize: Size(28, 28),
+              maximumSize: Size(28, 28),
+              padding: EdgeInsets.zero,
+              shape: AppShape.md,
+              tapTargetSize: TapTargetSize.shrinkWrap,
+            ),
+            icon: const GlyphIcon(AppGlyphs.settings),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _BusinessSidebarItem extends StatelessWidget {
   const _BusinessSidebarItem({
     required this.item,
@@ -213,6 +304,7 @@ class _BusinessSidebarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = context.colorScheme.brightness == Brightness.dark;
+    final macOS = defaultTargetPlatform == TargetPlatform.macOS;
     final foreground = selected
         ? (dark
               ? BusinessPalette.sidebarDarkSelected
@@ -221,7 +313,9 @@ class _BusinessSidebarItem extends StatelessWidget {
               ? BusinessPalette.sidebarDarkSecondary
               : BusinessPalette.sidebarSecondary);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(
+        bottom: defaultTargetPlatform == TargetPlatform.macOS ? 2 : 4,
+      ),
       child: Semantics(
         button: true,
         selected: selected,
@@ -236,7 +330,7 @@ class _BusinessSidebarItem extends StatelessWidget {
               overlay: PressRegion.hoverOverlay,
               child: SizedBox(
                 key: ValueKey('business-sidebar-${item.label.name}'),
-                height: 38,
+                height: defaultTargetPlatform == TargetPlatform.macOS ? 32 : 38,
                 child: Stack(
                   alignment: AlignmentDirectional.centerStart,
                   children: [
@@ -244,13 +338,15 @@ class _BusinessSidebarItem extends StatelessWidget {
                       Positioned.fill(
                         child: DecoratedBox(
                           decoration: ShapeDecoration(
-                            color: dark
+                            color: macOS && !dark
+                                ? Colors.white
+                                : dark
                                 ? BusinessPalette.sidebarDarkBackground
                                 : BusinessPalette.sidebarSelection,
                             shape: RoundedSuperellipseBorder(
                               borderRadius: _sidebarRowShape.borderRadius,
                             ),
-                            shadows: dark
+                            shadows: dark || macOS
                                 ? const []
                                 : const [
                                     BoxShadow(

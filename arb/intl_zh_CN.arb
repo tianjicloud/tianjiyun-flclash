@@ -1652,5 +1652,21 @@
   "businessOnboardingFailedStatus": "状态",
   "businessOnboardingFailedDays": "已过期 {days} 天",
   "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
-  "businessOnboardingFailedRetainedConfig": "之前的配置已保留，客户端仍可正常使用。"
+  "businessOnboardingFailedRetainedConfig": "之前的配置已保留，客户端仍可正常使用。",
+  "dnsUpstream": "上游",
+  "dnsResourcesDesktop": "DNS 与资源",
+  "routingResourcesDesktop": "分流资源",
+  "desktopFakeIpExplanation": "198.18.0.0/16 为 fake-ip 映射地址，真实解析在出口端完成，不经本地运营商",
+  "dnsHandling": "处理",
+  "recentDnsQueries": "最近 DNS 查询",
+  "dnsProxyRoute": "走代理",
+  "desktopResourceUpdateNote": "资源每 {hours} 小时自动检查更新；下载失败时继续使用旧版本",
+  "@desktopResourceUpdateNote": {"placeholders":{"hours":{"type":"int"}}},
+  "dnsBlocked": "已拦截",
+  "routingResourcesSubtitle": "决定哪些流量走代理、哪些直连",
+  "desktopGeoIpDescription": "IP 归属地库",
+  "desktopGeoSiteDescription": "域名分类库",
+  "desktopAsnDescription": "自治系统数据库",
+  "desktopRuleSetDescription": "订阅下发规则集",
+  "desktopResourceLatest": "已是最新"
 }

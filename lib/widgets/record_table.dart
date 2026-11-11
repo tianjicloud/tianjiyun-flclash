@@ -159,6 +159,7 @@ class RecordTableFrame<T> extends ConsumerStatefulWidget {
   final bool reverse;
   final bool cardSurface;
   final ShapeBorder? cardShape;
+  final double? minWidth;
   final List<RecordColumn<T>> Function(double width) columnsOf;
   final Widget Function(
     BuildContext context,
@@ -174,6 +175,7 @@ class RecordTableFrame<T> extends ConsumerStatefulWidget {
     this.reverse = false,
     this.cardSurface = false,
     this.cardShape,
+    this.minWidth = _recordTableMinWidth,
     required this.columnsOf,
     required this.builder,
   });
@@ -194,7 +196,7 @@ class _RecordTableFrameState<T> extends ConsumerState<RecordTableFrame<T>>
   String get tableId => widget.tableId;
 
   RecordTable<T>? _tableOf(BuildContext context, double width) {
-    if (width < _recordTableMinWidth) {
+    if (width < (widget.minWidth ?? _recordTableMinWidth)) {
       return null;
     }
     final rowHeight = widget.cardSurface

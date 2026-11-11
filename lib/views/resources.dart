@@ -33,6 +33,10 @@ const _RemoteResources _noResources = (
   modules: <MitmModule>[],
 );
 
+final desktopResourceFileInfoProvider = Provider<Map<String, FileInfo?>>(
+  (ref) => const {},
+);
+
 class ResourcesView extends ConsumerStatefulWidget {
   const ResourcesView({super.key, this.embedded = false});
 
@@ -94,7 +98,7 @@ class BusinessResourcesPreview extends ConsumerWidget {
                 if (geoInfo.isNotEmpty)
                   ListItem(
                     padding: EdgeInsets.zero,
-                    title: Text('GeoIP · GeoSite'),
+                    title: const Text('GeoIP · GeoSite'),
                     subtitle: lastUpdate == null
                         ? null
                         : Text(lastUpdate.getLastUpdateTimeDesc(context)),
@@ -127,6 +131,40 @@ class BusinessResourcesPreview extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class DesktopResourceItems extends ConsumerWidget {
+  const DesktopResourceItems({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final providers = ref.watch(clashProvidersProvider).value ?? const [];
+    final remoteProviders = providers.where((provider) => provider.isRemote);
+    final fileInfos = ref.watch(desktopResourceFileInfoProvider);
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      children: [
+        for (final resource in const [
+          GeoResource.GEOIP,
+          GeoResource.GEOSITE,
+          GeoResource.ASN,
+        ])
+          _GeoResourceItem(
+            resource,
+            preloaded: fileInfos,
+            showUpdateAction: true,
+          ),
+        for (final provider in remoteProviders)
+          _RuleProviderItem(
+            provider,
+            preloaded: fileInfos,
+            showUpdateAction: true,
+            showLatestStatus: true,
+            key: ValueKey(provider.id),
+          ),
+      ],
     );
   }
 }
@@ -376,6 +414,9 @@ class _ResourceItem extends StatelessWidget {
   final DateTime? lastUpdateTime;
   final bool pending;
   final bool isUpdating;
+  final bool showUpdateAction;
+  final bool showLatestStatus;
+  final String? desktopDescription;
   final Future<void> Function() onSync;
   final VoidCallback? onEdit;
 
@@ -388,6 +429,9 @@ class _ResourceItem extends StatelessWidget {
     required this.isUpdating,
     required this.onSync,
     this.onEdit,
+    this.showUpdateAction = false,
+    this.showLatestStatus = false,
+    this.desktopDescription,
   });
 
   Future<void> _copyLink(BuildContext context, String url) async {
@@ -440,6 +484,39 @@ class _ResourceItem extends StatelessWidget {
       ),
       child: isUpdating
           ? const ActivityIndicator(key: ValueKey('updating'), size: 24)
+          : showUpdateAction && showLatestStatus
+          ? TonalChip(
+              label: context.appLocalizations.desktopResourceLatest,
+              color: colorScheme.successContainer,
+              foregroundColor: colorScheme.onSuccessContainer,
+            )
+          : showUpdateAction
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 2,
+              children: [
+                if (lastUpdateTime case final date?)
+                  LastUpdateTimeText(
+                    lastUpdateDate: date,
+                    style: context.listCaptionStyle,
+                  ),
+                OutlinedButton(
+                  onPressed: () => globalState.safeRun<void>(
+                    onSync,
+                    title: title,
+                    silence: false,
+                  ),
+                  style: const ButtonStyle(
+                    minimumSize: Size(64, 24),
+                    fixedSize: Size(64, 24),
+                    padding: EdgeInsets.zero,
+                    shape: AppShape.sm,
+                  ),
+                  child: Text(context.appLocalizations.update),
+                ),
+              ],
+            )
           : chip == null
           ? const SizedBox.shrink()
           : TonalChip(
@@ -458,8 +535,27 @@ class _ResourceItem extends StatelessWidget {
       menuItems: _menuItems(context),
       child: DecorationListItem(
         onPressed: onEdit,
-        title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-        subtitle: lastUpdateTime != null || pending
+        title: Text(
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: showUpdateAction
+              ? AppTextStyle.subheadline.of(context, emphasized: true)
+              : null,
+        ),
+        subtitle: showUpdateAction
+            ? Text(
+                [
+                  ?desktopDescription,
+                  if (chip case final size?) _resourceSizeLabel(size),
+                ].join(' · '),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.caption1
+                    .of(context)
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              )
+            : lastUpdateTime != null || pending
             ? LastUpdateTimeText(
                 lastUpdateDate: lastUpdateTime,
                 style: subtitleStyle,
@@ -542,6 +638,24 @@ String _geoFileName(GeoResource type) => switch (type) {
   GeoResource.GEOSITE => GEOSITE,
 };
 
+String _desktopGeoName(GeoResource type) => switch (type) {
+  GeoResource.GEOIP => 'GeoIP',
+  GeoResource.GEOSITE => 'GeoSite',
+  GeoResource.ASN => 'ASN',
+  GeoResource.MMDB => 'MMDB',
+};
+
+String _resourceSizeLabel(String value) =>
+    value.replaceAllMapped(RegExp(r'(?<=\d)(?=[A-Za-z])'), (_) => ' ');
+
+String _desktopGeoDescription(BuildContext context, GeoResource type) =>
+    switch (type) {
+      GeoResource.GEOIP => context.appLocalizations.desktopGeoIpDescription,
+      GeoResource.GEOSITE => context.appLocalizations.desktopGeoSiteDescription,
+      GeoResource.ASN ||
+      GeoResource.MMDB => context.appLocalizations.desktopAsnDescription,
+    };
+
 Future<FileInfo?> _geoFileInfo(GeoResource type) async {
   final homePath = await appPath.homeDirPath;
   return File(join(homePath, _geoFileName(type))).getFileInfo();
@@ -601,8 +715,13 @@ List<FileInfo?> _readFileInfos(_FileInfoQuery query) {
 class _GeoResourceItem extends ConsumerWidget {
   final GeoResource type;
   final Map<String, FileInfo?> preloaded;
+  final bool showUpdateAction;
 
-  const _GeoResourceItem(this.type, {required this.preloaded});
+  const _GeoResourceItem(
+    this.type, {
+    required this.preloaded,
+    this.showUpdateAction = false,
+  });
 
   Future<void> _updateUrl(
     BuildContext context,
@@ -611,7 +730,7 @@ class _GeoResourceItem extends ConsumerWidget {
   ) async {
     final newUrl = await dialogs.showCommonDialog<String>(
       child: UpdateGeoUrlFormDialog(
-        title: type.name,
+        title: showUpdateAction ? _desktopGeoName(type) : type.name,
         url: url,
         defaultValue: defaultGeoXUrl[type],
       ),
@@ -644,7 +763,7 @@ class _GeoResourceItem extends ConsumerWidget {
       preloaded: preloaded,
       load: () => _geoFileInfo(type),
       builder: (context, fileInfo, pending) => _ResourceItem(
-        title: type.name,
+        title: showUpdateAction ? _desktopGeoName(type) : type.name,
         url: url,
         chip: fileInfo?.size.traffic.show,
         lastUpdateTime: fileInfo?.lastModified,
@@ -654,6 +773,10 @@ class _GeoResourceItem extends ConsumerWidget {
             .read(geoResourceActionProvider.notifier)
             .updateGeoResource(type),
         onEdit: url == null ? null : () => _updateUrl(context, ref, url),
+        showUpdateAction: showUpdateAction,
+        desktopDescription: showUpdateAction
+            ? _desktopGeoDescription(context, type)
+            : null,
       ),
     );
   }
@@ -681,8 +804,16 @@ class _IconSetItem extends ConsumerWidget {
 class _RuleProviderItem extends ConsumerWidget {
   final ClashProvider provider;
   final Map<String, FileInfo?> preloaded;
+  final bool showUpdateAction;
+  final bool showLatestStatus;
 
-  const _RuleProviderItem(this.provider, {required this.preloaded, super.key});
+  const _RuleProviderItem(
+    this.provider, {
+    required this.preloaded,
+    this.showUpdateAction = false,
+    this.showLatestStatus = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -702,6 +833,11 @@ class _RuleProviderItem extends ConsumerWidget {
         onSync: () => ref
             .read(resourcesActionProvider.notifier)
             .updateRuleProvider(provider),
+        showUpdateAction: showUpdateAction,
+        showLatestStatus: showLatestStatus && fileInfo?.lastModified != null,
+        desktopDescription: showUpdateAction
+            ? context.appLocalizations.desktopRuleSetDescription
+            : null,
       ),
     );
   }

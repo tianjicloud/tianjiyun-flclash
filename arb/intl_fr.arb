@@ -1652,5 +1652,21 @@
   "businessOnboardingFailedStatus": "État",
   "businessOnboardingFailedDays": "Expiré depuis {days} jours",
   "@businessOnboardingFailedDays": {"placeholders":{"days":{"type":"int"}}},
-  "businessOnboardingFailedRetainedConfig": "Votre configuration précédente est conservée et le client peut continuer à fonctionner."
+  "businessOnboardingFailedRetainedConfig": "Votre configuration précédente est conservée et le client peut continuer à fonctionner.",
+  "dnsUpstream": "DNS amont",
+  "dnsResourcesDesktop": "DNS et ressources",
+  "routingResourcesDesktop": "Ressources de routage",
+  "desktopFakeIpExplanation": "198.18.0.0/16 est la plage de mappage fake-IP ; la résolution DNS réelle se fait à la sortie, sans passer par votre FAI local.",
+  "dnsHandling": "Traitement",
+  "recentDnsQueries": "Requêtes DNS récentes",
+  "dnsProxyRoute": "Via proxy",
+  "desktopResourceUpdateNote": "Les ressources recherchent les mises à jour toutes les {hours} heures ; en cas d’échec, la version précédente reste utilisée.",
+  "@desktopResourceUpdateNote": {"placeholders":{"hours":{"type":"int"}}},
+  "dnsBlocked": "Bloqué",
+  "routingResourcesSubtitle": "Détermine le trafic passant par le proxy ou en direct",
+  "desktopGeoIpDescription": "Base de données de localisation IP",
+  "desktopGeoSiteDescription": "Base de données des catégories de domaines",
+  "desktopAsnDescription": "Base de données des systèmes autonomes",
+  "desktopRuleSetDescription": "Règles fournies par l’abonnement",
+  "desktopResourceLatest": "À jour"
 }

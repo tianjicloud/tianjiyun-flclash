@@ -10,7 +10,8 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/ui.dart';
-import 'package:flutter/foundation.dart' show ValueListenable;
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, ValueListenable, defaultTargetPlatform;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window/window.dart';
@@ -406,6 +407,73 @@ class _WindowHeaderState extends ConsumerState<WindowHeader> {
     final isBusiness = isTianjiSubscriptionProfile(
       ref.watch(currentProfileProvider),
     );
+    if (defaultTargetPlatform == TargetPlatform.linux) {
+      final navigation = ref.watch(navigationStateProvider);
+      return WindowHeaderBar(
+        height: kHeaderHeight,
+        backdropOpacity: backdropOpacity,
+        onDragStart: desktopWindow.startDragging,
+        onDoubleTap: caption.toggleMaximized,
+        leadingInset: 14,
+        leading: PopupAnchor(
+          targetBuilder: (open) => IconButton(
+            tooltip: context.appLocalizations.more,
+            onPressed: open,
+            style: ButtonStyle(
+              fixedSize: const Size(38, 30),
+              minimumSize: const Size(38, 30),
+              maximumSize: const Size(38, 30),
+              padding: EdgeInsets.zero,
+              shape: AppShape.md,
+              backgroundColor: WidgetStatePropertyAll(
+                context.colorScheme.surfaceContainer,
+              ),
+            ),
+            icon: const GlyphIcon(AppGlyphs.menu),
+          ),
+          popupBuilder: (_) => PopupMenu(
+            items: [
+              for (final item in navigation.navigationItems)
+                PopupMenuItem(
+                  label: item.label.label,
+                  glyph: item.glyph,
+                  checked: item.label == navigation.pageLabel,
+                  onPressed: () => ref
+                      .read(currentPageLabelProvider.notifier)
+                      .toPage(item.label),
+                ),
+            ],
+          ),
+        ),
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              context.appLocalizations.brandName,
+              style: AppTextStyle.footnote.of(context, emphasized: true),
+            ),
+            Text(
+              navigation.pageLabel == PageLabel.dns
+                  ? context.appLocalizations.dnsResourcesDesktop
+                  : navigation.pageLabel.label,
+              style: AppTextStyle.caption2
+                  .of(context)
+                  .copyWith(color: context.colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ),
+        actions: _LinuxWindowActions(
+          maximizeTooltip: caption.value.isMaximized
+              ? context.appLocalizations.unmaximize
+              : context.appLocalizations.maximize,
+          closeTooltip: context.appLocalizations.close,
+          minimizeTooltip: context.appLocalizations.minimize,
+          onMinimize: desktopWindow.minimize,
+          onMaximize: caption.toggleMaximized,
+          onClose: () => ref.read(systemActionProvider.notifier).handleClose(),
+        ),
+      );
+    }
     return WindowHeaderBar(
       height: kHeaderHeight,
       backdropOpacity: backdropOpacity,
@@ -437,6 +505,60 @@ class _WindowHeaderState extends ConsumerState<WindowHeader> {
                 ref.read(systemActionProvider.notifier).handleClose();
               },
             ),
+    );
+  }
+}
+
+class _LinuxWindowActions extends StatelessWidget {
+  const _LinuxWindowActions({
+    required this.maximizeTooltip,
+    required this.closeTooltip,
+    required this.minimizeTooltip,
+    required this.onMinimize,
+    required this.onMaximize,
+    required this.onClose,
+  });
+
+  final String maximizeTooltip;
+  final String closeTooltip;
+  final String minimizeTooltip;
+  final VoidCallback onMinimize;
+  final VoidCallback onMaximize;
+  final VoidCallback onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget control(
+      String tooltip,
+      CaptionGlyph glyph,
+      VoidCallback onPressed,
+    ) => IconButton(
+      tooltip: tooltip,
+      onPressed: onPressed,
+      style: ButtonStyle(
+        fixedSize: const Size(24, 24),
+        minimumSize: const Size(24, 24),
+        maximumSize: const Size(24, 24),
+        padding: EdgeInsets.zero,
+        shape: AppShape.circle,
+        backgroundColor: WidgetStatePropertyAll(
+          context.colorScheme.surfaceContainer,
+        ),
+        iconSize: 12,
+      ),
+      icon: CaptionIcon(glyph),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 10,
+        children: [
+          control(minimizeTooltip, CaptionGlyph.minimize, onMinimize),
+          control(maximizeTooltip, CaptionGlyph.maximize, onMaximize),
+          control(closeTooltip, CaptionGlyph.close, onClose),
+        ],
+      ),
     );
   }
 }
