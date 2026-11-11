@@ -413,19 +413,35 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("본문 재작성"),
     "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("밝기"),
+    "businessAccentColor": MessageLookupByLibrary.simpleMessage("강조 색상"),
     "businessAiServiceLabel": MessageLookupByLibrary.simpleMessage("AI 서비스"),
     "businessAiServices": MessageLookupByLibrary.simpleMessage(
       "ChatGPT · Claude",
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("모든 회선"),
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("가상 어댑터 승인"),
+    "businessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "Windows 로그인 후 백그라운드에서 실행",
+    ),
+    "businessAutoLaunchTitle": MessageLookupByLibrary.simpleMessage(
+      "시작 시 자동 실행",
+    ),
+    "businessAutoRunDesc": MessageLookupByLibrary.simpleMessage(
+      "이전 회선 및 모드 사용",
+    ),
+    "businessAutoRunTitle": MessageLookupByLibrary.simpleMessage("시작 후 자동 연결"),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("자동 테스트"),
     "businessCards": MessageLookupByLibrary.simpleMessage("카드"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
+    "businessClientVersion": MessageLookupByLibrary.simpleMessage("클라이언트 버전"),
+    "businessClientVersionDesc": MessageLookupByLibrary.simpleMessage(
+      "현재 설치된 클라이언트 버전",
+    ),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
       "모두 닫기",
     ),
+    "businessCloseWindow": MessageLookupByLibrary.simpleMessage("창을 닫을 때"),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
       "연결됨 · 문제가 있습니다",
@@ -470,6 +486,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDate": m8,
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
+    "businessFollowSystem": MessageLookupByLibrary.simpleMessage("시스템 설정 따르기"),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("그룹"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("잠김"),
     "businessHome": MessageLookupByLibrary.simpleMessage("홈"),
@@ -497,10 +514,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "중국 본토 직접 연결",
     ),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage("수동 선택"),
+    "businessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "트레이 아이콘에 연결 상태가 계속 표시됩니다",
+    ),
+    "businessMinimizeToTray": MessageLookupByLibrary.simpleMessage("트레이로 최소화"),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage("이번 달 트래픽"),
     "businessMonthUsed": MessageLookupByLibrary.simpleMessage("이번 달 사용량"),
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("연결 안 됨"),
+    "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
+      "필요 시 연결",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("아웃바운드"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "자동 업데이트",
@@ -592,6 +616,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "요금제 정보",
     ),
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage("구독 편집"),
+    "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
+      "프록시 카드 밀도",
+    ),
+    "businessProxyIcons": MessageLookupByLibrary.simpleMessage("프록시 아이콘"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("프록시"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("다시 확인"),
     "businessReplace": MessageLookupByLibrary.simpleMessage("변경"),
@@ -613,8 +641,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "구독 또는 모드가 변경되었습니다. 회선 선택을 다시 여세요.",
     ),
+    "businessSettingsAbout": MessageLookupByLibrary.simpleMessage(
+      "Tianji Cloud 정보",
+    ),
+    "businessSettingsAppearance": MessageLookupByLibrary.simpleMessage("모양"),
+    "businessSettingsCommon": MessageLookupByLibrary.simpleMessage("일반"),
+    "businessSettingsHotkeys": MessageLookupByLibrary.simpleMessage("단축키"),
+    "businessSettingsIconsUa": MessageLookupByLibrary.simpleMessage("아이콘 및 UA"),
+    "businessSettingsInboundPorts": MessageLookupByLibrary.simpleMessage(
+      "인바운드 및 포트",
+    ),
+    "businessSettingsNetworkAdvanced": MessageLookupByLibrary.simpleMessage(
+      "네트워크 (고급)",
+    ),
+    "businessSettingsOther": MessageLookupByLibrary.simpleMessage("기타"),
+    "businessSettingsRules": MessageLookupByLibrary.simpleMessage("규칙 및 재정의"),
+    "businessSettingsStartupWindow": MessageLookupByLibrary.simpleMessage(
+      "시작 및 창",
+    ),
+    "businessSettingsTun": MessageLookupByLibrary.simpleMessage("가상 어댑터 TUN"),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("스마트 라우팅"),
     "businessSortByDelay": MessageLookupByLibrary.simpleMessage("지연 시간순 정렬"),
+    "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "구독 자동 업데이트",
+    ),
+    "businessSubscriptionAutoUpdateDesc": MessageLookupByLibrary.simpleMessage(
+      "회선이 변경되면 자동으로 새로 고칩니다",
+    ),
     "businessSubscriptionDetails": MessageLookupByLibrary.simpleMessage(
       "구독 세부정보",
     ),
@@ -629,6 +682,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "가상 네트워크 인터페이스(TUN)",
     ),
+    "businessTypographyLayout": MessageLookupByLibrary.simpleMessage(
+      "텍스트 및 레이아웃",
+    ),
+    "businessUpdateDaily": MessageLookupByLibrary.simpleMessage("매일"),
+    "businessUpdateHour1": MessageLookupByLibrary.simpleMessage("매시간"),
+    "businessUpdateHour12": MessageLookupByLibrary.simpleMessage("12시간마다"),
+    "businessUpdateHour6": MessageLookupByLibrary.simpleMessage("6시간마다"),
     "businessUsagePercent": m14,
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("진단 보기"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(

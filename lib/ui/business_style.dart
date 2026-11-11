@@ -22,6 +22,12 @@ abstract final class BusinessPalette {
   static const sidebarSelection = Color(0xFFFFFFFF);
   static const sidebarSelectionShadow = Color(0x140E1726);
   static const sidebarLight = Color(0xFFF7F8FA);
+  static const themePreviewLightBackground = Color(0xFFEEF1F4);
+  static const themePreviewLightSidebar = Color(0xFFE1E5EA);
+  static const themePreviewLightContent = Color(0xFFFFFFFF);
+  static const themePreviewDarkBackground = Color(0xFF0B0F14);
+  static const themePreviewDarkSidebar = Color(0xFF131A22);
+  static const themePreviewDarkContent = Color(0xFF1A2330);
   static const timelineLine = Color(0xFFD5E1FA);
   static const hintBackground = Color(0xFFF4F8FF);
   static const listSelectionDark = Color(0xFF1E2B3C);

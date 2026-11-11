@@ -157,261 +157,172 @@ class _BusinessSettingsLayoutState
         .navigationItems;
     final entries = [
       _SettingsEntry(
-        keyName: 'general',
-        section: l10n.settings,
-        title: l10n.general,
-        glyph: AppGlyphs.settings,
-        page: const GeneralView(),
-      ),
-      if (system.isAndroid)
-        _SettingsEntry(
-          keyName: 'access',
-          section: l10n.settings,
-          title: l10n.accessControl,
-          glyph: AppGlyphs.appsList,
-          page: const AccessView(),
-        ),
-      _SettingsEntry(
-        keyName: 'language',
-        section: l10n.settings,
-        title: l10n.language,
-        glyph: AppGlyphs.language,
-        page: const _LocaleSettingsView(),
+        'general',
+        l10n.businessSettingsCommon,
+        l10n.general,
+        const GeneralView(),
       ),
       _SettingsEntry(
-        keyName: 'appearance',
-        section: l10n.settings,
-        title: l10n.theme,
-        glyph: AppGlyphs.paintbrush,
-        page: const ThemeView(),
+        'appearance',
+        l10n.businessSettingsCommon,
+        l10n.businessSettingsAppearance,
+        const ThemeView(business: true),
       ),
       if (system.isDesktop)
         _SettingsEntry(
-          keyName: 'hotkeys',
-          section: l10n.settings,
-          title: l10n.hotkeyManagement,
-          glyph: AppGlyphs.keyboard,
-          page: const HotKeyView(),
+          'hotkeys',
+          l10n.businessSettingsCommon,
+          l10n.businessSettingsHotkeys,
+          const HotKeyView(),
         ),
       _SettingsEntry(
-        keyName: 'on-demand',
-        section: l10n.settings,
-        title: l10n.onDemand,
-        glyph: AppGlyphs.proxies,
-        page: const OnDemandView(),
+        'on-demand',
+        l10n.businessSettingsCommon,
+        l10n.businessOnDemandConnection,
+        const OnDemandView(),
       ),
       _SettingsEntry(
-        keyName: 'backup',
-        section: l10n.settings,
-        title: l10n.backupAndRestore,
-        glyph: AppGlyphs.cloudSync,
-        page: const BackupAndRestore(),
+        'backup',
+        l10n.businessSettingsCommon,
+        l10n.backupAndRestore,
+        const BackupAndRestore(),
       ),
       _SettingsEntry(
-        keyName: 'network',
-        section: l10n.advancedConfig,
-        title: l10n.network,
-        glyph: AppGlyphs.key,
-        page: BaseScaffold(title: l10n.network, body: const NetworkListView()),
+        'network',
+        l10n.businessSettingsNetworkAdvanced,
+        l10n.businessSettingsInboundPorts,
+        _NetworkSettingsView(navigation: navigation),
       ),
       _SettingsEntry(
-        keyName: 'dns',
-        section: l10n.advancedConfig,
-        title: 'DNS',
-        glyph: AppGlyphs.dns,
-        page: const DnsView(),
+        'tun',
+        l10n.businessSettingsNetworkAdvanced,
+        l10n.businessSettingsTun,
+        const _TunSettingsView(),
       ),
       _SettingsEntry(
-        keyName: 'rules',
-        section: l10n.advancedConfig,
-        title: l10n.addedRules,
-        glyph: AppGlyphs.rules,
-        page: const AddedRulesView(),
+        'dns',
+        l10n.businessSettingsNetworkAdvanced,
+        'DNS',
+        _DnsSettingsView(navigation: navigation),
       ),
       _SettingsEntry(
-        keyName: 'scripts',
-        section: l10n.advancedConfig,
-        title: l10n.script,
-        glyph: AppGlyphs.code,
-        page: const ScriptsView(),
+        'rules',
+        l10n.businessSettingsNetworkAdvanced,
+        l10n.businessSettingsRules,
+        const _RuleSettingsView(),
       ),
       if (mitmFeature)
         _SettingsEntry(
-          keyName: 'mitm',
-          section: l10n.advancedConfig,
-          title: l10n.mitm,
-          glyph: AppGlyphs.lockOpen,
-          page: MitmView(isAndroid: system.isAndroid),
+          'mitm',
+          l10n.businessSettingsNetworkAdvanced,
+          l10n.mitm,
+          MitmView(isAndroid: system.isAndroid),
         ),
       _SettingsEntry(
-        keyName: 'icon-sets',
-        section: l10n.advancedConfig,
-        title: l10n.iconSets,
-        glyph: AppGlyphs.photos,
-        page: const IconSetsView(),
+        'user-agents',
+        l10n.businessSettingsNetworkAdvanced,
+        l10n.businessSettingsIconsUa,
+        const _IconAndUaSettingsView(),
+      ),
+      if (system.isAndroid)
+        _SettingsEntry(
+          'access',
+          l10n.businessSettingsNetworkAdvanced,
+          l10n.accessControl,
+          const AccessView(),
+        ),
+      _SettingsEntry(
+        'service-management',
+        l10n.businessSettingsOther,
+        l10n.serviceManage,
+        const ServiceManageView(),
       ),
       _SettingsEntry(
-        keyName: 'providers',
-        section: l10n.advancedConfig,
-        title: l10n.ruleProviders,
-        glyph: AppGlyphs.resources,
-        page: const ClashProvidersView(),
-      ),
-      _SettingsEntry(
-        keyName: 'filters',
-        section: l10n.advancedConfig,
-        title: l10n.filters,
-        glyph: AppGlyphs.filter,
-        page: const FiltersView(),
-      ),
-      _SettingsEntry(
-        keyName: 'user-agents',
-        section: l10n.advancedConfig,
-        title: l10n.userAgent,
-        glyph: AppGlyphs.language,
-        page: const UserAgentsView(),
-      ),
-      _SettingsEntry(
-        keyName: 'custom-proxies',
-        section: l10n.advancedConfig,
-        title: l10n.proxies,
-        glyph: AppGlyphs.proxies,
-        page: const CustomProxiesView(),
-      ),
-      _SettingsEntry(
-        keyName: 'service-management',
-        section: l10n.advancedConfig,
-        title: l10n.serviceManage,
-        glyph: AppGlyphs.settings,
-        page: const ServiceManageView(),
-      ),
-      _SettingsEntry(
-        keyName: 'other',
-        section: l10n.other,
-        title: l10n.about,
-        glyph: AppGlyphs.info,
-        page: const AboutView(),
+        'other',
+        l10n.businessSettingsOther,
+        l10n.businessSettingsAbout,
+        const AboutView(),
       ),
       if (widget.developerMode)
         _SettingsEntry(
-          keyName: 'developer',
-          section: l10n.other,
-          title: l10n.developerMode,
-          glyph: AppGlyphs.code,
-          page: const DeveloperView(),
-        ),
-      for (final item in navigation)
-        _SettingsEntry(
-          keyName: 'tool:${item.label.name}',
-          section: l10n.settings,
-          title: item.label.label,
-          glyph: item.glyph,
-          page: item.builder(context),
+          'developer',
+          l10n.businessSettingsOther,
+          l10n.developerMode,
+          const DeveloperView(),
         ),
     ];
     final active = entries.firstWhere(
-      (entry) => entry.keyName == _selectedKey,
+      (entry) => entry.key == _selectedKey,
       orElse: () => entries.first,
     );
     final sections = <String, List<_SettingsEntry>>{};
     for (final entry in entries) {
       sections.putIfAbsent(entry.section, () => []).add(entry);
     }
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          width: 180,
-          child: DecoratedBox(
-            decoration: ShapeDecoration(
-              color: context.colorScheme.surfaceContainerLow,
-              shape: AppShape.all(AppCorner.xl),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 18, 12, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 2, 10, 18),
-                    child: Text(
-                      l10n.settings,
-                      style: AppTextStyle.pageTitle
-                          .of(context)
-                          .copyWith(color: context.colorScheme.onSurface),
-                    ),
-                  ),
-                  Expanded(
-                    child: FocusTraversalGroup(
-                      child: ListView(
-                        children: [
-                          for (final section in sections.entries) ...[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 12, 10, 6),
-                              child: Text(
-                                section.key,
-                                style: AppTextStyle.caption1
-                                    .of(context, emphasized: true)
-                                    .copyWith(
-                                      color:
-                                          context.colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
-                            ),
-                            for (final entry in section.value)
-                              _SettingsNavigationItem(
-                                entry: entry,
-                                selected: entry.keyName == active.keyName,
-                                onPressed: () => setState(
-                                  () => _selectedKey = entry.keyName,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(29, 50, 24, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(l10n.settings, style: BusinessText.pageTitle(context)),
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: 160,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      for (final section in sections.entries) ...[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+                          child: Text(
+                            section.key,
+                            style: AppTextStyle.caption1
+                                .of(context)
+                                .copyWith(
+                                  color: context.colorScheme.onSurfaceVariant,
                                 ),
-                              ),
-                          ],
-                        ],
-                      ),
-                    ),
+                          ),
+                        ),
+                        for (final entry in section.value)
+                          _SettingsNavigationItem(
+                            entry: entry,
+                            selected: entry.key == active.key,
+                            onPressed: () =>
+                                setState(() => _selectedKey = entry.key),
+                          ),
+                      ],
+                    ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: KeyedSubtree(
+                    key: ValueKey(active.key),
+                    child: active.page,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: KeyedSubtree(
-            key: ValueKey(active.keyName),
-            child: active.page,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
 class _SettingsEntry {
-  const _SettingsEntry({
-    required this.keyName,
-    required this.section,
-    required this.title,
-    required this.glyph,
-    required this.page,
-  });
+  const _SettingsEntry(this.key, this.section, this.title, this.page);
 
-  final String keyName;
+  final String key;
   final String section;
   final String title;
-  final Glyph glyph;
   final Widget page;
-}
-
-class _LocaleSettingsView extends StatelessWidget {
-  const _LocaleSettingsView();
-
-  @override
-  Widget build(BuildContext context) => generateSection(
-    title: context.appLocalizations.language,
-    items: [const _LocaleItem()],
-  );
 }
 
 class _SettingsNavigationItem extends StatelessWidget {
@@ -427,56 +338,46 @@ class _SettingsNavigationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = context.colorScheme.brightness == Brightness.dark;
     final foreground = selected
-        ? dark
-              ? context.colorScheme.onSurface
-              : BusinessPalette.deep
+        ? context.colorScheme.onSurface
         : context.colorScheme.onSurfaceVariant;
+    final shape = AppShape.all(BusinessRadius.navItem);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.only(bottom: 2),
       child: FocusRing(
-        shape: AppShape.md,
+        shape: shape,
         child: PressRegion(
           onTap: onPressed,
-          shape: AppShape.md,
+          shape: shape,
           overlay: PressRegion.hoverOverlay,
           child: DecoratedBox(
             decoration: ShapeDecoration(
               color: selected
-                  ? context.colorScheme.surfaceBright
+                  ? context.colorScheme.surface
                   : const Color(0x00FFFFFF),
-              shape: selected
-                  ? RoundedSuperellipseBorder(
-                      side: BorderSide(
-                        color: context.colorScheme.outlineVariant,
+              shape: shape,
+              shadows: selected
+                  ? [
+                      BusinessShadow.selectedLine(
+                        BusinessPalette.sidebarSelectionShadow,
                       ),
-                      borderRadius: AppRadius.md,
-                    )
-                  : AppShape.md,
+                    ]
+                  : const [],
             ),
             child: SizedBox(
-              height: 38,
+              height: 32,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    GlyphIcon(
-                      entry.glyph,
-                      color: selected ? BusinessPalette.blue : foreground,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        entry.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyle.subheadline
-                            .of(context, emphasized: selected)
-                            .copyWith(color: foreground),
-                      ),
-                    ),
-                  ],
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    entry.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.subheadline
+                        .of(context, emphasized: selected)
+                        .copyWith(color: foreground),
+                  ),
                 ),
               ),
             ),
@@ -485,6 +386,122 @@ class _SettingsNavigationItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class _RuleSettingsView extends StatelessWidget {
+  const _RuleSettingsView();
+
+  @override
+  Widget build(BuildContext context) => generateSection(
+    title: context.appLocalizations.businessSettingsRules,
+    items: [
+      ListItem.open(
+        title: Text(context.appLocalizations.addedRules),
+        widget: const AddedRulesView(),
+      ),
+      ListItem.open(
+        title: Text(context.appLocalizations.script),
+        widget: const ScriptsView(),
+      ),
+      ListItem.open(
+        title: Text(context.appLocalizations.ruleProviders),
+        widget: const ClashProvidersView(),
+      ),
+      ListItem.open(
+        title: Text(context.appLocalizations.filters),
+        widget: const FiltersView(),
+      ),
+      ListItem.open(
+        title: Text(context.appLocalizations.proxies),
+        widget: const CustomProxiesView(),
+      ),
+    ],
+  );
+}
+
+class _NetworkSettingsView extends StatelessWidget {
+  const _NetworkSettingsView({required this.navigation});
+
+  final List<NavigationItem> navigation;
+
+  @override
+  Widget build(BuildContext context) => generateSection(
+    title: context.appLocalizations.businessSettingsInboundPorts,
+    items: [
+      ListItem.open(
+        title: Text(context.appLocalizations.network),
+        widget: BaseScaffold(
+          title: context.appLocalizations.network,
+          body: const NetworkListView(),
+        ),
+      ),
+      for (final item in navigation.where(
+        (item) => item.label == PageLabel.requests,
+      ))
+        ListItem.open(
+          title: Text(item.label.label),
+          widget: item.builder(context),
+        ),
+    ],
+  );
+}
+
+class _DnsSettingsView extends StatelessWidget {
+  const _DnsSettingsView({required this.navigation});
+
+  final List<NavigationItem> navigation;
+
+  @override
+  Widget build(BuildContext context) => generateSection(
+    title: 'DNS',
+    items: [
+      ListItem.open(title: const Text('DNS'), widget: const DnsView()),
+      for (final item in navigation.where(
+        (item) =>
+            item.label == PageLabel.dns || item.label == PageLabel.resources,
+      ))
+        ListItem.open(
+          title: Text(item.label.label),
+          widget: item.builder(context),
+        ),
+    ],
+  );
+}
+
+class _TunSettingsView extends StatelessWidget {
+  const _TunSettingsView();
+
+  @override
+  Widget build(BuildContext context) => ListView(
+    padding: EdgeInsets.only(bottom: context.bottomInset + 20),
+    children: [
+      const NetworkOptionsSection(),
+      TunSection(
+        isDesktop: system.isDesktop,
+        isLinux: system.isLinux,
+        isWindows: system.isWindows,
+      ),
+    ],
+  );
+}
+
+class _IconAndUaSettingsView extends StatelessWidget {
+  const _IconAndUaSettingsView();
+
+  @override
+  Widget build(BuildContext context) => generateSection(
+    title: context.appLocalizations.businessSettingsIconsUa,
+    items: [
+      ListItem.open(
+        title: Text(context.appLocalizations.iconSets),
+        widget: const IconSetsView(),
+      ),
+      ListItem.open(
+        title: Text(context.appLocalizations.userAgent),
+        widget: const UserAgentsView(),
+      ),
+    ],
+  );
 }
 
 class _LocaleItem extends ConsumerWidget {

@@ -498,6 +498,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Перезапись тела"),
     "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("Яркость"),
+    "businessAccentColor": MessageLookupByLibrary.simpleMessage("Цвет акцента"),
     "businessAiServiceLabel": MessageLookupByLibrary.simpleMessage(
       "Сервисы ИИ",
     ),
@@ -508,12 +509,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
       "Авторизовать адаптер",
     ),
+    "businessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "Работать в фоне после входа в Windows",
+    ),
+    "businessAutoLaunchTitle": MessageLookupByLibrary.simpleMessage(
+      "Запускать при входе",
+    ),
+    "businessAutoRunDesc": MessageLookupByLibrary.simpleMessage(
+      "Использовать прежнюю линию и режим",
+    ),
+    "businessAutoRunTitle": MessageLookupByLibrary.simpleMessage(
+      "Подключаться при запуске",
+    ),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("Автотест"),
     "businessCards": MessageLookupByLibrary.simpleMessage("Карточки"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
+    "businessClientVersion": MessageLookupByLibrary.simpleMessage(
+      "Версия клиента",
+    ),
+    "businessClientVersionDesc": MessageLookupByLibrary.simpleMessage(
+      "Установленная версия клиента",
+    ),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
       "Закрыть все",
+    ),
+    "businessCloseWindow": MessageLookupByLibrary.simpleMessage(
+      "При закрытии окна",
     ),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
@@ -569,6 +591,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDate": m8,
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
+    "businessFollowSystem": MessageLookupByLibrary.simpleMessage(
+      "Как в системе",
+    ),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Группы"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage(
       "Заблокировано",
@@ -604,6 +629,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessManualSelect": MessageLookupByLibrary.simpleMessage(
       "Выбор вручную",
     ),
+    "businessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "Значок в трее всегда показывает состояние соединения",
+    ),
+    "businessMinimizeToTray": MessageLookupByLibrary.simpleMessage(
+      "Свернуть в трей",
+    ),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage(
       "Трафик за месяц",
     ),
@@ -613,6 +644,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage(
       "Не подключено",
+    ),
+    "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
+      "Подключение по требованию",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Выход"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
@@ -719,6 +753,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "Изменить подписку",
     ),
+    "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
+      "Плотность карточек прокси",
+    ),
+    "businessProxyIcons": MessageLookupByLibrary.simpleMessage("Значки прокси"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Прокси"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Проверить снова"),
     "businessReplace": MessageLookupByLibrary.simpleMessage("Заменить"),
@@ -742,11 +780,46 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "Подписка или режим изменились. Откройте выбор линии заново.",
     ),
+    "businessSettingsAbout": MessageLookupByLibrary.simpleMessage(
+      "О Tianji Cloud",
+    ),
+    "businessSettingsAppearance": MessageLookupByLibrary.simpleMessage(
+      "Внешний вид",
+    ),
+    "businessSettingsCommon": MessageLookupByLibrary.simpleMessage("Основное"),
+    "businessSettingsHotkeys": MessageLookupByLibrary.simpleMessage(
+      "Горячие клавиши",
+    ),
+    "businessSettingsIconsUa": MessageLookupByLibrary.simpleMessage(
+      "Значки и UA",
+    ),
+    "businessSettingsInboundPorts": MessageLookupByLibrary.simpleMessage(
+      "Входящие подключения и порты",
+    ),
+    "businessSettingsNetworkAdvanced": MessageLookupByLibrary.simpleMessage(
+      "Сеть (дополнительно)",
+    ),
+    "businessSettingsOther": MessageLookupByLibrary.simpleMessage("Другое"),
+    "businessSettingsRules": MessageLookupByLibrary.simpleMessage(
+      "Правила и переопределения",
+    ),
+    "businessSettingsStartupWindow": MessageLookupByLibrary.simpleMessage(
+      "Запуск и окно",
+    ),
+    "businessSettingsTun": MessageLookupByLibrary.simpleMessage(
+      "Виртуальный адаптер TUN",
+    ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Умная маршрутизация",
     ),
     "businessSortByDelay": MessageLookupByLibrary.simpleMessage(
       "Сортировать по задержке",
+    ),
+    "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "Автообновление подписки",
+    ),
+    "businessSubscriptionAutoUpdateDesc": MessageLookupByLibrary.simpleMessage(
+      "Обновлять после изменения линий",
     ),
     "businessSubscriptionDetails": MessageLookupByLibrary.simpleMessage(
       "Сведения о подписке",
@@ -765,6 +838,17 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "Виртуальный сетевой интерфейс (TUN)",
+    ),
+    "businessTypographyLayout": MessageLookupByLibrary.simpleMessage(
+      "Текст и макет",
+    ),
+    "businessUpdateDaily": MessageLookupByLibrary.simpleMessage("Ежедневно"),
+    "businessUpdateHour1": MessageLookupByLibrary.simpleMessage("Каждый час"),
+    "businessUpdateHour12": MessageLookupByLibrary.simpleMessage(
+      "Каждые 12 часов",
+    ),
+    "businessUpdateHour6": MessageLookupByLibrary.simpleMessage(
+      "Каждые 6 часов",
     ),
     "businessUsagePercent": m14,
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(

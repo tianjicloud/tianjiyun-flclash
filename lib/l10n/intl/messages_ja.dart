@@ -417,19 +417,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("ボディ書き換え"),
     "brandName": MessageLookupByLibrary.simpleMessage("天機クラウド"),
     "brightness": MessageLookupByLibrary.simpleMessage("明度"),
+    "businessAccentColor": MessageLookupByLibrary.simpleMessage("アクセントカラー"),
     "businessAiServiceLabel": MessageLookupByLibrary.simpleMessage("AI サービス"),
     "businessAiServices": MessageLookupByLibrary.simpleMessage(
       "ChatGPT · Claude",
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("すべての回線"),
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("仮想アダプターを承認"),
+    "businessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "Windows へのサインイン後、バックグラウンドで実行",
+    ),
+    "businessAutoLaunchTitle": MessageLookupByLibrary.simpleMessage("起動時に自動起動"),
+    "businessAutoRunDesc": MessageLookupByLibrary.simpleMessage("前回の回線とモードを使用"),
+    "businessAutoRunTitle": MessageLookupByLibrary.simpleMessage("起動後に自動接続"),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage("自動テスト"),
     "businessCards": MessageLookupByLibrary.simpleMessage("カード"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
+    "businessClientVersion": MessageLookupByLibrary.simpleMessage(
+      "クライアントバージョン",
+    ),
+    "businessClientVersionDesc": MessageLookupByLibrary.simpleMessage(
+      "現在インストールされているクライアントバージョン",
+    ),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
       "すべて閉じる",
     ),
+    "businessCloseWindow": MessageLookupByLibrary.simpleMessage("ウィンドウを閉じるとき"),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
       "接続済み · 異常があります",
@@ -478,6 +492,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDate": m8,
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
+    "businessFollowSystem": MessageLookupByLibrary.simpleMessage("システムに従う"),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("グループ"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("ロック中"),
     "businessHome": MessageLookupByLibrary.simpleMessage("ホーム"),
@@ -503,10 +518,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("出口を固定"),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage("中国本土直通"),
     "businessManualSelect": MessageLookupByLibrary.simpleMessage("手動選択"),
+    "businessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "トレイアイコンに接続状態を常に表示",
+    ),
+    "businessMinimizeToTray": MessageLookupByLibrary.simpleMessage("トレイに最小化"),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage("今月の通信量"),
     "businessMonthUsed": MessageLookupByLibrary.simpleMessage("今月の使用量"),
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage("未接続"),
+    "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
+      "オンデマンド接続",
+    ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出力"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "自動更新",
@@ -606,6 +628,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションを編集",
     ),
+    "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
+      "プロキシカードの密度",
+    ),
+    "businessProxyIcons": MessageLookupByLibrary.simpleMessage("プロキシアイコン"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("プロキシ"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("再確認"),
     "businessReplace": MessageLookupByLibrary.simpleMessage("変更"),
@@ -625,8 +651,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションまたはモードが変わりました。回線選択を開き直してください。",
     ),
+    "businessSettingsAbout": MessageLookupByLibrary.simpleMessage("天机云について"),
+    "businessSettingsAppearance": MessageLookupByLibrary.simpleMessage("外観"),
+    "businessSettingsCommon": MessageLookupByLibrary.simpleMessage("よく使う項目"),
+    "businessSettingsHotkeys": MessageLookupByLibrary.simpleMessage("ショートカット"),
+    "businessSettingsIconsUa": MessageLookupByLibrary.simpleMessage("アイコンと UA"),
+    "businessSettingsInboundPorts": MessageLookupByLibrary.simpleMessage(
+      "受信とポート",
+    ),
+    "businessSettingsNetworkAdvanced": MessageLookupByLibrary.simpleMessage(
+      "ネットワーク（詳細）",
+    ),
+    "businessSettingsOther": MessageLookupByLibrary.simpleMessage("その他"),
+    "businessSettingsRules": MessageLookupByLibrary.simpleMessage("ルールと上書き"),
+    "businessSettingsStartupWindow": MessageLookupByLibrary.simpleMessage(
+      "起動とウィンドウ",
+    ),
+    "businessSettingsTun": MessageLookupByLibrary.simpleMessage("仮想アダプター TUN"),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage("スマートルーティング"),
     "businessSortByDelay": MessageLookupByLibrary.simpleMessage("遅延順に並べ替え"),
+    "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションの自動更新",
+    ),
+    "businessSubscriptionAutoUpdateDesc": MessageLookupByLibrary.simpleMessage(
+      "回線の変更後に自動で更新",
+    ),
     "businessSubscriptionDetails": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションの詳細",
     ),
@@ -641,6 +690,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "仮想ネットワークインターフェイス（TUN）",
     ),
+    "businessTypographyLayout": MessageLookupByLibrary.simpleMessage(
+      "文字とレイアウト",
+    ),
+    "businessUpdateDaily": MessageLookupByLibrary.simpleMessage("毎日"),
+    "businessUpdateHour1": MessageLookupByLibrary.simpleMessage("1 時間ごと"),
+    "businessUpdateHour12": MessageLookupByLibrary.simpleMessage("12 時間ごと"),
+    "businessUpdateHour6": MessageLookupByLibrary.simpleMessage("6 時間ごと"),
     "businessUsagePercent": m14,
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage("診断を見る"),
     "businessVpnPermission": MessageLookupByLibrary.simpleMessage(

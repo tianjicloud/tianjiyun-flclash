@@ -27,21 +27,25 @@ class PreviewChoiceGroup<T> extends StatelessWidget {
     required this.choices,
     required this.value,
     required this.onChanged,
+    this.showInfoHeader = true,
   });
 
   final Info info;
   final List<PreviewChoice<T>> choices;
   final T value;
   final ValueChanged<T> onChanged;
+  final bool showInfoHeader;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InfoHeader(info: info),
+        if (showInfoHeader) InfoHeader(info: info),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: showInfoHeader
+              ? const EdgeInsets.fromLTRB(16, 8, 16, 0)
+              : EdgeInsets.zero,
           child: generateGroup([
             for (final choice in choices)
               DecorationListItem(

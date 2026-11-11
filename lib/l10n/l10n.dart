@@ -11891,6 +11891,326 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Common`
+  String get businessSettingsCommon {
+    return Intl.message(
+      'Common',
+      name: 'businessSettingsCommon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network (advanced)`
+  String get businessSettingsNetworkAdvanced {
+    return Intl.message(
+      'Network (advanced)',
+      name: 'businessSettingsNetworkAdvanced',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other`
+  String get businessSettingsOther {
+    return Intl.message(
+      'Other',
+      name: 'businessSettingsOther',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance`
+  String get businessSettingsAppearance {
+    return Intl.message(
+      'Appearance',
+      name: 'businessSettingsAppearance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Startup and window`
+  String get businessSettingsStartupWindow {
+    return Intl.message(
+      'Startup and window',
+      name: 'businessSettingsStartupWindow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inbound and ports`
+  String get businessSettingsInboundPorts {
+    return Intl.message(
+      'Inbound and ports',
+      name: 'businessSettingsInboundPorts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Virtual adapter TUN`
+  String get businessSettingsTun {
+    return Intl.message(
+      'Virtual adapter TUN',
+      name: 'businessSettingsTun',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rules and overrides`
+  String get businessSettingsRules {
+    return Intl.message(
+      'Rules and overrides',
+      name: 'businessSettingsRules',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Icons and UA`
+  String get businessSettingsIconsUa {
+    return Intl.message(
+      'Icons and UA',
+      name: 'businessSettingsIconsUa',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About Tianji Cloud`
+  String get businessSettingsAbout {
+    return Intl.message(
+      'About Tianji Cloud',
+      name: 'businessSettingsAbout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Run in the background after signing in to Windows`
+  String get businessAutoLaunchDesc {
+    return Intl.message(
+      'Run in the background after signing in to Windows',
+      name: 'businessAutoLaunchDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use the previous line and mode`
+  String get businessAutoRunDesc {
+    return Intl.message(
+      'Use the previous line and mode',
+      name: 'businessAutoRunDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The tray icon always shows connection status`
+  String get businessMinimizeDesc {
+    return Intl.message(
+      'The tray icon always shows connection status',
+      name: 'businessMinimizeDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription auto-update`
+  String get businessSubscriptionAutoUpdate {
+    return Intl.message(
+      'Subscription auto-update',
+      name: 'businessSubscriptionAutoUpdate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refreshes automatically when lines change`
+  String get businessSubscriptionAutoUpdateDesc {
+    return Intl.message(
+      'Refreshes automatically when lines change',
+      name: 'businessSubscriptionAutoUpdateDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Client version`
+  String get businessClientVersion {
+    return Intl.message(
+      'Client version',
+      name: 'businessClientVersion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Currently installed client version`
+  String get businessClientVersionDesc {
+    return Intl.message(
+      'Currently installed client version',
+      name: 'businessClientVersionDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shortcuts`
+  String get businessSettingsHotkeys {
+    return Intl.message(
+      'Shortcuts',
+      name: 'businessSettingsHotkeys',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `When closing the window`
+  String get businessCloseWindow {
+    return Intl.message(
+      'When closing the window',
+      name: 'businessCloseWindow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Follow system`
+  String get businessFollowSystem {
+    return Intl.message(
+      'Follow system',
+      name: 'businessFollowSystem',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Text and layout`
+  String get businessTypographyLayout {
+    return Intl.message(
+      'Text and layout',
+      name: 'businessTypographyLayout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accent color`
+  String get businessAccentColor {
+    return Intl.message(
+      'Accent color',
+      name: 'businessAccentColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy card density`
+  String get businessProxyCardDensity {
+    return Intl.message(
+      'Proxy card density',
+      name: 'businessProxyCardDensity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy icons`
+  String get businessProxyIcons {
+    return Intl.message(
+      'Proxy icons',
+      name: 'businessProxyIcons',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimize to tray`
+  String get businessMinimizeToTray {
+    return Intl.message(
+      'Minimize to tray',
+      name: 'businessMinimizeToTray',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Every hour`
+  String get businessUpdateHour1 {
+    return Intl.message(
+      'Every hour',
+      name: 'businessUpdateHour1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Every 6 hours`
+  String get businessUpdateHour6 {
+    return Intl.message(
+      'Every 6 hours',
+      name: 'businessUpdateHour6',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Every 12 hours`
+  String get businessUpdateHour12 {
+    return Intl.message(
+      'Every 12 hours',
+      name: 'businessUpdateHour12',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily`
+  String get businessUpdateDaily {
+    return Intl.message(
+      'Daily',
+      name: 'businessUpdateDaily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Launch at startup`
+  String get businessAutoLaunchTitle {
+    return Intl.message(
+      'Launch at startup',
+      name: 'businessAutoLaunchTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect on launch`
+  String get businessAutoRunTitle {
+    return Intl.message(
+      'Connect on launch',
+      name: 'businessAutoRunTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On-demand connection`
+  String get businessOnDemandConnection {
+    return Intl.message(
+      'On-demand connection',
+      name: 'businessOnDemandConnection',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

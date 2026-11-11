@@ -9,16 +9,20 @@ import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/views/font_family.dart';
+import 'package:fl_clash/views/theme_choices.dart';
 import 'package:fl_clash/views/theme_preview.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ThemeView extends StatelessWidget {
-  const ThemeView({super.key});
+  const ThemeView({super.key, this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context) {
+    if (business) return const _BusinessThemeView();
     final appLocalizations = context.appLocalizations;
     return BaseScaffold(
       title: appLocalizations.theme,
@@ -61,6 +65,163 @@ class ThemeView extends StatelessWidget {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BusinessThemeView extends StatelessWidget {
+  const _BusinessThemeView();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        _BusinessThemeCard(
+          title: l10n.theme,
+          child: const BusinessThemeChoices(),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.businessAccentColor,
+          child: const _PrimaryColorItem(business: true),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.businessTypographyLayout,
+          child: Column(
+            children: [
+              const _FontFamilyItem(business: true),
+              SizedBox(
+                height: 1,
+                child: ColoredBox(color: context.colorScheme.outlineVariant),
+              ),
+              const _TextScaleFactorItem(business: true),
+              SizedBox(
+                height: 1,
+                child: ColoredBox(color: context.colorScheme.outlineVariant),
+              ),
+              const _BusinessProxyStyleRows(),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.colorStyle,
+          child: const _ColorStyleItem(),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.appBackground,
+          child: const _BackgroundItem(business: true),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.liquidGlass,
+          child: const _LiquidGlassItem(business: true),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.pureBlackMode,
+          child: const _PureBlackItem(business: true),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.navigationBarStyle,
+          child: const _NavigationBarItem(business: true),
+        ),
+        const SizedBox(height: 14),
+        _BusinessThemeCard(
+          title: l10n.tabAnimation,
+          child: const _TabAnimationItem(business: true),
+        ),
+        if (system.isMacOS || system.isWindows) ...[
+          const SizedBox(height: 14),
+          _BusinessThemeCard(
+            title: l10n.sidebar,
+            child: const _SidebarBlurItem(business: true),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _BusinessProxyStyleRows extends ConsumerWidget {
+  const _BusinessProxyStyleRows();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.appLocalizations;
+    final style = ref.watch(proxiesStyleSettingProvider);
+    return Column(
+      children: [
+        ListItem<ProxyCardType>.options(
+          title: Text(strings.businessProxyCardDensity),
+          options: ProxyCardType.values,
+          value: style.cardType,
+          textBuilder: (type) => type.label,
+          onChanged: (value) => ref
+              .read(proxiesStyleSettingProvider.notifier)
+              .update((state) => state.copyWith(cardType: value)),
+        ),
+        SizedBox(
+          height: 1,
+          child: ColoredBox(color: context.colorScheme.outlineVariant),
+        ),
+        ListItem<ProxiesIconStyle>.options(
+          title: Text(strings.businessProxyIcons),
+          options: ProxiesIconStyle.values,
+          value: style.iconStyle,
+          textBuilder: (value) => switch (value) {
+            ProxiesIconStyle.filled => strings.iconStyleFilled,
+            ProxiesIconStyle.plain => strings.iconStylePlain,
+            ProxiesIconStyle.hidden => strings.iconStyleHidden,
+          },
+          onChanged: (value) => ref
+              .read(proxiesStyleSettingProvider.notifier)
+              .update((state) => state.copyWith(iconStyle: value)),
+        ),
+      ],
+    );
+  }
+}
+
+class _BusinessThemeCard extends StatelessWidget {
+  const _BusinessThemeCard({this.title, required this.child});
+
+  final String? title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = context.colorScheme;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: ShapeDecoration(
+        color: dark ? color.surfaceContainerLow : color.surface,
+        shape: AppShape.all(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title case final title?) ...[
+            Text(
+              title,
+              style: AppTextStyle.custom(
+                context,
+                size: 14,
+                leading: 20,
+                weight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+          child,
         ],
       ),
     );
@@ -120,7 +281,9 @@ class _ThemeModeItem extends ConsumerWidget {
 }
 
 class _PrimaryColorItem extends ConsumerWidget {
-  const _PrimaryColorItem();
+  const _PrimaryColorItem({this.business = false});
+
+  final bool business;
 
   Future<void> _handleReset(BuildContext context, WidgetRef ref) async {
     final res = await dialogs.showMessage(
@@ -260,25 +423,36 @@ class _PrimaryColorItem extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InfoHeader(
-          info: Info(
-            label: appLocalizations.themeColor,
-            glyph: AppGlyphs.palette,
+        if (!business)
+          InfoHeader(
+            info: Info(
+              label: appLocalizations.themeColor,
+              glyph: AppGlyphs.palette,
+            ),
+            actions: [
+              if (!themeColors.isDefault)
+                _ResetButton(onPressed: () => _handleReset(context, ref)),
+            ],
           ),
-          actions: [
-            if (!themeColors.isDefault)
-              _ResetButton(onPressed: () => _handleReset(context, ref)),
-          ],
-        ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: business
+              ? EdgeInsets.zero
+              : const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 8,
+            spacing: business ? 12 : 8,
             children: [
+              if (business && !themeColors.isDefault)
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: _ResetButton(
+                    onPressed: () => _handleReset(context, ref),
+                  ),
+                ),
               _ColorSwatches(
                 colors: [null, ...themeColors.primaryColors],
                 selected: themeColors.primaryColor,
+                business: business,
                 onSelect: (color) => _update(
                   ref,
                   (state) => state.copyWith(primaryColor: color),
@@ -287,18 +461,19 @@ class _PrimaryColorItem extends ConsumerWidget {
                 onDelete: (color) => _handleDelete(context, ref, color),
                 onAdd: () => _handleAdd(context, ref),
               ),
-              generateGroup([
-                ListItem<ColorStyle>.options(
-                  title: Text(appLocalizations.colorStyle),
-                  options: ColorStyle.values,
-                  value: themeColors.colorStyle,
-                  textBuilder: (style) => style.label,
-                  onChanged: (style) => _update(
-                    ref,
-                    (state) => state.copyWith(colorStyle: style),
+              if (!business)
+                generateGroup([
+                  ListItem<ColorStyle>.options(
+                    title: Text(appLocalizations.colorStyle),
+                    options: ColorStyle.values,
+                    value: themeColors.colorStyle,
+                    textBuilder: (style) => style.label,
+                    onChanged: (style) => _update(
+                      ref,
+                      (state) => state.copyWith(colorStyle: style),
+                    ),
                   ),
-                ),
-              ]),
+                ]),
             ],
           ),
         ),
@@ -307,10 +482,31 @@ class _PrimaryColorItem extends ConsumerWidget {
   }
 }
 
+class _ColorStyleItem extends ConsumerWidget {
+  const _ColorStyleItem();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(
+      themeSettingProvider.select((state) => state.colorStyle),
+    );
+    return ListItem<ColorStyle>.options(
+      title: Text(context.appLocalizations.colorStyle),
+      options: ColorStyle.values,
+      value: value,
+      textBuilder: (style) => style.label,
+      onChanged: (style) => ref
+          .read(themeSettingProvider.notifier)
+          .update((state) => state.copyWith(colorStyle: style)),
+    );
+  }
+}
+
 class _ColorSwatches extends ConsumerWidget {
   const _ColorSwatches({
     required this.colors,
     required this.selected,
+    this.business = false,
     required this.onSelect,
     required this.onEdit,
     required this.onDelete,
@@ -324,6 +520,7 @@ class _ColorSwatches extends ConsumerWidget {
 
   final List<int?> colors;
   final int? selected;
+  final bool business;
   final ValueChanged<int?> onSelect;
   final ValueChanged<int> onEdit;
   final ValueChanged<int> onDelete;
@@ -338,22 +535,26 @@ class _ColorSwatches extends ConsumerWidget {
         .watch(dynamicColorProvider)
         .seedOf(Theme.of(context).brightness);
     return Container(
-      padding: const EdgeInsets.all(_inset),
-      decoration: ShapeDecoration(
-        color: level.colorOf(colorScheme),
-        shape: AppShape.xl,
-      ),
+      padding: EdgeInsets.all(business ? 0 : _inset),
+      decoration: business
+          ? null
+          : ShapeDecoration(
+              color: level.colorOf(colorScheme),
+              shape: AppShape.xl,
+            ),
       child: SurfaceScope(
         level: level,
         child: LayoutBuilder(
           builder: (_, constraints) {
-            const cell = _ColorSwatch.size;
+            final cell = business ? 32.0 : _ColorSwatch.size;
             final width = constraints.maxWidth;
             final columns = max(
               1,
               ((width + _minGap) / (cell + _minGap)).floor(),
             );
-            final gap = columns > 1
+            final gap = business
+                ? 14.0
+                : columns > 1
                 ? ((width - columns * cell) / (columns - 1)).floorToDouble()
                 : 0.0;
             return Wrap(
@@ -365,6 +566,7 @@ class _ColorSwatches extends ConsumerWidget {
                     color: color == null ? null : Color(color),
                     systemColor: systemColor,
                     isSelected: color == selected,
+                    business: business,
                     label: color == null
                         ? appLocalizations.followSystem
                         : Color(color).hex,
@@ -385,7 +587,7 @@ class _ColorSwatches extends ConsumerWidget {
                             ),
                           ],
                   ),
-                _AddColorButton(onPressed: onAdd),
+                _AddColorButton(onPressed: onAdd, business: business),
               ],
             );
           },
@@ -402,6 +604,7 @@ class _ColorSwatch extends StatelessWidget {
     required this.isSelected,
     required this.label,
     required this.onPressed,
+    this.business = false,
     this.menuItems,
   });
 
@@ -418,6 +621,7 @@ class _ColorSwatch extends StatelessWidget {
   final bool isSelected;
   final String label;
   final VoidCallback onPressed;
+  final bool business;
   final List<PopupMenuItem>? menuItems;
 
   @override
@@ -427,8 +631,10 @@ class _ColorSwatch extends StatelessWidget {
     final check = ThemeData.estimateBrightnessForColor(fill) == Brightness.dark
         ? Colors.white
         : Colors.black;
+    final swatchSize = business ? 32.0 : size;
+    final dotSize = business ? 24.0 : dot;
     final swatch = SizedBox.square(
-      dimension: size,
+      dimension: swatchSize,
       child: PressSurface(
         fill: Colors.transparent,
         shape: AppShape.circle,
@@ -447,14 +653,17 @@ class _ColorSwatch extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: ShapeDecoration(
                     shape: AppShape.circle.copyWith(
-                      side: BorderSide(color: fill, width: _ring),
+                      side: BorderSide(
+                        color: fill,
+                        width: business ? 2 : _ring,
+                      ),
                     ),
                   ),
                   child: const SizedBox.expand(),
                 ),
               ),
               SizedBox.square(
-                dimension: dot,
+                dimension: dotSize,
                 child: DecoratedBox(
                   decoration: ShapeDecoration(
                     color: fill,
@@ -463,10 +672,10 @@ class _ColorSwatch extends StatelessWidget {
                 ),
               ),
               if (color == null)
-                const Positioned(
+                Positioned(
                   right: 0,
                   bottom: 0,
-                  child: _EyedropperBadge(size: _badge),
+                  child: _EyedropperBadge(size: business ? 16 : _badge),
                 ),
               AnimatedScale(
                 scale: selected ? 1 : 0,
@@ -474,7 +683,7 @@ class _ColorSwatch extends StatelessWidget {
                 curve: Curves.easeOutBack,
                 child: GlyphIcon(
                   AppGlyphs.check,
-                  size: 18,
+                  size: business ? 14 : 18,
                   fill: 1,
                   color: check,
                 ),
@@ -528,9 +737,10 @@ class _EyedropperBadge extends StatelessWidget {
 }
 
 class _AddColorButton extends StatelessWidget {
-  const _AddColorButton({required this.onPressed});
+  const _AddColorButton({required this.onPressed, this.business = false});
 
   final VoidCallback onPressed;
+  final bool business;
 
   @override
   Widget build(BuildContext context) {
@@ -538,7 +748,7 @@ class _AddColorButton extends StatelessWidget {
     return Tooltip(
       message: context.appLocalizations.add,
       child: SizedBox.square(
-        dimension: _ColorSwatch.size,
+        dimension: business ? 32 : _ColorSwatch.size,
         child: PressSurface(
           fill: Colors.transparent,
           shape: AppShape.circle,
@@ -546,8 +756,8 @@ class _AddColorButton extends StatelessWidget {
           onPressed: onPressed,
           child: Center(
             child: Container(
-              width: _ColorSwatch.dot,
-              height: _ColorSwatch.dot,
+              width: business ? 24 : _ColorSwatch.dot,
+              height: business ? 24 : _ColorSwatch.dot,
               decoration: ShapeDecoration(
                 color: context.raisedSurfaceLevel.colorOf(colorScheme),
                 shape: AppShape.circle,
@@ -574,7 +784,9 @@ final _liquidGlassProvider = themeSettingProvider.select(
 );
 
 class _PureBlackItem extends ConsumerWidget {
-  const _PureBlackItem();
+  const _PureBlackItem({this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -599,6 +811,7 @@ class _PureBlackItem extends ConsumerWidget {
         glyph: AppGlyphs.pureBlack,
       ),
       value: pureBlack,
+      showInfoHeader: !business,
       choices: [
         PreviewChoice(
           value: false,
@@ -621,7 +834,9 @@ class _PureBlackItem extends ConsumerWidget {
 }
 
 class _NavigationBarItem extends ConsumerWidget {
-  const _NavigationBarItem();
+  const _NavigationBarItem({this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -635,6 +850,7 @@ class _NavigationBarItem extends ConsumerWidget {
         glyph: AppGlyphs.layers,
       ),
       value: floatingBar,
+      showInfoHeader: !business,
       choices: [
         PreviewChoice(
           value: true,
@@ -665,7 +881,9 @@ class _NavigationBarItem extends ConsumerWidget {
 }
 
 class _TabAnimationItem extends ConsumerWidget {
-  const _TabAnimationItem();
+  const _TabAnimationItem({this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -690,6 +908,7 @@ class _TabAnimationItem extends ConsumerWidget {
     return PreviewChoiceGroup<TabAnimation>(
       info: Info(label: appLocalizations.tabAnimation, glyph: AppGlyphs.motion),
       value: tabAnimation,
+      showInfoHeader: !business,
       choices: [
         PreviewChoice(
           value: TabAnimation.slide,
@@ -712,7 +931,9 @@ class _TabAnimationItem extends ConsumerWidget {
 }
 
 class _LiquidGlassItem extends ConsumerWidget {
-  const _LiquidGlassItem();
+  const _LiquidGlassItem({this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -737,6 +958,7 @@ class _LiquidGlassItem extends ConsumerWidget {
         glyph: AppGlyphs.liquidGlass,
       ),
       value: mode,
+      showInfoHeader: !business,
       choices: [
         PreviewChoice(
           value: LiquidGlassMode.none,
@@ -764,7 +986,9 @@ class _LiquidGlassItem extends ConsumerWidget {
 }
 
 class _SidebarBlurItem extends StatelessWidget {
-  const _SidebarBlurItem();
+  const _SidebarBlurItem({this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context) {
@@ -772,11 +996,14 @@ class _SidebarBlurItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InfoHeader(
-          info: Info(label: appLocalizations.sidebar, glyph: AppGlyphs.blur),
-        ),
+        if (!business)
+          InfoHeader(
+            info: Info(label: appLocalizations.sidebar, glyph: AppGlyphs.blur),
+          ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: business
+              ? EdgeInsets.zero
+              : const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: generateGroup([
             ConfigToggleItem(
               title: (l) => l.backgroundBlur,
@@ -795,7 +1022,9 @@ class _SidebarBlurItem extends StatelessWidget {
 }
 
 class _FontFamilyItem extends ConsumerWidget {
-  const _FontFamilyItem();
+  const _FontFamilyItem({this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -804,6 +1033,13 @@ class _FontFamilyItem extends ConsumerWidget {
     final fontFamily = ref.watch(
       themeSettingProvider.select((state) => state.fontFamily),
     );
+    if (business) {
+      return ListItem.open(
+        title: Text(appLocalizations.fontFamily),
+        subtitle: Text(fontFamily ?? appLocalizations.defaultText),
+        widget: const FontFamilyView(),
+      );
+    }
     final preview = Padding(
       padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
       child: Row(
@@ -852,7 +1088,9 @@ class _FontFamilyItem extends ConsumerWidget {
           info: Info(label: appLocalizations.fontFamily, glyph: AppGlyphs.font),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: business
+              ? EdgeInsets.zero
+              : const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: context.isMobileView
               ? OpenContainer<void>(
                   closedShape: AppShape.lg,
@@ -872,7 +1110,9 @@ class _FontFamilyItem extends ConsumerWidget {
 }
 
 class _TextScaleFactorItem extends ConsumerStatefulWidget {
-  const _TextScaleFactorItem();
+  const _TextScaleFactorItem({this.business = false});
+
+  final bool business;
 
   static const _step = 0.05;
 
@@ -906,6 +1146,66 @@ class _TextScaleFactorItemState extends ConsumerState<_TextScaleFactorItem> {
     final level = context.raisedSurfaceLevel;
     final divisions =
         ((maxTextScale - minTextScale) / _TextScaleFactorItem._step).round();
+    if (widget.business) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 10,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  appLocalizations.textScale,
+                  style: AppTextStyle.subheadline.of(context),
+                ),
+              ),
+              Text(
+                percent,
+                style: AppTextStyle.subheadline
+                    .of(context, emphasized: true)
+                    .copyWith(color: colorScheme.onSurfaceVariant),
+              ),
+              if (textScale.enable && textScale.scale != 1)
+                _ResetButton(
+                  onPressed: () => _update((state) => state.copyWith(scale: 1)),
+                ),
+            ],
+          ),
+          MediaQuery.withNoTextScaling(
+            child: Row(
+              spacing: 10,
+              children: [
+                Text('A', style: AppTextStyle.footnote.of(context)),
+                Expanded(
+                  child: Slider(
+                    min: minTextScale,
+                    max: maxTextScale,
+                    divisions: divisions,
+                    value: scale,
+                    label: percent,
+                    onChanged: textScale.enable
+                        ? (value) => setState(() => _draft = value)
+                        : null,
+                    onChangeEnd: (value) =>
+                        _update((state) => state.copyWith(scale: value)),
+                  ),
+                ),
+                Text('A', style: AppTextStyle.title2.of(context)),
+              ],
+            ),
+          ),
+          SegmentedControl<bool>(
+            segments: [
+              (false, appLocalizations.followSystem),
+              (true, appLocalizations.custom),
+            ],
+            value: textScale.enable,
+            onChanged: (value) =>
+                _update((state) => state.copyWith(enable: value)),
+          ),
+        ],
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -922,7 +1222,9 @@ class _TextScaleFactorItemState extends ConsumerState<_TextScaleFactorItem> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: widget.business
+              ? EdgeInsets.zero
+              : const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Column(
             spacing: 8,
             children: [
@@ -1201,7 +1503,9 @@ class _CustomColorPreview extends ConsumerWidget {
 }
 
 class _BackgroundItem extends ConsumerWidget {
-  const _BackgroundItem();
+  const _BackgroundItem({this.business = false});
+
+  final bool business;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1214,6 +1518,7 @@ class _BackgroundItem extends ConsumerWidget {
       value: AppBackgroundScope.imagePresets.contains(background)
           ? background
           : 'solid',
+      showInfoHeader: !business,
       choices: [
         for (final (value, label) in [
           ('solid', strings.backgroundSolid),

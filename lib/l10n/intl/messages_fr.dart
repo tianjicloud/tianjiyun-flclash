@@ -512,6 +512,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "bodyRewrite": MessageLookupByLibrary.simpleMessage("Réécriture du corps"),
     "brandName": MessageLookupByLibrary.simpleMessage("Tianji Cloud"),
     "brightness": MessageLookupByLibrary.simpleMessage("Luminosité"),
+    "businessAccentColor": MessageLookupByLibrary.simpleMessage(
+      "Couleur d’accentuation",
+    ),
     "businessAiServiceLabel": MessageLookupByLibrary.simpleMessage(
       "Services IA",
     ),
@@ -524,6 +527,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
       "Autoriser l’adaptateur",
     ),
+    "businessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "S’exécute en arrière-plan après la connexion à Windows",
+    ),
+    "businessAutoLaunchTitle": MessageLookupByLibrary.simpleMessage(
+      "Lancer au démarrage",
+    ),
+    "businessAutoRunDesc": MessageLookupByLibrary.simpleMessage(
+      "Utiliser la ligne et le mode précédents",
+    ),
+    "businessAutoRunTitle": MessageLookupByLibrary.simpleMessage(
+      "Se connecter au lancement",
+    ),
     "businessAutoTest": MessageLookupByLibrary.simpleMessage(
       "Test automatique",
     ),
@@ -532,8 +547,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessChooseLine": MessageLookupByLibrary.simpleMessage(
       "Changer de ligne",
     ),
+    "businessClientVersion": MessageLookupByLibrary.simpleMessage(
+      "Version du client",
+    ),
+    "businessClientVersionDesc": MessageLookupByLibrary.simpleMessage(
+      "Version du client actuellement installée",
+    ),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
       "Tout fermer",
+    ),
+    "businessCloseWindow": MessageLookupByLibrary.simpleMessage(
+      "À la fermeture de la fenêtre",
     ),
     "businessConnectVia": m5,
     "businessConnectedAbnormal": MessageLookupByLibrary.simpleMessage(
@@ -591,6 +615,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDate": m8,
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
+    "businessFollowSystem": MessageLookupByLibrary.simpleMessage(
+      "Suivre le système",
+    ),
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Groupes"),
     "businessGroupLocked": MessageLookupByLibrary.simpleMessage("Verrouillé"),
     "businessHome": MessageLookupByLibrary.simpleMessage("Accueil"),
@@ -624,6 +651,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessManualSelect": MessageLookupByLibrary.simpleMessage(
       "Sélection manuelle",
     ),
+    "businessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "L’icône de la barre affiche toujours l’état de connexion",
+    ),
+    "businessMinimizeToTray": MessageLookupByLibrary.simpleMessage(
+      "Réduire dans la zone de notification",
+    ),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage(
       "Trafic du mois",
     ),
@@ -633,6 +666,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMultiplier": m11,
     "businessNotConnected": MessageLookupByLibrary.simpleMessage(
       "Non connecté",
+    ),
+    "businessOnDemandConnection": MessageLookupByLibrary.simpleMessage(
+      "Connexion à la demande",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Sortie"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(
@@ -735,6 +771,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
       "Modifier l’abonnement",
     ),
+    "businessProxyCardDensity": MessageLookupByLibrary.simpleMessage(
+      "Densité des cartes proxy",
+    ),
+    "businessProxyIcons": MessageLookupByLibrary.simpleMessage("Icônes proxy"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage(
       "Vérifier à nouveau",
@@ -760,11 +800,46 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessSelectionStale": MessageLookupByLibrary.simpleMessage(
       "L’abonnement ou le mode a changé. Rouvrez la sélection.",
     ),
+    "businessSettingsAbout": MessageLookupByLibrary.simpleMessage(
+      "À propos de Tianji Cloud",
+    ),
+    "businessSettingsAppearance": MessageLookupByLibrary.simpleMessage(
+      "Apparence",
+    ),
+    "businessSettingsCommon": MessageLookupByLibrary.simpleMessage("Général"),
+    "businessSettingsHotkeys": MessageLookupByLibrary.simpleMessage(
+      "Raccourcis",
+    ),
+    "businessSettingsIconsUa": MessageLookupByLibrary.simpleMessage(
+      "Icônes et UA",
+    ),
+    "businessSettingsInboundPorts": MessageLookupByLibrary.simpleMessage(
+      "Entrées et ports",
+    ),
+    "businessSettingsNetworkAdvanced": MessageLookupByLibrary.simpleMessage(
+      "Réseau (avancé)",
+    ),
+    "businessSettingsOther": MessageLookupByLibrary.simpleMessage("Autre"),
+    "businessSettingsRules": MessageLookupByLibrary.simpleMessage(
+      "Règles et remplacements",
+    ),
+    "businessSettingsStartupWindow": MessageLookupByLibrary.simpleMessage(
+      "Démarrage et fenêtre",
+    ),
+    "businessSettingsTun": MessageLookupByLibrary.simpleMessage(
+      "Adaptateur virtuel TUN",
+    ),
     "businessSmartRouting": MessageLookupByLibrary.simpleMessage(
       "Routage intelligent",
     ),
     "businessSortByDelay": MessageLookupByLibrary.simpleMessage(
       "Trier par latence",
+    ),
+    "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
+      "Mise à jour automatique de l’abonnement",
+    ),
+    "businessSubscriptionAutoUpdateDesc": MessageLookupByLibrary.simpleMessage(
+      "Actualisation automatique après un changement de ligne",
     ),
     "businessSubscriptionDetails": MessageLookupByLibrary.simpleMessage(
       "Détails de l’abonnement",
@@ -785,6 +860,19 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessTunTitle": MessageLookupByLibrary.simpleMessage(
       "Interface réseau virtuelle (TUN)",
+    ),
+    "businessTypographyLayout": MessageLookupByLibrary.simpleMessage(
+      "Texte et disposition",
+    ),
+    "businessUpdateDaily": MessageLookupByLibrary.simpleMessage("Chaque jour"),
+    "businessUpdateHour1": MessageLookupByLibrary.simpleMessage(
+      "Toutes les heures",
+    ),
+    "businessUpdateHour12": MessageLookupByLibrary.simpleMessage(
+      "Toutes les 12 heures",
+    ),
+    "businessUpdateHour6": MessageLookupByLibrary.simpleMessage(
+      "Toutes les 6 heures",
     ),
     "businessUsagePercent": m14,
     "businessViewDiagnostics": MessageLookupByLibrary.simpleMessage(
