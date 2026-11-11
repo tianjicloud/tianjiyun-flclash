@@ -489,6 +489,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
       "Authorize virtual adapter",
     ),
+    "businessAutoTest": MessageLookupByLibrary.simpleMessage("Automatic test"),
+    "businessCards": MessageLookupByLibrary.simpleMessage("Cards"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Change line"),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
@@ -547,7 +549,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Groups"),
+    "businessGroupLocked": MessageLookupByLibrary.simpleMessage("Locked"),
     "businessHome": MessageLookupByLibrary.simpleMessage("Home"),
+    "businessLineCount": MessageLookupByLibrary.simpleMessage("lines"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Could not finish switching lines. Retry.",
     ),
@@ -569,6 +573,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("Exit locked"),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Mainland direct",
+    ),
+    "businessManualSelect": MessageLookupByLibrary.simpleMessage(
+      "Manual selection",
     ),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage("This month"),
     "businessMonthUsed": MessageLookupByLibrary.simpleMessage(
@@ -683,6 +690,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Verify again"),
+    "businessReplace": MessageLookupByLibrary.simpleMessage("Replace"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(
       "Residential broadband",
     ),

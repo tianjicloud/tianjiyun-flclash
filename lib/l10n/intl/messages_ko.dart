@@ -419,6 +419,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("모든 회선"),
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("가상 어댑터 승인"),
+    "businessAutoTest": MessageLookupByLibrary.simpleMessage("자동 테스트"),
+    "businessCards": MessageLookupByLibrary.simpleMessage("카드"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("회선 변경"),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
@@ -469,7 +471,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("그룹"),
+    "businessGroupLocked": MessageLookupByLibrary.simpleMessage("잠김"),
     "businessHome": MessageLookupByLibrary.simpleMessage("홈"),
+    "businessLineCount": MessageLookupByLibrary.simpleMessage("개 노드"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
     ),
@@ -492,6 +496,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "중국 본토 직접 연결",
     ),
+    "businessManualSelect": MessageLookupByLibrary.simpleMessage("수동 선택"),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage("이번 달 트래픽"),
     "businessMonthUsed": MessageLookupByLibrary.simpleMessage("이번 달 사용량"),
     "businessMultiplier": m11,
@@ -589,6 +594,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage("구독 편집"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("프록시"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("다시 확인"),
+    "businessReplace": MessageLookupByLibrary.simpleMessage("변경"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(
       "가정용 광대역",
     ),

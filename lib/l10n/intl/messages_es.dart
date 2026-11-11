@@ -527,6 +527,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
       "Autorizar adaptador virtual",
     ),
+    "businessAutoTest": MessageLookupByLibrary.simpleMessage(
+      "Prueba automática",
+    ),
+    "businessCards": MessageLookupByLibrary.simpleMessage("Tarjetas"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Cambiar línea"),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
@@ -587,7 +591,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Grupos"),
+    "businessGroupLocked": MessageLookupByLibrary.simpleMessage("Bloqueado"),
     "businessHome": MessageLookupByLibrary.simpleMessage("Inicio"),
+    "businessLineCount": MessageLookupByLibrary.simpleMessage("líneas"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "No se pudo completar el cambio. Reinténtalo.",
     ),
@@ -613,6 +619,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Conexión directa a China continental",
+    ),
+    "businessManualSelect": MessageLookupByLibrary.simpleMessage(
+      "Selección manual",
     ),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage(
       "Tráfico del mes",
@@ -729,6 +738,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessRecheck": MessageLookupByLibrary.simpleMessage(
       "Verificar de nuevo",
     ),
+    "businessReplace": MessageLookupByLibrary.simpleMessage("Reemplazar"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(
       "Banda ancha residencial",
     ),

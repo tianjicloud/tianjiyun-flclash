@@ -1329,6 +1329,7 @@
   "businessLineSelectionHintShort": "The selected line is the exit; its exit IP is checked after switching.",
   "businessResidentialLockedHint": "The home broadband group is locked to “{name}”. Change it in the home broadband lines.",
   "businessLocked": "Locked",
+  "businessGroupLocked": "Locked",
   "businessExitCheckPassed": "Exit check passed",
   "businessExitVerifiedDetail": "Selected “{name}” matches exit {ip}",
   "businessSearchHint": "Search line name or region",
@@ -1346,6 +1347,12 @@
   "businessDelayTimeout": "Timeout",
   "businessRecheck": "Verify again",
   "businessMultiplier": "Rate {value}×",
+  "businessManualSelect": "Manual selection",
+  "businessCards": "Cards",
+  "businessAutoTest": "Automatic test",
+  "businessLineCount": "lines",
+  "businessCurrent": "Current",
+  "businessReplace": "Replace",
   "@businessMultiplier": {
     "placeholders": {
       "value": {}

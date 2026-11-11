@@ -57,6 +57,7 @@ class ProxyCard extends ConsumerWidget {
   final String? testUrl;
   final bool businessStyle;
   final bool businessMobile;
+  final bool businessList;
 
   const ProxyCard({
     super.key,
@@ -67,6 +68,7 @@ class ProxyCard extends ConsumerWidget {
     required this.type,
     this.businessStyle = false,
     this.businessMobile = false,
+    this.businessList = false,
   });
 
   Measure get measure => globalState.measure;
@@ -214,6 +216,56 @@ class ProxyCard extends ConsumerWidget {
     );
   }
 
+  Widget _buildBusinessListContent(BuildContext context, bool selected) {
+    final region = _businessName();
+    final multiplier = RegExp(
+      r'\b(\d+(?:\.\d+)?)x\b',
+      caseSensitive: false,
+    ).firstMatch(proxy.name)?.group(1);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: selected
+            ? context.colorScheme.brightness == Brightness.dark
+                  ? BusinessPalette.listSelectionDark
+                  : BusinessPalette.hintBackground
+            : null,
+      ),
+      child: SizedBox(
+        height: 44,
+        child: Row(
+          spacing: 14,
+          children: [
+            _BusinessRadio(selected: selected),
+            if (region.code case final code?) RegionCodeBadge(code: code),
+            Expanded(
+              child: EmojiText(
+                region.name.replaceAll(
+                  RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false),
+                  '',
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BusinessText.linesNodeTitle(
+                  context,
+                  emphasized: selected,
+                ),
+              ),
+            ),
+            if (multiplier case final value?)
+              Text(
+                context.appLocalizations.businessMultiplier(value),
+                style: AppTextStyle.footnote
+                    .of(context)
+                    .toJetBrainsMono
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
+            _BusinessDelayText(proxy: proxy, testUrl: testUrl),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _handleSelect(WidgetRef ref) {
     selectGroupProxy(
       ref,
@@ -333,10 +385,17 @@ class ProxyCard extends ConsumerWidget {
         final card = Card(
           radius: businessMobile
               ? AppCorner.none
+              : businessList
+              ? AppCorner.none
               : businessStyle
               ? AppCorner.md
               : AppCorner.lg,
           shape: businessMobile
+              ? const RoundedSuperellipseBorder(
+                  side: BorderSide.none,
+                  borderRadius: AppRadius.none,
+                )
+              : businessList
               ? const RoundedSuperellipseBorder(
                   side: BorderSide.none,
                   borderRadius: AppRadius.none,
@@ -350,8 +409,10 @@ class ProxyCard extends ConsumerWidget {
           enterActionsOnRight: true,
           key: key,
           onPressed: () => _handleSelect(ref),
-          isSelected: businessMobile ? false : inUse,
+          isSelected: businessMobile || businessList ? false : inUse,
           padding: businessMobile
+              ? const EdgeInsets.symmetric(horizontal: 16)
+              : businessList
               ? const EdgeInsets.symmetric(horizontal: 16)
               : businessStyle
               ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
@@ -359,7 +420,9 @@ class ProxyCard extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: businessMobile
+            children: businessList
+                ? [_buildBusinessListContent(context, inUse)]
+                : businessMobile
                 ? [
                     SizedBox(
                       height: 68,
@@ -388,7 +451,8 @@ class ProxyCard extends ConsumerWidget {
                   ],
           ),
         );
-        final selectedCard = businessStyle && inUse && !businessMobile
+        final selectedCard =
+            businessStyle && inUse && !businessMobile && !businessList
             ? DecoratedBox(
                 decoration: ShapeDecoration(
                   shadows: [BusinessShadow.selectedLine(BusinessPalette.blue)],
@@ -478,8 +542,8 @@ class _BusinessRadio extends StatelessWidget {
       ),
     ),
     child: SizedBox(
-      width: 22,
-      height: 22,
+      width: 20,
+      height: 20,
       child: selected
           ? const Center(
               child: DecoratedBox(

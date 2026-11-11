@@ -1329,6 +1329,7 @@
   "businessLineSelectionHintShort": "选中哪条，出口就是哪条；切换后自动校验出口 IP。",
   "businessResidentialLockedHint": "家宽分组已锁定到「{name}」，在家宽线路里更换。",
   "businessLocked": "锁定",
+  "businessGroupLocked": "已锁定",
   "businessExitCheckPassed": "出口校验通过",
   "businessExitVerifiedDetail": "所选「{name}」与实际出口 {ip} 一致",
   "businessSearchHint": "搜索线路名或地区",
@@ -1346,6 +1347,12 @@
   "businessDelayTimeout": "超时",
   "businessRecheck": "重新校验",
   "businessMultiplier": "倍率 {value}×",
+  "businessManualSelect": "手动选择",
+  "businessCards": "卡片",
+  "businessAutoTest": "自动测速",
+  "businessLineCount": "条",
+  "businessCurrent": "当前",
+  "businessReplace": "更换",
   "@businessMultiplier": {
     "placeholders": {
       "value": {}

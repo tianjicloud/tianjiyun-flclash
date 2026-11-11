@@ -207,6 +207,8 @@ enum RestoreOption { all, onlyProfiles }
 
 enum ProxiesType { tab, list }
 
+enum BusinessProxiesView { cards, list }
+
 enum ProxiesLayout { loose, standard, tight }
 
 enum ProxyCardType { loose, standard, compact }

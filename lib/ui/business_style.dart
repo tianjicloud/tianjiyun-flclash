@@ -24,6 +24,7 @@ abstract final class BusinessPalette {
   static const sidebarLight = Color(0xFFF7F8FA);
   static const timelineLine = Color(0xFFD5E1FA);
   static const hintBackground = Color(0xFFF4F8FF);
+  static const listSelectionDark = Color(0xFF1E2B3C);
   static const searchStroke = Color(0x120E1726);
   static const searchShadow = Color(0x0A0E1726);
   static const sidebarDarkOverlay = Color(0x8C0A0F2B);

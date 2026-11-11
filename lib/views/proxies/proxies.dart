@@ -7,8 +7,10 @@ import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/proxies/list.dart';
 import 'package:fl_clash/views/proxies/business_browser.dart';
+import 'package:fl_clash/views/proxies/business_list.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessPrimaryButton, BusinessSecondaryButton;
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -211,6 +213,23 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
           : null,
       actions: businessDesktopSearch
           ? [
+              BusinessSegmented<BusinessProxiesView>(
+                height: 30,
+                items: [
+                  BusinessSegment(
+                    value: BusinessProxiesView.cards,
+                    label: context.appLocalizations.businessCards,
+                  ),
+                  BusinessSegment(
+                    value: BusinessProxiesView.list,
+                    label: context.appLocalizations.list,
+                  ),
+                ],
+                selected: style.businessProxiesView,
+                onSelected: (value) => _updateStyle(
+                  (state) => state.copyWith(businessProxiesView: value),
+                ),
+              ),
               BusinessSecondaryButton(
                 label: context.appLocalizations.businessSortByDelay,
                 width: 99 * textScale,
@@ -255,10 +274,12 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
       searchState: businessDesktopSearch
           ? null
           : AppBarSearchState(onSearch: _onSearch),
-      body: switch ((business, style.type)) {
-        (true, ProxiesType.list) => const BusinessProxyBrowser(),
-        (_, ProxiesType.tab) => _tabView,
-        (_, ProxiesType.list) => const ProxiesListView(),
+      body: switch ((business, style.type, style.businessProxiesView)) {
+        (true, ProxiesType.list, BusinessProxiesView.list) =>
+          const BusinessProxyList(),
+        (true, ProxiesType.list, _) => const BusinessProxyBrowser(),
+        (_, ProxiesType.tab, _) => _tabView,
+        (_, ProxiesType.list, _) => const ProxiesListView(),
       },
     );
   }

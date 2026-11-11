@@ -11087,6 +11087,16 @@ class AppLocalizations {
     return Intl.message('Locked', name: 'businessLocked', desc: '', args: []);
   }
 
+  /// `Locked`
+  String get businessGroupLocked {
+    return Intl.message(
+      'Locked',
+      name: 'businessGroupLocked',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Exit check passed`
   String get businessExitCheckPassed {
     return Intl.message(
@@ -11195,6 +11205,41 @@ class AppLocalizations {
       desc: '',
       args: [value],
     );
+  }
+
+  /// `Manual selection`
+  String get businessManualSelect {
+    return Intl.message(
+      'Manual selection',
+      name: 'businessManualSelect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cards`
+  String get businessCards {
+    return Intl.message('Cards', name: 'businessCards', desc: '', args: []);
+  }
+
+  /// `Automatic test`
+  String get businessAutoTest {
+    return Intl.message(
+      'Automatic test',
+      name: 'businessAutoTest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `lines`
+  String get businessLineCount {
+    return Intl.message('lines', name: 'businessLineCount', desc: '', args: []);
+  }
+
+  /// `Replace`
+  String get businessReplace {
+    return Intl.message('Replace', name: 'businessReplace', desc: '', args: []);
   }
 
   /// `Update all`

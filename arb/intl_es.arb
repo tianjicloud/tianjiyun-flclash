@@ -1329,6 +1329,7 @@
   "businessLineSelectionHintShort": "La línea elegida será la salida; su IP se comprobará al cambiar.",
   "businessResidentialLockedHint": "El grupo residencial está bloqueado en «{name}». Cámbialo en las líneas residenciales.",
   "businessLocked": "Bloqueado",
+  "businessGroupLocked": "Bloqueado",
   "businessExitCheckPassed": "Verificación de salida aprobada",
   "businessExitVerifiedDetail": "La línea « {name} » coincide con la salida {ip}",
   "businessSearchHint": "Buscar nombre de línea o región",
@@ -1346,6 +1347,12 @@
   "businessDelayTimeout": "Tiempo agotado",
   "businessRecheck": "Verificar de nuevo",
   "businessMultiplier": "Multiplicador {value}×",
+  "businessManualSelect": "Selección manual",
+  "businessCards": "Tarjetas",
+  "businessAutoTest": "Prueba automática",
+  "businessLineCount": "líneas",
+  "businessCurrent": "Actual",
+  "businessReplace": "Reemplazar",
   "@businessMultiplier": {
     "placeholders": {
       "value": {}

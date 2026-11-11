@@ -1329,6 +1329,7 @@
   "businessLineSelectionHintShort": "Выбранная линия станет выходом; после переключения проверим IP выхода.",
   "businessResidentialLockedHint": "Домашняя группа закреплена за «{name}». Измените её в списке домашних линий.",
   "businessLocked": "Закреплено",
+  "businessGroupLocked": "Заблокировано",
   "businessExitCheckPassed": "Проверка выхода пройдена",
   "businessExitVerifiedDetail": "Выбранная линия «{name}» совпадает с выходом {ip}",
   "businessSearchHint": "Поиск линии или региона",
@@ -1346,6 +1347,12 @@
   "businessDelayTimeout": "Тайм-аут",
   "businessRecheck": "Проверить снова",
   "businessMultiplier": "Коэффициент {value}×",
+  "businessManualSelect": "Выбор вручную",
+  "businessCards": "Карточки",
+  "businessAutoTest": "Автотест",
+  "businessLineCount": "линий",
+  "businessCurrent": "Текущий",
+  "businessReplace": "Заменить",
   "@businessMultiplier": {
     "placeholders": {
       "value": {}

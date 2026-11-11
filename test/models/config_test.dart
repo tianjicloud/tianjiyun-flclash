@@ -819,6 +819,7 @@ void main() {
       expect(props.type, ProxiesType.list);
       expect(props.sortType, ProxiesSortType.none);
       expect(props.layout, ProxiesLayout.standard);
+      expect(props.businessProxiesView, BusinessProxiesView.cards);
     });
 
     test('round-trip with custom values', () {
@@ -832,6 +833,20 @@ void main() {
       );
       expect(restored.type, ProxiesType.tab);
       expect(restored.sortType, ProxiesSortType.delay);
+    });
+
+    test('persists business proxy view and defaults old configs to cards', () {
+      expect(
+        ProxiesStyleProps.fromJson({}).businessProxiesView,
+        BusinessProxiesView.cards,
+      );
+      final restored = roundTrip(
+        () => const ProxiesStyleProps(
+          businessProxiesView: BusinessProxiesView.list,
+        ).toJson(),
+        ProxiesStyleProps.fromJson,
+      );
+      expect(restored.businessProxiesView, BusinessProxiesView.list);
     });
 
     test('reads the icon styles saved under their former names', () {

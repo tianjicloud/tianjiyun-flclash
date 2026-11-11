@@ -1329,6 +1329,7 @@
   "businessLineSelectionHintShort": "La ligne choisie devient la sortie ; son IP est vérifiée après le changement.",
   "businessResidentialLockedHint": "Le groupe résidentiel est verrouillé sur « {name} ». Modifiez-le dans les lignes résidentielles.",
   "businessLocked": "Verrouillé",
+  "businessGroupLocked": "Verrouillé",
   "businessExitCheckPassed": "Vérification de sortie réussie",
   "businessExitVerifiedDetail": "La ligne « {name} » correspond à la sortie {ip}",
   "businessSearchHint": "Rechercher un nom ou une région",
@@ -1346,6 +1347,12 @@
   "businessDelayTimeout": "Délai dépassé",
   "businessRecheck": "Vérifier à nouveau",
   "businessMultiplier": "Coefficient {value}×",
+  "businessManualSelect": "Sélection manuelle",
+  "businessCards": "Cartes",
+  "businessAutoTest": "Test automatique",
+  "businessLineCount": "lignes",
+  "businessCurrent": "Actuel",
+  "businessReplace": "Remplacer",
   "@businessMultiplier": {
     "placeholders": {
       "value": {}

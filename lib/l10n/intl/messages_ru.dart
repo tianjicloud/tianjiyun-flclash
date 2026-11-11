@@ -508,6 +508,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage(
       "Авторизовать адаптер",
     ),
+    "businessAutoTest": MessageLookupByLibrary.simpleMessage("Автотест"),
+    "businessCards": MessageLookupByLibrary.simpleMessage("Карточки"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("Сменить линию"),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
@@ -568,7 +570,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("Группы"),
+    "businessGroupLocked": MessageLookupByLibrary.simpleMessage(
+      "Заблокировано",
+    ),
     "businessHome": MessageLookupByLibrary.simpleMessage("Главная"),
+    "businessLineCount": MessageLookupByLibrary.simpleMessage("линий"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось завершить переключение. Повторите попытку.",
     ),
@@ -594,6 +600,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Прямое подключение к материковому Китаю",
+    ),
+    "businessManualSelect": MessageLookupByLibrary.simpleMessage(
+      "Выбор вручную",
     ),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage(
       "Трафик за месяц",
@@ -712,6 +721,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Прокси"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Проверить снова"),
+    "businessReplace": MessageLookupByLibrary.simpleMessage("Заменить"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(
       "Домашний широкополосный доступ",
     ),

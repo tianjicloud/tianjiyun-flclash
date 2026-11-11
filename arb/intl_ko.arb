@@ -1329,6 +1329,7 @@
   "businessLineSelectionHintShort": "선택한 회선이 출구가 되며 전환 후 출구 IP를 확인합니다.",
   "businessResidentialLockedHint": "가정용 회선 그룹은 “{name}”에 잠겨 있습니다. 가정용 회선에서 변경하세요.",
   "businessLocked": "잠김",
+  "businessGroupLocked": "잠김",
   "businessExitCheckPassed": "출구 확인 통과",
   "businessExitVerifiedDetail": "선택한 “{name}”과 출구 {ip}가 일치",
   "businessSearchHint": "회선 이름 또는 지역 검색",
@@ -1346,6 +1347,12 @@
   "businessDelayTimeout": "시간 초과",
   "businessRecheck": "다시 확인",
   "businessMultiplier": "배율 {value}×",
+  "businessManualSelect": "수동 선택",
+  "businessCards": "카드",
+  "businessAutoTest": "자동 테스트",
+  "businessLineCount": "개 노드",
+  "businessCurrent": "현재",
+  "businessReplace": "변경",
   "@businessMultiplier": {
     "placeholders": {
       "value": {}

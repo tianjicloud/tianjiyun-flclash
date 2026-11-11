@@ -1329,6 +1329,7 @@
   "businessLineSelectionHintShort": "選択した回線が出口になり、切替後に出口 IP を確認します。",
   "businessResidentialLockedHint": "ホーム回線グループは「{name}」に固定されています。ホーム回線で変更してください。",
   "businessLocked": "固定",
+  "businessGroupLocked": "ロック中",
   "businessExitCheckPassed": "出口確認に成功しました",
   "businessExitVerifiedDetail": "選択した「{name}」と出口 {ip} が一致",
   "businessSearchHint": "回線名または地域を検索",
@@ -1346,6 +1347,12 @@
   "businessDelayTimeout": "タイムアウト",
   "businessRecheck": "再確認",
   "businessMultiplier": "倍率 {value}×",
+  "businessManualSelect": "手動選択",
+  "businessCards": "カード",
+  "businessAutoTest": "自動テスト",
+  "businessLineCount": "件",
+  "businessCurrent": "現在",
+  "businessReplace": "変更",
   "@businessMultiplier": {
     "placeholders": {
       "value": {}

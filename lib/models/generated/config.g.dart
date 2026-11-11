@@ -309,6 +309,12 @@ _ProxiesStyleProps _$ProxiesStylePropsFromJson(Map<String, dynamic> json) =>
       layout:
           $enumDecodeNullable(_$ProxiesLayoutEnumMap, json['layout']) ??
           ProxiesLayout.standard,
+      businessProxiesView:
+          $enumDecodeNullable(
+            _$BusinessProxiesViewEnumMap,
+            json['businessProxiesView'],
+          ) ??
+          BusinessProxiesView.cards,
       iconStyle: json['iconStyle'] == null
           ? ProxiesIconStyle.filled
           : proxiesIconStyleSafeFromJson(json['iconStyle']),
@@ -323,6 +329,8 @@ Map<String, dynamic> _$ProxiesStylePropsToJson(_ProxiesStyleProps instance) =>
       'type': _$ProxiesTypeEnumMap[instance.type]!,
       'sortType': _$ProxiesSortTypeEnumMap[instance.sortType]!,
       'layout': _$ProxiesLayoutEnumMap[instance.layout]!,
+      'businessProxiesView':
+          _$BusinessProxiesViewEnumMap[instance.businessProxiesView]!,
       'iconStyle': _$ProxiesIconStyleEnumMap[instance.iconStyle]!,
       'cardType': _$ProxyCardTypeEnumMap[instance.cardType]!,
       'hideTimeoutProxies': instance.hideTimeoutProxies,
@@ -340,6 +348,11 @@ const _$ProxiesLayoutEnumMap = {
   ProxiesLayout.loose: 'loose',
   ProxiesLayout.standard: 'standard',
   ProxiesLayout.tight: 'tight',
+};
+
+const _$BusinessProxiesViewEnumMap = {
+  BusinessProxiesView.cards: 'cards',
+  BusinessProxiesView.list: 'list',
 };
 
 const _$ProxiesIconStyleEnumMap = {

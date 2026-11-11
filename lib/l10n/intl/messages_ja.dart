@@ -423,6 +423,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessAllLines": MessageLookupByLibrary.simpleMessage("すべての回線"),
     "businessAuthorizeTun": MessageLookupByLibrary.simpleMessage("仮想アダプターを承認"),
+    "businessAutoTest": MessageLookupByLibrary.simpleMessage("自動テスト"),
+    "businessCards": MessageLookupByLibrary.simpleMessage("カード"),
     "businessCheckedAt": m4,
     "businessChooseLine": MessageLookupByLibrary.simpleMessage("回線を変更"),
     "businessCloseAllConnections": MessageLookupByLibrary.simpleMessage(
@@ -477,7 +479,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessExpiryDateShort": m9,
     "businessExpiryNotice": m10,
     "businessGroupHeader": MessageLookupByLibrary.simpleMessage("グループ"),
+    "businessGroupLocked": MessageLookupByLibrary.simpleMessage("ロック中"),
     "businessHome": MessageLookupByLibrary.simpleMessage("ホーム"),
+    "businessLineCount": MessageLookupByLibrary.simpleMessage("件"),
     "businessLineFailed": MessageLookupByLibrary.simpleMessage(
       "回線の切り替えを完了できませんでした。再試行してください。",
     ),
@@ -498,6 +502,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessLocked": MessageLookupByLibrary.simpleMessage("固定"),
     "businessLockedExit": MessageLookupByLibrary.simpleMessage("出口を固定"),
     "businessMainlandDirect": MessageLookupByLibrary.simpleMessage("中国本土直通"),
+    "businessManualSelect": MessageLookupByLibrary.simpleMessage("手動選択"),
     "businessMonthTraffic": MessageLookupByLibrary.simpleMessage("今月の通信量"),
     "businessMonthUsed": MessageLookupByLibrary.simpleMessage("今月の使用量"),
     "businessMultiplier": m11,
@@ -603,6 +608,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("プロキシ"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("再確認"),
+    "businessReplace": MessageLookupByLibrary.simpleMessage("変更"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(
       "住宅用ブロードバンド",
     ),
