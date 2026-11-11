@@ -1690,5 +1690,12 @@
   "businessLocalExport": "Экспорт в локальный файл",
   "businessRestoreFromFileWebDav": "Восстановить из файла или WebDAV",
   "businessTunExcludedRoutes": "Исключённые маршруты",
-  "businessTunRouteCount": "маршрутов"
+  "businessTunRouteCount": "маршрутов",
+  "trayNotConnected": "Не подключено",
+  "trayPreferences": "Настройки",
+  "trayOpenApp": "Открыть Tianji Cloud…",
+  "trayDisconnect": "Отключиться",
+  "trayShowMainWindow": "Показать главное окно",
+  "trayCopyProxyCommand": "Скопировать команду прокси для терминала",
+  "trayTun": "Виртуальный сетевой адаптер (TUN)"
 }

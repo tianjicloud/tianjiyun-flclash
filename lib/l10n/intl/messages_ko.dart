@@ -2751,6 +2751,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficUsage": MessageLookupByLibrary.simpleMessage("트래픽 사용량"),
     "transport": MessageLookupByLibrary.simpleMessage("전송"),
     "transportHeaders": m126,
+    "trayCopyProxyCommand": MessageLookupByLibrary.simpleMessage(
+      "터미널 프록시 명령 복사",
+    ),
+    "trayDisconnect": MessageLookupByLibrary.simpleMessage("연결 끊기"),
+    "trayNotConnected": MessageLookupByLibrary.simpleMessage("연결되지 않음"),
+    "trayOpenApp": MessageLookupByLibrary.simpleMessage("Tianji Cloud 열기…"),
+    "trayPreferences": MessageLookupByLibrary.simpleMessage("환경설정"),
+    "trayShowMainWindow": MessageLookupByLibrary.simpleMessage("기본 창 표시"),
+    "trayTun": MessageLookupByLibrary.simpleMessage("가상 네트워크 어댑터(TUN)"),
     "trustCertificate": MessageLookupByLibrary.simpleMessage("인증서 신뢰"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

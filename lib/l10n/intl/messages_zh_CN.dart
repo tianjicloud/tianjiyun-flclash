@@ -2490,6 +2490,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficUsage": MessageLookupByLibrary.simpleMessage("流量统计"),
     "transport": MessageLookupByLibrary.simpleMessage("传输协议"),
     "transportHeaders": m126,
+    "trayCopyProxyCommand": MessageLookupByLibrary.simpleMessage("复制终端代理命令"),
+    "trayDisconnect": MessageLookupByLibrary.simpleMessage("断开连接"),
+    "trayNotConnected": MessageLookupByLibrary.simpleMessage("未连接"),
+    "trayOpenApp": MessageLookupByLibrary.simpleMessage("打开天机云…"),
+    "trayPreferences": MessageLookupByLibrary.simpleMessage("偏好"),
+    "trayShowMainWindow": MessageLookupByLibrary.simpleMessage("显示主窗口"),
+    "trayTun": MessageLookupByLibrary.simpleMessage("虚拟网卡（TUN）"),
     "trustCertificate": MessageLookupByLibrary.simpleMessage("信任证书"),
     "tun": MessageLookupByLibrary.simpleMessage("虚拟网卡"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

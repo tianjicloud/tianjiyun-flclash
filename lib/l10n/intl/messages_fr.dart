@@ -3493,6 +3493,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Trafic utilisé"),
     "transport": MessageLookupByLibrary.simpleMessage("Transport"),
     "transportHeaders": m126,
+    "trayCopyProxyCommand": MessageLookupByLibrary.simpleMessage(
+      "Copier la commande proxy du terminal",
+    ),
+    "trayDisconnect": MessageLookupByLibrary.simpleMessage("Déconnecter"),
+    "trayNotConnected": MessageLookupByLibrary.simpleMessage("Non connecté"),
+    "trayOpenApp": MessageLookupByLibrary.simpleMessage("Ouvrir Tianji Cloud…"),
+    "trayPreferences": MessageLookupByLibrary.simpleMessage("Préférences"),
+    "trayShowMainWindow": MessageLookupByLibrary.simpleMessage(
+      "Afficher la fenêtre principale",
+    ),
+    "trayTun": MessageLookupByLibrary.simpleMessage(
+      "Adaptateur réseau virtuel (TUN)",
+    ),
     "trustCertificate": MessageLookupByLibrary.simpleMessage(
       "Approuver le certificat",
     ),

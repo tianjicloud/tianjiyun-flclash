@@ -3410,6 +3410,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Статистика трафика"),
     "transport": MessageLookupByLibrary.simpleMessage("Транспорт"),
     "transportHeaders": m126,
+    "trayCopyProxyCommand": MessageLookupByLibrary.simpleMessage(
+      "Скопировать команду прокси для терминала",
+    ),
+    "trayDisconnect": MessageLookupByLibrary.simpleMessage("Отключиться"),
+    "trayNotConnected": MessageLookupByLibrary.simpleMessage("Не подключено"),
+    "trayOpenApp": MessageLookupByLibrary.simpleMessage(
+      "Открыть Tianji Cloud…",
+    ),
+    "trayPreferences": MessageLookupByLibrary.simpleMessage("Настройки"),
+    "trayShowMainWindow": MessageLookupByLibrary.simpleMessage(
+      "Показать главное окно",
+    ),
+    "trayTun": MessageLookupByLibrary.simpleMessage(
+      "Виртуальный сетевой адаптер (TUN)",
+    ),
     "trustCertificate": MessageLookupByLibrary.simpleMessage(
       "Доверять сертификату",
     ),

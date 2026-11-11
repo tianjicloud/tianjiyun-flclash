@@ -2,15 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fl_clash/common/app_localizations.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/app_ports.dart';
 import 'package:fl_clash/common/constant.dart';
 import 'package:fl_clash/common/l10n_labels.dart';
 import 'package:fl_clash/common/tray.dart';
+import 'package:fl_clash/common/service_probe.dart' show routedOutbound;
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/core/scene.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
-import 'package:fl_clash/providers/action.dart';
-import 'package:fl_clash/providers/state.dart';
+import 'package:fl_clash/providers/outbound_ip.dart';
+import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +27,7 @@ import 'package:tray/tray.dart';
 import '../helpers/app_paths.dart';
 
 const _channel = MethodChannel('tray');
+final _menuReports = <String>[];
 
 const _proxyGroup = Group(
   name: 'Proxy',
@@ -99,6 +104,10 @@ void main() {
   });
 
   tearDownAll(() {
+    final reportPath = Platform.environment['TRAY_MENU_REPORT'];
+    if (reportPath != null) {
+      File(reportPath).writeAsStringSync(_menuReports.join('\n\n'));
+    }
     // The shared system temp dir is not exclusively ours; another suite running
     // alongside this one can take the tree out from under the teardown, either
     // before the check or between the check and the delete.
@@ -140,6 +149,112 @@ void main() {
     return null;
   }
 
+  String menuReport(String platform, MethodCall? call) {
+    final buffer = StringBuffer('$platform\n');
+    void writeItems(List<Map<Object?, Object?>> items, int depth) {
+      for (final item in items) {
+        final type = item['type'];
+        if (type == 'separator') {
+          buffer.writeln('${'  ' * depth}—');
+          continue;
+        }
+        buffer.write('${'  ' * depth}${item['label']}');
+        for (final field in ['detail', 'checked', 'enabled']) {
+          if (item.containsKey(field)) buffer.write(' | $field=${item[field]}');
+        }
+        buffer.writeln();
+        if (type == 'submenu') {
+          writeItems(
+            (item['items'] as List).cast<Map<Object?, Object?>>(),
+            depth + 1,
+          );
+        }
+      }
+    }
+
+    writeItems(_items(call), 0);
+    return buffer.toString().trimRight();
+  }
+
+  Future<List<Group>> useBusinessFixture({required bool connected}) async {
+    container.dispose();
+    const profile = Profile(
+      id: 1,
+      type: ProfileType.url,
+      label: '天机云',
+      url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+      autoUpdateDuration: Duration(days: 1),
+    );
+    const groups = [
+      Group(
+        name: 'Proxy',
+        type: GroupType.Selector,
+        hidden: false,
+        all: [
+          Proxy(name: 'JP · 东京家宽 · 04', type: 'ss'),
+          Proxy(name: 'HK · 香港 · 家宽', type: 'ss'),
+          Proxy(name: 'US · 洛杉矶住宅 02', type: 'ss'),
+        ],
+      ),
+    ];
+    final catalog = connected ? groups : const <Group>[];
+    const route = 'JP · 东京家宽 · 04';
+    container = ProviderContainer(
+      overrides: [
+        currentProfileProvider.overrideWithValue(profile),
+        coreStatusProvider.overrideWithValue(
+          connected ? CoreStatus.connected : CoreStatus.disconnected,
+        ),
+        groupsProvider.overrideWithValue(catalog),
+        currentGroupsStateProvider.overrideWithValue(
+          GroupsState(value: catalog),
+        ),
+        selectedProxyNameProvider('Proxy').overrideWithValue(route),
+        residentialPolicyProvider.overrideWithValue(
+          ResidentialPolicy(
+            profileId: profile.id,
+            fingerprint: null,
+            configuredExit: null,
+            selectedExit: null,
+            active: false,
+            rootAvailable: false,
+            choices: const [],
+            catalogReady: connected,
+          ),
+        ),
+        scenePolicyProvider.overrideWithValue(
+          const ScenePolicy(
+            available: true,
+            current: SceneKind.daily,
+            suspended: false,
+          ),
+        ),
+        delaysAtLastTestBatchProvider.overrideWithValue({
+          'https://delay.test': {route: 37},
+        }),
+        realTestUrlProvider().overrideWithValue('https://delay.test'),
+        outboundIpProbeProvider.overrideWithValue(
+          RoutedProbeState<String, IpInfo>(
+            connected
+                ? {
+                    routedOutbound: const ProbeEntry(
+                      phase: ProbePhase.fresh,
+                      value: IpInfo(ip: '203.0.113.42', countryCode: 'JP'),
+                    ),
+                  }
+                : const {},
+          ),
+        ),
+      ],
+    );
+    if (connected) {
+      container
+          .read(trafficsProvider.notifier)
+          .addTraffic(const Traffic(down: 2.4 * 1024 * 1024, up: 312 * 1024));
+    }
+    return catalog;
+  }
+
   Future<void> update(TrayState trayState, {AppTray? on}) {
     return (on ?? tray).update(
       trayState: trayState,
@@ -174,6 +289,33 @@ void main() {
     expect(labels, contains(l10n.exit));
     expect(labels, isNot(contains(l10n.tun)));
     expect(labels, isNot(contains(l10n.systemProxy)));
+  });
+
+  test('uses the Tianji macOS menu hierarchy for business profiles', () async {
+    container.dispose();
+    container = ProviderContainer(
+      overrides: [
+        currentProfileProvider.overrideWithValue(
+          const Profile(
+            id: 1,
+            type: ProfileType.url,
+            label: 'Tianji',
+            url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+            autoUpdateDuration: Duration(days: 1),
+          ),
+        ),
+      ],
+    );
+    await update(_trayState(isStart: true));
+
+    final labels = _labels(showCall());
+    expect(labels.first, currentAppLocalizations.trayNotConnected);
+    expect(labels, contains(currentAppLocalizations.scene));
+    expect(labels, contains(currentAppLocalizations.outboundMode));
+    expect(labels, contains(currentAppLocalizations.diagnosticsTitle));
+    expect(labels, contains(currentAppLocalizations.trayPreferences));
+    expect(labels, isNot(contains(currentAppLocalizations.autoLaunch)));
+    expect(labels.last, currentAppLocalizations.exit);
   });
 
   test('adds TUN and system proxy toggles once the core is running', () async {
@@ -421,6 +563,64 @@ void main() {
       expect(_labels(showCall()), isNot(contains(HotAction.delayTest.label)));
     });
 
+    test(
+      'uses the Tianji Windows menu hierarchy for business profiles',
+      () async {
+        container.dispose();
+        container = ProviderContainer(
+          overrides: [
+            currentProfileProvider.overrideWithValue(
+              const Profile(
+                id: 1,
+                type: ProfileType.url,
+                label: 'Tianji',
+                url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+                autoUpdateDuration: Duration(days: 1),
+              ),
+            ),
+          ],
+        );
+        await update(_trayState(), on: windows);
+
+        final items = _items(showCall());
+        final labels = _labels(showCall());
+        expect(items.first['enabled'], isFalse);
+        expect(items.first['label'], currentAppLocalizations.trayNotConnected);
+        expect(labels, contains(currentAppLocalizations.outboundMode));
+        expect(labels, contains(currentAppLocalizations.systemProxy));
+        expect(labels, contains(currentAppLocalizations.trayTun));
+        expect(labels, contains(currentAppLocalizations.autoLaunch));
+        expect(items.last['label'], currentAppLocalizations.exit);
+        expect(
+          labels,
+          isNot(contains(currentAppLocalizations.diagnosticsTitle)),
+        );
+      },
+    );
+
+    test('Linux omits the menu-open rate row', () async {
+      container.dispose();
+      container = ProviderContainer(
+        overrides: [
+          currentProfileProvider.overrideWithValue(
+            const Profile(
+              id: 1,
+              type: ProfileType.url,
+              label: 'Tianji',
+              url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+              autoUpdateDuration: Duration(days: 1),
+            ),
+          ),
+        ],
+      );
+      final linux = AppTray.forPlatform(isMacOS: false, isWindows: false);
+      await update(_trayState(), on: linux);
+
+      final labels = _labels(showCall());
+      expect(labels.first, currentAppLocalizations.trayNotConnected);
+      expect(labels, isNot(contains(currentAppLocalizations.download)));
+    });
+
     test('joins modifiers with + in the hotkey hints', () async {
       await update(
         _trayState(
@@ -443,4 +643,81 @@ void main() {
       expect(calls.where((call) => call.method == 'setTitle'), isEmpty);
     });
   });
+
+  test(
+    'writes six zh_CN platform menus from disconnected and connected fakes',
+    () async {
+      await AppLocalizations.load(const Locale('zh', 'CN'));
+      addTearDown(() => AppLocalizations.load(const Locale('en')));
+      final platforms = [
+        (name: 'Windows', target: TargetPlatform.windows),
+        (name: 'macOS', target: TargetPlatform.macOS),
+        (name: 'Linux', target: TargetPlatform.linux),
+      ];
+      for (final platform in platforms) {
+        for (final connected in [false, true]) {
+          debugDefaultTargetPlatformOverride = platform.target;
+          final groups = await useBusinessFixture(connected: connected);
+          calls.clear();
+          Tray.instance.resetForTesting();
+          final target = AppTray.forPlatform(
+            isMacOS: platform.target == TargetPlatform.macOS,
+            isWindows: platform.target == TargetPlatform.windows,
+          );
+          await update(
+            _trayState(isStart: connected, groups: groups),
+            on: target,
+          );
+          final call = showCall();
+          final labels = _labels(call);
+          final stateLabel = connected ? '已连接（含线路数据）' : '未连接';
+          _menuReports.add(menuReport('${platform.name}｜$stateLabel', call));
+
+          if (!connected) {
+            expect(labels.first, currentAppLocalizations.trayNotConnected);
+            expect(labels, isNot(contains('↓ 2.4 MB/s　↑ 312 KB/s')));
+            expect(
+              labels,
+              isNot(contains('下载 2.4 MB/s · 上传 312 KB/s · 延迟 37 ms')),
+            );
+            if (platform.target == TargetPlatform.macOS) {
+              expect(
+                _item(call, currentAppLocalizations.sceneDaily)['enabled'],
+                isTrue,
+              );
+            }
+            continue;
+          }
+
+          if (platform.target == TargetPlatform.windows) {
+            expect(labels.first, '已连接 · 东京家宽 · 04');
+            expect(labels[1], '↓ 2.4 MB/s　↑ 312 KB/s');
+            expect(labels, contains('断开连接'));
+            expect(labels, contains('显示主窗口'));
+            final quickLines = _item(call, currentAppLocalizations.quickLines);
+            expect(quickLines['type'], 'submenu');
+            expect(quickLines['items'], hasLength(3));
+          } else if (platform.target == TargetPlatform.macOS) {
+            expect(labels.take(3), [
+              '已连接',
+              '东京家宽 · 04 · 203.0.113.42',
+              '下载 2.4 MB/s · 上传 312 KB/s · 延迟 37 ms',
+            ]);
+            expect(labels, contains('打开天机云…'));
+            expect(labels, contains('一键诊断'));
+            expect(labels.where((label) => label == '东京家宽 · 04'), hasLength(1));
+            expect(labels.where((label) => label == '香港 · 家宽'), hasLength(1));
+            expect(labels.where((label) => label == '洛杉矶住宅 02'), hasLength(1));
+          } else {
+            expect(labels.first, '已连接 · 东京家宽 · 04');
+            expect(labels, isNot(contains('↓ 2.4 MB/s　↑ 312 KB/s')));
+            expect(
+              _item(call, currentAppLocalizations.quickLines)['type'],
+              'submenu',
+            );
+          }
+        }
+      }
+    },
+  );
 }

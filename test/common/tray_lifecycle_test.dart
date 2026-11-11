@@ -2,6 +2,7 @@ import 'package:fl_clash/common/tray.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -39,7 +40,9 @@ void main() {
   setUp(() {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
     calls = [];
-    container = ProviderContainer();
+    container = ProviderContainer(
+      overrides: [currentProfileProvider.overrideWithValue(null)],
+    );
     Tray.instance.resetForTesting();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_channel, (call) async {
@@ -74,6 +77,26 @@ void main() {
       read: container.read,
     );
     await tray.updateTitle(showTrayTitle: true, traffic: const Traffic());
+
+    expect(calls, isEmpty);
+  });
+
+  test('refresh then open after shutdown cannot resurrect the tray', () async {
+    final tray = AppTray.forPlatform(isMacOS: false, isWindows: true);
+    await tray.update(
+      trayState: _trayState(),
+      traffic: const Traffic(),
+      read: container.read,
+    );
+    await tray.shutdown();
+    calls.clear();
+
+    await tray.update(
+      trayState: _trayState(isStart: true),
+      traffic: const Traffic(down: 2.4 * 1024 * 1024, up: 312 * 1024),
+      read: container.read,
+    );
+    await Tray.instance.openMenu();
 
     expect(calls, isEmpty);
   });

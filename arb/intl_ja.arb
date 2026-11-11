@@ -1690,5 +1690,12 @@
   "businessLocalExport": "ローカルファイルにエクスポート",
   "businessRestoreFromFileWebDav": "ファイルまたは WebDAV から復元",
   "businessTunExcludedRoutes": "除外ルート",
-  "businessTunRouteCount": "件"
+  "businessTunRouteCount": "件",
+  "trayNotConnected": "未接続",
+  "trayPreferences": "環境設定",
+  "trayOpenApp": "Tianji Cloud を開く…",
+  "trayDisconnect": "切断",
+  "trayShowMainWindow": "メインウィンドウを表示",
+  "trayCopyProxyCommand": "ターミナル用プロキシコマンドをコピー",
+  "trayTun": "仮想ネットワークアダプター（TUN）"
 }

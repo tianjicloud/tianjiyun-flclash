@@ -102,10 +102,17 @@ class _TrayManagerState extends ConsumerState<TrayManager> {
       case TrayIconActivated():
         window?.show();
       case TrayMenuRequested():
-        _reportFailure(Tray.instance.openMenu());
+        _reportFailure(_refreshAndOpenMenu());
       case TrayMenuItemSelected():
         break;
     }
+  }
+
+  Future<void> _refreshAndOpenMenu() async {
+    if (Tray.instance.capabilities.menuControl) {
+      await ref.read(systemActionProvider.notifier).updateTray();
+    }
+    await Tray.instance.openMenu();
   }
 
   @override

@@ -1690,5 +1690,12 @@
   "businessLocalExport": "导出到本地文件",
   "businessRestoreFromFileWebDav": "从文件或 WebDAV 恢复",
   "businessTunExcludedRoutes": "排除的路由",
-  "businessTunRouteCount": "条"
+  "businessTunRouteCount": "条",
+  "trayNotConnected": "未连接",
+  "trayPreferences": "偏好",
+  "trayOpenApp": "打开天机云…",
+  "trayDisconnect": "断开连接",
+  "trayShowMainWindow": "显示主窗口",
+  "trayCopyProxyCommand": "复制终端代理命令",
+  "trayTun": "虚拟网卡（TUN）"
 }

@@ -1690,5 +1690,12 @@
   "businessLocalExport": "로컬 파일로 내보내기",
   "businessRestoreFromFileWebDav": "파일 또는 WebDAV에서 복원",
   "businessTunExcludedRoutes": "제외된 경로",
-  "businessTunRouteCount": "개 경로"
+  "businessTunRouteCount": "개 경로",
+  "trayNotConnected": "연결되지 않음",
+  "trayPreferences": "환경설정",
+  "trayOpenApp": "Tianji Cloud 열기…",
+  "trayDisconnect": "연결 끊기",
+  "trayShowMainWindow": "기본 창 표시",
+  "trayCopyProxyCommand": "터미널 프록시 명령 복사",
+  "trayTun": "가상 네트워크 어댑터(TUN)"
 }

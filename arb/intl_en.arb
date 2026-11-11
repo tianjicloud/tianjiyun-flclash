@@ -1690,5 +1690,12 @@
   "businessLocalExport": "Export to local file",
   "businessRestoreFromFileWebDav": "Restore from file or WebDAV",
   "businessTunExcludedRoutes": "Excluded routes",
-  "businessTunRouteCount": "routes"
+  "businessTunRouteCount": "routes",
+  "trayNotConnected": "Not connected",
+  "trayPreferences": "Preferences",
+  "trayOpenApp": "Open Tianji Cloud…",
+  "trayDisconnect": "Disconnect",
+  "trayShowMainWindow": "Show main window",
+  "trayCopyProxyCommand": "Copy terminal proxy command",
+  "trayTun": "Virtual network adapter (TUN)"
 }

@@ -13802,6 +13802,76 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Not connected`
+  String get trayNotConnected {
+    return Intl.message(
+      'Not connected',
+      name: 'trayNotConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Preferences`
+  String get trayPreferences {
+    return Intl.message(
+      'Preferences',
+      name: 'trayPreferences',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open Tianji Cloud…`
+  String get trayOpenApp {
+    return Intl.message(
+      'Open Tianji Cloud…',
+      name: 'trayOpenApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disconnect`
+  String get trayDisconnect {
+    return Intl.message(
+      'Disconnect',
+      name: 'trayDisconnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show main window`
+  String get trayShowMainWindow {
+    return Intl.message(
+      'Show main window',
+      name: 'trayShowMainWindow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy terminal proxy command`
+  String get trayCopyProxyCommand {
+    return Intl.message(
+      'Copy terminal proxy command',
+      name: 'trayCopyProxyCommand',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Virtual network adapter (TUN)`
+  String get trayTun {
+    return Intl.message(
+      'Virtual network adapter (TUN)',
+      name: 'trayTun',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
