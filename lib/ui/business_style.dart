@@ -643,13 +643,6 @@ abstract final class BusinessText {
   static TextStyle controlLabel(BuildContext context) =>
       AppTextStyle.custom(context, size: 12, leading: 16);
 
-  static TextStyle controlValue(BuildContext context) => AppTextStyle.custom(
-    context,
-    size: 15,
-    leading: 20,
-    weight: FontWeight.w600,
-  );
-
   static TextStyle sceneNote(BuildContext context) =>
       AppTextStyle.custom(context, size: 12.5, leading: 18);
 

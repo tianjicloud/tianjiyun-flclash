@@ -2,6 +2,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -237,5 +238,94 @@ void main() {
     );
 
     await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  group('business connection detail', () {
+    TrackerInfo business({String rule = 'DOMAIN-SUFFIX'}) => TrackerInfo(
+      id: '7',
+      start: DateTime.now().subtract(const Duration(minutes: 2, seconds: 5)),
+      download: 2048,
+      upload: 512,
+      metadata: const Metadata(
+        network: 'tcp',
+        process: 'chrome',
+        processPath: '/usr/bin/chrome',
+        sourceIP: '192.168.1.2',
+        sourcePort: '50000',
+        destinationIP: '198.18.0.9',
+        destinationPort: '443',
+        host: 'example.com',
+        dnsMode: DnsMode.fakeIp,
+        specialProxy: 'Proxy',
+      ),
+      chains: const ['Auto', 'Tokyo 04'],
+      rule: rule,
+      rulePayload: 'example.com',
+    );
+
+    Future<void> pump(
+      WidgetTester tester,
+      TrackerInfo info, {
+      ValueChanged<TrackerInfo>? onClose,
+    }) async {
+      tester.view.physicalSize = const Size(480, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        TestApp(
+          wrapInProviderScope: true,
+          overrides: [currentProfileProvider.overrideWithValue(null)],
+          homeBuilder: (child) => HostScaffold(body: child),
+          child: TrackerInfoDetailView(
+            trackerInfo: info,
+            onClose: onClose,
+            isBusiness: true,
+          ),
+        ),
+      );
+      await tester.pump();
+    }
+
+    testWidgets('walks the path from the device through the rule to the exit', (
+      tester,
+    ) async {
+      await pump(tester, business());
+
+      expect(find.text('chrome'), findsWidgets);
+      expect(find.text('example.com:443 · TCP'), findsOneWidget);
+      expect(find.text('Proxy · DOMAIN-SUFFIX example.com'), findsOneWidget);
+      expect(find.textContaining('Auto', findRichText: true), findsOneWidget);
+      expect(find.text('Tokyo 04'), findsOneWidget);
+      expect(find.text('198.18.0.9 (fake-ip)'), findsOneWidget);
+      expect(find.text('192.168.1.2:50000'), findsOneWidget);
+      expect(find.text('/usr/bin/chrome'), findsOneWidget);
+      expect(find.text('2 KB / 512 B'), findsOneWidget);
+      expect(find.textContaining('02:0'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('a rejected connection shows no duration', (tester) async {
+      await pump(tester, business(rule: 'REJECT'));
+
+      expect(find.text('—'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('closing hands the connection back and needs no profile', (
+      tester,
+    ) async {
+      final closed = <TrackerInfo>[];
+      final info = business();
+      await pump(tester, info, onClose: closed.add);
+      final l10n = tester
+          .element(find.byType(TrackerInfoDetailView))
+          .appLocalizations;
+
+      expect(find.text(l10n.connectionAddDomainRule), findsNothing);
+      await tester.tap(find.text(l10n.connectionCloseThis));
+      expect(closed, [info]);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
   });
 }
