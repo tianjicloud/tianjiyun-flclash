@@ -1578,5 +1578,13 @@
   "previewReadOnly": "Lecture seule",
   "businessProfilesSortTitle": "Réorganiser les abonnements",
   "businessProfilesSortDescription": "Faites glisser pour changer l’ordre. Les abonnements en tête s’affichent en premier dans le tableau de bord et la barre système.",
-  "localFile": "Fichier local"
+  "localFile": "Fichier local",
+  "systemService": "Service système",
+  "systemServiceDescription": "S’exécute avec les droits administrateur pour configurer et restaurer l’adaptateur virtuel, les routes et le proxy système.",
+  "systemServiceRunning": "Installé et en cours d’exécution",
+  "systemServiceNotInstalled": "Non installé",
+  "systemServiceAbnormal": "Anomalie",
+  "systemServiceInstall": "Installer",
+  "systemServiceRepair": "Réparer",
+  "systemServiceRefresh": "Actualiser"
 }

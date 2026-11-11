@@ -12826,6 +12826,86 @@ class AppLocalizations {
   String get localFile {
     return Intl.message('Local file', name: 'localFile', desc: '', args: []);
   }
+
+  /// `System Service`
+  String get systemService {
+    return Intl.message(
+      'System Service',
+      name: 'systemService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Runs with administrator privileges to configure and restore the virtual adapter, routes, and system proxy.`
+  String get systemServiceDescription {
+    return Intl.message(
+      'Runs with administrator privileges to configure and restore the virtual adapter, routes, and system proxy.',
+      name: 'systemServiceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Installed and running`
+  String get systemServiceRunning {
+    return Intl.message(
+      'Installed and running',
+      name: 'systemServiceRunning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not installed`
+  String get systemServiceNotInstalled {
+    return Intl.message(
+      'Not installed',
+      name: 'systemServiceNotInstalled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Abnormal`
+  String get systemServiceAbnormal {
+    return Intl.message(
+      'Abnormal',
+      name: 'systemServiceAbnormal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Install`
+  String get systemServiceInstall {
+    return Intl.message(
+      'Install',
+      name: 'systemServiceInstall',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repair`
+  String get systemServiceRepair {
+    return Intl.message(
+      'Repair',
+      name: 'systemServiceRepair',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh`
+  String get systemServiceRefresh {
+    return Intl.message(
+      'Refresh',
+      name: 'systemServiceRefresh',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

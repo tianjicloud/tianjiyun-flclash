@@ -1578,5 +1578,13 @@
   "previewReadOnly": "Read-only",
   "businessProfilesSortTitle": "Reorder subscriptions",
   "businessProfilesSortDescription": "Drag to change order. Earlier subscriptions appear first in the dashboard and tray.",
-  "localFile": "Local file"
+  "localFile": "Local file",
+  "systemService": "System Service",
+  "systemServiceDescription": "Runs with administrator privileges to configure and restore the virtual adapter, routes, and system proxy.",
+  "systemServiceRunning": "Installed and running",
+  "systemServiceNotInstalled": "Not installed",
+  "systemServiceAbnormal": "Abnormal",
+  "systemServiceInstall": "Install",
+  "systemServiceRepair": "Repair",
+  "systemServiceRefresh": "Refresh"
 }

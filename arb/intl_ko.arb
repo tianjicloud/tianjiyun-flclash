@@ -1578,5 +1578,13 @@
   "previewReadOnly": "읽기 전용",
   "businessProfilesSortTitle": "구독 순서 조정",
   "businessProfilesSortDescription": "드래그하여 순서를 조정하세요. 앞에 있는 구독이 대시보드와 트레이에 먼저 표시됩니다.",
-  "localFile": "로컬 파일"
+  "localFile": "로컬 파일",
+  "systemService": "시스템 서비스",
+  "systemServiceDescription": "관리자 권한으로 실행되어 가상 어댑터, 경로 및 시스템 프록시를 설정하고 복구합니다.",
+  "systemServiceRunning": "설치 및 실행 중",
+  "systemServiceNotInstalled": "설치되지 않음",
+  "systemServiceAbnormal": "비정상",
+  "systemServiceInstall": "설치",
+  "systemServiceRepair": "복구",
+  "systemServiceRefresh": "새로 고침"
 }

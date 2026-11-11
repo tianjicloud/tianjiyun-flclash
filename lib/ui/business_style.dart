@@ -272,6 +272,14 @@ abstract final class BusinessText {
   static TextStyle metaLabel(BuildContext context) =>
       AppTextStyle.custom(context, size: 12, leading: 16);
 
+  static TextStyle systemServiceTitle(BuildContext context) =>
+      AppTextStyle.custom(
+        context,
+        size: 16,
+        leading: 22,
+        weight: FontWeight.w700,
+      );
+
   static TextStyle logTimestamp(BuildContext context) => AppTextStyle.custom(
     context,
     size: 12,

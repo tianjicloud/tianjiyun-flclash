@@ -26,6 +26,7 @@ import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:fl_clash/views/diagnostics.dart';
+import 'package:fl_clash/views/system_service.dart';
 import 'package:fl_clash/views/config/user_agents.dart';
 import 'package:fl_clash/views/dashboard/widgets/service_status.dart';
 import 'package:fl_clash/views/hotkey.dart';
@@ -60,6 +61,7 @@ class _ToolViewState extends ConsumerState<ToolsView> {
       title: context.appLocalizations.other,
       items: [
         if (enableDeveloperMode) const _DeveloperItem(),
+        if (system.hasHelperService) const _SystemServiceItem(),
         const _InfoItem(),
       ],
     );
@@ -244,6 +246,13 @@ class _BusinessSettingsLayoutState
         l10n.serviceManage,
         const ServiceManageView(),
       ),
+      if (system.hasHelperService)
+        _SettingsEntry(
+          'system-service',
+          l10n.businessSettingsOther,
+          l10n.systemService,
+          const SystemServiceView(),
+        ),
       _SettingsEntry(
         'other',
         l10n.businessSettingsOther,
@@ -1191,6 +1200,17 @@ class _InfoItem extends StatelessWidget {
       widget: const AboutView(),
     );
   }
+}
+
+class _SystemServiceItem extends StatelessWidget {
+  const _SystemServiceItem();
+
+  @override
+  Widget build(BuildContext context) => ListItem.open(
+    leading: const GlyphIcon(AppGlyphs.settings),
+    title: Text(context.appLocalizations.systemService),
+    widget: const SystemServiceView(),
+  );
 }
 
 class _DeveloperItem extends StatelessWidget {

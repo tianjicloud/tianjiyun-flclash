@@ -3165,6 +3165,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "system": MessageLookupByLibrary.simpleMessage("Système"),
     "systemApp": MessageLookupByLibrary.simpleMessage("Apps système"),
     "systemProxy": MessageLookupByLibrary.simpleMessage("Proxy système"),
+    "systemService": MessageLookupByLibrary.simpleMessage("Service système"),
+    "systemServiceAbnormal": MessageLookupByLibrary.simpleMessage("Anomalie"),
+    "systemServiceDescription": MessageLookupByLibrary.simpleMessage(
+      "S’exécute avec les droits administrateur pour configurer et restaurer l’adaptateur virtuel, les routes et le proxy système.",
+    ),
+    "systemServiceInstall": MessageLookupByLibrary.simpleMessage("Installer"),
+    "systemServiceNotInstalled": MessageLookupByLibrary.simpleMessage(
+      "Non installé",
+    ),
+    "systemServiceRefresh": MessageLookupByLibrary.simpleMessage("Actualiser"),
+    "systemServiceRepair": MessageLookupByLibrary.simpleMessage("Réparer"),
+    "systemServiceRunning": MessageLookupByLibrary.simpleMessage(
+      "Installé et en cours d’exécution",
+    ),
     "tab": MessageLookupByLibrary.simpleMessage("Onglet"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage(
       "Animation des onglets",

@@ -2952,6 +2952,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "system": MessageLookupByLibrary.simpleMessage("System"),
     "systemApp": MessageLookupByLibrary.simpleMessage("System apps"),
     "systemProxy": MessageLookupByLibrary.simpleMessage("System proxy"),
+    "systemService": MessageLookupByLibrary.simpleMessage("System Service"),
+    "systemServiceAbnormal": MessageLookupByLibrary.simpleMessage("Abnormal"),
+    "systemServiceDescription": MessageLookupByLibrary.simpleMessage(
+      "Runs with administrator privileges to configure and restore the virtual adapter, routes, and system proxy.",
+    ),
+    "systemServiceInstall": MessageLookupByLibrary.simpleMessage("Install"),
+    "systemServiceNotInstalled": MessageLookupByLibrary.simpleMessage(
+      "Not installed",
+    ),
+    "systemServiceRefresh": MessageLookupByLibrary.simpleMessage("Refresh"),
+    "systemServiceRepair": MessageLookupByLibrary.simpleMessage("Repair"),
+    "systemServiceRunning": MessageLookupByLibrary.simpleMessage(
+      "Installed and running",
+    ),
     "tab": MessageLookupByLibrary.simpleMessage("Tab"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("Tab animation"),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage(

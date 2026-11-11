@@ -1578,5 +1578,13 @@
   "previewReadOnly": "Solo lectura",
   "businessProfilesSortTitle": "Reordenar suscripciones",
   "businessProfilesSortDescription": "Arrastra para cambiar el orden. Las suscripciones anteriores aparecen primero en el panel y la bandeja.",
-  "localFile": "Archivo local"
+  "localFile": "Archivo local",
+  "systemService": "Servicio del sistema",
+  "systemServiceDescription": "Se ejecuta con permisos de administrador para configurar y restaurar el adaptador virtual, las rutas y el proxy del sistema.",
+  "systemServiceRunning": "Instalado y en ejecución",
+  "systemServiceNotInstalled": "No instalado",
+  "systemServiceAbnormal": "Anómalo",
+  "systemServiceInstall": "Instalar",
+  "systemServiceRepair": "Reparar",
+  "systemServiceRefresh": "Actualizar"
 }

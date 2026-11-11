@@ -1578,5 +1578,13 @@
   "previewReadOnly": "只读",
   "businessProfilesSortTitle": "调整订阅顺序",
   "businessProfilesSortDescription": "拖动调整顺序，排在前面的订阅优先显示在仪表盘和托盘中。",
-  "localFile": "本地文件"
+  "localFile": "本地文件",
+  "systemService": "系统服务",
+  "systemServiceDescription": "以管理员权限运行，负责虚拟网卡、路由和系统代理的设置与恢复",
+  "systemServiceRunning": "已安装并运行",
+  "systemServiceNotInstalled": "未安装",
+  "systemServiceAbnormal": "异常",
+  "systemServiceInstall": "安装",
+  "systemServiceRepair": "修复",
+  "systemServiceRefresh": "刷新"
 }

@@ -3156,6 +3156,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "system": MessageLookupByLibrary.simpleMessage("Sistema"),
     "systemApp": MessageLookupByLibrary.simpleMessage("Apps del sistema"),
     "systemProxy": MessageLookupByLibrary.simpleMessage("Proxy del sistema"),
+    "systemService": MessageLookupByLibrary.simpleMessage(
+      "Servicio del sistema",
+    ),
+    "systemServiceAbnormal": MessageLookupByLibrary.simpleMessage("Anómalo"),
+    "systemServiceDescription": MessageLookupByLibrary.simpleMessage(
+      "Se ejecuta con permisos de administrador para configurar y restaurar el adaptador virtual, las rutas y el proxy del sistema.",
+    ),
+    "systemServiceInstall": MessageLookupByLibrary.simpleMessage("Instalar"),
+    "systemServiceNotInstalled": MessageLookupByLibrary.simpleMessage(
+      "No instalado",
+    ),
+    "systemServiceRefresh": MessageLookupByLibrary.simpleMessage("Actualizar"),
+    "systemServiceRepair": MessageLookupByLibrary.simpleMessage("Reparar"),
+    "systemServiceRunning": MessageLookupByLibrary.simpleMessage(
+      "Instalado y en ejecución",
+    ),
     "tab": MessageLookupByLibrary.simpleMessage("Pestaña"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage(
       "Animación de pestañas",

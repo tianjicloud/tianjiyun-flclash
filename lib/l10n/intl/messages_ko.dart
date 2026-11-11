@@ -2474,6 +2474,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "system": MessageLookupByLibrary.simpleMessage("시스템"),
     "systemApp": MessageLookupByLibrary.simpleMessage("시스템 앱"),
     "systemProxy": MessageLookupByLibrary.simpleMessage("시스템 프록시"),
+    "systemService": MessageLookupByLibrary.simpleMessage("시스템 서비스"),
+    "systemServiceAbnormal": MessageLookupByLibrary.simpleMessage("비정상"),
+    "systemServiceDescription": MessageLookupByLibrary.simpleMessage(
+      "관리자 권한으로 실행되어 가상 어댑터, 경로 및 시스템 프록시를 설정하고 복구합니다.",
+    ),
+    "systemServiceInstall": MessageLookupByLibrary.simpleMessage("설치"),
+    "systemServiceNotInstalled": MessageLookupByLibrary.simpleMessage(
+      "설치되지 않음",
+    ),
+    "systemServiceRefresh": MessageLookupByLibrary.simpleMessage("새로 고침"),
+    "systemServiceRepair": MessageLookupByLibrary.simpleMessage("복구"),
+    "systemServiceRunning": MessageLookupByLibrary.simpleMessage("설치 및 실행 중"),
     "tab": MessageLookupByLibrary.simpleMessage("탭"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("탭 애니메이션"),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage("아이콘을 눌러 다시 시도"),

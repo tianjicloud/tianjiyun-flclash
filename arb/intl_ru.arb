@@ -1578,5 +1578,13 @@
   "previewReadOnly": "Только чтение",
   "businessProfilesSortTitle": "Изменить порядок подписок",
   "businessProfilesSortDescription": "Перетащите подписку, чтобы изменить порядок. Подписки выше отображаются первыми на панели и в трее.",
-  "localFile": "Локальный файл"
+  "localFile": "Локальный файл",
+  "systemService": "Системная служба",
+  "systemServiceDescription": "Работает с правами администратора и настраивает или восстанавливает виртуальный адаптер, маршруты и системный прокси.",
+  "systemServiceRunning": "Установлена и запущена",
+  "systemServiceNotInstalled": "Не установлена",
+  "systemServiceAbnormal": "Ошибка",
+  "systemServiceInstall": "Установить",
+  "systemServiceRepair": "Восстановить",
+  "systemServiceRefresh": "Обновить"
 }

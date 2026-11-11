@@ -3083,6 +3083,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "system": MessageLookupByLibrary.simpleMessage("Система"),
     "systemApp": MessageLookupByLibrary.simpleMessage("Системные приложения"),
     "systemProxy": MessageLookupByLibrary.simpleMessage("Системный прокси"),
+    "systemService": MessageLookupByLibrary.simpleMessage("Системная служба"),
+    "systemServiceAbnormal": MessageLookupByLibrary.simpleMessage("Ошибка"),
+    "systemServiceDescription": MessageLookupByLibrary.simpleMessage(
+      "Работает с правами администратора и настраивает или восстанавливает виртуальный адаптер, маршруты и системный прокси.",
+    ),
+    "systemServiceInstall": MessageLookupByLibrary.simpleMessage("Установить"),
+    "systemServiceNotInstalled": MessageLookupByLibrary.simpleMessage(
+      "Не установлена",
+    ),
+    "systemServiceRefresh": MessageLookupByLibrary.simpleMessage("Обновить"),
+    "systemServiceRepair": MessageLookupByLibrary.simpleMessage("Восстановить"),
+    "systemServiceRunning": MessageLookupByLibrary.simpleMessage(
+      "Установлена и запущена",
+    ),
     "tab": MessageLookupByLibrary.simpleMessage("Вкладки"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("Анимация вкладок"),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage(

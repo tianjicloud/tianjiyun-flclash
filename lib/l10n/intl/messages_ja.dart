@@ -2512,6 +2512,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "system": MessageLookupByLibrary.simpleMessage("システム"),
     "systemApp": MessageLookupByLibrary.simpleMessage("システムアプリ"),
     "systemProxy": MessageLookupByLibrary.simpleMessage("システムプロキシ"),
+    "systemService": MessageLookupByLibrary.simpleMessage("システムサービス"),
+    "systemServiceAbnormal": MessageLookupByLibrary.simpleMessage("異常"),
+    "systemServiceDescription": MessageLookupByLibrary.simpleMessage(
+      "管理者権限で実行し、仮想アダプター、ルート、システムプロキシの設定と復元を行います。",
+    ),
+    "systemServiceInstall": MessageLookupByLibrary.simpleMessage("インストール"),
+    "systemServiceNotInstalled": MessageLookupByLibrary.simpleMessage(
+      "未インストール",
+    ),
+    "systemServiceRefresh": MessageLookupByLibrary.simpleMessage("更新"),
+    "systemServiceRepair": MessageLookupByLibrary.simpleMessage("修復"),
+    "systemServiceRunning": MessageLookupByLibrary.simpleMessage(
+      "インストール済み・実行中",
+    ),
     "tab": MessageLookupByLibrary.simpleMessage("タブ"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("タブアニメーション"),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage("アイコンをタップして再試行"),

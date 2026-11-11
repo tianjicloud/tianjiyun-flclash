@@ -1578,5 +1578,13 @@
   "previewReadOnly": "読み取り専用",
   "businessProfilesSortTitle": "サブスクリプションの順序を変更",
   "businessProfilesSortDescription": "ドラッグして順序を変更します。先にあるサブスクリプションがダッシュボードとトレイに優先表示されます。",
-  "localFile": "ローカルファイル"
+  "localFile": "ローカルファイル",
+  "systemService": "システムサービス",
+  "systemServiceDescription": "管理者権限で実行し、仮想アダプター、ルート、システムプロキシの設定と復元を行います。",
+  "systemServiceRunning": "インストール済み・実行中",
+  "systemServiceNotInstalled": "未インストール",
+  "systemServiceAbnormal": "異常",
+  "systemServiceInstall": "インストール",
+  "systemServiceRepair": "修復",
+  "systemServiceRefresh": "更新"
 }
