@@ -223,7 +223,7 @@ class _BusinessSettingsLayoutState
           'mitm',
           l10n.businessSettingsNetworkAdvanced,
           l10n.mitm,
-          MitmView(isAndroid: system.isAndroid),
+          MitmView(isAndroid: system.isAndroid, business: true),
         ),
       _SettingsEntry(
         'user-agents',
@@ -248,14 +248,14 @@ class _BusinessSettingsLayoutState
         'other',
         l10n.businessSettingsOther,
         l10n.businessSettingsAbout,
-        const AboutView(),
+        const AboutView(business: true),
       ),
       if (widget.developerMode)
         _SettingsEntry(
           'developer',
           l10n.businessSettingsOther,
           l10n.developerMode,
-          const DeveloperView(),
+          const DeveloperView(business: true),
         ),
     ];
     final active = entries.firstWhere(
@@ -1007,23 +1007,70 @@ class _TunSettingsView extends ConsumerWidget {
   }
 }
 
-class _IconAndUaSettingsView extends StatelessWidget {
+class _IconAndUaSettingsView extends ConsumerWidget {
   const _IconAndUaSettingsView();
 
   @override
-  Widget build(BuildContext context) => generateSection(
-    title: context.appLocalizations.businessSettingsIconsUa,
-    items: [
-      ListItem.open(
-        title: Text(context.appLocalizations.iconSets),
-        widget: const IconSetsView(),
-      ),
-      ListItem.open(
-        title: Text(context.appLocalizations.userAgent),
-        widget: const UserAgentsView(),
-      ),
-    ],
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.appLocalizations;
+    final iconSets = ref.watch(iconSetsProvider).value ?? const <IconSet>[];
+    final savedUserAgents = ref.watch(
+      appSettingProvider.select((state) => state.userAgents),
+    );
+    final selectedUserAgent = ref.watch(
+      patchClashConfigProvider.select((state) => state.globalUa),
+    );
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 14),
+          child: Text(
+            l10n.businessSettingsIconsUa,
+            style: BusinessText.pageTitle(context),
+          ),
+        ),
+        BusinessSettingsCard(
+          title: l10n.iconSets,
+          trailing: BusinessSecondaryButton(
+            label: l10n.businessManage,
+            width: 84,
+            onPressed: () => BaseNavigator.push(context, const IconSetsView()),
+          ),
+          items: [
+            if (iconSets.isEmpty)
+              ListItem(title: Text(l10n.iconSets), subtitle: Text(l10n.none))
+            else
+              for (final iconSet in iconSets)
+                ListItem(
+                  title: Text(iconSet.name),
+                  subtitle: Text(l10n.itemsCount(iconSet.icons.length)),
+                ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.userAgent,
+          trailing: BusinessSecondaryButton(
+            label: l10n.businessManage,
+            width: 84,
+            onPressed: () =>
+                BaseNavigator.push(context, const UserAgentsView()),
+          ),
+          items: [
+            ListItem(
+              title: Text(selectedUserAgent ?? l10n.defaultText),
+              subtitle: Text(
+                selectedUserAgent == null
+                    ? l10n.defaultText
+                    : l10n.itemsCount(savedUserAgents.length),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 class _LocaleItem extends ConsumerWidget {

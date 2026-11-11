@@ -3371,6 +3371,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Developer options`
+  String get businessDeveloperOptionsTitle {
+    return Intl.message(
+      'Developer options',
+      name: 'businessDeveloperOptionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `These options help diagnose problems. Most people do not need to change them.`
+  String get businessDeveloperOptionsDescription {
+    return Intl.message(
+      'These options help diagnose problems. Most people do not need to change them.',
+      name: 'businessDeveloperOptionsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Developer mode is enabled.`
   String get developerModeEnableTip {
     return Intl.message(
@@ -7713,8 +7733,7 @@ class AppLocalizations {
   String customImportDroppedSubRules(num count, Object label) {
     return Intl.plural(
       count,
-      one:
-          '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
+      one: '1 SUB-RULE rule was dropped, since custom profiles do not support sub-rules',
       other:
           '$label SUB-RULE rules were dropped, since custom profiles do not support sub-rules',
       name: 'customImportDroppedSubRules',
@@ -12325,6 +12344,36 @@ class AppLocalizations {
       name: 'businessIntercept',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `User panel and renewal`
+  String get businessAboutPanel {
+    return Intl.message(
+      'User panel and renewal',
+      name: 'businessAboutPanel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MITM decrypts HTTPS traffic for matching domains. Enable it only for modules you trust.`
+  String get businessMitmWarning {
+    return Intl.message(
+      'MITM decrypts HTTPS traffic for matching domains. Enable it only for modules you trust.',
+      name: 'businessMitmWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update available: {version}`
+  String businessUpdateAvailable(String version) {
+    return Intl.message(
+      'Update available: $version',
+      name: 'businessUpdateAvailable',
+      desc: '',
+      args: [version],
     );
   }
 }

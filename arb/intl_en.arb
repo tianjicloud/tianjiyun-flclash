@@ -428,6 +428,8 @@
   "tintedStyle": "Tinted",
   "softStyle": "Soft",
   "developerMode": "Developer mode",
+  "businessDeveloperOptionsTitle": "Developer options",
+  "businessDeveloperOptionsDescription": "These options help diagnose problems. Most people do not need to change them.",
   "developerModeEnableTip": "Developer mode is enabled.",
   "messageTest": "Message test",
   "messageTestTip": "This is a message.",
@@ -1351,7 +1353,6 @@
   "businessCards": "Cards",
   "businessAutoTest": "Automatic test",
   "businessLineCount": "lines",
-  "businessCurrent": "Current",
   "businessReplace": "Replace",
   "@businessMultiplier": {
     "placeholders": {
@@ -1506,22 +1507,27 @@
   "businessUpdateDaily": "Daily",
   "businessAutoLaunchTitle": "Launch at startup",
   "businessAutoRunTitle": "Connect on launch",
-  "businessOnDemandConnection": "On-demand connection"
-,
+  "businessOnDemandConnection": "On-demand connection",
   "businessHotkeyHint": "Select a row to set or change its shortcut",
   "businessBackupNow": "Back up now",
-  "businessBackupDesc": "Save your profiles and app settings to a backup file."
-,
+  "businessBackupDesc": "Save your profiles and app settings to a backup file.",
   "businessOnDemandEmpty": "Add a Wi-Fi network to pause the app when you connect to it.",
   "businessDisconnect": "Disconnect",
-  "businessRestoreAction": "Restore…"
-,
-  "businessManage": "Manage"
-,
+  "businessRestoreAction": "Restore…",
+  "businessManage": "Manage",
   "businessLocalPorts": "Local ports",
   "businessDnsServers": "DNS servers",
   "businessDnsNoUpstream": "No DNS upstream overrides are configured.",
-  "businessOverrideSettings": "Subscription overrides"
-,
-  "businessIntercept": "Intercept"
+  "businessOverrideSettings": "Subscription overrides",
+  "businessIntercept": "Intercept",
+  "businessAboutPanel": "User panel and renewal",
+  "businessMitmWarning": "MITM decrypts HTTPS traffic for matching domains. Enable it only for modules you trust.",
+  "businessUpdateAvailable": "Update available: {version}",
+  "@businessUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

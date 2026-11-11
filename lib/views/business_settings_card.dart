@@ -2,6 +2,38 @@ import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 
+class BusinessWarningBanner extends StatelessWidget {
+  const BusinessWarningBanner({super.key, required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: double.infinity,
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+    decoration: ShapeDecoration(
+      color: BusinessPalette.exitBannerBackgroundFor(
+        context.colorScheme.brightness,
+      ),
+      shape: AppShape.all(BusinessRadius.heroDesktop).copyWith(
+        side: BorderSide(
+          color: BusinessPalette.exitBannerStrokeFor(
+            context.colorScheme.brightness,
+          ),
+        ),
+      ),
+    ),
+    child: Text(
+      message,
+      style: BusinessText.metaLabel(context).copyWith(
+        color: BusinessPalette.exitWarningForegroundFor(
+          context.colorScheme.brightness,
+        ),
+      ),
+    ),
+  );
+}
+
 class BusinessSettingsCard extends StatelessWidget {
   const BusinessSettingsCard({
     super.key,

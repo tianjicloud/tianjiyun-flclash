@@ -14,6 +14,10 @@ import 'package:fl_clash/providers/database.dart';
 import 'package:fl_clash/providers/mitm.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/config/mitm_modules.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,9 +45,10 @@ Future<bool> _generateCertificate(MitmCa ca, String title) async {
 }
 
 class MitmView extends ConsumerStatefulWidget {
-  const MitmView({super.key, required this.isAndroid});
+  const MitmView({super.key, required this.isAndroid, this.business = false});
 
   final bool isAndroid;
+  final bool business;
 
   @override
   ConsumerState<MitmView> createState() => _MitmViewState();
@@ -70,6 +75,189 @@ class _MitmViewState extends ConsumerState<MitmView> {
 
   void _checkTrust() {
     unawaited(ref.read(mitmTrustStateProvider.notifier).refresh());
+  }
+
+  Widget _buildBusinessPage(
+    BuildContext context,
+    AsyncValue<MitmCertificate?> certificateState, {
+    required bool canTrust,
+  }) {
+    final l10n = context.appLocalizations;
+    final certificate = certificateState.value;
+    final enabled = ref.watch(
+      patchClashConfigProvider.select((state) => state.mitm.enable),
+    );
+    final trust = certificate == null
+        ? null
+        : ref.watch(mitmTrustStateProvider).value;
+    final installable =
+        canTrust &&
+        switch (trust) {
+          MitmTrustCheck(
+            trust: MitmTrust.notInstalled || MitmTrust.untrusted,
+          ) =>
+            true,
+          MitmTrustCheck(
+            trust: MitmTrust.ready,
+            systemStore: false,
+            rootAvailable: true,
+          ) =>
+            true,
+          _ => false,
+        };
+    final modules =
+        ref.watch(mitmModulesProvider).value ?? const <MitmModule>[];
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(l10n.mitm, style: BusinessText.pageTitle(context)),
+              ),
+              SizedBox(
+                width: 190,
+                child: ListItem.toggle(
+                  title: Text(enabled ? l10n.enabled : l10n.disabled),
+                  value: enabled,
+                  onChanged: (value) => const _MitmEnableItem()._handleChanged(
+                    context,
+                    ref,
+                    value,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        BusinessWarningBanner(message: l10n.businessMitmWarning),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.certificate,
+          items: [
+            if (certificate == null)
+              ListItem(
+                title: Text(l10n.mitmTrustNotInstalled),
+                subtitle: certificateState.error == null
+                    ? null
+                    : Text(compactError(certificateState.error!)),
+                trailing: BusinessSecondaryButton(
+                  label: l10n.generateCertificate,
+                  width: 112,
+                  onPressed: () => _generateCertificate(
+                    ref.read(mitmCaProvider.notifier),
+                    l10n.generateCertificate,
+                  ),
+                ),
+              )
+            else
+              ListItem(
+                title: Text(certificate.subject),
+                subtitle: Text(
+                  _trustLabel(
+                    context.appLocalizations,
+                    ref.watch(mitmTrustStateProvider),
+                  ),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
+                  children: [
+                    if (installable)
+                      BusinessSecondaryButton(
+                        label: trust?.trust == MitmTrust.untrusted
+                            ? l10n.trustCertificate
+                            : l10n.installCertificate,
+                        width: 112,
+                        onPressed: () => _install(context, ref),
+                      ),
+                    BusinessSecondaryButton(
+                      label: l10n.exportCertificate,
+                      width: 96,
+                      onPressed: () => _export(context, certificate),
+                    ),
+                  ],
+                ),
+                onTap: () => _showDetails(context, certificate),
+              ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: '${l10n.mitmModules} · ${modules.length}',
+          trailing: BusinessSecondaryButton(
+            label: l10n.businessManage,
+            width: 84,
+            onPressed: () =>
+                BaseNavigator.push(context, const MitmModulesView()),
+          ),
+          items: [
+            for (final module in modules)
+              ListItem.toggle(
+                title: Text(module.name),
+                subtitle: module.description.isEmpty
+                    ? null
+                    : Text(module.description),
+                value: module.enabled,
+                onChanged: (value) => setMitmModuleEnabled(ref, module, value),
+              ),
+            if (modules.isEmpty) ListItem(title: Text(l10n.none)),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.httpCapture,
+          items: [
+            _MitmCaptureItem(isAndroid: isAndroid),
+            const _MitmHostnameItem(),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: l10n.options,
+          items: [
+            ConfigToggleItem(
+              title: (l) => l.skipServerCertVerify,
+              selector: patchClashConfigProvider.select(
+                (state) => state.mitm.skipServerCertVerify,
+              ),
+              onChanged: _mitmWriter(
+                (state, value) => state.copyWith(skipServerCertVerify: value),
+              ),
+            ),
+            ConfigToggleItem(
+              title: (l) => l.blockQuic,
+              selector: patchClashConfigProvider.select(
+                (state) => state.mitm.autoQuicBlock,
+              ),
+              onChanged: _mitmWriter(
+                (state, value) => state.copyWith(autoQuicBlock: value),
+              ),
+            ),
+            ConfigToggleItem(
+              title: (l) => l.http2,
+              selector: patchClashConfigProvider.select(
+                (state) => state.mitm.h2,
+              ),
+              onChanged: _mitmWriter(
+                (state, value) => state.copyWith(h2: value),
+              ),
+            ),
+            ConfigToggleItem(
+              title: (l) => l.decryptUntrusted,
+              selector: patchClashConfigProvider.select(
+                (state) => state.mitm.decryptUntrusted,
+              ),
+              onChanged: _mitmWriter(
+                (state, value) => state.copyWith(decryptUntrusted: value),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   String _trustLabel(
@@ -359,6 +547,12 @@ class _MitmViewState extends ConsumerState<MitmView> {
     final check = certificate.value == null
         ? null
         : ref.watch(mitmTrustStateProvider).value;
+    if (widget.business) {
+      return NullStatusSwitcher(
+        isLoading: certificate.isLoading && !certificate.hasValue,
+        child: _buildBusinessPage(context, certificate, canTrust: canTrust),
+      );
+    }
     return Scaffold(
       title: appLocalizations.mitm,
       isLoading: ref.watch(loadingProvider(LoadingTag.mitm)),

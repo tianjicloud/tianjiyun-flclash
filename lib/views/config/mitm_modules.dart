@@ -30,7 +30,11 @@ void _putModule(WidgetRef ref, MitmModule module) {
   ref.read(mitmModulesActionProvider.notifier).putModule(module);
 }
 
-Future<void> _setEnabled(WidgetRef ref, MitmModule module, bool enabled) async {
+Future<void> setMitmModuleEnabled(
+  WidgetRef ref,
+  MitmModule module,
+  bool enabled,
+) async {
   if (enabled && module.scripts > 0 && !await acceptMitmScripts()) {
     return;
   }
@@ -356,7 +360,8 @@ class _MitmModuleRow extends ConsumerWidget {
                     )
                   : Switch(
                       value: module.enabled,
-                      onChanged: (value) => _setEnabled(ref, module, value),
+                      onChanged: (value) =>
+                          setMitmModuleEnabled(ref, module, value),
                     ),
             ),
             onPressed: () =>
@@ -614,7 +619,8 @@ class MitmModuleView extends ConsumerWidget {
                       ListItem.toggle(
                         title: Text(appLocalizations.enabled),
                         value: module.enabled,
-                        onChanged: (value) => _setEnabled(ref, module, value),
+                        onChanged: (value) =>
+                            setMitmModuleEnabled(ref, module, value),
                       ),
                     ],
                     footer: _aboutFooter(appLocalizations, module),

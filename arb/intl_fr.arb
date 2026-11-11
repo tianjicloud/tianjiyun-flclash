@@ -428,6 +428,8 @@
   "tintedStyle": "Teinté",
   "softStyle": "Doux",
   "developerMode": "Mode développeur",
+  "businessDeveloperOptionsTitle": "Options pour les développeurs",
+  "businessDeveloperOptionsDescription": "Ces options aident à diagnostiquer les problèmes. Il est généralement inutile de les modifier.",
   "developerModeEnableTip": "Le mode développeur est activé.",
   "messageTest": "Test de message",
   "messageTestTip": "Ceci est un message.",
@@ -1351,7 +1353,6 @@
   "businessCards": "Cartes",
   "businessAutoTest": "Test automatique",
   "businessLineCount": "lignes",
-  "businessCurrent": "Actuel",
   "businessReplace": "Remplacer",
   "@businessMultiplier": {
     "placeholders": {
@@ -1506,22 +1507,27 @@
   "businessUpdateDaily": "Chaque jour",
   "businessAutoLaunchTitle": "Lancer au démarrage",
   "businessAutoRunTitle": "Se connecter au lancement",
-  "businessOnDemandConnection": "Connexion à la demande"
-,
+  "businessOnDemandConnection": "Connexion à la demande",
   "businessHotkeyHint": "Sélectionnez une ligne pour définir ou modifier le raccourci",
   "businessBackupNow": "Sauvegarder maintenant",
-  "businessBackupDesc": "Enregistre vos profils et réglages dans un fichier de sauvegarde."
-,
+  "businessBackupDesc": "Enregistre vos profils et réglages dans un fichier de sauvegarde.",
   "businessOnDemandEmpty": "Ajoutez un réseau Wi-Fi pour mettre l’application en pause lorsque vous vous y connectez.",
   "businessDisconnect": "Déconnecter",
-  "businessRestoreAction": "Restaurer…"
-,
-  "businessManage": "Gérer"
-,
+  "businessRestoreAction": "Restaurer…",
+  "businessManage": "Gérer",
   "businessLocalPorts": "Ports locaux",
   "businessDnsServers": "Serveurs DNS",
   "businessDnsNoUpstream": "Aucun serveur DNS personnalisé n’est configuré.",
-  "businessOverrideSettings": "Remplacements des abonnements"
-,
-  "businessIntercept": "Bloquer"
+  "businessOverrideSettings": "Remplacements des abonnements",
+  "businessIntercept": "Bloquer",
+  "businessAboutPanel": "Espace utilisateur et renouvellement",
+  "businessMitmWarning": "MITM déchiffre le trafic HTTPS des domaines correspondants. Activez-le uniquement pour les modules de confiance.",
+  "businessUpdateAvailable": "Nouvelle version disponible : {version}",
+  "@businessUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

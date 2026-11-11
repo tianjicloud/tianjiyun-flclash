@@ -428,6 +428,8 @@
   "tintedStyle": "氛围",
   "softStyle": "柔和",
   "developerMode": "开发者模式",
+  "businessDeveloperOptionsTitle": "开发者选项",
+  "businessDeveloperOptionsDescription": "这些选项用于排查问题，一般不需要修改。",
   "developerModeEnableTip": "开发者模式已启用。",
   "messageTest": "消息测试",
   "messageTestTip": "这是一条消息。",
@@ -1351,7 +1353,6 @@
   "businessCards": "卡片",
   "businessAutoTest": "自动测速",
   "businessLineCount": "条",
-  "businessCurrent": "当前",
   "businessReplace": "更换",
   "@businessMultiplier": {
     "placeholders": {
@@ -1506,22 +1507,27 @@
   "businessUpdateDaily": "每天",
   "businessAutoLaunchTitle": "开机自动启动",
   "businessAutoRunTitle": "启动后自动连接",
-  "businessOnDemandConnection": "按需连接"
-,
+  "businessOnDemandConnection": "按需连接",
   "businessHotkeyHint": "点击一行设置或修改快捷键",
   "businessBackupNow": "立即备份",
-  "businessBackupDesc": "将配置和应用设置保存为备份文件。"
-,
+  "businessBackupDesc": "将配置和应用设置保存为备份文件。",
   "businessOnDemandEmpty": "添加 Wi-Fi 网络后，连接到该网络时会暂停应用运行。",
   "businessDisconnect": "断开",
-  "businessRestoreAction": "恢复…"
-,
-  "businessManage": "管理"
-,
+  "businessRestoreAction": "恢复…",
+  "businessManage": "管理",
   "businessLocalPorts": "本地端口",
   "businessDnsServers": "DNS 服务器",
   "businessDnsNoUpstream": "尚未配置 DNS 上游覆写。",
-  "businessOverrideSettings": "订阅覆写"
-,
-  "businessIntercept": "拦截"
+  "businessOverrideSettings": "订阅覆写",
+  "businessIntercept": "拦截",
+  "businessAboutPanel": "用户面板与续费",
+  "businessMitmWarning": "MITM 会解密匹配域名的 HTTPS 流量。只在你信任的模块里启用。",
+  "businessUpdateAvailable": "发现新版本 {version}",
+  "@businessUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

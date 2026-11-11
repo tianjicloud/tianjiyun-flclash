@@ -1,12 +1,21 @@
 import 'dart:async';
+import 'dart:ffi' show Abi;
+import 'dart:io';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/business_brand_mark.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
+import 'package:fl_clash/views/business_settings_card.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
+import 'package:fl_clash/views/disclaimer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +28,9 @@ class Contributor {
 }
 
 class AboutView extends ConsumerWidget {
-  const AboutView({super.key});
+  const AboutView({super.key, this.business = false});
+
+  final bool business;
 
   static const _contributors = [
     Contributor(avatar: 'assets/images/avatar/june2.jpg', name: 'June2'),
@@ -57,10 +68,158 @@ class AboutView extends ConsumerWidget {
     );
   }
 
+  Widget _buildBusinessLink(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) => ListItem(
+    title: Text(title),
+    subtitle: Text(subtitle),
+    trailing: const DisclosureIndicator(),
+    onTap: onTap,
+  );
+
+  Widget _buildBusinessPage(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations appLocalizations,
+    bool isLoading,
+  ) {
+    final version = globalState.packageInfo.version;
+    final download = ref.watch(updateDownloadStateProvider);
+    final updateTag = download?.tag;
+    final hasUpdate =
+        updateTag != null &&
+        compareVersions(updateTag.replaceFirst(RegExp(r'^v'), ''), version) > 0;
+    final platform = Platform.isWindows ? 'Windows' : Platform.operatingSystem;
+    final architecture = Abi.current()
+        .toString()
+        .split('.')
+        .last
+        .split('_')
+        .last;
+    final links = [
+      _buildBusinessLink(
+        context,
+        title: appLocalizations.businessAboutPanel,
+        subtitle: userPanelUrl,
+        onTap: () => dialogs.openUrl(userPanelUrl),
+      ),
+      _buildBusinessLink(
+        context,
+        title: appLocalizations.serviceStatus,
+        subtitle: statusPageUrl,
+        onTap: () => dialogs.openUrl(statusPageUrl),
+      ),
+      _buildBusinessLink(
+        context,
+        title: appLocalizations.project,
+        subtitle: 'github.com/$repository',
+        onTap: () => dialogs.openUrl('https://github.com/$repository'),
+      ),
+      _buildBusinessLink(
+        context,
+        title: appLocalizations.core,
+        subtitle: 'github.com/chen08209/Clash.Meta',
+        onTap: () => dialogs.openUrl(
+          'https://github.com/chen08209/Clash.Meta/tree/FlClash',
+        ),
+      ),
+      _buildBusinessLink(
+        context,
+        title: 'FlClash',
+        subtitle: 'github.com/chen08209/FlClash',
+        onTap: () => dialogs.openUrl('https://github.com/chen08209/FlClash'),
+      ),
+    ];
+    return ListView(
+      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      children: [
+        BusinessSettingsCard(
+          title: appLocalizations.about,
+          trailing: BusinessSecondaryButton(
+            label: appLocalizations.checkUpdate,
+            width: 96,
+            onPressed: isLoading ? null : () => _checkUpdate(context, ref),
+          ),
+          items: [
+            ListItem(
+              minVerticalPadding: 16,
+              leading: const BusinessBrandMark(size: 64),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    appName,
+                    style: AppTextStyle.title2.of(context, emphasized: true),
+                  ),
+                  Text(
+                    'TIANJI CLOUD',
+                    style: AppTextStyle.caption1
+                        .of(context)
+                        .copyWith(letterSpacing: 2),
+                  ),
+                ],
+              ),
+              subtitle: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${appLocalizations.businessClientVersion} ',
+                    ),
+                    TextSpan(
+                      text: version,
+                      style: AppTextStyle.subheadline
+                          .of(context)
+                          .toJetBrainsMono,
+                    ),
+                    TextSpan(text: ' · $platform $architecture · mihomo'),
+                  ],
+                ),
+              ),
+              trailing: hasUpdate
+                  ? Text(
+                      appLocalizations.businessUpdateAvailable(
+                        updateTag.replaceFirst(RegExp(r'^v'), ''),
+                      ),
+                      style: AppTextStyle.caption1
+                          .of(context)
+                          .copyWith(
+                            color: BusinessPalette.warningForegroundFor(
+                              context.colorScheme.brightness,
+                            ),
+                          ),
+                    )
+                  : null,
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(title: appLocalizations.more, items: links),
+        const SizedBox(height: 14),
+        BusinessSettingsCard(
+          title: appLocalizations.disclaimer,
+          items: [
+            _buildBusinessLink(
+              context,
+              title: appLocalizations.disclaimerPrivacyTitle,
+              subtitle: appLocalizations.disclaimerLicenseTitle,
+              onTap: () => BaseNavigator.push(context, const DisclaimerView()),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
     final isLoading = ref.watch(loadingProvider(LoadingTag.checkUpdate));
+    if (business) {
+      return _buildBusinessPage(context, ref, appLocalizations, isLoading);
+    }
     return Scaffold(
       isLoading: isLoading,
       title: appLocalizations.about,

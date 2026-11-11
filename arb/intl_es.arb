@@ -428,6 +428,8 @@
   "tintedStyle": "Tintado",
   "softStyle": "Suave",
   "developerMode": "Modo desarrollador",
+  "businessDeveloperOptionsTitle": "Opciones para desarrolladores",
+  "businessDeveloperOptionsDescription": "Estas opciones ayudan a diagnosticar problemas. Normalmente no hace falta cambiarlas.",
   "developerModeEnableTip": "El modo desarrollador está activado.",
   "messageTest": "Prueba de mensaje",
   "messageTestTip": "Esto es un mensaje.",
@@ -1351,7 +1353,6 @@
   "businessCards": "Tarjetas",
   "businessAutoTest": "Prueba automática",
   "businessLineCount": "líneas",
-  "businessCurrent": "Actual",
   "businessReplace": "Reemplazar",
   "@businessMultiplier": {
     "placeholders": {
@@ -1506,22 +1507,27 @@
   "businessUpdateDaily": "Cada día",
   "businessAutoLaunchTitle": "Iniciar al arrancar",
   "businessAutoRunTitle": "Conectar al iniciar",
-  "businessOnDemandConnection": "Conexión bajo demanda"
-,
+  "businessOnDemandConnection": "Conexión bajo demanda",
   "businessHotkeyHint": "Selecciona una fila para configurar o cambiar el atajo",
   "businessBackupNow": "Crear copia ahora",
-  "businessBackupDesc": "Guarda tus perfiles y ajustes en un archivo de copia."
-,
+  "businessBackupDesc": "Guarda tus perfiles y ajustes en un archivo de copia.",
   "businessOnDemandEmpty": "Añade una red Wi-Fi para pausar la aplicación al conectarte.",
   "businessDisconnect": "Desconectar",
-  "businessRestoreAction": "Restaurar…"
-,
-  "businessManage": "Gestionar"
-,
+  "businessRestoreAction": "Restaurar…",
+  "businessManage": "Gestionar",
   "businessLocalPorts": "Puertos locales",
   "businessDnsServers": "Servidores DNS",
   "businessDnsNoUpstream": "No hay servidores DNS personalizados configurados.",
-  "businessOverrideSettings": "Ajustes sobrescritos"
-,
-  "businessIntercept": "Bloquear"
+  "businessOverrideSettings": "Ajustes sobrescritos",
+  "businessIntercept": "Bloquear",
+  "businessAboutPanel": "Panel de usuario y renovación",
+  "businessMitmWarning": "MITM descifra el tráfico HTTPS de los dominios coincidentes. Actívalo solo para módulos de confianza.",
+  "businessUpdateAvailable": "Nueva versión disponible: {version}",
+  "@businessUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }
