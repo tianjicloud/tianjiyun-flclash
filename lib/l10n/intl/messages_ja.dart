@@ -552,6 +552,55 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
       "インポート時に検証します。解析に失敗しても現在の設定は上書きされません。",
     ),
+    "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
+      "このサブスクリプションを削除",
+    ),
+    "businessProfileEditDeleteDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "この端末の設定のみ削除します。Tianji Cloud アカウントとプランには影響しません。",
+        ),
+    "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションを削除",
+    ),
+    "businessProfileEditExpire": MessageLookupByLibrary.simpleMessage("有効期限"),
+    "businessProfileEditExtendDescription":
+        MessageLookupByLibrary.simpleMessage("有効なオーバーライド："),
+    "businessProfileEditExtendSuffix": MessageLookupByLibrary.simpleMessage(
+      " 件",
+    ),
+    "businessProfileEditExtensionTitle": MessageLookupByLibrary.simpleMessage(
+      "拡張オーバーライドとスクリプト",
+    ),
+    "businessProfileEditGroupCountSuffix": MessageLookupByLibrary.simpleMessage(
+      " グループ",
+    ),
+    "businessProfileEditHide": MessageLookupByLibrary.simpleMessage("非表示"),
+    "businessProfileEditLineCountSeparator":
+        MessageLookupByLibrary.simpleMessage(" 件 · "),
+    "businessProfileEditLineLabel": MessageLookupByLibrary.simpleMessage("回線"),
+    "businessProfileEditManage": MessageLookupByLibrary.simpleMessage("管理"),
+    "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("開く"),
+    "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("プラン"),
+    "businessProfileEditPreviewDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "読み取り専用プレビューです。変更にはカスタム設定を使用してください。",
+        ),
+    "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
+      "このリンクには個人トークンが含まれています。共有しないでください。",
+    ),
+    "businessProfileEditRawTitle": MessageLookupByLibrary.simpleMessage(
+      "元の設定を表示",
+    ),
+    "businessProfileEditRenew": MessageLookupByLibrary.simpleMessage(
+      "更新 / アップグレード",
+    ),
+    "businessProfileEditShow": MessageLookupByLibrary.simpleMessage("表示"),
+    "businessProfileEditSummaryTitle": MessageLookupByLibrary.simpleMessage(
+      "プラン情報",
+    ),
+    "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションを編集",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("プロキシ"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("再確認"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

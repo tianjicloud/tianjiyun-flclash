@@ -19,6 +19,20 @@ bool isTianjiSubscriptionProfile(Profile? profile) {
   return resolveTianjiProfile(profile) != null;
 }
 
+String maskTianjiSubscriptionUrl(String url) {
+  final queryToken = RegExp(r'([?&]token=)[^&#]*', caseSensitive: false);
+  if (queryToken.hasMatch(url)) {
+    return url.replaceFirstMapped(queryToken, (match) => '${match[1]}••••••••');
+  }
+  return url.replaceFirstMapped(
+    RegExp(r'(/s/)[^/?#]+', caseSensitive: false),
+    (match) => '${match[1]}••••••••',
+  );
+}
+
+String formatTianjiTrafficUsage(TrafficShow used, TrafficShow total) =>
+    '${used.value} / ${total.value} ${total.unit}';
+
 bool isResidentialPolicyActive(Profile? profile) {
   final resolved = resolveTianjiProfile(profile);
   final entry = profile?.overrides.residentialExit;

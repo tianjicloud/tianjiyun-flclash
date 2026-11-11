@@ -1,18 +1,20 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/editor.dart';
-import 'package:fl_clash/providers/action.dart';
-import 'package:fl_clash/providers/core.dart';
-import 'package:fl_clash/providers/database.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/profiles/extend/extend.dart';
 import 'package:fl_clash/views/profiles/preview.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton, DashboardCard;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -37,9 +39,21 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   late bool _autoUpdate;
   Uint8List? _editedData;
   bool _attempted = false;
+  bool _showAgeSecretKey = false;
   final _fileInfoNotifier = ValueNotifier<FileInfo?>(null);
   late SetupAction _setupAction;
   Uint8List? _fileData;
+
+  int get _overrideCount {
+    final overrides = widget.profile.overrides;
+    return overrides.dnsOverrideKeys.length +
+        overrides.ntpOverrideKeys.length +
+        overrides.snifferOverrideKeys.length +
+        overrides.tunOverrideKeys.length +
+        overrides.proxyProviders.length +
+        overrides.manualSelections.length +
+        (overrides.residentialExit == null ? 0 : 1);
+  }
 
   @override
   void initState() {
@@ -409,6 +423,8 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
           ],
         ),
     ];
+    final businessEdit =
+        system.isDesktop && isTianjiSubscriptionProfile(widget.profile);
     return FocusTraversalGroup(
       policy: PageTraversalPolicy(),
       child: PageFocusScope(
@@ -420,72 +436,490 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                   return false;
                 },
           child: Scaffold(
-            title: appLocalizations.edit,
-            confirmationAction: IconButtonData(
-              glyph: AppGlyphs.check,
-              onPressed: _handleConfirm,
-              tooltip: appLocalizations.save,
-            ),
-            body: Builder(
-              builder: (context) => LayoutBuilder(
-                builder: (context, constraints) {
-                  final padding = const EdgeInsets.symmetric(horizontal: 16)
-                      .copyWith(
-                        top: context.sectionsTopPadding,
-                        bottom: context.bottomInset + 16,
-                      );
-                  final form = ListView(
-                    padding: padding,
+            title: businessEdit ? null : appLocalizations.edit,
+            titleWidget: businessEdit
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ErrorBanner(message: issue?.message),
-                      ...sections,
-                    ],
-                  );
-                  if (!system.isDesktop || constraints.maxWidth < 900) {
-                    return form;
-                  }
-                  final editorSections = isUrl
-                      ? sections.take(sections.length - 1).toList()
-                      : sections;
-                  return ListView(
-                    padding: padding,
-                    children: [
-                      ErrorBanner(message: issue?.message),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 16,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: editorSections,
-                            ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).maybePop(),
+                        child: Text(
+                          '${appLocalizations.businessSubscriptions} ›',
+                          style: BusinessText.metaLabel(context).copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
                           ),
-                          if (isUrl)
-                            SizedBox(
-                              width: 320,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  _SubscriptionSummary(profile: widget.profile),
-                                  _DeleteProfileAction(
-                                    onPressed: _handleDeleteProfile,
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
+                        ),
+                      ),
+                      Text(
+                        appLocalizations.businessProfileEditTitle,
+                        style: BusinessText.pageTitle(context),
                       ),
                     ],
-                  );
-                },
-              ),
-            ),
+                  )
+                : null,
+            actions: businessEdit
+                ? [
+                    BusinessSecondaryButton(
+                      label: appLocalizations.cancel,
+                      width: 68,
+                      onPressed: () => Navigator.of(context).maybePop(),
+                    ),
+                    BusinessPrimaryButton(
+                      label: appLocalizations.save,
+                      width: 68,
+                      onPressed: _handleConfirm,
+                    ),
+                  ]
+                : null,
+            businessTitleInset: businessEdit,
+            showLeading: !businessEdit,
+            confirmationAction: businessEdit
+                ? null
+                : IconButtonData(
+                    glyph: AppGlyphs.check,
+                    onPressed: _handleConfirm,
+                    tooltip: appLocalizations.save,
+                  ),
+            body: businessEdit
+                ? _buildBusinessEditor(issue)
+                : Builder(
+                    builder: (context) => LayoutBuilder(
+                      builder: (context, constraints) {
+                        final padding =
+                            const EdgeInsets.symmetric(horizontal: 16).copyWith(
+                              top: context.sectionsTopPadding,
+                              bottom: context.bottomInset + 16,
+                            );
+                        final form = ListView(
+                          padding: padding,
+                          children: [
+                            ErrorBanner(message: issue?.message),
+                            ...sections,
+                          ],
+                        );
+                        if (!system.isDesktop || constraints.maxWidth < 900) {
+                          return form;
+                        }
+                        final editorSections = isUrl
+                            ? sections.take(sections.length - 1).toList()
+                            : sections;
+                        return ListView(
+                          padding: padding,
+                          children: [
+                            ErrorBanner(message: issue?.message),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              spacing: 16,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: editorSections,
+                                  ),
+                                ),
+                                if (isUrl)
+                                  SizedBox(
+                                    width: 320,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        _SubscriptionSummary(
+                                          profile: widget.profile,
+                                        ),
+                                        _DeleteProfileAction(
+                                          onPressed: _handleDeleteProfile,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
           ),
         ),
       ),
     );
   }
+
+  Widget _buildBusinessEditor(({_ProfileField field, String message})? issue) {
+    final context = this.context;
+    final l10n = context.appLocalizations;
+    final info = widget.profile.subscriptionInfo;
+    final used = (info?.upload ?? 0) + (info?.download ?? 0);
+    final activeProfile = ref.read(currentProfileProvider);
+    final counts = activeProfile?.id == widget.profile.id
+        ? globalState.lastConfigCounts
+        : null;
+    Widget fieldLabel(String label) => Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(label, style: BusinessText.cardTitle(context)),
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) => ListView(
+        padding: EdgeInsets.fromLTRB(
+          24,
+          context.sectionsTopPadding,
+          24,
+          context.bottomInset + 24,
+        ),
+        children: [
+          ErrorBanner(message: issue?.message),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 16,
+            children: [
+              Expanded(
+                child: DashboardCard(
+                  radius: 18,
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      fieldLabel(l10n.name),
+                      _BusinessEditInput(
+                        controller: _labelController,
+                        onChanged: _handleChanged,
+                      ),
+                      const SizedBox(height: 18),
+                      fieldLabel(l10n.businessProfileAddUrlLabel),
+                      _BusinessEditInput(
+                        controller: _urlController,
+                        obscure: true,
+                        onChanged: _handleChanged,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        l10n.businessProfileEditPrivacy,
+                        style: BusinessText.quickMeta(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                      const SizedBox(height: 18),
+                      fieldLabel(l10n.businessProfileAddAutoUpdate),
+                      _BusinessIntervalInput(
+                        controller: _autoUpdateDurationController,
+                        onChanged: (value) {
+                          _setAutoUpdate(true);
+                          _handleChanged(value);
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      _BusinessEditRow(
+                        title: l10n.businessProfileEditExtensionTitle,
+                        subtitle:
+                            '${l10n.businessProfileEditExtendDescription}$_overrideCount${l10n.businessProfileEditExtendSuffix}',
+                        action: l10n.businessProfileEditManage,
+                        onPressed: () => BaseNavigator.push(
+                          context,
+                          ExtendView(profileId: widget.profile.id),
+                        ),
+                      ),
+                      _BusinessEditRow(
+                        title: l10n.businessProfileEditRawTitle,
+                        subtitle: l10n.businessProfileEditPreviewDescription,
+                        action: l10n.businessProfileEditOpen,
+                        onPressed: () => BaseNavigator.push(
+                          context,
+                          PreviewProfileView(profile: widget.profile),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(
+                          () => _showAgeSecretKey = !_showAgeSecretKey,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  l10n.businessProfileAddMoreOptions,
+                                  style: BusinessText.quickMeta(context),
+                                ),
+                              ),
+                              const GlyphIcon(AppGlyphs.chevronDown),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (_showAgeSecretKey)
+                        _AgeSecretKeyField(controller: _ageSecretKeyController),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 316,
+                child: Column(
+                  children: [
+                    DashboardCard(
+                      radius: 18,
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            l10n.businessProfileEditSummaryTitle,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          const SizedBox(height: 14),
+                          if (widget.profile.label.isNotEmpty)
+                            _BusinessSummaryRow(
+                              label: l10n.businessProfileEditPlan,
+                              value: widget.profile.label,
+                            ),
+                          if (info?.expireDate != null)
+                            _BusinessSummaryRow(
+                              label: l10n.businessProfileEditExpire,
+                              value:
+                                  '${info!.expireDate!.show}（${l10n.profileDaysLeft(info.expireDate!.difference(DateTime.now()).inDays.clamp(0, 9999))}）',
+                            ),
+                          if (info != null && info.total > 0)
+                            _BusinessSummaryRow(
+                              label: l10n.traffic,
+                              value: formatTianjiTrafficUsage(
+                                used.traffic,
+                                info.total.traffic,
+                              ),
+                              mono: true,
+                            ),
+                          if (counts != null &&
+                              (counts.proxies > 0 || counts.groups > 0))
+                            _BusinessSummaryRow(
+                              label: l10n.businessProfileEditLineLabel,
+                              value:
+                                  '${counts.proxies}${l10n.businessProfileEditLineCountSeparator}${counts.groups}${l10n.businessProfileEditGroupCountSuffix}',
+                            ),
+                          if (widget.profile.lastUpdateDate != null)
+                            _BusinessSummaryRow(
+                              label: l10n.lastUpdated,
+                              value: widget.profile.lastUpdateDate!.show,
+                            ),
+                          const SizedBox(height: 16),
+                          BusinessPrimaryButton(
+                            label: l10n.businessProfileEditRenew,
+                            width: double.infinity,
+                            onPressed: () => dialogs.openUrl(userPanelUrl),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    DashboardCard(
+                      radius: 18,
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            l10n.businessProfileEditDeleteTitle,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            l10n.businessProfileEditDeleteDescription,
+                            style: BusinessText.quickMeta(context),
+                          ),
+                          const SizedBox(height: 14),
+                          BusinessSecondaryButton(
+                            label: l10n.businessProfileEditDelete,
+                            width: double.infinity,
+                            labelColor: context.colorScheme.error,
+                            onPressed: _handleDeleteProfile,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BusinessEditInput extends StatefulWidget {
+  const _BusinessEditInput({
+    required this.controller,
+    required this.onChanged,
+    this.obscure = false,
+  });
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final bool obscure;
+
+  @override
+  State<_BusinessEditInput> createState() => _BusinessEditInputState();
+}
+
+class _BusinessEditInputState extends State<_BusinessEditInput> {
+  late bool hidden = widget.obscure;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: 44,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: ShapeDecoration(
+        color: context.colorScheme.surface,
+        shape: AppShape.all(
+          12,
+        ).copyWith(side: BorderSide(color: context.colorScheme.outlineVariant)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: widget.obscure && hidden
+                ? Text(
+                    maskTianjiSubscriptionUrl(widget.controller.text),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.heroMetaValue(context).toJetBrainsMono,
+                  )
+                : TextField(
+                    controller: widget.controller,
+                    keyboardType: widget.obscure
+                        ? TextInputType.url
+                        : TextInputType.text,
+                    autocorrect: false,
+                    onChanged: widget.onChanged,
+                    style: widget.obscure
+                        ? BusinessText.quickMeta(context).toJetBrainsMono
+                        : BusinessText.dataBody(context),
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: const InputDecoration.collapsed(hintText: ''),
+                  ),
+          ),
+          if (widget.obscure)
+            TextButton(
+              onPressed: () => setState(() => hidden = !hidden),
+              child: Text(
+                hidden
+                    ? context.appLocalizations.businessProfileEditShow
+                    : context.appLocalizations.businessProfileEditHide,
+              ),
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _BusinessIntervalInput extends StatelessWidget {
+  const _BusinessIntervalInput({
+    required this.controller,
+    required this.onChanged,
+  });
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final minutes = int.tryParse(controller.text) ?? 360;
+    return PopupAnchor(
+      targetBuilder: (open) => GestureDetector(
+        onTap: open,
+        child: Container(
+          height: 44,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: ShapeDecoration(
+            shape: AppShape.all(12).copyWith(
+              side: BorderSide(color: context.colorScheme.outlineVariant),
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  context.appLocalizations.zzAutoUpdateHours(minutes ~/ 60),
+                  style: BusinessText.dataBody(context),
+                ),
+              ),
+              const GlyphIcon(AppGlyphs.chevronDown),
+            ],
+          ),
+        ),
+      ),
+      popupBuilder: (_) => PopupMenu(
+        items: [
+          for (final hours in [6, 12, 24, 48])
+            PopupMenuItem(
+              label: context.appLocalizations.zzAutoUpdateHours(hours),
+              onPressed: () {
+                controller.text = '${hours * 60}';
+                onChanged(controller.text);
+              },
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BusinessEditRow extends StatelessWidget {
+  const _BusinessEditRow({
+    required this.title,
+    required this.subtitle,
+    required this.action,
+    required this.onPressed,
+  });
+  final String title, subtitle, action;
+  final VoidCallback onPressed;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: 64,
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: BusinessText.cardTitle(context)),
+              Text(subtitle, style: BusinessText.quickMeta(context)),
+            ],
+          ),
+        ),
+        BusinessSecondaryButton(label: action, width: 76, onPressed: onPressed),
+      ],
+    ),
+  );
+}
+
+class _BusinessSummaryRow extends StatelessWidget {
+  const _BusinessSummaryRow({
+    required this.label,
+    required this.value,
+    this.mono = false,
+  });
+  final String label, value;
+  final bool mono;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 7),
+    child: Row(
+      children: [
+        Expanded(child: Text(label, style: BusinessText.quickMeta(context))),
+        Text(
+          value,
+          style: mono
+              ? BusinessText.dataBody(context).toJetBrainsMono
+              : BusinessText.dataBody(context),
+        ),
+      ],
+    ),
+  );
 }
 
 class _DeleteProfileAction extends StatelessWidget {

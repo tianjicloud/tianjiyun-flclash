@@ -675,6 +675,57 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
       "L’importation est d’abord vérifiée. Une erreur d’analyse ne remplacera pas le profil actif.",
     ),
+    "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
+      "Supprimer cet abonnement",
+    ),
+    "businessProfileEditDeleteDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Supprime uniquement cette configuration locale. Votre compte et votre forfait Tianji Cloud ne sont pas affectés.",
+        ),
+    "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
+      "Supprimer l’abonnement",
+    ),
+    "businessProfileEditExpire": MessageLookupByLibrary.simpleMessage("Expire"),
+    "businessProfileEditExtendDescription":
+        MessageLookupByLibrary.simpleMessage("Substitutions actives : "),
+    "businessProfileEditExtendSuffix": MessageLookupByLibrary.simpleMessage(
+      " éléments",
+    ),
+    "businessProfileEditExtensionTitle": MessageLookupByLibrary.simpleMessage(
+      "Substitutions et scripts",
+    ),
+    "businessProfileEditGroupCountSuffix": MessageLookupByLibrary.simpleMessage(
+      " groupes",
+    ),
+    "businessProfileEditHide": MessageLookupByLibrary.simpleMessage("Masquer"),
+    "businessProfileEditLineCountSeparator":
+        MessageLookupByLibrary.simpleMessage(" · "),
+    "businessProfileEditLineLabel": MessageLookupByLibrary.simpleMessage(
+      "Lignes",
+    ),
+    "businessProfileEditManage": MessageLookupByLibrary.simpleMessage("Gérer"),
+    "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("Ouvrir"),
+    "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("Forfait"),
+    "businessProfileEditPreviewDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Aperçu en lecture seule. Utilisez la configuration personnalisée pour modifier.",
+        ),
+    "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
+      "Ce lien contient un jeton personnel. Ne le partagez pas.",
+    ),
+    "businessProfileEditRawTitle": MessageLookupByLibrary.simpleMessage(
+      "Voir la configuration d’origine",
+    ),
+    "businessProfileEditRenew": MessageLookupByLibrary.simpleMessage(
+      "Renouveler / mettre à niveau",
+    ),
+    "businessProfileEditShow": MessageLookupByLibrary.simpleMessage("Afficher"),
+    "businessProfileEditSummaryTitle": MessageLookupByLibrary.simpleMessage(
+      "Détails du forfait",
+    ),
+    "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
+      "Modifier l’abonnement",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage(
       "Vérifier à nouveau",

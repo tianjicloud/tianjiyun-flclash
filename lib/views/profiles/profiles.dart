@@ -1149,7 +1149,9 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
     final expire = info?.expireDate;
     final url = Uri.tryParse(profile.url);
     final maskedUrl = url != null && url.hasAuthority
-        ? '${url.scheme}://${url.host}/••••••••'
+        ? isTianjiSubscriptionProfile(profile)
+              ? maskTianjiSubscriptionUrl(profile.url)
+              : '${url.scheme}://${url.host}/••••••••'
         : null;
     final updateInterval = profile.autoUpdateDuration;
     final intervalLabel = profile.autoUpdate
@@ -1240,7 +1242,10 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                       child: _ProfileMetric(
                         label: l10n.currentUsage,
                         value: used != null && info != null
-                            ? '${used.traffic.value} / ${info.total.traffic.value} ${info.total.traffic.unit}'
+                            ? formatTianjiTrafficUsage(
+                                used.traffic,
+                                info.total.traffic,
+                              )
                             : '—',
                         footnote: null,
                         progress: usage,
@@ -1493,6 +1498,10 @@ class ProfileItem extends ConsumerWidget {
   }
 
   void _handleShowEditExtendPage(BuildContext context) {
+    if (isTianjiSubscriptionProfile(profile) && !context.isMobileView) {
+      unawaited(BaseNavigator.push(context, EditProfileView(profile: profile)));
+      return;
+    }
     showExtend(
       context,
       builder: (context) => EditProfileView(profile: profile),

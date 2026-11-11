@@ -628,6 +628,59 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
       "The import is validated first. A parsing failure will not replace the active profile.",
     ),
+    "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
+      "Delete this subscription",
+    ),
+    "businessProfileEditDeleteDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Only removes this local configuration. Your Tianji Cloud account and plan are unaffected.",
+        ),
+    "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
+      "Delete subscription",
+    ),
+    "businessProfileEditExpire": MessageLookupByLibrary.simpleMessage(
+      "Expires",
+    ),
+    "businessProfileEditExtendDescription":
+        MessageLookupByLibrary.simpleMessage("Overrides enabled: "),
+    "businessProfileEditExtendSuffix": MessageLookupByLibrary.simpleMessage(
+      " items",
+    ),
+    "businessProfileEditExtensionTitle": MessageLookupByLibrary.simpleMessage(
+      "Overrides & scripts",
+    ),
+    "businessProfileEditGroupCountSuffix": MessageLookupByLibrary.simpleMessage(
+      " groups",
+    ),
+    "businessProfileEditHide": MessageLookupByLibrary.simpleMessage("Hide"),
+    "businessProfileEditLineCountSeparator":
+        MessageLookupByLibrary.simpleMessage(" · "),
+    "businessProfileEditLineLabel": MessageLookupByLibrary.simpleMessage(
+      "Lines",
+    ),
+    "businessProfileEditManage": MessageLookupByLibrary.simpleMessage("Manage"),
+    "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("Open"),
+    "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("Plan"),
+    "businessProfileEditPreviewDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Read-only preview. Use custom configuration to make changes.",
+        ),
+    "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
+      "This link contains a personal token. Do not share it.",
+    ),
+    "businessProfileEditRawTitle": MessageLookupByLibrary.simpleMessage(
+      "View raw configuration",
+    ),
+    "businessProfileEditRenew": MessageLookupByLibrary.simpleMessage(
+      "Renew / upgrade",
+    ),
+    "businessProfileEditShow": MessageLookupByLibrary.simpleMessage("Show"),
+    "businessProfileEditSummaryTitle": MessageLookupByLibrary.simpleMessage(
+      "Plan details",
+    ),
+    "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
+      "Edit subscription",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Verify again"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

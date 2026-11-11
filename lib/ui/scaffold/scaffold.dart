@@ -53,6 +53,7 @@ class Scaffold extends StatefulWidget {
   final String? title;
   final Widget? titleWidget;
   final bool businessTitleInset;
+  final bool showLeading;
   final List<PopupMenuItem> titleMenuItems;
   final bool isLoading;
   final List<Widget>? actions;
@@ -94,6 +95,7 @@ class Scaffold extends StatefulWidget {
     this.title,
     this.titleWidget,
     this.businessTitleInset = false,
+    this.showLeading = true,
     this.titleMenuItems = const [],
     this.actions,
     this.backAction,
@@ -484,6 +486,9 @@ class ScaffoldState extends State<Scaffold>
   }
 
   Widget? _buildLeading(VoidCallback? backAction, {required _SheetPop? pop}) {
+    if (!widget.showLeading && pop == null) {
+      return null;
+    }
     final button = _buildLeadingButton(backAction, pop: pop);
     if (button == null) {
       return null;

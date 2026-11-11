@@ -540,6 +540,53 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
       "가져오기 전에 먼저 검증합니다. 파싱에 실패해도 현재 프로필을 덮어쓰지 않습니다.",
     ),
+    "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
+      "이 구독 삭제",
+    ),
+    "businessProfileEditDeleteDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "이 기기의 구성만 삭제합니다. Tianji Cloud 계정과 요금제에는 영향이 없습니다.",
+        ),
+    "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
+      "구독 삭제",
+    ),
+    "businessProfileEditExpire": MessageLookupByLibrary.simpleMessage("만료"),
+    "businessProfileEditExtendDescription":
+        MessageLookupByLibrary.simpleMessage("활성 재정의: "),
+    "businessProfileEditExtendSuffix": MessageLookupByLibrary.simpleMessage(
+      "개",
+    ),
+    "businessProfileEditExtensionTitle": MessageLookupByLibrary.simpleMessage(
+      "확장 재정의 및 스크립트",
+    ),
+    "businessProfileEditGroupCountSuffix": MessageLookupByLibrary.simpleMessage(
+      "개 그룹",
+    ),
+    "businessProfileEditHide": MessageLookupByLibrary.simpleMessage("숨기기"),
+    "businessProfileEditLineCountSeparator":
+        MessageLookupByLibrary.simpleMessage("개 · "),
+    "businessProfileEditLineLabel": MessageLookupByLibrary.simpleMessage("회선"),
+    "businessProfileEditManage": MessageLookupByLibrary.simpleMessage("관리"),
+    "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("열기"),
+    "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("요금제"),
+    "businessProfileEditPreviewDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "읽기 전용 미리보기입니다. 수정하려면 사용자 지정 구성을 사용하세요.",
+        ),
+    "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
+      "이 링크에는 개인 토큰이 포함되어 있습니다. 공유하지 마세요.",
+    ),
+    "businessProfileEditRawTitle": MessageLookupByLibrary.simpleMessage(
+      "원본 구성 보기",
+    ),
+    "businessProfileEditRenew": MessageLookupByLibrary.simpleMessage(
+      "갱신 / 업그레이드",
+    ),
+    "businessProfileEditShow": MessageLookupByLibrary.simpleMessage("표시"),
+    "businessProfileEditSummaryTitle": MessageLookupByLibrary.simpleMessage(
+      "요금제 정보",
+    ),
+    "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage("구독 편집"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("프록시"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("다시 확인"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

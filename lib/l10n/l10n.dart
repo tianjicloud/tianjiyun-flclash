@@ -11636,6 +11636,216 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `This link contains a personal token. Do not share it.`
+  String get businessProfileEditPrivacy {
+    return Intl.message(
+      'This link contains a personal token. Do not share it.',
+      name: 'businessProfileEditPrivacy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Overrides enabled: `
+  String get businessProfileEditExtendDescription {
+    return Intl.message(
+      'Overrides enabled: ',
+      name: 'businessProfileEditExtendDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read-only preview. Use custom configuration to make changes.`
+  String get businessProfileEditPreviewDescription {
+    return Intl.message(
+      'Read-only preview. Use custom configuration to make changes.',
+      name: 'businessProfileEditPreviewDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only removes this local configuration. Your Tianji Cloud account and plan are unaffected.`
+  String get businessProfileEditDeleteDescription {
+    return Intl.message(
+      'Only removes this local configuration. Your Tianji Cloud account and plan are unaffected.',
+      name: 'businessProfileEditDeleteDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete this subscription`
+  String get businessProfileEditDelete {
+    return Intl.message(
+      'Delete this subscription',
+      name: 'businessProfileEditDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage`
+  String get businessProfileEditManage {
+    return Intl.message(
+      'Manage',
+      name: 'businessProfileEditManage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open`
+  String get businessProfileEditOpen {
+    return Intl.message(
+      'Open',
+      name: 'businessProfileEditOpen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit subscription`
+  String get businessProfileEditTitle {
+    return Intl.message(
+      'Edit subscription',
+      name: 'businessProfileEditTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plan`
+  String get businessProfileEditPlan {
+    return Intl.message(
+      'Plan',
+      name: 'businessProfileEditPlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show`
+  String get businessProfileEditShow {
+    return Intl.message(
+      'Show',
+      name: 'businessProfileEditShow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide`
+  String get businessProfileEditHide {
+    return Intl.message(
+      'Hide',
+      name: 'businessProfileEditHide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` items`
+  String get businessProfileEditExtendSuffix {
+    return Intl.message(
+      ' items',
+      name: 'businessProfileEditExtendSuffix',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Overrides & scripts`
+  String get businessProfileEditExtensionTitle {
+    return Intl.message(
+      'Overrides & scripts',
+      name: 'businessProfileEditExtensionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View raw configuration`
+  String get businessProfileEditRawTitle {
+    return Intl.message(
+      'View raw configuration',
+      name: 'businessProfileEditRawTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plan details`
+  String get businessProfileEditSummaryTitle {
+    return Intl.message(
+      'Plan details',
+      name: 'businessProfileEditSummaryTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expires`
+  String get businessProfileEditExpire {
+    return Intl.message(
+      'Expires',
+      name: 'businessProfileEditExpire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete subscription`
+  String get businessProfileEditDeleteTitle {
+    return Intl.message(
+      'Delete subscription',
+      name: 'businessProfileEditDeleteTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renew / upgrade`
+  String get businessProfileEditRenew {
+    return Intl.message(
+      'Renew / upgrade',
+      name: 'businessProfileEditRenew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lines`
+  String get businessProfileEditLineLabel {
+    return Intl.message(
+      'Lines',
+      name: 'businessProfileEditLineLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` · `
+  String get businessProfileEditLineCountSeparator {
+    return Intl.message(
+      ' · ',
+      name: 'businessProfileEditLineCountSeparator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` groups`
+  String get businessProfileEditGroupCountSuffix {
+    return Intl.message(
+      ' groups',
+      name: 'businessProfileEditGroupCountSuffix',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

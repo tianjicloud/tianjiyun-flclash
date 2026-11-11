@@ -672,6 +672,59 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
       "La importación se valida primero. Un error de análisis no sustituirá el perfil activo.",
     ),
+    "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
+      "Eliminar esta suscripción",
+    ),
+    "businessProfileEditDeleteDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Solo elimina esta configuración local. Tu cuenta y plan de Tianji Cloud no se ven afectados.",
+        ),
+    "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
+      "Eliminar suscripción",
+    ),
+    "businessProfileEditExpire": MessageLookupByLibrary.simpleMessage("Caduca"),
+    "businessProfileEditExtendDescription":
+        MessageLookupByLibrary.simpleMessage("Sobrescrituras activas: "),
+    "businessProfileEditExtendSuffix": MessageLookupByLibrary.simpleMessage(
+      " elementos",
+    ),
+    "businessProfileEditExtensionTitle": MessageLookupByLibrary.simpleMessage(
+      "Sobrescrituras y scripts",
+    ),
+    "businessProfileEditGroupCountSuffix": MessageLookupByLibrary.simpleMessage(
+      " grupos",
+    ),
+    "businessProfileEditHide": MessageLookupByLibrary.simpleMessage("Ocultar"),
+    "businessProfileEditLineCountSeparator":
+        MessageLookupByLibrary.simpleMessage(" · "),
+    "businessProfileEditLineLabel": MessageLookupByLibrary.simpleMessage(
+      "Líneas",
+    ),
+    "businessProfileEditManage": MessageLookupByLibrary.simpleMessage(
+      "Administrar",
+    ),
+    "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("Abrir"),
+    "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("Plan"),
+    "businessProfileEditPreviewDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Vista previa de solo lectura. Usa la configuración personalizada para modificar.",
+        ),
+    "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
+      "Este enlace contiene un token personal. No lo compartas.",
+    ),
+    "businessProfileEditRawTitle": MessageLookupByLibrary.simpleMessage(
+      "Ver configuración original",
+    ),
+    "businessProfileEditRenew": MessageLookupByLibrary.simpleMessage(
+      "Renovar / mejorar",
+    ),
+    "businessProfileEditShow": MessageLookupByLibrary.simpleMessage("Mostrar"),
+    "businessProfileEditSummaryTitle": MessageLookupByLibrary.simpleMessage(
+      "Detalles del plan",
+    ),
+    "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
+      "Editar suscripción",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Proxy"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage(
       "Verificar de nuevo",

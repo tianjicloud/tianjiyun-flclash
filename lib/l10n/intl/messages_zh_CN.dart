@@ -510,6 +510,45 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
       "导入后会先校验；解析失败不会覆盖你正在用的配置。",
     ),
+    "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage("删除此订阅"),
+    "businessProfileEditDeleteDescription":
+        MessageLookupByLibrary.simpleMessage("只删除本机的配置，不影响你的天机云账号和套餐。"),
+    "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
+      "删除订阅",
+    ),
+    "businessProfileEditExpire": MessageLookupByLibrary.simpleMessage("到期"),
+    "businessProfileEditExtendDescription":
+        MessageLookupByLibrary.simpleMessage("已启用 "),
+    "businessProfileEditExtendSuffix": MessageLookupByLibrary.simpleMessage(
+      " 项覆写",
+    ),
+    "businessProfileEditExtensionTitle": MessageLookupByLibrary.simpleMessage(
+      "扩展覆写与脚本",
+    ),
+    "businessProfileEditGroupCountSuffix": MessageLookupByLibrary.simpleMessage(
+      " 个分组",
+    ),
+    "businessProfileEditHide": MessageLookupByLibrary.simpleMessage("隐藏"),
+    "businessProfileEditLineCountSeparator":
+        MessageLookupByLibrary.simpleMessage(" 条 · "),
+    "businessProfileEditLineLabel": MessageLookupByLibrary.simpleMessage("线路"),
+    "businessProfileEditManage": MessageLookupByLibrary.simpleMessage("管理"),
+    "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("打开"),
+    "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("套餐"),
+    "businessProfileEditPreviewDescription":
+        MessageLookupByLibrary.simpleMessage("只读预览，修改请用自定义配置"),
+    "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
+      "链接含个人令牌，请勿分享",
+    ),
+    "businessProfileEditRawTitle": MessageLookupByLibrary.simpleMessage(
+      "查看原始配置",
+    ),
+    "businessProfileEditRenew": MessageLookupByLibrary.simpleMessage("续费 / 升级"),
+    "businessProfileEditShow": MessageLookupByLibrary.simpleMessage("显示"),
+    "businessProfileEditSummaryTitle": MessageLookupByLibrary.simpleMessage(
+      "套餐信息",
+    ),
+    "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage("编辑订阅"),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("代理"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("重新校验"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(

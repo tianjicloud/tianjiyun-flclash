@@ -655,6 +655,61 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessProfileAddValidationNote": MessageLookupByLibrary.simpleMessage(
       "При импорте сначала выполняется проверка. Ошибка разбора не заменит активный профиль.",
     ),
+    "businessProfileEditDelete": MessageLookupByLibrary.simpleMessage(
+      "Удалить подписку",
+    ),
+    "businessProfileEditDeleteDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Удаляется только локальная конфигурация. Аккаунт и тариф Tianji Cloud не затрагиваются.",
+        ),
+    "businessProfileEditDeleteTitle": MessageLookupByLibrary.simpleMessage(
+      "Удалить подписку",
+    ),
+    "businessProfileEditExpire": MessageLookupByLibrary.simpleMessage(
+      "Истекает",
+    ),
+    "businessProfileEditExtendDescription":
+        MessageLookupByLibrary.simpleMessage("Активных переопределений: "),
+    "businessProfileEditExtendSuffix": MessageLookupByLibrary.simpleMessage(
+      " items",
+    ),
+    "businessProfileEditExtensionTitle": MessageLookupByLibrary.simpleMessage(
+      "Переопределения и скрипты",
+    ),
+    "businessProfileEditGroupCountSuffix": MessageLookupByLibrary.simpleMessage(
+      " групп",
+    ),
+    "businessProfileEditHide": MessageLookupByLibrary.simpleMessage("Скрыть"),
+    "businessProfileEditLineCountSeparator":
+        MessageLookupByLibrary.simpleMessage(" · "),
+    "businessProfileEditLineLabel": MessageLookupByLibrary.simpleMessage(
+      "Линии",
+    ),
+    "businessProfileEditManage": MessageLookupByLibrary.simpleMessage(
+      "Управлять",
+    ),
+    "businessProfileEditOpen": MessageLookupByLibrary.simpleMessage("Открыть"),
+    "businessProfileEditPlan": MessageLookupByLibrary.simpleMessage("Тариф"),
+    "businessProfileEditPreviewDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Предпросмотр только для чтения. Для изменений используйте пользовательскую конфигурацию.",
+        ),
+    "businessProfileEditPrivacy": MessageLookupByLibrary.simpleMessage(
+      "Ссылка содержит личный токен. Не передавайте её другим.",
+    ),
+    "businessProfileEditRawTitle": MessageLookupByLibrary.simpleMessage(
+      "Просмотр исходной конфигурации",
+    ),
+    "businessProfileEditRenew": MessageLookupByLibrary.simpleMessage(
+      "Продлить / улучшить",
+    ),
+    "businessProfileEditShow": MessageLookupByLibrary.simpleMessage("Показать"),
+    "businessProfileEditSummaryTitle": MessageLookupByLibrary.simpleMessage(
+      "Информация о тарифе",
+    ),
+    "businessProfileEditTitle": MessageLookupByLibrary.simpleMessage(
+      "Изменить подписку",
+    ),
     "businessProxyTraffic": MessageLookupByLibrary.simpleMessage("Прокси"),
     "businessRecheck": MessageLookupByLibrary.simpleMessage("Проверить снова"),
     "businessResidentialBroadband": MessageLookupByLibrary.simpleMessage(
