@@ -467,6 +467,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDeveloperOptionsTitle": MessageLookupByLibrary.simpleMessage(
       "开发者选项",
     ),
+    "businessDisclaimerAgree": MessageLookupByLibrary.simpleMessage("同意并继续"),
+    "businessDisclaimerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "首次启动时显示一次",
+    ),
+    "businessDisclaimerTitle": MessageLookupByLibrary.simpleMessage("使用前请阅读"),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("断开"),
     "businessDnsFailed": MessageLookupByLibrary.simpleMessage("失败"),
     "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
@@ -535,6 +540,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
       "添加 Wi-Fi 网络后，连接到该网络时会暂停应用运行。",
     ),
+    "businessOnboardingFactDashboard": MessageLookupByLibrary.simpleMessage(
+      "在仪表盘查看连接统计",
+    ),
+    "businessOnboardingFactImport": MessageLookupByLibrary.simpleMessage(
+      "导入订阅配置",
+    ),
+    "businessOnboardingFactStatus": MessageLookupByLibrary.simpleMessage(
+      "查看线路连接状态",
+    ),
+    "businessOnboardingHeroTitle": MessageLookupByLibrary.simpleMessage(
+      "三步连接天机云",
+    ),
+    "businessOnboardingImportConnect": MessageLookupByLibrary.simpleMessage(
+      "导入并连接",
+    ),
+    "businessOnboardingScanFile": MessageLookupByLibrary.simpleMessage(
+      "扫码 / 选择文件",
+    ),
+    "businessOnboardingUrlHint": MessageLookupByLibrary.simpleMessage(
+      "粘贴天机云订阅链接",
+    ),
+    "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage("订阅链接"),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出站"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage("订阅覆写"),
     "businessProfileAddAutoUpdate": MessageLookupByLibrary.simpleMessage(

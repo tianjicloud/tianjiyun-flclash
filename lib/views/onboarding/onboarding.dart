@@ -10,6 +10,9 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:fl_clash/views/dashboard/probe_start_hold.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
@@ -102,6 +105,7 @@ class _DesktopOnboardingLayout extends StatelessWidget {
       OnboardingConfirm() || OnboardingImporting() || OnboardingFailed() => 1,
       _ => 2,
     };
+    final business = BusinessTheme.of(context) && system.isDesktop;
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minHeight),
       child: IntrinsicHeight(
@@ -112,7 +116,7 @@ class _DesktopOnboardingLayout extends StatelessWidget {
               width: 460,
               child: DecoratedBox(
                 decoration: ShapeDecoration(
-                  color: const Color(0xFF0E1726),
+                  color: BusinessPalette.deep,
                   shape: AppShape.all(AppCorner.fit(800)),
                 ),
                 child: Padding(
@@ -126,26 +130,75 @@ class _DesktopOnboardingLayout extends StatelessWidget {
                         height: 48,
                       ),
                       const SizedBox(height: 28),
-                      Text(
-                        appName,
-                        style: AppTextStyle.title2
-                            .of(context, emphasized: true)
-                            .copyWith(color: const Color(0xFFFFFFFF)),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        l10n.onboardingTitle,
-                        style: AppTextStyle.title1
-                            .of(context, emphasized: true)
-                            .copyWith(color: const Color(0xFFFFFFFF)),
-                      ),
-                      const SizedBox(height: 14),
-                      Text(
-                        l10n.onboardingDescription,
-                        style: AppTextStyle.body
-                            .of(context)
-                            .copyWith(color: const Color(0xFFC3CCD8)),
-                      ),
+                      if (business) ...[
+                        Text(
+                          appName,
+                          style: BusinessText.pageTitle(
+                            context,
+                          ).copyWith(color: BusinessPalette.onBlue),
+                        ),
+                        const SizedBox(height: 30),
+                        Text(
+                          l10n.businessOnboardingHeroTitle,
+                          style: BusinessText.pageTitle(
+                            context,
+                          ).copyWith(color: BusinessPalette.onBlue),
+                        ),
+                        const SizedBox(height: 22),
+                        for (final text in [
+                          l10n.businessOnboardingFactImport,
+                          l10n.businessOnboardingFactStatus,
+                          l10n.businessOnboardingFactDashboard,
+                        ])
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '•',
+                                  style: BusinessText.cardTitle(
+                                    context,
+                                  ).copyWith(color: BusinessPalette.onBlue),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    text,
+                                    style: BusinessText.cardTitle(context)
+                                        .copyWith(
+                                          color: BusinessPalette
+                                              .sidebarDarkSecondary,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ] else ...[
+                        Text(
+                          appName,
+                          style: AppTextStyle.title2
+                              .of(context, emphasized: true)
+                              .copyWith(color: BusinessPalette.onBlue),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          l10n.onboardingTitle,
+                          style: AppTextStyle.title1
+                              .of(context, emphasized: true)
+                              .copyWith(color: BusinessPalette.onBlue),
+                        ),
+                        const SizedBox(height: 14),
+                        Text(
+                          l10n.onboardingDescription,
+                          style: AppTextStyle.body
+                              .of(context)
+                              .copyWith(
+                                color: BusinessPalette.sidebarDarkSecondary,
+                              ),
+                        ),
+                      ],
                       const Spacer(),
                       TextButton(
                         onPressed: () => dialogs.openUrl(userPanelUrl),
@@ -394,6 +447,9 @@ class _WelcomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (BusinessTheme.of(context) && system.isDesktop) {
+      return _BusinessOnboardingImport(onScan: () => _scan(context, ref));
+    }
     final appLocalizations = context.appLocalizations;
     final colorScheme = context.colorScheme;
     return Column(
@@ -456,6 +512,107 @@ class _WelcomeView extends ConsumerWidget {
           child: Text(appLocalizations.onboardingNoSubscription),
         ),
       ],
+    );
+  }
+}
+
+class _BusinessOnboardingImport extends ConsumerStatefulWidget {
+  const _BusinessOnboardingImport({required this.onScan});
+
+  final Future<void> Function() onScan;
+
+  @override
+  ConsumerState<_BusinessOnboardingImport> createState() =>
+      _BusinessOnboardingImportState();
+}
+
+class _BusinessOnboardingImportState
+    extends ConsumerState<_BusinessOnboardingImport> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _continue() {
+    final url = subscriptionUrlFromText(_controller.text.trim());
+    if (url == null) {
+      ref
+          .read(onboardingProvider.notifier)
+          .failed(ImportFailure.notSubscription);
+      return;
+    }
+    ref.read(onboardingProvider.notifier).confirm(url);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: colorScheme.surface,
+        shape: AppShape.all(BusinessPalette.cardRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(28),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l.businessOnboardingUrlLabel,
+              style: BusinessText.cardTitle(context),
+            ),
+            const SizedBox(height: 10),
+            DecoratedBox(
+              decoration: ShapeDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                shape: AppShape.all(AppRadius.sm.topLeft.x),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: TextField(
+                  controller: _controller,
+                  keyboardType: TextInputType.url,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                    hintText: l.businessOnboardingUrlHint,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  style: AppTextStyle.callout
+                      .of(context)
+                      .copyWith(color: colorScheme.onSurface)
+                      .toJetBrainsMono,
+                  onSubmitted: (_) => _continue(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            BusinessPrimaryButton(
+              label: l.businessOnboardingImportConnect,
+              width: double.infinity,
+              onPressed: _continue,
+            ),
+            const SizedBox(height: 12),
+            BusinessSecondaryButton(
+              label: l.businessOnboardingScanFile,
+              width: double.infinity,
+              onPressed: () => widget.onScan(),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l.onboardingPrivacyNote,
+              textAlign: TextAlign.center,
+              style: BusinessText.metaLabel(
+                context,
+              ).copyWith(color: colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

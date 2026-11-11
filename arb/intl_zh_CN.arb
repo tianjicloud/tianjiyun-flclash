@@ -1375,6 +1375,17 @@
       "value": {}
     }
   },
+  "businessOnboardingHeroTitle": "三步连接天机云",
+  "businessOnboardingFactImport": "导入订阅配置",
+  "businessOnboardingFactStatus": "查看线路连接状态",
+  "businessOnboardingFactDashboard": "在仪表盘查看连接统计",
+  "businessOnboardingUrlLabel": "订阅链接",
+  "businessOnboardingUrlHint": "粘贴天机云订阅链接",
+  "businessOnboardingImportConnect": "导入并连接",
+  "businessOnboardingScanFile": "扫码 / 选择文件",
+  "businessDisclaimerTitle": "使用前请阅读",
+  "businessDisclaimerSubtitle": "首次启动时显示一次",
+  "businessDisclaimerAgree": "同意并继续",
   "businessProvidersTitle": "代理集与规则集",
   "businessProxyProviders": "代理集",
   "businessRuleProviders": "规则集",

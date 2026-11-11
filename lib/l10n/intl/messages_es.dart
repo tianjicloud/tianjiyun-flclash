@@ -611,6 +611,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDeveloperOptionsTitle": MessageLookupByLibrary.simpleMessage(
       "Opciones para desarrolladores",
     ),
+    "businessDisclaimerAgree": MessageLookupByLibrary.simpleMessage(
+      "Aceptar y continuar",
+    ),
+    "businessDisclaimerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Se muestra al iniciar por primera vez",
+    ),
+    "businessDisclaimerTitle": MessageLookupByLibrary.simpleMessage(
+      "Lee esto antes de usar",
+    ),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
     "businessDnsFailed": MessageLookupByLibrary.simpleMessage("Error"),
     "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
@@ -714,6 +723,30 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
       "Añade una red Wi-Fi para pausar la aplicación al conectarte.",
+    ),
+    "businessOnboardingFactDashboard": MessageLookupByLibrary.simpleMessage(
+      "Consulta estadísticas en el panel",
+    ),
+    "businessOnboardingFactImport": MessageLookupByLibrary.simpleMessage(
+      "Importa la configuración de la suscripción",
+    ),
+    "businessOnboardingFactStatus": MessageLookupByLibrary.simpleMessage(
+      "Consulta el estado de conexión de las líneas",
+    ),
+    "businessOnboardingHeroTitle": MessageLookupByLibrary.simpleMessage(
+      "Conéctate a Tianji Cloud en tres pasos",
+    ),
+    "businessOnboardingImportConnect": MessageLookupByLibrary.simpleMessage(
+      "Importar y conectar",
+    ),
+    "businessOnboardingScanFile": MessageLookupByLibrary.simpleMessage(
+      "Escanear QR / elegir archivo",
+    ),
+    "businessOnboardingUrlHint": MessageLookupByLibrary.simpleMessage(
+      "Pega un enlace de Tianji Cloud",
+    ),
+    "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "Enlace de suscripción",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Salida"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(

@@ -1375,6 +1375,17 @@
       "value": {}
     }
   },
+  "businessOnboardingHeroTitle": "3ステップで天機雲に接続",
+  "businessOnboardingFactImport": "サブスクリプション設定をインポート",
+  "businessOnboardingFactStatus": "回線の接続状態を確認",
+  "businessOnboardingFactDashboard": "ダッシュボードで接続統計を確認",
+  "businessOnboardingUrlLabel": "サブスクリプションリンク",
+  "businessOnboardingUrlHint": "天機雲のリンクを貼り付け",
+  "businessOnboardingImportConnect": "インポートして接続",
+  "businessOnboardingScanFile": "QRコードをスキャン / ファイルを選択",
+  "businessDisclaimerTitle": "使用前にお読みください",
+  "businessDisclaimerSubtitle": "初回起動時に表示されます",
+  "businessDisclaimerAgree": "同意して続行",
   "businessProvidersTitle": "プロキシセットとルールセット",
   "businessProxyProviders": "プロキシセット",
   "businessRuleProviders": "ルールセット",

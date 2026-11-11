@@ -588,6 +588,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDeveloperOptionsTitle": MessageLookupByLibrary.simpleMessage(
       "Параметры разработчика",
     ),
+    "businessDisclaimerAgree": MessageLookupByLibrary.simpleMessage(
+      "Согласиться и продолжить",
+    ),
+    "businessDisclaimerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Показывается при первом запуске",
+    ),
+    "businessDisclaimerTitle": MessageLookupByLibrary.simpleMessage(
+      "Прочитайте перед использованием",
+    ),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("Отключить"),
     "businessDnsFailed": MessageLookupByLibrary.simpleMessage("Ошибка"),
     "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
@@ -693,6 +702,30 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
       "Добавьте сеть Wi-Fi, чтобы при подключении к ней приостанавливать приложение.",
+    ),
+    "businessOnboardingFactDashboard": MessageLookupByLibrary.simpleMessage(
+      "Смотрите статистику подключений на панели",
+    ),
+    "businessOnboardingFactImport": MessageLookupByLibrary.simpleMessage(
+      "Импортируйте конфигурацию подписки",
+    ),
+    "businessOnboardingFactStatus": MessageLookupByLibrary.simpleMessage(
+      "Проверяйте состояние подключения линий",
+    ),
+    "businessOnboardingHeroTitle": MessageLookupByLibrary.simpleMessage(
+      "Подключение к Tianji Cloud за три шага",
+    ),
+    "businessOnboardingImportConnect": MessageLookupByLibrary.simpleMessage(
+      "Импортировать и подключиться",
+    ),
+    "businessOnboardingScanFile": MessageLookupByLibrary.simpleMessage(
+      "Сканировать QR-код / выбрать файл",
+    ),
+    "businessOnboardingUrlHint": MessageLookupByLibrary.simpleMessage(
+      "Вставьте ссылку Tianji Cloud",
+    ),
+    "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "Ссылка на подписку",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Выход"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(

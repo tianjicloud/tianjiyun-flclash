@@ -483,6 +483,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDeveloperOptionsTitle": MessageLookupByLibrary.simpleMessage(
       "개발자 옵션",
     ),
+    "businessDisclaimerAgree": MessageLookupByLibrary.simpleMessage("동의하고 계속"),
+    "businessDisclaimerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "최초 실행 시 표시됩니다",
+    ),
+    "businessDisclaimerTitle": MessageLookupByLibrary.simpleMessage(
+      "사용 전에 읽어 주세요",
+    ),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("연결 끊기"),
     "businessDnsFailed": MessageLookupByLibrary.simpleMessage("실패"),
     "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
@@ -565,6 +572,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
       "Wi-Fi 네트워크를 추가하면 연결 시 앱을 일시 중지합니다.",
     ),
+    "businessOnboardingFactDashboard": MessageLookupByLibrary.simpleMessage(
+      "대시보드에서 연결 통계를 확인하세요",
+    ),
+    "businessOnboardingFactImport": MessageLookupByLibrary.simpleMessage(
+      "구독 구성을 가져오세요",
+    ),
+    "businessOnboardingFactStatus": MessageLookupByLibrary.simpleMessage(
+      "회선 연결 상태를 확인하세요",
+    ),
+    "businessOnboardingHeroTitle": MessageLookupByLibrary.simpleMessage(
+      "세 단계로 Tianji Cloud에 연결",
+    ),
+    "businessOnboardingImportConnect": MessageLookupByLibrary.simpleMessage(
+      "가져오고 연결",
+    ),
+    "businessOnboardingScanFile": MessageLookupByLibrary.simpleMessage(
+      "QR 코드 스캔 / 파일 선택",
+    ),
+    "businessOnboardingUrlHint": MessageLookupByLibrary.simpleMessage(
+      "Tianji Cloud 구독 링크를 붙여넣으세요",
+    ),
+    "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage("구독 링크"),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("아웃바운드"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(
       "구독 설정 재정의",

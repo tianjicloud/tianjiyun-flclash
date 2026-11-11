@@ -11392,6 +11392,116 @@ class AppLocalizations {
     return Intl.message('Replace', name: 'businessReplace', desc: '', args: []);
   }
 
+  /// `Connect to Tianji Cloud in three steps`
+  String get businessOnboardingHeroTitle {
+    return Intl.message(
+      'Connect to Tianji Cloud in three steps',
+      name: 'businessOnboardingHeroTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import your subscription configuration`
+  String get businessOnboardingFactImport {
+    return Intl.message(
+      'Import your subscription configuration',
+      name: 'businessOnboardingFactImport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check line connection status`
+  String get businessOnboardingFactStatus {
+    return Intl.message(
+      'Check line connection status',
+      name: 'businessOnboardingFactStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View connection statistics on the dashboard`
+  String get businessOnboardingFactDashboard {
+    return Intl.message(
+      'View connection statistics on the dashboard',
+      name: 'businessOnboardingFactDashboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription link`
+  String get businessOnboardingUrlLabel {
+    return Intl.message(
+      'Subscription link',
+      name: 'businessOnboardingUrlLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paste a Tianji Cloud subscription link`
+  String get businessOnboardingUrlHint {
+    return Intl.message(
+      'Paste a Tianji Cloud subscription link',
+      name: 'businessOnboardingUrlHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import and connect`
+  String get businessOnboardingImportConnect {
+    return Intl.message(
+      'Import and connect',
+      name: 'businessOnboardingImportConnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan QR code / choose file`
+  String get businessOnboardingScanFile {
+    return Intl.message(
+      'Scan QR code / choose file',
+      name: 'businessOnboardingScanFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please read before use`
+  String get businessDisclaimerTitle {
+    return Intl.message(
+      'Please read before use',
+      name: 'businessDisclaimerTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shown once on first launch`
+  String get businessDisclaimerSubtitle {
+    return Intl.message(
+      'Shown once on first launch',
+      name: 'businessDisclaimerSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Agree and continue`
+  String get businessDisclaimerAgree {
+    return Intl.message(
+      'Agree and continue',
+      name: 'businessDisclaimerAgree',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Proxy sets and rule sets`
   String get businessProvidersTitle {
     return Intl.message(

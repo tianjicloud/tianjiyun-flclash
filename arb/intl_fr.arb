@@ -1375,6 +1375,17 @@
       "value": {}
     }
   },
+  "businessOnboardingHeroTitle": "Connectez-vous à Tianji Cloud en trois étapes",
+  "businessOnboardingFactImport": "Importez la configuration de votre abonnement",
+  "businessOnboardingFactStatus": "Consultez l’état de connexion des lignes",
+  "businessOnboardingFactDashboard": "Consultez les statistiques sur le tableau de bord",
+  "businessOnboardingUrlLabel": "Lien d’abonnement",
+  "businessOnboardingUrlHint": "Collez un lien Tianji Cloud",
+  "businessOnboardingImportConnect": "Importer et connecter",
+  "businessOnboardingScanFile": "Scanner le QR code / choisir un fichier",
+  "businessDisclaimerTitle": "À lire avant utilisation",
+  "businessDisclaimerSubtitle": "Affiché au premier démarrage",
+  "businessDisclaimerAgree": "Accepter et continuer",
   "businessProvidersTitle": "Ensembles de proxys et de règles",
   "businessProxyProviders": "Ensembles de proxys",
   "businessRuleProviders": "Ensembles de règles",

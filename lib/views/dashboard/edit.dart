@@ -5,6 +5,9 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, DashboardSwitch;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -166,6 +169,7 @@ class _DashboardEditorState extends ConsumerState<DashboardEditor>
     final scale = DashboardDensityScope.scaleOf(context);
     final sway = context.disableAnimations ? null : _sway;
     final appLocalizations = context.appLocalizations;
+    final business = BusinessTheme.of(context) && system.isDesktop;
 
     final revealPadding = EdgeInsets.only(
       top: widget.padding.top,
@@ -194,13 +198,25 @@ class _DashboardEditorState extends ConsumerState<DashboardEditor>
                   revealPadding: revealPadding,
                   onSettled: () => _settle(card),
                   child: spaced(
-                    _EditableCard(
-                      item: card,
-                      cardKey: widget.cardKeyOf(card),
-                      index: index,
-                      sway: sway,
-                      onRemove: card.removable ? () => _remove(card) : null,
-                    ),
+                    business
+                        ? _BusinessDashboardRow(
+                            item: card,
+                            enabled: true,
+                            dragIndex: index,
+                            onChanged: card.removable
+                                ? (enabled) =>
+                                      enabled ? _add(card) : _remove(card)
+                                : null,
+                          )
+                        : _EditableCard(
+                            item: card,
+                            cardKey: widget.cardKeyOf(card),
+                            index: index,
+                            sway: sway,
+                            onRemove: card.removable
+                                ? () => _remove(card)
+                                : null,
+                          ),
                   ),
                 );
               },
@@ -232,11 +248,108 @@ class _DashboardEditorState extends ConsumerState<DashboardEditor>
                     for (final card in addable)
                       Padding(
                         padding: const EdgeInsets.only(bottom: _rowGap),
-                        child: _AddRow(item: card, onAdd: () => _add(card)),
+                        child: business
+                            ? _BusinessDashboardRow(
+                                item: card,
+                                enabled: false,
+                                onChanged: (_) => _add(card),
+                              )
+                            : _AddRow(item: card, onAdd: () => _add(card)),
                       ),
                   ],
                 ),
               ),
+            if (business)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: BusinessPrimaryButton(
+                      label: appLocalizations.done,
+                      width: 92,
+                      onPressed: widget.onDone,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BusinessDashboardRow extends StatelessWidget {
+  const _BusinessDashboardRow({
+    required this.item,
+    required this.enabled,
+    required this.onChanged,
+    this.dragIndex,
+  });
+
+  final DashboardWidget item;
+  final bool enabled;
+  final ValueChanged<bool>? onChanged;
+  final int? dragIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: colorScheme.surface,
+        shape: AppShape.all(BusinessPalette.cardRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 14, 12),
+        child: Row(
+          spacing: 12,
+          children: [
+            if (dragIndex case final index?)
+              ReorderDragStartListener(
+                index: index,
+                child: Text(
+                  '⠿',
+                  style: BusinessText.actionLabel(
+                    context,
+                  ).copyWith(color: colorScheme.onSurfaceVariant),
+                ),
+              )
+            else
+              SizedBox(
+                width: 16,
+                child: Text(
+                  '⠿',
+                  style: BusinessText.actionLabel(
+                    context,
+                  ).copyWith(color: colorScheme.onSurfaceVariant),
+                ),
+              ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.label(context),
+                    style: BusinessText.cardTitle(context),
+                  ),
+                  if (item.description(context) case final description?)
+                    Text(
+                      description,
+                      style: BusinessText.metaLabel(
+                        context,
+                      ).copyWith(color: colorScheme.onSurfaceVariant),
+                    ),
+                ],
+              ),
+            ),
+            DashboardSwitch(
+              compact: true,
+              value: enabled,
+              semanticLabel: item.label(context),
+              onChanged: onChanged,
+            ),
           ],
         ),
       ),

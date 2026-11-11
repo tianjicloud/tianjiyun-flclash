@@ -1,7 +1,11 @@
 import 'package:fl_clash/common/common.dart';
+import 'dart:math' as math;
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,6 +101,19 @@ class DisclaimerView extends StatelessWidget {
             ),
           );
         }
+        if (BusinessTheme.of(context) && system.isDesktop) {
+          return Surface(
+            color: SurfaceLevel.page.colorOf(context.colorScheme),
+            child: SafeArea(
+              child: Center(
+                child: _BusinessDisclaimerCard(
+                  terms: _terms(appLocalizations),
+                  requireConsent: requireConsent,
+                ),
+              ),
+            ),
+          );
+        }
         return Surface(
           color: Theme.of(context).scaffoldBackgroundColor,
           child: SafeArea(
@@ -139,6 +156,135 @@ class DisclaimerView extends StatelessWidget {
           content: term.content,
         ),
     ];
+  }
+}
+
+class _BusinessDisclaimerCard extends StatelessWidget {
+  const _BusinessDisclaimerCard({
+    required this.terms,
+    required this.requireConsent,
+  });
+
+  final List<({String title, String content})> terms;
+  final bool requireConsent;
+
+  Future<void> _agree(BuildContext context) async {
+    final restated = await dialogs.showCommonDialog<bool>(
+      context: context,
+      dismissible: false,
+      child: const _RestateDialog(),
+    );
+    if (restated == true && context.mounted) {
+      Navigator.of(context).pop(true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final maxHeight = math
+        .max(0, MediaQuery.sizeOf(context).height - 96)
+        .toDouble();
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 560, maxHeight: maxHeight),
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: colorScheme.surface,
+          shape: AppShape.all(BusinessPalette.cardRadius),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Image.asset('assets/images/icon.png', width: 42, height: 42),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l.businessDisclaimerTitle,
+                          style: BusinessText.subscriptionTitle(context),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          l.businessDisclaimerSubtitle,
+                          style: BusinessText.metaLabel(
+                            context,
+                          ).copyWith(color: colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Expanded(
+                child: DecoratedBox(
+                  decoration: ShapeDecoration(
+                    color: colorScheme.brightness == Brightness.dark
+                        ? colorScheme.surfaceContainerHighest
+                        : BusinessPalette.sidebarLight,
+                    shape: AppShape.all(AppRadius.md.topLeft.x),
+                  ),
+                  child: PrismListView(
+                    padding: const EdgeInsets.all(18),
+                    itemCount: terms.length,
+                    gap: 18,
+                    itemBuilder: (context, index) {
+                      final term = terms[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            term.title,
+                            style: BusinessText.cardTitle(context),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            term.content,
+                            style: AppTextStyle.subheadline
+                                .of(context)
+                                .copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                  height: 22 / 15,
+                                ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+              if (requireConsent) ...[
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  spacing: 12,
+                  children: [
+                    BusinessSecondaryButton(
+                      label: l.exit,
+                      width: 72,
+                      height: 42,
+                      onPressed: () => Navigator.of(context).pop(false),
+                    ),
+                    BusinessPrimaryButton(
+                      label: l.businessDisclaimerAgree,
+                      width: 132,
+                      height: 42,
+                      onPressed: () => _agree(context),
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

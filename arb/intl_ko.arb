@@ -1375,6 +1375,17 @@
       "value": {}
     }
   },
+  "businessOnboardingHeroTitle": "세 단계로 Tianji Cloud에 연결",
+  "businessOnboardingFactImport": "구독 구성을 가져오세요",
+  "businessOnboardingFactStatus": "회선 연결 상태를 확인하세요",
+  "businessOnboardingFactDashboard": "대시보드에서 연결 통계를 확인하세요",
+  "businessOnboardingUrlLabel": "구독 링크",
+  "businessOnboardingUrlHint": "Tianji Cloud 구독 링크를 붙여넣으세요",
+  "businessOnboardingImportConnect": "가져오고 연결",
+  "businessOnboardingScanFile": "QR 코드 스캔 / 파일 선택",
+  "businessDisclaimerTitle": "사용 전에 읽어 주세요",
+  "businessDisclaimerSubtitle": "최초 실행 시 표시됩니다",
+  "businessDisclaimerAgree": "동의하고 계속",
   "businessProvidersTitle": "프록시 세트 및 규칙 세트",
   "businessProxyProviders": "프록시 세트",
   "businessRuleProviders": "규칙 세트",

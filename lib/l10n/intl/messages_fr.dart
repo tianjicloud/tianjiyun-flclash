@@ -612,6 +612,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDeveloperOptionsTitle": MessageLookupByLibrary.simpleMessage(
       "Options pour les développeurs",
     ),
+    "businessDisclaimerAgree": MessageLookupByLibrary.simpleMessage(
+      "Accepter et continuer",
+    ),
+    "businessDisclaimerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Affiché au premier démarrage",
+    ),
+    "businessDisclaimerTitle": MessageLookupByLibrary.simpleMessage(
+      "À lire avant utilisation",
+    ),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("Déconnecter"),
     "businessDnsFailed": MessageLookupByLibrary.simpleMessage("Échec"),
     "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
@@ -713,6 +722,30 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
       "Ajoutez un réseau Wi-Fi pour mettre l’application en pause lorsque vous vous y connectez.",
+    ),
+    "businessOnboardingFactDashboard": MessageLookupByLibrary.simpleMessage(
+      "Consultez les statistiques sur le tableau de bord",
+    ),
+    "businessOnboardingFactImport": MessageLookupByLibrary.simpleMessage(
+      "Importez la configuration de votre abonnement",
+    ),
+    "businessOnboardingFactStatus": MessageLookupByLibrary.simpleMessage(
+      "Consultez l’état de connexion des lignes",
+    ),
+    "businessOnboardingHeroTitle": MessageLookupByLibrary.simpleMessage(
+      "Connectez-vous à Tianji Cloud en trois étapes",
+    ),
+    "businessOnboardingImportConnect": MessageLookupByLibrary.simpleMessage(
+      "Importer et connecter",
+    ),
+    "businessOnboardingScanFile": MessageLookupByLibrary.simpleMessage(
+      "Scanner le QR code / choisir un fichier",
+    ),
+    "businessOnboardingUrlHint": MessageLookupByLibrary.simpleMessage(
+      "Collez un lien Tianji Cloud",
+    ),
+    "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "Lien d’abonnement",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("Sortie"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(

@@ -485,6 +485,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDeveloperOptionsTitle": MessageLookupByLibrary.simpleMessage(
       "開発者向けオプション",
     ),
+    "businessDisclaimerAgree": MessageLookupByLibrary.simpleMessage("同意して続行"),
+    "businessDisclaimerSubtitle": MessageLookupByLibrary.simpleMessage(
+      "初回起動時に表示されます",
+    ),
+    "businessDisclaimerTitle": MessageLookupByLibrary.simpleMessage(
+      "使用前にお読みください",
+    ),
     "businessDisconnect": MessageLookupByLibrary.simpleMessage("切断"),
     "businessDnsFailed": MessageLookupByLibrary.simpleMessage("失敗"),
     "businessDnsNoUpstream": MessageLookupByLibrary.simpleMessage(
@@ -568,6 +575,30 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessOnDemandEmpty": MessageLookupByLibrary.simpleMessage(
       "Wi-Fiネットワークを追加すると、接続時にアプリを一時停止できます。",
+    ),
+    "businessOnboardingFactDashboard": MessageLookupByLibrary.simpleMessage(
+      "ダッシュボードで接続統計を確認",
+    ),
+    "businessOnboardingFactImport": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプション設定をインポート",
+    ),
+    "businessOnboardingFactStatus": MessageLookupByLibrary.simpleMessage(
+      "回線の接続状態を確認",
+    ),
+    "businessOnboardingHeroTitle": MessageLookupByLibrary.simpleMessage(
+      "3ステップで天機雲に接続",
+    ),
+    "businessOnboardingImportConnect": MessageLookupByLibrary.simpleMessage(
+      "インポートして接続",
+    ),
+    "businessOnboardingScanFile": MessageLookupByLibrary.simpleMessage(
+      "QRコードをスキャン / ファイルを選択",
+    ),
+    "businessOnboardingUrlHint": MessageLookupByLibrary.simpleMessage(
+      "天機雲のリンクを貼り付け",
+    ),
+    "businessOnboardingUrlLabel": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションリンク",
     ),
     "businessOutboundLabel": MessageLookupByLibrary.simpleMessage("出力"),
     "businessOverrideSettings": MessageLookupByLibrary.simpleMessage(

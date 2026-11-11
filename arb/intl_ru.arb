@@ -1375,6 +1375,17 @@
       "value": {}
     }
   },
+  "businessOnboardingHeroTitle": "Подключение к Tianji Cloud за три шага",
+  "businessOnboardingFactImport": "Импортируйте конфигурацию подписки",
+  "businessOnboardingFactStatus": "Проверяйте состояние подключения линий",
+  "businessOnboardingFactDashboard": "Смотрите статистику подключений на панели",
+  "businessOnboardingUrlLabel": "Ссылка на подписку",
+  "businessOnboardingUrlHint": "Вставьте ссылку Tianji Cloud",
+  "businessOnboardingImportConnect": "Импортировать и подключиться",
+  "businessOnboardingScanFile": "Сканировать QR-код / выбрать файл",
+  "businessDisclaimerTitle": "Прочитайте перед использованием",
+  "businessDisclaimerSubtitle": "Показывается при первом запуске",
+  "businessDisclaimerAgree": "Согласиться и продолжить",
   "businessProvidersTitle": "Наборы прокси и правил",
   "businessProxyProviders": "Наборы прокси",
   "businessRuleProviders": "Наборы правил",
