@@ -371,6 +371,16 @@ class AppTray implements TrayPort {
           ],
         ),
       );
+      if (policy.suspended || !policy.available) {
+        menu.add(
+          TrayMenuAction(
+            label: policy.suspended
+                ? l10n.sceneSuspended
+                : l10n.sceneUnavailable,
+            enabled: false,
+          ),
+        );
+      }
       menu.add(
         TrayMenuSegmented(
           label: l10n.outboundMode,

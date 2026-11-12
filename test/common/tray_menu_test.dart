@@ -338,6 +338,41 @@ void main() {
     expect(labels.last, currentAppLocalizations.exit);
   });
 
+  test('says why the macOS scene switch is off', () async {
+    const profile = Profile(
+      id: 1,
+      type: ProfileType.url,
+      label: 'Tianji',
+      url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+      autoUpdateDuration: Duration(days: 1),
+    );
+    for (final (policy, reason) in [
+      (
+        const ScenePolicy(
+          available: true,
+          current: SceneKind.daily,
+          suspended: true,
+        ),
+        currentAppLocalizations.sceneSuspended,
+      ),
+      (
+        const ScenePolicy(available: false, current: null, suspended: false),
+        currentAppLocalizations.sceneUnavailable,
+      ),
+    ]) {
+      container.dispose();
+      container = ProviderContainer(
+        overrides: [
+          currentProfileProvider.overrideWithValue(profile),
+          scenePolicyProvider.overrideWithValue(policy),
+        ],
+      );
+      await update(_trayState(isStart: true));
+
+      expect(_labels(showCall()), contains(reason));
+    }
+  });
+
   test('adds TUN and system proxy toggles once the core is running', () async {
     await update(_trayState(isStart: true));
 
