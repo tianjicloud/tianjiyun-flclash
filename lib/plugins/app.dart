@@ -26,7 +26,10 @@ class App {
   late MethodChannel methodChannel;
   Function()? onExit;
   Function()? onPackagesChanged;
+  Function(String)? onRoute;
   final floatingKeyboard = ValueNotifier(false);
+
+  App.forTesting();
 
   App._internal() {
     methodChannel = const MethodChannel('$packageName/app');
@@ -38,6 +41,8 @@ class App {
           }
         case 'packagesChanged':
           onPackagesChanged?.call();
+        case 'route':
+          if (call.arguments is String) onRoute?.call(call.arguments as String);
         case 'floatingImeChanged':
           floatingKeyboard.value = call.arguments as bool;
         default:
@@ -54,6 +59,29 @@ class App {
   Future<bool?> moveTaskToBack() async {
     return methodChannel.invokeMethod<bool>('moveTaskToBack');
   }
+
+  Future<String?> takeInitialRoute() =>
+      methodChannel.invokeMethod<String>('takeInitialRoute');
+
+  Future<bool> sendEventNotification({
+    required String kind,
+    required String title,
+    required String body,
+    required String channelName,
+    required String route,
+    String? changeText,
+    String? retryText,
+  }) async =>
+      await methodChannel.invokeMethod<bool>('sendEventNotification', {
+        'kind': kind,
+        'title': title,
+        'body': body,
+        'channelName': channelName,
+        'route': route,
+        'changeText': changeText,
+        'retryText': retryText,
+      }) ??
+      false;
 
   Future<List<Package>> getPackages() async {
     final packagesString = await methodChannel.invokeMethod<String>(

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/subscription_expiry.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -33,16 +34,9 @@ _Usage? _usageOf(Profile? profile) {
   );
 }
 
-DateTime? _expiryOf(Profile? profile) {
-  final expire = profile?.subscriptionInfo?.expire ?? 0;
-  return expire > 0 ? DateTime.fromMillisecondsSinceEpoch(expire * 1000) : null;
-}
-
-int _daysLeft(DateTime expiry) =>
-    math.max(0, expiry.difference(DateTime.now()).inDays);
-
-String _expiryText(BuildContext context, DateTime expiry) =>
-    context.appLocalizations.profileExpiresIn(expiry.show, _daysLeft(expiry));
+String _expiryText(BuildContext context, DateTime expiry) => context
+    .appLocalizations
+    .profileExpiresIn(expiry.show, profileDaysLeft(expiry));
 
 void _openProfile(BuildContext context, Profile? profile) {
   switch (profile) {
@@ -84,7 +78,7 @@ class ProfilesCard extends ConsumerWidget {
       profilesProvider.select((profiles) => profiles.length > 1),
     );
     final usage = _usageOf(profile);
-    final expiry = _expiryOf(profile);
+    final expiry = profileExpiryOf(profile);
     final updatedAt = profile?.lastUpdateDate;
     final label = DashboardText.label(context);
     final figure = mobile
@@ -94,7 +88,9 @@ class ProfilesCard extends ConsumerWidget {
         ? AppTextStyle.headline
         : AppTextStyle.callout;
     final endText = switch ((profile, expiry)) {
-      (_, final expiry?) => appLocalizations.profileDaysLeft(_daysLeft(expiry)),
+      (_, final expiry?) => appLocalizations.profileDaysLeft(
+        profileDaysLeft(expiry),
+      ),
       (final profile?, null) => _sourceOf(context, profile.type),
       _ => null,
     };
@@ -104,7 +100,7 @@ class ProfilesCard extends ConsumerWidget {
         child: Text(
           text,
           maxLines: 1,
-          style: _daysLeft(expiry) <= _soonDays
+          style: profileDaysLeft(expiry) <= _soonDays
               ? label.copyWith(color: DashboardColors.of(context).warn)
               : label,
         ),
@@ -138,7 +134,7 @@ class ProfilesCard extends ConsumerWidget {
       ],
     );
     if (BusinessTheme.of(context)) {
-      final days = expiry == null ? null : _daysLeft(expiry);
+      final days = expiry == null ? null : profileDaysLeft(expiry);
       final soon = days != null && days <= _soonDays;
       final used = usage?.used.traffic;
       final total = usage?.total.traffic;
@@ -457,9 +453,9 @@ class PlanValidityCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final strings = context.appLocalizations;
-    final expiry = _expiryOf(ref.watch(currentProfileProvider));
+    final expiry = profileExpiryOf(ref.watch(currentProfileProvider));
     if (expiry == null) return const SizedBox.shrink();
-    final days = _daysLeft(expiry);
+    final days = profileDaysLeft(expiry);
     return DashboardCard(
       semanticLabel: strings.mobilePlanValidity,
       radius: BusinessRadius.metricMobile,
@@ -742,7 +738,7 @@ class BusinessSubscriptionStatus extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(currentProfileProvider);
-    final expiry = _expiryOf(profile);
+    final expiry = profileExpiryOf(profile);
     final updated = profile?.lastUpdateDate;
     final running = ref.watch(isStartProvider);
     final suspended = ref.watch(suspendProvider);
@@ -759,8 +755,8 @@ class BusinessSubscriptionStatus extends ConsumerWidget {
           children: [
             if (!DashboardDensityScope.of(context).isDesktop && expiry != null)
               DashboardChip(
-                label: strings.profileDaysLeft(_daysLeft(expiry)),
-                tone: _daysLeft(expiry) <= 7
+                label: strings.profileDaysLeft(profileDaysLeft(expiry)),
+                tone: profileDaysLeft(expiry) <= 7
                     ? DashboardChipTone.warn
                     : DashboardChipTone.idle,
               ),
@@ -790,7 +786,7 @@ class BusinessSubscriptionStatus extends ConsumerWidget {
             ),
           ],
         ),
-        if (expiry != null && _daysLeft(expiry) <= 7)
+        if (expiry != null && profileDaysLeft(expiry) <= 7)
           DashboardCard(
             child: Text(
               _expiryText(context, expiry),

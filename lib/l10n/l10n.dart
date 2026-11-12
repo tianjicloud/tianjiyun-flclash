@@ -14137,6 +14137,96 @@ class AppLocalizations {
       args: [categories],
     );
   }
+
+  /// `Event alerts`
+  String get eventAlerts {
+    return Intl.message(
+      'Event alerts',
+      name: 'eventAlerts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch mode`
+  String get businessSwitchMode {
+    return Intl.message(
+      'Switch mode',
+      name: 'businessSwitchMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change line`
+  String get businessChangeLine {
+    return Intl.message(
+      'Change line',
+      name: 'businessChangeLine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Residential line temporarily unavailable`
+  String get residentialNoticeTitle {
+    return Intl.message(
+      'Residential line temporarily unavailable',
+      name: 'residentialNoticeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `“{line}” failed 3 consecutive checks. Check the line or try again.`
+  String residentialNoticeBody(String line) {
+    return Intl.message(
+      '“$line” failed 3 consecutive checks. Check the line or try again.',
+      name: 'residentialNoticeBody',
+      desc: '',
+      args: [line],
+    );
+  }
+
+  /// `Choose another`
+  String get residentialNoticeChange {
+    return Intl.message(
+      'Choose another',
+      name: 'residentialNoticeChange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get residentialNoticeRetry {
+    return Intl.message(
+      'Retry',
+      name: 'residentialNoticeRetry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your plan expires in {days} days`
+  String subscriptionExpiryNoticeTitle(int days) {
+    return Intl.message(
+      'Your plan expires in $days days',
+      name: 'subscriptionExpiryNoticeTitle',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `{name} · {date}`
+  String subscriptionExpiryNoticeBody(String name, String date) {
+    return Intl.message(
+      '$name · $date',
+      name: 'subscriptionExpiryNoticeBody',
+      desc: '',
+      args: [name, date],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

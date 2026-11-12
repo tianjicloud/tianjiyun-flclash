@@ -1730,4 +1730,17 @@
   "businessProxyDnsRemote": "プロキシ通信のドメインは回線側で解決されます",
   "businessSubstitutedCategories": "次のカテゴリはデータセンターから直接接続：{categories}",
   "@businessSubstitutedCategories": {"placeholders": {"categories": {}}}
+,
+  "eventAlerts": "イベント通知",
+  "businessSwitchMode": "モードを切り替え",
+  "businessChangeLine": "回線を変更",
+  "residentialNoticeTitle": "住宅回線を一時的に利用できません",
+  "residentialNoticeBody": "「{line}」の確認に 3 回連続で失敗しました。回線を確認するか再試行してください。",
+  "residentialNoticeChange": "別の住宅回線",
+  "residentialNoticeRetry": "再試行",
+  "subscriptionExpiryNoticeTitle": "プランの有効期限まであと {days} 日",
+  "subscriptionExpiryNoticeBody": "{name} · {date}",
+  "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
+  "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
 }

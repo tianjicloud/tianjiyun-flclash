@@ -14,6 +14,8 @@ const _sharedState = SharedState(
   startTip: 'start',
   localNetworkTip: 'local',
   currentProfileName: 'profile',
+  switchModeText: 'Mode',
+  changeLineText: 'Line',
   stopText: 'stopped',
   onlyStatisticsProxy: true,
 );

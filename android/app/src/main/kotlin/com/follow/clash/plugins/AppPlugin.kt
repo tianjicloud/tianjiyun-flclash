@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.app.DownloadManager
 import android.app.PendingIntent
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.ContentUris
@@ -24,6 +26,8 @@ import android.provider.Settings
 import android.security.KeyChain
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.IntentCompat
@@ -35,6 +39,7 @@ import androidx.core.view.OnApplyWindowInsetsListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.follow.clash.R
+import com.follow.clash.NotificationRoute
 import com.follow.clash.SystemCaStore
 import com.follow.clash.common.Components
 import com.follow.clash.common.GlobalState
@@ -64,6 +69,9 @@ import java.io.File
 import java.io.IOException
 
 class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
+
+    private var initialRoute: String? = null
+    private lateinit var applicationContext: Context
 
     private var activity: Activity? = null
 
@@ -184,6 +192,8 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
+            "takeInitialRoute" -> result.success(initialRoute.also { initialRoute = null })
+            "sendEventNotification" -> sendEventNotification(call, result)
             "moveTaskToBack" -> {
                 activity?.moveTaskToBack(true)
                 result.success(true)
@@ -321,6 +331,54 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
                 result.notImplemented()
             }
         }
+    }
+
+    fun onRouteIntent(intent: Intent) {
+        val route = NotificationRoute.parse(intent.getStringExtra(NotificationRoute.EXTRA)) ?: return
+        intent.removeExtra(NotificationRoute.EXTRA)
+        channel.invokeMethod("route", route)
+    }
+
+    private fun sendEventNotification(call: MethodCall, result: Result) {
+        val title = call.argument<String>("title") ?: return result.error("INVALID_ARGUMENT", "Missing title", null)
+        val body = call.argument<String>("body") ?: return result.error("INVALID_ARGUMENT", "Missing body", null)
+        val channelName = call.argument<String>("channelName") ?: "Event alerts"
+        val kind = call.argument<String>("kind") ?: return result.error("INVALID_ARGUMENT", "Missing kind", null)
+        val route = NotificationRoute.parse(call.argument<String>("route"))
+            ?: return result.error("INVALID_ARGUMENT", "Invalid route", null)
+        val context = applicationContext
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) return result.success(false)
+        val manager = context.getSystemService(NotificationManager::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(
+                NotificationChannel(EVENT_CHANNEL, channelName, NotificationManager.IMPORTANCE_LOW),
+            )
+        }
+        val notification = NotificationCompat.Builder(context, EVENT_CHANNEL)
+            .setSmallIcon(com.follow.clash.service.R.drawable.ic_service)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setAutoCancel(true)
+            .setContentIntent(routePendingIntent(route, if (kind == "residentialFailure") 510 else 520))
+        if (kind == "residentialFailure") {
+            notification.addAction(0, call.argument<String>("changeText") ?: "Choose another", routePendingIntent("residential", 511))
+            notification.addAction(0, call.argument<String>("retryText") ?: "Retry", routePendingIntent("residentialRetry", 512))
+        }
+        NotificationManagerCompat.from(context).notify(if (kind == "residentialFailure") 7101 else 7102, notification.build())
+        result.success(true)
+    }
+
+    private fun routePendingIntent(route: String, requestCode: Int): PendingIntent {
+        val intent = Intent().setComponent(Components.mainActivity)
+            .putExtra(NotificationRoute.EXTRA, route)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        return PendingIntent.getActivity(
+            applicationContext, requestCode, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
     }
 
     // From Android 11 an app can no longer hand a CA certificate to the
@@ -724,6 +782,7 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
     }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        applicationContext = flutterPluginBinding.applicationContext
         scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         channel =
             MethodChannel(flutterPluginBinding.binaryMessenger, "${Components.PACKAGE_NAME}/app")
@@ -768,6 +827,8 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
         detachFromActivity()
         activityBinding = binding
         activity = binding.activity
+        initialRoute = NotificationRoute.parse(activity?.intent?.getStringExtra(NotificationRoute.EXTRA))
+        activity?.intent?.removeExtra(NotificationRoute.EXTRA)
         binding.addActivityResultListener(activityResultListener)
         binding.addRequestPermissionsResultListener(permissionsResultListener)
         if (isTelevision) {
@@ -857,6 +918,7 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
     }
 
     private companion object {
+        const val EVENT_CHANNEL = "tianji_event_alerts"
         val SHORTCUT_ORDER = listOf(QuickAction.START, QuickAction.STOP, QuickAction.TOGGLE)
         const val VPN_PERMISSION_REQUEST_CODE = 1001
         const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1002

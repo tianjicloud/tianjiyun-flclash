@@ -3,13 +3,21 @@ import 'dart:async';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/system_dns.dart';
+import 'package:fl_clash/common/subscription_expiry.dart';
+import 'package:fl_clash/manager/notification_policy.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/mitm.dart';
+import 'package:fl_clash/providers/outbound_ip.dart';
+import 'package:fl_clash/providers/routed_probe.dart';
+import 'package:fl_clash/common/service_probe.dart' show routedOutbound;
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/ui/app_background.dart';
+import 'package:fl_clash/views/dashboard/business.dart';
+import 'package:fl_clash/views/config/advanced.dart';
 import 'package:fl_clash/widgets/icon.dart';
 import 'package:fl_clash/widgets/business_navigation.dart';
 import 'package:flutter/foundation.dart';
@@ -18,8 +26,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppStateManager extends ConsumerStatefulWidget {
   final Widget child;
+  final App? appPlugin;
+  final bool? isAndroid;
+  final DateTime Function()? clock;
 
-  const AppStateManager({super.key, required this.child});
+  const AppStateManager({
+    super.key,
+    required this.child,
+    this.appPlugin,
+    this.isAndroid,
+    this.clock,
+  });
 
   @override
   ConsumerState<AppStateManager> createState() => _AppStateManagerState();
@@ -27,10 +44,52 @@ class AppStateManager extends ConsumerStatefulWidget {
 
 class _AppStateManagerState extends ConsumerState<AppStateManager>
     with WidgetsBindingObserver {
+  final _residentialFailures = ResidentialFailureTracker();
+  String? _residentialExit;
+  App? get _app => widget.appPlugin ?? app;
+  DateTime get _now => widget.clock?.call() ?? DateTime.now();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    if (_app != null) {
+      _app!.onRoute = _handleRoute;
+      unawaited(
+        _app!.takeInitialRoute().then((route) {
+          if (route != null && mounted) _handleRoute(route);
+        }),
+      );
+    }
+    ref.listenManual(currentProfileProvider, (_, profile) {
+      unawaited(_checkExpiry(profile));
+    }, fireImmediately: true);
+    _residentialExit = ref.read(residentialPolicyProvider).selectedExit;
+    ref.listenManual(
+      residentialPolicyProvider.select((state) => state.selectedExit),
+      (_, next) {
+        if (next != _residentialExit) {
+          _residentialExit = next;
+          _residentialFailures.observe(
+            exit: next ?? '',
+            failed: false,
+            appVisible: true,
+            now: _now,
+          );
+        }
+      },
+    );
+    // Each finished routed probe is one check of the residential exit; the
+    // apply action only runs when the user picks a line.
+    ref.listenManual(
+      outboundIpProbeProvider.select((state) => state.entryOf(routedOutbound)),
+      (previous, entry) {
+        if (previous?.phase != ProbePhase.probing ||
+            entry.phase == ProbePhase.probing) {
+          return;
+        }
+        _observeResidentialCheck(failed: entry.phase == ProbePhase.failed);
+      },
+    );
     // A desktop build started to the tray mounts while hidden, and a paused
     // render never runs a post-frame callback.
     scheduleMicrotask(() {
@@ -73,9 +132,114 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
     }
   }
 
+  void _observeResidentialCheck({required bool failed}) {
+    final profile = ref.read(currentProfileProvider);
+    final policy = ref.read(residentialPolicyProvider);
+    final exit = policy.selectedExit;
+    if (!isTianjiSubscriptionProfile(profile) ||
+        !policy.active ||
+        exit == null ||
+        ref.read(coreStatusProvider) != CoreStatus.connected) {
+      if (_residentialExit != null) {
+        _residentialFailures.observe(
+          exit: _residentialExit!,
+          failed: false,
+          appVisible: true,
+          now: _now,
+        );
+      }
+      return;
+    }
+    final notify = _residentialFailures.observe(
+      exit: exit,
+      failed: failed,
+      appVisible: ref.read(appVisibleProvider),
+      now: _now,
+    );
+    if (notify) unawaited(_sendResidentialFailure(exit));
+  }
+
+  void _handleRoute(String value) {
+    final page = businessNotificationRoutePage(
+      value,
+      business: isTianjiSubscriptionProfile(ref.read(currentProfileProvider)),
+    );
+    if (page == null) return;
+    ref.read(currentPageLabelProvider.notifier).toPage(page);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (value == 'residential') showResidentialExitSheet(context);
+      if (value == 'outboundMode') {
+        showExtend(
+          context,
+          builder: (_) => const AdvancedConfigView(isAndroid: true),
+        );
+      }
+      if (value == 'residentialRetry') {
+        ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
+      }
+    });
+  }
+
+  Future<void> _sendResidentialFailure(String line) async {
+    if (ref.read(appVisibleProvider)) return;
+    final prefs = Preferences();
+    final key = 'residential:${Uri.encodeComponent(line)}';
+    final previous = await prefs.getEventDate(key);
+    final now = _now;
+    if (previous != null &&
+        now.millisecondsSinceEpoch - previous <
+            const Duration(minutes: 30).inMilliseconds) {
+      return;
+    }
+    final sent = await _app?.sendEventNotification(
+      kind: 'residentialFailure',
+      title: currentAppLocalizations.residentialNoticeTitle,
+      body: currentAppLocalizations.residentialNoticeBody(line),
+      channelName: currentAppLocalizations.eventAlerts,
+      route: 'residential',
+      changeText: currentAppLocalizations.residentialNoticeChange,
+      retryText: currentAppLocalizations.residentialNoticeRetry,
+    );
+    if (sent == true) await prefs.setEventDate(key, now.millisecondsSinceEpoch);
+  }
+
+  Future<void> _checkExpiry(Profile? profile) async {
+    if (!(widget.isAndroid ?? system.isAndroid) ||
+        !isTianjiSubscriptionProfile(profile)) {
+      return;
+    }
+    final expiry = profileExpiryOf(profile);
+    if (expiry == null) return;
+    final days = profileDaysLeft(expiry);
+    if (days < 1 || days > 7) return;
+    final now = _now;
+    final day = now.year * 10000 + now.month * 100 + now.day;
+    final prefs = Preferences();
+    if (!shouldSendSubscriptionExpiry(
+      daysLeft: days,
+      lastSentDay: await prefs.getEventDate('subscriptionExpiry'),
+      today: day,
+    )) {
+      return;
+    }
+    final sent = await _app?.sendEventNotification(
+      kind: 'subscriptionExpiry',
+      title: currentAppLocalizations.subscriptionExpiryNoticeTitle(days),
+      body: currentAppLocalizations.subscriptionExpiryNoticeBody(
+        profile!.realLabel,
+        expiry.show,
+      ),
+      channelName: currentAppLocalizations.eventAlerts,
+      route: 'subscription',
+    );
+    if (sent == true) await prefs.setEventDate('subscriptionExpiry', day);
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _app?.onRoute = null;
     super.dispose();
   }
 
@@ -91,6 +255,13 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     _updateVisible(state);
+    if (state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.paused) {
+      if (_residentialFailures.shouldSendOnBackground &&
+          _residentialExit != null) {
+        unawaited(_sendResidentialFailure(_residentialExit!));
+      }
+    }
     if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(locationPermissionsProvider.notifier).refresh());
       // A certificate removed meanwhile stops decryption before the next start.

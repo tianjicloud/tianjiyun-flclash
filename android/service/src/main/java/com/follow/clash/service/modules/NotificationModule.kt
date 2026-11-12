@@ -4,6 +4,7 @@ import android.app.Notification.FOREGROUND_SERVICE_IMMEDIATE
 import android.app.Service
 import android.app.Service.STOP_FOREGROUND_REMOVE
 import android.content.Intent
+import android.app.PendingIntent
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
@@ -36,6 +37,9 @@ private data class ExtendedNotificationParams(
     val stopText: String,
     val showStopAction: Boolean,
     val contentText: String,
+    val currentLineName: String,
+    val switchModeText: String,
+    val changeLineText: String,
 )
 
 private val NotificationParams.extended: ExtendedNotificationParams
@@ -44,6 +48,9 @@ private val NotificationParams.extended: ExtendedNotificationParams
         stopText,
         showStopAction,
         Core.getSpeedTrafficText(onlyStatisticsProxy),
+        currentLineName,
+        switchModeText,
+        changeLineText,
     )
 
 internal class NotificationModule(
@@ -119,8 +126,23 @@ internal class NotificationModule(
                 if (params.showStopAction) {
                     addAction(0, params.stopText, stopIntent)
                 }
+                if (params.currentLineName.isNotEmpty()) {
+                    addAction(0, params.switchModeText, routeIntent("outboundMode", 401))
+                    addAction(0, params.changeLineText, routeIntent("lines", 402))
+                }
                 build()
             },
+        )
+    }
+
+    private fun routeIntent(route: String, requestCode: Int): PendingIntent {
+        val intent = Intent().setComponent(Components.mainActivity)
+            .putExtra("com.follow.clash.extra.ROUTE", route)
+        return PendingIntent.getActivity(
+            service,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 

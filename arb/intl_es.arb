@@ -1730,4 +1730,17 @@
   "businessProxyDnsRemote": "Los dominios del tráfico proxy se resuelven en la línea",
   "businessSubstitutedCategories": "Salida directa del centro de datos para: {categories}",
   "@businessSubstitutedCategories": {"placeholders": {"categories": {}}}
+,
+  "eventAlerts": "Avisos de eventos",
+  "businessSwitchMode": "Cambiar modo",
+  "businessChangeLine": "Cambiar línea",
+  "residentialNoticeTitle": "La línea residencial no está disponible temporalmente",
+  "residentialNoticeBody": "“{line}” ha fallado 3 comprobaciones seguidas. Comprueba la línea o inténtalo de nuevo.",
+  "residentialNoticeChange": "Elegir otra",
+  "residentialNoticeRetry": "Reintentar",
+  "subscriptionExpiryNoticeTitle": "Tu plan vence en {days} días",
+  "subscriptionExpiryNoticeBody": "{name} · {date}",
+  "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
+  "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
 }

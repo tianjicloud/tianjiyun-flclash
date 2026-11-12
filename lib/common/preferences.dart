@@ -46,6 +46,13 @@ class Preferences {
     await preferences?.setInt('version', version);
   }
 
+  Future<int?> getEventDate(String key) async =>
+      (await _store.value)?.getInt('event:$key');
+
+  Future<void> setEventDate(String key, int value) async {
+    await (await _store.value)?.setInt('event:$key', value);
+  }
+
   Future<int> getUpgradeVersion() async {
     final preferences = await _store.value;
     return preferences?.getInt('upgradeVersion') ?? 0;

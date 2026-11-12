@@ -1730,4 +1730,17 @@
   "businessProxyDnsRemote": "代理流量的域名由线路端解析",
   "businessSubstitutedCategories": "以下类别走机房直出：{categories}",
   "@businessSubstitutedCategories": {"placeholders": {"categories": {}}}
+,
+  "eventAlerts": "事件提醒",
+  "businessSwitchMode": "切换模式",
+  "businessChangeLine": "换线路",
+  "residentialNoticeTitle": "家宽线路暂时不可用",
+  "residentialNoticeBody": "「{line}」连续 3 次检测失败，请检查线路或重试。",
+  "residentialNoticeChange": "换一条家宽",
+  "residentialNoticeRetry": "重试",
+  "subscriptionExpiryNoticeTitle": "套餐还剩 {days} 天到期",
+  "subscriptionExpiryNoticeBody": "{name} · {date}",
+  "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
+  "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
 }

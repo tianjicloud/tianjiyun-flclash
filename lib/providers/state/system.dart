@@ -239,6 +239,8 @@ SharedState sharedState(Ref ref) {
     currentProfileName: currentProfileName,
     currentLineName: currentLineName,
     connectedText: currentAppLocalizations.connected,
+    switchModeText: currentAppLocalizations.businessSwitchMode,
+    changeLineText: currentAppLocalizations.businessChangeLine,
     notConnectedText: currentAppLocalizations.businessNotConnected,
     onlyStatisticsProxy: onlyStatisticsProxy,
     showStopAction: appSetting.showStopAction,

@@ -1730,4 +1730,17 @@
   "businessProxyDnsRemote": "Домены прокси-трафика разрешаются на стороне линии",
   "businessSubstitutedCategories": "Категории с прямым выходом через дата-центр: {categories}",
   "@businessSubstitutedCategories": {"placeholders": {"categories": {}}}
+,
+  "eventAlerts": "Уведомления о событиях",
+  "businessSwitchMode": "Сменить режим",
+  "businessChangeLine": "Сменить линию",
+  "residentialNoticeTitle": "Домашняя линия временно недоступна",
+  "residentialNoticeBody": "Три проверки линии «{line}» подряд завершились неудачно. Проверьте линию или повторите попытку.",
+  "residentialNoticeChange": "Выбрать другую",
+  "residentialNoticeRetry": "Повторить",
+  "subscriptionExpiryNoticeTitle": "До окончания плана осталось {days} дн.",
+  "subscriptionExpiryNoticeBody": "{name} · {date}",
+  "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
+  "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
 }

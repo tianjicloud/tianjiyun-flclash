@@ -1730,4 +1730,17 @@
   "businessProxyDnsRemote": "Proxy traffic domains are resolved by the route",
   "businessSubstitutedCategories": "Direct datacenter exit for: {categories}",
   "@businessSubstitutedCategories": {"placeholders": {"categories": {}}}
+,
+  "eventAlerts": "Event alerts",
+  "businessSwitchMode": "Switch mode",
+  "businessChangeLine": "Change line",
+  "residentialNoticeTitle": "Residential line temporarily unavailable",
+  "residentialNoticeBody": "“{line}” failed 3 consecutive checks. Check the line or try again.",
+  "residentialNoticeChange": "Choose another",
+  "residentialNoticeRetry": "Retry",
+  "subscriptionExpiryNoticeTitle": "Your plan expires in {days} days",
+  "subscriptionExpiryNoticeBody": "{name} · {date}",
+  "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
+  "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
 }

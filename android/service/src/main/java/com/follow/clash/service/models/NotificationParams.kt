@@ -5,4 +5,7 @@ data class NotificationParams(
     val stopText: String = "STOP",
     val onlyStatisticsProxy: Boolean = false,
     val showStopAction: Boolean = true,
+    val currentLineName: String = "",
+    val switchModeText: String = "Switch mode",
+    val changeLineText: String = "Change line",
 )

@@ -1730,4 +1730,17 @@
   "businessProxyDnsRemote": "프록시 트래픽 도메인은 회선 측에서 확인됩니다",
   "businessSubstitutedCategories": "다음 범주는 데이터센터에서 직접 나갑니다: {categories}",
   "@businessSubstitutedCategories": {"placeholders": {"categories": {}}}
+,
+  "eventAlerts": "이벤트 알림",
+  "businessSwitchMode": "모드 전환",
+  "businessChangeLine": "회선 변경",
+  "residentialNoticeTitle": "가정용 회선을 일시적으로 사용할 수 없습니다",
+  "residentialNoticeBody": "“{line}” 회선 검사가 3회 연속 실패했습니다. 회선을 확인하거나 다시 시도하세요.",
+  "residentialNoticeChange": "다른 회선 선택",
+  "residentialNoticeRetry": "다시 시도",
+  "subscriptionExpiryNoticeTitle": "요금제가 {days}일 후 만료됩니다",
+  "subscriptionExpiryNoticeBody": "{name} · {date}",
+  "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
+  "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
 }

@@ -170,6 +170,8 @@ abstract class SharedState with _$SharedState {
     required String currentProfileName,
     @Default('') String currentLineName,
     @Default('Connected') String connectedText,
+    @Default('Switch mode') String switchModeText,
+    @Default('Change line') String changeLineText,
     @Default('Not connected') String notConnectedText,
     required String stopText,
     required bool onlyStatisticsProxy,
