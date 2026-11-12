@@ -326,15 +326,15 @@ class AppTray implements TrayPort {
       }
       if (connected) menu.add(macMetrics);
     }
+    menu.add(
+      TrayMenuCheckbox(
+        label: running ? l10n.trayDisconnect : l10n.connection,
+        checked: false,
+        detail: shortcut(HotAction.start),
+        onSelected: commonAction.toggleRunning,
+      ),
+    );
     if (!isMacOS) {
-      menu.add(
-        TrayMenuCheckbox(
-          label: running ? l10n.trayDisconnect : l10n.connection,
-          checked: false,
-          detail: shortcut(HotAction.start),
-          onSelected: commonAction.toggleRunning,
-        ),
-      );
       menu.add(
         TrayMenuAction(
           label: l10n.trayShowMainWindow,

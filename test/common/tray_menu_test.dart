@@ -325,6 +325,11 @@ void main() {
 
     final labels = _labels(showCall());
     expect(labels.first, currentAppLocalizations.trayNotConnected);
+    expect(
+      labels,
+      contains(currentAppLocalizations.trayDisconnect),
+      reason: 'the menu bar can stop a running connection',
+    );
     expect(labels, contains(currentAppLocalizations.scene));
     expect(labels, contains(currentAppLocalizations.outboundMode));
     expect(labels, contains(currentAppLocalizations.diagnosticsTitle));
