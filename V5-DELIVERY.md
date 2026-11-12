@@ -1,5 +1,7 @@
 # 设计稿逐页还原验收记录
 
+> 之后的改动（出口资料接入、Android 通知按钮与提醒、macOS 原生观感、偏差项补齐）与偏差表终版见 `V6-DELIVERY.md`。
+
 日期：2026-11-11。基线：`tianjiyun-dev` 的 `3d35a20b`（v0.9.18）。
 范围：`tianjiyun-design/` 63 页 HTML 设计稿与 `assets/polish.css`，按页还原 Flutter 界面。
 实现由 Luna 完成；Claude Code 负责拆页、出对比图、逐项打回与最终验收。连续三轮未通过的项目由 Claude Code 直接修正。
