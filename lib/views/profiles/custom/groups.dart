@@ -148,11 +148,13 @@ double get _groupRowExtent => globalState.measure.listTwoLineRowHeight;
 class CustomProxyGroupsSection extends ConsumerStatefulWidget {
   final int profileId;
   final bool embedded;
+  final ValueChanged<Widget?>? onEditPanel;
 
   const CustomProxyGroupsSection(
     this.profileId, {
     super.key,
     this.embedded = false,
+    this.onEditPanel,
   });
 
   @override
@@ -178,16 +180,30 @@ class _CustomProxyGroupsSectionState
   }
 
   void _handleAddOrUpdate({ProxyGroup? proxyGroup}) {
+    final initial =
+        proxyGroup ??
+        const ProxyGroup(id: -1, name: '', type: GroupType.Selector);
+    final overrides = [proxyGroupProvider.overrideWithBuild((_, _) => initial)];
+    final onEditPanel = widget.onEditPanel;
+    if (onEditPanel != null) {
+      onEditPanel(
+        ProfileIdProvider(
+          profileId: widget.profileId,
+          child: ProviderScope(
+            overrides: overrides,
+            child: InlineFormHost(
+              formBuilder: (_) => const EditProxyGroupView(),
+              onClose: () => onEditPanel(null),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
     showNestedFormSheet<ProxyGroup>(
       context: context,
       profileId: widget.profileId,
-      overrides: [
-        proxyGroupProvider.overrideWithBuild(
-          (_, _) =>
-              proxyGroup ??
-              const ProxyGroup(id: -1, name: '', type: GroupType.Selector),
-        ),
-      ],
+      overrides: overrides,
       currentOf: (ref) => ref.read(proxyGroupProvider),
       formBuilder: (_) => const EditProxyGroupView(),
     );

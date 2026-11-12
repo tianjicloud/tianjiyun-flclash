@@ -1158,6 +1158,7 @@
   "vpnTraffic": "VPN",
   "trafficSavedThisMonth": "Saved this month",
   "residentialTitle": "Residential exit",
+  "residentialFollowSelected": "AI and proxies follow the selected residential exit",
   "residentialExitSheetTitle": "Choose residential exit",
   "residentialExitSheetSubtitle": "AI and groups that require a proxy follow the selected route.",
   "residentialUseExit": "Use {name}",
@@ -1766,5 +1767,7 @@
   "diagnosticsIpv6ProxyOnly": "System proxy does not capture every app; IPv6 may go direct. Enable TUN.",
   "diagnosticsEnableTun": "Enable TUN",
   "diagnosticsIpv6Direct": "IPv6 is not captured by TUN or the system proxy and may connect directly.",
-  "businessDashboardEditorHint": "Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top."
+  "businessDashboardEditorHint": "Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.",
+  "customEditorPanelEmpty": "Select an item to edit its settings here.",
+  "residentialPageExplanation": "After switching, groups that need the proxy leave through the chosen residential line right away and connections briefly reconnect; mainland and direct traffic still follow the subscription. Some destinations may use a server-side substitute exit."
 }

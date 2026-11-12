@@ -550,6 +550,7 @@ enum PageLabel {
   requests,
   resources,
   dns,
+  residential,
 }
 
 enum RuleAction {

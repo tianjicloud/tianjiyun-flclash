@@ -18,8 +18,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CustomProvidersView extends ConsumerWidget {
   final int profileId;
   final bool embedded;
+  final ValueChanged<Widget?>? onEditPanel;
 
-  const CustomProvidersView(this.profileId, {super.key, this.embedded = false});
+  const CustomProvidersView(
+    this.profileId, {
+    super.key,
+    this.embedded = false,
+    this.onEditPanel,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,6 +58,7 @@ class CustomProvidersView extends ConsumerWidget {
                   invalid: data != null && !data.proxyProviders.contains(name),
                   embedded: true,
                   isLast: index == proxy.length - 1,
+                  onEditPanel: onEditPanel,
                 ),
             ],
           ),
@@ -124,6 +131,7 @@ class _ProxyProviderItem extends ConsumerWidget {
   final bool invalid;
   final bool embedded;
   final bool isLast;
+  final ValueChanged<Widget?>? onEditPanel;
 
   const _ProxyProviderItem({
     required this.profileId,
@@ -132,18 +140,37 @@ class _ProxyProviderItem extends ConsumerWidget {
     required this.invalid,
     this.embedded = false,
     this.isLast = false,
+    this.onEditPanel,
   });
 
   void _handleEdit(BuildContext context, WidgetRef ref) {
     final options =
         ref.read(profileProvider(profileId))?.overrides.proxyProviders[name] ??
         const ProxyProviderOptions();
+    final overrides = [
+      proxyProviderOptionsProvider.overrideWithBuild((_, _) => options),
+    ];
+    final onEditPanel = this.onEditPanel;
+    if (onEditPanel != null) {
+      onEditPanel(
+        ProfileIdProvider(
+          profileId: profileId,
+          child: ProviderScope(
+            overrides: overrides,
+            child: InlineFormHost(
+              formBuilder: (_) =>
+                  _ProxyProviderOptionsView(name: name, onSave: _handleSave),
+              onClose: () => onEditPanel(null),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
     showNestedFormSheet<ProxyProviderOptions>(
       context: context,
       profileId: profileId,
-      overrides: [
-        proxyProviderOptionsProvider.overrideWithBuild((_, _) => options),
-      ],
+      overrides: overrides,
       currentOf: (ref) => ref.read(proxyProviderOptionsProvider),
       formBuilder: (_) =>
           _ProxyProviderOptionsView(name: name, onSave: _handleSave),

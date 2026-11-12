@@ -1235,6 +1235,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "custom": MessageLookupByLibrary.simpleMessage("カスタム"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("プロキシを追加"),
     "customColor": MessageLookupByLibrary.simpleMessage("カスタムカラー"),
+    "customEditorPanelEmpty": MessageLookupByLibrary.simpleMessage(
+      "項目を選択すると、ここで設定を編集できます。",
+    ),
     "customGroupMemberSummary": m32,
     "customGroupRuleUsage": m33,
     "customGroupsLabel": MessageLookupByLibrary.simpleMessage("グループ"),
@@ -2435,6 +2438,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
       "既定のプロキシ通信は選択した住宅回線を使用し、中国本土と直接通信はサブスクリプションに従います。大容量通信の迂回が有効な場合は下に表示します。一部の宛先ではサーバーが別の出口を使用する場合があります。",
     ),
+    "residentialFollowSelected": MessageLookupByLibrary.simpleMessage(
+      "AI とプロキシを選択した住宅回線に接続",
+    ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "住宅回線を読み込み中…",
     ),
@@ -2463,6 +2469,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "住宅回線を一時的に利用できません",
     ),
     "residentialOutbound": MessageLookupByLibrary.simpleMessage("住宅回線"),
+    "residentialPageExplanation": MessageLookupByLibrary.simpleMessage(
+      "切り替えると、プロキシが必要なグループはすぐに選択した住宅回線から出るようになり、接続が一時的に再確立されます。中国本土と直接接続の通信は引き続きサブスクリプションに従います。一部の宛先はサーバー側の代替出口を使う場合があります。",
+    ),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "回線を切り替えています。しばらくお待ちください。",
     ),

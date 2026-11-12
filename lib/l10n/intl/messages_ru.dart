@@ -1502,6 +1502,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "custom": MessageLookupByLibrary.simpleMessage("Вручную"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("Добавить прокси"),
     "customColor": MessageLookupByLibrary.simpleMessage("Свой цвет"),
+    "customEditorPanelEmpty": MessageLookupByLibrary.simpleMessage(
+      "Выберите элемент, чтобы изменить его настройки здесь.",
+    ),
     "customGroupMemberSummary": m32,
     "customGroupRuleUsage": m33,
     "customGroupsLabel": MessageLookupByLibrary.simpleMessage("Группы"),
@@ -2972,6 +2975,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
       "Прокси-трафик по умолчанию использует выбранный домашний выход; прямой трафик следует подписке. Активный обход для больших загрузок указан ниже. Для отдельных адресов сервер может использовать другой выход.",
     ),
+    "residentialFollowSelected": MessageLookupByLibrary.simpleMessage(
+      "ИИ и прокси используют выбранный домашний выход",
+    ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "Загрузка домашних линий…",
     ),
@@ -3003,6 +3009,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialOutbound": MessageLookupByLibrary.simpleMessage(
       "Домашний выход",
+    ),
+    "residentialPageExplanation": MessageLookupByLibrary.simpleMessage(
+      "После переключения группы, которым нужен прокси, сразу выходят через выбранную домашнюю линию, а соединения ненадолго переустанавливаются; трафик материкового Китая и прямой трафик по-прежнему следуют подписке. Некоторые адреса могут использовать резервный выход на стороне сервера.",
     ),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "Переключение линии. Подождите.",

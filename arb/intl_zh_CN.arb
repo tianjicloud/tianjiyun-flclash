@@ -1158,6 +1158,7 @@
   "vpnTraffic": "VPN",
   "trafficSavedThisMonth": "本月节省",
   "residentialTitle": "家宽线路",
+  "residentialFollowSelected": "AI 与代理跟随所选家宽",
   "residentialExitSheetTitle": "选择家宽出口",
   "residentialExitSheetSubtitle": "AI 与需要代理的分组会跟随所选线路",
   "residentialUseExit": "使用{name}",
@@ -1766,5 +1767,7 @@
   "diagnosticsIpv6ProxyOnly": "仅系统代理无法接管所有应用，IPv6 可能直连。请开启 TUN。",
   "diagnosticsEnableTun": "开启 TUN",
   "diagnosticsIpv6Direct": "IPv6 未由 TUN 或系统代理接管，可能直接访问。",
-  "businessDashboardEditorHint": "拖动卡片调整位置，点击删除按钮移除；连接区与场景条固定在顶部。"
+  "businessDashboardEditorHint": "拖动卡片调整位置，点击删除按钮移除；连接区与场景条固定在顶部。",
+  "customEditorPanelEmpty": "选择列表中的项目，在此处编辑其设置。",
+  "residentialPageExplanation": "切换后，需要代理的分组立刻改从所选家宽出去，连接会短暂重建；大陆与直连流量仍按订阅分流。部分目标可能由服务端使用替代出口。"
 }

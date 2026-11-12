@@ -1100,6 +1100,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "custom": MessageLookupByLibrary.simpleMessage("自定义"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("添加代理"),
     "customColor": MessageLookupByLibrary.simpleMessage("自定义颜色"),
+    "customEditorPanelEmpty": MessageLookupByLibrary.simpleMessage(
+      "选择列表中的项目，在此处编辑其设置。",
+    ),
     "customGroupMemberSummary": m32,
     "customGroupRuleUsage": m33,
     "customGroupsLabel": MessageLookupByLibrary.simpleMessage("分组"),
@@ -2180,6 +2183,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
       "默认代理流量使用所选家宽线路；大陆与直连流量仍按订阅分流。大流量绕行状态见下方说明。部分目标可能由服务端使用替代出口。",
     ),
+    "residentialFollowSelected": MessageLookupByLibrary.simpleMessage(
+      "AI 与代理跟随所选家宽",
+    ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "正在加载家宽线路…",
     ),
@@ -2204,6 +2210,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialNoticeRetry": MessageLookupByLibrary.simpleMessage("重试"),
     "residentialNoticeTitle": MessageLookupByLibrary.simpleMessage("家宽线路暂时不可用"),
     "residentialOutbound": MessageLookupByLibrary.simpleMessage("住宅出口"),
+    "residentialPageExplanation": MessageLookupByLibrary.simpleMessage(
+      "切换后，需要代理的分组立刻改从所选家宽出去，连接会短暂重建；大陆与直连流量仍按订阅分流。部分目标可能由服务端使用替代出口。",
+    ),
     "residentialPending": MessageLookupByLibrary.simpleMessage("正在切换线路，请稍候。"),
     "residentialResetFailed": MessageLookupByLibrary.simpleMessage(
       "新出口已生效，但旧连接未能关闭，重连前可能仍走旧出口。",

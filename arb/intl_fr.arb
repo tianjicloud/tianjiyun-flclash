@@ -1158,6 +1158,7 @@
   "vpnTraffic": "VPN",
   "trafficSavedThisMonth": "Économisé ce mois",
   "residentialTitle": "Sortie résidentielle",
+  "residentialFollowSelected": "L’IA et les proxys suivent la sortie résidentielle choisie",
   "residentialExitSheetTitle": "Choisir une sortie résidentielle",
   "residentialExitSheetSubtitle": "L’IA et les groupes nécessitant un proxy suivront la ligne sélectionnée.",
   "residentialUseExit": "Utiliser {name}",
@@ -1766,5 +1767,7 @@
   "diagnosticsIpv6ProxyOnly": "Le proxy système ne couvre pas toutes les applications ; IPv6 peut passer en direct. Activez TUN.",
   "diagnosticsEnableTun": "Activer TUN",
   "diagnosticsIpv6Direct": "IPv6 n’est capturé ni par TUN ni par le proxy système et peut se connecter directement.",
-  "businessDashboardEditorHint": "Faites glisser les cartes pour les réordonner et appuyez sur le bouton de suppression. La connexion et les scènes restent en haut."
+  "businessDashboardEditorHint": "Faites glisser les cartes pour les réordonner et appuyez sur le bouton de suppression. La connexion et les scènes restent en haut.",
+  "customEditorPanelEmpty": "Sélectionnez un élément pour modifier ses réglages ici.",
+  "residentialPageExplanation": "Après le changement, les groupes qui passent par le proxy sortent aussitôt par la ligne résidentielle choisie et les connexions se rétablissent brièvement ; le trafic de Chine continentale et direct suit toujours l'abonnement. Certaines destinations peuvent utiliser une sortie de remplacement côté serveur."
 }

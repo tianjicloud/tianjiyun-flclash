@@ -32,6 +32,7 @@ NavigationItemsState currentNavigationItemsState(Ref ref) {
       PageLabel.dashboard,
       PageLabel.proxies,
       PageLabel.profiles,
+      PageLabel.residential,
       PageLabel.requests,
       PageLabel.dns,
       PageLabel.logs,

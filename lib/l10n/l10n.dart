@@ -9823,6 +9823,16 @@ class AppLocalizations {
     );
   }
 
+  /// `AI and proxies follow the selected residential exit`
+  String get residentialFollowSelected {
+    return Intl.message(
+      'AI and proxies follow the selected residential exit',
+      name: 'residentialFollowSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Choose residential exit`
   String get residentialExitSheetTitle {
     return Intl.message(
@@ -14453,6 +14463,26 @@ class AppLocalizations {
     return Intl.message(
       'Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.',
       name: 'businessDashboardEditorHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select an item to edit its settings here.`
+  String get customEditorPanelEmpty {
+    return Intl.message(
+      'Select an item to edit its settings here.',
+      name: 'customEditorPanelEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `After switching, groups that need the proxy leave through the chosen residential line right away and connections briefly reconnect; mainland and direct traffic still follow the subscription. Some destinations may use a server-side substitute exit.`
+  String get residentialPageExplanation {
+    return Intl.message(
+      'After switching, groups that need the proxy leave through the chosen residential line right away and connections briefly reconnect; mainland and direct traffic still follow the subscription. Some destinations may use a server-side substitute exit.',
+      name: 'residentialPageExplanation',
       desc: '',
       args: [],
     );

@@ -201,9 +201,10 @@ enum _OptionSection {
 }
 
 class CustomProxiesView extends ConsumerStatefulWidget {
-  const CustomProxiesView({super.key, this.embedded = false});
+  const CustomProxiesView({super.key, this.embedded = false, this.onEditPanel});
 
   final bool embedded;
+  final ValueChanged<Widget?>? onEditPanel;
 
   @override
   ConsumerState createState() => _CustomProxiesViewState();
@@ -382,16 +383,29 @@ class _CustomProxiesViewState extends ConsumerState<CustomProxiesView> {
   }
 
   void _handleAddOrUpdate({CustomProxy? proxy}) {
+    final initial =
+        proxy ??
+        const CustomProxy(id: -1, definition: {'name': '', 'type': 'ss'});
+    final overrides = [
+      customProxyProvider.overrideWithBuild((_, _) => initial),
+    ];
+    final onEditPanel = widget.onEditPanel;
+    if (onEditPanel != null) {
+      onEditPanel(
+        ProviderScope(
+          overrides: overrides,
+          child: InlineFormHost(
+            formBuilder: (_) => const _EditCustomProxyView(),
+            onClose: () => onEditPanel(null),
+          ),
+        ),
+      );
+      return;
+    }
     showNestedFormSheet<CustomProxy>(
       context: context,
       profileId: null,
-      overrides: [
-        customProxyProvider.overrideWithBuild(
-          (_, _) =>
-              proxy ??
-              const CustomProxy(id: -1, definition: {'name': '', 'type': 'ss'}),
-        ),
-      ],
+      overrides: overrides,
       currentOf: (ref) => ref.read(customProxyProvider),
       formBuilder: (_) => const _EditCustomProxyView(),
     );

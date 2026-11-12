@@ -343,6 +343,12 @@ class _BusinessBody extends ConsumerWidget {
                       onChooseResidential: () =>
                           showResidentialExitSheet(context),
                     ),
+                  if (MacOSStyle.of(context) &&
+                      cards.contains(BusinessDashboardCard.residentialLines))
+                    QuickLines(
+                      onChooseResidential: () =>
+                          showResidentialExitSheet(context),
+                    ),
                   if (mobile) const _MobileExpiryNotice(),
                   if (isDefaultLayout && density.isDesktop) ...[
                     if (needsTakeover)
@@ -354,13 +360,6 @@ class _BusinessBody extends ConsumerWidget {
                       ),
                     LayoutBuilder(
                       builder: (context, constraints) {
-                        final lineCard = _CardMinHeight(
-                          minHeight: MacOSMetrics.dashboardSummaryCardHeight(
-                            context,
-                            fallback: 214 * scale,
-                          ),
-                          child: const BusinessLineCard(),
-                        );
                         final trafficCard = _CardMinHeight(
                           minHeight: MacOSMetrics.dashboardSummaryCardHeight(
                             context,
@@ -376,6 +375,31 @@ class _BusinessBody extends ConsumerWidget {
                           child: ProfilesCard(
                             title: context.appLocalizations.subscriptionInfo,
                           ),
+                        );
+                        if (MacOSStyle.of(context)) {
+                          return _EqualHeightRow(
+                            spacing: gap,
+                            flexes: const [1, 1, 1],
+                            children: [
+                              profileCard,
+                              trafficCard,
+                              _CardMinHeight(
+                                minHeight:
+                                    MacOSMetrics.dashboardSummaryCardHeight(
+                                      context,
+                                      fallback: 214 * scale,
+                                    ),
+                                child: controlBar,
+                              ),
+                            ],
+                          );
+                        }
+                        final lineCard = _CardMinHeight(
+                          minHeight: MacOSMetrics.dashboardSummaryCardHeight(
+                            context,
+                            fallback: 214 * scale,
+                          ),
+                          child: const BusinessLineCard(),
                         );
                         if (constraints.maxWidth / scale < 820) {
                           return Column(
@@ -398,13 +422,14 @@ class _BusinessBody extends ConsumerWidget {
                         );
                       },
                     ),
-                    SizedBox(
-                      height: MacOSMetrics.dashboardControlHeight(
-                        context,
-                        fallback: 72 * scale,
+                    if (!MacOSStyle.of(context))
+                      SizedBox(
+                        height: MacOSMetrics.dashboardControlHeight(
+                          context,
+                          fallback: 72 * scale,
+                        ),
+                        child: controlBar,
                       ),
-                      child: controlBar,
-                    ),
                   ] else if (isDefaultLayout) ...[
                     if (needsTakeover)
                       Text(
@@ -468,7 +493,11 @@ class _BusinessBody extends ConsumerWidget {
                                     card !=
                                         BusinessDashboardCard.networkTakeover &&
                                     card !=
-                                        BusinessDashboardCard.aiAvailability,
+                                        BusinessDashboardCard.aiAvailability &&
+                                    (!MacOSStyle.of(context) ||
+                                        card !=
+                                            BusinessDashboardCard
+                                                .residentialLines),
                               )
                               .toList();
                           return Wrap(

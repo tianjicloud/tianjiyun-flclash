@@ -1438,6 +1438,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "custom": MessageLookupByLibrary.simpleMessage("Custom"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("Add proxy"),
     "customColor": MessageLookupByLibrary.simpleMessage("Custom color"),
+    "customEditorPanelEmpty": MessageLookupByLibrary.simpleMessage(
+      "Select an item to edit its settings here.",
+    ),
     "customGroupMemberSummary": m32,
     "customGroupRuleUsage": m33,
     "customGroupsLabel": MessageLookupByLibrary.simpleMessage("Groups"),
@@ -2840,6 +2843,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
       "Default proxy traffic uses the selected residential exit; mainland and direct traffic follow the subscription. Bulk bypass status is shown below when active. Some destinations may use a service-side alternative exit.",
     ),
+    "residentialFollowSelected": MessageLookupByLibrary.simpleMessage(
+      "AI and proxies follow the selected residential exit",
+    ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "Loading residential lines…",
     ),
@@ -2871,6 +2877,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialOutbound": MessageLookupByLibrary.simpleMessage(
       "Residential exit",
+    ),
+    "residentialPageExplanation": MessageLookupByLibrary.simpleMessage(
+      "After switching, groups that need the proxy leave through the chosen residential line right away and connections briefly reconnect; mainland and direct traffic still follow the subscription. Some destinations may use a server-side substitute exit.",
     ),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "Switching lines. Please wait.",

@@ -53,6 +53,30 @@ class NestedFormSheet<T> extends ConsumerStatefulWidget {
   ConsumerState<NestedFormSheet<T>> createState() => _NestedFormSheetState<T>();
 }
 
+class InlineFormHost extends StatefulWidget {
+  const InlineFormHost({
+    super.key,
+    required this.formBuilder,
+    required this.onClose,
+  });
+
+  final WidgetBuilder formBuilder;
+  final VoidCallback onClose;
+
+  @override
+  State<InlineFormHost> createState() => InlineFormHostState();
+}
+
+class InlineFormHostState extends State<InlineFormHost> {
+  @override
+  Widget build(BuildContext context) => SheetProvider<Object?>(
+    type: SheetType.page,
+    nestedNavigatorPop: ([result]) => widget.onClose(),
+    onClose: widget.onClose,
+    child: Builder(builder: widget.formBuilder),
+  );
+}
+
 class _NestedFormSheetState<T> extends ConsumerState<NestedFormSheet<T>> {
   late final T _origin;
   FutureOr<void> Function()? _save;

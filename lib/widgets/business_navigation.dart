@@ -35,6 +35,7 @@ String _navigationLabel(
     PageLabel.tools => mobile ? l10n.tools : l10n.settings,
     PageLabel.resources => l10n.resources,
     PageLabel.dns => l10n.dnsResourcesDesktop,
+    PageLabel.residential => l10n.residentialTitle,
   };
 }
 

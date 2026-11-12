@@ -19,8 +19,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CustomRulesView extends ConsumerStatefulWidget {
   final int profileId;
   final bool embedded;
+  final ValueChanged<Widget?>? onEditPanel;
 
-  const CustomRulesView(this.profileId, {super.key, this.embedded = false});
+  const CustomRulesView(
+    this.profileId, {
+    super.key,
+    this.embedded = false,
+    this.onEditPanel,
+  });
 
   @override
   ConsumerState createState() => _CustomRulesViewState();
@@ -137,12 +143,28 @@ class _CustomRulesViewState extends ConsumerState<CustomRulesView> {
   }
 
   void _handleAddOrUpdate({Rule? rule}) {
+    final initial = rule ?? Rule.init();
+    final overrides = [ruleProvider.overrideWithBuild((_, _) => initial)];
+    final onEditPanel = widget.onEditPanel;
+    if (onEditPanel != null) {
+      onEditPanel(
+        ProfileIdProvider(
+          profileId: widget.profileId,
+          child: ProviderScope(
+            overrides: overrides,
+            child: InlineFormHost(
+              formBuilder: (_) => const _AddOrEditRuleView(),
+              onClose: () => onEditPanel(null),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
     showNestedFormSheet<Rule>(
       context: context,
       profileId: widget.profileId,
-      overrides: [
-        ruleProvider.overrideWithBuild((_, _) => rule ?? Rule.init()),
-      ],
+      overrides: overrides,
       currentOf: (ref) => ref.read(ruleProvider),
       formBuilder: (_) => const _AddOrEditRuleView(),
     );

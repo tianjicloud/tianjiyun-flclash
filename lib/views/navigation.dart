@@ -7,6 +7,11 @@ import 'package:fl_clash/views/views.dart';
 class Navigation implements NavigationPort {
   static Navigation? _instance;
 
+  Navigation._internal({SupportPlatform? platform})
+    : _platform = platform ?? SupportPlatform.currentPlatform;
+
+  final SupportPlatform _platform;
+
   @override
   List<NavigationItem> getItems({
     bool openLogs = false,
@@ -26,6 +31,12 @@ class Navigation implements NavigationPort {
             ? [NavigationItemMode.mobile, NavigationItemMode.desktop]
             : [],
       ),
+      if (_platform == SupportPlatform.MacOS)
+        NavigationItem(
+          glyph: AppGlyphs.proxies,
+          label: PageLabel.residential,
+          builder: (_) => const ResidentialView(),
+        ),
       NavigationItem(
         glyph: AppGlyphs.profiles,
         label: PageLabel.profiles,
@@ -66,12 +77,13 @@ class Navigation implements NavigationPort {
     ];
   }
 
-  Navigation._internal();
-
   factory Navigation() {
     _instance ??= Navigation._internal();
     return _instance!;
   }
+
+  Navigation.forPlatform(SupportPlatform platform)
+    : this._internal(platform: platform);
 }
 
 final navigation = Navigation();

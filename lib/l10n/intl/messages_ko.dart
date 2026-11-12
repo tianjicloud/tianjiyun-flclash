@@ -1212,6 +1212,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "custom": MessageLookupByLibrary.simpleMessage("사용자 지정"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("프록시 추가"),
     "customColor": MessageLookupByLibrary.simpleMessage("사용자 지정 색상"),
+    "customEditorPanelEmpty": MessageLookupByLibrary.simpleMessage(
+      "항목을 선택하면 여기서 설정을 편집할 수 있습니다.",
+    ),
     "customGroupMemberSummary": m32,
     "customGroupRuleUsage": m33,
     "customGroupsLabel": MessageLookupByLibrary.simpleMessage("그룹"),
@@ -2396,6 +2399,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
       "기본 프록시 트래픽은 선택한 가정용 회선을 사용하고 직접 연결 트래픽은 구독 규칙을 따릅니다. 대용량 우회가 활성화되면 아래에 표시됩니다. 일부 대상은 서버의 대체 출구를 사용할 수 있습니다.",
     ),
+    "residentialFollowSelected": MessageLookupByLibrary.simpleMessage(
+      "AI와 프록시가 선택한 주거용 출구를 따릅니다",
+    ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "주거용 회선을 불러오는 중…",
     ),
@@ -2424,6 +2430,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "가정용 회선을 일시적으로 사용할 수 없습니다",
     ),
     "residentialOutbound": MessageLookupByLibrary.simpleMessage("가정용 회선"),
+    "residentialPageExplanation": MessageLookupByLibrary.simpleMessage(
+      "전환하면 프록시가 필요한 그룹은 바로 선택한 주거용 회선으로 나가며 연결이 잠시 다시 맺어집니다. 중국 본토 및 직접 연결 트래픽은 계속 구독 설정을 따릅니다. 일부 대상은 서버 측 대체 출구를 사용할 수 있습니다.",
+    ),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "회선을 전환하는 중입니다. 잠시 기다려 주세요.",
     ),

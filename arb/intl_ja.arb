@@ -1158,6 +1158,7 @@
   "vpnTraffic": "VPN",
   "trafficSavedThisMonth": "今月の節約",
   "residentialTitle": "住宅回線",
+  "residentialFollowSelected": "AI とプロキシを選択した住宅回線に接続",
   "residentialExitSheetTitle": "住宅回線の出口を選択",
   "residentialExitSheetSubtitle": "AI とプロキシが必要なグループは選択した回線を使用します。",
   "residentialUseExit": "{name}を使用",
@@ -1766,5 +1767,7 @@
   "diagnosticsIpv6ProxyOnly": "システムプロキシはすべてのアプリを捕捉できず、IPv6が直接接続する場合があります。TUNを有効にしてください。",
   "diagnosticsEnableTun": "TUNを有効にする",
   "diagnosticsIpv6Direct": "IPv6はTUNまたはシステムプロキシで捕捉されず、直接接続する可能性があります。",
-  "businessDashboardEditorHint": "カードをドラッグして並べ替え、削除ボタンをタップします。接続とシーンは上部に固定されます。"
+  "businessDashboardEditorHint": "カードをドラッグして並べ替え、削除ボタンをタップします。接続とシーンは上部に固定されます。",
+  "customEditorPanelEmpty": "項目を選択すると、ここで設定を編集できます。",
+  "residentialPageExplanation": "切り替えると、プロキシが必要なグループはすぐに選択した住宅回線から出るようになり、接続が一時的に再確立されます。中国本土と直接接続の通信は引き続きサブスクリプションに従います。一部の宛先はサーバー側の代替出口を使う場合があります。"
 }

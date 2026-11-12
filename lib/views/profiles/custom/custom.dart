@@ -171,6 +171,7 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
   var _edited = false;
   var _importing = false;
   var _editorTab = _CustomEditorTab.proxies;
+  Widget? _activeEditor;
 
   @override
   void initState() {
@@ -342,7 +343,10 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
           _EditorTabButton(
             item: item,
             selected: _editorTab == item.value,
-            onPressed: () => setState(() => _editorTab = item.value),
+            onPressed: () => setState(() {
+              _editorTab = item.value;
+              _activeEditor = null;
+            }),
           ),
       ],
     ),
@@ -366,35 +370,83 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
     ),
   ];
 
-  Widget _desktopTab(int profileId) => switch (_editorTab) {
-    _CustomEditorTab.proxies => const CustomProxiesView(embedded: true),
-    _CustomEditorTab.groups => CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          sliver: CustomProxyGroupsSection(profileId, embedded: true),
+  Widget _desktopTab(int profileId) => LayoutBuilder(
+    builder: (context, constraints) {
+      final canShowEditor = constraints.maxWidth >= 1000;
+      final onEditPanel = canShowEditor
+          ? (Widget? editor) => setState(() => _activeEditor = editor)
+          : null;
+      final content = switch (_editorTab) {
+        _CustomEditorTab.proxies => CustomProxiesView(
+          embedded: true,
+          onEditPanel: onEditPanel,
         ),
-      ],
-    ),
-    _CustomEditorTab.rules => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28),
-      child: CustomRulesView(profileId, embedded: true),
-    ),
-    _CustomEditorTab.resources => CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
-          sliver: SliverList.list(
-            children: [
-              CustomProvidersView(profileId, embedded: true),
-              const SizedBox(height: 16),
-              CustomProxyDialersView(profileId, embedded: true),
-            ],
+        _CustomEditorTab.groups => CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              sliver: CustomProxyGroupsSection(
+                profileId,
+                embedded: true,
+                onEditPanel: onEditPanel,
+              ),
+            ),
+          ],
+        ),
+        _CustomEditorTab.rules => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: CustomRulesView(
+            profileId,
+            embedded: true,
+            onEditPanel: onEditPanel,
           ),
         ),
-      ],
-    ),
-  };
+        _CustomEditorTab.resources => CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
+              sliver: SliverList.list(
+                children: [
+                  CustomProvidersView(
+                    profileId,
+                    embedded: true,
+                    onEditPanel: onEditPanel,
+                  ),
+                  const SizedBox(height: 16),
+                  CustomProxyDialersView(profileId, embedded: true),
+                ],
+              ),
+            ),
+          ],
+        ),
+      };
+      if (!canShowEditor) return content;
+      return Row(
+        children: [
+          Expanded(child: content),
+          SizedBox(
+            width: 1,
+            child: ColoredBox(color: context.colorScheme.outlineVariant),
+          ),
+          SizedBox(
+            width: 390,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child:
+                  _activeEditor ??
+                  Center(
+                    child: Text(
+                      context.appLocalizations.customEditorPanelEmpty,
+                      textAlign: TextAlign.center,
+                      style: context.listSubtitleStyle,
+                    ),
+                  ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 
   @override
   Widget build(BuildContext context) {

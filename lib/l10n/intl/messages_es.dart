@@ -1520,6 +1520,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "custom": MessageLookupByLibrary.simpleMessage("Personalizado"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("Añadir proxy"),
     "customColor": MessageLookupByLibrary.simpleMessage("Color personalizado"),
+    "customEditorPanelEmpty": MessageLookupByLibrary.simpleMessage(
+      "Selecciona un elemento para editar aquí sus ajustes.",
+    ),
     "customGroupMemberSummary": m32,
     "customGroupRuleUsage": m33,
     "customGroupsLabel": MessageLookupByLibrary.simpleMessage("Grupos"),
@@ -3020,6 +3023,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "residentialExplanation": MessageLookupByLibrary.simpleMessage(
       "El tráfico proxy predeterminado usa la salida residencial elegida; el tráfico directo sigue la suscripción. El desvío de descargas se indica abajo cuando está activo. El servidor puede usar salidas alternativas para ciertos destinos.",
     ),
+    "residentialFollowSelected": MessageLookupByLibrary.simpleMessage(
+      "La IA y los proxies siguen la salida residencial elegida",
+    ),
     "residentialLoadingCatalog": MessageLookupByLibrary.simpleMessage(
       "Cargando líneas residenciales…",
     ),
@@ -3053,6 +3059,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "residentialOutbound": MessageLookupByLibrary.simpleMessage(
       "Salida residencial",
+    ),
+    "residentialPageExplanation": MessageLookupByLibrary.simpleMessage(
+      "Al cambiar, los grupos que necesitan el proxy salen de inmediato por la línea residencial elegida y las conexiones se restablecen brevemente; el tráfico de China continental y directo sigue la suscripción. Algunos destinos pueden usar una salida sustituta del servidor.",
     ),
     "residentialPending": MessageLookupByLibrary.simpleMessage(
       "Cambiando de línea. Espera un momento.",
