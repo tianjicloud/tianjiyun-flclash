@@ -1,11 +1,16 @@
 import 'package:fl_clash/common/service_probe.dart';
+import 'package:fl_clash/common/tianji_api.dart';
+import 'package:fl_clash/common/constant.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/core/interface.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/core.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/route_state.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
+import 'package:fl_clash/providers/state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/riverpod.dart';
@@ -27,7 +32,11 @@ void main() {
 
   setUp(() => core = _MockCore());
 
-  ProviderContainer build({bool proxied = true}) {
+  ProviderContainer build({
+    bool proxied = true,
+    Profile? profile,
+    List<Group> groups = const [],
+  }) {
     final container = ProviderContainer(
       overrides: [
         routeTrackerProvider.overrideWithBuild(
@@ -41,6 +50,8 @@ void main() {
           ),
         ),
         coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
+        currentProfileProvider.overrideWithValue(profile),
+        groupsProvider.overrideWithValue(groups),
       ],
     );
     addTearDown(container.dispose);
@@ -154,5 +165,121 @@ void main() {
     await pumpEventQueue();
 
     verify(() => core.outboundIp(any())).called(1);
+  });
+
+  test(
+    'business probes Tianji first and falls back to third parties',
+    () async {
+      when(() => core.outboundIp(any())).thenAnswer((invocation) async {
+        final params =
+            invocation.positionalArguments.single as OutboundIpParams;
+        if (params.urls.length == 1 && params.urls.single == tianjiEgressUrl) {
+          return const OutboundIpResult(
+            url: tianjiEgressUrl,
+            body: '{invalid',
+            chains: ['JP-01'],
+            coreEpoch: 1,
+            routeVersion: 1,
+          );
+        }
+        return _answer;
+      });
+      final container = build(
+        profile: const Profile(
+          id: 1,
+          type: ProfileType.url,
+          url: 'https://sub1.tianjiyun.org/s/abcdefgh',
+          autoUpdateDuration: Duration.zero,
+        ),
+      );
+
+      container.read(outboundIpProbeProvider.notifier).watch('JP-01');
+      await pumpEventQueue();
+
+      final calls = verify(
+        () => core.outboundIp(captureAny()),
+      ).captured.cast<OutboundIpParams>();
+      expect(calls.map((call) => call.urls), [
+        [tianjiEgressUrl],
+        outboundIpSourceUrls(),
+      ]);
+      expect(
+        container.read(outboundIpProbeProvider).valueOf('JP-01')?.fromTianji,
+        isFalse,
+      );
+    },
+  );
+
+  test('business Tianji failures cool down for one minute', () async {
+    when(() => core.outboundIp(any())).thenAnswer((invocation) async {
+      final params = invocation.positionalArguments.single as OutboundIpParams;
+      return params.urls.length == 1 && params.urls.single == tianjiEgressUrl
+          ? const OutboundIpResult(error: 'unavailable')
+          : _answer;
+    });
+    final container = build(
+      profile: const Profile(
+        id: 1,
+        type: ProfileType.url,
+        url: 'https://sub1.tianjiyun.org/s/abcdefgh',
+        autoUpdateDuration: Duration.zero,
+      ),
+    );
+    final probe = container.read(outboundIpProbeProvider.notifier);
+    probe.watch('JP-01');
+    await pumpEventQueue();
+    probe.refresh(['JP-01']);
+    await pumpEventQueue();
+
+    final calls = verify(
+      () => core.outboundIp(captureAny()),
+    ).captured.cast<OutboundIpParams>();
+    expect(calls.map((call) => call.urls), [
+      [tianjiEgressUrl],
+      outboundIpSourceUrls(),
+      outboundIpSourceUrls(),
+    ]);
+  });
+
+  test('business routed probe keeps the routed target', () async {
+    when(() => core.outboundIp(any())).thenAnswer(
+      (_) async => const OutboundIpResult(
+        url: tianjiEgressUrl,
+        body: '{"ip":"203.0.113.42","exit":null}',
+        chains: ['JP-01', 'Root'],
+        coreEpoch: 1,
+        routeVersion: 1,
+      ),
+    );
+    final container = build(
+      profile: const Profile(
+        id: 1,
+        type: ProfileType.url,
+        url: 'https://sub1.tianjiyun.org/s/abcdefgh',
+        autoUpdateDuration: Duration.zero,
+      ),
+      groups: [
+        const Group(
+          name: 'GLOBAL',
+          type: GroupType.Selector,
+          now: 'JP-01',
+          all: [Proxy(name: 'JP-01', type: 'ss')],
+        ),
+        const Group(
+          name: appName,
+          type: GroupType.Selector,
+          now: 'JP-01',
+          all: [Proxy(name: 'JP-01', type: 'ss')],
+        ),
+      ],
+    );
+    container.read(outboundIpProbeProvider.notifier).watch(routedOutbound);
+    await pumpEventQueue();
+
+    final params =
+        verify(() => core.outboundIp(captureAny())).captured.single
+            as OutboundIpParams;
+    expect(params.proxyName, '');
+    expect(params.urls, [tianjiEgressUrl]);
   });
 }

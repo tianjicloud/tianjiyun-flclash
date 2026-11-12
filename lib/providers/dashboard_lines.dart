@@ -50,6 +50,8 @@ final _ratePatterns = [
   return null;
 }
 
+double? businessMultiplierFromName(String name) => _rateOf(name)?.rate;
+
 Group? _hostOf(
   T Function<T>(ProviderListenable<T> provider) read,
   List<Group> groups,
@@ -78,13 +80,20 @@ Group? _hostOf(
 
 List<DashboardLine> dashboardLines(WidgetRef ref, {int limit = 4}) {
   T watch<T>(ProviderListenable<T> provider) => ref.watch(provider);
-  return dashboardLinesFrom(watch, limit: limit);
+  return dashboardLinesFrom(
+    watch,
+    limit: limit,
+    useTianji: ref.watch(tianjiApiEnabledProvider),
+  );
 }
 
 List<DashboardLine> dashboardLinesFrom(
   T Function<T>(ProviderListenable<T> provider) read, {
   int limit = 4,
+  bool useTianji = false,
 }) {
+  TianjiNode? nodeFor(String name) =>
+      useTianji ? read(tianjiNodeProvider(name)) : null;
   final groups = read(currentGroupsStateProvider).value;
   if (groups.isEmpty) return const [];
   final policy = read(residentialPolicyProvider);
@@ -116,6 +125,7 @@ List<DashboardLine> dashboardLinesFrom(
         residentialGroup || policy.choices.contains(member.name);
     final ownRate = _rateOf(member.name);
     final parsed = ownRate ?? _rateOf(resolved);
+    final rate = _multiplierFor(nodeFor(member.name), parsed?.rate);
     final name = ownRate?.name ?? member.name;
     final countryCode = _countryCodeOf(name);
     lines.add(
@@ -131,19 +141,24 @@ List<DashboardLine> dashboardLinesFrom(
             ? policy.active &&
                   (residentialGroup || policy.selectedExit == member.name)
             : !policy.active && selected == member.name,
-        rate: parsed?.rate,
+        rate: rate,
       ),
     );
   }
   return lines;
 }
 
-DashboardLine? currentDashboardLine(WidgetRef ref) =>
-    currentDashboardLineFrom(ref.watch);
+DashboardLine? currentDashboardLine(WidgetRef ref) => currentDashboardLineFrom(
+  ref.watch,
+  useTianji: ref.watch(tianjiApiEnabledProvider),
+);
 
 DashboardLine? currentDashboardLineFrom(
-  T Function<T>(ProviderListenable<T> provider) watch,
-) {
+  T Function<T>(ProviderListenable<T> provider) watch, {
+  bool useTianji = false,
+}) {
+  TianjiNode? nodeFor(String name) =>
+      useTianji ? watch(tianjiNodeProvider(name)) : null;
   final groups = watch(currentGroupsStateProvider).value;
   if (groups.isEmpty) return null;
   final policy = watch(residentialPolicyProvider);
@@ -174,6 +189,7 @@ DashboardLine? currentDashboardLineFrom(
         if (type.isEmpty) return null;
         final ownRate = _rateOf(member.name);
         final parsed = ownRate ?? _rateOf(resolved);
+        final rate = _multiplierFor(nodeFor(member.name), parsed?.rate);
         final name = ownRate?.name ?? member.name;
         return DashboardLine(
           groupName: group.name,
@@ -183,7 +199,7 @@ DashboardLine? currentDashboardLineFrom(
           type: type,
           delay: delays[testUrl]?[resolved],
           current: true,
-          rate: parsed?.rate,
+          rate: rate,
         );
       }
     }
@@ -202,6 +218,7 @@ DashboardLine? currentDashboardLineFrom(
       if (type.isEmpty) return null;
       final ownRate = _rateOf(member.name);
       final parsed = ownRate ?? _rateOf(resolved);
+      final rate = _multiplierFor(nodeFor(member.name), parsed?.rate);
       final name = ownRate?.name ?? member.name;
       return DashboardLine(
         groupName: group.name,
@@ -211,7 +228,7 @@ DashboardLine? currentDashboardLineFrom(
         type: type,
         delay: delays[testUrl]?[resolved],
         current: true,
-        rate: parsed?.rate,
+        rate: rate,
       );
     }
   }
@@ -220,6 +237,9 @@ DashboardLine? currentDashboardLineFrom(
 
 String? _countryCodeOf(String name) =>
     RegExp(r'^([A-Z]{2})\s*[·|—-]\s*').firstMatch(name)?.group(1);
+
+double? _multiplierFor(TianjiNode? node, double? parsedRate) =>
+    node?.multiplier ?? parsedRate;
 
 String _displayNameOf(String name) =>
     name.replaceFirst(RegExp(r'^[A-Z]{2}\s*[·|—-]\s*'), '');

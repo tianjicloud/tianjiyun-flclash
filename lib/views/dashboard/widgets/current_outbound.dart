@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/service_probe.dart';
+import 'package:fl_clash/common/tianji_api.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
 import 'package:fl_clash/features/ip_quality/labels.dart';
@@ -200,7 +201,10 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           SelectionVerdict.failed ||
               SelectionVerdict.notCaptured ||
               SelectionVerdict.residentialLocked ||
-              SelectionVerdict.groupOverridden,
+              SelectionVerdict.groupOverridden ||
+              SelectionVerdict.trafficNotOnTianji ||
+              SelectionVerdict.egressMismatch ||
+              SelectionVerdict.egressAnomaly,
         ) =>
           colors.warn,
         _ when verifiedExit => colors.ok,
@@ -1041,18 +1045,30 @@ class _BusinessChips extends StatelessWidget {
       return const SizedBox.shrink();
     }
     final code = info?.countryCode;
-    final city = info?.city;
+    final city = info?.fromTianji == true ? null : info?.city;
     final desktop = DashboardDensityScope.of(context).isDesktop;
-    final location = outboundLocationLabel(
-      countryCode: code,
-      city: city,
-      desktop: desktop,
-    );
+    final location = info?.fromTianji == true
+        ? code == null
+              ? null
+              : '$code · ${localizedRegion(context.appLocalizations, code)}'
+        : outboundLocationLabel(
+            countryCode: code,
+            city: city,
+            desktop: desktop,
+          );
     final country = location == null
         ? null
         : DashboardChip(label: location, large: false);
+    final isp = info?.isp;
     final chips = <Widget>[
+      if (business && info?.fromTianji == true)
+        DashboardChip(
+          label: context.appLocalizations.businessOrdinaryWebExit,
+          large: false,
+        ),
       ?country,
+      if (business && isp != null && isp.isNotEmpty)
+        DashboardChip(label: isp, large: false),
       if (quality != null) ...[
         DashboardChip(
           label: quality.type == IpType.residential
@@ -1078,7 +1094,7 @@ class _BusinessChips extends StatelessWidget {
             large: business ? false : large,
           ),
         if (quality.organization case final organization?
-            when organization.isNotEmpty)
+            when organization.isNotEmpty && (isp == null || isp.isEmpty))
           DashboardChip(label: organization, large: business ? false : large)
         else if (quality.asn case final asn?)
           DashboardChip(label: 'AS$asn', large: business ? false : large),

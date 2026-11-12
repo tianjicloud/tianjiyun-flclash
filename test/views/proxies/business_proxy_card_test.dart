@@ -35,6 +35,13 @@ void main() {
           profilesProvider.overrideWith(() => TestProfiles([profile])),
           currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
           groupsProvider.overrideWithValue([group]),
+          tianjiNodeProvider('🇺🇸 洛杉矶 住宅 02').overrideWithValue(
+            const TianjiNode(
+              name: '🇺🇸 洛杉矶 住宅 02',
+              multiplier: 0.5,
+              expectedExit: EgressExit(kind: 'residential', countryCode: 'US'),
+            ),
+          ),
         ],
       );
       addTearDown(container.dispose);
@@ -78,6 +85,8 @@ void main() {
       );
       expect(selectedDecorations, findsOneWidget);
       expect(selectedSemantics, findsOneWidget);
+      expect(find.text('Rate 0.5×'), findsOneWidget);
+      expect(find.text('Residential'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );

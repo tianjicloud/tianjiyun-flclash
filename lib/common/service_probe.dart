@@ -200,11 +200,12 @@ Future<OutboundIpResult> lookupOutboundIp(
   CoreController core,
   String proxyName, {
   Duration timeout = outboundIpTimeoutDuration,
+  List<String>? urls,
 }) {
   return core.outboundIp(
     OutboundIpParams(
       proxyName: proxyName,
-      urls: outboundIpSourceUrls(),
+      urls: urls ?? outboundIpSourceUrls(),
       timeout: timeout.inMilliseconds,
     ),
   );

@@ -13,6 +13,7 @@ import 'package:fl_clash/providers/ip_quality.dart';
 import 'package:fl_clash/providers/route_state.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/providers/service_status.dart';
+import 'package:fl_clash/providers/tianji_nodes.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
@@ -95,6 +96,7 @@ void main() {
     return TestApp(
       locale: locale,
       overrides: [
+        tianjiApiEnabledProvider.overrideWithValue(false),
         viewSizeProvider.overrideWithBuild((_, _) => const Size(400, 800)),
         appSettingProvider.overrideWithBuild((_, _) => settings),
         runTimeProvider.overrideWithBuild((_, _) => started ? 1 : null),

@@ -13872,6 +13872,271 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Japan`
+  String get businessRegionJP {
+    return Intl.message('Japan', name: 'businessRegionJP', desc: '', args: []);
+  }
+
+  /// `Hong Kong`
+  String get businessRegionHK {
+    return Intl.message(
+      'Hong Kong',
+      name: 'businessRegionHK',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `United States`
+  String get businessRegionUS {
+    return Intl.message(
+      'United States',
+      name: 'businessRegionUS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Singapore`
+  String get businessRegionSG {
+    return Intl.message(
+      'Singapore',
+      name: 'businessRegionSG',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Germany`
+  String get businessRegionDE {
+    return Intl.message(
+      'Germany',
+      name: 'businessRegionDE',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `United Kingdom`
+  String get businessRegionGB {
+    return Intl.message(
+      'United Kingdom',
+      name: 'businessRegionGB',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Taiwan`
+  String get businessRegionTW {
+    return Intl.message('Taiwan', name: 'businessRegionTW', desc: '', args: []);
+  }
+
+  /// `Canada`
+  String get businessRegionCA {
+    return Intl.message('Canada', name: 'businessRegionCA', desc: '', args: []);
+  }
+
+  /// `France`
+  String get businessRegionFR {
+    return Intl.message('France', name: 'businessRegionFR', desc: '', args: []);
+  }
+
+  /// `Austria`
+  String get businessRegionAT {
+    return Intl.message(
+      'Austria',
+      name: 'businessRegionAT',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Australia`
+  String get businessRegionAU {
+    return Intl.message(
+      'Australia',
+      name: 'businessRegionAU',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brazil`
+  String get businessRegionBR {
+    return Intl.message('Brazil', name: 'businessRegionBR', desc: '', args: []);
+  }
+
+  /// `Colombia`
+  String get businessRegionCO {
+    return Intl.message(
+      'Colombia',
+      name: 'businessRegionCO',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Czechia`
+  String get businessRegionCZ {
+    return Intl.message(
+      'Czechia',
+      name: 'businessRegionCZ',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `South Korea`
+  String get businessRegionKR {
+    return Intl.message(
+      'South Korea',
+      name: 'businessRegionKR',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Romania`
+  String get businessRegionRO {
+    return Intl.message(
+      'Romania',
+      name: 'businessRegionRO',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sweden`
+  String get businessRegionSE {
+    return Intl.message('Sweden', name: 'businessRegionSE', desc: '', args: []);
+  }
+
+  /// `Belgium`
+  String get businessRegionBE {
+    return Intl.message(
+      'Belgium',
+      name: 'businessRegionBE',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Italy`
+  String get businessRegionIT {
+    return Intl.message('Italy', name: 'businessRegionIT', desc: '', args: []);
+  }
+
+  /// `Ordinary web exit`
+  String get businessOrdinaryWebExit {
+    return Intl.message(
+      'Ordinary web exit',
+      name: 'businessOrdinaryWebExit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Residential`
+  String get businessResidential {
+    return Intl.message(
+      'Residential',
+      name: 'businessResidential',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Datacenter`
+  String get businessDatacenter {
+    return Intl.message(
+      'Datacenter',
+      name: 'businessDatacenter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No exit data`
+  String get businessNoExitInfo {
+    return Intl.message(
+      'No exit data',
+      name: 'businessNoExitInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic is not using a Tianji route`
+  String get businessTrafficNotOnTianji {
+    return Intl.message(
+      'Traffic is not using a Tianji route',
+      name: 'businessTrafficNotOnTianji',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit is in {actual}, while the selected line is in {expected}`
+  String businessExitCountryMismatch(Object actual, Object expected) {
+    return Intl.message(
+      'Exit is in $actual, while the selected line is in $expected',
+      name: 'businessExitCountryMismatch',
+      desc: '',
+      args: [actual, expected],
+    );
+  }
+
+  /// `The exit type does not match the selected line`
+  String get businessExitKindMismatch {
+    return Intl.message(
+      'The exit type does not match the selected line',
+      name: 'businessExitKindMismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Line anomaly. Contact support.`
+  String get businessExitAnomaly {
+    return Intl.message(
+      'Line anomaly. Contact support.',
+      name: 'businessExitAnomaly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mainland domains are resolved locally`
+  String get businessRegionLocalDns {
+    return Intl.message(
+      'Mainland domains are resolved locally',
+      name: 'businessRegionLocalDns',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy traffic domains are resolved by the route`
+  String get businessProxyDnsRemote {
+    return Intl.message(
+      'Proxy traffic domains are resolved by the route',
+      name: 'businessProxyDnsRemote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Direct datacenter exit for: {categories}`
+  String businessSubstitutedCategories(Object categories) {
+    return Intl.message(
+      'Direct datacenter exit for: $categories',
+      name: 'businessSubstitutedCategories',
+      desc: '',
+      args: [categories],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

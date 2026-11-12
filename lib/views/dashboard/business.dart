@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/common/default_line.dart';
 import 'package:fl_clash/common/service_probe.dart' show routedOutbound;
 import 'package:fl_clash/core/core.dart';
@@ -1000,6 +1001,15 @@ class ResidentialExitCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
     final policy = ref.watch(residentialPolicyProvider);
+    final selectedNode = policy.selectedExit == null
+        ? null
+        : ref.watch(tianjiNodeProvider(policy.selectedExit!));
+    final categories = ref.watch(tianjiCategoriesProvider);
+    final substituted = _substitutedCategoriesText(
+      appLocalizations,
+      selectedNode,
+      categories,
+    );
     final action = ref.watch(residentialActionProvider);
     final matches = action.matches(policy.profileId, policy.fingerprint);
     final applying = matches && action.applying;
@@ -1140,6 +1150,10 @@ class ResidentialExitCard extends ConsumerWidget {
                     mobile: !DashboardDensityScope.of(context).isDesktop,
                   ),
                 ),
+              if (substituted != null) ...[
+                const SizedBox(height: 5),
+                Text(substituted, style: label),
+              ],
               if (failed) ...[
                 const SizedBox(height: 6),
                 Text(
@@ -1422,6 +1436,13 @@ class _ResidentialExitChoice extends ConsumerWidget {
       delayProvider(proxyName: item, testUrl: ref.watch(realTestUrlProvider())),
     );
     final codeAndName = _residentialRegion(item);
+    final node = ref.watch(tianjiNodeProvider(item));
+    final categories = ref.watch(tianjiCategoriesProvider);
+    final substituted = _substitutedCategoriesText(
+      context.appLocalizations,
+      node,
+      categories,
+    );
     return PressRegion(
       onTap: onPressed,
       shape: AppShape.md,
@@ -1440,7 +1461,7 @@ class _ResidentialExitChoice extends ConsumerWidget {
           ),
         ),
         child: SizedBox(
-          height: 72,
+          height: substituted == null ? 72 : 92,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
@@ -1462,6 +1483,19 @@ class _ResidentialExitChoice extends ConsumerWidget {
                           emphasized: true,
                         ),
                       ),
+                      if (substituted != null) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                          substituted,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.caption2
+                              .of(context)
+                              .copyWith(
+                                color: context.colorScheme.onSurfaceVariant,
+                              ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -1471,6 +1505,18 @@ class _ResidentialExitChoice extends ConsumerWidget {
                     color: businessDelayColor(context.colorScheme, delay),
                   ),
                 ),
+                if (node?.expectedExit?.kind == 'datacenter')
+                  DashboardChip(
+                    label: context.appLocalizations.businessDatacenter,
+                    labelStyle: AppTextStyle.caption2.of(context),
+                  ),
+                if (node != null && node.expectedExit == null)
+                  Text(
+                    context.appLocalizations.businessNoExitInfo,
+                    style: AppTextStyle.caption2
+                        .of(context)
+                        .copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ),
                 _ResidentialRadio(selected: selected),
               ],
             ),
@@ -1479,6 +1525,22 @@ class _ResidentialExitChoice extends ConsumerWidget {
       ),
     );
   }
+}
+
+String? _substitutedCategoriesText(
+  AppLocalizations strings,
+  TianjiNode? node,
+  Map<String, String> categories,
+) {
+  if (node == null) return null;
+  final names = node.substitutedCategories
+      .map((key) => categories[key])
+      .whereType<String>()
+      .where((name) => name.isNotEmpty)
+      .toList();
+  return names.isEmpty
+      ? null
+      : strings.businessSubstitutedCategories(names.join('、'));
 }
 
 class _ResidentialRadio extends StatelessWidget {

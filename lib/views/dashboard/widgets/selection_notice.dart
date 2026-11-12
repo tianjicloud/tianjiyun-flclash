@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/tianji_api.dart';
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/selection_check.dart';
@@ -14,6 +15,9 @@ class SelectionNotice extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final verdict = ref.watch(selectionCheckProvider);
     final l10n = context.appLocalizations;
+    final mismatch = ref
+        .watch(selectionCheckProvider.notifier)
+        .egressMismatchCountries;
     final message = switch (verdict) {
       SelectionVerdict.untouched || SelectionVerdict.consistent => null,
       SelectionVerdict.confirming => l10n.selectionConfirming,
@@ -23,6 +27,15 @@ class SelectionNotice extends ConsumerWidget {
       SelectionVerdict.groupOverridden => l10n.selectionGroupOverridden,
       SelectionVerdict.unknownPending => l10n.selectionUnknownPending,
       SelectionVerdict.unknown => l10n.selectionUnknown,
+      SelectionVerdict.egressPending => l10n.selectionConfirming,
+      SelectionVerdict.trafficNotOnTianji => l10n.businessTrafficNotOnTianji,
+      SelectionVerdict.egressMismatch when mismatch != null =>
+        l10n.businessExitCountryMismatch(
+          localizedRegion(l10n, mismatch.actual),
+          localizedRegion(l10n, mismatch.expected),
+        ),
+      SelectionVerdict.egressMismatch => l10n.businessExitKindMismatch,
+      SelectionVerdict.egressAnomaly => l10n.businessExitAnomaly,
     };
     if (message == null) return const SizedBox.shrink();
     final confirming = verdict == SelectionVerdict.confirming;

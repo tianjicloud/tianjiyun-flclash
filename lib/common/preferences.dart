@@ -208,6 +208,13 @@ class Preferences {
     }
   }
 
+  Future<String?> getTianjiNodesCache() async =>
+      (await _store.value)?.getString('tianjiNodesCache');
+
+  Future<void> saveTianjiNodesCache(String value) async {
+    await (await _store.value)?.setString('tianjiNodesCache', value);
+  }
+
   Future<void> clearPreferences() async {
     final sharedPreferencesIns = await _store.value;
     await sharedPreferencesIns?.clear();

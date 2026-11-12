@@ -2,6 +2,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/providers/dashboard_lines.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/business_style.dart';
@@ -120,12 +121,11 @@ class ProxyCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildBusinessContent(BuildContext context) {
+  Widget _buildBusinessContent(BuildContext context, TianjiNode? node) {
     final region = _businessName();
-    final multiplier = RegExp(
-      r'\b(\d+(?:\.\d+)?)x\b',
-      caseSensitive: false,
-    ).firstMatch(proxy.name)?.group(1);
+    final multiplier =
+        node?.multiplier?.toString() ??
+        businessMultiplierFromName(proxy.name)?.toString();
     final delayText = _BusinessDelayText(proxy: proxy, testUrl: testUrl);
     final chipStyle = AppTextStyle.caption1
         .of(context)
@@ -154,13 +154,32 @@ class ProxyCard extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 8),
-        if (multiplier != null)
-          _ProxyMetaChip(
-            label: context.appLocalizations.businessMultiplier(multiplier),
-            style: chipStyle,
-          )
-        else
-          const SizedBox(height: 22),
+        Wrap(
+          spacing: 6,
+          runSpacing: 4,
+          children: [
+            if (multiplier != null)
+              _ProxyMetaChip(
+                label: context.appLocalizations.businessMultiplier(multiplier),
+                style: chipStyle,
+              ),
+            if (node?.expectedExit?.kind == 'residential')
+              _ProxyMetaChip(
+                label: context.appLocalizations.businessResidential,
+                style: chipStyle,
+              ),
+            if (node?.expectedExit?.kind == 'datacenter')
+              _ProxyMetaChip(
+                label: context.appLocalizations.businessDatacenter,
+                style: chipStyle,
+              ),
+            if (node != null && node.expectedExit == null)
+              Text(
+                context.appLocalizations.businessNoExitInfo,
+                style: chipStyle,
+              ),
+          ],
+        ),
       ],
     );
   }
@@ -168,12 +187,12 @@ class ProxyCard extends ConsumerWidget {
   Widget _buildBusinessMobileContent(
     BuildContext context, {
     required bool selected,
+    TianjiNode? node,
   }) {
     final region = _businessName();
-    final multiplier = RegExp(
-      r'\b(\d+(?:\.\d+)?)x\b',
-      caseSensitive: false,
-    ).firstMatch(proxy.name)?.group(1);
+    final multiplier =
+        node?.multiplier?.toString() ??
+        businessMultiplierFromName(proxy.name)?.toString();
     return Row(
       children: [
         if (region.code case final code?) ...[
@@ -198,12 +217,37 @@ class ProxyCard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 3),
-              if (multiplier != null)
-                _ProxyMetaChip(
-                  label: context.appLocalizations.businessMultiplier(
-                    multiplier,
-                  ),
-                  style: AppTextStyle.caption1.of(context),
+              if (multiplier != null || node?.expectedExit != null)
+                Wrap(
+                  spacing: 6,
+                  children: [
+                    if (multiplier != null)
+                      _ProxyMetaChip(
+                        label: context.appLocalizations.businessMultiplier(
+                          multiplier,
+                        ),
+                        style: AppTextStyle.caption1.of(context),
+                      ),
+                    if (node?.expectedExit?.kind == 'residential')
+                      _ProxyMetaChip(
+                        label: context.appLocalizations.businessResidential,
+                        style: AppTextStyle.caption1.of(context),
+                      ),
+                    if (node?.expectedExit?.kind == 'datacenter')
+                      _ProxyMetaChip(
+                        label: context.appLocalizations.businessDatacenter,
+                        style: AppTextStyle.caption1.of(context),
+                      ),
+                    if (node != null && node.expectedExit == null)
+                      Text(
+                        context.appLocalizations.businessNoExitInfo,
+                        style: AppTextStyle.caption1
+                            .of(context)
+                            .copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                  ],
                 ),
             ],
           ),
@@ -216,12 +260,15 @@ class ProxyCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildBusinessListContent(BuildContext context, bool selected) {
+  Widget _buildBusinessListContent(
+    BuildContext context,
+    bool selected,
+    TianjiNode? node,
+  ) {
     final region = _businessName();
-    final multiplier = RegExp(
-      r'\b(\d+(?:\.\d+)?)x\b',
-      caseSensitive: false,
-    ).firstMatch(proxy.name)?.group(1);
+    final multiplier =
+        node?.multiplier?.toString() ??
+        businessMultiplierFromName(proxy.name)?.toString();
     return DecoratedBox(
       decoration: BoxDecoration(
         color: selected
@@ -257,6 +304,23 @@ class ProxyCard extends ConsumerWidget {
                 style: AppTextStyle.footnote
                     .of(context)
                     .toJetBrainsMono
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
+            if (node?.expectedExit?.kind == 'residential')
+              _ProxyMetaChip(
+                label: context.appLocalizations.businessResidential,
+                style: AppTextStyle.footnote.of(context),
+              ),
+            if (node?.expectedExit?.kind == 'datacenter')
+              _ProxyMetaChip(
+                label: context.appLocalizations.businessDatacenter,
+                style: AppTextStyle.footnote.of(context),
+              ),
+            if (node != null && node.expectedExit == null)
+              Text(
+                context.appLocalizations.businessNoExitInfo,
+                style: AppTextStyle.footnote
+                    .of(context)
                     .copyWith(color: context.colorScheme.onSurfaceVariant),
               ),
             _BusinessDelayText(proxy: proxy, testUrl: testUrl),
@@ -377,11 +441,11 @@ class ProxyCard extends ConsumerWidget {
             ref.watch(
               proxyNameProvider(groupName).select((name) => name == proxy.name),
             );
-        final isCustomProfile = ref.watch(
-          currentProfileProvider.select(
-            (profile) => profile?.type == ProfileType.custom,
-          ),
-        );
+        final profile = ref.watch(currentProfileProvider);
+        final node = businessStyle
+            ? ref.watch(tianjiNodeProvider(proxy.name))
+            : null;
+        final isCustomProfile = profile?.type == ProfileType.custom;
         final card = Card(
           radius: businessMobile
               ? AppCorner.none
@@ -421,7 +485,7 @@ class ProxyCard extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: businessList
-                ? [_buildBusinessListContent(context, inUse)]
+                ? [_buildBusinessListContent(context, inUse, node)]
                 : businessMobile
                 ? [
                     SizedBox(
@@ -429,11 +493,12 @@ class ProxyCard extends ConsumerWidget {
                       child: _buildBusinessMobileContent(
                         context,
                         selected: inUse,
+                        node: node,
                       ),
                     ),
                   ]
                 : businessStyle
-                ? [_buildBusinessContent(context)]
+                ? [_buildBusinessContent(context, node)]
                 : [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,

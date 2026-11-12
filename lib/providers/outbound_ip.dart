@@ -1,10 +1,12 @@
 import 'package:fl_clash/common/service_probe.dart';
+import 'package:fl_clash/common/tianji_api.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'core.dart';
 import 'route_state.dart';
 import 'routed_probe.dart';
+import 'tianji_nodes.dart';
 
 part 'generated/outbound_ip.g.dart';
 
@@ -13,6 +15,7 @@ part 'generated/outbound_ip.g.dart';
 @Riverpod(keepAlive: true)
 class OutboundIpProbe extends _$OutboundIpProbe
     with RoutedProbe<String, IpInfo> {
+  DateTime? _tianjiCooldownUntil;
   @override
   RoutedProbeState<String, IpInfo> build() => buildProbe();
 
@@ -24,11 +27,24 @@ class OutboundIpProbe extends _$OutboundIpProbe
     final proxyName = target == routedOutbound && !route.proxied
         ? directOutbound
         : target;
-    final result = await lookupOutboundIp(
-      ref.read(coreHandlerProvider),
-      proxyName,
-    );
-    final value = parseOutboundIp(result);
+    final core = ref.read(coreHandlerProvider);
+    final business = ref.read(tianjiApiEnabledProvider);
+    OutboundIpResult? result;
+    IpInfo? value;
+    if (business &&
+        (_tianjiCooldownUntil == null ||
+            DateTime.now().isAfter(_tianjiCooldownUntil!))) {
+      result = await lookupOutboundIp(core, proxyName, urls: [tianjiEgressUrl]);
+      value = parseTianjiEgress(result.body);
+      if (value == null || result.error != null) {
+        _tianjiCooldownUntil = DateTime.now().add(const Duration(seconds: 60));
+        result = null;
+      } else {
+        _tianjiCooldownUntil = null;
+      }
+    }
+    result ??= await lookupOutboundIp(core, proxyName);
+    value ??= parseOutboundIp(result);
     final exit = result.chains.firstOrNull;
     return {
       target: ProbeAnswer(

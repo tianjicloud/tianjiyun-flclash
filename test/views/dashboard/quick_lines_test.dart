@@ -38,6 +38,7 @@ void main() {
     );
     container = ProviderContainer(
       overrides: [
+        tianjiApiEnabledProvider.overrideWithValue(false),
         profilesProvider.overrideWith(() => TestProfiles([profile])),
       ],
     );
@@ -90,6 +91,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            tianjiApiEnabledProvider.overrideWithValue(false),
             currentGroupsStateProvider.overrideWithValue(
               const GroupsState(
                 value: [

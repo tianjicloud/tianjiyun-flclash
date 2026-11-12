@@ -109,6 +109,7 @@ void main() {
     );
     container = ProviderContainer(
       overrides: [
+        tianjiApiEnabledProvider.overrideWithValue(false),
         commonActionProvider.overrideWith(() => updateAction),
         profilesProvider.overrideWith(
           () => TestProfiles(const [

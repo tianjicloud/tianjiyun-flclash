@@ -201,6 +201,7 @@ void main() {
     const route = 'JP · 东京家宽 · 04';
     container = ProviderContainer(
       overrides: [
+        tianjiApiEnabledProvider.overrideWithValue(false),
         currentProfileProvider.overrideWithValue(profile),
         coreStatusProvider.overrideWithValue(
           connected ? CoreStatus.connected : CoreStatus.disconnected,

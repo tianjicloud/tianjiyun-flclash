@@ -13,6 +13,7 @@ import 'residential.dart';
 import 'route_state.dart';
 import 'selection_verification.dart';
 import 'state.dart';
+import 'tianji_nodes.dart';
 
 class ManualSelectionPending extends Notifier<Map<String, int>> {
   @override
@@ -59,6 +60,7 @@ final residentialSelectionRejectionProvider =
 
 class SelectionCheck extends Notifier<SelectionVerdict> {
   Object? _retried;
+  ({String actual, String expected})? egressMismatchCountries;
 
   SelectionVerdict _bounded(SelectionVerdict verdict) {
     if (verdict != SelectionVerdict.confirming || !ref.read(isStartProvider)) {
@@ -125,8 +127,26 @@ class SelectionCheck extends Notifier<SelectionVerdict> {
       route.routeVersion,
       route.hostEpoch,
     );
+    final expected = residential.active
+        ? residential.selectedExit
+        : choice.expected;
+    final node = expected == null
+        ? null
+        : ref.watch(tianjiNodeProvider(expected));
+    final info = entry.value;
+    final expectedExit = node?.expectedExit;
+    final actualExit = info?.exit;
+    egressMismatchCountries =
+        info?.fromTianji == true &&
+            expectedExit != null &&
+            actualExit != null &&
+            actualExit.countryCode != null &&
+            expectedExit.countryCode != null &&
+            actualExit.countryCode != expectedExit.countryCode
+        ? (actual: actualExit.countryCode!, expected: expectedExit.countryCode!)
+        : null;
     final verdict = verifySelection(
-      expected: residential.active ? residential.selectedExit : choice.expected,
+      expected: expected,
       entry: entry,
       route: route,
       running: ref.watch(isStartProvider),
@@ -140,13 +160,16 @@ class SelectionCheck extends Notifier<SelectionVerdict> {
       residentialLocked: residential.active && rejected,
       automaticGroup: !residential.active && choice.automatic,
       retried: _retried == key,
+      node: node,
     );
     if (!residential.active &&
         (pending.containsValue(choice.sequence) ||
             (choice.sequence > 0 && choice.expected == null))) {
       return _bounded(SelectionVerdict.confirming);
     }
-    if (verdict == SelectionVerdict.unknownPending && _retried != key) {
+    if ((verdict == SelectionVerdict.unknownPending ||
+            verdict == SelectionVerdict.egressPending) &&
+        _retried != key) {
       _retried = key;
       scheduleMicrotask(() {
         if (ref.mounted && _retried == key) {

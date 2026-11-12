@@ -13,6 +13,10 @@ enum SelectionVerdict {
   groupOverridden,
   unknownPending,
   unknown,
+  egressPending,
+  trafficNotOnTianji,
+  egressMismatch,
+  egressAnomaly,
 }
 
 SelectionVerdict verifySelection({
@@ -24,6 +28,7 @@ SelectionVerdict verifySelection({
   bool residentialLocked = false,
   bool automaticGroup = false,
   bool retried = false,
+  TianjiNode? node,
 }) {
   if (expected == null && !residentialLocked) return SelectionVerdict.untouched;
   if (running && !captured) return SelectionVerdict.notCaptured;
@@ -42,7 +47,29 @@ SelectionVerdict verifySelection({
       stamp.chains.isEmpty) {
     return SelectionVerdict.confirming;
   }
-  if (stamp.chains.first == expected) return SelectionVerdict.consistent;
+  if (stamp.chains.first == expected) {
+    final info = entry.value!;
+    final expectedExit = node?.expectedExit;
+    if (!info.fromTianji || expectedExit == null) {
+      return SelectionVerdict.consistent;
+    }
+    final actualExit = info.exit;
+    if (actualExit == null) {
+      return retried
+          ? SelectionVerdict.trafficNotOnTianji
+          : SelectionVerdict.egressPending;
+    }
+    if (actualExit.countryCode != expectedExit.countryCode) {
+      return SelectionVerdict.egressMismatch;
+    }
+    if (expectedExit.kind == 'residential' && actualExit.kind == 'datacenter') {
+      return SelectionVerdict.egressAnomaly;
+    }
+    if (actualExit.kind != expectedExit.kind) {
+      return SelectionVerdict.egressMismatch;
+    }
+    return SelectionVerdict.consistent;
+  }
   if (automaticGroup) return SelectionVerdict.groupOverridden;
   return retried ? SelectionVerdict.unknown : SelectionVerdict.unknownPending;
 }

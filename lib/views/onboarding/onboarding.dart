@@ -1412,7 +1412,7 @@ class _ConnectSuccessView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
     final colorScheme = context.colorScheme;
-    final countryCode = ipInfo.countryCode.toUpperCase();
+    final countryCode = ipInfo.countryCode?.toUpperCase() ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

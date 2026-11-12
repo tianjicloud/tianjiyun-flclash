@@ -17,6 +17,46 @@ part 'generated/common.freezed.dart';
 part 'generated/common.g.dart';
 
 @freezed
+abstract class EgressExit with _$EgressExit {
+  const factory EgressExit({
+    required String kind,
+    @JsonKey(name: 'country_code') String? countryCode,
+    String? pool,
+  }) = _EgressExit;
+
+  factory EgressExit.fromJson(Map<String, Object?> json) =>
+      _$EgressExitFromJson(json);
+}
+
+@freezed
+abstract class TianjiNode with _$TianjiNode {
+  const factory TianjiNode({
+    required String name,
+    @JsonKey(name: 'country_code') String? countryCode,
+    double? multiplier,
+    @JsonKey(name: 'expected_exit') EgressExit? expectedExit,
+    @JsonKey(name: 'substituted_categories')
+    @Default([])
+    List<String> substitutedCategories,
+  }) = _TianjiNode;
+
+  factory TianjiNode.fromJson(Map<String, Object?> json) =>
+      _$TianjiNodeFromJson(json);
+}
+
+@freezed
+abstract class TianjiNodes with _$TianjiNodes {
+  const factory TianjiNodes({
+    @Default([]) List<TianjiNode> nodes,
+    @Default({}) Map<String, String> categories,
+    @JsonKey(name: 'generated_at') String? generatedAt,
+  }) = _TianjiNodes;
+
+  factory TianjiNodes.fromJson(Map<String, Object?> json) =>
+      _$TianjiNodesFromJson(json);
+}
+
+@freezed
 abstract class NavigationItem with _$NavigationItem {
   const factory NavigationItem({
     required Glyph glyph,
@@ -604,9 +644,13 @@ extension GroupExt on Group {
 abstract class IpInfo with _$IpInfo {
   const factory IpInfo({
     required String ip,
-    required String countryCode,
+    String? countryCode,
     String? city,
     String? region,
+    int? asn,
+    String? isp,
+    EgressExit? exit,
+    @Default(false) bool fromTianji,
   }) = _IpInfo;
 
   static IpInfo fromIpInfoIoJson(Map<String, dynamic> json) {

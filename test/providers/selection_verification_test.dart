@@ -35,6 +35,7 @@ void main() {
     bool locked = false,
     bool auto = false,
     bool retry = false,
+    TianjiNode? node,
   }) => verifySelection(
     expected: expected,
     entry: entry ?? answer(),
@@ -44,6 +45,7 @@ void main() {
     residentialLocked: locked,
     automaticGroup: auto,
     retried: retry,
+    node: node,
   );
 
   test('pure automatic history makes no consistency assertion', () {
@@ -83,6 +85,57 @@ void main() {
       verify(entry: answer(exit: 'B'), retry: true),
       SelectionVerdict.unknown,
     );
+  });
+  test('Tianji egress is checked only for listed expected exits', () {
+    const node = TianjiNode(
+      name: 'JP home',
+      expectedExit: EgressExit(kind: 'residential', countryCode: 'JP'),
+    );
+    ProbeEntry<IpInfo> tianji({EgressExit? exit}) => ProbeEntry(
+      phase: ProbePhase.fresh,
+      value: IpInfo(
+        ip: '192.0.2.1',
+        countryCode: 'JP',
+        exit: exit,
+        fromTianji: true,
+      ),
+      stamp: answer().stamp,
+    );
+    expect(verify(node: null, entry: tianji()), SelectionVerdict.consistent);
+    expect(
+      verify(
+        node: const TianjiNode(name: 'unknown'),
+        entry: tianji(),
+      ),
+      SelectionVerdict.consistent,
+    );
+    expect(
+      verify(node: node, entry: tianji(), retry: false),
+      SelectionVerdict.egressPending,
+    );
+    expect(
+      verify(node: node, entry: tianji(), retry: true),
+      SelectionVerdict.trafficNotOnTianji,
+    );
+    expect(
+      verify(
+        node: node,
+        entry: tianji(
+          exit: const EgressExit(kind: 'residential', countryCode: 'US'),
+        ),
+      ),
+      SelectionVerdict.egressMismatch,
+    );
+    expect(
+      verify(
+        node: node,
+        entry: tianji(
+          exit: const EgressExit(kind: 'datacenter', countryCode: 'JP'),
+        ),
+      ),
+      SelectionVerdict.egressAnomaly,
+    );
+    expect(verify(node: node, entry: answer()), SelectionVerdict.consistent);
   });
   test(
     'a more recent off-path selection never changes the default expectation',

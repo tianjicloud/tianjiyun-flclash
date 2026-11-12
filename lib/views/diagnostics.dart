@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/service_probe.dart';
+import 'package:fl_clash/common/tianji_api.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
@@ -30,11 +31,13 @@ class _DiagnosticCheck {
     required this.title,
     required this.result,
     this.detail,
+    this.detailIsVerdict = false,
   });
 
   final String title;
   final DiagnosticResult result;
   final String? detail;
+  final bool detailIsVerdict;
 }
 
 void refreshDiagnostics(WidgetRef ref) {
@@ -150,7 +153,22 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
     final outbound = ref.watch(
       outboundIpProbeProvider.select((state) => state.entryOf(routedOutbound)),
     );
+    final selectedNode = ref.watch(
+      tianjiNodeProvider(outbound.stamp?.chains.firstOrNull ?? ''),
+    );
     final services = ref.watch(serviceStatusProvider);
+    final dns = ref.watch(patchClashConfigProvider).dns;
+    final mainlandPolicy = dns.nameserverPolicy.entries.any((entry) {
+      final key = entry.key.toLowerCase();
+      final server = entry.value;
+      return (key.contains('cn') || key.endsWith('.cn')) &&
+          (server.contains('114.114.114.114') || server.contains('223.5.5.5'));
+    });
+    final dnsDetail = [
+      if (dns.enhancedMode == DnsMode.fakeIp || dns.nameserver.isNotEmpty)
+        strings.businessProxyDnsRemote,
+      if (mainlandPolicy) strings.businessRegionLocalDns,
+    ].join(' · ');
     final route = ref.watch(routeTrackerProvider);
     final outboundResult = outboundDiagnosticResult(
       active: active,
@@ -184,7 +202,23 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
         result: active
             ? _selectionResult(selection)
             : DiagnosticResult.unverified,
-        detail: active ? _selectionDetail(strings, selection) : null,
+        detail: active
+            ? _selectionDetail(
+                strings,
+                selection,
+                actual: localizedRegion(
+                  strings,
+                  outbound.value?.exit?.countryCode,
+                ),
+                expected: localizedRegion(
+                  strings,
+                  selectedNode?.expectedExit?.countryCode,
+                ),
+              )
+            : null,
+        detailIsVerdict:
+            selection == SelectionVerdict.egressMismatch ||
+            selection == SelectionVerdict.egressAnomaly,
       ),
       _DiagnosticCheck(
         title: strings.outboundIp,
@@ -258,6 +292,16 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
               ],
             ),
           ),
+          if (dnsDetail.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                dnsDetail,
+                style: AppTextStyle.footnote
+                    .of(context)
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
+            ),
         ],
       );
     }
@@ -289,6 +333,15 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
           counts,
           const SizedBox(height: 10),
           for (final check in checks) _DiagnosticRow(check: check),
+          if (dnsDetail.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              dnsDetail,
+              style: AppTextStyle.footnote
+                  .of(context)
+                  .copyWith(color: context.colorScheme.onSurfaceVariant),
+            ),
+          ],
         ],
       ),
     );
@@ -410,25 +463,40 @@ DiagnosticResult _selectionResult(SelectionVerdict selection) =>
       SelectionVerdict.failed ||
       SelectionVerdict.notCaptured ||
       SelectionVerdict.residentialLocked ||
-      SelectionVerdict.groupOverridden => DiagnosticResult.failed,
+      SelectionVerdict.groupOverridden ||
+      SelectionVerdict.trafficNotOnTianji ||
+      SelectionVerdict.egressMismatch ||
+      SelectionVerdict.egressAnomaly => DiagnosticResult.failed,
       SelectionVerdict.untouched ||
       SelectionVerdict.confirming ||
       SelectionVerdict.unknownPending ||
       SelectionVerdict.unknown => DiagnosticResult.unverified,
+      SelectionVerdict.egressPending => DiagnosticResult.unverified,
     };
 
-String _selectionDetail(AppLocalizations strings, SelectionVerdict selection) =>
-    switch (selection) {
-      SelectionVerdict.untouched => strings.servicePending,
-      SelectionVerdict.confirming => strings.selectionConfirming,
-      SelectionVerdict.failed => strings.serviceFailed,
-      SelectionVerdict.consistent => strings.connected,
-      SelectionVerdict.notCaptured => strings.selectionNotCaptured,
-      SelectionVerdict.residentialLocked => strings.selectionResidentialLocked,
-      SelectionVerdict.groupOverridden => strings.selectionGroupOverridden,
-      SelectionVerdict.unknownPending => strings.selectionUnknownPending,
-      SelectionVerdict.unknown => strings.selectionUnknown,
-    };
+String _selectionDetail(
+  AppLocalizations strings,
+  SelectionVerdict selection, {
+  required String actual,
+  required String expected,
+}) => switch (selection) {
+  SelectionVerdict.untouched => strings.servicePending,
+  SelectionVerdict.confirming => strings.selectionConfirming,
+  SelectionVerdict.failed => strings.serviceFailed,
+  SelectionVerdict.consistent => strings.connected,
+  SelectionVerdict.notCaptured => strings.selectionNotCaptured,
+  SelectionVerdict.residentialLocked => strings.selectionResidentialLocked,
+  SelectionVerdict.groupOverridden => strings.selectionGroupOverridden,
+  SelectionVerdict.unknownPending => strings.selectionUnknownPending,
+  SelectionVerdict.unknown => strings.selectionUnknown,
+  SelectionVerdict.egressPending => strings.selectionConfirming,
+  SelectionVerdict.trafficNotOnTianji => strings.businessTrafficNotOnTianji,
+  SelectionVerdict.egressMismatch =>
+    actual == expected
+        ? strings.businessExitKindMismatch
+        : strings.businessExitCountryMismatch(actual, expected),
+  SelectionVerdict.egressAnomaly => strings.businessExitAnomaly,
+};
 
 class _DiagnosticCount extends StatelessWidget {
   const _DiagnosticCount({
@@ -502,6 +570,13 @@ class _DiagnosticRow extends StatelessWidget {
       DiagnosticResult.failed => strings.diagnosticsFailed,
       DiagnosticResult.unverified => strings.diagnosticsUnverified,
     };
+    final showDetail =
+        check.detail != null &&
+        check.detail != strings.servicePending &&
+        check.detail != status &&
+        (check.result == DiagnosticResult.unverified ||
+            (check.result == DiagnosticResult.failed &&
+                check.title == strings.diagnosticsSelection));
     final content = Row(
       crossAxisAlignment: mobile
           ? CrossAxisAlignment.center
@@ -525,11 +600,10 @@ class _DiagnosticRow extends StatelessWidget {
           ),
         ),
         Text(
-          check.result == DiagnosticResult.unverified &&
-                  check.detail != null &&
-                  check.detail != strings.servicePending &&
-                  check.detail != status
-              ? '${strings.diagnosticsUnverified}（${check.detail}）'
+          check.detailIsVerdict
+              ? check.detail ?? status
+              : showDetail
+              ? '$status（${check.detail}）'
               : status,
           style: BusinessText.metaLabel(context).copyWith(color: color),
         ),

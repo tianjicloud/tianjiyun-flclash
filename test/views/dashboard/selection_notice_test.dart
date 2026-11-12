@@ -7,6 +7,25 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../helpers/test_app.dart';
 
 void main() {
+  testWidgets('egress mismatch shows actual and selected countries', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      TestApp(
+        locale: const Locale('zh', 'CN'),
+        overrides: [
+          selectionCheckProvider.overrideWith(() => _MismatchSelectionCheck()),
+        ],
+        child: const Align(
+          alignment: Alignment.topLeft,
+          child: SizedBox(width: 320, child: SelectionNotice()),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('出口在美国，所选线路在日本'), findsOneWidget);
+  });
+
   for (final verdict in SelectionVerdict.values) {
     testWidgets('selection notice renders $verdict at large text', (
       tester,
@@ -39,5 +58,13 @@ void main() {
             : findsNothing,
       );
     });
+  }
+}
+
+class _MismatchSelectionCheck extends SelectionCheck {
+  @override
+  SelectionVerdict build() {
+    egressMismatchCountries = (actual: 'US', expected: 'JP');
+    return SelectionVerdict.egressMismatch;
   }
 }

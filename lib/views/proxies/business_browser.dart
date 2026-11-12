@@ -709,6 +709,14 @@ String _verdictSummary(
   SelectionVerdict.unknownPending =>
     context.appLocalizations.selectionUnknownPending,
   SelectionVerdict.unknown => context.appLocalizations.selectionUnknown,
+  SelectionVerdict.egressPending =>
+    context.appLocalizations.selectionConfirming,
+  SelectionVerdict.trafficNotOnTianji =>
+    context.appLocalizations.businessTrafficNotOnTianji,
+  SelectionVerdict.egressMismatch =>
+    context.appLocalizations.businessExitCountryMismatch('', ''),
+  SelectionVerdict.egressAnomaly =>
+    context.appLocalizations.businessExitAnomaly,
 };
 
 String _cleanGroupName(String name) {

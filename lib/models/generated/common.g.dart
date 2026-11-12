@@ -6,6 +6,63 @@ part of '../common.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_EgressExit _$EgressExitFromJson(Map<String, dynamic> json) => _EgressExit(
+  kind: json['kind'] as String,
+  countryCode: json['country_code'] as String?,
+  pool: json['pool'] as String?,
+);
+
+Map<String, dynamic> _$EgressExitToJson(_EgressExit instance) =>
+    <String, dynamic>{
+      'kind': instance.kind,
+      'country_code': instance.countryCode,
+      'pool': instance.pool,
+    };
+
+_TianjiNode _$TianjiNodeFromJson(Map<String, dynamic> json) => _TianjiNode(
+  name: json['name'] as String,
+  countryCode: json['country_code'] as String?,
+  multiplier: (json['multiplier'] as num?)?.toDouble(),
+  expectedExit: json['expected_exit'] == null
+      ? null
+      : EgressExit.fromJson(json['expected_exit'] as Map<String, dynamic>),
+  substitutedCategories:
+      (json['substituted_categories'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
+);
+
+Map<String, dynamic> _$TianjiNodeToJson(_TianjiNode instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'country_code': instance.countryCode,
+      'multiplier': instance.multiplier,
+      'expected_exit': instance.expectedExit,
+      'substituted_categories': instance.substitutedCategories,
+    };
+
+_TianjiNodes _$TianjiNodesFromJson(Map<String, dynamic> json) => _TianjiNodes(
+  nodes:
+      (json['nodes'] as List<dynamic>?)
+          ?.map((e) => TianjiNode.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
+  categories:
+      (json['categories'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ) ??
+      const {},
+  generatedAt: json['generated_at'] as String?,
+);
+
+Map<String, dynamic> _$TianjiNodesToJson(_TianjiNodes instance) =>
+    <String, dynamic>{
+      'nodes': instance.nodes,
+      'categories': instance.categories,
+      'generated_at': instance.generatedAt,
+    };
+
 _Package _$PackageFromJson(Map<String, dynamic> json) => _Package(
   packageName: json['packageName'] as String,
   label: json['label'] as String,

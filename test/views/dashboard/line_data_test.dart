@@ -33,6 +33,7 @@ Widget _lineView({
 }) {
   return ProviderScope(
     overrides: [
+      tianjiApiEnabledProvider.overrideWithValue(false),
       currentGroupsStateProvider.overrideWithValue(GroupsState(value: groups)),
       residentialPolicyProvider.overrideWithValue(policy),
       scenePolicyProvider.overrideWithValue(_inactiveScene),

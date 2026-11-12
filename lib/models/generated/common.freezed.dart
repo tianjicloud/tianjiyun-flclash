@@ -12,6 +12,882 @@ part of '../common.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
+
+/// @nodoc
+mixin _$EgressExit {
+
+ String get kind;@JsonKey(name: 'country_code') String? get countryCode; String? get pool;
+/// Create a copy of EgressExit
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EgressExitCopyWith<EgressExit> get copyWith => _$EgressExitCopyWithImpl<EgressExit>(this as EgressExit, _$identity);
+
+  /// Serializes this EgressExit to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as EgressExit;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EgressExit&&(identical(other.kind, _this.kind) || other.kind == _this.kind)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.pool, _this.pool) || other.pool == _this.pool));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+  final _this = this as EgressExit;
+  return Object.hash(runtimeType,_this.kind,_this.countryCode,_this.pool);
+}
+
+@override
+String toString() {
+  final _this = this as EgressExit;
+  return 'EgressExit(kind: ${_this.kind}, countryCode: ${_this.countryCode}, pool: ${_this.pool})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $EgressExitCopyWith<$Res>  {
+  factory $EgressExitCopyWith(EgressExit value, $Res Function(EgressExit) _then) = _$EgressExitCopyWithImpl;
+@useResult
+$Res call({
+ String kind,@JsonKey(name: 'country_code') String? countryCode, String? pool
+});
+
+
+
+
+}
+/// @nodoc
+class _$EgressExitCopyWithImpl<$Res>
+    implements $EgressExitCopyWith<$Res> {
+  _$EgressExitCopyWithImpl(this._self, this._then);
+
+  final EgressExit _self;
+  final $Res Function(EgressExit) _then;
+
+/// Create a copy of EgressExit
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? kind = null,Object? countryCode = freezed,Object? pool = freezed,}) {
+  return _then(EgressExit(
+kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non_nullable
+as String,countryCode: freezed == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
+as String?,pool: freezed == pool ? _self.pool : pool // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [EgressExit].
+extension EgressExitPatterns on EgressExit {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _EgressExit value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _EgressExit() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _EgressExit value)  $default,){
+final _that = this;
+switch (_that) {
+case _EgressExit():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _EgressExit value)?  $default,){
+final _that = this;
+switch (_that) {
+case _EgressExit() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String kind, @JsonKey(name: 'country_code')  String? countryCode,  String? pool)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _EgressExit() when $default != null:
+return $default(_that.kind,_that.countryCode,_that.pool);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String kind, @JsonKey(name: 'country_code')  String? countryCode,  String? pool)  $default,) {final _that = this;
+switch (_that) {
+case _EgressExit():
+return $default(_that.kind,_that.countryCode,_that.pool);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String kind, @JsonKey(name: 'country_code')  String? countryCode,  String? pool)?  $default,) {final _that = this;
+switch (_that) {
+case _EgressExit() when $default != null:
+return $default(_that.kind,_that.countryCode,_that.pool);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _EgressExit implements EgressExit {
+  const _EgressExit({required this.kind, @JsonKey(name: 'country_code') this.countryCode, this.pool});
+  factory _EgressExit.fromJson(Map<String, dynamic> json) => _$EgressExitFromJson(json);
+
+@override final  String kind;
+@override@JsonKey(name: 'country_code') final  String? countryCode;
+@override final  String? pool;
+
+/// Create a copy of EgressExit
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EgressExitCopyWith<_EgressExit> get copyWith => __$EgressExitCopyWithImpl<_EgressExit>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$EgressExitToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EgressExit&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.pool, pool) || other.pool == pool));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+    return Object.hash(runtimeType,kind,countryCode,pool);
+}
+
+@override
+String toString() {
+    return 'EgressExit(kind: $kind, countryCode: $countryCode, pool: $pool)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EgressExitCopyWith<$Res> implements $EgressExitCopyWith<$Res> {
+  factory _$EgressExitCopyWith(_EgressExit value, $Res Function(_EgressExit) _then) = __$EgressExitCopyWithImpl;
+@override @useResult
+$Res call({
+ String kind,@JsonKey(name: 'country_code') String? countryCode, String? pool
+});
+
+
+
+
+}
+/// @nodoc
+class __$EgressExitCopyWithImpl<$Res>
+    implements _$EgressExitCopyWith<$Res> {
+  __$EgressExitCopyWithImpl(this._self, this._then);
+
+  final _EgressExit _self;
+  final $Res Function(_EgressExit) _then;
+
+/// Create a copy of EgressExit
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? kind = null,Object? countryCode = freezed,Object? pool = freezed,}) {
+  return _then(_EgressExit(
+kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non_nullable
+as String,countryCode: freezed == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
+as String?,pool: freezed == pool ? _self.pool : pool // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$TianjiNode {
+
+ String get name;@JsonKey(name: 'country_code') String? get countryCode; double? get multiplier;@JsonKey(name: 'expected_exit') EgressExit? get expectedExit;@JsonKey(name: 'substituted_categories') List<String> get substitutedCategories;
+/// Create a copy of TianjiNode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TianjiNodeCopyWith<TianjiNode> get copyWith => _$TianjiNodeCopyWithImpl<TianjiNode>(this as TianjiNode, _$identity);
+
+  /// Serializes this TianjiNode to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as TianjiNode;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TianjiNode&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.multiplier, _this.multiplier) || other.multiplier == _this.multiplier)&&(identical(other.expectedExit, _this.expectedExit) || other.expectedExit == _this.expectedExit)&&const DeepCollectionEquality().equals(other.substitutedCategories, _this.substitutedCategories));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+  final _this = this as TianjiNode;
+  return Object.hash(runtimeType,_this.name,_this.countryCode,_this.multiplier,_this.expectedExit,const DeepCollectionEquality().hash(_this.substitutedCategories));
+}
+
+@override
+String toString() {
+  final _this = this as TianjiNode;
+  return 'TianjiNode(name: ${_this.name}, countryCode: ${_this.countryCode}, multiplier: ${_this.multiplier}, expectedExit: ${_this.expectedExit}, substitutedCategories: ${_this.substitutedCategories})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TianjiNodeCopyWith<$Res>  {
+  factory $TianjiNodeCopyWith(TianjiNode value, $Res Function(TianjiNode) _then) = _$TianjiNodeCopyWithImpl;
+@useResult
+$Res call({
+ String name,@JsonKey(name: 'country_code') String? countryCode, double? multiplier,@JsonKey(name: 'expected_exit') EgressExit? expectedExit,@JsonKey(name: 'substituted_categories') List<String> substitutedCategories
+});
+
+
+$EgressExitCopyWith<$Res>? get expectedExit;
+
+}
+/// @nodoc
+class _$TianjiNodeCopyWithImpl<$Res>
+    implements $TianjiNodeCopyWith<$Res> {
+  _$TianjiNodeCopyWithImpl(this._self, this._then);
+
+  final TianjiNode _self;
+  final $Res Function(TianjiNode) _then;
+
+/// Create a copy of TianjiNode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? countryCode = freezed,Object? multiplier = freezed,Object? expectedExit = freezed,Object? substitutedCategories = null,}) {
+  return _then(TianjiNode(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,countryCode: freezed == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
+as String?,multiplier: freezed == multiplier ? _self.multiplier : multiplier // ignore: cast_nullable_to_non_nullable
+as double?,expectedExit: freezed == expectedExit ? _self.expectedExit : expectedExit // ignore: cast_nullable_to_non_nullable
+as EgressExit?,substitutedCategories: null == substitutedCategories ? _self.substitutedCategories : substitutedCategories // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+/// Create a copy of TianjiNode
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EgressExitCopyWith<$Res>? get expectedExit {
+    if (_self.expectedExit == null) {
+    return null;
+  }
+
+  return $EgressExitCopyWith<$Res>(_self.expectedExit!, (value) {
+    return _then(_self.copyWith(expectedExit: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [TianjiNode].
+extension TianjiNodePatterns on TianjiNode {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TianjiNode value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TianjiNode() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TianjiNode value)  $default,){
+final _that = this;
+switch (_that) {
+case _TianjiNode():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TianjiNode value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TianjiNode() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'country_code')  String? countryCode,  double? multiplier, @JsonKey(name: 'expected_exit')  EgressExit? expectedExit, @JsonKey(name: 'substituted_categories')  List<String> substitutedCategories)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TianjiNode() when $default != null:
+return $default(_that.name,_that.countryCode,_that.multiplier,_that.expectedExit,_that.substitutedCategories);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'country_code')  String? countryCode,  double? multiplier, @JsonKey(name: 'expected_exit')  EgressExit? expectedExit, @JsonKey(name: 'substituted_categories')  List<String> substitutedCategories)  $default,) {final _that = this;
+switch (_that) {
+case _TianjiNode():
+return $default(_that.name,_that.countryCode,_that.multiplier,_that.expectedExit,_that.substitutedCategories);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name, @JsonKey(name: 'country_code')  String? countryCode,  double? multiplier, @JsonKey(name: 'expected_exit')  EgressExit? expectedExit, @JsonKey(name: 'substituted_categories')  List<String> substitutedCategories)?  $default,) {final _that = this;
+switch (_that) {
+case _TianjiNode() when $default != null:
+return $default(_that.name,_that.countryCode,_that.multiplier,_that.expectedExit,_that.substitutedCategories);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _TianjiNode implements TianjiNode {
+  const _TianjiNode({required this.name, @JsonKey(name: 'country_code') this.countryCode, this.multiplier, @JsonKey(name: 'expected_exit') this.expectedExit, @JsonKey(name: 'substituted_categories')  List<String> substitutedCategories = const []}): _substitutedCategories = substitutedCategories;
+  factory _TianjiNode.fromJson(Map<String, dynamic> json) => _$TianjiNodeFromJson(json);
+
+@override final  String name;
+@override@JsonKey(name: 'country_code') final  String? countryCode;
+@override final  double? multiplier;
+@override@JsonKey(name: 'expected_exit') final  EgressExit? expectedExit;
+ final  List<String> _substitutedCategories;
+@override@JsonKey(name: 'substituted_categories') List<String> get substitutedCategories {
+  if (_substitutedCategories is EqualUnmodifiableListView) return _substitutedCategories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_substitutedCategories);
+}
+
+
+/// Create a copy of TianjiNode
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TianjiNodeCopyWith<_TianjiNode> get copyWith => __$TianjiNodeCopyWithImpl<_TianjiNode>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$TianjiNodeToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _TianjiNode&&(identical(other.name, name) || other.name == name)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.multiplier, multiplier) || other.multiplier == multiplier)&&(identical(other.expectedExit, expectedExit) || other.expectedExit == expectedExit)&&const DeepCollectionEquality().equals(other.substitutedCategories, _substitutedCategories));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+    return Object.hash(runtimeType,name,countryCode,multiplier,expectedExit,const DeepCollectionEquality().hash(_substitutedCategories));
+}
+
+@override
+String toString() {
+    return 'TianjiNode(name: $name, countryCode: $countryCode, multiplier: $multiplier, expectedExit: $expectedExit, substitutedCategories: $substitutedCategories)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TianjiNodeCopyWith<$Res> implements $TianjiNodeCopyWith<$Res> {
+  factory _$TianjiNodeCopyWith(_TianjiNode value, $Res Function(_TianjiNode) _then) = __$TianjiNodeCopyWithImpl;
+@override @useResult
+$Res call({
+ String name,@JsonKey(name: 'country_code') String? countryCode, double? multiplier,@JsonKey(name: 'expected_exit') EgressExit? expectedExit,@JsonKey(name: 'substituted_categories') List<String> substitutedCategories
+});
+
+
+@override $EgressExitCopyWith<$Res>? get expectedExit;
+
+}
+/// @nodoc
+class __$TianjiNodeCopyWithImpl<$Res>
+    implements _$TianjiNodeCopyWith<$Res> {
+  __$TianjiNodeCopyWithImpl(this._self, this._then);
+
+  final _TianjiNode _self;
+  final $Res Function(_TianjiNode) _then;
+
+/// Create a copy of TianjiNode
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? countryCode = freezed,Object? multiplier = freezed,Object? expectedExit = freezed,Object? substitutedCategories = null,}) {
+  return _then(_TianjiNode(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,countryCode: freezed == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
+as String?,multiplier: freezed == multiplier ? _self.multiplier : multiplier // ignore: cast_nullable_to_non_nullable
+as double?,expectedExit: freezed == expectedExit ? _self.expectedExit : expectedExit // ignore: cast_nullable_to_non_nullable
+as EgressExit?,substitutedCategories: null == substitutedCategories ? _self._substitutedCategories : substitutedCategories // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+
+/// Create a copy of TianjiNode
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EgressExitCopyWith<$Res>? get expectedExit {
+    if (_self.expectedExit == null) {
+    return null;
+  }
+
+  return $EgressExitCopyWith<$Res>(_self.expectedExit!, (value) {
+    return _then(_self.copyWith(expectedExit: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$TianjiNodes {
+
+ List<TianjiNode> get nodes; Map<String, String> get categories;@JsonKey(name: 'generated_at') String? get generatedAt;
+/// Create a copy of TianjiNodes
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TianjiNodesCopyWith<TianjiNodes> get copyWith => _$TianjiNodesCopyWithImpl<TianjiNodes>(this as TianjiNodes, _$identity);
+
+  /// Serializes this TianjiNodes to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as TianjiNodes;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TianjiNodes&&const DeepCollectionEquality().equals(other.nodes, _this.nodes)&&const DeepCollectionEquality().equals(other.categories, _this.categories)&&(identical(other.generatedAt, _this.generatedAt) || other.generatedAt == _this.generatedAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+  final _this = this as TianjiNodes;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.nodes),const DeepCollectionEquality().hash(_this.categories),_this.generatedAt);
+}
+
+@override
+String toString() {
+  final _this = this as TianjiNodes;
+  return 'TianjiNodes(nodes: ${_this.nodes}, categories: ${_this.categories}, generatedAt: ${_this.generatedAt})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TianjiNodesCopyWith<$Res>  {
+  factory $TianjiNodesCopyWith(TianjiNodes value, $Res Function(TianjiNodes) _then) = _$TianjiNodesCopyWithImpl;
+@useResult
+$Res call({
+ List<TianjiNode> nodes, Map<String, String> categories,@JsonKey(name: 'generated_at') String? generatedAt
+});
+
+
+
+
+}
+/// @nodoc
+class _$TianjiNodesCopyWithImpl<$Res>
+    implements $TianjiNodesCopyWith<$Res> {
+  _$TianjiNodesCopyWithImpl(this._self, this._then);
+
+  final TianjiNodes _self;
+  final $Res Function(TianjiNodes) _then;
+
+/// Create a copy of TianjiNodes
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? nodes = null,Object? categories = null,Object? generatedAt = freezed,}) {
+  return _then(TianjiNodes(
+nodes: null == nodes ? _self.nodes : nodes // ignore: cast_nullable_to_non_nullable
+as List<TianjiNode>,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,generatedAt: freezed == generatedAt ? _self.generatedAt : generatedAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [TianjiNodes].
+extension TianjiNodesPatterns on TianjiNodes {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TianjiNodes value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TianjiNodes() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TianjiNodes value)  $default,){
+final _that = this;
+switch (_that) {
+case _TianjiNodes():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TianjiNodes value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TianjiNodes() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<TianjiNode> nodes,  Map<String, String> categories, @JsonKey(name: 'generated_at')  String? generatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TianjiNodes() when $default != null:
+return $default(_that.nodes,_that.categories,_that.generatedAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<TianjiNode> nodes,  Map<String, String> categories, @JsonKey(name: 'generated_at')  String? generatedAt)  $default,) {final _that = this;
+switch (_that) {
+case _TianjiNodes():
+return $default(_that.nodes,_that.categories,_that.generatedAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<TianjiNode> nodes,  Map<String, String> categories, @JsonKey(name: 'generated_at')  String? generatedAt)?  $default,) {final _that = this;
+switch (_that) {
+case _TianjiNodes() when $default != null:
+return $default(_that.nodes,_that.categories,_that.generatedAt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _TianjiNodes implements TianjiNodes {
+  const _TianjiNodes({ List<TianjiNode> nodes = const [],  Map<String, String> categories = const {}, @JsonKey(name: 'generated_at') this.generatedAt}): _nodes = nodes,_categories = categories;
+  factory _TianjiNodes.fromJson(Map<String, dynamic> json) => _$TianjiNodesFromJson(json);
+
+ final  List<TianjiNode> _nodes;
+@override@JsonKey() List<TianjiNode> get nodes {
+  if (_nodes is EqualUnmodifiableListView) return _nodes;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_nodes);
+}
+
+ final  Map<String, String> _categories;
+@override@JsonKey() Map<String, String> get categories {
+  if (_categories is EqualUnmodifiableMapView) return _categories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_categories);
+}
+
+@override@JsonKey(name: 'generated_at') final  String? generatedAt;
+
+/// Create a copy of TianjiNodes
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TianjiNodesCopyWith<_TianjiNodes> get copyWith => __$TianjiNodesCopyWithImpl<_TianjiNodes>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$TianjiNodesToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _TianjiNodes&&const DeepCollectionEquality().equals(other.nodes, _nodes)&&const DeepCollectionEquality().equals(other.categories, _categories)&&(identical(other.generatedAt, generatedAt) || other.generatedAt == generatedAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_nodes),const DeepCollectionEquality().hash(_categories),generatedAt);
+}
+
+@override
+String toString() {
+    return 'TianjiNodes(nodes: $nodes, categories: $categories, generatedAt: $generatedAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TianjiNodesCopyWith<$Res> implements $TianjiNodesCopyWith<$Res> {
+  factory _$TianjiNodesCopyWith(_TianjiNodes value, $Res Function(_TianjiNodes) _then) = __$TianjiNodesCopyWithImpl;
+@override @useResult
+$Res call({
+ List<TianjiNode> nodes, Map<String, String> categories,@JsonKey(name: 'generated_at') String? generatedAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$TianjiNodesCopyWithImpl<$Res>
+    implements _$TianjiNodesCopyWith<$Res> {
+  __$TianjiNodesCopyWithImpl(this._self, this._then);
+
+  final _TianjiNodes _self;
+  final $Res Function(_TianjiNodes) _then;
+
+/// Create a copy of TianjiNodes
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? nodes = null,Object? categories = null,Object? generatedAt = freezed,}) {
+  return _then(_TianjiNodes(
+nodes: null == nodes ? _self._nodes : nodes // ignore: cast_nullable_to_non_nullable
+as List<TianjiNode>,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,generatedAt: freezed == generatedAt ? _self.generatedAt : generatedAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
 /// @nodoc
 mixin _$NavigationItem {
 
@@ -4014,7 +4890,7 @@ as String,
 /// @nodoc
 mixin _$IpInfo {
 
- String get ip; String get countryCode; String? get city; String? get region;
+ String get ip; String? get countryCode; String? get city; String? get region; int? get asn; String? get isp; EgressExit? get exit; bool get fromTianji;
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -4026,20 +4902,20 @@ $IpInfoCopyWith<IpInfo> get copyWith => _$IpInfoCopyWithImpl<IpInfo>(this as IpI
 @override
 bool operator ==(Object other) {
   final _this = this as IpInfo;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is IpInfo&&(identical(other.ip, _this.ip) || other.ip == _this.ip)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.city, _this.city) || other.city == _this.city)&&(identical(other.region, _this.region) || other.region == _this.region));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is IpInfo&&(identical(other.ip, _this.ip) || other.ip == _this.ip)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.city, _this.city) || other.city == _this.city)&&(identical(other.region, _this.region) || other.region == _this.region)&&(identical(other.asn, _this.asn) || other.asn == _this.asn)&&(identical(other.isp, _this.isp) || other.isp == _this.isp)&&(identical(other.exit, _this.exit) || other.exit == _this.exit)&&(identical(other.fromTianji, _this.fromTianji) || other.fromTianji == _this.fromTianji));
 }
 
 
 @override
 int get hashCode {
   final _this = this as IpInfo;
-  return Object.hash(runtimeType,_this.ip,_this.countryCode,_this.city,_this.region);
+  return Object.hash(runtimeType,_this.ip,_this.countryCode,_this.city,_this.region,_this.asn,_this.isp,_this.exit,_this.fromTianji);
 }
 
 @override
 String toString() {
   final _this = this as IpInfo;
-  return 'IpInfo(ip: ${_this.ip}, countryCode: ${_this.countryCode}, city: ${_this.city}, region: ${_this.region})';
+  return 'IpInfo(ip: ${_this.ip}, countryCode: ${_this.countryCode}, city: ${_this.city}, region: ${_this.region}, asn: ${_this.asn}, isp: ${_this.isp}, exit: ${_this.exit}, fromTianji: ${_this.fromTianji})';
 }
 
 
@@ -4050,11 +4926,11 @@ abstract mixin class $IpInfoCopyWith<$Res>  {
   factory $IpInfoCopyWith(IpInfo value, $Res Function(IpInfo) _then) = _$IpInfoCopyWithImpl;
 @useResult
 $Res call({
- String ip, String countryCode, String? city, String? region
+ String ip, String? countryCode, String? city, String? region, int? asn, String? isp, EgressExit? exit, bool fromTianji
 });
 
 
-
+$EgressExitCopyWith<$Res>? get exit;
 
 }
 /// @nodoc
@@ -4067,16 +4943,32 @@ class _$IpInfoCopyWithImpl<$Res>
 
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? ip = null,Object? countryCode = null,Object? city = freezed,Object? region = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? ip = null,Object? countryCode = freezed,Object? city = freezed,Object? region = freezed,Object? asn = freezed,Object? isp = freezed,Object? exit = freezed,Object? fromTianji = null,}) {
   return _then(IpInfo(
 ip: null == ip ? _self.ip : ip // ignore: cast_nullable_to_non_nullable
-as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
-as String,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,countryCode: freezed == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,region: freezed == region ? _self.region : region // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,asn: freezed == asn ? _self.asn : asn // ignore: cast_nullable_to_non_nullable
+as int?,isp: freezed == isp ? _self.isp : isp // ignore: cast_nullable_to_non_nullable
+as String?,exit: freezed == exit ? _self.exit : exit // ignore: cast_nullable_to_non_nullable
+as EgressExit?,fromTianji: null == fromTianji ? _self.fromTianji : fromTianji // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
+/// Create a copy of IpInfo
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EgressExitCopyWith<$Res>? get exit {
+    if (_self.exit == null) {
+    return null;
+  }
 
+  return $EgressExitCopyWith<$Res>(_self.exit!, (value) {
+    return _then(_self.copyWith(exit: value));
+  });
+}
 }
 
 
@@ -4158,10 +5050,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String ip,  String countryCode,  String? city,  String? region)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String ip,  String? countryCode,  String? city,  String? region,  int? asn,  String? isp,  EgressExit? exit,  bool fromTianji)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _IpInfo() when $default != null:
-return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
+return $default(_that.ip,_that.countryCode,_that.city,_that.region,_that.asn,_that.isp,_that.exit,_that.fromTianji);case _:
   return orElse();
 
 }
@@ -4179,10 +5071,10 @@ return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String ip,  String countryCode,  String? city,  String? region)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String ip,  String? countryCode,  String? city,  String? region,  int? asn,  String? isp,  EgressExit? exit,  bool fromTianji)  $default,) {final _that = this;
 switch (_that) {
 case _IpInfo():
-return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
+return $default(_that.ip,_that.countryCode,_that.city,_that.region,_that.asn,_that.isp,_that.exit,_that.fromTianji);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -4199,10 +5091,10 @@ return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String ip,  String countryCode,  String? city,  String? region)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String ip,  String? countryCode,  String? city,  String? region,  int? asn,  String? isp,  EgressExit? exit,  bool fromTianji)?  $default,) {final _that = this;
 switch (_that) {
 case _IpInfo() when $default != null:
-return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
+return $default(_that.ip,_that.countryCode,_that.city,_that.region,_that.asn,_that.isp,_that.exit,_that.fromTianji);case _:
   return null;
 
 }
@@ -4214,13 +5106,17 @@ return $default(_that.ip,_that.countryCode,_that.city,_that.region);case _:
 
 
 class _IpInfo implements IpInfo {
-  const _IpInfo({required this.ip, required this.countryCode, this.city, this.region});
+  const _IpInfo({required this.ip, this.countryCode, this.city, this.region, this.asn, this.isp, this.exit, this.fromTianji = false});
   
 
 @override final  String ip;
-@override final  String countryCode;
+@override final  String? countryCode;
 @override final  String? city;
 @override final  String? region;
+@override final  int? asn;
+@override final  String? isp;
+@override final  EgressExit? exit;
+@override@JsonKey() final  bool fromTianji;
 
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
@@ -4232,18 +5128,18 @@ _$IpInfoCopyWith<_IpInfo> get copyWith => __$IpInfoCopyWithImpl<_IpInfo>(this, _
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _IpInfo&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.city, city) || other.city == city)&&(identical(other.region, region) || other.region == region));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _IpInfo&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.city, city) || other.city == city)&&(identical(other.region, region) || other.region == region)&&(identical(other.asn, asn) || other.asn == asn)&&(identical(other.isp, isp) || other.isp == isp)&&(identical(other.exit, exit) || other.exit == exit)&&(identical(other.fromTianji, fromTianji) || other.fromTianji == fromTianji));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,ip,countryCode,city,region);
+    return Object.hash(runtimeType,ip,countryCode,city,region,asn,isp,exit,fromTianji);
 }
 
 @override
 String toString() {
-    return 'IpInfo(ip: $ip, countryCode: $countryCode, city: $city, region: $region)';
+    return 'IpInfo(ip: $ip, countryCode: $countryCode, city: $city, region: $region, asn: $asn, isp: $isp, exit: $exit, fromTianji: $fromTianji)';
 }
 
 
@@ -4254,11 +5150,11 @@ abstract mixin class _$IpInfoCopyWith<$Res> implements $IpInfoCopyWith<$Res> {
   factory _$IpInfoCopyWith(_IpInfo value, $Res Function(_IpInfo) _then) = __$IpInfoCopyWithImpl;
 @override @useResult
 $Res call({
- String ip, String countryCode, String? city, String? region
+ String ip, String? countryCode, String? city, String? region, int? asn, String? isp, EgressExit? exit, bool fromTianji
 });
 
 
-
+@override $EgressExitCopyWith<$Res>? get exit;
 
 }
 /// @nodoc
@@ -4271,17 +5167,33 @@ class __$IpInfoCopyWithImpl<$Res>
 
 /// Create a copy of IpInfo
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? ip = null,Object? countryCode = null,Object? city = freezed,Object? region = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? ip = null,Object? countryCode = freezed,Object? city = freezed,Object? region = freezed,Object? asn = freezed,Object? isp = freezed,Object? exit = freezed,Object? fromTianji = null,}) {
   return _then(_IpInfo(
 ip: null == ip ? _self.ip : ip // ignore: cast_nullable_to_non_nullable
-as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
-as String,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,countryCode: freezed == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,region: freezed == region ? _self.region : region // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,asn: freezed == asn ? _self.asn : asn // ignore: cast_nullable_to_non_nullable
+as int?,isp: freezed == isp ? _self.isp : isp // ignore: cast_nullable_to_non_nullable
+as String?,exit: freezed == exit ? _self.exit : exit // ignore: cast_nullable_to_non_nullable
+as EgressExit?,fromTianji: null == fromTianji ? _self.fromTianji : fromTianji // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
+/// Create a copy of IpInfo
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EgressExitCopyWith<$Res>? get exit {
+    if (_self.exit == null) {
+    return null;
+  }
 
+  return $EgressExitCopyWith<$Res>(_self.exit!, (value) {
+    return _then(_self.copyWith(exit: value));
+  });
+}
 }
 
 
