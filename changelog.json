@@ -2,6 +2,78 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.20",
+      "tag": "v0.9.20",
+      "date": "2026-11-13",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "346041c",
+              "scope": "desktop",
+              "text": "Add the custom profile side panel, the macOS dashboard layout and a macOS residential page"
+            },
+            {
+              "id": "228d015",
+              "scope": "dashboard",
+              "text": "Make the tianjicloud dashboard editable and regroup settings like the design"
+            },
+            {
+              "id": "053a1cb",
+              "scope": "diagnostics",
+              "text": "Check whether IPv6 can bypass the lines and offer a background residential check"
+            },
+            {
+              "id": "4dbcb1e",
+              "scope": "settings",
+              "text": "Add the on-demand switch, hotkey reset and conflicts, provider health and TUN auto-route"
+            },
+            {
+              "id": "9854691",
+              "scope": "macos",
+              "text": "Size type, controls and cards like a native Mac app"
+            },
+            {
+              "id": "01f3611",
+              "text": "Fill in the small design gaps on lines, logs, profiles and about"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "c782742",
+              "scope": "navigation",
+              "text": "Keep the classic sidebar toggle without patching prism_ui"
+            },
+            {
+              "id": "0134602",
+              "scope": "dashboard",
+              "text": "Keep the exit chips on one row"
+            },
+            {
+              "id": "082795a",
+              "scope": "tray",
+              "text": "Say why the macOS menu bar scenes are greyed out"
+            },
+            {
+              "id": "ddbeb06",
+              "scope": "settings",
+              "text": "Align appearance rows with their card titles"
+            },
+            {
+              "id": "fdd6821",
+              "scope": "tray",
+              "text": "Let the macOS menu bar connect and disconnect"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.19",
       "tag": "v0.9.19",
       "date": "2026-11-12",

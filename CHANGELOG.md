@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.9.20 (2026-11-13)
+
+**Features**
+
+- **desktop** Add the custom profile side panel, the macOS dashboard layout and a macOS residential page (346041c)
+- **dashboard** Make the tianjicloud dashboard editable and regroup settings like the design (228d015)
+- **diagnostics** Check whether IPv6 can bypass the lines and offer a background residential check (053a1cb)
+- **settings** Add the on-demand switch, hotkey reset and conflicts, provider health and TUN auto-route (4dbcb1e)
+- **macos** Size type, controls and cards like a native Mac app (9854691)
+- Fill in the small design gaps on lines, logs, profiles and about (01f3611)
+
+**Bug Fixes**
+
+- **navigation** Keep the classic sidebar toggle without patching prism_ui (c782742)
+- **dashboard** Keep the exit chips on one row (0134602)
+- **tray** Say why the macOS menu bar scenes are greyed out (082795a)
+- **settings** Align appearance rows with their card titles (ddbeb06)
+- **tray** Let the macOS menu bar connect and disconnect (fdd6821)
+
 ## v0.9.19 (2026-11-12)
 
 **Features**
