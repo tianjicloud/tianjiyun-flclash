@@ -1753,5 +1753,16 @@
   "alreadyLatest": "Already up to date",
   "lastBackupTime": "Last backup",
   "autoRoute": "Auto route",
-  "proxyAvailability": "Available {available}/{total}"
+  "proxyAvailability": "Available {available}/{total}",
+  "backgroundResidentialCheck": "Background residential check",
+  "backgroundResidentialCheckDescription": "Check the current residential exit every 10 minutes in the background. Uses a small amount of residential data.",
+  "diagnosticsIpv6": "IPv6",
+  "diagnosticsIpv6Checking": "IPv6 traffic is being checked.",
+  "diagnosticsIpv6Unavailable": "IPv6 network information is unavailable.",
+  "diagnosticsIpv6NoNetwork": "This device has no IPv6 network.",
+  "diagnosticsIpv6Routed": "IPv6 traffic is captured by TUN and follows the route.",
+  "diagnosticsIpv6Blocked": "IPv6 traffic is captured by TUN and blocked by the core.",
+  "diagnosticsIpv6ProxyOnly": "System proxy does not capture every app; IPv6 may go direct. Enable TUN.",
+  "diagnosticsEnableTun": "Enable TUN",
+  "diagnosticsIpv6Direct": "IPv6 is not captured by TUN or the system proxy and may connect directly."
 }

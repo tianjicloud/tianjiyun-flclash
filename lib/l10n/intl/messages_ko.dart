@@ -444,6 +444,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundNebula": MessageLookupByLibrary.simpleMessage("성운"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("궤도"),
     "backgroundPlanet": MessageLookupByLibrary.simpleMessage("행성"),
+    "backgroundResidentialCheck": MessageLookupByLibrary.simpleMessage(
+      "백그라운드 주거용 출구 확인",
+    ),
+    "backgroundResidentialCheckDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "백그라운드에서 10분마다 현재 주거용 출구를 확인합니다. 소량의 데이터를 사용합니다.",
+        ),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("단색"),
     "backup": MessageLookupByLibrary.simpleMessage("백업"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage("백업 및 복원"),
@@ -1292,7 +1299,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "개발자 모드가 켜졌습니다.",
     ),
+    "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("TUN 켜기"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("통과하지 못함"),
+    "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
+    "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
+      "TUN이 IPv6 트래픽을 받으며 코어에서 차단합니다.",
+    ),
+    "diagnosticsIpv6Checking": MessageLookupByLibrary.simpleMessage(
+      "IPv6 트래픽을 확인하는 중입니다.",
+    ),
+    "diagnosticsIpv6Direct": MessageLookupByLibrary.simpleMessage(
+      "IPv6가 TUN 또는 시스템 프록시에 의해 가로채지지 않아 직접 연결될 수 있습니다.",
+    ),
+    "diagnosticsIpv6NoNetwork": MessageLookupByLibrary.simpleMessage(
+      "이 기기에는 IPv6 네트워크가 없습니다.",
+    ),
+    "diagnosticsIpv6ProxyOnly": MessageLookupByLibrary.simpleMessage(
+      "시스템 프록시는 모든 앱을 가로채지 못해 IPv6가 직접 연결될 수 있습니다. TUN을 켜세요.",
+    ),
+    "diagnosticsIpv6Routed": MessageLookupByLibrary.simpleMessage(
+      "TUN이 IPv6 트래픽을 받아 경로로 전달합니다.",
+    ),
+    "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
+      "IPv6 네트워크 정보를 가져올 수 없습니다.",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("통과"),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("다시 진단"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("기본 경로 출구 검증"),

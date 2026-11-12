@@ -57,6 +57,12 @@ class _RecordingOutboundIpProbe extends OutboundIpProbe {
   RoutedProbeState<String, IpInfo> build() => const RoutedProbeState();
 
   @override
+  void watch(String target) {}
+
+  @override
+  void unwatch(String target) {}
+
+  @override
   Future<Map<String, ProbeAnswer<IpInfo>>> probe(
     String target,
     RouteState route,
@@ -115,6 +121,7 @@ void main() {
     required _RecordingApp fakeApp,
     required Profile profile,
     bool business = true,
+    bool backgroundPolicy = false,
     DateTime Function()? clock,
   }) async {
     await mockPreferences();
@@ -124,6 +131,19 @@ void main() {
         currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
         outboundIpProbeProvider.overrideWith(_RecordingOutboundIpProbe.new),
         proxiesActionProvider.overrideWith(_RecordingProxiesAction.new),
+        if (backgroundPolicy)
+          residentialPolicyProvider.overrideWithValue(
+            const ResidentialPolicy(
+              profileId: 1,
+              fingerprint: 'test',
+              configuredExit: 'Tokyo',
+              selectedExit: 'Tokyo',
+              active: true,
+              rootAvailable: true,
+              choices: ['Tokyo'],
+              catalogReady: true,
+            ),
+          ),
       ],
     );
     globalState.container = container;
@@ -158,6 +178,45 @@ void main() {
     probe.emit(ProbePhase.probing);
     probe.emit(result);
   }
+
+  testWidgets('background residential checks follow their eligibility', (
+    tester,
+  ) async {
+    final fakeApp = _RecordingApp();
+    await setUpManager(
+      tester: tester,
+      fakeApp: fakeApp,
+      profile: businessProfile(),
+      backgroundPolicy: true,
+    );
+    final probe =
+        container.read(outboundIpProbeProvider.notifier)
+            as _RecordingOutboundIpProbe;
+    container.read(coreStatusProvider.notifier).value = CoreStatus.connected;
+    container.read(appVisibleProvider.notifier).value = false;
+    await tester.pump(const Duration(minutes: 10));
+    expect(probe.rechecks, isEmpty);
+
+    container
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(backgroundResidentialCheck: true));
+    await tester.pump(const Duration(minutes: 10));
+    expect(probe.rechecks, [routedOutbound]);
+
+    container.read(appVisibleProvider.notifier).value = true;
+    await tester.pump(const Duration(minutes: 10));
+    expect(probe.rechecks, [routedOutbound]);
+
+    container.read(appVisibleProvider.notifier).value = false;
+    await tester.pump(const Duration(minutes: 10));
+    expect(probe.rechecks, [routedOutbound, routedOutbound]);
+
+    container
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(backgroundResidentialCheck: false));
+    await tester.pump(const Duration(minutes: 10));
+    expect(probe.rechecks, [routedOutbound, routedOutbound]);
+  });
 
   testWidgets('three failed routed residential checks notify once', (
     tester,

@@ -503,6 +503,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundNebula": MessageLookupByLibrary.simpleMessage("Nebula"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Orbit"),
     "backgroundPlanet": MessageLookupByLibrary.simpleMessage("Planet"),
+    "backgroundResidentialCheck": MessageLookupByLibrary.simpleMessage(
+      "Background residential check",
+    ),
+    "backgroundResidentialCheckDescription": MessageLookupByLibrary.simpleMessage(
+      "Check the current residential exit every 10 minutes in the background. Uses a small amount of residential data.",
+    ),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("Solid color"),
     "backup": MessageLookupByLibrary.simpleMessage("Backup"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
@@ -1543,7 +1549,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Developer mode is enabled.",
     ),
+    "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("Enable TUN"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Not passed"),
+    "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
+    "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
+      "IPv6 traffic is captured by TUN and blocked by the core.",
+    ),
+    "diagnosticsIpv6Checking": MessageLookupByLibrary.simpleMessage(
+      "IPv6 traffic is being checked.",
+    ),
+    "diagnosticsIpv6Direct": MessageLookupByLibrary.simpleMessage(
+      "IPv6 is not captured by TUN or the system proxy and may connect directly.",
+    ),
+    "diagnosticsIpv6NoNetwork": MessageLookupByLibrary.simpleMessage(
+      "This device has no IPv6 network.",
+    ),
+    "diagnosticsIpv6ProxyOnly": MessageLookupByLibrary.simpleMessage(
+      "System proxy does not capture every app; IPv6 may go direct. Enable TUN.",
+    ),
+    "diagnosticsIpv6Routed": MessageLookupByLibrary.simpleMessage(
+      "IPv6 traffic is captured by TUN and follows the route.",
+    ),
+    "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
+      "IPv6 network information is unavailable.",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Passed"),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Run again"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(

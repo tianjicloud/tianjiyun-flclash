@@ -11,6 +11,28 @@ import '../helpers/test_app.dart';
 import '../helpers/test_profiles.dart';
 
 void main() {
+  test(
+    'IPv6 diagnostic distinguishes missing network, takeover and proxy-only',
+    () {
+      expect(
+        ipv6DiagnosticResult(hasGlobalAddress: false, tunActive: false),
+        DiagnosticResult.passed,
+      );
+      expect(
+        ipv6DiagnosticResult(hasGlobalAddress: true, tunActive: true),
+        DiagnosticResult.passed,
+      );
+      expect(
+        ipv6DiagnosticResult(hasGlobalAddress: true, tunActive: false),
+        DiagnosticResult.failed,
+      );
+      expect(
+        ipv6DiagnosticResult(hasGlobalAddress: null, tunActive: false),
+        DiagnosticResult.unverified,
+      );
+    },
+  );
+
   const route = RouteState(
     coreEpoch: 2,
     routeVersion: 5,

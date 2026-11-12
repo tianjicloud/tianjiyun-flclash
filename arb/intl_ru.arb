@@ -1753,5 +1753,16 @@
   "alreadyLatest": "Установлена последняя версия",
   "lastBackupTime": "Время последней резервной копии",
   "autoRoute": "Автоматическая маршрутизация",
-  "proxyAvailability": "Доступно {available}/{total}"
+  "proxyAvailability": "Доступно {available}/{total}",
+  "backgroundResidentialCheck": "Фоновая проверка домашнего IP",
+  "backgroundResidentialCheckDescription": "Проверять текущий домашний IP каждые 10 минут в фоне. Используется небольшой объём трафика.",
+  "diagnosticsIpv6": "IPv6",
+  "diagnosticsIpv6Checking": "Проверка трафика IPv6.",
+  "diagnosticsIpv6Unavailable": "Не удалось получить сведения о сети IPv6.",
+  "diagnosticsIpv6NoNetwork": "На устройстве нет сети IPv6.",
+  "diagnosticsIpv6Routed": "Трафик IPv6 перехватывается TUN и идёт через маршрут.",
+  "diagnosticsIpv6Blocked": "Трафик IPv6 перехватывается TUN и блокируется ядром.",
+  "diagnosticsIpv6ProxyOnly": "Системный прокси не охватывает все приложения; IPv6 может идти напрямую. Включите TUN.",
+  "diagnosticsEnableTun": "Включить TUN",
+  "diagnosticsIpv6Direct": "IPv6 не перехватывается TUN или системным прокси и может подключаться напрямую."
 }

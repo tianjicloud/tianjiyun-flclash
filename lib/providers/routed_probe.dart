@@ -122,6 +122,12 @@ mixin RoutedProbe<K, V>
   Duration get throttleDuration => probeThrottleDuration;
 
   @protected
+  bool get allowBackgroundProbe => false;
+
+  @protected
+  bool canProbeInBackground(K target) => allowBackgroundProbe;
+
+  @protected
   Future<RouteCheck> checkRoutes(List<List<RouteHit>> routes) => ref
       .read(coreHandlerProvider)
       .checkRoutes(CheckRoutesParams(routes: routes));
@@ -243,7 +249,11 @@ mixin RoutedProbe<K, V>
 
   void _launch() {
     _scheduled = false;
-    if (!ref.mounted || !_route.live || !ref.read(appVisibleProvider)) {
+    final visible = ref.read(appVisibleProvider);
+    final background = !visible && _due.keys.any(canProbeInBackground);
+    if (!ref.mounted ||
+        (!_route.live && !background) ||
+        (!visible && !background)) {
       return;
     }
     final route = _route;
@@ -251,6 +261,10 @@ mixin RoutedProbe<K, V>
     final entries = Map<K, ProbeEntry<V>>.of(state.entries);
     final waiting = <K, _Due>{};
     for (final MapEntry(key: target, value: due) in _due.entries) {
+      if (!visible && !canProbeInBackground(target)) {
+        waiting[target] = due;
+        continue;
+      }
       final wanted = due.forced || _watchers.containsKey(target);
       if (!wanted || (_inFlight.containsKey(target) && !due.supersede)) {
         continue;
@@ -361,7 +375,8 @@ mixin RoutedProbe<K, V>
     if (current.isBehind(stamp)) {
       ref.read(routeTrackerProvider.notifier).resync();
     }
-    if (_due.isNotEmpty) {
+    final visible = ref.read(appVisibleProvider);
+    if (_due.isNotEmpty && (visible || _due.keys.any(canProbeInBackground))) {
       _schedule();
     }
     if (_landed.isNotEmpty) {

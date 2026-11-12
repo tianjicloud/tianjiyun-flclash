@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/common/tianji_api.dart';
@@ -26,18 +28,49 @@ const _diagnosticServices = [
 
 enum DiagnosticResult { passed, failed, unverified }
 
+final globalIpv6Provider = FutureProvider<bool?>((ref) async {
+  try {
+    final interfaces = await NetworkInterface.list(
+      includeLoopback: false,
+      type: InternetAddressType.IPv6,
+    );
+    return interfaces.expand((interface) => interface.addresses).any((address) {
+      final value = address.address.toLowerCase();
+      return !address.isLoopback &&
+          !address.isMulticast &&
+          !value.startsWith('fe80:') &&
+          !value.startsWith('fc') &&
+          !value.startsWith('fd') &&
+          value != '::';
+    });
+  } catch (_) {
+    return null;
+  }
+});
+
+DiagnosticResult ipv6DiagnosticResult({
+  required bool? hasGlobalAddress,
+  required bool tunActive,
+}) {
+  if (hasGlobalAddress == null) return DiagnosticResult.unverified;
+  if (!hasGlobalAddress || tunActive) return DiagnosticResult.passed;
+  return DiagnosticResult.failed;
+}
+
 class _DiagnosticCheck {
   const _DiagnosticCheck({
     required this.title,
     required this.result,
     this.detail,
     this.detailIsVerdict = false,
+    this.onAction,
   });
 
   final String title;
   final DiagnosticResult result;
   final String? detail;
   final bool detailIsVerdict;
+  final VoidCallback? onAction;
 }
 
 void refreshDiagnostics(WidgetRef ref) {
@@ -163,6 +196,22 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
     );
     final services = ref.watch(serviceStatusProvider);
     final dns = ref.watch(patchClashConfigProvider).dns;
+    final ipv6 = ref.watch(patchClashConfigProvider).ipv6;
+    final globalIpv6 = ref.watch(globalIpv6Provider);
+    final tunConfigured = ref.watch(patchClashConfigProvider).tun.enable;
+    final running = ref.watch(runTimeProvider) != null;
+    final safeMode = ref.watch(safeModeProvider);
+    final systemProxy = system.isAndroid
+        ? ref.watch(vpnSettingProvider).systemProxy
+        : ref.watch(networkSettingProvider).systemProxy;
+    final tunActive =
+        running &&
+        tunConfigured &&
+        !safeMode &&
+        (system.isAndroid
+            ? ref.watch(vpnSettingProvider).enable
+            : ref.watch(authorizedTunEnableProvider) ==
+                  TunAuthorizationState.authorized);
     final mainlandPolicy = dns.nameserverPolicy.entries.any((entry) {
       final key = entry.key.toLowerCase();
       final server = entry.value;
@@ -232,6 +281,37 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
             ? outbound.value?.ip
             : outboundResult == DiagnosticResult.failed
             ? strings.serviceFailed
+            : null,
+      ),
+      _DiagnosticCheck(
+        title: strings.diagnosticsIpv6,
+        result: ipv6DiagnosticResult(
+          hasGlobalAddress: globalIpv6.asData?.value,
+          tunActive: tunActive,
+        ),
+        detail:
+            globalIpv6.hasError ||
+                (globalIpv6.hasValue && globalIpv6.asData?.value == null)
+            ? strings.diagnosticsIpv6Unavailable
+            : !globalIpv6.hasValue
+            ? strings.diagnosticsIpv6Checking
+            : globalIpv6.asData?.value == false
+            ? strings.diagnosticsIpv6NoNetwork
+            : tunActive
+            ? ipv6
+                  ? strings.diagnosticsIpv6Routed
+                  : strings.diagnosticsIpv6Blocked
+            : systemProxy
+            ? strings.diagnosticsIpv6ProxyOnly
+            : strings.diagnosticsIpv6Direct,
+        detailIsVerdict: true,
+        onAction: globalIpv6.asData?.value == true && !tunActive
+            ? () {
+                ref
+                    .read(currentPageLabelProvider.notifier)
+                    .toPage(PageLabel.tools);
+                Navigator.of(context).pop();
+              }
             : null,
       ),
       for (final target in _diagnosticServices)
@@ -575,11 +655,13 @@ class _DiagnosticRow extends StatelessWidget {
       DiagnosticResult.failed => strings.diagnosticsFailed,
       DiagnosticResult.unverified => strings.diagnosticsUnverified,
     };
+    final action = check.onAction;
     final showDetail =
         check.detail != null &&
         check.detail != strings.servicePending &&
         check.detail != status &&
-        (check.result == DiagnosticResult.unverified ||
+        (check.detailIsVerdict ||
+            check.result == DiagnosticResult.unverified ||
             (check.result == DiagnosticResult.failed &&
                 check.title == strings.diagnosticsSelection));
     final content = Row(
@@ -599,33 +681,101 @@ class _DiagnosticRow extends StatelessWidget {
           ),
         ),
         Expanded(
+          flex: 2,
           child: Text(
             check.title,
             style: BusinessText.diagnosticsCheckTitle(context, mobile: mobile),
           ),
         ),
-        Text(
-          check.detailIsVerdict
-              ? check.detail ?? status
-              : showDetail
-              ? '$status（${check.detail}）'
-              : status,
-          style: BusinessText.metaLabel(context).copyWith(color: color),
+        Expanded(
+          flex: 3,
+          child: Text(
+            check.detailIsVerdict
+                ? check.detail ?? status
+                : showDetail
+                ? '$status（${check.detail}）'
+                : status,
+            textAlign: TextAlign.end,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: BusinessText.metaLabel(context).copyWith(color: color),
+          ),
         ),
       ],
     );
     if (mobile) {
-      return SizedBox(
-        height: 52,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: content,
+      final row = Row(
+        spacing: 10,
+        children: [
+          SizedBox.square(
+            dimension: 22,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Center(child: GlyphIcon(glyph, size: 13, color: color)),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              check.title,
+              style: BusinessText.diagnosticsCheckTitle(context, mobile: true),
+            ),
+          ),
+          Text(
+            status,
+            style: BusinessText.metaLabel(context).copyWith(color: color),
+          ),
+        ],
+      );
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 4,
+          children: [
+            row,
+            if (showDetail)
+              Padding(
+                padding: const EdgeInsets.only(left: 32),
+                child: Text(
+                  check.detail!,
+                  style: AppTextStyle.footnote
+                      .of(context)
+                      .copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+              ),
+            if (action != null)
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton(
+                  onPressed: action,
+                  child: Text(strings.diagnosticsEnableTun),
+                ),
+              ),
+          ],
         ),
       );
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: content,
+      child: action != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                content,
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: TextButton(
+                    onPressed: action,
+                    child: Text(strings.diagnosticsEnableTun),
+                  ),
+                ),
+              ],
+            )
+          : content,
     );
   }
 }

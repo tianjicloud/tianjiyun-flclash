@@ -1753,5 +1753,16 @@
   "alreadyLatest": "已是最新版本",
   "lastBackupTime": "上次备份时间",
   "autoRoute": "自动路由",
-  "proxyAvailability": "可用 {available}/{total}"
+  "proxyAvailability": "可用 {available}/{total}",
+  "backgroundResidentialCheck": "后台定时检测家宽",
+  "backgroundResidentialCheckDescription": "每 10 分钟检测一次当前家宽出口，会少量占用家宽流量。",
+  "diagnosticsIpv6": "IPv6",
+  "diagnosticsIpv6Checking": "正在检查 IPv6 流量。",
+  "diagnosticsIpv6Unavailable": "无法读取 IPv6 网卡信息。",
+  "diagnosticsIpv6NoNetwork": "本机没有 IPv6 网络。",
+  "diagnosticsIpv6Routed": "IPv6 流量由 TUN 接管并经线路转发。",
+  "diagnosticsIpv6Blocked": "IPv6 流量由 TUN 接管，内核已关闭 IPv6，不会外发。",
+  "diagnosticsIpv6ProxyOnly": "仅系统代理无法接管所有应用，IPv6 可能直连。请开启 TUN。",
+  "diagnosticsEnableTun": "开启 TUN",
+  "diagnosticsIpv6Direct": "IPv6 未由 TUN 或系统代理接管，可能直接访问。"
 }

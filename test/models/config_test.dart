@@ -145,12 +145,29 @@ void main() {
       expect(restored.closeConnections, true);
       expect(restored.tabAnimation, TabAnimation.fade);
       expect(restored.autoCheckUpdate, true);
+      expect(restored.backgroundResidentialCheck, false);
       expect(restored.sidebarExpanded, true);
       expect(restored.minimizeOnExit, true);
       expect(restored.restoreStrategy, RestoreStrategy.compatible);
       expect(restored.userAgents, defaultUserAgents);
       expect(restored.filters, defaultFilters);
     });
+
+    test(
+      'background residential checking is saved and defaults off for old data',
+      () {
+        expect(AppSettingProps.fromJson({}).backgroundResidentialCheck, false);
+        expect(
+          roundTrip(
+            () => const AppSettingProps(
+              backgroundResidentialCheck: true,
+            ).toJson(),
+            AppSettingProps.fromJson,
+          ).backgroundResidentialCheck,
+          true,
+        );
+      },
+    );
 
     test('a saved outboundModeV2 card folds into outboundMode', () {
       final restored = AppSettingProps.fromJson({

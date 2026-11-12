@@ -45,6 +45,8 @@ class AppStateManager extends ConsumerStatefulWidget {
 class _AppStateManagerState extends ConsumerState<AppStateManager>
     with WidgetsBindingObserver {
   final _residentialFailures = ResidentialFailureTracker();
+  Timer? _residentialTimer;
+  bool _residentialBackgroundWatching = false;
   String? _residentialExit;
   App? get _app => widget.appPlugin ?? app;
   DateTime get _now => widget.clock?.call() ?? DateTime.now();
@@ -102,6 +104,39 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
         ref.read(storeActionProvider.notifier).savePreferencesDebounce();
       }
     });
+    void syncResidentialTimer() {
+      if (!_residentialCheckEligible()) {
+        _residentialTimer?.cancel();
+        _residentialTimer = null;
+        if (_residentialBackgroundWatching) {
+          ref.read(outboundIpProbeProvider.notifier).unwatch(routedOutbound);
+          _residentialBackgroundWatching = false;
+        }
+        return;
+      }
+      if (_residentialTimer != null) return;
+      ref.read(outboundIpProbeProvider.notifier).watch(routedOutbound);
+      _residentialBackgroundWatching = true;
+      _residentialTimer = Timer.periodic(const Duration(minutes: 10), (_) {
+        if (_residentialCheckEligible()) {
+          ref.read(outboundIpProbeProvider.notifier).recheck(routedOutbound);
+        } else {
+          syncResidentialTimer();
+        }
+      });
+    }
+
+    ref.listenManual(
+      appSettingProvider.select((state) => state.backgroundResidentialCheck),
+      (_, _) => syncResidentialTimer(),
+    );
+    ref.listenManual(coreStatusProvider, (_, _) => syncResidentialTimer());
+    ref.listenManual(
+      residentialPolicyProvider.select((state) => state.active),
+      (_, _) => syncResidentialTimer(),
+    );
+    ref.listenManual(appVisibleProvider, (_, _) => syncResidentialTimer());
+    syncResidentialTimer();
     ref.listenManual(groupsProvider, (prev, next) {
       if (prev != next) {
         unawaited(precacheTargetIcons(next.map((group) => group.icon)));
@@ -131,6 +166,12 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
       }, fireImmediately: true);
     }
   }
+
+  bool _residentialCheckEligible() =>
+      ref.read(appSettingProvider).backgroundResidentialCheck &&
+      ref.read(coreStatusProvider) == CoreStatus.connected &&
+      ref.read(residentialPolicyProvider).active &&
+      !ref.read(appVisibleProvider);
 
   void _observeResidentialCheck({required bool failed}) {
     final profile = ref.read(currentProfileProvider);
@@ -239,6 +280,10 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
 
   @override
   void dispose() {
+    _residentialTimer?.cancel();
+    if (_residentialBackgroundWatching) {
+      ref.read(outboundIpProbeProvider.notifier).unwatch(routedOutbound);
+    }
     WidgetsBinding.instance.removeObserver(this);
     _app?.onRoute = null;
     super.dispose();

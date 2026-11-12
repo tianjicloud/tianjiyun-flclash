@@ -1753,5 +1753,16 @@
   "alreadyLatest": "Vous utilisez la dernière version",
   "lastBackupTime": "Dernière sauvegarde",
   "autoRoute": "Routage automatique",
-  "proxyAvailability": "Disponibles {available}/{total}"
+  "proxyAvailability": "Disponibles {available}/{total}",
+  "backgroundResidentialCheck": "Vérification résidentielle en arrière-plan",
+  "backgroundResidentialCheckDescription": "Vérifie la sortie résidentielle actuelle toutes les 10 minutes en arrière-plan. Utilise un peu de trafic.",
+  "diagnosticsIpv6": "IPv6",
+  "diagnosticsIpv6Checking": "Vérification du trafic IPv6.",
+  "diagnosticsIpv6Unavailable": "Informations réseau IPv6 indisponibles.",
+  "diagnosticsIpv6NoNetwork": "Cet appareil ne dispose pas de réseau IPv6.",
+  "diagnosticsIpv6Routed": "Le trafic IPv6 est capturé par TUN et suit la route.",
+  "diagnosticsIpv6Blocked": "Le trafic IPv6 est capturé par TUN et bloqué par le cœur.",
+  "diagnosticsIpv6ProxyOnly": "Le proxy système ne couvre pas toutes les applications ; IPv6 peut passer en direct. Activez TUN.",
+  "diagnosticsEnableTun": "Activer TUN",
+  "diagnosticsIpv6Direct": "IPv6 n’est capturé ni par TUN ni par le proxy système et peut se connecter directement."
 }

@@ -430,6 +430,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundNebula": MessageLookupByLibrary.simpleMessage("星云"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("深空轨道"),
     "backgroundPlanet": MessageLookupByLibrary.simpleMessage("星球"),
+    "backgroundResidentialCheck": MessageLookupByLibrary.simpleMessage(
+      "后台定时检测家宽",
+    ),
+    "backgroundResidentialCheckDescription":
+        MessageLookupByLibrary.simpleMessage("每 10 分钟检测一次当前家宽出口，会少量占用家宽流量。"),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("纯色"),
     "backup": MessageLookupByLibrary.simpleMessage("备份"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage("备份与恢复"),
@@ -1170,7 +1175,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "detectionTip": MessageLookupByLibrary.simpleMessage("依赖第三方api，仅供参考"),
     "developerMode": MessageLookupByLibrary.simpleMessage("开发者模式"),
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage("开发者模式已启用。"),
+    "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("开启 TUN"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("未通过"),
+    "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
+    "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
+      "IPv6 流量由 TUN 接管，内核已关闭 IPv6，不会外发。",
+    ),
+    "diagnosticsIpv6Checking": MessageLookupByLibrary.simpleMessage(
+      "正在检查 IPv6 流量。",
+    ),
+    "diagnosticsIpv6Direct": MessageLookupByLibrary.simpleMessage(
+      "IPv6 未由 TUN 或系统代理接管，可能直接访问。",
+    ),
+    "diagnosticsIpv6NoNetwork": MessageLookupByLibrary.simpleMessage(
+      "本机没有 IPv6 网络。",
+    ),
+    "diagnosticsIpv6ProxyOnly": MessageLookupByLibrary.simpleMessage(
+      "仅系统代理无法接管所有应用，IPv6 可能直连。请开启 TUN。",
+    ),
+    "diagnosticsIpv6Routed": MessageLookupByLibrary.simpleMessage(
+      "IPv6 流量由 TUN 接管并经线路转发。",
+    ),
+    "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
+      "无法读取 IPv6 网卡信息。",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("通过"),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("重新诊断"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("默认路径出口校验"),

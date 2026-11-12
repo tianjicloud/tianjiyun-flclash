@@ -525,6 +525,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundNebula": MessageLookupByLibrary.simpleMessage("Туманность"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Орбита"),
     "backgroundPlanet": MessageLookupByLibrary.simpleMessage("Планета"),
+    "backgroundResidentialCheck": MessageLookupByLibrary.simpleMessage(
+      "Фоновая проверка домашнего IP",
+    ),
+    "backgroundResidentialCheckDescription": MessageLookupByLibrary.simpleMessage(
+      "Проверять текущий домашний IP каждые 10 минут в фоне. Используется небольшой объём трафика.",
+    ),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("Сплошной цвет"),
     "backup": MessageLookupByLibrary.simpleMessage("Резервное копирование"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
@@ -1605,7 +1611,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Режим разработчика включён.",
     ),
+    "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage(
+      "Включить TUN",
+    ),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Не пройдено"),
+    "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
+    "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
+      "Трафик IPv6 перехватывается TUN и блокируется ядром.",
+    ),
+    "diagnosticsIpv6Checking": MessageLookupByLibrary.simpleMessage(
+      "Проверка трафика IPv6.",
+    ),
+    "diagnosticsIpv6Direct": MessageLookupByLibrary.simpleMessage(
+      "IPv6 не перехватывается TUN или системным прокси и может подключаться напрямую.",
+    ),
+    "diagnosticsIpv6NoNetwork": MessageLookupByLibrary.simpleMessage(
+      "На устройстве нет сети IPv6.",
+    ),
+    "diagnosticsIpv6ProxyOnly": MessageLookupByLibrary.simpleMessage(
+      "Системный прокси не охватывает все приложения; IPv6 может идти напрямую. Включите TUN.",
+    ),
+    "diagnosticsIpv6Routed": MessageLookupByLibrary.simpleMessage(
+      "Трафик IPv6 перехватывается TUN и идёт через маршрут.",
+    ),
+    "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
+      "Не удалось получить сведения о сети IPv6.",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Пройдено"),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Повторить"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(

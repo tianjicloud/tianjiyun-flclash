@@ -14332,6 +14332,111 @@ class AppLocalizations {
       args: [available, total],
     );
   }
+
+  /// `Background residential check`
+  String get backgroundResidentialCheck {
+    return Intl.message(
+      'Background residential check',
+      name: 'backgroundResidentialCheck',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check the current residential exit every 10 minutes in the background. Uses a small amount of residential data.`
+  String get backgroundResidentialCheckDescription {
+    return Intl.message(
+      'Check the current residential exit every 10 minutes in the background. Uses a small amount of residential data.',
+      name: 'backgroundResidentialCheckDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv6`
+  String get diagnosticsIpv6 {
+    return Intl.message('IPv6', name: 'diagnosticsIpv6', desc: '', args: []);
+  }
+
+  /// `IPv6 traffic is being checked.`
+  String get diagnosticsIpv6Checking {
+    return Intl.message(
+      'IPv6 traffic is being checked.',
+      name: 'diagnosticsIpv6Checking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv6 network information is unavailable.`
+  String get diagnosticsIpv6Unavailable {
+    return Intl.message(
+      'IPv6 network information is unavailable.',
+      name: 'diagnosticsIpv6Unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This device has no IPv6 network.`
+  String get diagnosticsIpv6NoNetwork {
+    return Intl.message(
+      'This device has no IPv6 network.',
+      name: 'diagnosticsIpv6NoNetwork',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv6 traffic is captured by TUN and follows the route.`
+  String get diagnosticsIpv6Routed {
+    return Intl.message(
+      'IPv6 traffic is captured by TUN and follows the route.',
+      name: 'diagnosticsIpv6Routed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv6 traffic is captured by TUN and blocked by the core.`
+  String get diagnosticsIpv6Blocked {
+    return Intl.message(
+      'IPv6 traffic is captured by TUN and blocked by the core.',
+      name: 'diagnosticsIpv6Blocked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System proxy does not capture every app; IPv6 may go direct. Enable TUN.`
+  String get diagnosticsIpv6ProxyOnly {
+    return Intl.message(
+      'System proxy does not capture every app; IPv6 may go direct. Enable TUN.',
+      name: 'diagnosticsIpv6ProxyOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable TUN`
+  String get diagnosticsEnableTun {
+    return Intl.message(
+      'Enable TUN',
+      name: 'diagnosticsEnableTun',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv6 is not captured by TUN or the system proxy and may connect directly.`
+  String get diagnosticsIpv6Direct {
+    return Intl.message(
+      'IPv6 is not captured by TUN or the system proxy and may connect directly.',
+      name: 'diagnosticsIpv6Direct',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

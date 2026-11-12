@@ -431,6 +431,21 @@ class GeneralView extends ConsumerWidget {
           title: l10n.update,
           items: [
             const _SubscriptionUpdateDurationItem(),
+            ListItem.toggle(
+              title: Text(l10n.backgroundResidentialCheck),
+              subtitle: Text(l10n.backgroundResidentialCheckDescription),
+              value: ref.watch(
+                appSettingProvider.select(
+                  (state) => state.backgroundResidentialCheck,
+                ),
+              ),
+              onChanged: (value) => ref
+                  .read(appSettingProvider.notifier)
+                  .update(
+                    (state) =>
+                        state.copyWith(backgroundResidentialCheck: value),
+                  ),
+            ),
             ListItem(
               title: Text.rich(
                 TextSpan(

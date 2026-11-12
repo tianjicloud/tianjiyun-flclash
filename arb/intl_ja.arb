@@ -1753,5 +1753,16 @@
   "alreadyLatest": "最新バージョンです",
   "lastBackupTime": "前回のバックアップ",
   "autoRoute": "自動ルート",
-  "proxyAvailability": "利用可能 {available}/{total}"
+  "proxyAvailability": "利用可能 {available}/{total}",
+  "backgroundResidentialCheck": "バックグラウンドで住宅回線を確認",
+  "backgroundResidentialCheckDescription": "バックグラウンドで10分ごとに現在の住宅回線出口を確認します。少量の通信量を使用します。",
+  "diagnosticsIpv6": "IPv6",
+  "diagnosticsIpv6Checking": "IPv6トラフィックを確認しています。",
+  "diagnosticsIpv6Unavailable": "IPv6ネットワーク情報を取得できません。",
+  "diagnosticsIpv6NoNetwork": "この端末にIPv6ネットワークはありません。",
+  "diagnosticsIpv6Routed": "IPv6トラフィックはTUNで捕捉され、ルート経由で送信されます。",
+  "diagnosticsIpv6Blocked": "IPv6トラフィックはTUNで捕捉され、コアで無効化されています。",
+  "diagnosticsIpv6ProxyOnly": "システムプロキシはすべてのアプリを捕捉できず、IPv6が直接接続する場合があります。TUNを有効にしてください。",
+  "diagnosticsEnableTun": "TUNを有効にする",
+  "diagnosticsIpv6Direct": "IPv6はTUNまたはシステムプロキシで捕捉されず、直接接続する可能性があります。"
 }

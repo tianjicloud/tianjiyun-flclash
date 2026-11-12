@@ -1753,5 +1753,16 @@
   "alreadyLatest": "최신 버전입니다",
   "lastBackupTime": "마지막 백업 시간",
   "autoRoute": "자동 라우팅",
-  "proxyAvailability": "사용 가능 {available}/{total}"
+  "proxyAvailability": "사용 가능 {available}/{total}",
+  "backgroundResidentialCheck": "백그라운드 주거용 출구 확인",
+  "backgroundResidentialCheckDescription": "백그라운드에서 10분마다 현재 주거용 출구를 확인합니다. 소량의 데이터를 사용합니다.",
+  "diagnosticsIpv6": "IPv6",
+  "diagnosticsIpv6Checking": "IPv6 트래픽을 확인하는 중입니다.",
+  "diagnosticsIpv6Unavailable": "IPv6 네트워크 정보를 가져올 수 없습니다.",
+  "diagnosticsIpv6NoNetwork": "이 기기에는 IPv6 네트워크가 없습니다.",
+  "diagnosticsIpv6Routed": "TUN이 IPv6 트래픽을 받아 경로로 전달합니다.",
+  "diagnosticsIpv6Blocked": "TUN이 IPv6 트래픽을 받으며 코어에서 차단합니다.",
+  "diagnosticsIpv6ProxyOnly": "시스템 프록시는 모든 앱을 가로채지 못해 IPv6가 직접 연결될 수 있습니다. TUN을 켜세요.",
+  "diagnosticsEnableTun": "TUN 켜기",
+  "diagnosticsIpv6Direct": "IPv6가 TUN 또는 시스템 프록시에 의해 가로채지지 않아 직접 연결될 수 있습니다."
 }

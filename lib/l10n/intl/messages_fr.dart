@@ -539,6 +539,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundNebula": MessageLookupByLibrary.simpleMessage("Nébuleuse"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("Orbite"),
     "backgroundPlanet": MessageLookupByLibrary.simpleMessage("Planète"),
+    "backgroundResidentialCheck": MessageLookupByLibrary.simpleMessage(
+      "Vérification résidentielle en arrière-plan",
+    ),
+    "backgroundResidentialCheckDescription": MessageLookupByLibrary.simpleMessage(
+      "Vérifie la sortie résidentielle actuelle toutes les 10 minutes en arrière-plan. Utilise un peu de trafic.",
+    ),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("Couleur unie"),
     "backup": MessageLookupByLibrary.simpleMessage("Sauvegarde"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
@@ -1640,7 +1646,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Le mode développeur est activé.",
     ),
+    "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("Activer TUN"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Non réussi"),
+    "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
+    "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
+      "Le trafic IPv6 est capturé par TUN et bloqué par le cœur.",
+    ),
+    "diagnosticsIpv6Checking": MessageLookupByLibrary.simpleMessage(
+      "Vérification du trafic IPv6.",
+    ),
+    "diagnosticsIpv6Direct": MessageLookupByLibrary.simpleMessage(
+      "IPv6 n’est capturé ni par TUN ni par le proxy système et peut se connecter directement.",
+    ),
+    "diagnosticsIpv6NoNetwork": MessageLookupByLibrary.simpleMessage(
+      "Cet appareil ne dispose pas de réseau IPv6.",
+    ),
+    "diagnosticsIpv6ProxyOnly": MessageLookupByLibrary.simpleMessage(
+      "Le proxy système ne couvre pas toutes les applications ; IPv6 peut passer en direct. Activez TUN.",
+    ),
+    "diagnosticsIpv6Routed": MessageLookupByLibrary.simpleMessage(
+      "Le trafic IPv6 est capturé par TUN et suit la route.",
+    ),
+    "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
+      "Informations réseau IPv6 indisponibles.",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Réussi"),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Relancer"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(

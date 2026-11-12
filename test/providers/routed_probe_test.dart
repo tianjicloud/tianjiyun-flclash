@@ -27,6 +27,7 @@ class _Probe extends Notifier<RoutedProbeState<String, String>>
   Duration settle = Duration.zero;
   Duration moveSettle = Duration.zero;
   Duration throttle = Duration.zero;
+  bool backgroundAllowed = false;
 
   @override
   Duration get settleDuration => settle;
@@ -36,6 +37,9 @@ class _Probe extends Notifier<RoutedProbeState<String, String>>
 
   @override
   Duration get throttleDuration => throttle;
+
+  @override
+  bool get allowBackgroundProbe => backgroundAllowed;
 
   @override
   RoutedProbeState<String, String> build() => buildProbe();
@@ -135,6 +139,21 @@ void main() {
     probe.watch('a');
     await pumpEventQueue();
     expect(probe.calls, hasLength(1));
+  });
+
+  test('only an explicitly permitted probe launches while hidden', () async {
+    final container = build(route: _route.copyWith(live: false));
+    container.read(appVisibleProvider.notifier).value = false;
+    final probe = container.read(_probeProvider.notifier);
+    probe.backgroundAllowed = true;
+    probe.watch('a');
+    await pumpEventQueue();
+    expect(probe.calls, ['a']);
+    probe.answer({'a': _ok('a.example:443')});
+    await pumpEventQueue();
+    probe.recheck('a');
+    await pumpEventQueue();
+    expect(probe.calls, ['a', 'a']);
   });
 
   test('probes nothing that nobody watches', () async {

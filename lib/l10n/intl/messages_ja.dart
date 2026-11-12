@@ -441,6 +441,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "backgroundNebula": MessageLookupByLibrary.simpleMessage("星雲"),
     "backgroundOrbit": MessageLookupByLibrary.simpleMessage("軌道"),
     "backgroundPlanet": MessageLookupByLibrary.simpleMessage("惑星"),
+    "backgroundResidentialCheck": MessageLookupByLibrary.simpleMessage(
+      "バックグラウンドで住宅回線を確認",
+    ),
+    "backgroundResidentialCheckDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "バックグラウンドで10分ごとに現在の住宅回線出口を確認します。少量の通信量を使用します。",
+        ),
     "backgroundSolid": MessageLookupByLibrary.simpleMessage("単色"),
     "backup": MessageLookupByLibrary.simpleMessage("バックアップ"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage("バックアップと復元"),
@@ -1317,7 +1324,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "開発者モードが有効になりました。",
     ),
+    "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("TUNを有効にする"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("未合格"),
+    "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
+    "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
+      "IPv6トラフィックはTUNで捕捉され、コアで無効化されています。",
+    ),
+    "diagnosticsIpv6Checking": MessageLookupByLibrary.simpleMessage(
+      "IPv6トラフィックを確認しています。",
+    ),
+    "diagnosticsIpv6Direct": MessageLookupByLibrary.simpleMessage(
+      "IPv6はTUNまたはシステムプロキシで捕捉されず、直接接続する可能性があります。",
+    ),
+    "diagnosticsIpv6NoNetwork": MessageLookupByLibrary.simpleMessage(
+      "この端末にIPv6ネットワークはありません。",
+    ),
+    "diagnosticsIpv6ProxyOnly": MessageLookupByLibrary.simpleMessage(
+      "システムプロキシはすべてのアプリを捕捉できず、IPv6が直接接続する場合があります。TUNを有効にしてください。",
+    ),
+    "diagnosticsIpv6Routed": MessageLookupByLibrary.simpleMessage(
+      "IPv6トラフィックはTUNで捕捉され、ルート経由で送信されます。",
+    ),
+    "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
+      "IPv6ネットワーク情報を取得できません。",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("成功"),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("再診断"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("既定経路の出口検証"),

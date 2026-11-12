@@ -1,10 +1,15 @@
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/common/tianji_api.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
+import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/providers/residential.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'core.dart';
 import 'route_state.dart';
+import 'state.dart';
 import 'routed_probe.dart';
 import 'tianji_nodes.dart';
 
@@ -18,6 +23,17 @@ class OutboundIpProbe extends _$OutboundIpProbe
   DateTime? _tianjiCooldownUntil;
   @override
   RoutedProbeState<String, IpInfo> build() => buildProbe();
+
+  @override
+  bool get allowBackgroundProbe =>
+      ref.read(appSettingProvider).backgroundResidentialCheck &&
+      ref.read(residentialPolicyProvider).active &&
+      ref.read(coreStatusProvider) == CoreStatus.connected &&
+      !ref.read(suspendProvider);
+
+  @override
+  bool canProbeInBackground(String target) =>
+      target == routedOutbound && allowBackgroundProbe;
 
   @override
   Future<Map<String, ProbeAnswer<IpInfo>>> probe(
