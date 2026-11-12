@@ -15,11 +15,17 @@ enum ProbePhase { empty, probing, fresh, failed }
 
 @immutable
 class ProbeEntry<V> {
-  const ProbeEntry({required this.phase, this.value, this.stamp});
+  const ProbeEntry({
+    required this.phase,
+    this.value,
+    this.stamp,
+    this.completedAt,
+  });
 
   final ProbePhase phase;
   final V? value;
   final RouteStamp? stamp;
+  final DateTime? completedAt;
 
   bool get isLoading => phase == ProbePhase.probing;
 
@@ -28,10 +34,11 @@ class ProbeEntry<V> {
       other is ProbeEntry<V> &&
       other.phase == phase &&
       other.value == value &&
-      other.stamp == stamp;
+      other.stamp == stamp &&
+      other.completedAt == completedAt;
 
   @override
-  int get hashCode => Object.hash(phase, value, stamp);
+  int get hashCode => Object.hash(phase, value, stamp, completedAt);
 }
 
 @immutable
@@ -368,6 +375,7 @@ mixin RoutedProbe<K, V>
       phase: failed ? ProbePhase.failed : ProbePhase.fresh,
       value: value,
       stamp: stamp,
+      completedAt: DateTime.now(),
     );
   }
 

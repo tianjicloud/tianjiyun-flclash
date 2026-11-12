@@ -258,6 +258,11 @@ class App {
     return methodChannel.invokeMethod<bool>('openAppSettings');
   }
 
+  Future<bool?> openVpnSettings() async {
+    if (!Platform.isAndroid) return false;
+    return methodChannel.invokeMethod<bool>('openVpnSettings');
+  }
+
   Future<({bool user, bool system, bool root})> locateCaCertificate(
     List<int> der,
   ) async {

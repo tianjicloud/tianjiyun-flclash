@@ -42,6 +42,14 @@ class UpdateDownloadState extends _$UpdateDownloadState
 }
 
 @Riverpod(keepAlive: true)
+class UpdateCheckResult extends _$UpdateCheckResult {
+  @override
+  bool? build() => null;
+
+  void record(bool isLatest) => state = isLatest;
+}
+
+@Riverpod(keepAlive: true)
 class Logs extends _$Logs with AutoDisposeNotifierMixin {
   @override
   FixedList<Log> build() {
@@ -56,7 +64,7 @@ class Logs extends _$Logs with AutoDisposeNotifierMixin {
   }
 
   Future<bool> exportLogs() async {
-    final logString = await encodeLogsTask(value.list);
+    final logString = redactReport(await encodeLogsTask(value.list));
     final tempFilePath = await appPath.tempFilePath;
     final file = File(tempFilePath);
     await file.safeWriteAsString(logString);

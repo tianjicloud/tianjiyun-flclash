@@ -1742,5 +1742,13 @@
   "subscriptionExpiryNoticeBody": "{name} · {date}",
   "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
   "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
-  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}},
+  "businessDetectedAt": "확인",
+  "logRedactionNotice": "내보낸 보고서에서 구독 토큰, 비밀번호, UUID, 개인 키, Authorization 및 Cookie 헤더를 숨깁니다.",
+  "profileShowPlanInfo": "홈에 요금제 정보 표시",
+  "profileExpiryNotifications": "만료 및 데이터 사용량 알림",
+  "alwaysOnVpn": "VPN 항상 켜기",
+  "alwaysOnVpnDescription": "시스템 설정에서 천기운을 사용 설정하세요",
+  "alreadyLatest": "최신 버전입니다",
+  "lastBackupTime": "마지막 백업 시간"
 }

@@ -1742,5 +1742,13 @@
   "subscriptionExpiryNoticeBody": "{name} · {date}",
   "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
   "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
-  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}},
+  "businessDetectedAt": "検出",
+  "logRedactionNotice": "エクスポートしたレポートでは、購読トークン、パスワード、UUID、秘密鍵、Authorization と Cookie ヘッダーを伏せます。",
+  "profileShowPlanInfo": "ホームにプラン情報を表示",
+  "profileExpiryNotifications": "有効期限とデータ使用量の通知",
+  "alwaysOnVpn": "VPN を常時接続",
+  "alwaysOnVpnDescription": "システム設定で天機雲を有効にしてください",
+  "alreadyLatest": "最新バージョンです",
+  "lastBackupTime": "前回のバックアップ"
 }

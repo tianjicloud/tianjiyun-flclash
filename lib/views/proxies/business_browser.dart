@@ -180,6 +180,16 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                         ),
                         const SizedBox(height: 8),
                         Expanded(child: content),
+                        if (ref.watch(isStartProvider)) ...[
+                          const SizedBox(height: 12),
+                          _VerificationCard(
+                            verdict: ref.watch(selectionCheckProvider),
+                            selectedName: _cleanProxyName(
+                              selectedProxyName ?? '',
+                            ),
+                          ),
+                          SizedBox(height: 88 + context.bottomInset),
+                        ],
                       ],
                     ),
                   ),
@@ -590,8 +600,18 @@ class _VerificationCard extends ConsumerWidget {
     final success = verdict == SelectionVerdict.consistent;
     final message = _verdictSummary(verdict, context);
     final ip = entry.value?.ip ?? '';
+    final completedAt = entry.completedAt;
+    final detectedAt = completedAt == null
+        ? ''
+        : ' · ${completedAt.hour.toString().padLeft(2, '0')}:${completedAt.minute.toString().padLeft(2, '0')} ${context.appLocalizations.businessDetectedAt}';
+    final verifiedDetail = context.appLocalizations.businessExitVerifiedDetail(
+      selectedName,
+      ip,
+    );
     final detail = success
-        ? context.appLocalizations.businessExitVerifiedDetail(selectedName, ip)
+        ? ViewScope.isMobileOf(context)
+              ? '$detectedAt · $verifiedDetail'
+              : '$verifiedDetail$detectedAt'
         : message;
     final ipOffset = ip.isEmpty ? -1 : detail.indexOf(ip);
     final detailText = ipOffset < 0

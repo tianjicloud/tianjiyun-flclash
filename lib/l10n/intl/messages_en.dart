@@ -447,6 +447,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("Allow LAN"),
     "allowedIps": MessageLookupByLibrary.simpleMessage("Allowed IPs"),
     "alreadyInLocalProxies": m2,
+    "alreadyLatest": MessageLookupByLibrary.simpleMessage("Already up to date"),
+    "alwaysOnVpn": MessageLookupByLibrary.simpleMessage("Always-on VPN"),
+    "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "Enable Tianji Yun in system settings",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("Answers"),
     "app": MessageLookupByLibrary.simpleMessage("App"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
@@ -611,6 +616,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Test speed",
     ),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("Timeout"),
+    "businessDetectedAt": MessageLookupByLibrary.simpleMessage("checked"),
     "businessDeveloperDescription": MessageLookupByLibrary.simpleMessage(
       "Open diagnostics and advanced developer tools.",
     ),
@@ -2090,6 +2096,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "label": MessageLookupByLibrary.simpleMessage("Label"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "large": MessageLookupByLibrary.simpleMessage("Large"),
+    "lastBackupTime": MessageLookupByLibrary.simpleMessage("Last backup"),
     "lastUpdated": MessageLookupByLibrary.simpleMessage("Last updated"),
     "launchInterrupted": MessageLookupByLibrary.simpleMessage(
       "Launch did not finish",
@@ -2139,6 +2146,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logFilterInfo": MessageLookupByLibrary.simpleMessage("Info"),
     "logFilterWarning": MessageLookupByLibrary.simpleMessage("Warning"),
     "logLevel": MessageLookupByLibrary.simpleMessage("Log level"),
+    "logRedactionNotice": MessageLookupByLibrary.simpleMessage(
+      "Exported reports redact subscription tokens, passwords, UUIDs, private keys and authorization or cookie headers.",
+    ),
     "logcat": MessageLookupByLibrary.simpleMessage("Logcat"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
       "Turning off Logcat hides the logs entry.",
@@ -2631,6 +2641,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "profileDaysLeft": m106,
     "profileExpiresIn": m107,
+    "profileExpiryNotifications": MessageLookupByLibrary.simpleMessage(
+      "Expiry and data usage alerts",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "The profile has been modified. Turn off auto update?",
     ),
@@ -2642,6 +2655,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Applies to this profile only; anything not added uses its default.",
+    ),
+    "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage(
+      "Show plan information on home",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
       "Changes apply immediately; if parsing fails, the current configuration is kept.",

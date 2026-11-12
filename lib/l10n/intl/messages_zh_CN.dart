@@ -388,6 +388,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("局域网代理"),
     "allowedIps": MessageLookupByLibrary.simpleMessage("允许的 IP"),
     "alreadyInLocalProxies": m2,
+    "alreadyLatest": MessageLookupByLibrary.simpleMessage("已是最新版本"),
+    "alwaysOnVpn": MessageLookupByLibrary.simpleMessage("始终开启 VPN"),
+    "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "在系统设置中为天机云开启",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("应答"),
     "app": MessageLookupByLibrary.simpleMessage("应用"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage("应用访问控制"),
@@ -502,6 +507,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("机房"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("测速"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("超时"),
+    "businessDetectedAt": MessageLookupByLibrary.simpleMessage("检测"),
     "businessDeveloperDescription": MessageLookupByLibrary.simpleMessage(
       "打开诊断与开发者工具。",
     ),
@@ -1580,6 +1586,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "label": MessageLookupByLibrary.simpleMessage("标签"),
     "language": MessageLookupByLibrary.simpleMessage("语言"),
     "large": MessageLookupByLibrary.simpleMessage("大"),
+    "lastBackupTime": MessageLookupByLibrary.simpleMessage("上次备份时间"),
     "lastUpdated": MessageLookupByLibrary.simpleMessage("上次更新"),
     "launchInterrupted": MessageLookupByLibrary.simpleMessage("启动未完成"),
     "launchInterruptedTip": MessageLookupByLibrary.simpleMessage(
@@ -1623,6 +1630,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logFilterInfo": MessageLookupByLibrary.simpleMessage("信息"),
     "logFilterWarning": MessageLookupByLibrary.simpleMessage("警告"),
     "logLevel": MessageLookupByLibrary.simpleMessage("日志等级"),
+    "logRedactionNotice": MessageLookupByLibrary.simpleMessage(
+      "导出的报告已去除订阅令牌、密码、UUID、私钥及 Authorization、Cookie 头。",
+    ),
     "logcat": MessageLookupByLibrary.simpleMessage("日志捕获"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage("关闭日志捕获会隐藏日志入口。"),
     "logs": MessageLookupByLibrary.simpleMessage("日志"),
@@ -2002,6 +2012,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("请输入自动更新间隔时间"),
     "profileDaysLeft": m106,
     "profileExpiresIn": m107,
+    "profileExpiryNotifications": MessageLookupByLibrary.simpleMessage(
+      "到期与流量提醒",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "配置文件已经修改，是否关闭自动更新？",
     ),
@@ -2012,6 +2025,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "仅作用于当前配置，未添加的项使用默认值。",
     ),
+    "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("在首页显示套餐信息"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
       "切换后立即生效；解析失败时保留当前配置",
     ),

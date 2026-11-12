@@ -38,6 +38,8 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   late final TextEditingController _ageSecretKeyController;
   late final TextEditingController _autoUpdateDurationController;
   late bool _autoUpdate;
+  late bool _showSubscriptionInfo;
+  late bool _subscriptionExpiryNotifications;
   Uint8List? _editedData;
   bool _attempted = false;
   bool _showAgeSecretKey = false;
@@ -65,6 +67,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       text: widget.profile.ageSecretKey,
     );
     _autoUpdate = widget.profile.autoUpdate;
+    _showSubscriptionInfo = widget.profile.showSubscriptionInfo;
+    _subscriptionExpiryNotifications =
+        widget.profile.subscriptionExpiryNotifications;
     _autoUpdateDurationController = TextEditingController(
       text: widget.profile.autoUpdateDuration.inMinutes.toString(),
     );
@@ -149,6 +154,8 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       ageSecretKey: _ageSecretKeyController.text.trim(),
       label: _labelController.text,
       autoUpdate: _autoUpdate,
+      showSubscriptionInfo: _showSubscriptionInfo,
+      subscriptionExpiryNotifications: _subscriptionExpiryNotifications,
       autoUpdateDuration: interval != null && interval > 0
           ? Duration(minutes: interval)
           : current.autoUpdateDuration,
@@ -371,6 +378,29 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
               title: appLocalizations.autoUpdate,
               onPressed: () => _setAutoUpdate(!_autoUpdate),
               trailing: Switch(value: _autoUpdate, onChanged: _setAutoUpdate),
+            ),
+            FormRow(
+              title: appLocalizations.profileShowPlanInfo,
+              onPressed: () => setState(
+                () => _showSubscriptionInfo = !_showSubscriptionInfo,
+              ),
+              trailing: Switch(
+                value: _showSubscriptionInfo,
+                onChanged: (value) =>
+                    setState(() => _showSubscriptionInfo = value),
+              ),
+            ),
+            FormRow(
+              title: appLocalizations.profileExpiryNotifications,
+              onPressed: () => setState(
+                () => _subscriptionExpiryNotifications =
+                    !_subscriptionExpiryNotifications,
+              ),
+              trailing: Switch(
+                value: _subscriptionExpiryNotifications,
+                onChanged: (value) =>
+                    setState(() => _subscriptionExpiryNotifications = value),
+              ),
             ),
             if (_autoUpdate)
               _AutoUpdateIntervalField(
@@ -841,6 +871,34 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                 if (value != 'disabled') _handleChanged(value);
               },
             ),
+          ),
+          const SizedBox(height: 16),
+          BusinessSettingsCard(
+            items: [
+              ListItem(
+                title: Text(l10n.profileShowPlanInfo),
+                trailing: Switch(
+                  value: _showSubscriptionInfo,
+                  onChanged: (value) =>
+                      setState(() => _showSubscriptionInfo = value),
+                ),
+                onTap: () => setState(
+                  () => _showSubscriptionInfo = !_showSubscriptionInfo,
+                ),
+              ),
+              ListItem(
+                title: Text(l10n.profileExpiryNotifications),
+                trailing: Switch(
+                  value: _subscriptionExpiryNotifications,
+                  onChanged: (value) =>
+                      setState(() => _subscriptionExpiryNotifications = value),
+                ),
+                onTap: () => setState(
+                  () => _subscriptionExpiryNotifications =
+                      !_subscriptionExpiryNotifications,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           BusinessSettingsCard(

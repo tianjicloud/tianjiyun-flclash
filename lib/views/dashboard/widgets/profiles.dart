@@ -77,8 +77,9 @@ class ProfilesCard extends ConsumerWidget {
     final switchable = ref.watch(
       profilesProvider.select((profiles) => profiles.length > 1),
     );
-    final usage = _usageOf(profile);
-    final expiry = profileExpiryOf(profile);
+    final showSubscriptionInfo = profile?.showSubscriptionInfo != false;
+    final usage = _usageOf(showSubscriptionInfo ? profile : null);
+    final expiry = showSubscriptionInfo ? profileExpiryOf(profile) : null;
     final updatedAt = profile?.lastUpdateDate;
     final label = DashboardText.label(context);
     final figure = mobile

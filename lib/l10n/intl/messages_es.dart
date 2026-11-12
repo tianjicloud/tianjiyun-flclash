@@ -468,6 +468,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("Permitir LAN"),
     "allowedIps": MessageLookupByLibrary.simpleMessage("IP permitidas"),
     "alreadyInLocalProxies": m2,
+    "alreadyLatest": MessageLookupByLibrary.simpleMessage(
+      "Ya tienes la última versión",
+    ),
+    "alwaysOnVpn": MessageLookupByLibrary.simpleMessage("VPN siempre activa"),
+    "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "Activa Tianji Yun en los ajustes del sistema",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("Respuestas"),
     "app": MessageLookupByLibrary.simpleMessage("App"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
@@ -660,6 +667,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage(
       "Tiempo agotado",
     ),
+    "businessDetectedAt": MessageLookupByLibrary.simpleMessage("comprobado"),
     "businessDeveloperDescription": MessageLookupByLibrary.simpleMessage(
       "Abre diagnósticos y herramientas avanzadas.",
     ),
@@ -2211,6 +2219,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "label": MessageLookupByLibrary.simpleMessage("Etiqueta"),
     "language": MessageLookupByLibrary.simpleMessage("Idioma"),
     "large": MessageLookupByLibrary.simpleMessage("Grande"),
+    "lastBackupTime": MessageLookupByLibrary.simpleMessage(
+      "Última copia de seguridad",
+    ),
     "lastUpdated": MessageLookupByLibrary.simpleMessage("Última actualización"),
     "launchInterrupted": MessageLookupByLibrary.simpleMessage(
       "El inicio no se completó",
@@ -2262,6 +2273,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logFilterInfo": MessageLookupByLibrary.simpleMessage("Información"),
     "logFilterWarning": MessageLookupByLibrary.simpleMessage("Advertencia"),
     "logLevel": MessageLookupByLibrary.simpleMessage("Nivel de registro"),
+    "logRedactionNotice": MessageLookupByLibrary.simpleMessage(
+      "Los informes exportados ocultan tokens de suscripción, contraseñas, UUID, claves privadas y encabezados Authorization o Cookie.",
+    ),
     "logcat": MessageLookupByLibrary.simpleMessage("Logcat"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
       "Si desactivas Logcat, se oculta la entrada de registros.",
@@ -2796,6 +2810,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "profileDaysLeft": m106,
     "profileExpiresIn": m107,
+    "profileExpiryNotifications": MessageLookupByLibrary.simpleMessage(
+      "Avisos de vencimiento y consumo",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "El perfil se ha modificado. ¿Desactivar la actualización automática?",
     ),
@@ -2807,6 +2824,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Se aplica solo a este perfil; lo que no añadas usa su valor predeterminado.",
+    ),
+    "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage(
+      "Mostrar información del plan en inicio",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
       "Los cambios se aplican al instante; si falla el análisis, se conserva la configuración actual.",

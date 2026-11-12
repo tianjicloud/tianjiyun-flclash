@@ -253,6 +253,10 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
                 result.success(openAppSettings())
             }
 
+            "openVpnSettings" -> {
+                result.success(startSettings(Intent(Settings.ACTION_VPN_SETTINGS)))
+            }
+
             "getLastExitInfo" -> reply(result) {
                 GlobalState.lastExitInfo()
             }

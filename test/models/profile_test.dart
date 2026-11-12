@@ -67,6 +67,13 @@ void main() {
       expect(profile.url, isEmpty);
       expect(profile.realAutoUpdate, false);
     });
+
+    test('subscription display and reminder settings default to enabled', () {
+      final profile = Profile.normal(url: 'https://example.com/profile.yaml');
+
+      expect(profile.showSubscriptionInfo, isTrue);
+      expect(profile.subscriptionExpiryNotifications, isTrue);
+    });
   });
 
   group('ProfileExtension', () {

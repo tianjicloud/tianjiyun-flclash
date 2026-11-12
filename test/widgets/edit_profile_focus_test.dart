@@ -130,6 +130,7 @@ void main() {
   ) async {
     final outsideFocus = await pumpEditProfile(tester);
     expect(FocusManager.instance.primaryFocus, outsideFocus);
+    expect(find.byType(Switch), findsNWidgets(3));
 
     for (var i = 0; i < 4 && !_isTextFieldFocused(); i++) {
       if (i > 0) {
@@ -187,7 +188,7 @@ void main() {
     );
 
     await tester.enterText(interval, '');
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.byType(Switch).first);
     await tester.pump();
     await tester.tap(find.byTooltip('Save'));
     await tester.pump();

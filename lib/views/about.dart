@@ -47,6 +47,7 @@ class AboutView extends ConsumerWidget {
       tag: LoadingTag.checkUpdate,
     );
     if (result == null) return;
+    ref.read(updateCheckResultProvider.notifier).record(result.release == null);
     unawaited(
       commonAction.checkUpdateResultHandle(data: result.release, isUser: true),
     );
@@ -90,6 +91,7 @@ class AboutView extends ConsumerWidget {
     final version = globalState.packageInfo.version;
     final download = ref.watch(updateDownloadStateProvider);
     final updateTag = download?.tag;
+    final upToDate = ref.watch(updateCheckResultProvider) == true;
     final hasUpdate =
         updateTag != null &&
         compareVersions(updateTag.replaceFirst(RegExp(r'^v'), ''), version) > 0;
@@ -194,9 +196,15 @@ class AboutView extends ConsumerWidget {
                     )
                   : null,
             ),
+            if (upToDate)
+              ListItem(
+                title: Text(appLocalizations.alreadyLatest),
+                leading: const GlyphIcon(AppGlyphs.checkCircle),
+              ),
           ],
         ),
         const SizedBox(height: 14),
+        const _LastBackupItem(),
         BusinessSettingsCard(title: appLocalizations.more, items: links),
         const SizedBox(height: 14),
         BusinessSettingsCard(
@@ -452,6 +460,30 @@ class AboutView extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _LastBackupItem extends StatelessWidget {
+  const _LastBackupItem();
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<int?>(
+    future: preferences.getLastBackupAt(),
+    builder: (context, snapshot) {
+      final value = snapshot.data;
+      if (value == null) return const SizedBox.shrink();
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 14),
+        child: BusinessSettingsCard(
+          items: [
+            ListItem(
+              title: Text(context.appLocalizations.lastBackupTime),
+              subtitle: Text(DateTime.fromMillisecondsSinceEpoch(value).show),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
 
 class _AboutHero extends StatelessWidget {

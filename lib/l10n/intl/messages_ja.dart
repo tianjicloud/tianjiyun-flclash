@@ -397,6 +397,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("LANプロキシ"),
     "allowedIps": MessageLookupByLibrary.simpleMessage("許可する IP"),
     "alreadyInLocalProxies": m2,
+    "alreadyLatest": MessageLookupByLibrary.simpleMessage("最新バージョンです"),
+    "alwaysOnVpn": MessageLookupByLibrary.simpleMessage("VPN を常時接続"),
+    "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "システム設定で天機雲を有効にしてください",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("応答"),
     "app": MessageLookupByLibrary.simpleMessage("アプリ"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage("アプリアクセス制御"),
@@ -523,6 +528,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("データセンター"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("速度測定"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("タイムアウト"),
+    "businessDetectedAt": MessageLookupByLibrary.simpleMessage("検出"),
     "businessDeveloperDescription": MessageLookupByLibrary.simpleMessage(
       "診断と開発者向けツールを開きます。",
     ),
@@ -1783,6 +1789,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "label": MessageLookupByLibrary.simpleMessage("ラベル"),
     "language": MessageLookupByLibrary.simpleMessage("言語"),
     "large": MessageLookupByLibrary.simpleMessage("大"),
+    "lastBackupTime": MessageLookupByLibrary.simpleMessage("前回のバックアップ"),
     "lastUpdated": MessageLookupByLibrary.simpleMessage("最終更新"),
     "launchInterrupted": MessageLookupByLibrary.simpleMessage("起動が完了しませんでした"),
     "launchInterruptedTip": MessageLookupByLibrary.simpleMessage(
@@ -1826,6 +1833,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logFilterInfo": MessageLookupByLibrary.simpleMessage("情報"),
     "logFilterWarning": MessageLookupByLibrary.simpleMessage("警告"),
     "logLevel": MessageLookupByLibrary.simpleMessage("ログレベル"),
+    "logRedactionNotice": MessageLookupByLibrary.simpleMessage(
+      "エクスポートしたレポートでは、購読トークン、パスワード、UUID、秘密鍵、Authorization と Cookie ヘッダーを伏せます。",
+    ),
     "logcat": MessageLookupByLibrary.simpleMessage("ログキャプチャ"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
       "ログキャプチャを無効にすると、ログの入り口が非表示になります。",
@@ -2247,6 +2257,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("自動更新間隔を入力してください"),
     "profileDaysLeft": m106,
     "profileExpiresIn": m107,
+    "profileExpiryNotifications": MessageLookupByLibrary.simpleMessage(
+      "有効期限とデータ使用量の通知",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "プロファイルが変更されています。自動更新を無効にしますか？",
     ),
@@ -2257,6 +2270,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "このプロファイルにのみ適用されます。追加していない項目はデフォルト値を使用します。",
     ),
+    "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("ホームにプラン情報を表示"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
       "切り替えはすぐに反映されます。解析に失敗した場合は現在の設定を維持します。",
     ),

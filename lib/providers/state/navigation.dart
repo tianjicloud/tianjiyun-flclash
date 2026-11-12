@@ -33,7 +33,7 @@ NavigationItemsState currentNavigationItemsState(Ref ref) {
       PageLabel.proxies,
       PageLabel.profiles,
       PageLabel.requests,
-      if (defaultTargetPlatform != TargetPlatform.windows) PageLabel.dns,
+      PageLabel.dns,
       PageLabel.logs,
       PageLabel.tools,
     };

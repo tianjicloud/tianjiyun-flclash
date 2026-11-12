@@ -1742,5 +1742,13 @@
   "subscriptionExpiryNoticeBody": "{name} · {date}",
   "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
   "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
-  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}},
+  "businessDetectedAt": "检测",
+  "logRedactionNotice": "导出的报告已去除订阅令牌、密码、UUID、私钥及 Authorization、Cookie 头。",
+  "profileShowPlanInfo": "在首页显示套餐信息",
+  "profileExpiryNotifications": "到期与流量提醒",
+  "alwaysOnVpn": "始终开启 VPN",
+  "alwaysOnVpnDescription": "在系统设置中为天机云开启",
+  "alreadyLatest": "已是最新版本",
+  "lastBackupTime": "上次备份时间"
 }

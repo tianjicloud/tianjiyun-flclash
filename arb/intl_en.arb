@@ -1742,5 +1742,13 @@
   "subscriptionExpiryNoticeBody": "{name} · {date}",
   "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
   "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
-  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}},
+  "businessDetectedAt": "checked",
+  "logRedactionNotice": "Exported reports redact subscription tokens, passwords, UUIDs, private keys and authorization or cookie headers.",
+  "profileShowPlanInfo": "Show plan information on home",
+  "profileExpiryNotifications": "Expiry and data usage alerts",
+  "alwaysOnVpn": "Always-on VPN",
+  "alwaysOnVpnDescription": "Enable Tianji Yun in system settings",
+  "alreadyLatest": "Already up to date",
+  "lastBackupTime": "Last backup"
 }

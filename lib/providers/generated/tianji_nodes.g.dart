@@ -74,7 +74,7 @@ final class TianjiNodeCatalogProvider
   TianjiNodeCatalog create() => TianjiNodeCatalog();
 }
 
-String _$tianjiNodeCatalogHash() => r'1e2658e97e611047d97e30c62579c8cdb0539a32';
+String _$tianjiNodeCatalogHash() => r'173f7d41854ca3cdad68368905109e57784c975c';
 
 abstract class _$TianjiNodeCatalog extends $AsyncNotifier<TianjiNodes?> {
   FutureOr<TianjiNodes?> build();
@@ -151,7 +151,7 @@ final class TianjiNodeProvider
   }
 }
 
-String _$tianjiNodeHash() => r'4c7793891f135fd84725aa3bc8a5be5b81c10f0b';
+String _$tianjiNodeHash() => r'91bfbe5ad6843cec92dfc64d6fbdf7d6adae5860';
 
 final class TianjiNodeFamily extends $Family
     with $FunctionalFamilyOverride<TianjiNode?, String> {
@@ -216,4 +216,4 @@ final class TianjiCategoriesProvider
   }
 }
 
-String _$tianjiCategoriesHash() => r'f38ba2453235b84c589c82676fc1b8a960aa4a3a';
+String _$tianjiCategoriesHash() => r'303b6bb8af769aeeabdecc1c403c67dfcd1734e5';

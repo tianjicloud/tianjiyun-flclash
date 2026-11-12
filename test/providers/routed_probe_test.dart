@@ -130,6 +130,7 @@ void main() {
     final entry = container.read(_probeProvider).entryOf('a');
     expect(entry.phase, ProbePhase.fresh);
     expect(entry.value, 'ok');
+    expect(entry.completedAt, isNotNull);
 
     probe.watch('a');
     await pumpEventQueue();

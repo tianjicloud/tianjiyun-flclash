@@ -457,6 +457,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("Разрешить LAN"),
     "allowedIps": MessageLookupByLibrary.simpleMessage("Разрешённые IP"),
     "alreadyInLocalProxies": m2,
+    "alreadyLatest": MessageLookupByLibrary.simpleMessage(
+      "Установлена последняя версия",
+    ),
+    "alwaysOnVpn": MessageLookupByLibrary.simpleMessage(
+      "Всегда включённый VPN",
+    ),
+    "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "Включите Tianji Yun в системных настройках",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("Ответы"),
     "app": MessageLookupByLibrary.simpleMessage("Приложение"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
@@ -635,6 +644,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Проверить скорость",
     ),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("Тайм-аут"),
+    "businessDetectedAt": MessageLookupByLibrary.simpleMessage("проверено"),
     "businessDeveloperDescription": MessageLookupByLibrary.simpleMessage(
       "Диагностика и инструменты разработчика.",
     ),
@@ -2170,6 +2180,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "label": MessageLookupByLibrary.simpleMessage("Метка"),
     "language": MessageLookupByLibrary.simpleMessage("Язык"),
     "large": MessageLookupByLibrary.simpleMessage("Крупный"),
+    "lastBackupTime": MessageLookupByLibrary.simpleMessage(
+      "Время последней резервной копии",
+    ),
     "lastUpdated": MessageLookupByLibrary.simpleMessage("Последнее обновление"),
     "launchInterrupted": MessageLookupByLibrary.simpleMessage(
       "Запуск не завершён",
@@ -2221,6 +2234,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logFilterInfo": MessageLookupByLibrary.simpleMessage("Информация"),
     "logFilterWarning": MessageLookupByLibrary.simpleMessage("Предупреждения"),
     "logLevel": MessageLookupByLibrary.simpleMessage("Уровень логов"),
+    "logRedactionNotice": MessageLookupByLibrary.simpleMessage(
+      "В экспортированных отчетах скрываются токены подписки, пароли, UUID, закрытые ключи, а также заголовки Authorization и Cookie.",
+    ),
     "logcat": MessageLookupByLibrary.simpleMessage("Захват логов"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
       "При отключении захвата логов раздел логов скрывается.",
@@ -2751,6 +2767,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("Введите интервал автообновления"),
     "profileDaysLeft": m106,
     "profileExpiresIn": m107,
+    "profileExpiryNotifications": MessageLookupByLibrary.simpleMessage(
+      "Уведомления об окончании срока и трафике",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "Профиль изменён. Отключить автообновление?",
     ),
@@ -2762,6 +2781,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Действует только для этого профиля; не добавленные параметры используют значения по умолчанию.",
+    ),
+    "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage(
+      "Показывать сведения о тарифе на главной",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
       "Изменения применяются сразу; при ошибке разбора сохраняется текущая конфигурация.",

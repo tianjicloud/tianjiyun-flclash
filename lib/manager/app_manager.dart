@@ -206,6 +206,7 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
 
   Future<void> _checkExpiry(Profile? profile) async {
     if (!(widget.isAndroid ?? system.isAndroid) ||
+        profile?.subscriptionExpiryNotifications == false ||
         !isTianjiSubscriptionProfile(profile)) {
       return;
     }

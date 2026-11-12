@@ -8,6 +8,7 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/proxies/list.dart';
 import 'package:fl_clash/views/proxies/business_browser.dart';
 import 'package:fl_clash/views/proxies/business_list.dart';
+import 'package:fl_clash/views/config/providers.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessPrimaryButton, BusinessSecondaryButton;
 import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
@@ -184,7 +185,18 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
         ? null
         : _buildPrimaryAction(business: business);
     final desktopActions = businessDesktop
-        ? <IconButtonData>[]
+        ? [
+            if (!businessDesktopSearch &&
+                style.businessProxiesView == BusinessProxiesView.list)
+              IconButtonData(
+                glyph: AppGlyphs.resources,
+                tooltip: context.appLocalizations.businessProvidersTitle,
+                onPressed: () => BaseNavigator.push<void>(
+                  context,
+                  const ClashProvidersView(),
+                ),
+              ),
+          ]
         : [
             if (_isTab && !picker)
               IconButtonData(
@@ -241,6 +253,15 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
                   ),
                 ),
               ),
+              if (style.businessProxiesView == BusinessProxiesView.list)
+                BusinessSecondaryButton(
+                  label: context.appLocalizations.businessProvidersTitle,
+                  width: 136 * textScale,
+                  onPressed: () => BaseNavigator.push<void>(
+                    context,
+                    const ClashProvidersView(),
+                  ),
+                ),
               BusinessPrimaryButton(
                 label: context.appLocalizations.businessTestAll,
                 width: 86 * textScale,

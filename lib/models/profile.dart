@@ -74,6 +74,8 @@ abstract class Profile with _$Profile {
     required Duration autoUpdateDuration,
     SubscriptionInfo? subscriptionInfo,
     @Default(true) bool autoUpdate,
+    @Default(true) bool showSubscriptionInfo,
+    @Default(true) bool subscriptionExpiryNotifications,
     @Default({}) Map<String, String> selectedMap,
     @Default({}) Set<String> unfoldSet,
     @Default(ExtendType.standard) ExtendType extendType,

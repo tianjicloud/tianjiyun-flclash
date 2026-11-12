@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/service_probe.dart';
@@ -6,6 +8,7 @@ import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/providers/service_status.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
@@ -39,6 +42,8 @@ import 'package:fl_clash/views/hotkey.dart';
 import 'package:fl_clash/views/profiles/custom/custom_proxies.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config/advanced.dart';
@@ -298,6 +303,19 @@ class _BusinessMobileTools extends ConsumerWidget {
           _BusinessMobileSection(
             title: l10n.network,
             items: [
+              if (defaultTargetPlatform == TargetPlatform.android)
+                ListItem(
+                  leading: icon(AppGlyphs.vpn),
+                  title: Text(l10n.alwaysOnVpn),
+                  subtitle: Text(l10n.alwaysOnVpnDescription),
+                  trailing: const GlyphIcon(AppGlyphs.chevronForward),
+                  onTap: () {
+                    final plugin = app;
+                    if (plugin != null) {
+                      unawaited(plugin.openVpnSettings().then<void>((_) {}));
+                    }
+                  },
+                ),
               ListItem.open(
                 leading: icon(AppGlyphs.appsList),
                 title: Text(l10n.businessToolsPerAppProxy),

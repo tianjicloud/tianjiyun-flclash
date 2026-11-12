@@ -53,6 +53,16 @@ class Preferences {
     await (await _store.value)?.setInt('event:$key', value);
   }
 
+  Future<int?> getLastBackupAt() async =>
+      (await _store.value)?.getInt('lastBackupAt');
+
+  Future<void> setLastBackupAt(DateTime value) async {
+    await (await _store.value)?.setInt(
+      'lastBackupAt',
+      value.millisecondsSinceEpoch,
+    );
+  }
+
   Future<int> getUpgradeVersion() async {
     final preferences = await _store.value;
     return preferences?.getInt('upgradeVersion') ?? 0;

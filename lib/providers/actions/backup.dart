@@ -13,7 +13,9 @@ class BackupAction extends _$BackupAction {
 
   Future<bool> backup(BackupDelivery deliver) {
     return _withWorkDir((workDir) async {
-      return deliver(await _createArchive(workDir));
+      final succeeded = await deliver(await _createArchive(workDir));
+      if (succeeded) await preferences.setLastBackupAt(DateTime.now());
+      return succeeded;
     });
   }
 

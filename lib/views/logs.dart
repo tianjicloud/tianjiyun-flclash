@@ -263,6 +263,15 @@ class _LogsViewState extends ConsumerState<LogsView>
             ),
           ),
           const Divider(height: 1),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+            child: Text(
+              appLocalizations.logRedactionNotice,
+              style: AppTextStyle.caption2
+                  .of(context)
+                  .copyWith(color: context.colorScheme.onSurfaceVariant),
+            ),
+          ),
           Expanded(child: feed),
         ],
       ),

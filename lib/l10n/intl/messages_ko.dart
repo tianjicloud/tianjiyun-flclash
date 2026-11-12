@@ -400,6 +400,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("LAN 허용"),
     "allowedIps": MessageLookupByLibrary.simpleMessage("허용 IP"),
     "alreadyInLocalProxies": m2,
+    "alreadyLatest": MessageLookupByLibrary.simpleMessage("최신 버전입니다"),
+    "alwaysOnVpn": MessageLookupByLibrary.simpleMessage("VPN 항상 켜기"),
+    "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "시스템 설정에서 천기운을 사용 설정하세요",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("응답"),
     "app": MessageLookupByLibrary.simpleMessage("앱"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage("앱 접근 제어"),
@@ -522,6 +527,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("데이터센터"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("속도 측정"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("시간 초과"),
+    "businessDetectedAt": MessageLookupByLibrary.simpleMessage("확인"),
     "businessDeveloperDescription": MessageLookupByLibrary.simpleMessage(
       "진단 및 개발자 도구를 엽니다.",
     ),
@@ -1754,6 +1760,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "label": MessageLookupByLibrary.simpleMessage("레이블"),
     "language": MessageLookupByLibrary.simpleMessage("언어"),
     "large": MessageLookupByLibrary.simpleMessage("크게"),
+    "lastBackupTime": MessageLookupByLibrary.simpleMessage("마지막 백업 시간"),
     "lastUpdated": MessageLookupByLibrary.simpleMessage("마지막 업데이트"),
     "launchInterrupted": MessageLookupByLibrary.simpleMessage("시작이 완료되지 않음"),
     "launchInterruptedTip": MessageLookupByLibrary.simpleMessage(
@@ -1797,6 +1804,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logFilterInfo": MessageLookupByLibrary.simpleMessage("정보"),
     "logFilterWarning": MessageLookupByLibrary.simpleMessage("경고"),
     "logLevel": MessageLookupByLibrary.simpleMessage("로그 수준"),
+    "logRedactionNotice": MessageLookupByLibrary.simpleMessage(
+      "내보낸 보고서에서 구독 토큰, 비밀번호, UUID, 개인 키, Authorization 및 Cookie 헤더를 숨깁니다.",
+    ),
     "logcat": MessageLookupByLibrary.simpleMessage("Logcat"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
       "Logcat을 끄면 로그 항목이 숨겨집니다.",
@@ -2212,6 +2222,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("자동 업데이트 간격을 입력하세요"),
     "profileDaysLeft": m106,
     "profileExpiresIn": m107,
+    "profileExpiryNotifications": MessageLookupByLibrary.simpleMessage(
+      "만료 및 데이터 사용량 알림",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "프로필이 수정되었습니다. 자동 업데이트를 끄시겠습니까?",
     ),
@@ -2222,6 +2235,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "이 프로필에만 적용되며, 추가하지 않은 항목은 기본값을 사용합니다.",
     ),
+    "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("홈에 요금제 정보 표시"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
       "전환 내용은 즉시 적용됩니다. 파싱에 실패하면 현재 구성을 유지합니다.",
     ),

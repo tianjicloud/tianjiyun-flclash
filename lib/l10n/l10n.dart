@@ -14227,6 +14227,86 @@ class AppLocalizations {
       args: [name, date],
     );
   }
+
+  /// `checked`
+  String get businessDetectedAt {
+    return Intl.message(
+      'checked',
+      name: 'businessDetectedAt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exported reports redact subscription tokens, passwords, UUIDs, private keys and authorization or cookie headers.`
+  String get logRedactionNotice {
+    return Intl.message(
+      'Exported reports redact subscription tokens, passwords, UUIDs, private keys and authorization or cookie headers.',
+      name: 'logRedactionNotice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show plan information on home`
+  String get profileShowPlanInfo {
+    return Intl.message(
+      'Show plan information on home',
+      name: 'profileShowPlanInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry and data usage alerts`
+  String get profileExpiryNotifications {
+    return Intl.message(
+      'Expiry and data usage alerts',
+      name: 'profileExpiryNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Always-on VPN`
+  String get alwaysOnVpn {
+    return Intl.message(
+      'Always-on VPN',
+      name: 'alwaysOnVpn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable Tianji Yun in system settings`
+  String get alwaysOnVpnDescription {
+    return Intl.message(
+      'Enable Tianji Yun in system settings',
+      name: 'alwaysOnVpnDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already up to date`
+  String get alreadyLatest {
+    return Intl.message(
+      'Already up to date',
+      name: 'alreadyLatest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last backup`
+  String get lastBackupTime {
+    return Intl.message(
+      'Last backup',
+      name: 'lastBackupTime',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

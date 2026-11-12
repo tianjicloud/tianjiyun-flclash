@@ -1742,5 +1742,13 @@
   "subscriptionExpiryNoticeBody": "{name} · {date}",
   "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
   "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
-  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}},
+  "businessDetectedAt": "проверено",
+  "logRedactionNotice": "В экспортированных отчетах скрываются токены подписки, пароли, UUID, закрытые ключи, а также заголовки Authorization и Cookie.",
+  "profileShowPlanInfo": "Показывать сведения о тарифе на главной",
+  "profileExpiryNotifications": "Уведомления об окончании срока и трафике",
+  "alwaysOnVpn": "Всегда включённый VPN",
+  "alwaysOnVpnDescription": "Включите Tianji Yun в системных настройках",
+  "alreadyLatest": "Установлена последняя версия",
+  "lastBackupTime": "Время последней резервной копии"
 }

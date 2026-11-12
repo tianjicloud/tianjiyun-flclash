@@ -193,6 +193,58 @@ abstract class _$UpdateDownloadState extends $Notifier<UpdateDownload?> {
   }
 }
 
+@ProviderFor(UpdateCheckResult)
+final updateCheckResultProvider = UpdateCheckResultProvider._();
+
+final class UpdateCheckResultProvider
+    extends $NotifierProvider<UpdateCheckResult, bool?> {
+  UpdateCheckResultProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'updateCheckResultProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$updateCheckResultHash();
+
+  @$internal
+  @override
+  UpdateCheckResult create() => UpdateCheckResult();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool?>(value),
+    );
+  }
+}
+
+String _$updateCheckResultHash() => r'3d399e53a1c57d1f8999feb2d33f688e1062f068';
+
+abstract class _$UpdateCheckResult extends $Notifier<bool?> {
+  bool? build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<bool?, bool?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool?, bool?>,
+              bool?,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(Logs)
 final logsProvider = LogsProvider._();
 
@@ -224,7 +276,7 @@ final class LogsProvider extends $NotifierProvider<Logs, FixedList<Log>> {
   }
 }
 
-String _$logsHash() => r'aefb14ef2c0a3c7a4e27f2ac4188a5b2943e60b5';
+String _$logsHash() => r'ac1a04bd0719a6df17c82e0f80c93bef6c31b6ce';
 
 abstract class _$Logs extends $Notifier<FixedList<Log>> {
   FixedList<Log> build();

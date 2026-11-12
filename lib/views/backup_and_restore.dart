@@ -182,6 +182,7 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
               ),
             ],
           ),
+          const _LastBackupSummary(),
           const SizedBox(height: 14),
           BusinessSettingsCard(
             title: appLocalizations.remote,
@@ -363,10 +364,33 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
               ),
             ],
           ),
+          const _LastBackupSummary(),
         ],
       ),
     );
   }
+}
+
+class _LastBackupSummary extends StatelessWidget {
+  const _LastBackupSummary();
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<int?>(
+    future: preferences.getLastBackupAt(),
+    builder: (context, snapshot) {
+      final value = snapshot.data;
+      if (value == null) return const SizedBox.shrink();
+      return Padding(
+        padding: const EdgeInsets.only(top: 14),
+        child: Text(
+          '${context.appLocalizations.lastBackupTime} · ${DateTime.fromMillisecondsSinceEpoch(value).show}',
+          style: AppTextStyle.caption1
+              .of(context)
+              .copyWith(color: context.colorScheme.onSurfaceVariant),
+        ),
+      );
+    },
+  );
 }
 
 class _DavConnectionIndicator extends StatelessWidget {

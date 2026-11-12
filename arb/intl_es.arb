@@ -1742,5 +1742,13 @@
   "subscriptionExpiryNoticeBody": "{name} · {date}",
   "@residentialNoticeBody": {"placeholders": {"line": {"type": "String"}}},
   "@subscriptionExpiryNoticeTitle": {"placeholders": {"days": {"type": "int"}}},
-  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}}
+  "@subscriptionExpiryNoticeBody": {"placeholders": {"name": {"type": "String"}, "date": {"type": "String"}}},
+  "businessDetectedAt": "comprobado",
+  "logRedactionNotice": "Los informes exportados ocultan tokens de suscripción, contraseñas, UUID, claves privadas y encabezados Authorization o Cookie.",
+  "profileShowPlanInfo": "Mostrar información del plan en inicio",
+  "profileExpiryNotifications": "Avisos de vencimiento y consumo",
+  "alwaysOnVpn": "VPN siempre activa",
+  "alwaysOnVpnDescription": "Activa Tianji Yun en los ajustes del sistema",
+  "alreadyLatest": "Ya tienes la última versión",
+  "lastBackupTime": "Última copia de seguridad"
 }

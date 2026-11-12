@@ -471,6 +471,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("Autoriser le LAN"),
     "allowedIps": MessageLookupByLibrary.simpleMessage("IP autorisées"),
     "alreadyInLocalProxies": m2,
+    "alreadyLatest": MessageLookupByLibrary.simpleMessage(
+      "Vous utilisez la dernière version",
+    ),
+    "alwaysOnVpn": MessageLookupByLibrary.simpleMessage("VPN toujours activé"),
+    "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
+      "Activez Tianji Yun dans les réglages système",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("Réponses"),
     "app": MessageLookupByLibrary.simpleMessage("App"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
@@ -663,6 +670,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage(
       "Délai dépassé",
     ),
+    "businessDetectedAt": MessageLookupByLibrary.simpleMessage("détecté"),
     "businessDeveloperDescription": MessageLookupByLibrary.simpleMessage(
       "Ouvrir les diagnostics et outils avancés.",
     ),
@@ -2225,6 +2233,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "label": MessageLookupByLibrary.simpleMessage("Libellé"),
     "language": MessageLookupByLibrary.simpleMessage("Langue"),
     "large": MessageLookupByLibrary.simpleMessage("Grande"),
+    "lastBackupTime": MessageLookupByLibrary.simpleMessage(
+      "Dernière sauvegarde",
+    ),
     "lastUpdated": MessageLookupByLibrary.simpleMessage("Dernière mise à jour"),
     "launchInterrupted": MessageLookupByLibrary.simpleMessage(
       "Démarrage inachevé",
@@ -2277,6 +2288,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "logFilterWarning": MessageLookupByLibrary.simpleMessage("Avertissement"),
     "logLevel": MessageLookupByLibrary.simpleMessage(
       "Niveau de journalisation",
+    ),
+    "logRedactionNotice": MessageLookupByLibrary.simpleMessage(
+      "Les rapports exportés masquent les jetons d’abonnement, mots de passe, UUID, clés privées et en-têtes Authorization ou Cookie.",
     ),
     "logcat": MessageLookupByLibrary.simpleMessage("Logcat"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
@@ -2810,6 +2824,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "profileDaysLeft": m106,
     "profileExpiresIn": m107,
+    "profileExpiryNotifications": MessageLookupByLibrary.simpleMessage(
+      "Alertes d’expiration et de consommation",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "Le profil a été modifié. Désactiver la mise à jour automatique ?",
     ),
@@ -2821,6 +2838,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "S’applique uniquement à ce profil ; tout ce qui n’est pas ajouté utilise la valeur par défaut.",
+    ),
+    "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage(
+      "Afficher les informations du forfait sur l’accueil",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
       "Le changement prend effet immédiatement ; en cas d’échec de l’analyse, la configuration actuelle est conservée.",

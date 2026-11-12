@@ -10,9 +10,9 @@ import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
-import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prism_ui/prism_ui.dart';
@@ -38,10 +38,7 @@ String _navigationLabel(
     PageLabel.logs => l10n.logsAndDiagnostics,
     PageLabel.tools => mobile ? l10n.tools : l10n.settings,
     PageLabel.resources => l10n.resources,
-    PageLabel.dns =>
-      defaultTargetPlatform == TargetPlatform.windows
-          ? l10n.dnsQueries
-          : l10n.dnsResourcesDesktop,
+    PageLabel.dns => l10n.dnsResourcesDesktop,
   };
 }
 
