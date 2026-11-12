@@ -1067,8 +1067,12 @@ class _BusinessChips extends StatelessWidget {
           large: false,
         ),
       ?country,
-      if (business && isp != null && isp.isNotEmpty)
-        DashboardChip(label: isp, large: false),
+      // The phone hero keeps one chip row; the operator stays in diagnostics.
+      if (business && !large && isp != null && isp.isNotEmpty)
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 220),
+          child: DashboardChip(label: isp, large: false),
+        ),
       if (quality != null) ...[
         DashboardChip(
           label: quality.type == IpType.residential
