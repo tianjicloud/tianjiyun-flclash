@@ -74,6 +74,25 @@ final class _InputAction extends _ListItemAction {
   });
 }
 
+/// Replaces the row padding of every [ListItem] below it, for a card whose
+/// own padding already insets the rows.
+class ListItemInsets extends InheritedWidget {
+  const ListItemInsets({
+    super.key,
+    required this.padding,
+    required super.child,
+  });
+
+  final EdgeInsets padding;
+
+  static EdgeInsets? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ListItemInsets>()?.padding;
+
+  @override
+  bool updateShouldNotify(ListItemInsets oldWidget) =>
+      padding != oldWidget.padding;
+}
+
 class ListItem<T> extends StatelessWidget {
   final Widget? leading;
   final Widget title;
@@ -215,6 +234,7 @@ class ListItem<T> extends StatelessWidget {
     Widget? trailing,
     Widget? leading,
   }) {
+    final padding = ListItemInsets.maybeOf(context) ?? this.padding;
     if (position != null) {
       // OpenContainer reparents the closed tile out of the section's provider.
       return ItemPositionProvider(

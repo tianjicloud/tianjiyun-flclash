@@ -290,7 +290,7 @@ class _BusinessThemeCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-          child,
+          ListItemInsets(padding: EdgeInsets.zero, child: child),
         ],
       ),
     );
