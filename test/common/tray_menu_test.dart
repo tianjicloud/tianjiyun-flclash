@@ -158,11 +158,25 @@ void main() {
           buffer.writeln('${'  ' * depth}—');
           continue;
         }
+        if (type == 'metrics') {
+          final metrics = (item['metrics'] as List).cast<Map>();
+          buffer.writeln(
+            '${'  ' * depth}${metrics.map((metric) => '${metric['label']} ${metric['value']}').join(' · ')} | enabled=false',
+          );
+          continue;
+        }
         buffer.write('${'  ' * depth}${item['label']}');
         for (final field in ['detail', 'checked', 'enabled']) {
           if (item.containsKey(field)) buffer.write(' | $field=${item[field]}');
         }
         buffer.writeln();
+        if (type == 'segmented') {
+          for (final option in (item['options'] as List).cast<Map>()) {
+            buffer.writeln(
+              '${'  ' * (depth + 1)}${option['label']} | checked=${option['selected']} | enabled=${option['enabled']}',
+            );
+          }
+        }
         if (type == 'submenu') {
           writeItems(
             (item['items'] as List).cast<Map<Object?, Object?>>(),
@@ -682,10 +696,9 @@ void main() {
               isNot(contains('下载 2.4 MB/s · 上传 312 KB/s · 延迟 37 ms')),
             );
             if (platform.target == TargetPlatform.macOS) {
-              expect(
-                _item(call, currentAppLocalizations.sceneDaily)['enabled'],
-                isTrue,
-              );
+              final scene = _item(call, currentAppLocalizations.scene);
+              expect(scene['type'], 'segmented');
+              expect((scene['options'] as List).first['enabled'], isTrue);
             }
             continue;
           }
@@ -699,11 +712,16 @@ void main() {
             expect(quickLines['type'], 'submenu');
             expect(quickLines['items'], hasLength(3));
           } else if (platform.target == TargetPlatform.macOS) {
-            expect(labels.take(3), [
-              '已连接',
-              '东京家宽 · 04 · 203.0.113.42',
-              '下载 2.4 MB/s · 上传 312 KB/s · 延迟 37 ms',
-            ]);
+            expect(labels.take(2), ['已连接', '东京家宽 · 04 · 203.0.113.42']);
+            expect(_items(call)[2]['type'], 'metrics');
+            expect(
+              _item(call, currentAppLocalizations.scene)['type'],
+              'segmented',
+            );
+            expect(
+              _item(call, currentAppLocalizations.outboundMode)['type'],
+              'segmented',
+            );
             expect(labels, contains('打开天机云…'));
             expect(labels, contains('一键诊断'));
             expect(labels.where((label) => label == '东京家宽 · 04'), hasLength(1));

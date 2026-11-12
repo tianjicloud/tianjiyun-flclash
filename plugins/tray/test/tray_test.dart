@@ -135,6 +135,39 @@ void main() {
     expect(selected, 1);
   });
 
+  test('segmented item dispatches the selected option callback', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    var ruleSelected = 0;
+    var globalSelected = 0;
+    await Tray.instance.show(
+      _spec(
+        menu: [
+          TrayMenuSegmented(
+            label: 'Mode',
+            options: [
+              TrayMenuSegmentOption(
+                id: 'rule',
+                label: 'Rule',
+                selected: true,
+                onSelected: () => ruleSelected++,
+              ),
+              TrayMenuSegmentOption(
+                id: 'global',
+                label: 'Global',
+                selected: false,
+                onSelected: () => globalSelected++,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    await _emit('onMenuItemSelected', <String, Object?>{'id': 1025});
+
+    expect([ruleSelected, globalSelected], [1, 0]);
+  });
+
   test('a rejected show keeps callbacks for the visible menu', () async {
     var oldSelected = 0;
     var newSelected = 0;

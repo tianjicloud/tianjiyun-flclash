@@ -14,7 +14,12 @@ final class TrayMenu: NSMenu, NSMenuDelegate {
         for entry in items {
             let item = makeItem(entry)
             addItem(item)
-            contents.append(item.isSeparatorItem ? nil : TrayMenu.content(entry, item))
+            let type = entry["type"] as? String ?? ""
+            contents.append(
+                item.isSeparatorItem || type == "metrics" || type == "segmented"
+                    ? nil
+                    : TrayMenu.content(entry, item)
+            )
         }
     }
 
@@ -41,7 +46,24 @@ final class TrayMenu: NSMenu, NSMenuDelegate {
         item.isEnabled = entry["enabled"] as? Bool ?? true
         item.state = type == "checkbox" && entry["checked"] as? Bool == true ? .on : .off
 
-        if type == "submenu" {
+        if type == "metrics" {
+            let metrics = entry["metrics"] as? [[String: String]] ?? []
+            item.view = TrayMetricsView(metrics: metrics)
+        } else if type == "segmented" {
+            let options = entry["options"] as? [[String: Any]] ?? []
+            let labels = options.map { $0["label"] as? String ?? "" }
+            let control = NSSegmentedControl(labels: labels, trackingMode: .selectOne, target: self, action: #selector(didSelectSegment(_:)))
+            control.segmentStyle = .rounded
+            control.segmentDistribution = .fillEqually
+            for (index, option) in options.enumerated() {
+                control.setEnabled(option["enabled"] as? Bool ?? true, forSegment: index)
+                if option["selected"] as? Bool == true { control.selectedSegment = index }
+            }
+            control.identifier = NSUserInterfaceItemIdentifier(
+                rawValue: options.map { String($0["id"] as? Int ?? 0) }.joined(separator: ",")
+            )
+            item.view = TraySegmentedView(title: entry["label"] as? String ?? "", control: control)
+        } else if type == "submenu" {
             let children = entry["items"] as? [[String: Any]] ?? []
             setSubmenu(TrayMenu(items: children, onSelect: onSelect), for: item)
         } else {
@@ -87,4 +109,62 @@ final class TrayMenu: NSMenu, NSMenuDelegate {
     @objc private func didSelectItem(_ sender: NSMenuItem) {
         onSelect(sender.tag)
     }
+
+    @objc private func didSelectSegment(_ sender: NSSegmentedControl) {
+        let ids = sender.identifier?.rawValue.split(separator: ",").compactMap { Int($0) } ?? []
+        guard ids.indices.contains(sender.selectedSegment) else { return }
+        cancelTracking()
+        onSelect(ids[sender.selectedSegment])
+    }
+}
+
+private final class TrayMetricsView: NSView {
+    private let metrics: [[String: String]]
+    private let font = NSFont.menuFont(ofSize: 0)
+    private var valueFont: NSFont { .monospacedDigitSystemFont(ofSize: font.pointSize, weight: .medium) }
+
+    init(metrics: [[String: String]]) {
+        self.metrics = metrics
+        super.init(frame: NSRect(x: 0, y: 0, width: 250, height: 44))
+        autoresizingMask = [.width]
+        setAccessibilityElement(true)
+        setAccessibilityRole(.staticText)
+        setAccessibilityLabel(metrics.map { "\($0["label"] ?? ""), \($0["value"] ?? "")" }.joined(separator: ", "))
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override func draw(_ dirtyRect: NSRect) {
+        guard !metrics.isEmpty else { return }
+        let columnWidth = bounds.width / CGFloat(metrics.count)
+        for (index, metric) in metrics.enumerated() {
+            let x = CGFloat(index) * columnWidth + 12
+            let label = metric["label"] ?? ""
+            let value = metric["value"] ?? ""
+            (label as NSString).draw(at: NSPoint(x: x, y: 25), withAttributes: [.font: font, .foregroundColor: NSColor.secondaryLabelColor])
+            (value as NSString).draw(at: NSPoint(x: x, y: 8), withAttributes: [.font: valueFont, .foregroundColor: NSColor.labelColor])
+        }
+    }
+}
+
+private final class TraySegmentedView: NSView {
+    init(title: String, control: NSSegmentedControl) {
+        super.init(frame: NSRect(x: 0, y: 0, width: 250, height: 50))
+        autoresizingMask = [.width]
+        let heading = NSTextField(labelWithString: title)
+        heading.font = .menuFont(ofSize: 0)
+        heading.textColor = .secondaryLabelColor
+        heading.frame = NSRect(x: 12, y: 29, width: 226, height: 15)
+        heading.autoresizingMask = [.width]
+        control.frame = NSRect(x: 12, y: 3, width: 226, height: 22)
+        control.autoresizingMask = [.width]
+        control.setAccessibilityLabel(title)
+        addSubview(heading)
+        addSubview(control)
+        setAccessibilityElement(true)
+        setAccessibilityRole(.group)
+        setAccessibilityLabel(title)
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }

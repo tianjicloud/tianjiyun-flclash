@@ -51,3 +51,39 @@ final class TrayMenuSubmenu extends TrayMenuItem {
 final class TrayMenuSeparator extends TrayMenuItem {
   const TrayMenuSeparator();
 }
+
+final class TrayMenuMetric {
+  const TrayMenuMetric({required this.label, required this.value});
+
+  final String label;
+  final String value;
+}
+
+final class TrayMenuMetrics extends TrayMenuItem {
+  const TrayMenuMetrics({required this.metrics});
+
+  final List<TrayMenuMetric> metrics;
+}
+
+final class TrayMenuSegmentOption {
+  const TrayMenuSegmentOption({
+    required this.id,
+    required this.label,
+    required this.selected,
+    this.enabled = true,
+    this.onSelected,
+  });
+
+  final String id;
+  final String label;
+  final bool selected;
+  final bool enabled;
+  final TrayMenuItemSelectedCallback? onSelected;
+}
+
+final class TrayMenuSegmented extends TrayMenuItem {
+  const TrayMenuSegmented({required this.label, required this.options});
+
+  final String label;
+  final List<TrayMenuSegmentOption> options;
+}

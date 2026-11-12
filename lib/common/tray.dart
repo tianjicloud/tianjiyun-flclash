@@ -267,6 +267,16 @@ class AppTray implements TrayPort {
           : '↓ ${_trafficRate(traffic.down)}　↑ ${_trafficRate(traffic.up)}',
       enabled: false,
     );
+    final macMetrics = TrayMenuMetrics(
+      metrics: [
+        TrayMenuMetric(label: l10n.download, value: _trafficRate(traffic.down)),
+        TrayMenuMetric(label: l10n.upload, value: _trafficRate(traffic.up)),
+        TrayMenuMetric(
+          label: l10n.delay,
+          value: currentLine?.delay == null ? '—' : '${currentLine!.delay} ms',
+        ),
+      ],
+    );
     final modes = [
       for (final mode in Mode.values)
         TrayMenuCheckbox(
@@ -314,7 +324,7 @@ class AppTray implements TrayPort {
           TrayMenuAction(label: routeDetails.join(' · '), enabled: false),
         );
       }
-      if (connected) menu.add(speed);
+      if (connected) menu.add(macMetrics);
     }
     if (!isMacOS) {
       menu.add(
@@ -340,25 +350,41 @@ class AppTray implements TrayPort {
       final sceneState = read(sceneActionProvider);
       final sceneApplying =
           sceneState.applying && sceneState.matches(profileId);
-      menu.add(TrayMenuAction(label: l10n.scene, enabled: false));
-      for (final scene in SceneKind.values) {
-        final label = switch (scene) {
-          SceneKind.daily => l10n.sceneDaily,
-          SceneKind.ai => l10n.sceneAi,
-          SceneKind.watch => l10n.sceneWatch,
-        };
-        menu.add(
-          TrayMenuCheckbox(
-            label: label,
-            checked: policy.current == scene,
-            enabled: policy.available && !sceneApplying && !policy.suspended,
-            detail: policy.suspended ? l10n.sceneSuspended : null,
-            onSelected: () => read(sceneActionProvider.notifier).select(scene),
-          ),
-        );
-      }
-      menu.add(TrayMenuAction(label: l10n.outboundMode, enabled: false));
-      menu.addAll(modes);
+      menu.add(
+        TrayMenuSegmented(
+          label: l10n.scene,
+          options: [
+            for (final scene in SceneKind.values)
+              TrayMenuSegmentOption(
+                id: scene.name,
+                label: switch (scene) {
+                  SceneKind.daily => l10n.sceneDaily,
+                  SceneKind.ai => l10n.sceneAi,
+                  SceneKind.watch => l10n.sceneWatch,
+                },
+                selected: policy.current == scene,
+                enabled:
+                    policy.available && !sceneApplying && !policy.suspended,
+                onSelected: () =>
+                    read(sceneActionProvider.notifier).select(scene),
+              ),
+          ],
+        ),
+      );
+      menu.add(
+        TrayMenuSegmented(
+          label: l10n.outboundMode,
+          options: [
+            for (final mode in Mode.values)
+              TrayMenuSegmentOption(
+                id: mode.name,
+                label: mode.label,
+                selected: mode == trayState.mode,
+                onSelected: () => setupAction.changeMode(mode),
+              ),
+          ],
+        ),
+      );
       if (lines.isNotEmpty) {
         menu.add(const TrayMenuSeparator());
         menu.add(TrayMenuAction(label: l10n.quickLines, enabled: false));

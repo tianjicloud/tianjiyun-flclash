@@ -34,6 +34,7 @@ final class Tray {
       StreamController<TrayEvent>.broadcast();
 
   Map<int, TrayMenuItem> _itemsById = const {};
+  Map<int, TrayMenuItemSelectedCallback?> _callbacksById = const {};
   Future<void> _queue = Future<void>.value();
   String? _signature;
   String _title = '';
@@ -67,6 +68,7 @@ final class Tray {
   @visibleForTesting
   void resetForTesting() {
     _itemsById = const {};
+    _callbacksById = const {};
     _queue = Future<void>.value();
     _signature = null;
     _title = '';
@@ -90,9 +92,13 @@ final class Tray {
     if (!capabilities.supported) {
       return;
     }
-    final encoded = TrayCodec.encode(spec);
+    final encoded = TrayCodec.encode(
+      spec,
+      customMenuItems: capabilities.customMenuItems,
+    );
     if (_isVisible && encoded.signature == _signature) {
       _itemsById = encoded.itemsById;
+      _callbacksById = encoded.callbacksById;
       return;
     }
     final isApplied = await _channel
@@ -108,6 +114,7 @@ final class Tray {
       return;
     }
     _itemsById = encoded.itemsById;
+    _callbacksById = encoded.callbacksById;
     _signature = encoded.signature;
     _isVisible = true;
   }
@@ -128,6 +135,7 @@ final class Tray {
 
   Future<void> _hide() async {
     _itemsById = const {};
+    _callbacksById = const {};
     _signature = null;
     _title = '';
     if (!_isVisible) {
@@ -165,13 +173,18 @@ final class Tray {
             onSelected?.call();
           case TrayMenuCheckbox(:final onSelected):
             onSelected?.call();
+          case TrayMenuSegmented():
+            _callbackForId(id)?.call();
           case TrayMenuSubmenu():
           case TrayMenuSeparator():
+          case TrayMenuMetrics():
             return;
         }
         _events.add(TrayMenuItemSelected(item));
     }
   }
+
+  TrayMenuItemSelectedCallback? _callbackForId(int id) => _callbacksById[id];
 
   /// Scales probed in Flutter's `2.0x/` variant layout; the README says how
   /// each platform consumes them.

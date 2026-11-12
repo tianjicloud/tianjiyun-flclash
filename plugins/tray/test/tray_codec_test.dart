@@ -137,4 +137,75 @@ void main() {
 
     expect(encoded.menu.single, {'id': 1024, 'type': 'separator'});
   });
+
+  test('encodes metrics and segmented option dispatch ids', () {
+    var selected = false;
+    void onSelected() => selected = true;
+    final encoded = TrayCodec.encode(
+      _spec(
+        menu: [
+          const TrayMenuMetrics(
+            metrics: [TrayMenuMetric(label: '↓', value: '2 MB/s')],
+          ),
+          TrayMenuSegmented(
+            label: 'Mode',
+            options: [
+              TrayMenuSegmentOption(
+                id: 'rule',
+                label: 'Rule',
+                selected: true,
+                onSelected: onSelected,
+              ),
+              const TrayMenuSegmentOption(
+                id: 'global',
+                label: 'Global',
+                selected: false,
+                enabled: false,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    final menu = encoded.menu.cast<Map<String, Object?>>();
+    expect(menu[0]['id'], 1024);
+    expect(menu[0]['type'], 'metrics');
+    expect(menu[1]['id'], 1025);
+    final options = (menu[1]['options']! as List).cast<Map<String, Object?>>();
+    expect(options.map((option) => option['id']), [1026, 1027]);
+    expect(options.map((option) => option['optionId']), ['rule', 'global']);
+    expect(encoded.itemsById[1026], same(encoded.itemsById[1025]));
+    encoded.callbacksById[1026]?.call();
+    expect(selected, isTrue);
+    expect(encoded.callbacksById[1027], isNull);
+  });
+
+  test('flattens unsupported metrics and segmented rows', () {
+    final encoded = TrayCodec.encode(
+      _spec(
+        menu: const [
+          TrayMenuMetrics(
+            metrics: [
+              TrayMenuMetric(label: '下载', value: '2 MB/s'),
+              TrayMenuMetric(label: '上传', value: '1 MB/s'),
+            ],
+          ),
+          TrayMenuSegmented(
+            label: '场景',
+            options: [
+              TrayMenuSegmentOption(id: 'daily', label: '日常', selected: true),
+            ],
+          ),
+        ],
+      ),
+      customMenuItems: false,
+    );
+    final menu = encoded.menu.cast<Map<String, Object?>>();
+    expect(menu.map((item) => item['type']), ['action', 'action', 'checkbox']);
+    expect(menu.first['label'], '下载 2 MB/s · 上传 1 MB/s');
+    expect(menu[1]['label'], '场景');
+    expect(menu.last['label'], '日常');
+    expect(menu.last['checked'], isTrue);
+  });
 }
