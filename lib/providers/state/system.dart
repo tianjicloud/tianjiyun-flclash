@@ -323,5 +323,6 @@ class AccessControlState extends _$AccessControlState
 bool suspend(Ref ref) {
   final currentSSID = ref.watch(currentSSIDProvider);
   final excludeSSIDs = ref.watch(excludeSSIDsProvider);
-  return excludeSSIDs.contains(currentSSID);
+  return ref.watch(onDemandEnabledProvider) &&
+      excludeSSIDs.contains(currentSSID);
 }

@@ -2816,10 +2816,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Already used by “{action}”. Saving moves it here.`
+  /// `Already used by “{action}”. Choose another shortcut.`
   String hotkeyConflictWith(Object action) {
     return Intl.message(
-      'Already used by “$action”. Saving moves it here.',
+      'Already used by “$action”. Choose another shortcut.',
       name: 'hotkeyConflictWith',
       desc: '',
       args: [action],
@@ -14315,6 +14315,21 @@ class AppLocalizations {
       name: 'lastBackupTime',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Auto route`
+  String get autoRoute {
+    return Intl.message('Auto route', name: 'autoRoute', desc: '', args: []);
+  }
+
+  /// `Available {available}/{total}`
+  String proxyAvailability(Object available, Object total) {
+    return Intl.message(
+      'Available $available/$total',
+      name: 'proxyAvailability',
+      desc: '',
+      args: [available, total],
     );
   }
 }

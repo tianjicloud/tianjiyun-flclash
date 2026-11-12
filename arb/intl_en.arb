@@ -350,7 +350,7 @@
   "hotkeyNotSet": "Not set",
   "pressKeyboard": "Press a key combination",
   "hotkeyNeedsModifier": "Include at least one of {modifiers}",
-  "hotkeyConflictWith": "Already used by “{action}”. Saving moves it here.",
+  "hotkeyConflictWith": "Already used by “{action}”. Choose another shortcut.",
   "hotkeyUnavailable": "Not registered, it may be taken by another app",
   "remove": "Remove",
   "noNetwork": "No network",
@@ -1751,5 +1751,7 @@
   "alwaysOnVpn": "Always-on VPN",
   "alwaysOnVpnDescription": "Enable Tianji Yun in system settings",
   "alreadyLatest": "Already up to date",
-  "lastBackupTime": "Last backup"
+  "lastBackupTime": "Last backup",
+  "autoRoute": "Auto route",
+  "proxyAvailability": "Available {available}/{total}"
 }

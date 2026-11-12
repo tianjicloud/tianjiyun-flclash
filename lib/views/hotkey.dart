@@ -147,11 +147,11 @@ class HotKeyView extends StatelessWidget {
   }
 }
 
-class _HotKeyIntro extends StatelessWidget {
+class _HotKeyIntro extends ConsumerWidget {
   const _HotKeyIntro();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = context.colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -170,6 +170,13 @@ class _HotKeyIntro extends StatelessWidget {
                   .of(context)
                   .copyWith(color: colorScheme.onSurfaceVariant),
             ),
+          ),
+          TextButton(
+            onPressed: () {
+              ref.read(hotKeyActionsProvider.notifier).value =
+                  defaultHotKeyActions;
+            },
+            child: Text(context.appLocalizations.reset),
           ),
         ],
       ),
@@ -435,6 +442,9 @@ class _HotKeyRecorderState extends ConsumerState<HotKeyRecorder> {
   }
 
   void _handleSave() {
+    if (_conflictOf(ref.read(hotKeyActionsProvider), _draft) != null) {
+      return;
+    }
     Navigator.of(context).pop();
     _saveBinding(ref, _draft);
   }
@@ -566,7 +576,7 @@ class _HotKeyRecorderState extends ConsumerState<HotKeyRecorder> {
               child: Text(appLocalizations.remove),
             ),
           TextButton(
-            onPressed: isValid ? _handleSave : null,
+            onPressed: isValid && conflict == null ? _handleSave : null,
             child: Text(appLocalizations.save),
           ),
         ],

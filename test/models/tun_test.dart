@@ -56,6 +56,11 @@ void main() {
     });
   });
 
+  test('auto route defaults on and can be disabled', () {
+    expect(defaultTun.autoRoute, isTrue);
+    expect(const Tun(autoRoute: false).coreJson['auto-route'], isFalse);
+  });
+
   test('a config update patches every key the desktop TUN takes', () {
     expect(
       _keysOf('core/protocol.go', 'tunSchema', 'json'),

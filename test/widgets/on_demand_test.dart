@@ -10,6 +10,7 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/config/on_demand.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
+import 'package:prism_ui/switch.dart' as prism;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -112,6 +113,21 @@ void main() {
     expect(find.byTooltip('Add'), findsOneWidget);
     expect(find.byTooltip('Select all'), findsNothing);
     expect(find.byGlyph(AppGlyphs.delete), findsNothing);
+  });
+
+  testWidgets('the master switch keeps SSID rules but stops suspending', (
+    tester,
+  ) async {
+    await pumpView(tester, ssids: const ['Office']);
+    container.read(currentSSIDProvider.notifier).value = 'Office';
+    expect(container.read(suspendProvider), isTrue);
+
+    await tester.tap(find.byType(prism.Switch).first);
+    await tester.pumpAndSettle();
+
+    expect(container.read(onDemandEnabledProvider), isFalse);
+    expect(container.read(excludeSSIDsProvider), ['Office']);
+    expect(container.read(suspendProvider), isFalse);
   });
 
   testWidgets('every excluded SSID is rendered', (tester) async {
@@ -345,7 +361,12 @@ void main() {
     final appLocalizations = AppLocalizations.of(
       tester.element(find.byType(OnDemandView)),
     );
-    final row = tester.getRect(find.byType(DecorationListItem).first);
+    final row = tester.getRect(
+      find.ancestor(
+        of: find.text(appLocalizations.locationPermission),
+        matching: find.byType(DecorationListItem),
+      ),
+    );
     final desc = find.text(appLocalizations.locationPermissionDesc);
     final button = tester.getRect(
       find

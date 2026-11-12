@@ -656,7 +656,7 @@ final class SuspendProvider extends $FunctionalProvider<bool, bool, bool>
   }
 }
 
-String _$suspendHash() => r'9ab9210f4f3c70f63d9858d492a9c09b3fb24bf1';
+String _$suspendHash() => r'd0329cb6e13d879726ffed9f6edd260793dd194c';
 
 @ProviderFor(DynamicColor)
 final dynamicColorProvider = DynamicColorProvider._();
@@ -776,7 +776,7 @@ final class GenColorSchemeProvider
   }
 }
 
-String _$genColorSchemeHash() => r'5bdb2b5847ebeb8d67955d64100b336f2c09dfa3';
+String _$genColorSchemeHash() => r'b8814324483d60b0c25295b4426e37d60116d9db';
 
 final class GenColorSchemeFamily extends $Family
     with

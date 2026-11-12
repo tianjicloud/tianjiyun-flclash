@@ -25,4 +25,19 @@ void main() {
 
     expect(offsets.offsetOf('a'), 0);
   });
+
+  test('proxy set health waits for a result and excludes timeouts', () {
+    const proxies = [
+      Proxy(name: 'fast', type: 'ss'),
+      Proxy(name: 'slow', type: 'ss'),
+      Proxy(name: 'down', type: 'ss'),
+    ];
+
+    expect(proxySetHealth(proxies, null), isNull);
+    expect(proxySetHealth(proxies, {'fast': null}), isNull);
+    expect(proxySetHealth(proxies, {'fast': 120, 'down': -1}), (
+      available: 1,
+      total: 3,
+    ));
+  });
 }

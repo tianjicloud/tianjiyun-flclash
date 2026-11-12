@@ -124,6 +124,21 @@ TextButton _button(WidgetTester tester, String label) {
 
 void main() {
   group('HotKeyView', () {
+    testWidgets('restores the platform default shortcut list', (tester) async {
+      final custom = HotKeyAction(
+        action: HotAction.mode,
+        key: _keyA,
+        modifiers: const {KeyboardModifier.control},
+      );
+      final container = _containerFor(tester, hotKeyActions: [custom]);
+      await _pumpView(tester, container);
+
+      await tester.tap(find.text(currentAppLocalizations.reset));
+      await tester.pumpAndSettle();
+
+      expect(container.read(hotKeyActionsProvider), defaultHotKeyActions);
+    });
+
     testWidgets('lists every action, bound or not', (tester) async {
       final container = _containerFor(
         tester,
@@ -293,9 +308,7 @@ void main() {
       expect(container.read(hotKeyActionsProvider), isEmpty);
     });
 
-    testWidgets('saving a taken combination moves it from the other action', (
-      tester,
-    ) async {
+    testWidgets('a taken combination blocks saving', (tester) async {
       final taken = HotKeyAction(
         action: HotAction.start,
         key: _keyA,
@@ -317,13 +330,8 @@ void main() {
         findsOne,
       );
 
-      await tester.tap(find.text(currentAppLocalizations.save));
-      await tester.pumpAndSettle();
-
-      final stored = container.read(hotKeyActionsProvider);
-      expect(stored, hasLength(1));
-      expect(stored.single.action, HotAction.mode);
-      expect(stored.single.key, _keyA);
+      expect(_button(tester, currentAppLocalizations.save).onPressed, isNull);
+      expect(container.read(hotKeyActionsProvider), [taken]);
     });
 
     testWidgets('save replaces the binding for the same action', (

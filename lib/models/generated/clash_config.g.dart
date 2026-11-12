@@ -291,6 +291,7 @@ _Tun _$TunFromJson(Map<String, dynamic> json) => _Tun(
           ?.map((e) => e as String)
           .toList() ??
       const [],
+  autoRoute: json['auto-route'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$TunToJson(_Tun instance) => <String, dynamic>{
@@ -301,6 +302,7 @@ Map<String, dynamic> _$TunToJson(_Tun instance) => <String, dynamic>{
   'mtu': instance.mtu,
   'congestion-controller': instance.congestionController,
   'route-exclude-address': instance.routeExcludeAddress,
+  'auto-route': instance.autoRoute,
 };
 
 const _$TunStackEnumMap = {

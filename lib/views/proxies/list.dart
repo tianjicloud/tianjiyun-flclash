@@ -633,7 +633,7 @@ class ListHeader extends ConsumerWidget {
               child: Row(
                 children: [
                   _GroupIcon(src: group.icon, name: groupName),
-                  Flexible(child: _GroupSummary(groupName: groupName)),
+                  Flexible(child: _GroupSummary(group: group)),
                 ],
               ),
             ),
@@ -763,25 +763,42 @@ class _GroupIcon extends ConsumerWidget {
   }
 }
 
-class _GroupSummary extends StatelessWidget {
-  const _GroupSummary({required this.groupName});
+class _GroupSummary extends ConsumerWidget {
+  const _GroupSummary({required this.group});
 
-  final String groupName;
+  final Group group;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final delays = ref.watch(delaysAtLastTestBatchProvider);
+    final testUrl = ref.watch(realTestUrlProvider(group.testUrl));
+    final health = proxySetHealth(group.all, delays[testUrl]);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         EmojiText(
-          groupName,
+          group.name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyle.callout.of(context, emphasized: true),
         ),
         const SizedBox(height: 2),
-        Flexible(flex: 1, child: _SelectedProxyName(groupName: groupName)),
+        if (health != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(
+              context.appLocalizations.proxyAvailability(
+                health.available,
+                health.total,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyle.caption2.of(context).toLight,
+            ),
+          )
+        else
+          Flexible(flex: 1, child: _SelectedProxyName(groupName: group.name)),
       ],
     );
   }

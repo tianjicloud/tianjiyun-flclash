@@ -384,6 +384,8 @@ class _OnDemandViewState extends ConsumerState<OnDemandView>
     return ListView(
       padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
       children: [
+        BusinessSettingsCard(title: l10n.onDemand, items: [_onDemandToggle()]),
+        const SizedBox(height: 14),
         BusinessSettingsCard(
           title: l10n.excludeSsids,
           items: [
@@ -434,6 +436,17 @@ class _OnDemandViewState extends ConsumerState<OnDemandView>
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ).copyWith(top: context.sectionsTopPadding),
+            sliver: SliverToBoxAdapter(
+              child: generateSection(
+                title: context.appLocalizations.onDemand,
+                items: [_onDemandToggle()],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ).copyWith(top: context.sectionsTopPadding),
             sliver: SliverToBoxAdapter(child: _buildPrerequisites()),
           ),
           SliverPadding(
@@ -456,4 +469,13 @@ class _OnDemandViewState extends ConsumerState<OnDemandView>
       title: context.appLocalizations.onDemand,
     );
   }
+
+  ConfigToggleItem _onDemandToggle() => ConfigToggleItem(
+    title: (l) => l.onDemand,
+    subtitle: (l) => l.excludeSsidsDesc,
+    selector: onDemandEnabledProvider,
+    onChanged: (ref, value) {
+      ref.read(onDemandEnabledProvider.notifier).value = value;
+    },
+  );
 }

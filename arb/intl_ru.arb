@@ -350,7 +350,7 @@
   "hotkeyNotSet": "Не задано",
   "pressKeyboard": "Нажмите сочетание клавиш",
   "hotkeyNeedsModifier": "Добавьте хотя бы одну из клавиш: {modifiers}",
-  "hotkeyConflictWith": "Уже используется для «{action}». При сохранении будет перенесено сюда.",
+  "hotkeyConflictWith": "Уже используется для «{action}». Выберите другое сочетание.",
   "hotkeyUnavailable": "Не зарегистрировано: сочетание может быть занято другим приложением",
   "remove": "Убрать",
   "noNetwork": "Нет сети",
@@ -1751,5 +1751,7 @@
   "alwaysOnVpn": "Всегда включённый VPN",
   "alwaysOnVpnDescription": "Включите Tianji Yun в системных настройках",
   "alreadyLatest": "Установлена последняя версия",
-  "lastBackupTime": "Время последней резервной копии"
+  "lastBackupTime": "Время последней резервной копии",
+  "autoRoute": "Автоматическая маршрутизация",
+  "proxyAvailability": "Доступно {available}/{total}"
 }

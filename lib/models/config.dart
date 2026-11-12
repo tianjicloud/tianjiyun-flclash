@@ -555,6 +555,7 @@ abstract class Config with _$Config {
     WindowProps windowProps,
     @Default(defaultClashConfig) PatchClashConfig patchClashConfig,
     @Default([]) List<String> excludeSSIDs,
+    @Default(true) bool onDemandEnabled,
   }) = _Config;
 
   factory Config.fromJson(Map<String, Object?> json) =>

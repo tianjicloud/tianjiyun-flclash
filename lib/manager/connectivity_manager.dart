@@ -53,6 +53,9 @@ class _ConnectivityManagerState extends ConsumerState<ConnectivityManager> {
         unawaited(_updateSsid());
       }
     });
+    ref.listenManual(onDemandEnabledProvider, (_, _) {
+      unawaited(_updateSsid());
+    });
     ref.listenManual(
       locationPermissionsProvider.select(
         (permission) => permission == WifiSsidPermission.granted,
@@ -78,6 +81,7 @@ class _ConnectivityManagerState extends ConsumerState<ConnectivityManager> {
     // excluded.
     if (!_onWifi ||
         ref.read(safeModeProvider) ||
+        !ref.read(onDemandEnabledProvider) ||
         ref.read(excludeSSIDsProvider).isEmpty) {
       _publishSsid(requestId, null);
       return;

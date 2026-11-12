@@ -35,6 +35,19 @@ double getItemHeight(ProxyCardType proxyCardType) {
 double getRowExtent(ProxyCardType proxyCardType) =>
     getItemHeight(proxyCardType) + proxyGridSpacing;
 
+({int available, int total})? proxySetHealth(
+  List<Proxy> proxies,
+  Map<String, int?>? delays,
+) {
+  if (delays == null || !proxies.any((proxy) => delays[proxy.name] != null)) {
+    return null;
+  }
+  return (
+    available: proxies.where((proxy) => (delays[proxy.name] ?? 0) > 0).length,
+    total: proxies.length,
+  );
+}
+
 class GroupOffsets {
   const GroupOffsets(this.groups, this.offsets);
 

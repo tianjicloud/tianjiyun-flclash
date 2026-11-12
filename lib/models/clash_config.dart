@@ -1155,6 +1155,7 @@ abstract class Tun with _$Tun {
     @JsonKey(name: 'route-exclude-address')
     @Default([])
     List<String> routeExcludeAddress,
+    @JsonKey(name: 'auto-route') @Default(true) bool autoRoute,
   }) = _Tun;
 
   factory Tun.fromJson(Map<String, Object?> json) => _$TunFromJson(json);
@@ -1193,7 +1194,7 @@ extension TunExt on Tun {
     final json = toJson();
     return {
       for (final key in const ['enable', 'device', 'stack']) key: json[key],
-      'auto-route': true,
+      'auto-route': autoRoute,
     };
   }
 }

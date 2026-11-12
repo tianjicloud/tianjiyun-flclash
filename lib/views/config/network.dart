@@ -440,7 +440,18 @@ class TunSection extends ConsumerWidget {
     return OverrideSection(
       title: appLocalizations.tun,
       spec: appTunOverrideSpec(isLinux: isLinux, isWindows: isWindows),
-      items: const [BypassPrivateRouteItem(key: ValueKey(#bypassPrivateRoute))],
+      items: [
+        ConfigToggleItem(
+          title: (l) => l.autoRoute,
+          selector: patchClashConfigProvider.select(
+            (state) => state.tun.autoRoute,
+          ),
+          onChanged: (ref, value) => ref
+              .read(patchClashConfigProvider.notifier)
+              .update((state) => state.copyWith.tun(autoRoute: value)),
+        ),
+        const BypassPrivateRouteItem(key: ValueKey(#bypassPrivateRoute)),
+      ],
     );
   }
 }

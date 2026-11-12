@@ -95,6 +95,12 @@ class ExcludeSSIDs extends _$ExcludeSSIDs with AutoDisposeNotifierMixin {
   }
 }
 
+@Riverpod(name: 'onDemandEnabledProvider')
+class OnDemandEnabled extends _$OnDemandEnabled with AutoDisposeNotifierMixin {
+  @override
+  bool build() => true;
+}
+
 @Riverpod(name: 'configProvider')
 Config _config(Ref ref) {
   final appSettingProps = ref.watch(appSettingProvider);
@@ -108,6 +114,7 @@ Config _config(Ref ref) {
   final proxiesStyleProps = ref.watch(proxiesStyleSettingProvider);
   final patchClashConfig = ref.watch(patchClashConfigProvider);
   final excludeSSIDs = ref.watch(excludeSSIDsProvider);
+  final onDemandEnabled = ref.watch(onDemandEnabledProvider);
   return Config(
     appSettingProps: appSettingProps,
     windowProps: windowProps,
@@ -120,6 +127,7 @@ Config _config(Ref ref) {
     proxiesStyleProps: proxiesStyleProps,
     patchClashConfig: patchClashConfig,
     excludeSSIDs: excludeSSIDs,
+    onDemandEnabled: onDemandEnabled,
   );
 }
 
@@ -137,6 +145,7 @@ void writeConfig(Ref ref, Config config) {
   ref.read(patchClashConfigProvider.notifier).value = config.patchClashConfig
       .ensureControllerSecret();
   ref.read(excludeSSIDsProvider.notifier).value = config.excludeSSIDs;
+  ref.read(onDemandEnabledProvider.notifier).value = config.onDemandEnabled;
 }
 
 List<Override> buildConfigOverrides(Config config) {
@@ -158,5 +167,6 @@ List<Override> buildConfigOverrides(Config config) {
       (_, _) => config.patchClashConfig,
     ),
     excludeSSIDsProvider.overrideWithBuild((_, _) => config.excludeSSIDs),
+    onDemandEnabledProvider.overrideWithBuild((_, _) => config.onDemandEnabled),
   ];
 }

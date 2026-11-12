@@ -350,7 +350,7 @@
   "hotkeyNotSet": "Non défini",
   "pressKeyboard": "Appuyez sur une combinaison de touches",
   "hotkeyNeedsModifier": "Incluez au moins l’une de ces touches : {modifiers}",
-  "hotkeyConflictWith": "Déjà utilisé par « {action} ». L’enregistrer le déplace ici.",
+  "hotkeyConflictWith": "Déjà utilisé par « {action} ». Choisissez un autre raccourci.",
   "hotkeyUnavailable": "Non enregistré, il est peut-être pris par une autre app",
   "remove": "Retirer",
   "noNetwork": "Aucun réseau",
@@ -1751,5 +1751,7 @@
   "alwaysOnVpn": "VPN toujours activé",
   "alwaysOnVpnDescription": "Activez Tianji Yun dans les réglages système",
   "alreadyLatest": "Vous utilisez la dernière version",
-  "lastBackupTime": "Dernière sauvegarde"
+  "lastBackupTime": "Dernière sauvegarde",
+  "autoRoute": "Routage automatique",
+  "proxyAvailability": "Disponibles {available}/{total}"
 }

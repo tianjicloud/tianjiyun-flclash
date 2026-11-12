@@ -350,7 +350,7 @@
   "hotkeyNotSet": "未设置",
   "pressKeyboard": "请按下组合键",
   "hotkeyNeedsModifier": "至少包含 {modifiers} 中的一个",
-  "hotkeyConflictWith": "已被“{action}”使用，保存后将移到这里",
+  "hotkeyConflictWith": "已被“{action}”使用，请选择其他快捷键。",
   "hotkeyUnavailable": "未能注册，可能已被其他应用占用",
   "remove": "移除",
   "noNetwork": "无网络",
@@ -1751,5 +1751,7 @@
   "alwaysOnVpn": "始终开启 VPN",
   "alwaysOnVpnDescription": "在系统设置中为天机云开启",
   "alreadyLatest": "已是最新版本",
-  "lastBackupTime": "上次备份时间"
+  "lastBackupTime": "上次备份时间",
+  "autoRoute": "自动路由",
+  "proxyAvailability": "可用 {available}/{total}"
 }

@@ -350,7 +350,7 @@
   "hotkeyNotSet": "설정 안 됨",
   "pressKeyboard": "키 조합을 누르세요",
   "hotkeyNeedsModifier": "{modifiers} 중 하나 이상을 포함하세요",
-  "hotkeyConflictWith": "이미 “{action}”에서 사용 중입니다. 저장하면 이쪽으로 옮겨집니다.",
+  "hotkeyConflictWith": "이미 “{action}”에서 사용 중입니다. 다른 단축키를 선택하세요.",
   "hotkeyUnavailable": "등록되지 않음: 다른 앱이 사용 중일 수 있습니다",
   "remove": "제거",
   "noNetwork": "네트워크 없음",
@@ -1751,5 +1751,7 @@
   "alwaysOnVpn": "VPN 항상 켜기",
   "alwaysOnVpnDescription": "시스템 설정에서 천기운을 사용 설정하세요",
   "alreadyLatest": "최신 버전입니다",
-  "lastBackupTime": "마지막 백업 시간"
+  "lastBackupTime": "마지막 백업 시간",
+  "autoRoute": "자동 라우팅",
+  "proxyAvailability": "사용 가능 {available}/{total}"
 }
