@@ -340,7 +340,9 @@ class _BusinessProfilesList extends ConsumerWidget {
         if (profile.id != current?.id) profile,
     ];
     final mobile = ref.watch(isMobileViewProvider);
-    final horizontalInset = mobile ? 16.0 : 24.0;
+    final horizontalInset = mobile
+        ? 16.0
+        : MacOSMetrics.pageMargin(context, fallback: 24);
     return CustomScrollView(
       key: profilesStoreKey,
       slivers: [
@@ -932,8 +934,14 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
     return ContextMenuRegion(
       menuItems: isUpdating ? null : action._menuItems(context, ref),
       child: Card(
-        radius: BusinessPalette.cardRadius,
-        padding: EdgeInsets.all(mobile ? 16 : 26),
+        radius: MacOSMetrics.cardRadius(
+          context,
+          fallback: BusinessPalette.cardRadius,
+        ),
+        padding: MacOSMetrics.cardPadding(
+          context,
+          EdgeInsets.all(mobile ? 16 : 26),
+        ),
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.maxWidth >= 900) {
@@ -1693,7 +1701,10 @@ class ProfileItem extends ConsumerWidget {
       menuItems: isUpdating ? null : _menuItems(context, ref),
       child: Card(
         enterActionsOnRight: true,
-        radius: businessCompact ? BusinessPalette.cardRadius : AppCorner.xl,
+        radius: MacOSMetrics.cardRadius(
+          context,
+          fallback: businessCompact ? BusinessPalette.cardRadius : AppCorner.xl,
+        ),
         isSelected: isSelected,
         onPressed: () {
           onChanged(profile.id);
@@ -1948,7 +1959,12 @@ class _ReorderableProfilesSheetState
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 56, 24, 12),
+              padding: EdgeInsets.fromLTRB(
+                MacOSMetrics.pageMargin(context, fallback: 24),
+                56,
+                MacOSMetrics.pageMargin(context, fallback: 24),
+                12,
+              ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -1961,7 +1977,9 @@ class _ReorderableProfilesSheetState
             ),
             Expanded(
               child: PrismReorderableListView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MacOSMetrics.pageMargin(context, fallback: 24),
+                ),
                 proxyDecorator: (child, index, animation) =>
                     commonProxyDecorator(
                       _buildBusinessItem(index, currentProfileId),
@@ -1980,9 +1998,9 @@ class _ReorderableProfilesSheetState
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(
-                24,
+                MacOSMetrics.pageMargin(context, fallback: 24),
                 12,
-                24,
+                MacOSMetrics.pageMargin(context, fallback: 24),
                 20 + context.bottomInset,
               ),
               child: Align(

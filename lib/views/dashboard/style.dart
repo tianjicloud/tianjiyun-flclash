@@ -33,7 +33,9 @@ class DashboardColors {
         ? const Color(0xFFFFFFFF)
         : SurfaceLevel.card.colorOf(colorScheme);
     return DashboardColors._(
-      page: business && !businessDark
+      page: MacOSStyle.of(context)
+          ? colorScheme.surface
+          : business && !businessDark
           ? MediaQuery.sizeOf(context).width < 640
                 ? BusinessPalette.page
                 : const Color(0xFFF5F6F9)

@@ -458,6 +458,7 @@
   "textScale": "文本缩放",
   "textScalePreview": "应用内的文字将以这个大小显示",
   "followSystem": "跟随系统",
+  "followSystemAccent": "跟随系统强调色",
   "internet": "互联网",
   "systemApp": "系统应用",
   "noNetworkApp": "无网络应用",

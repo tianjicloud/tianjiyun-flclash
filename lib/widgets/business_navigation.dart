@@ -9,19 +9,15 @@ import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/macos_style.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prism_ui/prism_ui.dart';
 
 const _expandedSidebarWidth = 220.0;
 const _compactSidebarWidth = 56.0;
-const _sidebarRowShape = RoundedSuperellipseBorder(
-  borderRadius: BorderRadius.all(Radius.circular(10)),
-);
 const _dockHeight = 72.0;
 
 String _navigationLabel(
@@ -62,7 +58,7 @@ class BusinessNavigationSidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(currentProfileProvider);
     final dark = context.colorScheme.brightness == Brightness.dark;
-    final macOS = defaultTargetPlatform == TargetPlatform.macOS;
+    final macOS = MacOSStyle.of(context);
     final hasWallpaper = AppBackgroundScope.hasImage(context);
     final width = expanded ? _expandedSidebarWidth : _compactSidebarWidth;
     final horizontalInset = macOS && expanded
@@ -74,23 +70,14 @@ class BusinessNavigationSidebar extends ConsumerWidget {
       width: width,
       child: DecoratedBox(
         decoration: ShapeDecoration(
-          color: hasWallpaper
+          color: hasWallpaper || macOS
               ? Colors.transparent
               : dark
               ? BusinessPalette.sidebarDarkOverlay
               : macOS
               ? null
               : BusinessPalette.sidebarLight,
-          gradient: !dark && !hasWallpaper && macOS
-              ? const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color.fromRGBO(247, 248, 251, 0.86),
-                    Color.fromRGBO(239, 242, 247, 0.86),
-                  ],
-                )
-              : null,
+          gradient: null,
           shape: const RoundedSuperellipseBorder(),
         ),
         child: Padding(
@@ -301,7 +288,10 @@ class _BusinessSidebarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = context.colorScheme.brightness == Brightness.dark;
-    final macOS = defaultTargetPlatform == TargetPlatform.macOS;
+    final macOS = MacOSStyle.of(context);
+    final rowShape = AppShape.all(
+      MacOSMetrics.cardRadius(context, fallback: 10),
+    );
     final foreground = selected
         ? (dark
               ? BusinessPalette.sidebarDarkSelected
@@ -310,9 +300,7 @@ class _BusinessSidebarItem extends StatelessWidget {
               ? BusinessPalette.sidebarDarkSecondary
               : BusinessPalette.sidebarSecondary);
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: defaultTargetPlatform == TargetPlatform.macOS ? 2 : 4,
-      ),
+      padding: EdgeInsets.only(bottom: macOS ? 2 : 4),
       child: Semantics(
         button: true,
         selected: selected,
@@ -320,14 +308,17 @@ class _BusinessSidebarItem extends StatelessWidget {
         child: Tooltip(
           message: _navigationLabel(context, item.label),
           child: FocusRing(
-            shape: _sidebarRowShape,
+            shape: rowShape,
             child: PressRegion(
               onTap: onTap,
-              shape: _sidebarRowShape,
+              shape: rowShape,
               overlay: PressRegion.hoverOverlay,
               child: SizedBox(
                 key: ValueKey('business-sidebar-${item.label.name}'),
-                height: defaultTargetPlatform == TargetPlatform.macOS ? 32 : 38,
+                height: MacOSMetrics.sidebarRowHeight(
+                  context,
+                  fallback: macOS ? 32 : 38,
+                ),
                 child: Stack(
                   alignment: AlignmentDirectional.centerStart,
                   children: [
@@ -341,7 +332,7 @@ class _BusinessSidebarItem extends StatelessWidget {
                                 ? BusinessPalette.sidebarDarkBackground
                                 : BusinessPalette.sidebarSelection,
                             shape: RoundedSuperellipseBorder(
-                              borderRadius: _sidebarRowShape.borderRadius,
+                              borderRadius: rowShape.borderRadius,
                             ),
                             shadows: dark || macOS
                                 ? const []
@@ -368,7 +359,10 @@ class _BusinessSidebarItem extends StatelessWidget {
                         children: [
                           IconTheme.merge(
                             data: IconThemeData(
-                              size: 20,
+                              size: MacOSMetrics.sidebarIconSize(
+                                context,
+                                fallback: 20,
+                              ),
                               color: selected
                                   ? context.colorScheme.primary
                                   : foreground,

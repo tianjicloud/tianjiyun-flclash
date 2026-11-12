@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fl_clash/ui/macos_style.dart';
 import 'package:prism_ui/icons/icons.dart';
 import 'package:prism_ui/prism_ui.dart';
 
@@ -258,7 +259,10 @@ class ListItem<T> extends StatelessWidget {
       padding: padding,
       horizontalTitleGap: horizontalTitleGap,
       minVerticalPadding: minVerticalPadding,
-      minHeight: minTileHeight ?? listRowMinHeight,
+      minHeight: MacOSMetrics.listRowHeight(
+        context,
+        fallback: minTileHeight ?? listRowMinHeight,
+      ),
       alignment: alignment,
     );
     if (onTap == null) {
@@ -393,9 +397,27 @@ class ListItem<T> extends StatelessWidget {
               : () {
                   toggleAction.onChanged!(!toggleAction.value);
                 },
-          trailing: Switch(
-            value: toggleAction.value,
-            onChanged: toggleAction.onChanged,
+          trailing: SizedBox(
+            width: MacOSMetrics.switchWidth(
+              context,
+              fallback: Switch.trackWidth,
+            ),
+            height: MacOSMetrics.switchHeight(
+              context,
+              fallback: Switch.trackHeight,
+            ),
+            child: Transform.scale(
+              scale:
+                  MacOSMetrics.switchWidth(
+                    context,
+                    fallback: Switch.trackWidth,
+                  ) /
+                  Switch.trackWidth,
+              child: Switch(
+                value: toggleAction.value,
+                onChanged: toggleAction.onChanged,
+              ),
+            ),
           ),
         );
       case _DefaultAction():

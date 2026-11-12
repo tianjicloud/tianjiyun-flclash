@@ -148,7 +148,13 @@ class _BusinessBody extends ConsumerWidget {
         : 14.0;
     final padding = EdgeInsetsDirectional.fromSTEB(
       mobile ? 18 : 29,
-      mobile ? context.appBarInset - 23 : context.appBarInset - 18,
+      mobile
+          ? context.appBarInset - 23
+          : MacOSMetrics.dashboardTopPadding(
+              context,
+              appBarInset: context.appBarInset,
+              fallback: context.appBarInset - 18,
+            ),
       mobile ? 18 : 29,
       (mobile ? 18 : 24) + context.bottomInset,
     );
@@ -202,17 +208,25 @@ class _BusinessBody extends ConsumerWidget {
                 spacing: gap,
                 children: [
                   if (density.isDesktop)
-                    SizedBox(
-                      height: 236 * scale,
-                      child: const RepaintBoundary(
-                        child: CurrentOutboundCard(),
-                      ),
-                    )
+                    MacOSStyle.of(context)
+                        ? const RepaintBoundary(child: CurrentOutboundCard())
+                        : SizedBox(
+                            height: 236 * scale,
+                            child: const RepaintBoundary(
+                              child: CurrentOutboundCard(),
+                            ),
+                          )
                   else
                     const RepaintBoundary(child: CurrentOutboundCard()),
                   if (ref.watch(scenePolicyProvider).available)
                     density.isDesktop
-                        ? SizedBox(height: 60 * scale, child: const SceneBar())
+                        ? SizedBox(
+                            height: MacOSMetrics.dashboardSceneHeight(
+                              context,
+                              fallback: 60 * scale,
+                            ),
+                            child: const SceneBar(),
+                          )
                         : const SceneBar()
                   else ...[
                     if (ref
@@ -242,15 +256,24 @@ class _BusinessBody extends ConsumerWidget {
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final lineCard = _CardMinHeight(
-                          minHeight: 214 * scale,
+                          minHeight: MacOSMetrics.dashboardSummaryCardHeight(
+                            context,
+                            fallback: 214 * scale,
+                          ),
                           child: const BusinessLineCard(),
                         );
                         final trafficCard = _CardMinHeight(
-                          minHeight: 214 * scale,
+                          minHeight: MacOSMetrics.dashboardSummaryCardHeight(
+                            context,
+                            fallback: 214 * scale,
+                          ),
                           child: const TrafficSavingsCard(),
                         );
                         final profileCard = _CardMinHeight(
-                          minHeight: 214 * scale,
+                          minHeight: MacOSMetrics.dashboardSummaryCardHeight(
+                            context,
+                            fallback: 214 * scale,
+                          ),
                           child: ProfilesCard(
                             title: context.appLocalizations.subscriptionInfo,
                           ),
@@ -277,7 +300,10 @@ class _BusinessBody extends ConsumerWidget {
                       },
                     ),
                     SizedBox(
-                      height: 72 * scale,
+                      height: MacOSMetrics.dashboardControlHeight(
+                        context,
+                        fallback: 72 * scale,
+                      ),
                       child: _ControlBar(platform: platform),
                     ),
                   ] else ...[
@@ -738,7 +764,7 @@ class _ControlBar extends StatelessWidget {
       radius: BusinessPalette.cardRadius,
       padding: EdgeInsets.symmetric(
         horizontal: density.isCompact ? 14 : 18,
-        vertical: 0,
+        vertical: MacOSStyle.of(context) ? 4 : 0,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -1237,7 +1263,11 @@ class ResidentialExitCard extends ConsumerWidget {
             if (policy.active && !missing) ...[
               if (BusinessTheme.of(context) && constraints.hasBoundedHeight)
                 const Spacer(),
-              SizedBox(height: BusinessTheme.of(context) ? 4 : 14),
+              SizedBox(
+                height: BusinessTheme.of(context)
+                    ? (MacOSStyle.of(context) ? 12 : 4)
+                    : 14,
+              ),
               _ExitActions(
                 applying: applying,
                 onChoose: () => showResidentialExitSheet(context),

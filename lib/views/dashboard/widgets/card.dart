@@ -11,26 +11,38 @@ import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prism_ui/shapes/shapes.dart';
-import 'package:prism_ui/prism_ui.dart';
 
-EdgeInsets dashboardCardPadding(DashboardDensity density) => switch (density) {
-  DashboardDensity.standard => const EdgeInsets.symmetric(
-    horizontal: 22,
-    vertical: 20,
-  ),
-  DashboardDensity.compact => const EdgeInsets.symmetric(
-    horizontal: 20,
-    vertical: 16,
-  ),
-  DashboardDensity.mobile => const EdgeInsets.symmetric(
-    horizontal: 20,
-    vertical: 18,
-  ),
-};
+EdgeInsets dashboardCardPadding(
+  DashboardDensity density, {
+  BuildContext? context,
+}) {
+  final fallback = switch (density) {
+    DashboardDensity.standard => const EdgeInsets.symmetric(
+      horizontal: 22,
+      vertical: 20,
+    ),
+    DashboardDensity.compact => const EdgeInsets.symmetric(
+      horizontal: 20,
+      vertical: 16,
+    ),
+    DashboardDensity.mobile => const EdgeInsets.symmetric(
+      horizontal: 20,
+      vertical: 18,
+    ),
+  };
+  return context == null
+      ? fallback
+      : MacOSMetrics.cardPadding(context, fallback);
+}
 
-double dashboardCardRadius(DashboardDensity density) => density.isDesktop
-    ? DashboardCorner.desktopCard
-    : DashboardCorner.mobileCard;
+double dashboardCardRadius(DashboardDensity density, {BuildContext? context}) {
+  final fallback = density.isDesktop
+      ? DashboardCorner.desktopCard
+      : DashboardCorner.mobileCard;
+  return context == null
+      ? fallback
+      : MacOSMetrics.cardRadius(context, fallback: fallback);
+}
 
 class DashboardCard extends StatelessWidget {
   const DashboardCard({
@@ -67,11 +79,20 @@ class DashboardCard extends StatelessWidget {
     final density = DashboardDensityScope.of(context);
     final business = BusinessTheme.of(context);
     final shape = AppShape.all(
-      radius ??
-          (business
-              ? BusinessPalette.cardRadius
-              : dashboardCardRadius(density)),
+      MacOSMetrics.cardRadius(
+        context,
+        fallback:
+            radius ??
+            (business
+                ? BusinessPalette.cardRadius
+                : dashboardCardRadius(density, context: context)),
+      ),
     );
+    final cardPadding =
+        padding ??
+        (business && density.isCompact
+            ? const EdgeInsets.symmetric(horizontal: 18, vertical: 12)
+            : dashboardCardPadding(density, context: context));
     final overWallpaper =
         business &&
         context.colorScheme.brightness == Brightness.dark &&
@@ -83,11 +104,9 @@ class DashboardCard extends StatelessWidget {
         : BorderSide.none;
     final cardColor = DashboardColors.of(context).card;
     final content = Padding(
-      padding:
-          padding ??
-          (business && density.isCompact
-              ? const EdgeInsets.symmetric(horizontal: 18, vertical: 12)
-              : dashboardCardPadding(density)),
+      padding: padding == null
+          ? MacOSMetrics.cardPadding(context, cardPadding)
+          : cardPadding,
       child: child,
     );
     final onTap = this.onTap;
@@ -442,7 +461,7 @@ class DashboardConnectedButton extends StatelessWidget {
       inMutuallyExclusiveGroup: true,
       label: semanticLabel,
       excludeSemantics: true,
-      child: ElasticPress(
+      child: MacOSPressFeedback(
         child: TweenAnimationBuilder<double>(
           tween: Tween(end: selected ? 1 : 0),
           duration: context.motionDuration(_connectedSelectDuration),
@@ -506,6 +525,7 @@ class BusinessPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controlHeight = MacOSMetrics.buttonHeight(context, fallback: height);
     return FilledButton(
       onPressed: onPressed,
       style: ButtonStyle.from(
@@ -513,9 +533,9 @@ class BusinessPrimaryButton extends StatelessWidget {
         foregroundColor: BusinessPalette.onBlue,
         disabledForegroundColor: context.colorScheme.onSurfaceVariant,
         shape: AppShape.full,
-        fixedSize: Size(width, height),
-        minimumSize: Size(width, height),
-        maximumSize: Size(width, height),
+        fixedSize: Size(width, controlHeight),
+        minimumSize: Size(width, controlHeight),
+        maximumSize: Size(width, controlHeight),
         padding: EdgeInsets.zero,
         tapTargetSize: TapTargetSize.shrinkWrap,
         backgroundBuilder: (context, states, child) => DecoratedBox(
@@ -580,6 +600,7 @@ class BusinessSecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = context.colorScheme.brightness == Brightness.dark;
+    final controlHeight = MacOSMetrics.buttonHeight(context, fallback: height);
     const shape = AppShape.full;
     return FilledButton(
       onPressed: onPressed,
@@ -589,9 +610,9 @@ class BusinessSecondaryButton extends StatelessWidget {
             labelColor ??
             (dark ? context.colorScheme.onSurface : BusinessPalette.deep),
         shape: shape,
-        fixedSize: Size(width, height),
-        minimumSize: Size(width, height),
-        maximumSize: Size(width, height),
+        fixedSize: Size(width, controlHeight),
+        minimumSize: Size(width, controlHeight),
+        maximumSize: Size(width, controlHeight),
         padding: EdgeInsets.zero,
         tapTargetSize: TapTargetSize.shrinkWrap,
         pressLook: PressLook.ink,
@@ -686,11 +707,14 @@ class DashboardChip extends StatelessWidget {
         ? BusinessPalette.heroChipText
         : foreground;
     return Container(
-      height:
-          (large ? 28.0 : 24.0) *
-          (BusinessTheme.of(context)
-              ? DashboardDensityScope.scaleOf(context)
-              : 1),
+      height: MacOSMetrics.chipHeight(
+        context,
+        fallback:
+            (large ? 28.0 : 24.0) *
+            (BusinessTheme.of(context)
+                ? DashboardDensityScope.scaleOf(context)
+                : 1),
+      ),
       padding: EdgeInsets.symmetric(horizontal: large ? 10 : 9),
       decoration: ShapeDecoration(color: background, shape: AppShape.full),
       child: Row(
@@ -877,11 +901,19 @@ class DashboardSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MacOSMetrics.switchWidth(
+      context,
+      fallback: compact ? 40 : trackWidth,
+    );
+    final height = MacOSMetrics.switchHeight(
+      context,
+      fallback: compact ? 24 : Switch.trackHeight,
+    );
     return SizedBox(
-      width: compact ? 40 : trackWidth,
-      height: compact ? 24 : Switch.trackHeight,
+      width: width,
+      height: height,
       child: Transform.scale(
-        scale: compact ? 40 / trackWidth : 1,
+        scale: width / trackWidth,
         child: OverflowBox(
           maxWidth: double.infinity,
           maxHeight: double.infinity,
@@ -943,7 +975,7 @@ class DashboardSwitchRow extends StatelessWidget {
         padding.horizontal -
         iconSize -
         _gap * 2 -
-        DashboardSwitch.trackWidth;
+        MacOSMetrics.switchWidth(context, fallback: DashboardSwitch.trackWidth);
     return titles.every(
       (title) =>
           globalState.measure

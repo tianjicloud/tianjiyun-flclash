@@ -219,7 +219,7 @@ class ProxyGroupsCard extends ConsumerWidget {
     final compact = density.isCompact;
     final scale = DashboardDensityScope.scaleOf(context);
     final groups = ref.watch(visibleGroupsStateProvider).value;
-    final padding = dashboardCardPadding(density);
+    final padding = dashboardCardPadding(density, context: context);
     final tileHeight = (compact ? 52 : 60) * scale;
     final tileGap = compact ? 6.0 : 8.0;
     return DashboardCard(
@@ -248,7 +248,7 @@ class ProxyGroupsCard extends ConsumerWidget {
               else ...[
                 SizedBox(
                   height:
-                      connectionsTableTop(density, scale) -
+                      connectionsTableTop(density, scale, context) -
                       padding.top -
                       DashboardCardHeader.height * scale,
                 ),

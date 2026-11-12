@@ -36,9 +36,11 @@ class ThemeView extends StatelessWidget {
     return BaseScaffold(
       title: appLocalizations.theme,
       body: ListView(
-        padding: EdgeInsets.only(
-          top: context.appBarInset,
-          bottom: 32 + context.bottomInset,
+        padding: EdgeInsets.fromLTRB(
+          MacOSMetrics.pageMargin(context, fallback: 0),
+          context.appBarInset,
+          MacOSMetrics.pageMargin(context, fallback: 0),
+          32 + context.bottomInset,
         ),
         children: [
           Center(
@@ -53,6 +55,10 @@ class ThemeView extends StatelessWidget {
                   const SizedBox(height: 16),
                   const _PrimaryColorItem(),
                   const SizedBox(height: 16),
+                  if (MacOSStyle.of(context)) ...[
+                    const _FollowSystemAccentItem(),
+                    const SizedBox(height: 16),
+                  ],
                   const _FontFamilyItem(),
                   const SizedBox(height: 16),
                   const _TextScaleFactorItem(),
@@ -65,9 +71,9 @@ class ThemeView extends StatelessWidget {
                   const SizedBox(height: 16),
                   const _LiquidGlassItem(),
                   const SizedBox(height: 16),
-                  if (system.isMacOS || system.isWindows) ...const [
-                    _SidebarBlurItem(),
-                    SizedBox(height: 16),
+                  if (system.isWindows) ...[
+                    const _SidebarBlurItem(),
+                    const SizedBox(height: 16),
                   ],
                   const _BackgroundItem(),
                 ],
@@ -78,6 +84,19 @@ class ThemeView extends StatelessWidget {
       ),
     );
   }
+}
+
+class _FollowSystemAccentItem extends StatelessWidget {
+  const _FollowSystemAccentItem();
+
+  @override
+  Widget build(BuildContext context) => ConfigToggleItem(
+    title: (l) => l.followSystemAccent,
+    selector: themeSettingProvider.select((state) => state.followSystemAccent),
+    onChanged: (ref, value) => ref
+        .read(themeSettingProvider.notifier)
+        .update((state) => state.copyWith(followSystemAccent: value)),
+  );
 }
 
 class _BusinessMobileThemeView extends ConsumerWidget {
@@ -147,7 +166,11 @@ class _BusinessThemeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.appLocalizations;
     return ListView(
-      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      padding: EdgeInsets.only(
+        left: MacOSMetrics.pageMargin(context, fallback: 40),
+        right: MacOSMetrics.pageMargin(context, fallback: 0),
+        bottom: context.bottomInset + 20,
+      ),
       children: [
         _BusinessThemeCard(
           title: l10n.theme,
@@ -156,7 +179,18 @@ class _BusinessThemeView extends StatelessWidget {
         const SizedBox(height: 14),
         _BusinessThemeCard(
           title: l10n.businessAccentColor,
-          child: const _PrimaryColorItem(business: true),
+          child: Column(
+            children: [
+              const _PrimaryColorItem(business: true),
+              if (MacOSStyle.of(context)) ...[
+                SizedBox(
+                  height: 1,
+                  child: ColoredBox(color: context.colorScheme.outlineVariant),
+                ),
+                const _FollowSystemAccentItem(),
+              ],
+            ],
+          ),
         ),
         const SizedBox(height: 14),
         _BusinessThemeCard(
@@ -207,12 +241,13 @@ class _BusinessThemeView extends StatelessWidget {
           title: l10n.tabAnimation,
           child: const _TabAnimationItem(business: true),
         ),
-        if (system.isMacOS || system.isWindows) ...[
+        if (system.isWindows) ...[
           const SizedBox(height: 14),
-          _BusinessThemeCard(
-            title: l10n.sidebar,
-            child: const _SidebarBlurItem(business: true),
-          ),
+          if (!MacOSStyle.of(context))
+            _BusinessThemeCard(
+              title: l10n.sidebar,
+              child: const _SidebarBlurItem(business: true),
+            ),
         ],
       ],
     );
@@ -270,10 +305,10 @@ class _BusinessThemeCard extends StatelessWidget {
     final color = context.colorScheme;
     final dark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: MacOSMetrics.cardPadding(context, const EdgeInsets.all(18)),
       decoration: ShapeDecoration(
         color: dark ? color.surfaceContainerLow : color.surface,
-        shape: AppShape.all(18),
+        shape: AppShape.all(MacOSMetrics.cardRadius(context, fallback: 18)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -750,17 +785,27 @@ class _ColorSwatch extends StatelessWidget {
                   bottom: 0,
                   child: _EyedropperBadge(size: business ? 16 : _badge),
                 ),
-              AnimatedScale(
-                scale: selected ? 1 : 0,
-                duration: _duration,
-                curve: Curves.easeOutBack,
-                child: GlyphIcon(
-                  AppGlyphs.check,
-                  size: business ? 14 : 18,
-                  fill: 1,
-                  color: check,
+              if (MacOSStyle.of(context)) ...[
+                if (selected)
+                  GlyphIcon(
+                    AppGlyphs.check,
+                    size: business ? 14 : 18,
+                    fill: 1,
+                    color: check,
+                  ),
+              ] else ...[
+                AnimatedScale(
+                  scale: selected ? 1 : 0,
+                  duration: _duration,
+                  curve: Curves.easeOutBack,
+                  child: GlyphIcon(
+                    AppGlyphs.check,
+                    size: business ? 14 : 18,
+                    fill: 1,
+                    color: check,
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
@@ -1439,7 +1484,7 @@ class _ResetButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TonalButtonTheme(
       size: TonalButtonSize.section,
-      child: ElasticPress(
+      child: MacOSPressFeedback(
         child: IconButton(
           tooltip: context.appLocalizations.reset,
           onPressed: onPressed,

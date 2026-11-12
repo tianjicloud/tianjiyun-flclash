@@ -200,7 +200,7 @@ class _ProxyProviderItem extends ConsumerWidget {
             )
           : TonalButtonTheme(
               size: TonalButtonSize.compact,
-              child: ElasticPress(
+              child: MacOSPressFeedback(
                 child: IconButton(
                   tooltip: context.appLocalizations.edit,
                   onPressed: () => _handleEdit(context, ref),

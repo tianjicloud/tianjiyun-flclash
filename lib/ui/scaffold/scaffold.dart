@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' show ImageFilter, lerpDouble;
 
 import 'package:fl_clash/ui/app_background.dart';
+import 'package:fl_clash/ui/macos_style.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/physics.dart';
@@ -859,7 +860,9 @@ class ScaffoldState extends State<Scaffold>
         decoration: BoxDecoration(
           color:
               (widget.backgroundColor ??
-                      SurfaceLevel.page.colorOf(context.colorScheme))
+                      (MacOSStyle.of(context)
+                          ? context.colorScheme.surface
+                          : SurfaceLevel.page.colorOf(context.colorScheme)))
                   .withValues(alpha: 1),
           border: Border(
             bottom: BorderSide(color: context.colorScheme.outlineVariant),

@@ -1883,6 +1883,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "floating": MessageLookupByLibrary.simpleMessage("Плавающая"),
     "followProfile": MessageLookupByLibrary.simpleMessage("Как в профиле"),
     "followSystem": MessageLookupByLibrary.simpleMessage("Как в системе"),
+    "followSystemAccent": MessageLookupByLibrary.simpleMessage(
+      "Использовать системный акцентный цвет",
+    ),
     "fontFamily": MessageLookupByLibrary.simpleMessage("Шрифт"),
     "fontSize": MessageLookupByLibrary.simpleMessage("Размер"),
     "forceDnsMapping": MessageLookupByLibrary.simpleMessage(

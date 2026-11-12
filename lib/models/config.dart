@@ -515,6 +515,7 @@ abstract class ThemeProps with _$ThemeProps {
     @Default('solid') String background,
     @Default(false) bool pureBlack,
     @Default(false) bool sidebarBlur,
+    @Default(false) bool followSystemAccent,
     @Default(LiquidGlassMode.none)
     @JsonKey(readValue: _readLiquidGlass)
     LiquidGlassMode liquidGlass,

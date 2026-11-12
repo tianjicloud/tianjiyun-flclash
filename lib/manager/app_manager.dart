@@ -419,7 +419,9 @@ class AppSidebarContainer extends ConsumerWidget {
     final currentIndex = navigationState.currentIndex;
     final backdropOpacity = ref.watch(windowBlurProvider);
     final wallpaper = AppBackgroundScope.hasImage(context);
-    final page = SurfaceLevel.page.colorOf(context.colorScheme);
+    final page = MacOSStyle.of(context)
+        ? context.colorScheme.surface
+        : SurfaceLevel.page.colorOf(context.colorScheme);
     final chrome = context.colorScheme.chromeSurface;
     final isBusiness = isTianjiSubscriptionProfile(
       ref.watch(currentProfileProvider),

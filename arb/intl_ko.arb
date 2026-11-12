@@ -458,6 +458,7 @@
   "textScale": "글자 크기 조절",
   "textScalePreview": "앱의 글자가 이렇게 표시됩니다",
   "followSystem": "시스템 설정 따르기",
+  "followSystemAccent": "시스템 강조 색상 사용",
   "internet": "인터넷",
   "systemApp": "시스템 앱",
   "noNetworkApp": "네트워크 미사용 앱",

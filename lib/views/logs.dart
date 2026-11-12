@@ -164,10 +164,11 @@ class _LogsViewState extends ConsumerState<LogsView>
             }
             return Padding(
               padding: EdgeInsets.fromLTRB(
-                28,
+                MacOSMetrics.pageMargin(context, fallback: 28),
                 context.contentTopPadding,
-                28,
-                24 + context.bottomInset,
+                MacOSMetrics.pageMargin(context, fallback: 28),
+                MacOSMetrics.pageMargin(context, fallback: 24) +
+                    context.bottomInset,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -192,7 +193,7 @@ class _LogsViewState extends ConsumerState<LogsView>
   Widget _logCard(BuildContext context, Widget feed) {
     final appLocalizations = context.appLocalizations;
     return Card(
-      radius: AppCorner.xl,
+      radius: MacOSMetrics.cardRadius(context, fallback: AppCorner.xl),
       padding: EdgeInsets.zero,
       child: Column(
         children: [
@@ -201,7 +202,7 @@ class _LogsViewState extends ConsumerState<LogsView>
             child: Row(
               children: [
                 BusinessSegmented<bool>(
-                  height: 30,
+                  height: MacOSMetrics.segmentedHeight(context, fallback: 30),
                   items: [
                     BusinessSegment(
                       value: false,
@@ -222,7 +223,7 @@ class _LogsViewState extends ConsumerState<LogsView>
                 ),
                 const Spacer(),
                 BusinessSegmented<LogLevel?>(
-                  height: 30,
+                  height: MacOSMetrics.segmentedHeight(context, fallback: 30),
                   items: [
                     BusinessSegment(value: null, label: appLocalizations.all),
                     BusinessSegment(
@@ -256,7 +257,7 @@ class _LogsViewState extends ConsumerState<LogsView>
                 BusinessSecondaryButton(
                   label: appLocalizations.exportShort,
                   width: 62,
-                  height: 30,
+                  height: MacOSMetrics.buttonHeight(context, fallback: 30),
                   onPressed: _handleExport,
                 ),
               ],

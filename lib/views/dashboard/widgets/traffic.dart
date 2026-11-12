@@ -107,7 +107,7 @@ class SpeedCard extends ConsumerWidget {
     final density = DashboardDensityScope.of(context);
     final compact = density.isCompact;
     final scale = DashboardDensityScope.scaleOf(context);
-    final padding = dashboardCardPadding(density);
+    final padding = dashboardCardPadding(density, context: context);
     final appLocalizations = context.appLocalizations;
     final traffics = ref.watch(trafficsProvider);
     final total = ref.watch(

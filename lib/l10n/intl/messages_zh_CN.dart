@@ -1366,6 +1366,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "floating": MessageLookupByLibrary.simpleMessage("悬浮"),
     "followProfile": MessageLookupByLibrary.simpleMessage("跟随配置"),
     "followSystem": MessageLookupByLibrary.simpleMessage("跟随系统"),
+    "followSystemAccent": MessageLookupByLibrary.simpleMessage("跟随系统强调色"),
     "fontFamily": MessageLookupByLibrary.simpleMessage("字体"),
     "fontSize": MessageLookupByLibrary.simpleMessage("大小"),
     "forceDnsMapping": MessageLookupByLibrary.simpleMessage("强制DNS映射"),

@@ -356,7 +356,7 @@ class _GroupChoice extends StatelessWidget {
                   : const [],
             ),
             child: SizedBox(
-              height: 44,
+              height: MacOSMetrics.listRowHeight(context, fallback: 44),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
@@ -438,7 +438,7 @@ class _MobileGroupChip extends StatelessWidget {
             shape: AppShape.full,
           ),
           child: SizedBox(
-            height: 34,
+            height: MacOSMetrics.chipHeight(context, fallback: 34),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Row(

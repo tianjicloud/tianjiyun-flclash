@@ -458,6 +458,7 @@
   "textScale": "Масштаб текста",
   "textScalePreview": "Так будет выглядеть текст в приложении",
   "followSystem": "Как в системе",
+  "followSystemAccent": "Использовать системный акцентный цвет",
   "internet": "Интернет",
   "systemApp": "Системные приложения",
   "noNetworkApp": "Приложения без сети",

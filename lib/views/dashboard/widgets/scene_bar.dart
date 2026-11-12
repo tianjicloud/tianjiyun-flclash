@@ -104,10 +104,26 @@ class SceneBar extends ConsumerWidget {
       semanticLabel: context.appLocalizations.scene,
       radius: mobile ? BusinessRadius.sceneMobile : BusinessPalette.cardRadius,
       padding: EdgeInsetsDirectional.fromSTEB(
-        mobile ? 14 : 18,
-        mobile ? 11 : 13,
-        mobile ? 14 : 18,
-        mobile ? 11 : 13,
+        mobile
+            ? 14
+            : MacOSStyle.of(context)
+            ? 12
+            : 18,
+        mobile
+            ? 11
+            : MacOSStyle.of(context)
+            ? 6
+            : 13,
+        mobile
+            ? 14
+            : MacOSStyle.of(context)
+            ? 12
+            : 18,
+        mobile
+            ? 11
+            : MacOSStyle.of(context)
+            ? 6
+            : 13,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {

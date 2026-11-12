@@ -859,7 +859,7 @@ class _GroupActions extends StatelessWidget {
                   .toLight,
             ),
           const SizedBox(width: 6),
-          ElasticPress(
+          MacOSPressFeedback(
             child: IconButton(
               tooltip: isExpand
                   ? context.appLocalizations.showLess

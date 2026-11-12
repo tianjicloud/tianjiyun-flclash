@@ -16,7 +16,8 @@ import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _connectionCardShape = AppShape.all(18);
+ShapeBorder _connectionCardShape(BuildContext context) =>
+    AppShape.all(MacOSMetrics.cardRadius(context, fallback: 18));
 
 class RequestsView extends ConsumerStatefulWidget {
   final ScrollController? scrollController;
@@ -157,7 +158,12 @@ class _RequestsViewState extends ConsumerState<RequestsView>
             child: Column(
               children: [
                 if (pinned)
-                  _buildControls(context, horizontalInset: isBusiness ? 28 : 16)
+                  _buildControls(
+                    context,
+                    horizontalInset: isBusiness
+                        ? MacOSMetrics.pageMargin(context, fallback: 28)
+                        : 16,
+                  )
                 else if (businessMobile)
                   _buildBusinessMobileControls(context)
                 else
@@ -169,13 +175,13 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                   child: Padding(
                     padding: EdgeInsets.only(
                       left: pinned && isBusiness && _feed == RequestFeed.live
-                          ? 28
+                          ? MacOSMetrics.pageMargin(context, fallback: 28)
                           : 0,
                       right: pinned && isBusiness && _feed == RequestFeed.live
-                          ? 28
+                          ? MacOSMetrics.pageMargin(context, fallback: 28)
                           : 0,
                       bottom: pinned && isBusiness && _feed == RequestFeed.live
-                          ? 12
+                          ? MacOSMetrics.pageMargin(context, fallback: 12)
                           : 0,
                     ),
                     child: body!,
@@ -363,11 +369,12 @@ class _RequestsViewState extends ConsumerState<RequestsView>
   }
 
   Widget _searchField(BuildContext context, {required double width}) {
+    final height = MacOSMetrics.inputHeight(context, fallback: 34);
     return SizedBox(
       width: width,
-      height: 34,
+      height: height,
       child: SearchField(
-        height: 34,
+        height: height,
         fill: context.raisedSurfaceLevel.colorOf(context.colorScheme),
         hintText: context.appLocalizations.connectionSearchHint,
         onChanged: _search,
@@ -457,7 +464,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
       onPressed: onPressed,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: SizedBox(
-        height: mobile ? 34 : 30,
+        height: MacOSMetrics.chipHeight(context, fallback: mobile ? 34 : 30),
         child: Center(
           child: Text(
             label,
@@ -860,7 +867,7 @@ class _LiveFeedState extends ConsumerState<_LiveFeed>
             tableId: 'connections',
             items: connections,
             cardSurface: widget.isBusiness,
-            cardShape: widget.isBusiness ? _connectionCardShape : null,
+            cardShape: widget.isBusiness ? _connectionCardShape(context) : null,
             columnsOf: (width) => trackerInfoColumns(
               context,
               width: width,

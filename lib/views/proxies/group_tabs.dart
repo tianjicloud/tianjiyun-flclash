@@ -6,7 +6,6 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
-import 'package:prism_ui/prism_ui.dart';
 
 const _stripInset = 16.0;
 const _tabSpacing = 8.0;
@@ -138,7 +137,7 @@ class _GroupTabsState extends State<GroupTabs> {
   Widget _buildMoreButton() {
     return TonalButtonTheme(
       size: TonalButtonSize.section,
-      child: ElasticPress(
+      child: MacOSPressFeedback(
         child: PopupAnchor(
           targetBuilder: (open) => IconButton(
             tooltip: context.appLocalizations.proxyGroup,
@@ -196,7 +195,10 @@ class _GroupTabsState extends State<GroupTabs> {
   Widget build(BuildContext context) {
     final extents = _extents = _TabExtents.of(context, widget.groups, _extents);
     return SizedBox(
-      height: TonalButtonSize.section.button,
+      height: MacOSMetrics.segmentedHeight(
+        context,
+        fallback: TonalButtonSize.section.button,
+      ),
       child: ValueListenableBuilder(
         valueListenable: _hasMore,
         builder: (_, hasMore, moreButton) {

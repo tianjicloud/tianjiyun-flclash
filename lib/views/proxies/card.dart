@@ -278,7 +278,7 @@ class ProxyCard extends ConsumerWidget {
             : null,
       ),
       child: SizedBox(
-        height: 44,
+        height: MacOSMetrics.listRowHeight(context, fallback: 44),
         child: Row(
           spacing: 14,
           children: [
@@ -446,41 +446,36 @@ class ProxyCard extends ConsumerWidget {
             ? ref.watch(tianjiNodeProvider(proxy.name))
             : null;
         final isCustomProfile = profile?.type == ProfileType.custom;
-        final card = Card(
-          radius: businessMobile
-              ? AppCorner.none
-              : businessList
+        final radius = MacOSMetrics.cardRadius(
+          context,
+          fallback: businessMobile || businessList
               ? AppCorner.none
               : businessStyle
               ? AppCorner.md
               : AppCorner.lg,
-          shape: businessMobile
-              ? const RoundedSuperellipseBorder(
-                  side: BorderSide.none,
-                  borderRadius: AppRadius.none,
-                )
-              : businessList
-              ? const RoundedSuperellipseBorder(
-                  side: BorderSide.none,
-                  borderRadius: AppRadius.none,
-                )
-              : businessStyle
-              ? const RoundedSuperellipseBorder(
-                  side: BorderSide.none,
-                  borderRadius: AppRadius.md,
-                )
-              : null,
+        );
+        final shape = businessMobile || businessList
+            ? AppShape.none
+            : MacOSStyle.of(context)
+            ? AppShape.all(radius)
+            : businessStyle
+            ? AppShape.md
+            : null;
+        final card = Card(
+          radius: radius,
+          shape: shape,
           enterActionsOnRight: true,
           key: key,
           onPressed: () => _handleSelect(ref),
           isSelected: businessMobile || businessList ? false : inUse,
-          padding: businessMobile
-              ? const EdgeInsets.symmetric(horizontal: 16)
-              : businessList
-              ? const EdgeInsets.symmetric(horizontal: 16)
-              : businessStyle
-              ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
-              : const EdgeInsets.symmetric(horizontal: 12),
+          padding: MacOSMetrics.compactCardPadding(
+            context,
+            fallback: businessMobile || businessList
+                ? const EdgeInsets.symmetric(horizontal: 16)
+                : businessStyle
+                ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
+                : const EdgeInsets.symmetric(horizontal: 12),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -521,14 +516,16 @@ class ProxyCard extends ConsumerWidget {
             ? DecoratedBox(
                 decoration: ShapeDecoration(
                   shadows: [BusinessShadow.selectedLine(BusinessPalette.blue)],
-                  shape: AppShape.md,
+                  shape: AppShape.all(radius),
                 ),
                 child: DecoratedBox(
                   position: DecorationPosition.foreground,
-                  decoration: const ShapeDecoration(
-                    shape: RoundedSuperellipseBorder(
-                      side: BorderSide(color: BusinessPalette.blue, width: 2),
-                      borderRadius: AppRadius.md,
+                  decoration: ShapeDecoration(
+                    shape: AppShape.all(radius).copyWith(
+                      side: const BorderSide(
+                        color: BusinessPalette.blue,
+                        width: 2,
+                      ),
                     ),
                   ),
                   child: card,

@@ -55,7 +55,8 @@ class TestApp extends StatelessWidget {
       emojiFont: (family: FontFamily.twEmoji.value, pattern: emojiPattern),
       remoteFocus: remoteFocus,
       liquidGlass: liquidGlass,
-      builder: (context, child) => wrapViewScopes(context, child!),
+      builder: (context, child) =>
+          MacOSPlatformStyle(child: wrapViewScopes(context, child!)),
       home: homeBuilder(child),
     );
     return overrides.isNotEmpty || wrapInProviderScope

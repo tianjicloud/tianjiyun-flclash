@@ -144,7 +144,7 @@ class _DesktopDashboard extends StatelessWidget {
     final topHeight = (compact ? 176 : 208) * scale;
     final controlHeight = (compact ? 56 : 64) * scale;
     final middleHeight = (compact ? 152 : 176) * scale;
-    final tablesHeight = connectionsTableMinHeight(density, scale);
+    final tablesHeight = connectionsTableMinHeight(density, scale, context);
     final summaryHeight = (compact ? 112 : 120) * scale;
     return LayoutBuilder(
       builder: (context, constraints) {

@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/ui/macos_style.dart';
 import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -58,7 +59,12 @@ class _BusinessProxyListState extends ConsumerState<BusinessProxyList> {
     );
     return AppBarClearance(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(24, top, 24, 24),
+        padding: EdgeInsets.fromLTRB(
+          MacOSMetrics.pageMargin(context, fallback: 24),
+          top,
+          MacOSMetrics.pageMargin(context, fallback: 24),
+          MacOSMetrics.pageMargin(context, fallback: 24),
+        ),
         child: SurfaceScope(
           level: context.raisedSurfaceLevel,
           child: ClipPath(
@@ -169,7 +175,7 @@ class _BusinessGroupHeader extends ConsumerWidget {
     final automatic = group.type != GroupType.Selector;
     return SizedBox(
       key: ValueKey('business-list-group:${group.name}'),
-      height: 52,
+      height: MacOSMetrics.proxyGroupHeaderHeight(context, fallback: 52),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
         child: Row(
@@ -179,7 +185,9 @@ class _BusinessGroupHeader extends ConsumerWidget {
               onTap: onToggle,
               shape: AppShape.md,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: EdgeInsets.symmetric(
+                  vertical: MacOSStyle.of(context) ? 4 : 8,
+                ),
                 child: Row(
                   spacing: 8,
                   children: [

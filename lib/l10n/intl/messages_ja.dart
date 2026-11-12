@@ -1533,6 +1533,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "floating": MessageLookupByLibrary.simpleMessage("フローティング"),
     "followProfile": MessageLookupByLibrary.simpleMessage("プロファイルに従う"),
     "followSystem": MessageLookupByLibrary.simpleMessage("システムに従う"),
+    "followSystemAccent": MessageLookupByLibrary.simpleMessage(
+      "システムのアクセントカラーに従う",
+    ),
     "fontFamily": MessageLookupByLibrary.simpleMessage("フォント"),
     "fontSize": MessageLookupByLibrary.simpleMessage("サイズ"),
     "forceDnsMapping": MessageLookupByLibrary.simpleMessage("DNSマッピングを強制"),

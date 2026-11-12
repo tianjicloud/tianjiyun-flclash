@@ -29,21 +29,39 @@ const _tableGap = 12.0;
 const _headerHeight = 32.0;
 const _minRows = 3;
 
-double _tabHeightOf(DashboardDensity density) => density.isCompact ? 32 : 36;
+double _tabHeightOf(DashboardDensity density, [BuildContext? context]) =>
+    context == null
+    ? density.isCompact
+          ? 32
+          : 36
+    : MacOSMetrics.segmentedHeight(
+        context,
+        fallback: density.isCompact ? 32 : 36,
+      );
 
 double _rowHeightOf(DashboardDensity density) => density.isCompact ? 32 : 34;
 
 /// Keeps the pill tabs concentric with the card's corners.
-double _tabInsetOf(DashboardDensity density) =>
-    dashboardCardRadius(density) - _tabHeightOf(density) / 2;
+double _tabInsetOf(DashboardDensity density, BuildContext? context) =>
+    (dashboardCardRadius(density, context: context) -
+            _tabHeightOf(density, context) / 2)
+        .clamp(0, double.infinity)
+        .toDouble();
 
-double connectionsTableTop(DashboardDensity density, double scale) =>
-    _tabInsetOf(density) + _tabHeightOf(density) * scale + _tableGap;
+double connectionsTableTop(
+  DashboardDensity density,
+  double scale, [
+  BuildContext? context,
+]) => _tabInsetOf(density, context) + _tabHeightOf(density) * scale + _tableGap;
 
 /// The grid gives the tables a row once they can show their head and a few
 /// connections; shorter, it shows the summary cards.
-double connectionsTableMinHeight(DashboardDensity density, double scale) =>
-    connectionsTableTop(density, scale) +
+double connectionsTableMinHeight(
+  DashboardDensity density,
+  double scale, [
+  BuildContext? context,
+]) =>
+    connectionsTableTop(density, scale, context) +
     (_headerHeight + _rowHeightOf(density) * _minRows) * scale;
 
 enum DashboardFeed {
@@ -298,9 +316,10 @@ class _ConnectionsTableCardState extends ConsumerState<ConnectionsTableCard>
     final scale = DashboardDensityScope.scaleOf(context);
     final rowHeight = _rowHeightOf(density) * scale;
     final appLocalizations = context.appLocalizations;
-    final headerHeight = _tabHeightOf(density) * scale;
-    final tabInset = _tabInsetOf(density);
-    final cellStart = dashboardCardPadding(density).left - _cellInset;
+    final headerHeight = _tabHeightOf(density, context) * scale;
+    final tabInset = _tabInsetOf(density, context);
+    final cellStart =
+        dashboardCardPadding(density, context: context).left - _cellInset;
     Widget segment(DashboardFeed feed, Widget count) =>
         DashboardConnectedButton(
           selected: _feed == feed,

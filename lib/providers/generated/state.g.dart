@@ -776,7 +776,7 @@ final class GenColorSchemeProvider
   }
 }
 
-String _$genColorSchemeHash() => r'c6838e224d41780617f7338c5e56173a7620cd87';
+String _$genColorSchemeHash() => r'5bdb2b5847ebeb8d67955d64100b336f2c09dfa3';
 
 final class GenColorSchemeFamily extends $Family
     with
@@ -857,7 +857,7 @@ final class WindowBlurRequestProvider
   }
 }
 
-String _$windowBlurRequestHash() => r'90b7a731689db7fa39d979866c428843b1073cf8';
+String _$windowBlurRequestHash() => r'd7db8a97a675f87a4a2d017d317497c886ce7c77';
 
 @ProviderFor(currentBrightness)
 final currentBrightnessProvider = CurrentBrightnessProvider._();

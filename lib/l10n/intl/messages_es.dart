@@ -1910,6 +1910,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "floating": MessageLookupByLibrary.simpleMessage("Flotante"),
     "followProfile": MessageLookupByLibrary.simpleMessage("Seguir perfil"),
     "followSystem": MessageLookupByLibrary.simpleMessage("Seguir el sistema"),
+    "followSystemAccent": MessageLookupByLibrary.simpleMessage(
+      "Usar el color de énfasis del sistema",
+    ),
     "fontFamily": MessageLookupByLibrary.simpleMessage("Familia de fuente"),
     "fontSize": MessageLookupByLibrary.simpleMessage("Tamaño"),
     "forceDnsMapping": MessageLookupByLibrary.simpleMessage("Forzar mapeo DNS"),

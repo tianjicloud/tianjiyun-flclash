@@ -231,9 +231,14 @@ class _BusinessMobileTools extends ConsumerWidget {
         shape: AppShape.all(10),
       ),
       child: SizedBox(
-        width: 32,
-        height: 32,
-        child: Center(child: GlyphIcon(glyph)),
+        width: 24,
+        height: 24,
+        child: Center(
+          child: GlyphIcon(
+            glyph,
+            size: MacOSMetrics.sidebarIconSize(context, fallback: 24),
+          ),
+        ),
       ),
     );
 
@@ -559,7 +564,12 @@ class _BusinessSettingsLayoutState
       sections.putIfAbsent(entry.section, () => []).add(entry);
     }
     return Padding(
-      padding: const EdgeInsets.fromLTRB(29, 50, 24, 20),
+      padding: EdgeInsets.fromLTRB(
+        MacOSMetrics.pageMargin(context, fallback: 29),
+        50,
+        MacOSMetrics.pageMargin(context, fallback: 24),
+        20,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -664,7 +674,7 @@ class _SettingsNavigationItem extends StatelessWidget {
                   : const [],
             ),
             child: SizedBox(
-              height: 32,
+              height: MacOSMetrics.sidebarRowHeight(context, fallback: 32),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Align(
@@ -701,7 +711,11 @@ class _RuleSettingsView extends ConsumerWidget {
       appSettingProvider.select((state) => state.filters),
     );
     return ListView(
-      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      padding: EdgeInsets.only(
+        left: MacOSMetrics.pageMargin(context, fallback: 40),
+        right: MacOSMetrics.pageMargin(context, fallback: 0),
+        bottom: context.bottomInset + 20,
+      ),
       children: [
         BusinessSettingsCard(
           title: '${l10n.global} ${l10n.addedRules} · ${rules.length}',
@@ -922,7 +936,11 @@ class _NetworkSettingsView extends ConsumerWidget {
       ),
     );
     return ListView(
-      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      padding: EdgeInsets.only(
+        left: MacOSMetrics.pageMargin(context, fallback: 40),
+        right: MacOSMetrics.pageMargin(context, fallback: 0),
+        bottom: context.bottomInset + 20,
+      ),
       children: [
         BusinessSettingsCard(
           title: l10n.businessLocalPorts,
@@ -1360,7 +1378,11 @@ class _DnsSettingsViewState extends ConsumerState<_DnsSettingsView> {
       (item) => item.label == PageLabel.resources,
     );
     return ListView(
-      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      padding: EdgeInsets.only(
+        left: MacOSMetrics.pageMargin(context, fallback: 40),
+        right: MacOSMetrics.pageMargin(context, fallback: 0),
+        bottom: context.bottomInset + 20,
+      ),
       children: [
         BusinessSettingsCard(
           title: l10n.businessDnsServers,
@@ -1744,7 +1766,11 @@ class _TunSettingsView extends ConsumerWidget {
       null => l10n.loading,
     };
     return ListView(
-      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      padding: EdgeInsets.only(
+        left: MacOSMetrics.pageMargin(context, fallback: 40),
+        right: MacOSMetrics.pageMargin(context, fallback: 0),
+        bottom: context.bottomInset + 20,
+      ),
       children: [
         if (system.hasHelperService) ...[
           PressSurface(
@@ -1915,7 +1941,11 @@ class _IconAndUaSettingsView extends ConsumerWidget {
       patchClashConfigProvider.select((state) => state.globalUa),
     );
     return ListView(
-      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      padding: EdgeInsets.only(
+        left: MacOSMetrics.pageMargin(context, fallback: 40),
+        right: MacOSMetrics.pageMargin(context, fallback: 0),
+        bottom: context.bottomInset + 20,
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 14),

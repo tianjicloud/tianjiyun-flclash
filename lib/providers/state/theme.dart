@@ -47,6 +47,7 @@ ColorScheme genColorScheme(
     themeSettingProvider.select(
       (state) => (
         primaryColor: state.primaryColor,
+        followSystemAccent: state.followSystemAccent,
         colorStyle: state.colorStyle,
         pureBlack: state.pureBlack,
       ),
@@ -54,11 +55,14 @@ ColorScheme genColorScheme(
   );
   final dynamicColor = ref.watch(dynamicColorProvider);
   final Color seedColor;
-  if (color == null &&
-      (ignoreConfig == true || themeSetting.primaryColor == null)) {
+  final followsSystemAccent = defaultTargetPlatform == TargetPlatform.macOS
+      ? themeSetting.followSystemAccent
+      : themeSetting.primaryColor == null;
+  if (color == null && (ignoreConfig == true || followsSystemAccent)) {
     seedColor = dynamicColor.seedOf(brightness);
   } else {
-    seedColor = color ?? Color(themeSetting.primaryColor!);
+    seedColor =
+        color ?? Color(themeSetting.primaryColor ?? defaultPrimaryColor);
   }
   return _cachedColorScheme(
     seedColor,
@@ -154,7 +158,7 @@ WindowBlurRequest windowBlurRequest(Ref ref) {
   final brightness = ref.watch(currentBrightnessProvider);
   final colorScheme = ref.watch(genColorSchemeProvider(brightness));
   return (
-    enabled: enabled,
+    enabled: enabled || defaultTargetPlatform == TargetPlatform.macOS,
     brightness: brightness,
     tint: colorScheme.surfaceContainer,
   );

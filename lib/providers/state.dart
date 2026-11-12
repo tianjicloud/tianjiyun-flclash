@@ -14,7 +14,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/dashboard_lines.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/ui/business_style.dart';
-import 'package:flutter/foundation.dart' show compute;
+import 'package:flutter/foundation.dart' show compute, defaultTargetPlatform;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' show join;

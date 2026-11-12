@@ -10,6 +10,8 @@ import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/database.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/views/navigation.dart';
+import 'package:flutter/foundation.dart'
+    show debugDefaultTargetPlatformOverride;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prism_ui/prism_ui.dart';
@@ -35,6 +37,27 @@ void main() {
 
   tearDown(() {
     container.dispose();
+  });
+
+  test('macOS follows the system accent only when its setting is enabled', () {
+    final platform = debugDefaultTargetPlatformOverride;
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = platform);
+
+    container
+        .read(dynamicColorProvider.notifier)
+        .seed(
+          lightSeed: null,
+          darkSeed: null,
+          accentColor: const Color(0xFFB33A7A),
+        );
+    final brand = container.read(genColorSchemeProvider(Brightness.light));
+    container
+        .read(themeSettingProvider.notifier)
+        .update((state) => state.copyWith(followSystemAccent: true));
+    final system = container.read(genColorSchemeProvider(Brightness.light));
+
+    expect(system.primary, isNot(brand.primary));
   });
 
   test('group derivation sanitizes runtime state and respects clash mode', () {

@@ -1,5 +1,6 @@
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/macos_style.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:flutter/widgets.dart';
@@ -48,7 +49,13 @@ class BusinessSegmented<T> extends StatelessWidget {
       ],
     );
     return Container(
-      padding: EdgeInsets.all(mobile ? 4 : 2),
+      padding: EdgeInsets.all(
+        MacOSStyle.of(context)
+            ? 0
+            : mobile
+            ? 4
+            : 2,
+      ),
       decoration: ShapeDecoration(
         color: colors.tone2,
         shape: AppShape.all(BusinessRadius.navItem),
@@ -62,6 +69,10 @@ class BusinessSegmented<T> extends StatelessWidget {
     BusinessSegment<T> item,
     TextStyle style,
   ) {
+    final controlHeight = MacOSMetrics.segmentedHeight(
+      context,
+      fallback: height,
+    );
     final isSelected = item.value == selected;
     final foreground = isSelected
         ? context.colorScheme.onSurface
@@ -71,7 +82,7 @@ class BusinessSegmented<T> extends StatelessWidget {
       overlay: PressRegion.hoverOverlay,
       onTap: onSelected == null ? null : () => onSelected!(item.value),
       child: Container(
-        height: height,
+        height: controlHeight,
         padding: EdgeInsets.symmetric(horizontal: mobile ? 7 : 9),
         decoration: ShapeDecoration(
           color: isSelected ? context.colorScheme.surface : null,

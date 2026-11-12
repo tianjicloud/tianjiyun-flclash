@@ -30,18 +30,19 @@ const _RowMetrics _cardRowMetrics = (
 /// A tile's icon and switch sit as far in from its ends as from its edges, so
 /// a full pill keeps both concentric with its corners. Without the icon, the
 /// title lines up with the content of the cards above and below.
-_RowMetrics _tileMetricsOf(DashboardDensity density) => density.isCompact
+_RowMetrics _tileMetricsOf(DashboardDensity density, BuildContext context) =>
+    density.isCompact
     ? (
         padding: const EdgeInsets.fromLTRB(10, 0, 12, 0),
-        titleStart: dashboardCardPadding(density).left,
-        radius: dashboardCardRadius(density),
+        titleStart: dashboardCardPadding(density, context: context).left,
+        radius: dashboardCardRadius(density, context: context),
         icon: 36,
         subtitle: false,
       )
     : (
         padding: const EdgeInsets.fromLTRB(12, 0, 16, 0),
-        titleStart: dashboardCardPadding(density).left,
-        radius: dashboardCardRadius(density),
+        titleStart: dashboardCardPadding(density, context: context).left,
+        radius: dashboardCardRadius(density, context: context),
         icon: 40,
         subtitle: true,
       );
@@ -170,7 +171,7 @@ class NetworkTakeoverTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final metrics = _tileMetricsOf(DashboardDensityScope.of(context));
+    final metrics = _tileMetricsOf(DashboardDensityScope.of(context), context);
     return DashboardCard(
       padding: EdgeInsets.zero,
       child: LayoutBuilder(
@@ -204,7 +205,7 @@ class VpnTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
-    final metrics = _tileMetricsOf(DashboardDensityScope.of(context));
+    final metrics = _tileMetricsOf(DashboardDensityScope.of(context), context);
     final enabled = ref.watch(
       vpnSettingProvider.select((state) => state.enable),
     );
@@ -354,7 +355,7 @@ class _TakeoverBlockBody extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: showIcon ? 10 : 0,
-          vertical: 8,
+          vertical: MacOSStyle.of(context) ? 4 : 8,
         ),
         child: Row(
           mainAxisSize: showIcon ? MainAxisSize.max : MainAxisSize.min,
@@ -414,9 +415,14 @@ class VpnCard extends ConsumerWidget {
     void change(bool value) => _setVpn(ref, value);
     return DashboardCard(
       semanticLabel: 'VPN',
-      padding: dashboardCardPadding(
-        DashboardDensityScope.of(context),
-      ).copyWith(top: 16, bottom: 16),
+      padding:
+          dashboardCardPadding(
+            DashboardDensityScope.of(context),
+            context: context,
+          ).copyWith(
+            top: MacOSStyle.of(context) ? 12 : 16,
+            bottom: MacOSStyle.of(context) ? 12 : 16,
+          ),
       onTap: () => change(!enabled),
       child: Row(
         spacing: 14,

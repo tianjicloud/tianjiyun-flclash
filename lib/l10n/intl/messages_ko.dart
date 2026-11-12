@@ -1510,6 +1510,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "floating": MessageLookupByLibrary.simpleMessage("플로팅"),
     "followProfile": MessageLookupByLibrary.simpleMessage("프로필 따르기"),
     "followSystem": MessageLookupByLibrary.simpleMessage("시스템 설정 따르기"),
+    "followSystemAccent": MessageLookupByLibrary.simpleMessage("시스템 강조 색상 사용"),
     "fontFamily": MessageLookupByLibrary.simpleMessage("글꼴"),
     "fontSize": MessageLookupByLibrary.simpleMessage("크기"),
     "forceDnsMapping": MessageLookupByLibrary.simpleMessage("DNS 매핑 강제"),

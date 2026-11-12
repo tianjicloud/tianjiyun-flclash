@@ -152,7 +152,7 @@ class _AppMediaQuery extends StatelessWidget {
           top: padding.top > data.size.height * 0.3 ? 20.0 : padding.top,
         ),
       ),
-      child: child,
+      child: MacOSPlatformStyle(child: child),
     );
   }
 }

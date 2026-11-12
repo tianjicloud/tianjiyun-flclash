@@ -135,7 +135,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
     final qualityLoading =
         qualityState != null && quality == null && qualityState.isLoading;
     final loading = ipInfo == null ? !failed : qualityLoading;
-    final metrics = _OutboundMetrics.of(density);
+    final metrics = _OutboundMetrics.of(density, context);
     final appLocalizations = context.appLocalizations;
     final colorScheme = context.colorScheme;
     final colors = DashboardColors.of(context);
@@ -243,7 +243,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           : colorScheme.onSurfaceVariant;
       final toggle = _StartToggle(
         size: density.isDesktop
-            ? 184
+            ? MacOSMetrics.dashboardPowerSize(context, fallback: 184)
             : isStart
             ? 164
             : 180,
@@ -275,22 +275,29 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
       final content = density.isDesktop
           ? ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: 210 + (showBusinessSelection ? 84 : 0),
+                minHeight: MacOSMetrics.dashboardHeroMinHeight(
+                  context,
+                  fallback: 210 + (showBusinessSelection ? 84 : 0),
+                ),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(child: details),
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 22),
+                    padding: EdgeInsetsDirectional.only(
+                      end: MacOSStyle.of(context) ? 12 : 22,
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Center(child: toggle),
                         Container(
                           width: 1,
-                          height: 132,
-                          margin: const EdgeInsets.symmetric(horizontal: 24),
+                          height: MacOSStyle.of(context) ? 112 : 132,
+                          margin: EdgeInsets.symmetric(
+                            horizontal: MacOSStyle.of(context) ? 14 : 24,
+                          ),
                           color: const Color(0xFFE5E9EE),
                         ),
                         _HeroSpeeds(active: active, vertical: true),
@@ -358,7 +365,12 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
             Positioned.fill(child: _HeroBackdrop(mobile: !density.isDesktop)),
             Padding(
               padding: density.isDesktop
-                  ? const EdgeInsetsDirectional.fromSTEB(26, 13, 26, 13)
+                  ? EdgeInsetsDirectional.fromSTEB(
+                      MacOSStyle.of(context) ? 16 : 26,
+                      MacOSStyle.of(context) ? 8 : 13,
+                      MacOSStyle.of(context) ? 16 : 26,
+                      MacOSStyle.of(context) ? 8 : 13,
+                    )
                   : EdgeInsetsDirectional.fromSTEB(
                       20,
                       isStart ? 18 : 22,
@@ -392,7 +404,9 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
           Positioned.fill(
             child: ClipPath(
               clipper: ShapeBorderClipper(
-                shape: AppShape.all(dashboardCardRadius(density)),
+                shape: AppShape.all(
+                  dashboardCardRadius(density, context: context),
+                ),
                 textDirection: Directionality.of(context),
               ),
               child: Stack(
@@ -404,7 +418,9 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                     child: TweenAnimationBuilder<double>(
                       tween: Tween(end: isStart ? 1 : 0),
                       duration: context.motionDuration(_morphDuration),
-                      curve: Curves.easeOutBack,
+                      curve: MacOSStyle.of(context)
+                          ? Curves.easeOutCubic
+                          : Curves.easeOutBack,
                       builder: (_, progress, _) => Transform.rotate(
                         angle: _decorationTurn * progress,
                         child: Transform.scale(
@@ -518,47 +534,48 @@ class _OutboundMetrics {
     required this.decorationTop,
   });
 
-  factory _OutboundMetrics.of(DashboardDensity density) => switch (density) {
-    DashboardDensity.standard => _OutboundMetrics(
-      padding: dashboardCardPadding(density),
-      gap: 16,
-      ipTop: 10,
-      cellGap: 28,
-      badgeSize: 48,
-      ip: AppTextStyle.title1,
-      buttonSize: 184,
-      buttonSlot: 184,
-      decorationSize: 290,
-      decorationEnd: -64,
-      decorationTop: -87,
-    ),
-    DashboardDensity.compact => _OutboundMetrics(
-      padding: dashboardCardPadding(density),
-      gap: 16,
-      ipTop: 8,
-      cellGap: 22,
-      badgeSize: 40,
-      ip: AppTextStyle.title2,
-      buttonSize: 184,
-      buttonSlot: 184,
-      decorationSize: 250,
-      decorationEnd: -64,
-      decorationTop: -75,
-    ),
-    DashboardDensity.mobile => const _OutboundMetrics(
-      padding: EdgeInsetsDirectional.fromSTEB(20, 18, 16, 18),
-      gap: 10,
-      ipTop: 12,
-      cellGap: 24,
-      badgeSize: 48,
-      ip: AppTextStyle.title2,
-      buttonSize: 88,
-      buttonSlot: 88,
-      decorationSize: 240,
-      decorationEnd: -60,
-      decorationTop: -66,
-    ),
-  };
+  factory _OutboundMetrics.of(DashboardDensity density, BuildContext context) =>
+      switch (density) {
+        DashboardDensity.standard => _OutboundMetrics(
+          padding: dashboardCardPadding(density, context: context),
+          gap: 16,
+          ipTop: 10,
+          cellGap: 28,
+          badgeSize: 48,
+          ip: AppTextStyle.title1,
+          buttonSize: MacOSMetrics.dashboardPowerSize(context, fallback: 184),
+          buttonSlot: 184,
+          decorationSize: 290,
+          decorationEnd: -64,
+          decorationTop: -87,
+        ),
+        DashboardDensity.compact => _OutboundMetrics(
+          padding: dashboardCardPadding(density, context: context),
+          gap: 16,
+          ipTop: 8,
+          cellGap: 22,
+          badgeSize: 40,
+          ip: AppTextStyle.title2,
+          buttonSize: MacOSMetrics.dashboardPowerSize(context, fallback: 184),
+          buttonSlot: 184,
+          decorationSize: 250,
+          decorationEnd: -64,
+          decorationTop: -75,
+        ),
+        DashboardDensity.mobile => const _OutboundMetrics(
+          padding: EdgeInsetsDirectional.fromSTEB(20, 18, 16, 18),
+          gap: 10,
+          ipTop: 12,
+          cellGap: 24,
+          badgeSize: 48,
+          ip: AppTextStyle.title2,
+          buttonSize: 88,
+          buttonSlot: 88,
+          decorationSize: 240,
+          decorationEnd: -60,
+          decorationTop: -66,
+        ),
+      };
 
   final EdgeInsetsGeometry padding;
   final double gap;
@@ -1155,7 +1172,7 @@ class _HeroSpeeds extends ConsumerWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 18,
+      spacing: MacOSStyle.of(context) ? 6 : 18,
       children: cells,
     );
   }
@@ -1498,7 +1515,7 @@ class _CountryBadgeState extends State<_CountryBadge>
           onTap: enabled ? widget.onRefresh : null,
           onHover: (value) => setState(() => _hovered = value),
           onFocusChange: (value) => setState(() => _focused = value),
-          child: ElasticPress(
+          child: MacOSPressFeedback(
             enabled: enabled,
             child: AnimatedBuilder(
               animation: _turns,
@@ -1703,7 +1720,7 @@ class _StartToggleState extends ConsumerState<_StartToggle>
   );
   late final CurvedAnimation _progress = CurvedAnimation(
     parent: _controller,
-    curve: Curves.easeOutBack,
+    curve: MacOSStyle.of(context) ? Curves.easeOutCubic : Curves.easeOutBack,
     reverseCurve: Curves.easeInCubic,
   );
   late final AnimationController _pulseController = AnimationController(
@@ -1736,6 +1753,7 @@ class _StartToggleState extends ConsumerState<_StartToggle>
   void _syncPulse() {
     final idle =
         BusinessTheme.of(context) &&
+        !MacOSStyle.of(context) &&
         widget.pulseEnabled &&
         widget.enabled &&
         !widget.running &&
@@ -1924,7 +1942,7 @@ class _StartToggleState extends ConsumerState<_StartToggle>
           onHover: (value) => setState(() => _hovered = value),
           onPressedChanged: (value) => setState(() => _pressed = value),
           onFocusChange: (value) => setState(() => _focused = value),
-          child: ElasticPress(
+          child: MacOSPressFeedback(
             enabled: enabled,
             child: TweenAnimationBuilder<double>(
               tween: Tween(end: _overlay),
@@ -1973,7 +1991,9 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                       : TweenAnimationBuilder<double>(
                           tween: Tween(end: widget.running ? 1 : 0),
                           duration: _morphDuration,
-                          curve: Curves.easeOutBack,
+                          curve: MacOSStyle.of(context)
+                              ? Curves.easeOutCubic
+                              : Curves.easeOutBack,
                           builder: (_, progress, _) => GlyphIcon(
                             AppGlyphs.playPause(progress),
                             size: size * 0.34,

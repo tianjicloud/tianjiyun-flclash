@@ -458,6 +458,7 @@
   "textScale": "テキストの拡大縮小",
   "textScalePreview": "アプリ内の文字はこの大きさで表示されます",
   "followSystem": "システムに従う",
+  "followSystemAccent": "システムのアクセントカラーに従う",
   "internet": "インターネット",
   "systemApp": "システムアプリ",
   "noNetworkApp": "ネットワーク不使用アプリ",

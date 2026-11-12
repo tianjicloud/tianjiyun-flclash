@@ -458,6 +458,7 @@
   "textScale": "Escala del texto",
   "textScalePreview": "Así se verá el texto en la app",
   "followSystem": "Seguir el sistema",
+  "followSystemAccent": "Usar el color de énfasis del sistema",
   "internet": "Internet",
   "systemApp": "Apps del sistema",
   "noNetworkApp": "Apps sin red",

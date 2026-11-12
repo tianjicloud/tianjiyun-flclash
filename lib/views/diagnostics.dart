@@ -59,8 +59,8 @@ class DiagnosticsView extends ConsumerWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
+              padding: EdgeInsets.symmetric(
+                horizontal: MacOSMetrics.pageMargin(context, fallback: 16),
               ).copyWith(top: context.sectionsTopPadding, bottom: 16),
               child: DiagnosticsPanel(
                 onRun: () => refreshDiagnostics(ref),
@@ -71,10 +71,15 @@ class DiagnosticsView extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + context.bottomInset),
+            padding: EdgeInsets.fromLTRB(
+              MacOSMetrics.pageMargin(context, fallback: 16),
+              8,
+              MacOSMetrics.pageMargin(context, fallback: 16),
+              16 + context.bottomInset,
+            ),
             child: SizedBox(
               width: double.infinity,
-              height: 50,
+              height: MacOSMetrics.buttonHeight(context, fallback: 50),
               child: FilledButton(
                 onPressed: isLoading ? null : () => refreshDiagnostics(ref),
                 child: Row(
@@ -306,8 +311,8 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
       );
     }
     return Card(
-      radius: AppCorner.xl,
-      padding: const EdgeInsets.all(22),
+      radius: MacOSMetrics.cardRadius(context, fallback: AppCorner.xl),
+      padding: MacOSMetrics.cardPadding(context, const EdgeInsets.all(22)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

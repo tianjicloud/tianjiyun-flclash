@@ -33,7 +33,8 @@ class _ConnectionStatsCardState extends ConsumerState<ConnectionStatsCard>
   @override
   Widget build(BuildContext context) {
     final shape = AppShape.all(
-      dashboardCardRadius(DashboardDensityScope.of(context)) - _inset,
+      dashboardCardRadius(DashboardDensityScope.of(context), context: context) -
+          _inset,
     );
     return DashboardCard(
       semanticLabel: context.appLocalizations.connectionStats,

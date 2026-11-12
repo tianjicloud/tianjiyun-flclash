@@ -1809,6 +1809,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "floating": MessageLookupByLibrary.simpleMessage("Floating"),
     "followProfile": MessageLookupByLibrary.simpleMessage("Follow profile"),
     "followSystem": MessageLookupByLibrary.simpleMessage("Follow system"),
+    "followSystemAccent": MessageLookupByLibrary.simpleMessage(
+      "Follow system accent color",
+    ),
     "fontFamily": MessageLookupByLibrary.simpleMessage("Font family"),
     "fontSize": MessageLookupByLibrary.simpleMessage("Size"),
     "forceDnsMapping": MessageLookupByLibrary.simpleMessage(

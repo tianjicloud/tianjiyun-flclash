@@ -132,12 +132,12 @@ class OutboundModeBar extends ConsumerWidget {
       patchClashConfigProvider.select((state) => state.mode),
     );
     final appLocalizations = context.appLocalizations;
-    final outer = dashboardCardRadius(density) - _inset;
+    final outer = dashboardCardRadius(density, context: context) - _inset;
     final style = AppTextStyle.subheadline.of(context, emphasized: true);
     return DashboardCard(
       semanticLabel: appLocalizations.outboundMode,
       padding: EdgeInsetsDirectional.fromSTEB(
-        dashboardCardPadding(density).left,
+        dashboardCardPadding(density, context: context).left,
         _inset,
         _inset,
         _inset,

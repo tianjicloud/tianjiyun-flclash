@@ -3626,6 +3626,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Follow system accent color`
+  String get followSystemAccent {
+    return Intl.message(
+      'Follow system accent color',
+      name: 'followSystemAccent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Internet`
   String get internet {
     return Intl.message('Internet', name: 'internet', desc: '', args: []);

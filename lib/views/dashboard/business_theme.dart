@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:prism_ui/prism_ui.dart';
 import 'package:fl_clash/ui/business_style.dart';
+import 'package:fl_clash/ui/macos_style.dart';
 
 export 'package:fl_clash/ui/business_style.dart'
     show BusinessPalette, BusinessRadius, BusinessText;
@@ -31,13 +32,15 @@ class BusinessAppearance extends StatelessWidget {
     final theme = Theme.of(context);
     return Theme(
       data: theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: BusinessPalette.blue,
-          onPrimary: BusinessPalette.onBlue,
-          primaryContainer: BusinessPalette.residentialChip,
-          onPrimaryContainer: BusinessPalette.residentialChipText,
-          surfaceTint: BusinessPalette.blue,
-        ),
+        colorScheme: MacOSStyle.of(context)
+            ? theme.colorScheme
+            : theme.colorScheme.copyWith(
+                primary: BusinessPalette.blue,
+                onPrimary: BusinessPalette.onBlue,
+                primaryContainer: BusinessPalette.residentialChip,
+                onPrimaryContainer: BusinessPalette.residentialChipText,
+                surfaceTint: BusinessPalette.blue,
+              ),
       ),
       child: BusinessTheme(child: child),
     );

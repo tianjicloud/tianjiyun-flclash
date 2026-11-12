@@ -394,6 +394,7 @@ _ThemeProps _$ThemePropsFromJson(Map<String, dynamic> json) => _ThemeProps(
   background: json['background'] as String? ?? 'solid',
   pureBlack: json['pureBlack'] as bool? ?? false,
   sidebarBlur: json['sidebarBlur'] as bool? ?? false,
+  followSystemAccent: json['followSystemAccent'] as bool? ?? false,
   liquidGlass:
       $enumDecodeNullable(
         _$LiquidGlassModeEnumMap,
@@ -415,6 +416,7 @@ Map<String, dynamic> _$ThemePropsToJson(_ThemeProps instance) =>
       'background': instance.background,
       'pureBlack': instance.pureBlack,
       'sidebarBlur': instance.sidebarBlur,
+      'followSystemAccent': instance.followSystemAccent,
       'liquidGlass': _$LiquidGlassModeEnumMap[instance.liquidGlass]!,
       'textScale': instance.textScale,
       'systemFontFamily': instance.fontFamily,

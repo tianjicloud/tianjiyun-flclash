@@ -17,7 +17,7 @@ import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/navigation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_color/dynamic_color.dart' as system_colors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -32,6 +32,9 @@ class Bootstrap {
   }
 
   BootDecision _bootDecision = const BootDecision();
+  // The subscription lives for the process lifetime with the bootstrap singleton.
+  // ignore: cancel_subscriptions
+  StreamSubscription<Color>? _accentColorSubscription;
 
   Future<ProviderContainer> init(int version) async {
     globalState.appEnv = const String.fromEnvironment(
@@ -49,7 +52,7 @@ class Bootstrap {
     ({Color light, Color dark})? systemSeeds;
     Color? accentColor;
     try {
-      systemSeeds = await DynamicColorPlugin.getSystemSeeds();
+      systemSeeds = await system_colors.DynamicColorPlugin.getSystemSeeds();
     } catch (error) {
       commonPrint.log(
         'Failed to get core palette: $error',
@@ -57,7 +60,7 @@ class Bootstrap {
       );
     }
     try {
-      accentColor = await DynamicColorPlugin.getAccentColor();
+      accentColor = await system_colors.DynamicColorPlugin.getAccentColor();
     } catch (error) {
       commonPrint.log(
         'Failed to get accent color: $error',
@@ -123,6 +126,21 @@ class Bootstrap {
           darkSeed: dynamicColor.darkSeed,
           accentColor: dynamicColor.accentColor,
         );
+    if (system.isMacOS) {
+      _accentColorSubscription ??= system_colors
+          .DynamicColorPlugin
+          .accentColorChanges
+          .listen((accentColor) {
+            final current = container.read(dynamicColorProvider);
+            container
+                .read(dynamicColorProvider.notifier)
+                .seed(
+                  lightSeed: current.lightSeed,
+                  darkSeed: current.darkSeed,
+                  accentColor: accentColor,
+                );
+          });
+    }
     final profiles = await database.profilesDao.query().get();
     container.read(profilesProvider.notifier).reorder(profiles);
     await AppLocalizations.load(

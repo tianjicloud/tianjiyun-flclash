@@ -4,6 +4,14 @@ class DynamicColorPlugin {
   static const _channel = OptionalMethodChannel(
     'io.material.plugins/dynamic_color',
   );
+  static const _accentChanges = EventChannel(
+    'io.material.plugins/dynamic_color/accent_changes',
+  );
+
+  static Stream<Color> get accentColorChanges => _accentChanges
+      .receiveBroadcastStream()
+      .where((value) => value is int)
+      .map((value) => Color(value as int));
 
   // Native answers the primary palette's tones from 0 by tens to 90, then 95, 99, 100.
   static const _primaryTones = 13;

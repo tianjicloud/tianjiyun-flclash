@@ -52,10 +52,12 @@ class BusinessSettingsCard extends StatelessWidget {
       color: context.colorScheme.brightness == Brightness.dark
           ? context.colorScheme.surfaceContainerLow
           : context.colorScheme.surface,
-      shape: AppShape.all(BusinessPalette.cardRadius),
+      shape: AppShape.all(
+        MacOSMetrics.cardRadius(context, fallback: BusinessPalette.cardRadius),
+      ),
     ),
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: EdgeInsets.symmetric(vertical: MacOSStyle.of(context) ? 8 : 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
