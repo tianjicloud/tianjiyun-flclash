@@ -2,6 +2,224 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.19",
+      "tag": "v0.9.19",
+      "date": "2026-11-12",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "d563127",
+              "scope": "tray",
+              "text": "Draw the macOS menu bar speed row and scene and mode switches natively"
+            },
+            {
+              "id": "05e3c1c",
+              "scope": "android",
+              "text": "Open the right page from notifications and alert on residential failures and expiry"
+            },
+            {
+              "id": "f24c6c7",
+              "scope": "dashboard",
+              "text": "Verify the exit against the tianjicloud egress and nodes APIs"
+            },
+            {
+              "id": "1fe4e95",
+              "scope": "android",
+              "text": "Name the current line in the notification and quick tile"
+            },
+            {
+              "id": "f6b1480",
+              "scope": "tray",
+              "text": "Order the tianjicloud tray and menu bar like the design"
+            },
+            {
+              "id": "aacfb13",
+              "scope": "ui",
+              "text": "Finish the android tools, DNS, about and windows TUN pages"
+            },
+            {
+              "id": "d747c13",
+              "scope": "desktop",
+              "text": "Add the GNOME title bar, macOS sidebar and DNS resources page"
+            },
+            {
+              "id": "97a1fdf",
+              "scope": "onboarding",
+              "text": "Show the expired subscription step on mobile"
+            },
+            {
+              "id": "437bae6",
+              "scope": "android",
+              "text": "Match profile edit, DNS and resources, and advanced network"
+            },
+            {
+              "id": "9934944",
+              "scope": "android",
+              "text": "Match per-app proxy, onboarding failure and scan pages"
+            },
+            {
+              "id": "3588a54",
+              "scope": "tools",
+              "text": "Match the android tools, appearance and about pages"
+            },
+            {
+              "id": "d2fb1da",
+              "scope": "settings",
+              "text": "Add a system service page for the desktop helper"
+            },
+            {
+              "id": "61af78e",
+              "scope": "ui",
+              "text": "Explain core startup failures and add a core detail page"
+            },
+            {
+              "id": "7a0c285",
+              "scope": "ui",
+              "text": "Match onboarding, disclaimer and dashboard editor styling"
+            },
+            {
+              "id": "509c841",
+              "scope": "providers",
+              "text": "Match providers and DNS query detail to the design"
+            },
+            {
+              "id": "e9683a2",
+              "scope": "profiles",
+              "text": "Match the config preview and profile ordering sheet"
+            },
+            {
+              "id": "1c742dc",
+              "scope": "profiles",
+              "text": "Match the overrides and scripts page to the design"
+            },
+            {
+              "id": "4ae7f49",
+              "scope": "profiles",
+              "text": "Match the custom groups, rules and providers tabs"
+            },
+            {
+              "id": "768362a",
+              "scope": "profiles",
+              "text": "Frame the custom profile editor and its proxies tab"
+            },
+            {
+              "id": "1c24a31",
+              "scope": "settings",
+              "text": "Match MITM, icons and UA, developer and about pages"
+            },
+            {
+              "id": "c8aa9c4",
+              "scope": "settings",
+              "text": "Match inbound, TUN, DNS and rules settings pages"
+            },
+            {
+              "id": "e6f762f",
+              "scope": "settings",
+              "text": "Match hotkeys, on-demand and backup settings pages"
+            },
+            {
+              "id": "771f94f",
+              "scope": "settings",
+              "text": "Match the settings shell, general and appearance pages"
+            },
+            {
+              "id": "8613cd6",
+              "scope": "proxies",
+              "text": "Add a list view to the tianjicloud lines page"
+            },
+            {
+              "id": "8cd8c9b",
+              "scope": "profiles",
+              "text": "Match the subscription editor to the tianjicloud design"
+            },
+            {
+              "id": "0954d1c",
+              "scope": "profiles",
+              "text": "Add subscriptions from one tianjicloud dialog"
+            },
+            {
+              "id": "f563add",
+              "scope": "diagnostics",
+              "text": "Match android diagnostics and align page titles"
+            },
+            {
+              "id": "8cc2add",
+              "scope": "logs",
+              "text": "Match the windows logs and diagnostics page to the design"
+            },
+            {
+              "id": "1164080",
+              "scope": "connections",
+              "text": "Match connection detail and android connections"
+            },
+            {
+              "id": "ac97f8b",
+              "scope": "connections",
+              "text": "Match the windows connections page to the design"
+            },
+            {
+              "id": "1c104e9",
+              "scope": "profiles",
+              "text": "Match the subscription page to the tianjicloud design"
+            },
+            {
+              "id": "1e7f4df",
+              "scope": "proxies",
+              "text": "Match the android lines page and residential sheet"
+            },
+            {
+              "id": "b6ee016",
+              "scope": "proxies",
+              "text": "Match the windows lines page to the tianjicloud design"
+            },
+            {
+              "id": "b14b4f8",
+              "scope": "navigation",
+              "text": "Size the sidebar to the window and move android mode"
+            },
+            {
+              "id": "a575b45",
+              "scope": "dashboard",
+              "text": "Explain each scene and show the exit city"
+            },
+            {
+              "id": "6971b20",
+              "scope": "dashboard",
+              "text": "Warn above the hero when the exit cannot be trusted"
+            },
+            {
+              "id": "5717f74",
+              "scope": "dashboard",
+              "text": "Show an amber dial when the exit probe fails"
+            },
+            {
+              "id": "5c52c11",
+              "scope": "dashboard",
+              "text": "Match the android home to the tianjicloud design"
+            },
+            {
+              "id": "dae91e8",
+              "scope": "dashboard",
+              "text": "Match the windows dashboard to the tianjicloud design"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "804a743",
+              "scope": "ui",
+              "text": "Size the about mark, provider metadata and service card to the design"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.18",
       "tag": "v0.9.18",
       "date": "2026-11-09",

@@ -1,5 +1,53 @@
 # Changelog
 
+## v0.9.19 (2026-11-12)
+
+**Features**
+
+- **tray** Draw the macOS menu bar speed row and scene and mode switches natively (d563127)
+- **android** Open the right page from notifications and alert on residential failures and expiry (05e3c1c)
+- **dashboard** Verify the exit against the tianjicloud egress and nodes APIs (f24c6c7)
+- **android** Name the current line in the notification and quick tile (1fe4e95)
+- **tray** Order the tianjicloud tray and menu bar like the design (f6b1480)
+- **ui** Finish the android tools, DNS, about and windows TUN pages (aacfb13)
+- **desktop** Add the GNOME title bar, macOS sidebar and DNS resources page (d747c13)
+- **onboarding** Show the expired subscription step on mobile (97a1fdf)
+- **android** Match profile edit, DNS and resources, and advanced network (437bae6)
+- **android** Match per-app proxy, onboarding failure and scan pages (9934944)
+- **tools** Match the android tools, appearance and about pages (3588a54)
+- **settings** Add a system service page for the desktop helper (d2fb1da)
+- **ui** Explain core startup failures and add a core detail page (61af78e)
+- **ui** Match onboarding, disclaimer and dashboard editor styling (7a0c285)
+- **providers** Match providers and DNS query detail to the design (509c841)
+- **profiles** Match the config preview and profile ordering sheet (e9683a2)
+- **profiles** Match the overrides and scripts page to the design (1c742dc)
+- **profiles** Match the custom groups, rules and providers tabs (4ae7f49)
+- **profiles** Frame the custom profile editor and its proxies tab (768362a)
+- **settings** Match MITM, icons and UA, developer and about pages (1c24a31)
+- **settings** Match inbound, TUN, DNS and rules settings pages (c8aa9c4)
+- **settings** Match hotkeys, on-demand and backup settings pages (e6f762f)
+- **settings** Match the settings shell, general and appearance pages (771f94f)
+- **proxies** Add a list view to the tianjicloud lines page (8613cd6)
+- **profiles** Match the subscription editor to the tianjicloud design (8cd8c9b)
+- **profiles** Add subscriptions from one tianjicloud dialog (0954d1c)
+- **diagnostics** Match android diagnostics and align page titles (f563add)
+- **logs** Match the windows logs and diagnostics page to the design (8cc2add)
+- **connections** Match connection detail and android connections (1164080)
+- **connections** Match the windows connections page to the design (ac97f8b)
+- **profiles** Match the subscription page to the tianjicloud design (1c104e9)
+- **proxies** Match the android lines page and residential sheet (1e7f4df)
+- **proxies** Match the windows lines page to the tianjicloud design (b6ee016)
+- **navigation** Size the sidebar to the window and move android mode (b14b4f8)
+- **dashboard** Explain each scene and show the exit city (a575b45)
+- **dashboard** Warn above the hero when the exit cannot be trusted (6971b20)
+- **dashboard** Show an amber dial when the exit probe fails (5717f74)
+- **dashboard** Match the android home to the tianjicloud design (5c52c11)
+- **dashboard** Match the windows dashboard to the tianjicloud design (dae91e8)
+
+**Bug Fixes**
+
+- **ui** Size the about mark, provider metadata and service card to the design (804a743)
+
 ## v0.9.18 (2026-11-09)
 
 **Bug Fixes**
