@@ -406,8 +406,16 @@ class _Sidebar extends ConsumerWidget {
       selectedIndex: currentIndex,
       expanded: canExpand && sidebarExpanded,
       onSelected: onSelected,
-      onToggle: null,
-      showToggle: false,
+      onToggle: canExpand
+          ? () {
+              ref
+                  .read(appSettingProvider.notifier)
+                  .update(
+                    (state) =>
+                        state.copyWith(sidebarExpanded: !state.sidebarExpanded),
+                  );
+            }
+          : null,
       windowControls: windowControls,
     );
   }
