@@ -534,6 +534,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("현재 회선"),
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
+    "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
+      "카드를 드래그해 순서를 바꾸고 삭제 버튼을 누르세요. 연결 및 장면 영역은 상단에 고정됩니다.",
+    ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("데이터센터"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("속도 측정"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("시간 초과"),
@@ -1123,6 +1126,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "colorStyle": MessageLookupByLibrary.simpleMessage("색상 스타일"),
     "columns": MessageLookupByLibrary.simpleMessage("열"),
     "compact": MessageLookupByLibrary.simpleMessage("간결하게"),
+    "compactSidebar": MessageLookupByLibrary.simpleMessage("사이드바 간소화"),
     "compatible": MessageLookupByLibrary.simpleMessage("호환 모드"),
     "confirm": MessageLookupByLibrary.simpleMessage("확인"),
     "confirmClearAllData": MessageLookupByLibrary.simpleMessage(

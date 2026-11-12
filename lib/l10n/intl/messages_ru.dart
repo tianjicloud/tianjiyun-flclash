@@ -650,6 +650,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Текущий узел"),
+    "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
+      "Перетаскивайте карточки для сортировки и нажимайте кнопку удаления. Подключение и сцены закреплены сверху.",
+    ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("Дата-центр"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage(
       "Проверить скорость",
@@ -1371,6 +1374,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "colorStyle": MessageLookupByLibrary.simpleMessage("Стиль палитры"),
     "columns": MessageLookupByLibrary.simpleMessage("Столбцы"),
     "compact": MessageLookupByLibrary.simpleMessage("Компактный"),
+    "compactSidebar": MessageLookupByLibrary.simpleMessage(
+      "Компактная боковая панель",
+    ),
     "compatible": MessageLookupByLibrary.simpleMessage("Режим совместимости"),
     "confirm": MessageLookupByLibrary.simpleMessage("Подтвердить"),
     "confirmClearAllData": MessageLookupByLibrary.simpleMessage(

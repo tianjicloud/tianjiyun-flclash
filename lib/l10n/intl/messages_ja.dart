@@ -535,6 +535,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("現在の回線"),
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("現在のノード"),
+    "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
+      "カードをドラッグして並べ替え、削除ボタンをタップします。接続とシーンは上部に固定されます。",
+    ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("データセンター"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("速度測定"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("タイムアウト"),
@@ -1140,6 +1143,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "colorStyle": MessageLookupByLibrary.simpleMessage("配色スタイル"),
     "columns": MessageLookupByLibrary.simpleMessage("列数"),
     "compact": MessageLookupByLibrary.simpleMessage("コンパクト"),
+    "compactSidebar": MessageLookupByLibrary.simpleMessage("コンパクトなサイドバー"),
     "compatible": MessageLookupByLibrary.simpleMessage("互換モード"),
     "confirm": MessageLookupByLibrary.simpleMessage("OK"),
     "confirmClearAllData": MessageLookupByLibrary.simpleMessage(

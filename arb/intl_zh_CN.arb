@@ -221,6 +221,7 @@
   "showNotificationStopAction": "通知栏显示停止按钮",
   "pureBlackMode": "纯黑模式",
   "sidebar": "侧边栏",
+  "compactSidebar": "紧凑侧栏",
   "backgroundBlur": "背景模糊",
   "liquidGlass": "液态玻璃",
   "keepAliveIntervalDesc": "TCP保持活动间隔",
@@ -1764,5 +1765,6 @@
   "diagnosticsIpv6Blocked": "IPv6 流量由 TUN 接管，内核已关闭 IPv6，不会外发。",
   "diagnosticsIpv6ProxyOnly": "仅系统代理无法接管所有应用，IPv6 可能直连。请开启 TUN。",
   "diagnosticsEnableTun": "开启 TUN",
-  "diagnosticsIpv6Direct": "IPv6 未由 TUN 或系统代理接管，可能直接访问。"
+  "diagnosticsIpv6Direct": "IPv6 未由 TUN 或系统代理接管，可能直接访问。",
+  "businessDashboardEditorHint": "拖动卡片调整位置，点击删除按钮移除；连接区与场景条固定在顶部。"
 }

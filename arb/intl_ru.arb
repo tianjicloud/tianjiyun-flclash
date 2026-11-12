@@ -221,6 +221,7 @@
   "showNotificationStopAction": "Кнопка остановки в уведомлении",
   "pureBlackMode": "Чисто чёрный режим",
   "sidebar": "Боковая панель",
+  "compactSidebar": "Компактная боковая панель",
   "backgroundBlur": "Размытие фона",
   "liquidGlass": "Жидкое стекло",
   "keepAliveIntervalDesc": "Интервал TCP keep-alive",
@@ -1764,5 +1765,6 @@
   "diagnosticsIpv6Blocked": "Трафик IPv6 перехватывается TUN и блокируется ядром.",
   "diagnosticsIpv6ProxyOnly": "Системный прокси не охватывает все приложения; IPv6 может идти напрямую. Включите TUN.",
   "diagnosticsEnableTun": "Включить TUN",
-  "diagnosticsIpv6Direct": "IPv6 не перехватывается TUN или системным прокси и может подключаться напрямую."
+  "diagnosticsIpv6Direct": "IPv6 не перехватывается TUN или системным прокси и может подключаться напрямую.",
+  "businessDashboardEditorHint": "Перетаскивайте карточки для сортировки и нажимайте кнопку удаления. Подключение и сцены закреплены сверху."
 }

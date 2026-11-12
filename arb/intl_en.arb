@@ -221,6 +221,7 @@
   "showNotificationStopAction": "Stop button in notification",
   "pureBlackMode": "Pure black mode",
   "sidebar": "Sidebar",
+  "compactSidebar": "Compact sidebar",
   "backgroundBlur": "Background blur",
   "liquidGlass": "Liquid Glass",
   "keepAliveIntervalDesc": "TCP keep-alive interval",
@@ -1764,5 +1765,6 @@
   "diagnosticsIpv6Blocked": "IPv6 traffic is captured by TUN and blocked by the core.",
   "diagnosticsIpv6ProxyOnly": "System proxy does not capture every app; IPv6 may go direct. Enable TUN.",
   "diagnosticsEnableTun": "Enable TUN",
-  "diagnosticsIpv6Direct": "IPv6 is not captured by TUN or the system proxy and may connect directly."
+  "diagnosticsIpv6Direct": "IPv6 is not captured by TUN or the system proxy and may connect directly.",
+  "businessDashboardEditorHint": "Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top."
 }

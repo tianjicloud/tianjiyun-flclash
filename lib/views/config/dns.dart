@@ -73,15 +73,15 @@ extension on DnsOverrideKey {
     DnsOverrideKey.fakeIpFilter ||
     DnsOverrideKey.fakeIpFilterMode ||
     DnsOverrideKey.fakeIpTtl => 'Fake-IP',
+    DnsOverrideKey.proxyServerNameserver ||
+    DnsOverrideKey.proxyServerNameserverPolicy => '${l.proxies} DNS',
+    DnsOverrideKey.directNameserver ||
+    DnsOverrideKey.directNameserverFollowPolicy => '${l.direct} DNS',
     DnsOverrideKey.defaultNameserver ||
     DnsOverrideKey.nameserverPolicy ||
     DnsOverrideKey.nameserver ||
     DnsOverrideKey.fallback ||
-    DnsOverrideKey.fallbackLazyQuery ||
-    DnsOverrideKey.proxyServerNameserver ||
-    DnsOverrideKey.proxyServerNameserverPolicy ||
-    DnsOverrideKey.directNameserver ||
-    DnsOverrideKey.directNameserverFollowPolicy => 'Nameserver',
+    DnsOverrideKey.fallbackLazyQuery => 'Nameserver',
     DnsOverrideKey.fallbackFilterGeoip ||
     DnsOverrideKey.fallbackFilterGeoipCode ||
     DnsOverrideKey.fallbackFilterGeosite ||

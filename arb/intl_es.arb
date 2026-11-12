@@ -221,6 +221,7 @@
   "showNotificationStopAction": "Botón de detener en la notificación",
   "pureBlackMode": "Modo negro puro",
   "sidebar": "Barra lateral",
+  "compactSidebar": "Barra lateral compacta",
   "backgroundBlur": "Desenfoque de fondo",
   "liquidGlass": "Liquid Glass",
   "keepAliveIntervalDesc": "Intervalo de keep-alive TCP",
@@ -1764,5 +1765,6 @@
   "diagnosticsIpv6Blocked": "TUN captura el tráfico IPv6 y el núcleo lo bloquea.",
   "diagnosticsIpv6ProxyOnly": "El proxy del sistema no captura todas las aplicaciones; IPv6 puede ir directamente. Activa TUN.",
   "diagnosticsEnableTun": "Activar TUN",
-  "diagnosticsIpv6Direct": "Ni TUN ni el proxy del sistema capturan IPv6, que puede conectarse directamente."
+  "diagnosticsIpv6Direct": "Ni TUN ni el proxy del sistema capturan IPv6, que puede conectarse directamente.",
+  "businessDashboardEditorHint": "Arrastra las tarjetas para reordenarlas y pulsa el botón de eliminar. La conexión y las escenas permanecen arriba."
 }

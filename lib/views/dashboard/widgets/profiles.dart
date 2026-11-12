@@ -158,6 +158,7 @@ class ProfilesCard extends ConsumerWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 12,
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,

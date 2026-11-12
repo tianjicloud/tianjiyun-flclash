@@ -456,7 +456,7 @@ enum DashboardWidget {
   currentOutbound,
   networkSpeed,
   trafficSavings,
-  outboundMode,
+  outboundMode(platforms: desktopPlatforms),
   vpnButton(platforms: [SupportPlatform.Android]),
   networkTakeover(platforms: desktopPlatforms),
   serviceStatus,
@@ -469,6 +469,19 @@ enum DashboardWidget {
   final List<SupportPlatform> platforms;
 
   const DashboardWidget({this.platforms = SupportPlatform.values});
+}
+
+enum BusinessDashboardCard {
+  residentialLines,
+  monthlyTraffic,
+  subscription,
+  networkTakeover,
+  aiAvailability,
+  networkSpeed,
+  trafficSavings,
+  proxyGroups,
+  connectionStats,
+  intranetIp,
 }
 
 enum DnsQueryInitiator { app, rule, direct, proxy, other }

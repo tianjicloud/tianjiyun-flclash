@@ -1726,6 +1726,16 @@ class AppLocalizations {
     return Intl.message('Sidebar', name: 'sidebar', desc: '', args: []);
   }
 
+  /// `Compact sidebar`
+  String get compactSidebar {
+    return Intl.message(
+      'Compact sidebar',
+      name: 'compactSidebar',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Background blur`
   String get backgroundBlur {
     return Intl.message(
@@ -14433,6 +14443,16 @@ class AppLocalizations {
     return Intl.message(
       'IPv6 is not captured by TUN or the system proxy and may connect directly.',
       name: 'diagnosticsIpv6Direct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.`
+  String get businessDashboardEditorHint {
+    return Intl.message(
+      'Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.',
+      name: 'businessDashboardEditorHint',
       desc: '',
       args: [],
     );

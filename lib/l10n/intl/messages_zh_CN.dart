@@ -512,6 +512,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("当前线路"),
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("当前节点"),
+    "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
+      "拖动卡片调整位置，点击删除按钮移除；连接区与场景条固定在顶部。",
+    ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("机房"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("测速"),
     "businessDelayTimeout": MessageLookupByLibrary.simpleMessage("超时"),
@@ -1023,6 +1026,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "colorStyle": MessageLookupByLibrary.simpleMessage("配色风格"),
     "columns": MessageLookupByLibrary.simpleMessage("列数"),
     "compact": MessageLookupByLibrary.simpleMessage("紧凑"),
+    "compactSidebar": MessageLookupByLibrary.simpleMessage("紧凑侧栏"),
     "compatible": MessageLookupByLibrary.simpleMessage("兼容模式"),
     "confirm": MessageLookupByLibrary.simpleMessage("确定"),
     "confirmClearAllData": MessageLookupByLibrary.simpleMessage("确定要清除所有数据？"),

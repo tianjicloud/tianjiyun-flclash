@@ -221,6 +221,7 @@
   "showNotificationStopAction": "알림에 중지 버튼 표시",
   "pureBlackMode": "퓨어 블랙 모드",
   "sidebar": "사이드바",
+  "compactSidebar": "사이드바 간소화",
   "backgroundBlur": "배경 흐림",
   "liquidGlass": "Liquid Glass",
   "keepAliveIntervalDesc": "TCP 킵얼라이브 간격",
@@ -1764,5 +1765,6 @@
   "diagnosticsIpv6Blocked": "TUN이 IPv6 트래픽을 받으며 코어에서 차단합니다.",
   "diagnosticsIpv6ProxyOnly": "시스템 프록시는 모든 앱을 가로채지 못해 IPv6가 직접 연결될 수 있습니다. TUN을 켜세요.",
   "diagnosticsEnableTun": "TUN 켜기",
-  "diagnosticsIpv6Direct": "IPv6가 TUN 또는 시스템 프록시에 의해 가로채지지 않아 직접 연결될 수 있습니다."
+  "diagnosticsIpv6Direct": "IPv6가 TUN 또는 시스템 프록시에 의해 가로채지지 않아 직접 연결될 수 있습니다.",
+  "businessDashboardEditorHint": "카드를 드래그해 순서를 바꾸고 삭제 버튼을 누르세요. 연결 및 장면 영역은 상단에 고정됩니다."
 }

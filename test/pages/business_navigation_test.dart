@@ -163,10 +163,6 @@ void main() {
     final container = _container(_profile(business: true));
     addTearDown(container.dispose);
     _setSize(tester, container, const Size(1200, 800));
-    container
-        .read(appSettingProvider.notifier)
-        .update((state) => state.copyWith(sidebarExpanded: false));
-
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,

@@ -147,10 +147,35 @@ void main() {
       expect(restored.autoCheckUpdate, true);
       expect(restored.backgroundResidentialCheck, false);
       expect(restored.sidebarExpanded, true);
+      expect(restored.businessDashboardCards, defaultBusinessDashboardCards);
       expect(restored.minimizeOnExit, true);
       expect(restored.restoreStrategy, RestoreStrategy.compatible);
       expect(restored.userAgents, defaultUserAgents);
       expect(restored.filters, defaultFilters);
+    });
+
+    test('business dashboard cards default for old data and round trip', () {
+      expect(
+        AppSettingProps.fromJson({}).businessDashboardCards,
+        defaultBusinessDashboardCards,
+      );
+      const cards = [
+        BusinessDashboardCard.subscription,
+        BusinessDashboardCard.networkSpeed,
+      ];
+      expect(
+        roundTrip(
+          () => const AppSettingProps(businessDashboardCards: cards).toJson(),
+          AppSettingProps.fromJson,
+        ).businessDashboardCards,
+        cards,
+      );
+      expect(
+        AppSettingProps.fromJson({
+          'businessDashboardCards': ['networkSpeed', 'futureCard'],
+        }).businessDashboardCards,
+        [BusinessDashboardCard.networkSpeed],
+      );
     });
 
     test(

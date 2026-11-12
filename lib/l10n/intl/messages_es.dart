@@ -666,6 +666,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("Línea actual"),
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nodo actual"),
+    "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
+      "Arrastra las tarjetas para reordenarlas y pulsa el botón de eliminar. La conexión y las escenas permanecen arriba.",
+    ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage(
       "Centro de datos",
     ),
@@ -1391,6 +1394,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "colorStyle": MessageLookupByLibrary.simpleMessage("Estilo de color"),
     "columns": MessageLookupByLibrary.simpleMessage("Columnas"),
     "compact": MessageLookupByLibrary.simpleMessage("Compacto"),
+    "compactSidebar": MessageLookupByLibrary.simpleMessage(
+      "Barra lateral compacta",
+    ),
     "compatible": MessageLookupByLibrary.simpleMessage(
       "Modo de compatibilidad",
     ),

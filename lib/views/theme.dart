@@ -71,6 +71,10 @@ class ThemeView extends StatelessWidget {
                   const SizedBox(height: 16),
                   const _LiquidGlassItem(),
                   const SizedBox(height: 16),
+                  if (system.isDesktop) ...[
+                    const _CompactSidebarItem(),
+                    const SizedBox(height: 16),
+                  ],
                   if (system.isWindows) ...[
                     const _SidebarBlurItem(),
                     const SizedBox(height: 16),
@@ -241,13 +245,25 @@ class _BusinessThemeView extends StatelessWidget {
           title: l10n.tabAnimation,
           child: const _TabAnimationItem(business: true),
         ),
-        if (system.isWindows) ...[
+        if (system.isDesktop) ...[
           const SizedBox(height: 14),
-          if (!MacOSStyle.of(context))
-            _BusinessThemeCard(
-              title: l10n.sidebar,
-              child: const _SidebarBlurItem(business: true),
+          _BusinessThemeCard(
+            title: l10n.sidebar,
+            child: Column(
+              children: [
+                const _CompactSidebarItem(),
+                if (system.isWindows) ...[
+                  SizedBox(
+                    height: 1,
+                    child: ColoredBox(
+                      color: context.colorScheme.outlineVariant,
+                    ),
+                  ),
+                  const _SidebarBlurItem(business: true),
+                ],
+              ],
             ),
+          ),
         ],
       ],
     );
@@ -1101,6 +1117,19 @@ class _LiquidGlassItem extends ConsumerWidget {
       },
     );
   }
+}
+
+class _CompactSidebarItem extends StatelessWidget {
+  const _CompactSidebarItem();
+
+  @override
+  Widget build(BuildContext context) => ConfigToggleItem(
+    title: (l) => l.compactSidebar,
+    selector: appSettingProvider.select((state) => !state.sidebarExpanded),
+    onChanged: (ref, value) => ref
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(sidebarExpanded: !value)),
+  );
 }
 
 class _SidebarBlurItem extends StatelessWidget {

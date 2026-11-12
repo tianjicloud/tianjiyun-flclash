@@ -452,6 +452,7 @@ class _BusinessSettingsLayoutState
     final navigation = ref
         .watch(moreToolsSelectorStateProvider)
         .navigationItems;
+    final profile = ref.watch(currentProfileProvider);
     final entries = [
       _SettingsEntry(
         'general',
@@ -508,6 +509,13 @@ class _BusinessSettingsLayoutState
         l10n.businessSettingsRules,
         const _RuleSettingsView(),
       ),
+      if (profile != null)
+        _SettingsEntry(
+          'sniffer',
+          l10n.businessSettingsNetworkAdvanced,
+          l10n.sniffer,
+          SnifferView(profile.id),
+        ),
       if (mitmFeature)
         _SettingsEntry(
           'mitm',
@@ -1956,6 +1964,12 @@ class _IconAndUaSettingsView extends ConsumerWidget {
         ),
         BusinessSettingsCard(
           title: l10n.iconSets,
+          footer: iconSets.isEmpty
+              ? null
+              : _IconSetGalleryPreview(
+                  label: l10n.preview,
+                  icons: iconSets.first.icons,
+                ),
           trailing: BusinessSecondaryButton(
             label: l10n.businessManage,
             width: 84,
@@ -1995,6 +2009,50 @@ class _IconAndUaSettingsView extends ConsumerWidget {
       ],
     );
   }
+}
+
+class _IconSetGalleryPreview extends StatelessWidget {
+  const _IconSetGalleryPreview({required this.label, required this.icons});
+
+  final String label;
+  final List<IconSetIcon> icons;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsetsDirectional.fromSTEB(18, 12, 18, 2),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: BusinessText.metaLabel(context)),
+        const SizedBox(height: 8),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            spacing: 8,
+            children: [
+              for (final icon in icons.take(8))
+                Tooltip(
+                  message: icon.label,
+                  child: DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: context.colorScheme.surfaceContainerLow,
+                      shape: AppShape.sm,
+                    ),
+                    child: SizedBox.square(
+                      dimension: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: CommonTargetIcon(src: icon.url),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _LocaleItem extends ConsumerWidget {

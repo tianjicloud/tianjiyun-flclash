@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/common/default_line.dart';
 import 'package:fl_clash/common/service_probe.dart' show routedOutbound;
@@ -19,10 +20,13 @@ import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
+import 'package:fl_clash/views/dashboard/edit.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart';
+import 'package:fl_clash/views/dashboard/widgets/connection_stats.dart';
 import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
+import 'package:fl_clash/views/dashboard/widgets/intranet_ip.dart';
 import 'package:fl_clash/views/diagnostics.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
 import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
@@ -33,6 +37,7 @@ import 'package:fl_clash/views/dashboard/widgets/quick_lines.dart';
 import 'package:fl_clash/views/dashboard/widgets/scene_bar.dart';
 import 'package:fl_clash/views/dashboard/widgets/service_status.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
+import 'package:fl_clash/views/dashboard/widgets/traffic.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/rendering.dart';
@@ -42,52 +47,106 @@ import 'package:intl/intl.dart';
 
 const _businessMaxWidth = 1284.0;
 
-class BusinessDashboardView extends ConsumerWidget {
+class BusinessDashboardView extends ConsumerStatefulWidget {
   const BusinessDashboardView({super.key, required this.platform});
 
   final SupportPlatform platform;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BusinessDashboardView> createState() =>
+      _BusinessDashboardViewState();
+}
+
+class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
+  var _editing = false;
+
+  void _setEditing(bool value) => setState(() => _editing = value);
+
+  @override
+  Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     final mobile = MediaQuery.sizeOf(context).width < 640;
+    final dashboardCards = ref.watch(
+      appSettingProvider.select((state) => state.businessDashboardCards),
+    );
     return BusinessAppearance(
       child: Builder(
         builder: (context) => Scaffold(
           businessTitleInset: !mobile,
           backgroundColor: DashboardColors.of(context).page,
           opaqueAppBar: context.colorScheme.brightness == Brightness.light,
-          title: mobile ? null : appLocalizations.dashboard,
-          titleWidget: mobile
+          title: _editing ? appLocalizations.editDashboard : null,
+          titleWidget: _editing
+              ? Text(
+                  appLocalizations.editDashboard,
+                  style: BusinessText.pageTitle(context),
+                )
+              : mobile
               ? const _MobileBrandTitle()
               : Text(
                   appLocalizations.dashboard,
                   style: BusinessText.pageTitle(context),
                 ),
+          confirmationAction: _editing
+              ? IconButtonData(
+                  glyph: AppGlyphs.check,
+                  tooltip: appLocalizations.done,
+                  onPressed: () => _setEditing(false),
+                )
+              : null,
+          iconActions: _editing
+              ? const []
+              : [
+                  IconButtonData(
+                    glyph: AppGlyphs.edit,
+                    tooltip: appLocalizations.editDashboard,
+                    onPressed: () => _setEditing(true),
+                  ),
+                ],
           actions: [
-            if (mobile) ...[
+            if (!_editing && mobile) ...[
               const _MobileNotice(),
               const UpdateStatusButton(),
-            ] else ...[
+            ] else if (!_editing) ...[
               const _DesktopBarStatus(),
               const UpdateStatusButton(),
             ],
           ],
-          body: LayoutBuilder(
-            builder: (context, constraints) {
-              final scale = math.max(
-                1.0,
-                MediaQuery.textScalerOf(context).scale(1),
-              );
-              final room = constraints.biggest / scale;
-              final density = _businessDensityOf(room);
-              return DashboardDensityScope(
-                density: density,
-                scale: scale,
-                child: _BusinessBody(density: density, platform: platform),
-              );
-            },
-          ),
+          body: _editing
+              ? SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(
+                    mobile ? 18 : 29,
+                    mobile
+                        ? context.contentTopPadding
+                        : MacOSMetrics.dashboardTopPadding(
+                            context,
+                            appBarInset: context.appBarInset,
+                            fallback: context.appBarInset - 18,
+                          ),
+                    mobile ? 18 : 29,
+                    24 + context.bottomInset,
+                  ),
+                  child: BusinessDashboardEditor(cards: dashboardCards),
+                )
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    final scale = math.max(
+                      1.0,
+                      MediaQuery.textScalerOf(context).scale(1),
+                    );
+                    final room = constraints.biggest / scale;
+                    final density = _businessDensityOf(room);
+                    return DashboardDensityScope(
+                      density: density,
+                      scale: scale,
+                      child: _BusinessBody(
+                        density: density,
+                        platform: widget.platform,
+                        cards: dashboardCards,
+                      ),
+                    );
+                  },
+                ),
         ),
       ),
     );
@@ -95,10 +154,15 @@ class BusinessDashboardView extends ConsumerWidget {
 }
 
 class _BusinessBody extends ConsumerWidget {
-  const _BusinessBody({required this.density, required this.platform});
+  const _BusinessBody({
+    required this.density,
+    required this.platform,
+    required this.cards,
+  });
 
   final DashboardDensity density;
   final SupportPlatform platform;
+  final List<BusinessDashboardCard> cards;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -139,6 +203,7 @@ class _BusinessBody extends ConsumerWidget {
     );
     final hasMobileMetrics =
         subInfo != null && subInfo.total > 0 && subInfo.expire > 0;
+    final isDefaultLayout = listEquals(cards, defaultBusinessDashboardCards);
     final scale = DashboardDensityScope.scaleOf(context);
     final mobile = !density.isDesktop;
     final gap = mobile
@@ -158,6 +223,40 @@ class _BusinessBody extends ConsumerWidget {
       mobile ? 18 : 29,
       (mobile ? 18 : 24) + context.bottomInset,
     );
+    Widget configuredCard(BusinessDashboardCard card) => switch (card) {
+      BusinessDashboardCard.residentialLines =>
+        mobile
+            ? QuickLines(
+                onChooseResidential: () => showResidentialExitSheet(context),
+              )
+            : const BusinessLineCard(),
+      BusinessDashboardCard.monthlyTraffic =>
+        mobile && hasMobileMetrics
+            ? const MobileUsageCard()
+            : const TrafficSavingsCard(),
+      BusinessDashboardCard.subscription => ProfilesCard(
+        title: context.appLocalizations.subscriptionInfo,
+      ),
+      BusinessDashboardCard.networkTakeover => _TakeoverRow(
+        platform: platform,
+        density: density,
+      ),
+      BusinessDashboardCard.aiAvailability => const BusinessAIStatusCard(),
+      BusinessDashboardCard.networkSpeed => const NetworkSpeedCard(),
+      BusinessDashboardCard.trafficSavings => const TrafficSavingsCard(),
+      BusinessDashboardCard.proxyGroups => const ProxyGroupsCard(),
+      BusinessDashboardCard.connectionStats => const ConnectionStatsCard(),
+      BusinessDashboardCard.intranetIp => const IntranetIpCard(),
+    };
+
+    final controlBar = _ControlBar(
+      platform: platform,
+      showNetworkTakeover: cards.contains(
+        BusinessDashboardCard.networkTakeover,
+      ),
+      showAiAvailability: cards.contains(BusinessDashboardCard.aiAvailability),
+    );
+
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: padding,
@@ -239,13 +338,13 @@ class _BusinessBody extends ConsumerWidget {
                   ],
                   if (mobile && platform == SupportPlatform.Android)
                     const BusinessOutboundModeWarning(),
-                  if (!density.isDesktop)
+                  if (isDefaultLayout && !density.isDesktop)
                     QuickLines(
                       onChooseResidential: () =>
                           showResidentialExitSheet(context),
                     ),
                   if (mobile) const _MobileExpiryNotice(),
-                  if (density.isDesktop) ...[
+                  if (isDefaultLayout && density.isDesktop) ...[
                     if (needsTakeover)
                       Text(
                         context.appLocalizations.residentialCaptureOff,
@@ -304,9 +403,9 @@ class _BusinessBody extends ConsumerWidget {
                         context,
                         fallback: 72 * scale,
                       ),
-                      child: _ControlBar(platform: platform),
+                      child: controlBar,
                     ),
-                  ] else ...[
+                  ] else if (isDefaultLayout) ...[
                     if (needsTakeover)
                       Text(
                         context.appLocalizations.residentialCaptureOff,
@@ -353,7 +452,60 @@ class _BusinessBody extends ConsumerWidget {
                       },
                     ),
                   ],
-                  if (!density.isDesktop)
+                  if (!isDefaultLayout) ...[
+                    if (density.isDesktop)
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final columns = constraints.maxWidth / scale < 820
+                              ? 2
+                              : 3;
+                          final width =
+                              (constraints.maxWidth - gap * (columns - 1)) /
+                              columns;
+                          final gridCards = cards
+                              .where(
+                                (card) =>
+                                    card !=
+                                        BusinessDashboardCard.networkTakeover &&
+                                    card !=
+                                        BusinessDashboardCard.aiAvailability,
+                              )
+                              .toList();
+                          return Wrap(
+                            spacing: gap,
+                            runSpacing: gap,
+                            children: [
+                              for (final card in gridCards)
+                                SizedBox(
+                                  width: width,
+                                  child: configuredCard(card),
+                                ),
+                            ],
+                          );
+                        },
+                      )
+                    else
+                      for (final card in cards)
+                        Padding(
+                          padding: EdgeInsets.only(bottom: gap),
+                          child: configuredCard(card),
+                        ),
+                    if (density.isDesktop &&
+                        (cards.contains(
+                              BusinessDashboardCard.networkTakeover,
+                            ) ||
+                            cards.contains(
+                              BusinessDashboardCard.aiAvailability,
+                            )))
+                      SizedBox(
+                        height: MacOSMetrics.dashboardControlHeight(
+                          context,
+                          fallback: 72 * scale,
+                        ),
+                        child: controlBar,
+                      ),
+                  ],
+                  if (isDefaultLayout && !density.isDesktop)
                     _TakeoverRow(platform: platform, density: density),
                 ],
               ),
@@ -742,17 +894,25 @@ class BusinessOutboundModeWarning extends ConsumerWidget {
 /// and diagnostics in one card, so the page ends with a single control
 /// surface instead of a row of separate cards.
 class _ControlBar extends StatelessWidget {
-  const _ControlBar({required this.platform});
+  const _ControlBar({
+    required this.platform,
+    this.showNetworkTakeover = true,
+    this.showAiAvailability = true,
+  });
 
   final SupportPlatform platform;
+  final bool showNetworkTakeover;
+  final bool showAiAvailability;
 
   @override
   Widget build(BuildContext context) {
     final density = DashboardDensityScope.of(context);
-    final hasTakeover = DashboardWidget.networkTakeover.platforms.contains(
-      platform,
-    );
-    final blocks = hasTakeover
+    final hasTakeover =
+        showNetworkTakeover &&
+        DashboardWidget.networkTakeover.platforms.contains(platform);
+    final blocks = !showNetworkTakeover
+        ? const <Widget>[]
+        : hasTakeover
         ? const [
             NetworkTakeoverBlock(TakeoverSwitch.systemProxy, showIcon: false),
             NetworkTakeoverBlock(TakeoverSwitch.tun, showIcon: false),
@@ -803,16 +963,17 @@ class _ControlBar extends StatelessWidget {
                     const SizedBox(width: 22),
                     _controlDivider(context),
                     const SizedBox(width: 22),
-                  ] else ...[
+                  ] else if (blocks.isNotEmpty) ...[
                     ...blockWidgets,
-                    const SizedBox(width: 22),
+                    if (showAiAvailability) const SizedBox(width: 22),
                   ],
-                  Expanded(
-                    child: Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: aiServices,
+                  if (showAiAvailability)
+                    Expanded(
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: aiServices,
+                      ),
                     ),
-                  ),
                   diagnostics,
                 ],
               ),
@@ -822,7 +983,11 @@ class _ControlBar extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             crossAxisAlignment: WrapCrossAlignment.center,
-            children: [...blockWidgets, aiServices, diagnostics],
+            children: [
+              ...blockWidgets,
+              if (showAiAvailability) aiServices,
+              diagnostics,
+            ],
           );
         },
       ),

@@ -3,11 +3,14 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/models/config.dart'
+    show defaultBusinessDashboardCards, platformDefaultDashboardWidgets;
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/business_widget_registry.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
-    show BusinessPrimaryButton, DashboardSwitch;
+    show BusinessPrimaryButton, BusinessSecondaryButton, DashboardSwitch;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -31,6 +34,246 @@ const _roomDuration = Duration(milliseconds: 260);
 const _appearDuration = Duration(milliseconds: 200);
 const _appearScale = 0.92;
 const _liftGrowth = 0.03;
+
+class BusinessDashboardEditor extends ConsumerWidget {
+  const BusinessDashboardEditor({super.key, required this.cards});
+
+  final List<BusinessDashboardCard> cards;
+
+  void _save(WidgetRef ref, List<BusinessDashboardCard> next) {
+    ref
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(businessDashboardCards: next));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.appLocalizations;
+    final addable = BusinessDashboardCard.values
+        .where((card) => !cards.contains(card))
+        .toList();
+    final fixed = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 8,
+      children: [
+        Text(
+          strings.businessDashboardEditorHint,
+          style: BusinessText.metaLabel(context),
+        ),
+        _BusinessFixedRow(
+          title: strings.status,
+          description: strings.currentOutboundDesc,
+          icon: AppGlyphs.status,
+        ),
+        _BusinessFixedRow(
+          title: '${strings.scene} · ${strings.outboundMode}',
+          description: strings.docked,
+          icon: AppGlyphs.split,
+        ),
+      ],
+    );
+    final shown = CustomScrollView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      slivers: [
+        SliverReorderableList(
+          itemCount: cards.length,
+          itemBuilder: (context, index) {
+            final card = cards[index];
+            return Padding(
+              key: ValueKey(card),
+              padding: const EdgeInsets.only(bottom: _rowGap),
+              child: _BusinessEditableCardRow(
+                card: card,
+                tooltip: strings.remove,
+                dragIndex: index,
+                onRemove: () =>
+                    _save(ref, cards.where((item) => item != card).toList()),
+              ),
+            );
+          },
+          onReorderItem: (from, to) =>
+              _save(ref, cards.copyAndReorder(from, to)),
+        ),
+      ],
+    );
+    final addableCards = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: _rowGap,
+      children: [
+        Text(
+          strings.dashboardAddableSection,
+          style: BusinessText.cardTitle(context),
+        ),
+        for (final card in addable)
+          _BusinessEditableCardRow(
+            key: ValueKey('add-$card'),
+            card: card,
+            add: true,
+            tooltip: strings.add,
+            onAdd: () => _save(ref, [...cards, card]),
+          ),
+      ],
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final desktop = constraints.maxWidth >= 720;
+        final left = Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 8,
+          children: [fixed, shown],
+        );
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 14,
+          children: [
+            if (desktop)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 18,
+                children: [
+                  Expanded(child: left),
+                  SizedBox(width: 320, child: addableCards),
+                ],
+              )
+            else ...[
+              fixed,
+              shown,
+              addableCards,
+            ],
+            Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: BusinessSecondaryButton(
+                label: strings.reset,
+                width: 132,
+                onPressed: () => _save(ref, defaultBusinessDashboardCards),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _BusinessFixedRow extends StatelessWidget {
+  const _BusinessFixedRow({
+    required this.title,
+    required this.description,
+    required this.icon,
+  });
+
+  final String title;
+  final String description;
+  final Glyph icon;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: context.colorScheme.surfaceContainerLow,
+      shape: AppShape.all(BusinessPalette.cardRadius),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        spacing: 12,
+        children: [
+          GlyphIcon(icon, size: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: BusinessText.cardTitle(context)),
+                Text(
+                  description,
+                  style: BusinessText.metaLabel(
+                    context,
+                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+          Text(context.appLocalizations.docked),
+        ],
+      ),
+    ),
+  );
+}
+
+class _BusinessEditableCardRow extends StatelessWidget {
+  const _BusinessEditableCardRow({
+    super.key,
+    required this.card,
+    required this.tooltip,
+    this.onRemove,
+    this.onAdd,
+    this.add = false,
+    this.dragIndex,
+  });
+
+  final BusinessDashboardCard card;
+  final String tooltip;
+  final VoidCallback? onRemove;
+  final VoidCallback? onAdd;
+  final bool add;
+  final int? dragIndex;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: ShapeDecoration(
+      color: context.colorScheme.surface,
+      shape: AppShape.all(BusinessPalette.cardRadius),
+    ),
+    child: Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 12, 12),
+      child: Row(
+        spacing: 12,
+        children: [
+          GlyphIcon(card.glyph, size: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  card.label(context),
+                  style: BusinessText.cardTitle(context),
+                ),
+                if (card.description(context) case final description?)
+                  Text(
+                    description,
+                    style: BusinessText.metaLabel(
+                      context,
+                    ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ),
+              ],
+            ),
+          ),
+          if (add)
+            IconButton(
+              tooltip: tooltip,
+              onPressed: onAdd,
+              icon: const GlyphIcon(AppGlyphs.add, size: 18),
+            )
+          else
+            IconButton(
+              tooltip: tooltip,
+              onPressed: onRemove,
+              icon: const GlyphIcon(AppGlyphs.close, size: 18),
+            ),
+          if (dragIndex case final index?)
+            ReorderableDragStartListener(
+              index: index,
+              child: GlyphIcon(
+                AppGlyphs.dragHandle,
+                size: 16,
+                color: context.colorScheme.onSurfaceVariant,
+              ),
+            ),
+        ],
+      ),
+    ),
+  );
+}
 
 /// Edits the shown cards where they stand: each sways, a removable one wears
 /// a remove badge, and a held card drags to a new place.
@@ -96,6 +339,20 @@ class _DashboardEditorState extends ConsumerState<DashboardEditor>
   void dispose() {
     _sway.dispose();
     super.dispose();
+  }
+
+  void _restoreDefaults() {
+    final defaults = platformDefaultDashboardWidgets
+        .where((card) => card.platforms.contains(widget.platform))
+        .toList();
+    setState(() {
+      _cards = _keepingOtherPlatforms(widget.widgets, defaults);
+      _leaving.clear();
+      _entering.clear();
+    });
+    ref
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(dashboardWidgets: _cards));
   }
 
   void _save() {
@@ -263,13 +520,21 @@ class _DashboardEditorState extends ConsumerState<DashboardEditor>
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: BusinessPrimaryButton(
-                      label: appLocalizations.done,
-                      width: 92,
-                      onPressed: widget.onDone,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 10,
+                    children: [
+                      BusinessSecondaryButton(
+                        label: appLocalizations.reset,
+                        width: 132,
+                        onPressed: _restoreDefaults,
+                      ),
+                      BusinessPrimaryButton(
+                        label: appLocalizations.done,
+                        width: 92,
+                        onPressed: widget.onDone,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -306,26 +571,7 @@ class _BusinessDashboardRow extends StatelessWidget {
         child: Row(
           spacing: 12,
           children: [
-            if (dragIndex case final index?)
-              ReorderDragStartListener(
-                index: index,
-                child: Text(
-                  '⠿',
-                  style: BusinessText.actionLabel(
-                    context,
-                  ).copyWith(color: colorScheme.onSurfaceVariant),
-                ),
-              )
-            else
-              SizedBox(
-                width: 16,
-                child: Text(
-                  '⠿',
-                  style: BusinessText.actionLabel(
-                    context,
-                  ).copyWith(color: colorScheme.onSurfaceVariant),
-                ),
-              ),
+            GlyphIcon(item.glyph, size: 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,6 +596,21 @@ class _BusinessDashboardRow extends StatelessWidget {
               semanticLabel: item.label(context),
               onChanged: onChanged,
             ),
+            if (dragIndex case final index?)
+              ReorderDragStartListener(
+                index: index,
+                child: GlyphIcon(
+                  AppGlyphs.dragHandle,
+                  size: 16,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              )
+            else
+              GlyphIcon(
+                AppGlyphs.dragHandle,
+                size: 16,
+                color: colorScheme.onSurfaceVariant,
+              ),
           ],
         ),
       ),

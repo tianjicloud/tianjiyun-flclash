@@ -18,11 +18,13 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
+import 'package:fl_clash/views/dashboard/edit.dart';
 import 'package:fl_clash/views/config/advanced.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
 import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
+import 'package:fl_clash/views/dashboard/widgets/traffic.dart';
 import 'package:fl_clash/views/about.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:fl_clash/views/dashboard/widgets/scene_bar.dart';
@@ -209,6 +211,137 @@ void main() {
     expect(find.text('出口校验通过'), findsNothing);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
+  });
+
+  testWidgets('business dashboard uses saved card visibility and order', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(
+          locale: Locale('zh', 'CN'),
+          child: BusinessDashboardView(platform: SupportPlatform.Windows),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(
+      container.read(appSettingProvider).businessDashboardCards,
+      defaultBusinessDashboardCards,
+    );
+    expect(find.byType(BusinessLineCard), findsOneWidget);
+    expect(find.byType(TrafficSavingsCard), findsOneWidget);
+    expect(find.byType(ProfilesCard), findsOneWidget);
+
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(
+            businessDashboardCards: const [
+              BusinessDashboardCard.networkSpeed,
+              BusinessDashboardCard.subscription,
+            ],
+          ),
+        );
+    await tester.pump();
+    expect(find.byType(BusinessLineCard), findsNothing);
+    expect(find.byType(TrafficSavingsCard), findsNothing);
+    expect(find.byType(NetworkSpeedCard), findsOneWidget);
+    expect(find.byType(ProfilesCard), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.byType(NetworkSpeedCard)).dx,
+      lessThan(tester.getTopLeft(find.byType(ProfilesCard)).dx),
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(seconds: 5));
+  });
+
+  testWidgets('business dashboard editor adds, removes, reorders, and resets', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(
+            businessDashboardCards: const [
+              BusinessDashboardCard.monthlyTraffic,
+            ],
+          ),
+        );
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(
+          locale: Locale('zh', 'CN'),
+          child: BusinessDashboardView(platform: SupportPlatform.Windows),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byTooltip('编辑仪表盘'));
+    await tester.pump();
+    expect(find.byType(BusinessDashboardEditor), findsOneWidget);
+    await tester.tap(find.byTooltip('移除').first);
+    await tester.pump();
+    expect(container.read(appSettingProvider).businessDashboardCards, isEmpty);
+    await tester.tap(find.byTooltip('添加').first);
+    await tester.pump();
+    expect(container.read(appSettingProvider).businessDashboardCards, [
+      BusinessDashboardCard.residentialLines,
+    ]);
+    await tester.tap(find.text('重置'));
+    await tester.pump();
+    expect(
+      container.read(appSettingProvider).businessDashboardCards,
+      defaultBusinessDashboardCards,
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(seconds: 5));
+  });
+
+  testWidgets('business dashboard editor persists drag order', (tester) async {
+    tester.view.physicalSize = const Size(1280, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    const initial = [
+      BusinessDashboardCard.monthlyTraffic,
+      BusinessDashboardCard.subscription,
+    ];
+    container
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(businessDashboardCards: initial));
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(
+          locale: Locale('zh', 'CN'),
+          child: BusinessDashboardView(platform: SupportPlatform.Windows),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byTooltip('编辑仪表盘'));
+    await tester.pump();
+    final handle = find.byType(ReorderableDragStartListener).first;
+    await tester.timedDragFrom(
+      tester.getCenter(handle),
+      const Offset(0, 130),
+      const Duration(milliseconds: 500),
+    );
+    await tester.pumpAndSettle();
+    expect(container.read(appSettingProvider).businessDashboardCards, const [
+      BusinessDashboardCard.subscription,
+      BusinessDashboardCard.monthlyTraffic,
+    ]);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(seconds: 5));
   });
 
   testWidgets('unsafe outbound warning restores rule mode', (tester) async {

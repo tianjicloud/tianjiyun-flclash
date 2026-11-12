@@ -123,6 +123,22 @@ const List<DashboardWidget> defaultDashboardWidgets = [
   DashboardWidget.connectionStats,
 ];
 
+const defaultBusinessDashboardCards = [
+  BusinessDashboardCard.residentialLines,
+  BusinessDashboardCard.monthlyTraffic,
+  BusinessDashboardCard.subscription,
+  BusinessDashboardCard.networkTakeover,
+  BusinessDashboardCard.aiAvailability,
+];
+
+List<BusinessDashboardCard> businessDashboardCardsFromJson(
+  List<dynamic>? cards,
+) {
+  if (cards == null) return defaultBusinessDashboardCards;
+  final byName = BusinessDashboardCard.values.asNameMap();
+  return cards.map((item) => byName[item]).nonNulls.toSet().toList();
+}
+
 /// A phone starts without the VPN switch and the diagnostic cards, which stay
 /// addable. The field default keeps the shared list because it must be const.
 final List<DashboardWidget> platformDefaultDashboardWidgets = system.isAndroid
@@ -274,6 +290,9 @@ abstract class AppSettingProps with _$AppSettingProps {
     @Default(defaultDashboardWidgets)
     @JsonKey(fromJson: dashboardWidgetsFromJson)
     List<DashboardWidget> dashboardWidgets,
+    @Default(defaultBusinessDashboardCards)
+    @JsonKey(fromJson: businessDashboardCardsFromJson)
+    List<BusinessDashboardCard> businessDashboardCards,
     @Default(false) bool onlyStatisticsProxy,
     @Default(true) bool showNotificationStopAction,
     @Default(false) bool autoLaunch,

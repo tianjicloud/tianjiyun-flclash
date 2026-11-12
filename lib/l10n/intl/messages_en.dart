@@ -620,6 +620,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLine": MessageLookupByLibrary.simpleMessage("Current line"),
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Current node"),
+    "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
+      "Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.",
+    ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("Datacenter"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage(
       "Test speed",
@@ -1319,6 +1322,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "colorStyle": MessageLookupByLibrary.simpleMessage("Color style"),
     "columns": MessageLookupByLibrary.simpleMessage("Columns"),
     "compact": MessageLookupByLibrary.simpleMessage("Compact"),
+    "compactSidebar": MessageLookupByLibrary.simpleMessage("Compact sidebar"),
     "compatible": MessageLookupByLibrary.simpleMessage("Compatibility mode"),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
     "confirmClearAllData": MessageLookupByLibrary.simpleMessage(

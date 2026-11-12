@@ -381,11 +381,9 @@ class _Sidebar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final canExpand = canExpandSidebar(viewMode);
-    final sidebarExpanded = business
-        ? viewMode == ViewMode.desktop
-        : ref.watch(
-            appSettingProvider.select((state) => state.sidebarExpanded),
-          );
+    final sidebarExpanded = ref.watch(
+      appSettingProvider.select((state) => state.sidebarExpanded),
+    );
     final version = ref.watch(versionProvider);
     final windowControls = windowControlsOverSidebar(
       isMacOS: system.isMacOS,
@@ -408,16 +406,8 @@ class _Sidebar extends ConsumerWidget {
       selectedIndex: currentIndex,
       expanded: canExpand && sidebarExpanded,
       onSelected: onSelected,
-      onToggle: !business && canExpand
-          ? () {
-              ref
-                  .read(appSettingProvider.notifier)
-                  .update(
-                    (state) =>
-                        state.copyWith(sidebarExpanded: !state.sidebarExpanded),
-                  );
-            }
-          : null,
+      onToggle: null,
+      showToggle: false,
       windowControls: windowControls,
     );
   }
