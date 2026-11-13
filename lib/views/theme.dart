@@ -1695,6 +1695,8 @@ class _BackgroundItem extends ConsumerWidget {
                   _ => Image.asset(
                     'assets/images/background_$value.jpg',
                     fit: BoxFit.cover,
+                    cacheHeight: (64 * MediaQuery.devicePixelRatioOf(context))
+                        .round(),
                   ),
                 },
               ),
