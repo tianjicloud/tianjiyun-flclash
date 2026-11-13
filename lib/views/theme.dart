@@ -17,6 +17,7 @@ import 'package:fl_clash/views/theme_preview.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ThemeView extends StatelessWidget {
   const ThemeView({super.key, this.business = false});
@@ -1679,16 +1680,23 @@ class _BackgroundItem extends ConsumerWidget {
           PreviewChoice(
             value: value,
             label: label,
-            pictogram: AppBackgroundScope(
-              preset: value,
-              child: AppBackground(
-                child: SizedBox(
-                  width: 96,
-                  height: 64,
-                  child: value == 'solid'
-                      ? ColoredBox(color: context.colorScheme.surface)
-                      : null,
-                ),
+            // Raw asset: a nested AppBackground is suppressed, and veiled.
+            pictogram: SizedBox(
+              width: 96,
+              height: 64,
+              child: ClipRSuperellipse(
+                borderRadius: AppRadius.sm,
+                child: switch (value) {
+                  'solid' => ColoredBox(color: context.colorScheme.surface),
+                  'orbit' || 'mountains' => SvgPicture.asset(
+                    'assets/images/background_$value.svg',
+                    fit: BoxFit.cover,
+                  ),
+                  _ => Image.asset(
+                    'assets/images/background_$value.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                },
               ),
             ),
           ),
