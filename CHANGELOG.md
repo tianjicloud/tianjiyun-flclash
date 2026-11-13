@@ -2,7 +2,27 @@
 
 ## v0.9.22 (2026-11-13)
 
-Internal improvements only.
+**Features**
+
+- **macos** The AppIcon set is now the classic macOS template (824px rounded plate on transparency, deep-space art) so macOS 15 and earlier render a native rounded icon instead of a sharp full-bleed square. Alongside it, AppIcon.icon (Icon Composer, same name as the icon set) carries the full-bleed layered version: macOS 26 uses it and falls back to the set on earlier systems. The pairing and the hand-authored icon.json need the CI build to confirm actool accepts them; if it does not, removing AppIcon.icon restores the classic set alone. (bcc7f25)
+- **macos** Add localized InfoPlist.strings (zh-Hans: 天机云, en: TianjiCloud) and register them in the Xcode project; the bundle stays TianjiCloud.app so packaging and update paths are unchanged. (54f3987)
+
+**Bug Fixes**
+
+- **dashboard** Push the business dashboard content down (703c867)
+- **theme** Draw background choices from the raw assets (97fbea4)
+- **macos** default_view must be 'icon-view' (dmgbuild's key); with 'icon' the icon-view settings block, including the background, would have been skipped entirely. Also pin text_size to Finder's 12pt so icon labels land on the plates as measured, and resolve the fallback background path lazily. (b79ee73)
+- **macos** appdmg writes the installer background as a legacy alias record that current Finder versions no longer resolve, leaving the DMG window plain white even though the image is inside the image file. setup.dart now repackages the built .app with dmgbuild (settings in macos/packaging/dmg/dmgbuild_settings.py, same window, positions and background art) and replaces the distributor's DMG before checksums are generated. (2b2f0f9)
+- **macos** Name the DMG volume in ASCII so Finder shows its background (ead41c2)
+- **macos** Register the Icon Composer icon as a project resource (ef543f9)
+- **macos** Let Finder show the localized app name (de03d12)
+- **macos** The icon artwork floated on transparency, so Launchpad and the apps view padded it with the system grey tile. Bake the brand deep-space background into every icon size so the tile is ours. (d722dfb)
+- **macos** Finder draws icon labels black in light appearance and white in dark appearance; on the dark installer background the black labels were unreadable. Semi-transparent plates (measured brightness ~131-137) keep both label colours legible. (6820b2f)
+- **macos** Replace the near-white installer background with the dark deep-space design (brand gradient, orbit ring, icon stage glows) so the drag-to-install window matches the app (0f1e016)
+
+**Performance**
+
+- **theme** Decode background thumbnails at thumbnail size (fcbbf49)
 
 ## v0.9.21 (2026-11-13)
 
