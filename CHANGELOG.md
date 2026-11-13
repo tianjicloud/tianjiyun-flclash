@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.9.23 (2026-11-13)
+
+**Features**
+
+- **macos** Add the app menu bar and window dragging (ffec66e)
+- **macos** Fade between pages and sheets instead of jumping (ccb103a)
+- **macos** One set of page, card and row metrics (b4f146d)
+- **macos** Flatten the lines and settings navigation (7b2bb4b)
+- **dashboard** Lead the macOS home with one state-driven hero (c7fc488)
+
+**Bug Fixes**
+
+- **ui** Speak the user's language on everyday pages (a3602a1)
+
 ## v0.9.22 (2026-11-13)
 
 **Features**

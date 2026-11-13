@@ -2,6 +2,54 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.23",
+      "tag": "v0.9.23",
+      "date": "2026-11-13",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "ffec66e",
+              "scope": "macos",
+              "text": "Add the app menu bar and window dragging"
+            },
+            {
+              "id": "ccb103a",
+              "scope": "macos",
+              "text": "Fade between pages and sheets instead of jumping"
+            },
+            {
+              "id": "b4f146d",
+              "scope": "macos",
+              "text": "One set of page, card and row metrics"
+            },
+            {
+              "id": "7b2bb4b",
+              "scope": "macos",
+              "text": "Flatten the lines and settings navigation"
+            },
+            {
+              "id": "c7fc488",
+              "scope": "dashboard",
+              "text": "Lead the macOS home with one state-driven hero"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "a3602a1",
+              "scope": "ui",
+              "text": "Speak the user's language on everyday pages"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.22",
       "tag": "v0.9.22",
       "date": "2026-11-13",
