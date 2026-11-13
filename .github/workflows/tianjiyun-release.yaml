@@ -175,7 +175,7 @@ jobs:
             arch: amd64
             targets: dmg
           - platform: macos
-            os: macos-latest
+            os: macos-26
             arch: arm64
             targets: dmg
     steps:
