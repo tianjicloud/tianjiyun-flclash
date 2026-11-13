@@ -5,10 +5,11 @@
 import os
 
 app = os.environ.get('TIANJI_APP_PATH', '')
-background = os.environ.get(
-    'TIANJI_BG_PATH',
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), 'background.png'),
-)
+background = os.environ.get('TIANJI_BG_PATH')
+if not background:
+    background = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'background.png'
+    )
 
 files = [app] if app else []
 symlinks = {'Applications': '/Applications'}
@@ -19,9 +20,10 @@ icon_locations = {
 }
 window_rect = ((100, 100), (720, 480))
 icon_size = 112
+text_size = 12.0
 
 format = 'UDZO'
-default_view = 'icon'
+default_view = 'icon-view'
 show_status_bar = False
 show_tab_view = False
 show_toolbar = False
