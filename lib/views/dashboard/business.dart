@@ -121,7 +121,7 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
                         : MacOSMetrics.dashboardTopPadding(
                             context,
                             appBarInset: context.appBarInset,
-                            fallback: context.appBarInset - 18,
+                            fallback: context.appBarInset - 2,
                           ),
                     mobile ? 18 : 29,
                     24 + context.bottomInset,
@@ -218,7 +218,7 @@ class _BusinessBody extends ConsumerWidget {
           : MacOSMetrics.dashboardTopPadding(
               context,
               appBarInset: context.appBarInset,
-              fallback: context.appBarInset - 18,
+              fallback: context.appBarInset - 2,
             ),
       mobile ? 18 : 29,
       (mobile ? 18 : 24) + context.bottomInset,

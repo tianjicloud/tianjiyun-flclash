@@ -149,7 +149,7 @@ abstract final class MacOSMetrics {
     required double appBarInset,
     required double fallback,
   }) => MacOSStyle.of(context)
-      ? (appBarInset - 18).clamp(0, double.infinity).toDouble()
+      ? (appBarInset - 2).clamp(0, double.infinity).toDouble()
       : fallback;
   static double switchWidth(BuildContext context, {required double fallback}) =>
       MacOSStyle.of(context) ? 32 : fallback;
