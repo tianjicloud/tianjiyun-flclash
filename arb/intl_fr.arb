@@ -1822,5 +1822,11 @@
   "diagnosticsCheckConnection": "Vérifiez la connexion et la ligne choisie, puis réessayez.",
   "macosBusinessAutoLaunchDesc": "S’exécute en arrière-plan après la connexion",
   "macosBusinessMinimizeDesc": "L’icône de la barre des menus affiche toujours l’état de connexion",
-  "macosBusinessMinimizeToMenuBar": "Réduire dans la barre des menus"
+  "macosBusinessMinimizeToMenuBar": "Réduire dans la barre des menus",
+  "menuConnect": "Se connecter",
+  "menuDisconnect": "Se déconnecter",
+  "menuWindow": "Fenêtre",
+  "menuHelp": "Aide",
+  "menuContactSupport": "Contacter le support",
+  "menuRecheckExit": "Revérifier la sortie"
 }

@@ -2447,6 +2447,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Память освобождена",
     ),
     "memoryReleasedSize": m78,
+    "menuConnect": MessageLookupByLibrary.simpleMessage("Подключиться"),
+    "menuContactSupport": MessageLookupByLibrary.simpleMessage(
+      "Связаться с поддержкой",
+    ),
+    "menuDisconnect": MessageLookupByLibrary.simpleMessage("Отключиться"),
+    "menuHelp": MessageLookupByLibrary.simpleMessage("Справка"),
+    "menuRecheckExit": MessageLookupByLibrary.simpleMessage(
+      "Повторно проверить выход",
+    ),
+    "menuWindow": MessageLookupByLibrary.simpleMessage("Окно"),
     "messageTest": MessageLookupByLibrary.simpleMessage("Тест сообщения"),
     "messageTestTip": MessageLookupByLibrary.simpleMessage("Это сообщение."),
     "method": MessageLookupByLibrary.simpleMessage("Метод"),

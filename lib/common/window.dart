@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/window_drag_area.dart' as drag_area;
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/config.dart';
 import 'package:flutter/foundation.dart';
@@ -34,6 +35,10 @@ class Window implements WindowPort {
   }
 
   Future<void> init(int version, WindowProps props) async {
+    drag_area.startWindowDragging = () async {
+      await windowPort?.startDragging();
+    };
+    drag_area.toggleWindowMaximizedAction = toggleWindowMaximized;
     if (!safeModeBuild) {
       if (system.isWindows) {
         for (final scheme in protocolSchemes) {
@@ -49,11 +54,16 @@ class Window implements WindowPort {
     if (system.isLinux) {
       _supportsPosition = await desktopWindow.isPositionSupported();
     }
+    if (system.isMacOS) {
+      _supportsPosition = await desktopWindow.isPositionSupported();
+    }
     if (!system.isMacOS || version > 10) {
       await desktopWindow.setTitleBarStyle(TitleBarStyle.hidden);
     }
+    await desktopWindow.setMinimumSize(
+      system.isMacOS ? const Size(820, 600) : const Size(380, 400),
+    );
     await desktopWindow.setSize(props.savedSize ?? await _defaultSize());
-    await desktopWindow.setMinimumSize(const Size(380, 400));
     await _windowPosition(props);
     await desktopWindow.setPreventClose(true);
   }
@@ -212,8 +222,22 @@ class Window implements WindowPort {
   }
 
   @override
+  Future<void> startDragging() => desktopWindow.startDragging();
+
+  @override
+  @override
   void forceExit() {
     exit(0);
+  }
+}
+
+Future<void> toggleWindowMaximized() async {
+  if (await desktopWindow.isFullScreen()) {
+    await desktopWindow.setFullScreen(false);
+  } else if (await desktopWindow.isMaximized()) {
+    await desktopWindow.unmaximize();
+  } else {
+    await desktopWindow.maximize();
   }
 }
 

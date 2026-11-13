@@ -11,6 +11,7 @@ import 'package:fl_clash/providers/mitm.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/common/service_probe.dart' show routedOutbound;
+import 'package:fl_clash/common/window_drag_area.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/state.dart';
@@ -389,34 +390,53 @@ class _Sidebar extends ConsumerWidget {
       isMacOS: system.isMacOS,
       version: version,
     );
+    final Widget sidebar;
     if (business && viewMode != ViewMode.mobile) {
-      return BusinessNavigationSidebar(
+      sidebar = BusinessNavigationSidebar(
         items: items,
         currentIndex: currentIndex,
         expanded: canExpand && sidebarExpanded,
         onSelected: onSelected,
         windowControls: windowControls,
       );
+    } else {
+      sidebar = NavigationSidebar(
+        destinations: [
+          for (final item in items)
+            SidebarDestination(glyph: item.glyph, label: item.label.label),
+        ],
+        selectedIndex: currentIndex,
+        expanded: canExpand && sidebarExpanded,
+        onSelected: onSelected,
+        onToggle: canExpand
+            ? () {
+                ref
+                    .read(appSettingProvider.notifier)
+                    .update(
+                      (state) => state.copyWith(
+                        sidebarExpanded: !state.sidebarExpanded,
+                      ),
+                    );
+              }
+            : null,
+        windowControls: windowControls,
+      );
     }
-    return NavigationSidebar(
-      destinations: [
-        for (final item in items)
-          SidebarDestination(glyph: item.glyph, label: item.label.label),
+    if (!system.isMacOS) return sidebar;
+    return Stack(
+      children: [
+        sidebar,
+        PositionedDirectional(
+          start: 0,
+          top: 0,
+          end: 0,
+          height: macOSTrafficLightsArea.height,
+          child: const MacOSWindowDragArea(
+            enabled: true,
+            child: SizedBox.expand(),
+          ),
+        ),
       ],
-      selectedIndex: currentIndex,
-      expanded: canExpand && sidebarExpanded,
-      onSelected: onSelected,
-      onToggle: canExpand
-          ? () {
-              ref
-                  .read(appSettingProvider.notifier)
-                  .update(
-                    (state) =>
-                        state.copyWith(sidebarExpanded: !state.sidebarExpanded),
-                  );
-            }
-          : null,
-      windowControls: windowControls,
     );
   }
 }

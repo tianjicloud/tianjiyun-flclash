@@ -10,6 +10,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/manager/hotkey_manager.dart';
 import 'package:fl_clash/manager/manager.dart';
+import 'package:fl_clash/manager/macos_menu.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
@@ -47,9 +48,10 @@ Widget buildManagerStack({
           ),
         )
       : AndroidManager(child: TileManager(child: state));
-  return AppEnvManager(
+  final managedApp = AppEnvManager(
     child: LocaleManager(child: ThemeManager(child: platformState)),
   );
+  return system.isMacOS ? MacOSMenuBar(child: managedApp) : managedApp;
 }
 
 class Application extends ConsumerStatefulWidget {

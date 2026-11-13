@@ -78,6 +78,9 @@ class _RecordingWindowPort implements WindowPort {
   Future<void> close() async {}
 
   @override
+  Future<void> startDragging() async {}
+
+  @override
   void forceExit() {}
 
   @override

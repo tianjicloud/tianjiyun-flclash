@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/launch.dart';
 import 'package:fl_clash/common/residential.dart';
+import 'package:fl_clash/common/window.dart' show toggleWindowMaximized;
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/config.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -360,13 +361,7 @@ class WindowCaptionController extends ValueNotifier<WindowCaptionState>
   }
 
   Future<void> toggleMaximized() async {
-    if (await desktopWindow.isFullScreen()) {
-      await desktopWindow.setFullScreen(false);
-    } else if (await desktopWindow.isMaximized()) {
-      await desktopWindow.unmaximize();
-    } else {
-      await desktopWindow.maximize();
-    }
+    await toggleWindowMaximized();
   }
 
   Future<void> togglePin() async {

@@ -3,6 +3,7 @@ import 'dart:ui' show ImageFilter, lerpDouble;
 
 import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/macos_style.dart';
+import 'package:fl_clash/common/window_drag_area.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/physics.dart';
@@ -767,6 +768,15 @@ class ScaffoldState extends State<Scaffold>
     );
   }
 
+  Widget _dragTitle(Widget title, {required bool compact}) {
+    if (!MacOSStyle.of(context) ||
+        compact ||
+        (widget.titleWidget != null && widget.titleWidget is! Text)) {
+      return title;
+    }
+    return MacOSWindowDragArea(enabled: true, child: title);
+  }
+
   PreferredSizeWidget _buildAppBar(VoidCallback? backAction, _SheetForm form) {
     final isCompact = form.isCompact;
     final isMobileView = ViewScope.isMobileOf(context);
@@ -817,7 +827,7 @@ class ScaffoldState extends State<Scaffold>
           clipBehavior: Clip.none,
           toolbarHeight: isCompact
               ? sheetToolbarHeight
-              : MacOSStyle.of(context) && widget.businessTitleInset
+              : MacOSStyle.of(context)
               ? MacOSMetrics.pageHeaderHeight(context, fallback: 56)
               : null,
           centerTitle: isCompact,
@@ -833,12 +843,18 @@ class ScaffoldState extends State<Scaffold>
               ? null
               : underField(
                   leading == null || isCompact
-                      ? _buildTitle(compact: compactTitle)
+                      ? _dragTitle(
+                          _buildTitle(compact: compactTitle),
+                          compact: compactTitle,
+                        )
                       : Padding(
                           padding: EdgeInsetsDirectional.only(
                             end: titleEndInset,
                           ),
-                          child: _buildTitle(compact: compactTitle),
+                          child: _dragTitle(
+                            _buildTitle(compact: compactTitle),
+                            compact: compactTitle,
+                          ),
                         ),
                   _titleUnderSearch,
                 ),

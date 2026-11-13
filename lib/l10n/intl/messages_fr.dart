@@ -2486,6 +2486,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "memoryReleased": MessageLookupByLibrary.simpleMessage("Mémoire libérée"),
     "memoryReleasedSize": m78,
+    "menuConnect": MessageLookupByLibrary.simpleMessage("Se connecter"),
+    "menuContactSupport": MessageLookupByLibrary.simpleMessage(
+      "Contacter le support",
+    ),
+    "menuDisconnect": MessageLookupByLibrary.simpleMessage("Se déconnecter"),
+    "menuHelp": MessageLookupByLibrary.simpleMessage("Aide"),
+    "menuRecheckExit": MessageLookupByLibrary.simpleMessage(
+      "Revérifier la sortie",
+    ),
+    "menuWindow": MessageLookupByLibrary.simpleMessage("Fenêtre"),
     "messageTest": MessageLookupByLibrary.simpleMessage("Test de message"),
     "messageTestTip": MessageLookupByLibrary.simpleMessage(
       "Ceci est un message.",

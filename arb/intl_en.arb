@@ -1822,5 +1822,11 @@
   "diagnosticsCheckConnection": "Check your connection and selected line, then retry.",
   "macosBusinessAutoLaunchDesc": "Run in the background after signing in",
   "macosBusinessMinimizeDesc": "The menu bar icon always shows connection status",
-  "macosBusinessMinimizeToMenuBar": "Minimize to menu bar"
+  "macosBusinessMinimizeToMenuBar": "Minimize to menu bar",
+  "menuConnect": "Connect",
+  "menuDisconnect": "Disconnect",
+  "menuWindow": "Window",
+  "menuHelp": "Help",
+  "menuContactSupport": "Contact Support",
+  "menuRecheckExit": "Recheck exit"
 }

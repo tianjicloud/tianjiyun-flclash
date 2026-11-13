@@ -1822,5 +1822,11 @@
   "diagnosticsCheckConnection": "Проверьте подключение и выбранную линию, затем повторите попытку.",
   "macosBusinessAutoLaunchDesc": "Работать в фоне после входа",
   "macosBusinessMinimizeDesc": "Значок строки меню всегда показывает состояние соединения",
-  "macosBusinessMinimizeToMenuBar": "Свернуть в строку меню"
+  "macosBusinessMinimizeToMenuBar": "Свернуть в строку меню",
+  "menuConnect": "Подключиться",
+  "menuDisconnect": "Отключиться",
+  "menuWindow": "Окно",
+  "menuHelp": "Справка",
+  "menuContactSupport": "Связаться с поддержкой",
+  "menuRecheckExit": "Повторно проверить выход"
 }

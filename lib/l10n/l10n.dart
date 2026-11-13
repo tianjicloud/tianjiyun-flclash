@@ -14987,6 +14987,51 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Connect`
+  String get menuConnect {
+    return Intl.message('Connect', name: 'menuConnect', desc: '', args: []);
+  }
+
+  /// `Disconnect`
+  String get menuDisconnect {
+    return Intl.message(
+      'Disconnect',
+      name: 'menuDisconnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Window`
+  String get menuWindow {
+    return Intl.message('Window', name: 'menuWindow', desc: '', args: []);
+  }
+
+  /// `Help`
+  String get menuHelp {
+    return Intl.message('Help', name: 'menuHelp', desc: '', args: []);
+  }
+
+  /// `Contact Support`
+  String get menuContactSupport {
+    return Intl.message(
+      'Contact Support',
+      name: 'menuContactSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recheck exit`
+  String get menuRecheckExit {
+    return Intl.message(
+      'Recheck exit',
+      name: 'menuRecheckExit',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

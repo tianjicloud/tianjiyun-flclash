@@ -1822,5 +1822,11 @@
   "diagnosticsCheckConnection": "请检查网络和所选线路后重试。",
   "macosBusinessAutoLaunchDesc": "登录后在后台运行",
   "macosBusinessMinimizeDesc": "菜单栏图标会一直显示连接状态",
-  "macosBusinessMinimizeToMenuBar": "最小化到菜单栏"
+  "macosBusinessMinimizeToMenuBar": "最小化到菜单栏",
+  "menuConnect": "连接",
+  "menuDisconnect": "断开连接",
+  "menuWindow": "窗口",
+  "menuHelp": "帮助",
+  "menuContactSupport": "联系客服",
+  "menuRecheckExit": "重新检测出口"
 }

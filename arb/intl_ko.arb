@@ -1822,5 +1822,11 @@
   "diagnosticsCheckConnection": "연결과 선택한 회선을 확인한 뒤 재시도하세요.",
   "macosBusinessAutoLaunchDesc": "로그인 후 백그라운드에서 실행",
   "macosBusinessMinimizeDesc": "메뉴 막대 아이콘에 연결 상태가 계속 표시됩니다",
-  "macosBusinessMinimizeToMenuBar": "메뉴 막대로 최소화"
+  "macosBusinessMinimizeToMenuBar": "메뉴 막대로 최소화",
+  "menuConnect": "연결",
+  "menuDisconnect": "연결 해제",
+  "menuWindow": "윈도우",
+  "menuHelp": "도움말",
+  "menuContactSupport": "고객 지원 문의",
+  "menuRecheckExit": "출구 다시 확인"
 }

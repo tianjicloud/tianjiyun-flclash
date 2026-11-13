@@ -22,6 +22,8 @@ abstract interface class WindowPort {
 
   Future<void> close();
 
+  Future<void> startDragging();
+
   void forceExit();
 }
 
