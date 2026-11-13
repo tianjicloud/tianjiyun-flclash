@@ -1818,5 +1818,8 @@
   "diagnosticsRestartService": "サービスを再起動して再試行してください。",
   "diagnosticsImportSubscription": "サブスクリプションを読み込むか確認してください。",
   "diagnosticsCheckLine": "選択した回線を確認して再試行してください。",
-  "diagnosticsCheckConnection": "接続と選択した回線を確認して再試行してください。"
+  "diagnosticsCheckConnection": "接続と選択した回線を確認して再試行してください。",
+  "macosBusinessAutoLaunchDesc": "サインイン後にバックグラウンドで実行",
+  "macosBusinessMinimizeDesc": "メニューバーアイコンに接続状態を常に表示",
+  "macosBusinessMinimizeToMenuBar": "メニューバーに最小化"
 }

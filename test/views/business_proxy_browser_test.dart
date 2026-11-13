@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -10,6 +11,7 @@ import 'package:fl_clash/views/proxies/tab.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:prism_ui/prism_ui.dart';
 
 import '../helpers/host_scaffold.dart';
 import '../helpers/test_app.dart';
@@ -130,6 +132,76 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     },
   );
+
+  testWidgets('macOS browser hides the residential group and hint banner', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final profile = Profile.normal(url: _subscriptionUrl);
+    final groups = [
+      const Group(
+        name: '🇯🇵 Japan',
+        type: GroupType.Selector,
+        hidden: false,
+        all: [Proxy(name: '🇯🇵 Tokyo', type: 'ss')],
+      ),
+      const Group(
+        name: tianjiResidentialRootName,
+        type: GroupType.Selector,
+        hidden: false,
+        all: [Proxy(name: '🇺🇸 Residential', type: 'ss')],
+      ),
+    ];
+    final container = ProviderContainer(
+      overrides: [
+        viewModeProvider.overrideWithValue(ViewMode.desktop),
+        profilesProvider.overrideWith(() => TestProfiles([profile])),
+        currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
+        currentGroupsStateProvider.overrideWithValue(
+          GroupsState(value: groups),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+    globalState.container = container;
+    container.read(groupsProvider.notifier).value = groups;
+    container.read(viewSizeProvider.notifier).value = const Size(1280, 900);
+    container
+        .read(proxiesStyleSettingProvider.notifier)
+        .update((state) => state.copyWith(type: ProxiesType.list));
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          theme: ThemeData(platform: TargetPlatform.macOS),
+          homeBuilder: (child) => HostScaffold(body: child),
+          child: const ProxiesView(),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    final l10n = tester
+        .element(find.byType(BusinessProxyBrowser))
+        .appLocalizations;
+    expect(find.text(tianjiResidentialRootName), findsNothing);
+    expect(find.text(l10n.businessLineSelectionHint), findsNothing);
+    expect(find.text('Tokyo'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is ProxyCard && widget.businessList,
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(seconds: 1));
+  });
 
   testWidgets('business profile keeps tab layout when that preference is set', (
     tester,

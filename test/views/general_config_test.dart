@@ -110,4 +110,45 @@ void main() {
     await tester.pumpAndSettle();
     expect(config().testUrl, 'https://probe.test/204');
   });
+
+  testWidgets('advanced settings keep their provider bindings when separated', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1000, 3000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final l10n = currentAppLocalizations;
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          theme: ThemeData(platform: TargetPlatform.macOS),
+          child: const GeneralView(hideAdvanced: true),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text(l10n.userAgent), findsNothing);
+    expect(find.text(l10n.checkCertificate), findsNothing);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          theme: ThemeData(platform: TargetPlatform.macOS),
+          child: const GeneralView(advancedOnly: true),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text(l10n.userAgent), findsOneWidget);
+    expect(find.text(l10n.checkCertificate), findsOneWidget);
+
+    final before = container.read(appSettingProvider).checkCertificate;
+    await tester.tap(find.text(l10n.checkCertificate));
+    await tester.pumpAndSettle();
+    expect(container.read(appSettingProvider).checkCertificate, !before);
+  });
 }

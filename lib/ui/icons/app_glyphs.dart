@@ -46,6 +46,26 @@ abstract final class AppGlyphs {
     ], role: GlyphRole.detail),
   ]);
 
+  static const residential = Glyph([
+    GlyphPolyline([
+      GlyphVertex(2.5, 11),
+      GlyphVertex(12, 3.5),
+      GlyphVertex(21.5, 11),
+    ]),
+    GlyphPolyline([
+      GlyphVertex(5, 9.5),
+      GlyphVertex(5, 20.5, 1.2),
+      GlyphVertex(19, 20.5, 1.2),
+      GlyphVertex(19, 9.5),
+    ]),
+    GlyphPolyline([
+      GlyphVertex(10, 20),
+      GlyphVertex(10, 14),
+      GlyphVertex(14, 14),
+      GlyphVertex(14, 20),
+    ], role: GlyphRole.detail),
+  ]);
+
   static const profiles = Glyph([
     GlyphPolyline([
       GlyphVertex(5, 3, 2.5),

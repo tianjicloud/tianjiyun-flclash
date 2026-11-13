@@ -84,7 +84,9 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
       for (final group in allGroups)
         if ((group.type == GroupType.Selector ||
                 group.type == GroupType.URLTest) &&
-            !isInternalLineGroup(group))
+            !isInternalLineGroup(group) &&
+            !(MacOSStyle.of(context) &&
+                group.name == tianjiResidentialRootName))
           group,
     ];
     _pruneControllers(allGroups);
@@ -120,9 +122,12 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final desktop = !isMobile && constraints.maxWidth > 760;
-            final top = math
-                .max(context.contentTopPadding - context.appBarInset, 0)
-                .toDouble();
+            final macOS = MacOSStyle.of(context);
+            final top = macOS
+                ? 0.0
+                : math
+                      .max(context.contentTopPadding - context.appBarInset, 0)
+                      .toDouble();
             final content = selected == null
                 ? const SizedBox.shrink()
                 : WidthBuilder(
@@ -130,7 +135,9 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                       key: ValueKey(selected.name),
                       group: selected,
                       controller: _controllerOf(selected.name),
-                      columns: textScale > 1.25
+                      columns: macOS
+                          ? 2
+                          : textScale > 1.25
                           ? (desktop ? 2 : getProxiesColumns(width, layout))
                           : desktop
                           ? 3
@@ -138,6 +145,7 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                       cardType: cardType,
                       businessStyle: true,
                       businessMobile: !desktop,
+                      businessList: macOS,
                     ),
                   );
             if (!desktop) {
@@ -217,26 +225,50 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
               padding: EdgeInsets.fromLTRB(24, top, 24, 12),
               child: Column(
                 children: [
-                  const _SelectionHint(),
-                  const SizedBox(height: 14),
+                  if (!macOS) ...[
+                    const _SelectionHint(),
+                    const SizedBox(height: 14),
+                  ],
+                  if (macOS && groups.isNotEmpty)
+                    SizedBox(
+                      height: 42,
+                      child: PrismListView(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: groups.length,
+                        gap: 8,
+                        itemBuilder: (_, index) {
+                          final group = groups[index];
+                          return _MobileGroupChip(
+                            group: group,
+                            selected: group.name == selected?.name,
+                            locked: false,
+                            onTap: () => _selectGroup(group.name),
+                          );
+                        },
+                      ),
+                    ),
+                  if (macOS) const SizedBox(height: 8),
                   Expanded(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(
-                          width: 232,
-                          child: _GroupPanel(
-                            groups: groups,
-                            selected: selected,
-                            onSelect: _selectGroup,
+                        if (!macOS) ...[
+                          SizedBox(
+                            width: 232,
+                            child: _GroupPanel(
+                              groups: groups,
+                              selected: selected,
+                              onSelect: _selectGroup,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 14),
+                          const SizedBox(width: 14),
+                        ],
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (selected != null)
+                              if (selected != null &&
+                                  (!macOS || selectedProxyName != null))
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(
                                     4,
@@ -283,7 +315,7 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                                   ),
                                 ),
                               Expanded(child: content),
-                              if (ref.watch(isStartProvider)) ...[
+                              if (!macOS && ref.watch(isStartProvider)) ...[
                                 const SizedBox(height: 12),
                                 _VerificationCard(
                                   verdict: ref.watch(selectionCheckProvider),

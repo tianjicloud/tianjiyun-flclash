@@ -2283,6 +2283,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsTest": MessageLookupByLibrary.simpleMessage("Logs test"),
     "loopback": MessageLookupByLibrary.simpleMessage("UWP loopback exemption"),
     "loose": MessageLookupByLibrary.simpleMessage("Loose"),
+    "macosBusinessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "Run in the background after signing in",
+    ),
+    "macosBusinessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "The menu bar icon always shows connection status",
+    ),
+    "macosBusinessMinimizeToMenuBar": MessageLookupByLibrary.simpleMessage(
+      "Minimize to menu bar",
+    ),
     "mainlandDirect": MessageLookupByLibrary.simpleMessage("Mainland direct"),
     "mapLocal": MessageLookupByLibrary.simpleMessage("Map local"),
     "matchCase": MessageLookupByLibrary.simpleMessage("Match case"),

@@ -33,7 +33,7 @@ class Navigation implements NavigationPort {
       ),
       if (_platform == SupportPlatform.MacOS)
         NavigationItem(
-          glyph: AppGlyphs.proxies,
+          glyph: AppGlyphs.residential,
           label: PageLabel.residential,
           builder: (_) => const ResidentialView(),
         ),

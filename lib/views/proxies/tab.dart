@@ -233,6 +233,7 @@ class ProxyGroupView extends ConsumerWidget {
   final ProxyCardType cardType;
   final bool businessStyle;
   final bool businessMobile;
+  final bool businessList;
 
   const ProxyGroupView({
     super.key,
@@ -242,6 +243,7 @@ class ProxyGroupView extends ConsumerWidget {
     required this.cardType,
     this.businessStyle = false,
     this.businessMobile = false,
+    this.businessList = false,
   });
 
   PageStorageKey _getPageStorageKey(WidgetRef ref) {
@@ -257,7 +259,9 @@ class ProxyGroupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final proxies = group.all;
-    final itemHeight = businessMobile
+    final itemHeight = businessList
+        ? 48.0
+        : businessMobile
         ? 68.0
         : businessStyle
         ? 80 * MediaQuery.textScalerOf(context).scale(1)
@@ -307,7 +311,11 @@ class ProxyGroupView extends ConsumerWidget {
         ),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
-          mainAxisSpacing: businessStyle ? 12 : proxyGridSpacing,
+          mainAxisSpacing: businessList
+              ? 8
+              : businessStyle
+              ? 12
+              : proxyGridSpacing,
           crossAxisSpacing: businessStyle ? 12 : 8,
           mainAxisExtent: itemHeight,
         ),
@@ -322,6 +330,7 @@ class ProxyGroupView extends ConsumerWidget {
             proxy: proxy,
             groupName: group.name,
             businessStyle: businessStyle,
+            businessList: businessList,
           );
         },
       ),

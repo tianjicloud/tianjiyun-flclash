@@ -1924,6 +1924,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsTest": MessageLookupByLibrary.simpleMessage("로그 테스트"),
     "loopback": MessageLookupByLibrary.simpleMessage("UWP 루프백 예외"),
     "loose": MessageLookupByLibrary.simpleMessage("넓게"),
+    "macosBusinessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "로그인 후 백그라운드에서 실행",
+    ),
+    "macosBusinessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "메뉴 막대 아이콘에 연결 상태가 계속 표시됩니다",
+    ),
+    "macosBusinessMinimizeToMenuBar": MessageLookupByLibrary.simpleMessage(
+      "메뉴 막대로 최소화",
+    ),
     "mainlandDirect": MessageLookupByLibrary.simpleMessage("중국 본토 직결"),
     "mapLocal": MessageLookupByLibrary.simpleMessage("로컬 매핑"),
     "matchCase": MessageLookupByLibrary.simpleMessage("대/소문자 구분"),

@@ -1730,6 +1730,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "logsTest": MessageLookupByLibrary.simpleMessage("日志测试"),
     "loopback": MessageLookupByLibrary.simpleMessage("UWP 回环解锁"),
     "loose": MessageLookupByLibrary.simpleMessage("宽松"),
+    "macosBusinessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "登录后在后台运行",
+    ),
+    "macosBusinessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "菜单栏图标会一直显示连接状态",
+    ),
+    "macosBusinessMinimizeToMenuBar": MessageLookupByLibrary.simpleMessage(
+      "最小化到菜单栏",
+    ),
     "mainlandDirect": MessageLookupByLibrary.simpleMessage("内地直连"),
     "mapLocal": MessageLookupByLibrary.simpleMessage("本地映射"),
     "matchCase": MessageLookupByLibrary.simpleMessage("区分大小写"),

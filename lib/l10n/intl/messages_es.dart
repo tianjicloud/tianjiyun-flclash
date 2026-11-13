@@ -2425,6 +2425,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Exención de loopback de UWP",
     ),
     "loose": MessageLookupByLibrary.simpleMessage("Amplio"),
+    "macosBusinessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "Se ejecuta en segundo plano después de iniciar sesión",
+    ),
+    "macosBusinessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "El icono de la barra de menús siempre muestra el estado de conexión",
+    ),
+    "macosBusinessMinimizeToMenuBar": MessageLookupByLibrary.simpleMessage(
+      "Minimizar en la barra de menús",
+    ),
     "mainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Directo continental",
     ),

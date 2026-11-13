@@ -1818,5 +1818,8 @@
   "diagnosticsRestartService": "Перезапустите службу и повторите попытку.",
   "diagnosticsImportSubscription": "Импортируйте подписку или проверьте её.",
   "diagnosticsCheckLine": "Проверьте выбранную линию и повторите попытку.",
-  "diagnosticsCheckConnection": "Проверьте подключение и выбранную линию, затем повторите попытку."
+  "diagnosticsCheckConnection": "Проверьте подключение и выбранную линию, затем повторите попытку.",
+  "macosBusinessAutoLaunchDesc": "Работать в фоне после входа",
+  "macosBusinessMinimizeDesc": "Значок строки меню всегда показывает состояние соединения",
+  "macosBusinessMinimizeToMenuBar": "Свернуть в строку меню"
 }

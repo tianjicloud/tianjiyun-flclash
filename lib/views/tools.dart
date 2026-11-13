@@ -444,8 +444,6 @@ class _BusinessSettingsLayout extends ConsumerStatefulWidget {
 
 class _BusinessSettingsLayoutState
     extends ConsumerState<_BusinessSettingsLayout> {
-  String _selectedKey = 'general';
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.appLocalizations;
@@ -453,13 +451,21 @@ class _BusinessSettingsLayoutState
         .watch(moreToolsSelectorStateProvider)
         .navigationItems;
     final profile = ref.watch(currentProfileProvider);
+    final selectedKey = ref.watch(macOSSettingsSelectionProvider);
     final entries = [
       _SettingsEntry(
         'general',
         l10n.businessSettingsCommon,
         l10n.general,
-        const GeneralView(),
+        GeneralView(hideAdvanced: MacOSStyle.of(context)),
       ),
+      if (MacOSStyle.of(context))
+        _SettingsEntry(
+          'advanced-general',
+          l10n.businessSettingsNetworkAdvanced,
+          l10n.advancedConfig,
+          const GeneralView(advancedOnly: true),
+        ),
       _SettingsEntry(
         'appearance',
         l10n.businessSettingsCommon,
@@ -564,7 +570,7 @@ class _BusinessSettingsLayoutState
         ),
     ];
     final active = entries.firstWhere(
-      (entry) => entry.key == _selectedKey,
+      (entry) => entry.key == selectedKey,
       orElse: () => entries.first,
     );
     final sections = <String, List<_SettingsEntry>>{};
@@ -574,7 +580,7 @@ class _BusinessSettingsLayoutState
     return Padding(
       padding: EdgeInsets.fromLTRB(
         MacOSMetrics.pageMargin(context, fallback: 29),
-        50,
+        MacOSStyle.of(context) ? 28 : 50,
         MacOSMetrics.pageMargin(context, fallback: 24),
         20,
       ),
@@ -586,46 +592,99 @@ class _BusinessSettingsLayoutState
             child: Text(l10n.settings, style: BusinessText.pageTitle(context)),
           ),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  width: 160,
-                  child: ListView(
-                    padding: EdgeInsets.zero,
+            child: MacOSStyle.of(context)
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      for (final section in sections.entries) ...[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
-                          child: Text(
-                            section.key,
-                            style: AppTextStyle.caption1
-                                .of(context)
-                                .copyWith(
-                                  color: context.colorScheme.onSurfaceVariant,
-                                ),
-                          ),
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: BusinessSegmented<String>(
+                          items: [
+                            for (final section in sections.keys)
+                              BusinessSegment(value: section, label: section),
+                          ],
+                          selected: active.section,
+                          onSelected: (section) => ref
+                              .read(macOSSettingsSelectionProvider.notifier)
+                              .select(sections[section]!.first.key),
                         ),
-                        for (final entry in section.value)
-                          _SettingsNavigationItem(
-                            entry: entry,
-                            selected: entry.key == active.key,
-                            onPressed: () =>
-                                setState(() => _selectedKey = entry.key),
-                          ),
-                      ],
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: MacOSMetrics.sidebarRowHeight(
+                          context,
+                          fallback: 32,
+                        ),
+                        child: PrismListView(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: sections[active.section]!.length,
+                          gap: 4,
+                          itemBuilder: (_, index) {
+                            final entry = sections[active.section]![index];
+                            return _SettingsNavigationItem(
+                              entry: entry,
+                              selected: entry.key == active.key,
+                              onPressed: () => ref
+                                  .read(macOSSettingsSelectionProvider.notifier)
+                                  .select(entry.key),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Expanded(
+                        child: KeyedSubtree(
+                          key: ValueKey(active.key),
+                          child: active.page,
+                        ),
+                      ),
+                    ],
+                  )
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        width: 160,
+                        child: ListView(
+                          padding: EdgeInsets.zero,
+                          children: [
+                            for (final section in sections.entries) ...[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+                                child: Text(
+                                  section.key,
+                                  style: AppTextStyle.caption1
+                                      .of(context)
+                                      .copyWith(
+                                        color: context
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                              ),
+                              for (final entry in section.value)
+                                _SettingsNavigationItem(
+                                  entry: entry,
+                                  selected: entry.key == active.key,
+                                  onPressed: () => ref
+                                      .read(
+                                        macOSSettingsSelectionProvider.notifier,
+                                      )
+                                      .select(entry.key),
+                                ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: KeyedSubtree(
+                          key: ValueKey(active.key),
+                          child: active.page,
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: KeyedSubtree(
-                    key: ValueKey(active.key),
-                    child: active.page,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

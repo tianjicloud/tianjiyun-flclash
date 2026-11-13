@@ -2389,6 +2389,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Снятие ограничения loopback для UWP",
     ),
     "loose": MessageLookupByLibrary.simpleMessage("Свободный"),
+    "macosBusinessAutoLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "Работать в фоне после входа",
+    ),
+    "macosBusinessMinimizeDesc": MessageLookupByLibrary.simpleMessage(
+      "Значок строки меню всегда показывает состояние соединения",
+    ),
+    "macosBusinessMinimizeToMenuBar": MessageLookupByLibrary.simpleMessage(
+      "Свернуть в строку меню",
+    ),
     "mainlandDirect": MessageLookupByLibrary.simpleMessage(
       "Прямое соединение (материк)",
     ),

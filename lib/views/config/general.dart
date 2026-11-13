@@ -270,7 +270,14 @@ ConfigToggleItem _appSettingToggle({
 }
 
 class GeneralView extends ConsumerWidget {
-  const GeneralView({super.key});
+  const GeneralView({
+    super.key,
+    this.advancedOnly = false,
+    this.hideAdvanced = false,
+  });
+
+  final bool advancedOnly;
+  final bool hideAdvanced;
 
   Widget _toggle({
     required ConfigLabel title,
@@ -366,157 +373,180 @@ class GeneralView extends ConsumerWidget {
     );
     final currentLocale = getLocaleForString(locale);
     return ListView(
-      padding: EdgeInsets.only(left: 40, bottom: context.bottomInset + 20),
+      padding: EdgeInsets.only(
+        left: MacOSStyle.of(context) ? 0 : 40,
+        bottom: context.bottomInset + 20,
+      ),
       children: [
-        BusinessSettingsCard(
-          title: l10n.businessSettingsStartupWindow,
-          items: [
-            if (system.isDesktop)
+        if (!advancedOnly) ...[
+          BusinessSettingsCard(
+            title: l10n.businessSettingsStartupWindow,
+            items: [
+              if (system.isDesktop)
+                ListItem.toggle(
+                  title: Text(l10n.businessAutoLaunchTitle),
+                  subtitle: Text(
+                    MacOSStyle.of(context)
+                        ? l10n.macosBusinessAutoLaunchDesc
+                        : l10n.businessAutoLaunchDesc,
+                  ),
+                  value: ref.watch(
+                    appSettingProvider.select((state) => state.autoLaunch),
+                  ),
+                  onChanged: (value) => ref
+                      .read(appSettingProvider.notifier)
+                      .update((state) => state.copyWith(autoLaunch: value)),
+                ),
               ListItem.toggle(
-                title: Text(l10n.businessAutoLaunchTitle),
-                subtitle: Text(l10n.businessAutoLaunchDesc),
+                title: Text(l10n.businessAutoRunTitle),
+                subtitle: Text(l10n.businessAutoRunDesc),
                 value: ref.watch(
-                  appSettingProvider.select((state) => state.autoLaunch),
+                  appSettingProvider.select((state) => state.autoRun),
                 ),
                 onChanged: (value) => ref
                     .read(appSettingProvider.notifier)
-                    .update((state) => state.copyWith(autoLaunch: value)),
+                    .update((state) => state.copyWith(autoRun: value)),
               ),
-            ListItem.toggle(
-              title: Text(l10n.businessAutoRunTitle),
-              subtitle: Text(l10n.businessAutoRunDesc),
-              value: ref.watch(
-                appSettingProvider.select((state) => state.autoRun),
-              ),
-              onChanged: (value) => ref
-                  .read(appSettingProvider.notifier)
-                  .update((state) => state.copyWith(autoRun: value)),
-            ),
-            ListItem<bool>.options(
-              title: Text(l10n.businessCloseWindow),
-              subtitle: Text(l10n.businessMinimizeDesc),
-              options: const [true, false],
-              value: ref.watch(
-                appSettingProvider.select((state) => state.minimizeOnExit),
-              ),
-              textBuilder: (value) =>
-                  value ? l10n.businessMinimizeToTray : l10n.exit,
-              onChanged: (value) => ref
-                  .read(appSettingProvider.notifier)
-                  .update((state) => state.copyWith(minimizeOnExit: value)),
-            ),
-            ListItem<Locale?>.options(
-              title: Text(l10n.language),
-              options: [null, ...AppLocalizations.delegate.supportedLocales],
-              value: currentLocale,
-              textBuilder: (value) => value?.label ?? l10n.defaultText,
-              onChanged: (value) => ref
-                  .read(appSettingProvider.notifier)
-                  .update((state) => state.copyWith(locale: value?.toString())),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
-        BusinessSettingsCard(
-          title: l10n.businessSettingsAppearance,
-          items: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 7),
-              child: BusinessThemeChoices(),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
-        BusinessSettingsCard(
-          title: l10n.update,
-          items: [
-            const _SubscriptionUpdateDurationItem(),
-            ListItem.toggle(
-              title: Text(l10n.backgroundResidentialCheck),
-              subtitle: Text(l10n.backgroundResidentialCheckDescription),
-              value: ref.watch(
-                appSettingProvider.select(
-                  (state) => state.backgroundResidentialCheck,
+              ListItem<bool>.options(
+                title: Text(l10n.businessCloseWindow),
+                subtitle: Text(
+                  MacOSStyle.of(context)
+                      ? l10n.macosBusinessMinimizeDesc
+                      : l10n.businessMinimizeDesc,
                 ),
+                options: const [true, false],
+                value: ref.watch(
+                  appSettingProvider.select((state) => state.minimizeOnExit),
+                ),
+                textBuilder: (value) => value
+                    ? MacOSStyle.of(context)
+                          ? l10n.macosBusinessMinimizeToMenuBar
+                          : l10n.businessMinimizeToTray
+                    : l10n.exit,
+                onChanged: (value) => ref
+                    .read(appSettingProvider.notifier)
+                    .update((state) => state.copyWith(minimizeOnExit: value)),
               ),
-              onChanged: (value) => ref
-                  .read(appSettingProvider.notifier)
-                  .update(
-                    (state) =>
-                        state.copyWith(backgroundResidentialCheck: value),
-                  ),
-            ),
-            ListItem(
-              title: Text.rich(
-                TextSpan(
-                  text: '${l10n.businessClientVersion} ',
-                  children: [
-                    TextSpan(
-                      text: _clientVersion(),
-                      style: AppTextStyle.custom(
-                        context,
-                        size: 14,
-                        leading: 20,
-                      ).toJetBrainsMono,
+              ListItem<Locale?>.options(
+                title: Text(l10n.language),
+                options: [null, ...AppLocalizations.delegate.supportedLocales],
+                value: currentLocale,
+                textBuilder: (value) => value?.label ?? l10n.defaultText,
+                onChanged: (value) => ref
+                    .read(appSettingProvider.notifier)
+                    .update(
+                      (state) => state.copyWith(locale: value?.toString()),
                     ),
-                  ],
-                ),
-              ),
-              subtitle: Text(l10n.businessClientVersionDesc),
-              trailing: _BusinessSecondaryButton(
-                label: l10n.checkUpdate,
-                onPressed: () => _checkForUpdate(context, ref),
-              ),
-            ),
-            _toggle(
-              title: (l) => l.autoCheckUpdate,
-              select: (state) => state.autoCheckUpdate,
-              update: (state, value) => state.copyWith(autoCheckUpdate: value),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
-        BusinessSettingsCard(
-          title: l10n.advancedConfig,
-          items: [
-            if (system.isDesktop)
-              _toggle(
-                title: (l) => l.silentLaunch,
-                select: (state) => state.silentLaunch,
-                update: (state, value) => state.copyWith(silentLaunch: value),
-              ),
-            if (system.isAndroid) ...[
-              _toggle(
-                title: (l) => l.exclude,
-                select: (state) => state.hidden,
-                update: (state, value) => state.copyWith(hidden: value),
-              ),
-              _toggle(
-                title: (l) => l.showNotificationStopAction,
-                select: (state) => state.showNotificationStopAction,
-                update: (state, value) =>
-                    state.copyWith(showNotificationStopAction: value),
               ),
             ],
-            const UaItem(),
-            _toggle(
-              title: (l) => l.checkCertificate,
-              select: (state) => state.checkCertificate,
-              update: (state, value) => state.copyWith(checkCertificate: value),
+          ),
+          if (!MacOSStyle.of(context)) ...[
+            const SizedBox(height: 14),
+            BusinessSettingsCard(
+              title: l10n.businessSettingsAppearance,
+              items: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 7),
+                  child: BusinessThemeChoices(),
+                ),
+              ],
             ),
-            ..._connectionItems(),
-            ..._inboundItems(
-              authentication: authentication,
-              externalController: externalController,
-            ),
-            OverrideSection(
-              title: l10n.core,
-              spec: _generalOverrideSpec,
-              items: _coreItems(),
-            ),
-            ..._logItems(),
+            const SizedBox(height: 14),
           ],
-        ),
+          BusinessSettingsCard(
+            title: l10n.update,
+            items: [
+              const _SubscriptionUpdateDurationItem(),
+              ListItem.toggle(
+                title: Text(l10n.backgroundResidentialCheck),
+                subtitle: Text(l10n.backgroundResidentialCheckDescription),
+                value: ref.watch(
+                  appSettingProvider.select(
+                    (state) => state.backgroundResidentialCheck,
+                  ),
+                ),
+                onChanged: (value) => ref
+                    .read(appSettingProvider.notifier)
+                    .update(
+                      (state) =>
+                          state.copyWith(backgroundResidentialCheck: value),
+                    ),
+              ),
+              ListItem(
+                title: Text.rich(
+                  TextSpan(
+                    text: '${l10n.businessClientVersion} ',
+                    children: [
+                      TextSpan(
+                        text: _clientVersion(),
+                        style: AppTextStyle.custom(
+                          context,
+                          size: 14,
+                          leading: 20,
+                        ).toJetBrainsMono,
+                      ),
+                    ],
+                  ),
+                ),
+                subtitle: Text(l10n.businessClientVersionDesc),
+                trailing: _BusinessSecondaryButton(
+                  label: l10n.checkUpdate,
+                  onPressed: () => _checkForUpdate(context, ref),
+                ),
+              ),
+              _toggle(
+                title: (l) => l.autoCheckUpdate,
+                select: (state) => state.autoCheckUpdate,
+                update: (state, value) =>
+                    state.copyWith(autoCheckUpdate: value),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+        ],
+        if (!hideAdvanced || advancedOnly)
+          BusinessSettingsCard(
+            title: l10n.advancedConfig,
+            items: [
+              if (system.isDesktop)
+                _toggle(
+                  title: (l) => l.silentLaunch,
+                  select: (state) => state.silentLaunch,
+                  update: (state, value) => state.copyWith(silentLaunch: value),
+                ),
+              if (system.isAndroid) ...[
+                _toggle(
+                  title: (l) => l.exclude,
+                  select: (state) => state.hidden,
+                  update: (state, value) => state.copyWith(hidden: value),
+                ),
+                _toggle(
+                  title: (l) => l.showNotificationStopAction,
+                  select: (state) => state.showNotificationStopAction,
+                  update: (state, value) =>
+                      state.copyWith(showNotificationStopAction: value),
+                ),
+              ],
+              const UaItem(),
+              _toggle(
+                title: (l) => l.checkCertificate,
+                select: (state) => state.checkCertificate,
+                update: (state, value) =>
+                    state.copyWith(checkCertificate: value),
+              ),
+              ..._connectionItems(),
+              ..._inboundItems(
+                authentication: authentication,
+                externalController: externalController,
+              ),
+              OverrideSection(
+                title: l10n.core,
+                spec: _generalOverrideSpec,
+                items: _coreItems(),
+              ),
+              ..._logItems(),
+            ],
+          ),
       ],
     );
   }

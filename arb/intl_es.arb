@@ -1818,5 +1818,8 @@
   "diagnosticsRestartService": "Reinicia el servicio e inténtalo de nuevo.",
   "diagnosticsImportSubscription": "Importa o revisa tu suscripción.",
   "diagnosticsCheckLine": "Revisa la línea seleccionada e inténtalo de nuevo.",
-  "diagnosticsCheckConnection": "Revisa la conexión y la línea seleccionada; vuelve a intentarlo."
+  "diagnosticsCheckConnection": "Revisa la conexión y la línea seleccionada; vuelve a intentarlo.",
+  "macosBusinessAutoLaunchDesc": "Se ejecuta en segundo plano después de iniciar sesión",
+  "macosBusinessMinimizeDesc": "El icono de la barra de menús siempre muestra el estado de conexión",
+  "macosBusinessMinimizeToMenuBar": "Minimizar en la barra de menús"
 }

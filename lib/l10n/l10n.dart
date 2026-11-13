@@ -14947,6 +14947,36 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Run in the background after signing in`
+  String get macosBusinessAutoLaunchDesc {
+    return Intl.message(
+      'Run in the background after signing in',
+      name: 'macosBusinessAutoLaunchDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The menu bar icon always shows connection status`
+  String get macosBusinessMinimizeDesc {
+    return Intl.message(
+      'The menu bar icon always shows connection status',
+      name: 'macosBusinessMinimizeDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimize to menu bar`
+  String get macosBusinessMinimizeToMenuBar {
+    return Intl.message(
+      'Minimize to menu bar',
+      name: 'macosBusinessMinimizeToMenuBar',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

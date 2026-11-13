@@ -266,6 +266,47 @@ class ProxyCard extends ConsumerWidget {
     final multiplier =
         node?.multiplier?.toString() ??
         businessMultiplierFromName(proxy.name)?.toString();
+    if (MacOSStyle.of(context)) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: MacOSMetrics.listRowHeight(context, fallback: 44),
+            child: Row(
+              spacing: 10,
+              children: [
+                if (region.code case final code?) RegionCodeBadge(code: code),
+                Expanded(
+                  child: EmojiText(
+                    stripBusinessMultiplierSuffix(region.name),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BusinessText.linesNodeTitle(
+                      context,
+                      emphasized: selected,
+                    ),
+                  ),
+                ),
+                _BusinessDelayText(proxy: proxy, testUrl: testUrl),
+              ],
+            ),
+          ),
+          if (multiplier case final value?)
+            Padding(
+              padding: EdgeInsetsDirectional.only(
+                start: region.code == null ? 0 : 42,
+              ),
+              child: Text(
+                context.appLocalizations.businessMultiplier(value),
+                style: AppTextStyle.caption1
+                    .of(context)
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
+            ),
+        ],
+      );
+    }
     return DecoratedBox(
       decoration: BoxDecoration(
         color: selected
@@ -442,13 +483,14 @@ class ProxyCard extends ConsumerWidget {
         final isCustomProfile = profile?.type == ProfileType.custom;
         final radius = MacOSMetrics.cardRadius(
           context,
-          fallback: businessMobile || businessList
+          fallback: businessMobile || (businessList && !MacOSStyle.of(context))
               ? AppCorner.none
               : businessStyle
               ? AppCorner.md
               : AppCorner.lg,
         );
-        final shape = businessMobile || businessList
+        final shape =
+            businessMobile || (businessList && !MacOSStyle.of(context))
             ? AppShape.none
             : MacOSStyle.of(context)
             ? AppShape.all(radius)
@@ -461,7 +503,10 @@ class ProxyCard extends ConsumerWidget {
           enterActionsOnRight: true,
           key: key,
           onPressed: () => _handleSelect(ref),
-          isSelected: businessMobile || businessList ? false : inUse,
+          isSelected:
+              businessMobile || (businessList && !MacOSStyle.of(context))
+              ? false
+              : inUse,
           padding: MacOSMetrics.compactCardPadding(
             context,
             fallback: businessMobile || businessList
@@ -506,7 +551,10 @@ class ProxyCard extends ConsumerWidget {
           ),
         );
         final selectedCard =
-            businessStyle && inUse && !businessMobile && !businessList
+            businessStyle &&
+                inUse &&
+                !businessMobile &&
+                (!businessList || MacOSStyle.of(context))
             ? DecoratedBox(
                 decoration: ShapeDecoration(
                   shadows: [BusinessShadow.selectedLine(BusinessPalette.blue)],

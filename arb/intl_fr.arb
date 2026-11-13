@@ -1818,5 +1818,8 @@
   "diagnosticsRestartService": "Redémarrez le service et réessayez.",
   "diagnosticsImportSubscription": "Importez ou vérifiez votre abonnement.",
   "diagnosticsCheckLine": "Vérifiez la ligne choisie et réessayez.",
-  "diagnosticsCheckConnection": "Vérifiez la connexion et la ligne choisie, puis réessayez."
+  "diagnosticsCheckConnection": "Vérifiez la connexion et la ligne choisie, puis réessayez.",
+  "macosBusinessAutoLaunchDesc": "S’exécute en arrière-plan après la connexion",
+  "macosBusinessMinimizeDesc": "L’icône de la barre des menus affiche toujours l’état de connexion",
+  "macosBusinessMinimizeToMenuBar": "Réduire dans la barre des menus"
 }

@@ -13,6 +13,7 @@ import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/views/font_family.dart';
 import 'package:fl_clash/views/business_settings_card.dart';
 import 'package:fl_clash/views/theme_choices.dart';
+import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/views/theme_preview.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -95,12 +96,28 @@ class _FollowSystemAccentItem extends StatelessWidget {
   const _FollowSystemAccentItem();
 
   @override
-  Widget build(BuildContext context) => ConfigToggleItem(
-    title: (l) => l.followSystemAccent,
-    selector: themeSettingProvider.select((state) => state.followSystemAccent),
-    onChanged: (ref, value) => ref
-        .read(themeSettingProvider.notifier)
-        .update((state) => state.copyWith(followSystemAccent: value)),
+  Widget build(BuildContext context) => Consumer(
+    builder: (context, ref, _) {
+      final followsSystem = ref.watch(
+        themeSettingProvider.select((state) => state.followSystemAccent),
+      );
+      final l10n = context.appLocalizations;
+      return ListItem(
+        title: Text(l10n.followSystemAccent),
+        padding: EdgeInsets.zero,
+        minVerticalPadding: 4,
+        trailing: BusinessSegmented<bool>(
+          items: [
+            BusinessSegment(value: true, label: l10n.followSystem),
+            BusinessSegment(value: false, label: l10n.custom),
+          ],
+          selected: followsSystem,
+          onSelected: (value) => ref
+              .read(themeSettingProvider.notifier)
+              .update((state) => state.copyWith(followSystemAccent: value)),
+        ),
+      );
+    },
   );
 }
 
@@ -172,8 +189,12 @@ class _BusinessThemeView extends StatelessWidget {
     final l10n = context.appLocalizations;
     return ListView(
       padding: EdgeInsets.only(
-        left: MacOSMetrics.pageMargin(context, fallback: 40),
-        right: MacOSMetrics.pageMargin(context, fallback: 0),
+        left: MacOSStyle.of(context)
+            ? 0
+            : MacOSMetrics.pageMargin(context, fallback: 40),
+        right: MacOSStyle.of(context)
+            ? 0
+            : MacOSMetrics.pageMargin(context, fallback: 0),
         bottom: context.bottomInset + 20,
       ),
       children: [
@@ -796,7 +817,7 @@ class _ColorSwatch extends StatelessWidget {
                   ),
                 ),
               ),
-              if (color == null)
+              if (color == null && !MacOSStyle.of(context))
                 Positioned(
                   right: 0,
                   bottom: 0,
@@ -1342,15 +1363,32 @@ class _TextScaleFactorItemState extends ConsumerState<_TextScaleFactorItem> {
               ],
             ),
           ),
-          SegmentedControl<bool>(
-            segments: [
-              (false, appLocalizations.followSystem),
-              (true, appLocalizations.custom),
-            ],
-            value: textScale.enable,
-            onChanged: (value) =>
-                _update((state) => state.copyWith(enable: value)),
-          ),
+          if (MacOSStyle.of(context))
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: BusinessSegmented<bool>(
+                items: [
+                  BusinessSegment(
+                    value: false,
+                    label: appLocalizations.followSystem,
+                  ),
+                  BusinessSegment(value: true, label: appLocalizations.custom),
+                ],
+                selected: textScale.enable,
+                onSelected: (value) =>
+                    _update((state) => state.copyWith(enable: value)),
+              ),
+            )
+          else
+            SegmentedControl<bool>(
+              segments: [
+                (false, appLocalizations.followSystem),
+                (true, appLocalizations.custom),
+              ],
+              value: textScale.enable,
+              onChanged: (value) =>
+                  _update((state) => state.copyWith(enable: value)),
+            ),
         ],
       );
     }

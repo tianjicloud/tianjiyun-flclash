@@ -1,5 +1,17 @@
 part of '../state.dart';
 
+final macOSSettingsSelectionProvider =
+    NotifierProvider<MacOSSettingsSelection, String>(
+      MacOSSettingsSelection.new,
+    );
+
+class MacOSSettingsSelection extends Notifier<String> {
+  @override
+  String build() => 'general';
+
+  void select(String key) => state = key;
+}
+
 @riverpod
 NavigationItemsState navigationItemsState(Ref ref) {
   final openLogs = ref.watch(appSettingProvider).openLogs;

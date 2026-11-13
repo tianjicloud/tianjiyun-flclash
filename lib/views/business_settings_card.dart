@@ -77,7 +77,12 @@ class BusinessSettingsCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
           ],
-          generateGroup(items),
+          MacOSStyle.of(context)
+              ? ListItemInsets(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: generateGroup(items),
+                )
+              : generateGroup(items),
           ?footer,
         ],
       ),

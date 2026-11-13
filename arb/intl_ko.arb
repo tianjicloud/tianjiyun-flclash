@@ -1818,5 +1818,8 @@
   "diagnosticsRestartService": "서비스를 다시 시작한 뒤 재시도하세요.",
   "diagnosticsImportSubscription": "구독을 가져오거나 확인하세요.",
   "diagnosticsCheckLine": "선택한 회선을 확인한 뒤 재시도하세요.",
-  "diagnosticsCheckConnection": "연결과 선택한 회선을 확인한 뒤 재시도하세요."
+  "diagnosticsCheckConnection": "연결과 선택한 회선을 확인한 뒤 재시도하세요.",
+  "macosBusinessAutoLaunchDesc": "로그인 후 백그라운드에서 실행",
+  "macosBusinessMinimizeDesc": "메뉴 막대 아이콘에 연결 상태가 계속 표시됩니다",
+  "macosBusinessMinimizeToMenuBar": "메뉴 막대로 최소화"
 }

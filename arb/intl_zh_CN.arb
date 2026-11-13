@@ -1818,5 +1818,8 @@
   "diagnosticsRestartService": "请重启服务后重试。",
   "diagnosticsImportSubscription": "请导入或检查订阅。",
   "diagnosticsCheckLine": "请检查所选线路后重试。",
-  "diagnosticsCheckConnection": "请检查网络和所选线路后重试。"
+  "diagnosticsCheckConnection": "请检查网络和所选线路后重试。",
+  "macosBusinessAutoLaunchDesc": "登录后在后台运行",
+  "macosBusinessMinimizeDesc": "菜单栏图标会一直显示连接状态",
+  "macosBusinessMinimizeToMenuBar": "最小化到菜单栏"
 }
