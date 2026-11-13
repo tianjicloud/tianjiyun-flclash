@@ -2,6 +2,23 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.21",
+      "tag": "v0.9.21",
+      "date": "2026-11-13",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "df54e3c",
+              "text": "Add the deferred startup, provider, user agent, DNS route, memory and support items"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.20",
       "tag": "v0.9.20",
       "date": "2026-11-13",

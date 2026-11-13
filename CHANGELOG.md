@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.21 (2026-11-13)
+
+**Features**
+
+- Add the deferred startup, provider, user agent, DNS route, memory and support items (df54e3c)
+
 ## v0.9.20 (2026-11-13)
 
 **Features**
