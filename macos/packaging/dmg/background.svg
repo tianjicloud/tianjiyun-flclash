@@ -38,6 +38,10 @@
   <ellipse cx="720" cy="620" rx="660" ry="215" fill="none" stroke="#5f74ff" stroke-opacity=".28" stroke-width="2.5" transform="rotate(-4 720 620)"/>
   <circle cx="400" cy="640" r="215" fill="url(#stage)"/>
   <circle cx="1040" cy="640" r="215" fill="url(#stage)"/>
+  <rect x="228" y="742" width="344" height="66" rx="33" fill="#ffffff" opacity=".43"/>
+  <rect x="868" y="742" width="344" height="66" rx="33" fill="#ffffff" opacity=".43"/>
+  <rect x="228" y="742" width="344" height="66" rx="33" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="2"/>
+  <rect x="868" y="742" width="344" height="66" rx="33" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="2"/>
   <rect x="648" y="118" width="144" height="9" rx="4.5" fill="url(#accent)"/>
   <text x="720" y="212" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans CJK SC','PingFang SC',sans-serif" font-size="56" font-weight="600" letter-spacing="2">安装天机云</text>
   <text x="720" y="268" text-anchor="middle" fill="#a9b8e8" font-family="'Noto Sans CJK SC','PingFang SC',sans-serif" font-size="27">将左侧应用拖到右侧文件夹即可完成安装</text>
