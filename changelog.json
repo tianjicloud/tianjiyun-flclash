@@ -2,6 +2,34 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.24",
+      "tag": "v0.9.24",
+      "date": "2026-11-14",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "f1f10d8",
+              "scope": "dashboard",
+              "text": "Keep the layout still while live values change"
+            },
+            {
+              "id": "9d9c82d",
+              "scope": "ui",
+              "text": "Show the cloud brand mark inside the window"
+            },
+            {
+              "id": "afce2a1",
+              "scope": "dashboard",
+              "text": "Keep the power button pulse inside its card"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.23",
       "tag": "v0.9.23",
       "date": "2026-11-13",

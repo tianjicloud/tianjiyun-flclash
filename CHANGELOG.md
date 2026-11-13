@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.24 (2026-11-14)
+
+**Bug Fixes**
+
+- **dashboard** Keep the layout still while live values change (f1f10d8)
+- **ui** Show the cloud brand mark inside the window (9d9c82d)
+- **dashboard** Keep the power button pulse inside its card (afce2a1)
+
 ## v0.9.23 (2026-11-13)
 
 **Features**
