@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:prism_ui/paged_sheet.dart';
+import 'package:prism_ui/motion.dart' show fadeTabDuration;
 import 'package:prism_ui/prism_ui.dart'
     show BuildContextExtension, ElasticPress, Theme;
 
@@ -104,6 +106,75 @@ class MacOSPressFeedback extends StatelessWidget {
   Widget build(BuildContext context) => MacOSStyle.of(context)
       ? child
       : ElasticPress(enabled: enabled, child: child);
+}
+
+class MacOSPagedSheetRoute<T> extends PagedSheetRoute<T> {
+  MacOSPagedSheetRoute({
+    required this.macOS,
+    this.reducedMotion = false,
+    required super.builder,
+  });
+
+  final bool macOS;
+  final bool reducedMotion;
+  final SnapshotController _snapshot = SnapshotController();
+
+  @override
+  void dispose() {
+    _snapshot.dispose();
+    super.dispose();
+  }
+
+  @override
+  Duration get transitionDuration => macOS
+      ? reducedMotion
+            ? Duration.zero
+            : fadeTabDuration
+      : super.transitionDuration;
+
+  @override
+  Duration get reverseTransitionDuration => macOS
+      ? reducedMotion
+            ? Duration.zero
+            : const Duration(milliseconds: 120)
+      : super.reverseTransitionDuration;
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    if (!macOS) {
+      return super.buildTransitions(
+        context,
+        animation,
+        secondaryAnimation,
+        child,
+      );
+    }
+    if (context.disableAnimations) {
+      return child;
+    }
+    final transition = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOut,
+      reverseCurve: Curves.easeIn,
+    );
+    return FadeTransition(
+      opacity: transition,
+      child: ScaleTransition(
+        scale: Tween<double>(begin: 0.98, end: 1).animate(transition),
+        child: SnapshotWidget(
+          controller: _snapshot,
+          mode: SnapshotMode.permissive,
+          autoresize: true,
+          child: child,
+        ),
+      ),
+    );
+  }
 }
 
 abstract final class MacOSMetrics {

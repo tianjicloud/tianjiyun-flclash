@@ -136,7 +136,9 @@ class _MemoryInfoState extends ConsumerState<MemoryInfo>
     stopPolling();
     if (coreDetail) {
       await Navigator.of(context).push(
-        PagedSheetRoute(
+        MacOSPagedSheetRoute(
+          macOS: MacOSStyle.of(context),
+          reducedMotion: context.disableAnimations,
           builder: (_) => CoreDetailView(memoryReader: widget.memoryReader),
         ),
       );

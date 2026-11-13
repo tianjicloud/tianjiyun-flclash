@@ -292,27 +292,20 @@ class ProxyCard extends ConsumerWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: 14,
-            child: Padding(
+          if (multiplier != null)
+            Padding(
               padding: EdgeInsetsDirectional.only(
                 start: region.code == null ? 0 : 42,
+                top: 2,
+                bottom: 2,
               ),
-              child: multiplier == null
-                  ? null
-                  : Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: Text(
-                        context.appLocalizations.businessMultiplier(multiplier),
-                        style: AppTextStyle.caption1
-                            .of(context)
-                            .copyWith(
-                              color: context.colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                    ),
+              child: Text(
+                context.appLocalizations.businessMultiplier(multiplier),
+                style: AppTextStyle.caption1
+                    .of(context)
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              ),
             ),
-          ),
         ],
       );
     }
@@ -622,15 +615,37 @@ class _BusinessDelayText extends ConsumerWidget {
       (_, final value?) when value > 0 => '$value ms',
       _ => context.appLocalizations.businessDelayTimeout,
     };
-    return Text(
+    final running =
+        phase == DelayTestPhase.running || phase == DelayTestPhase.queued;
+    final style =
+        (delay != null && delay <= 0
+                ? AppTextStyle.footnote.of(context, emphasized: true)
+                : BusinessText.cardDelay(context))
+            .copyWith(color: color);
+    final value = Text(
       label,
       maxLines: 1,
+      textAlign: MacOSStyle.of(context) ? TextAlign.end : null,
       overflow: TextOverflow.ellipsis,
-      style:
-          (delay != null && delay <= 0
-                  ? AppTextStyle.footnote.of(context, emphasized: true)
-                  : BusinessText.cardDelay(context))
-              .copyWith(color: color),
+      style: MacOSStyle.of(context) ? style.toJetBrainsMono : style,
+    );
+    if (!MacOSStyle.of(context)) {
+      return value;
+    }
+    return RepaintBoundary(
+      child: SizedBox(
+        width: 72,
+        child: AnimatedSwitcher(
+          duration: context.motionDuration(fadeTabDuration),
+          switchInCurve: Curves.easeOut,
+          switchOutCurve: Curves.easeIn,
+          child: Opacity(
+            key: ValueKey((label, running)),
+            opacity: running ? 0.55 : 1,
+            child: value,
+          ),
+        ),
+      ),
     );
   }
 }

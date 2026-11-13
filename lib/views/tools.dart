@@ -808,9 +808,13 @@ class _RuleSettingsView extends ConsumerWidget {
                 title: Text(
                   '${l10n.viewAll} ${l10n.itemsCount(rules.length)} ›',
                 ),
-                onTap: () => Navigator.of(
-                  context,
-                ).push(PagedSheetRoute(builder: (_) => const AddedRulesView())),
+                onTap: () => Navigator.of(context).push(
+                  MacOSPagedSheetRoute(
+                    macOS: MacOSStyle.of(context),
+                    reducedMotion: context.disableAnimations,
+                    builder: (_) => const AddedRulesView(),
+                  ),
+                ),
               ),
           ],
         ),
@@ -892,7 +896,13 @@ class _BusinessManageRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void open() {
-      Navigator.of(context).push(PagedSheetRoute(builder: (_) => page));
+      Navigator.of(context).push(
+        MacOSPagedSheetRoute(
+          macOS: MacOSStyle.of(context),
+          reducedMotion: context.disableAnimations,
+          builder: (_) => page,
+        ),
+      );
     }
 
     return ListItem(
@@ -1313,7 +1323,9 @@ class _BusinessBypassDomainsRow extends ConsumerWidget {
     void open() {
       Navigator.of(context)
           .push(
-            PagedSheetRoute(
+            MacOSPagedSheetRoute(
+              macOS: MacOSStyle.of(context),
+              reducedMotion: context.disableAnimations,
               builder: (_) => ListEditView(
                 title: l10n.bypassDomain,
                 description: l10n.bypassDomainDesc,
@@ -1843,9 +1855,13 @@ class _TunSettingsView extends ConsumerWidget {
           PressSurface(
             fill: context.colorScheme.primaryContainer,
             shape: AppShape.all(AppCorner.md),
-            onPressed: () => Navigator.of(
-              context,
-            ).push(PagedSheetRoute(builder: (_) => const SystemServiceView())),
+            onPressed: () => Navigator.of(context).push(
+              MacOSPagedSheetRoute(
+                macOS: MacOSStyle.of(context),
+                reducedMotion: context.disableAnimations,
+                builder: (_) => const SystemServiceView(),
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
@@ -1921,9 +1937,13 @@ class _TunSettingsView extends ConsumerWidget {
                   );
                 }
               },
-              onDiagnostics: () => Navigator.of(
-                context,
-              ).push(PagedSheetRoute(builder: (_) => const DiagnosticsView())),
+              onDiagnostics: () => Navigator.of(context).push(
+                MacOSPagedSheetRoute(
+                  macOS: MacOSStyle.of(context),
+                  reducedMotion: context.disableAnimations,
+                  builder: (_) => const DiagnosticsView(),
+                ),
+              ),
             ),
           ),
         BusinessSettingsCard(

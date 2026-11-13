@@ -260,7 +260,7 @@ class ProxyGroupView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final proxies = group.all;
     final itemHeight = businessList
-        ? 48.0
+        ? businessListItemHeight(context)
         : businessMobile
         ? 68.0
         : businessStyle

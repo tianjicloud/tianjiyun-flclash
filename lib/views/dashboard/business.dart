@@ -331,7 +331,9 @@ class _BusinessBody extends ConsumerWidget {
                           }
                         },
                         onDiagnostics: () => Navigator.of(context).push(
-                          PagedSheetRoute(
+                          MacOSPagedSheetRoute(
+                            macOS: MacOSStyle.of(context),
+                            reducedMotion: context.disableAnimations,
                             builder: (_) => const DiagnosticsView(),
                           ),
                         ),
@@ -1023,9 +1025,13 @@ class _ControlBar extends StatelessWidget {
           final diagnostics = BusinessSecondaryButton(
             label: strings.diagnosticsTitle,
             width: 86,
-            onPressed: () => Navigator.of(
-              context,
-            ).push(PagedSheetRoute(builder: (_) => const DiagnosticsView())),
+            onPressed: () => Navigator.of(context).push(
+              MacOSPagedSheetRoute(
+                macOS: MacOSStyle.of(context),
+                reducedMotion: context.disableAnimations,
+                builder: (_) => const DiagnosticsView(),
+              ),
+            ),
           );
           final aiServices = Row(
             mainAxisSize: MainAxisSize.min,

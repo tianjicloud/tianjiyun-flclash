@@ -12,7 +12,6 @@ import 'package:fl_clash/widgets/business_navigation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prism_ui/prism_ui.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -338,7 +337,8 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
       setState(() => _order = null);
       _pageController.jumpToPage(current);
     }
-    if (!isMobile || ignoreAnimateTo) {
+    final macOS = MacOSStyle.of(context);
+    if (ignoreAnimateTo || (!isMobile && !macOS)) {
       _pageController.jumpToPage(index);
       return;
     }
@@ -352,10 +352,12 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
       });
       _pageController.jumpToPage(adjacent);
     }
-    final fade = tabAnimation == TabAnimation.fade;
+    final fade = macOS || tabAnimation == TabAnimation.fade;
     await _pageController.animateToPage(
       index,
-      duration: fade ? fadeTabDuration : kTabScrollDuration,
+      duration: context.motionDuration(
+        fade ? fadeTabDuration : kTabScrollDuration,
+      ),
       curve: fade ? fadeTabCurve : Curves.easeOut,
     );
     if (mounted && slide == _slide && _order != null) {
@@ -379,11 +381,13 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
     final itemCount = ref.watch(
       currentNavigationItemsStateProvider.select((state) => state.value.length),
     );
-    final fade = ref.watch(
-      appSettingProvider.select(
-        (state) => state.tabAnimation == TabAnimation.fade,
-      ),
-    );
+    final fade =
+        MacOSStyle.of(context) ||
+        ref.watch(
+          appSettingProvider.select(
+            (state) => state.tabAnimation == TabAnimation.fade,
+          ),
+        );
     return PageView.builder(
       controller: _pageController,
       physics: const NeverScrollableScrollPhysics(),

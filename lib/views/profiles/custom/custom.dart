@@ -41,7 +41,13 @@ void showCustomProfileSheet(BuildContext context, int profileId) {
 
 void _push(BuildContext context, Widget view) {
   if (isSheetPage(context)) {
-    Navigator.of(context).push(PagedSheetRoute<void>(builder: (_) => view));
+    Navigator.of(context).push(
+      MacOSPagedSheetRoute<void>(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
+        builder: (_) => view,
+      ),
+    );
     return;
   }
   BaseNavigator.push(context, view);

@@ -411,9 +411,13 @@ class _MembersSliverState<M> extends ConsumerState<_MembersSliver<M>>
   }
 
   void _handleToPicker() {
-    Navigator.of(
-      context,
-    ).push(PagedSheetRoute(builder: (_) => _MemberPicker(_host)));
+    Navigator.of(context).push(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
+        builder: (_) => _MemberPicker(_host),
+      ),
+    );
   }
 
   void _update(List<_Member> Function(List<_Member> members) apply) {

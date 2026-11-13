@@ -595,7 +595,9 @@ class _ProxyProviderOptionsViewState
           .add(option);
     }
     Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (_) => SelectionSheet<_ProviderOption>(
           title: appLocalizations.addSettingEntry,
           sections: [
@@ -694,7 +696,9 @@ class _ProxyProviderOptionsViewState
 
   Future<void> _showIpVersionOptions() async {
     final value = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => SelectionSheet<IpVersion>(
           title: context.appLocalizations.ipVersion,
           sections: const [SelectionSection(items: IpVersion.values)],

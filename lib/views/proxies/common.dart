@@ -1,10 +1,17 @@
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/ui/macos_style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prism_ui/typography.dart';
 
 const proxyGridSpacing = 8.0;
+
+double businessListItemHeight(BuildContext context) => MacOSStyle.of(context)
+    ? MacOSMetrics.singleLineRowHeight(context, fallback: 30) +
+          globalState.measure.textHeight(AppTextStyle.caption1) +
+          12
+    : 48;
 
 double get listHeaderHeight {
   final measure = globalState.measure;

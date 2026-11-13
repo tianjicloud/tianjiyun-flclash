@@ -325,6 +325,7 @@ class _BusinessSidebarItem extends StatelessWidget {
               onTap: onTap,
               shape: rowShape,
               overlay: PressRegion.hoverOverlay,
+              mouseCursor: macOS ? SystemMouseCursors.basic : null,
               child: SizedBox(
                 key: ValueKey('business-sidebar-${item.label.name}'),
                 height: MacOSMetrics.sidebarRowHeight(
@@ -334,31 +335,35 @@ class _BusinessSidebarItem extends StatelessWidget {
                 child: Stack(
                   alignment: AlignmentDirectional.centerStart,
                   children: [
-                    if (selected)
-                      Positioned.fill(
-                        child: DecoratedBox(
-                          decoration: ShapeDecoration(
-                            color: macOS && !dark
-                                ? context.colorScheme.surfaceContainerLow
-                                : dark
-                                ? BusinessPalette.sidebarDarkBackground
-                                : BusinessPalette.sidebarSelection,
-                            shape: RoundedSuperellipseBorder(
-                              borderRadius: rowShape.borderRadius,
-                            ),
-                            shadows: dark || macOS
-                                ? const []
-                                : const [
-                                    BoxShadow(
-                                      color: BusinessPalette
-                                          .sidebarSelectionShadow,
-                                      blurRadius: 8,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
+                    Positioned.fill(
+                      child: AnimatedContainer(
+                        duration: macOS
+                            ? context.motionDuration(fadeTabDuration)
+                            : Duration.zero,
+                        decoration: ShapeDecoration(
+                          color: selected
+                              ? macOS && !dark
+                                    ? context.colorScheme.surfaceContainerLow
+                                    : dark
+                                    ? BusinessPalette.sidebarDarkBackground
+                                    : BusinessPalette.sidebarSelection
+                              : Colors.transparent,
+                          shape: RoundedSuperellipseBorder(
+                            borderRadius: rowShape.borderRadius,
                           ),
+                          shadows: selected && !dark && !macOS
+                              ? const [
+                                  BoxShadow(
+                                    color:
+                                        BusinessPalette.sidebarSelectionShadow,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ]
+                              : const [],
                         ),
                       ),
+                    ),
                     Padding(
                       padding: EdgeInsetsDirectional.only(
                         start: expanded ? 10 : 0,

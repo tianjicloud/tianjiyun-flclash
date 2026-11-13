@@ -818,7 +818,9 @@ class _EditProxyGroupViewState extends ConsumerState<EditProxyGroupView> {
 
   Future<void> _showTypeOptions() async {
     final value = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => SelectionSheet<GroupType>(
           title: context.appLocalizations.proxyType,
           sections: [SelectionSection(items: GroupType.selectableValues)],
@@ -839,7 +841,9 @@ class _EditProxyGroupViewState extends ConsumerState<EditProxyGroupView> {
 
   Future<void> _showStrategyOptions() async {
     final value = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => SelectionSheet<LoadBalanceStrategy>(
           title: context.appLocalizations.strategy,
           sections: const [SelectionSection(items: LoadBalanceStrategy.values)],
@@ -865,7 +869,9 @@ class _EditProxyGroupViewState extends ConsumerState<EditProxyGroupView> {
   Future<void> _showEmptyFallbackOptions() async {
     final profileId = ProfileIdProvider.of(context)!.profileId;
     final res = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => Consumer(
           builder: (_, ref, _) {
             final proxies = ref.watch(
@@ -904,7 +910,9 @@ class _EditProxyGroupViewState extends ConsumerState<EditProxyGroupView> {
 
   Future<void> _showDefaultSelectedOptions() async {
     final res = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => Consumer(
           builder: (_, ref, _) {
             final appLocalizations = context.appLocalizations;
@@ -944,7 +952,9 @@ class _EditProxyGroupViewState extends ConsumerState<EditProxyGroupView> {
   Future<void> _showIconPicker(String? icon) async {
     final groupName = ref.read(proxyGroupProvider).name;
     final value = await Navigator.of(context).push<String>(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => IconPickerView(value: icon, groupName: groupName),
       ),
     );
@@ -1370,7 +1380,9 @@ class _EditProxyGroupViewState extends ConsumerState<EditProxyGroupView> {
           .add(option);
     }
     Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (_) => SelectionSheet<_GroupOption>(
           title: appLocalizations.addSettingEntry,
           sections: [

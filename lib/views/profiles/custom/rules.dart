@@ -495,7 +495,9 @@ class _AddOrEditRuleViewState extends ConsumerState<_AddOrEditRuleView> {
 
   Future<void> _handleSelectedType() async {
     final res = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => SelectionSheet<RuleAction>(
           title: context.appLocalizations.proxyType,
           sections: [
@@ -582,7 +584,9 @@ class _AddOrEditRuleViewState extends ConsumerState<_AddOrEditRuleView> {
 
   Future<void> _handleSelectedRuleProvider() async {
     final res = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => Consumer(
           builder: (_, ref, _) {
             final ruleProviders = ref.watch(
@@ -651,7 +655,9 @@ class _AddOrEditRuleViewState extends ConsumerState<_AddOrEditRuleView> {
 
   Future<void> _handleSelectedTarget() async {
     final res = await Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => Consumer(
           builder: (_, ref, _) {
             final profileId = ProfileIdProvider.of(context)!.profileId;

@@ -148,4 +148,25 @@ void main() {
     await expectMetrics(false);
     await expectMetrics(true);
   });
+
+  test('macOS sheet uses a short fade and a quicker dismissal', () {
+    final route = MacOSPagedSheetRoute<void>(
+      macOS: true,
+      builder: (_) => const SizedBox(),
+    );
+
+    expect(route.transitionDuration, const Duration(milliseconds: 220));
+    expect(route.reverseTransitionDuration, const Duration(milliseconds: 120));
+  });
+
+  test('macOS sheet duration is zero with reduced motion', () {
+    final route = MacOSPagedSheetRoute<void>(
+      macOS: true,
+      reducedMotion: true,
+      builder: (_) => const SizedBox(),
+    );
+
+    expect(route.transitionDuration, Duration.zero);
+    expect(route.reverseTransitionDuration, Duration.zero);
+  });
 }

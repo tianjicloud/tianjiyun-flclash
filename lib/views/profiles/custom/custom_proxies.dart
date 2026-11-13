@@ -1559,7 +1559,9 @@ class _EditCustomProxyViewState extends ConsumerState<_EditCustomProxyView> {
     required String? Function(CustomProxy state) selectedOf,
   }) {
     return Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (context) => SelectionSheet<String>(
           title: title,
           sections: [SelectionSection(items: items)],
@@ -1624,7 +1626,9 @@ class _EditCustomProxyViewState extends ConsumerState<_EditCustomProxyView> {
           : appLocalizations.itemsCount(items.length),
       leading: leading,
       onPressed: () => Navigator.of(context).push(
-        PagedSheetRoute<void>(
+        MacOSPagedSheetRoute<void>(
+          macOS: MacOSStyle.of(context),
+          reducedMotion: context.disableAnimations,
           builder: (_) => _ProxyValuesView(
             title: title,
             path: path,
@@ -1650,7 +1654,9 @@ class _EditCustomProxyViewState extends ConsumerState<_EditCustomProxyView> {
           : appLocalizations.itemsCount(entries.length),
       leading: leading,
       onPressed: () => Navigator.of(context).push(
-        PagedSheetRoute<void>(
+        MacOSPagedSheetRoute<void>(
+          macOS: MacOSStyle.of(context),
+          reducedMotion: context.disableAnimations,
           builder: (_) => _ProxyEntriesView(title: title, field: field),
         ),
       ),
@@ -1667,7 +1673,9 @@ class _EditCustomProxyViewState extends ConsumerState<_EditCustomProxyView> {
         ],
     };
     Navigator.of(context).push(
-      PagedSheetRoute(
+      MacOSPagedSheetRoute(
+        macOS: MacOSStyle.of(context),
+        reducedMotion: context.disableAnimations,
         builder: (_) => SelectionSheet<ProxyField>(
           title: appLocalizations.addSettingEntry,
           sections: [
