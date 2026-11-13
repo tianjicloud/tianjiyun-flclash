@@ -21,6 +21,7 @@ import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -202,6 +203,42 @@ DashboardChip _chip(WidgetTester tester, String label) =>
     );
 
 void main() {
+  group('OrbitPainter bounds', () {
+    const size = Size(244, 244);
+
+    OrbitPainter painter({double? pulse, double? loadingProgress}) =>
+        OrbitPainter(
+          color: const Color(0xFFFFFFFF),
+          primary: const Color(0xFF0000FF),
+          idleCore: const Color(0xFF000000),
+          idleStroke: const Color(0xFFFFFFFF),
+          idleShadow: const Color(0x00000000),
+          idlePlate: const Color(0x00000000),
+          focused: false,
+          running: false,
+          pulse: pulse,
+          loadingProgress: loadingProgress,
+          includePulseOverflow: true,
+        );
+
+    test('pulse and loading strokes fit the reserved paint size', () {
+      final radius = (size.shortestSide / 2 - 2) / 1.3;
+      for (final value in [0.0, 0.15, 0.29]) {
+        final recorder = ui.PictureRecorder();
+        painter(pulse: value).paint(Canvas(recorder), size);
+        recorder.endRecording().dispose();
+        final wave = value / 0.3;
+        final waveEdge = radius * (1.08 + 0.22 * wave) + 1;
+        expect(waveEdge * 2, lessThanOrEqualTo(size.shortestSide));
+      }
+      final recorder = ui.PictureRecorder();
+      painter(loadingProgress: 0.5).paint(Canvas(recorder), size);
+      recorder.endRecording().dispose();
+      final tickEdge = radius * 0.95 + math.max(1.2, radius * 0.032) / 2;
+      expect(tickEdge * 2, lessThanOrEqualTo(size.shortestSide));
+    });
+  });
+
   testWidgets('business health ring requires a fresh captured route', (
     tester,
   ) async {
@@ -926,7 +963,7 @@ void main() {
 
     Future<void> pumpCard(
       WidgetTester tester, {
-      DashboardDensity density = DashboardDensity.standard,
+      DashboardDensity? density,
       bool glass = false,
       bool business = false,
     }) async {
@@ -938,18 +975,21 @@ void main() {
             child: LiquidGlassScope(
               enabled: glass,
               child: business
-                  ? const BusinessAppearance(
+                  ? BusinessAppearance(
                       child: HostScaffold(
                         body: SingleChildScrollView(
-                          child: DashboardDensityScope(
-                            density: DashboardDensity.mobile,
-                            scale: 1.6,
-                            child: CurrentOutboundCard(),
+                          child: SizedBox(
+                            height: density?.isDesktop == true ? 236 : null,
+                            child: DashboardDensityScope(
+                              density: density ?? DashboardDensity.mobile,
+                              scale: density?.isDesktop == true ? 1 : 1.6,
+                              child: const CurrentOutboundCard(),
+                            ),
                           ),
                         ),
                       ),
                     )
-                  : _card(density: density),
+                  : _card(density: density ?? DashboardDensity.standard),
             ),
           ),
         ),
@@ -1018,6 +1058,44 @@ void main() {
       expect(action.requests, [false, true]);
       expect(painter().color, const Color(0xFF98A2AD));
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('the orbit paint bounds stay inside the hero card', (
+      tester,
+    ) async {
+      for (final (viewport, density) in [
+        (const Size(360, 900), DashboardDensity.mobile),
+        (const Size(800, 900), DashboardDensity.compact),
+        (const Size(1280, 900), DashboardDensity.standard),
+      ]) {
+        tester.view.physicalSize = viewport;
+        tester.view.devicePixelRatio = 1;
+        container = containerWith();
+        await pumpCard(tester, business: true, density: density);
+        final card = tester.renderObject<RenderBox>(
+          find
+              .descendant(
+                of: find.byType(CurrentOutboundCard),
+                matching: find.byType(DashboardCard),
+              )
+              .first,
+        );
+        final button = tester.renderObject<RenderBox>(startButton());
+        final cardBounds =
+            card.localToGlobal(card.paintBounds.topLeft) &
+            card.paintBounds.size;
+        final buttonBounds =
+            button.localToGlobal(button.paintBounds.topLeft) &
+            button.paintBounds.size;
+        expect(cardBounds.contains(buttonBounds.topLeft), isTrue);
+        expect(cardBounds.contains(buttonBounds.bottomRight), isTrue);
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+      }
+      container = containerWith();
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
     });
 
     testWidgets('mobile business shows the expanded IP and live metrics', (

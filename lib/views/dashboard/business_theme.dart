@@ -57,6 +57,7 @@ class OrbitPainter extends CustomPainter {
     required this.idlePlate,
     required this.focused,
     required this.running,
+    this.includePulseOverflow = false,
     this.loadingProgress,
     this.pulse,
   });
@@ -69,13 +70,16 @@ class OrbitPainter extends CustomPainter {
   final Color idlePlate;
   final bool focused;
   final bool running;
+  final bool includePulseOverflow;
   final double? loadingProgress;
   final double? pulse;
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
-    final radius = size.shortestSide / 2;
+    final radius = includePulseOverflow
+        ? (size.shortestSide / 2 - 2) / 1.3
+        : size.shortestSide / 2;
     final tickStart = radius * 0.86;
     final tickEnd = radius * 0.95;
     final ballRadius = radius * 0.71;
@@ -197,6 +201,7 @@ class OrbitPainter extends CustomPainter {
       color != oldDelegate.color ||
       focused != oldDelegate.focused ||
       running != oldDelegate.running ||
+      includePulseOverflow != oldDelegate.includePulseOverflow ||
       primary != oldDelegate.primary ||
       idleCore != oldDelegate.idleCore ||
       idleStroke != oldDelegate.idleStroke ||

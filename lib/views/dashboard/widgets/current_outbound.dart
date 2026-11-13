@@ -2059,6 +2059,8 @@ class _StartToggleState extends ConsumerState<_StartToggle>
     final appLocalizations = context.appLocalizations;
     final glass = LiquidGlassScope.of(context);
     final size = widget.size;
+    final includePulseOverflow =
+        BusinessTheme.of(context) && widget.pulseEnabled;
     final enabled = widget.enabled;
     final fill = enabled
         ? BusinessPalette.blue
@@ -2097,11 +2099,21 @@ class _StartToggleState extends ConsumerState<_StartToggle>
           : !widget.running && !widget.suspended && widget.idleLabel != null
           ? widget.idleLabel!
           : tooltip;
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 8,
-        children: [
-          Tooltip(
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final paintSize = includePulseOverflow
+              ? math.min(
+                  size * 1.3 + 4,
+                  constraints.maxHeight.isFinite
+                      ? constraints.maxHeight
+                      : size * 1.3 + 4,
+                )
+              : size;
+          final orbitRadius = includePulseOverflow
+              ? (paintSize / 2 - 2) / 1.3
+              : size / 2;
+          final orbitSize = orbitRadius * 2;
+          final button = Tooltip(
             message: label,
             child: Semantics(
               button: true,
@@ -2138,6 +2150,7 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                             ),
                             focused: _focused,
                             running: widget.running && !widget.abnormal,
+                            includePulseOverflow: includePulseOverflow,
                             loadingProgress: connecting
                                 ? _pulseController.value
                                 : null,
@@ -2149,25 +2162,30 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                                 : null,
                           ),
                           child: SizedBox.square(
-                            dimension: size,
+                            dimension: paintSize,
                             child: Center(
-                              child: GlyphIcon(
-                                widget.suspended
-                                    ? AppGlyphs.wifiOff
-                                    : AppGlyphs.power,
-                                size: size * 0.22,
-                                color:
-                                    MacOSStyle.of(context) &&
-                                        (!widget.running || connecting)
-                                    ? colorScheme.onPrimary
-                                    : widget.abnormal
-                                    ? BusinessPalette.exitWarningForegroundFor(
-                                        colorScheme.brightness,
-                                      )
-                                    : widget.running
-                                    ? Colors.white
-                                    : BusinessPalette.blue,
-                                fill: 0,
+                              child: SizedBox.square(
+                                dimension: orbitSize,
+                                child: Center(
+                                  child: GlyphIcon(
+                                    widget.suspended
+                                        ? AppGlyphs.wifiOff
+                                        : AppGlyphs.power,
+                                    size: orbitSize * 0.22,
+                                    color:
+                                        MacOSStyle.of(context) &&
+                                            (!widget.running || connecting)
+                                        ? colorScheme.onPrimary
+                                        : widget.abnormal
+                                        ? BusinessPalette.exitWarningForegroundFor(
+                                            colorScheme.brightness,
+                                          )
+                                        : widget.running
+                                        ? Colors.white
+                                        : BusinessPalette.blue,
+                                    fill: 0,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -2178,15 +2196,39 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                 ),
               ),
             ),
-          ),
-          if (widget.showLabel)
-            Text(
-              label,
-              style: BusinessText.startLabel(
-                context,
-              ).copyWith(color: context.colorScheme.onSurfaceVariant),
-            ),
-        ],
+          );
+          final labelWidget = Text(
+            label,
+            style: BusinessText.startLabel(
+              context,
+            ).copyWith(color: context.colorScheme.onSurfaceVariant),
+          );
+          final buttonColumn = Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 8,
+            children: [
+              if (includePulseOverflow)
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    button,
+                    if (widget.showLabel)
+                      PositionedDirectional(
+                        top: paintSize / 2 + orbitRadius * 0.95 + 2,
+                        start: 0,
+                        end: 0,
+                        child: Center(child: labelWidget),
+                      ),
+                  ],
+                )
+              else ...[
+                button,
+                if (widget.showLabel) labelWidget,
+              ],
+            ],
+          );
+          return buttonColumn;
+        },
       );
     }
     final stateDuration = context.motionDuration(_stateDuration);
