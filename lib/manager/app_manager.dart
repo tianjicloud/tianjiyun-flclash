@@ -17,6 +17,7 @@ import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/ui/app_background.dart';
+import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
 import 'package:fl_clash/views/config/advanced.dart';
 import 'package:fl_clash/widgets/icon.dart';
@@ -47,10 +48,20 @@ class _AppStateManagerState extends ConsumerState<AppStateManager>
     with WidgetsBindingObserver {
   final _residentialFailures = ResidentialFailureTracker();
   Timer? _residentialTimer;
+  bool _brandMarksPrecached = false;
   bool _residentialBackgroundWatching = false;
   String? _residentialExit;
   App? get _app => widget.appPlugin ?? app;
   DateTime get _now => widget.clock?.call() ?? DateTime.now();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_brandMarksPrecached) return;
+    _brandMarksPrecached = true;
+    precacheBusinessBrandMarks(context);
+  }
+
   @override
   void initState() {
     super.initState();

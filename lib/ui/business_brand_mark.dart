@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
+
+const _brandMarkAsset = 'assets/images/icon.png';
 
 class BusinessBrandMark extends StatelessWidget {
   const BusinessBrandMark({super.key, this.size = 32});
@@ -7,40 +11,32 @@ class BusinessBrandMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size.square(size),
-      painter: const _BusinessBrandMarkPainter(),
+    final cacheSize = (size * MediaQuery.devicePixelRatioOf(context)).round();
+    return Image.asset(
+      _brandMarkAsset,
+      width: size,
+      height: size,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.medium,
+      cacheWidth: cacheSize,
+      cacheHeight: cacheSize,
     );
   }
 }
 
-class _BusinessBrandMarkPainter extends CustomPainter {
-  const _BusinessBrandMarkPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final scale = size.shortestSide / 32;
-    final rect = Offset.zero & size;
-    final backgroundPaint = Paint()..color = const Color(0xFF0E1726);
-    canvas.drawRSuperellipse(
-      RSuperellipse.fromRectAndRadius(rect, Radius.circular(8 * scale)),
-      backgroundPaint,
-    );
-    canvas.drawCircle(
-      Offset(16 * scale, 16 * scale),
-      6.5 * scale,
-      Paint()
-        ..color = const Color(0xFFFFFFFF)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.8 * scale,
-    );
-    canvas.drawCircle(
-      Offset(21.3 * scale, 11.2 * scale),
-      2.4 * scale,
-      Paint()..color = const Color(0xFF5B8CFF),
+void precacheBusinessBrandMarks(BuildContext context) {
+  final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+  for (final size in const [28.0, 34.0]) {
+    final cacheSize = (size * devicePixelRatio).round();
+    unawaited(
+      precacheImage(
+        ResizeImage(
+          const AssetImage(_brandMarkAsset),
+          width: cacheSize,
+          height: cacheSize,
+        ),
+        context,
+      ),
     );
   }
-
-  @override
-  bool shouldRepaint(_BusinessBrandMarkPainter oldDelegate) => false;
 }

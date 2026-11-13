@@ -223,9 +223,16 @@ void main() {
       ),
     );
     expect(sidebarFill, findsNothing);
-    expect(find.byType(Image), findsOneWidget);
+    final wallpaperImage = find.byWidgetPredicate(
+      (widget) =>
+          widget is Image &&
+          widget.image is AssetImage &&
+          (widget.image as AssetImage).assetName ==
+              'assets/images/background_planet.jpg',
+    );
+    expect(wallpaperImage, findsOneWidget);
     expect(
-      tester.getRect(find.byType(Image)),
+      tester.getRect(wallpaperImage),
       const Rect.fromLTWH(0, 0, 1200, 800),
     );
     expect(tester.takeException(), isNull);
