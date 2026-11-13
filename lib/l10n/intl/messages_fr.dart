@@ -480,6 +480,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
       "Activez Tianji Yun dans les réglages système",
     ),
+    "androidSharedMemory": MessageLookupByLibrary.simpleMessage(
+      "Sur Android, le cœur partage le processus de l’application, donc la mémoire est combinée.",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("Réponses"),
     "app": MessageLookupByLibrary.simpleMessage("App"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
@@ -505,6 +508,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authorize": MessageLookupByLibrary.simpleMessage("Autoriser"),
     "authorized": MessageLookupByLibrary.simpleMessage("Autorisé"),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
+    "autoChangePort": MessageLookupByLibrary.simpleMessage(
+      "Choisir un port libre",
+    ),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage(
       "Rechercher les mises à jour automatiquement",
     ),
@@ -657,6 +663,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "Connecté · Sortie non vérifiée",
+    ),
+    "businessContactSupport": MessageLookupByLibrary.simpleMessage(
+      "Contacter le support",
     ),
     "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage(
       "Copier les informations d’erreur",
@@ -1320,6 +1329,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Le cache est corrompu. Le vider ?",
     ),
     "cacheMaxSize": MessageLookupByLibrary.simpleMessage("Taille du cache"),
+    "cacheReleased": MessageLookupByLibrary.simpleMessage("Cache libéré"),
     "cameraPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Autorisez l’accès à l’appareil photo dans les réglages du système pour scanner des codes QR, ou choisissez une image de code QR dans l’album.",
     ),
@@ -1517,6 +1527,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
       "Windows Smart App Control a bloqué TianjiCloudCore.exe car il n’est pas signé. Ouvrez Sécurité Windows → Contrôle des applications et du navigateur → Paramètres de Smart App Control, choisissez Désactivé, puis relancez 天机云. Smart App Control ne peut pas être réactivé sans réinstaller Windows.",
     ),
+    "coreStartupFailure": MessageLookupByLibrary.simpleMessage(
+      "Échec du démarrage du cœur",
+    ),
     "coreStatus": MessageLookupByLibrary.simpleMessage("État du cœur"),
     "country": MessageLookupByLibrary.simpleMessage("Région"),
     "crashDetected": MessageLookupByLibrary.simpleMessage("Plantage détecté"),
@@ -1608,6 +1621,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sélection par défaut",
     ),
     "defaultText": MessageLookupByLibrary.simpleMessage("Par défaut"),
+    "defaultTianjiUserAgent": MessageLookupByLibrary.simpleMessage(
+      "Par défaut (Tianji Cloud)",
+    ),
     "definitionNotMap": MessageLookupByLibrary.simpleMessage(
       "La configuration doit être un mappage YAML avec un nom et un type",
     ),
@@ -1827,6 +1843,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage(
       "DNS et ressources",
     ),
+    "dnsRouteDirect": MessageLookupByLibrary.simpleMessage(
+      "Connexion directe nationale",
+    ),
+    "dnsRouteProxy": MessageLookupByLibrary.simpleMessage("Proxy"),
+    "dnsRouteRejected": MessageLookupByLibrary.simpleMessage("Bloqué"),
+    "dnsRouteResult": MessageLookupByLibrary.simpleMessage(
+      "Résultat du routage",
+    ),
     "dnsUpstream": MessageLookupByLibrary.simpleMessage("DNS amont"),
     "docked": MessageLookupByLibrary.simpleMessage("Ancrée"),
     "domain": MessageLookupByLibrary.simpleMessage("Domaine"),
@@ -1901,6 +1925,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportShort": MessageLookupByLibrary.simpleMessage("Exporter"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage(
       "Exportation réussie",
+    ),
+    "exportSupportReport": MessageLookupByLibrary.simpleMessage(
+      "Exporter le rapport pour le support",
     ),
     "extend": MessageLookupByLibrary.simpleMessage("Extension"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Mode d’extension"),
@@ -2015,6 +2042,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Réécriture d’en-têtes",
     ),
     "healthCheck": MessageLookupByLibrary.simpleMessage("Contrôle d’état"),
+    "heapInUse": MessageLookupByLibrary.simpleMessage("Tas utilisé"),
     "helperCorruptTip": MessageLookupByLibrary.simpleMessage(
       "Service Helper indisponible ; le mode TUN ne peut pas être activé. Réinstallez 天机云 pour le rétablir.",
     ),
@@ -2169,6 +2197,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sélection intelligente",
     ),
     "intercept": MessageLookupByLibrary.simpleMessage("Bloquer"),
+    "interfaceAndKernelCombined": MessageLookupByLibrary.simpleMessage(
+      "Avec l’interface",
+    ),
+    "interfaceMemory": MessageLookupByLibrary.simpleMessage(
+      "Mémoire de l’interface",
+    ),
     "interfaceName": MessageLookupByLibrary.simpleMessage("Nom de l’interface"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "Interface sortante",
@@ -2272,6 +2306,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "keepAliveIntervalDesc": MessageLookupByLibrary.simpleMessage(
       "Intervalle keep-alive TCP",
     ),
+    "kernelMemory": MessageLookupByLibrary.simpleMessage("Mémoire du cœur"),
     "key": MessageLookupByLibrary.simpleMessage("Clé"),
     "ko": MessageLookupByLibrary.simpleMessage("Coréen"),
     "label": MessageLookupByLibrary.simpleMessage("Libellé"),
@@ -2357,6 +2392,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Faire correspondre l’IP source",
     ),
     "matchTarget": MessageLookupByLibrary.simpleMessage("MATCH-TARGET"),
+    "matchedRule": MessageLookupByLibrary.simpleMessage("Règle correspondante"),
     "matchedRules": MessageLookupByLibrary.simpleMessage("Règles appliquées"),
     "maxFailedTimes": MessageLookupByLibrary.simpleMessage("Échecs maximum"),
     "maxLengthTip": m77,
@@ -2393,6 +2429,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ceci est un message.",
     ),
     "method": MessageLookupByLibrary.simpleMessage("Méthode"),
+    "mihomoCompatibleUserAgent": MessageLookupByLibrary.simpleMessage(
+      "Compatible avec Mihomo",
+    ),
     "minimize": MessageLookupByLibrary.simpleMessage("Réduire"),
     "minimizeOnExit": MessageLookupByLibrary.simpleMessage(
       "Réduire à la fermeture",
@@ -2911,6 +2950,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
+      "Échec de la mise à jour, ancienne version utilisée",
+    ),
     "providerUrlTip": MessageLookupByLibrary.simpleMessage(
       "Seuls les fournisseurs distants sont pris en charge",
     ),
@@ -2970,6 +3012,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Le nouveau certificat remplace l’actuel, que 天机云 retire des racines de confiance de cet appareil quand il le peut. Chaque autre appareil qui fait confiance à l’actuel doit installer le nouveau.",
     ),
     "regex": MessageLookupByLibrary.simpleMessage("Regex"),
+    "releaseCache": MessageLookupByLibrary.simpleMessage("Libérer le cache"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("Libérer la mémoire"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "Échec de la libération de la mémoire",
@@ -3550,6 +3593,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "subscriptionLink": MessageLookupByLibrary.simpleMessage(
       "Lien d’abonnement",
+    ),
+    "subscriptionUserAgent": MessageLookupByLibrary.simpleMessage(
+      "User-Agent de l’abonnement",
     ),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Saisissez votre mot de passe pour sudo",

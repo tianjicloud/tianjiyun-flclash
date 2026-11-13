@@ -16,6 +16,9 @@ class Request {
   late final Dio dio;
   late final Dio _clashDio;
 
+  @visibleForTesting
+  Dio get clashDioForTesting => _clashDio;
+
   /// Refuses an untrusted certificate even with the certificate check turned
   /// off, because what it fetches is installed, on Windows as administrator.
   @visibleForTesting
@@ -59,13 +62,24 @@ class Request {
     return FlClashHttpOverrides.findProxyForReader(read, uri);
   }
 
-  Future<Response<T>> _download<T>(String url, ResponseType responseType) {
+  Future<Response<T>> _download<T>(
+    String url,
+    ResponseType responseType, {
+    String? userAgent,
+  }) {
     final target = downloadTarget(url);
     final cancelToken = CancelToken();
+    final userAgentHeaders = switch (userAgent) {
+      final value? => {'User-Agent': value},
+      null => <String, String>{},
+    };
     return _clashDio
         .getUri<T>(
           target.uri,
-          options: Options(responseType: responseType, headers: target.headers),
+          options: Options(
+            responseType: responseType,
+            headers: {...target.headers, ...userAgentHeaders},
+          ),
           cancelToken: cancelToken,
         )
         .timeout(
@@ -80,9 +94,16 @@ class Request {
         );
   }
 
-  Future<Response<Uint8List>> getFileResponseForUrl(String url) async {
+  Future<Response<Uint8List>> getFileResponseForUrl(
+    String url, {
+    String? userAgent,
+  }) async {
     try {
-      return await _download<Uint8List>(url, ResponseType.bytes);
+      return await _download<Uint8List>(
+        url,
+        ResponseType.bytes,
+        userAgent: userAgent,
+      );
     } catch (e) {
       commonPrint.log(
         'getFileResponseForUrl error ${compactError(e)}',

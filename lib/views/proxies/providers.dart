@@ -10,6 +10,7 @@ import 'package:fl_clash/pages/editor.dart';
 import 'package:fl_clash/providers/action.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/core.dart';
+import 'package:fl_clash/providers/provider_update_failures.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/business_settings_card.dart';
@@ -140,6 +141,9 @@ class _BusinessProviderRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final updating = ref.watch(isUpdatingProvider(provider.updatingKey));
+    final failure = ref
+        .watch(providerUpdateFailuresProvider)
+        .value?[provider.name];
     final action = ref.read(proxiesActionProvider.notifier);
     final type = provider.vehicleType.toLowerCase() == 'http'
         ? 'http'
@@ -176,6 +180,8 @@ class _BusinessProviderRow extends ConsumerWidget {
                 ),
                 if (provider.updateAt.millisecondsSinceEpoch > 0)
                   LastUpdateTimeText(lastUpdateDate: provider.updateAt),
+                if (failure != null)
+                  _ProviderUpdateFailureChip(failure: failure),
               ],
             ),
           ),
@@ -394,12 +400,16 @@ class _ProviderItemState extends ConsumerState<ProviderItem> {
   @override
   Widget build(BuildContext context) {
     final isUpdating = ref.watch(isUpdatingProvider(provider.updatingKey));
+    final failure = ref
+        .watch(providerUpdateFailuresProvider)
+        .value?[provider.name];
     final previewable = _file != _ProviderFile.binary;
     return ContextMenuRegion(
       menuItems: isUpdating ? null : _menuItems(context),
       child: _ExternalProviderItem(
         provider: provider,
         isUpdating: isUpdating,
+        failure: failure,
         onPressed: isUpdating || !previewable
             ? null
             : () => _handlePreviewProvider(context),
@@ -412,10 +422,12 @@ class _ExternalProviderItem extends StatelessWidget {
   final ExternalProvider provider;
   final bool isUpdating;
   final VoidCallback? onPressed;
+  final Map<String, Object?>? failure;
 
   const _ExternalProviderItem({
     required this.provider,
     required this.isUpdating,
+    this.failure,
     this.onPressed,
   });
 
@@ -433,13 +445,22 @@ class _ExternalProviderItem extends StatelessWidget {
         chip: usage == null ? null : count.compact,
         expire: subscriptionInfo?.expireDate,
       ),
-      subtitle: switch ((subscriptionInfo, usage)) {
-        (final info?, final usage?) => _TrafficMeter(info: info, usage: usage),
-        _ => Text(switch (provider.type) {
-          'Proxy' => appLocalizations.proxiesCount(count, count.compact),
-          _ => appLocalizations.rulesCount(count, count.compact),
-        }),
-      },
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          switch ((subscriptionInfo, usage)) {
+            (final info?, final usage?) => _TrafficMeter(
+              info: info,
+              usage: usage,
+            ),
+            _ => Text(switch (provider.type) {
+              'Proxy' => appLocalizations.proxiesCount(count, count.compact),
+              _ => appLocalizations.rulesCount(count, count.compact),
+            }),
+          },
+          if (failure != null) _ProviderUpdateFailureChip(failure: failure!),
+        ],
+      ),
       trailing: AnimatedSwitcher(
         duration: context.motionDuration(commonDuration),
         layoutBuilder: (current, previous) => Stack(
@@ -456,6 +477,36 @@ class _ExternalProviderItem extends StatelessWidget {
                 compact: true,
                 style: context.listCaptionStyle,
               ),
+      ),
+    );
+  }
+}
+
+class _ProviderUpdateFailureChip extends StatelessWidget {
+  const _ProviderUpdateFailureChip({required this.failure});
+
+  final Map<String, Object?> failure;
+
+  @override
+  Widget build(BuildContext context) {
+    final reason = failure['reason'] as String? ?? '';
+    final time = failure['time'] as String? ?? '';
+    return Tooltip(
+      message: [reason, time].where((value) => value.isNotEmpty).join('\n'),
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: context.colorScheme.errorContainer,
+          shape: AppShape.all(AppCorner.sm),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          child: Text(
+            context.appLocalizations.providerUpdateFailedUsingOld,
+            style: BusinessText.metaLabel(
+              context,
+            ).copyWith(color: context.colorScheme.onErrorContainer),
+          ),
+        ),
       ),
     );
   }

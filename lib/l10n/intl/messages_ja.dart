@@ -404,6 +404,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
       "システム設定で天機雲を有効にしてください",
     ),
+    "androidSharedMemory": MessageLookupByLibrary.simpleMessage(
+      "Android ではコアと画面が同じプロセスで動くため、メモリを合算して表示します。",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("応答"),
     "app": MessageLookupByLibrary.simpleMessage("アプリ"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage("アプリアクセス制御"),
@@ -421,6 +424,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "authorize": MessageLookupByLibrary.simpleMessage("許可"),
     "authorized": MessageLookupByLibrary.simpleMessage("許可済み"),
     "auto": MessageLookupByLibrary.simpleMessage("自動"),
+    "autoChangePort": MessageLookupByLibrary.simpleMessage("空いているポートに変更"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("更新の自動チェック"),
     "autoCloseConnections": MessageLookupByLibrary.simpleMessage("接続を自動的に閉じる"),
     "autoInclude": MessageLookupByLibrary.simpleMessage("自動で含める"),
@@ -529,6 +533,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "接続済み · 出口未検証",
     ),
+    "businessContactSupport": MessageLookupByLibrary.simpleMessage("サポートに連絡"),
     "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage("エラー情報をコピー"),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("現在"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("現在の出口 IP"),
@@ -1086,6 +1091,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "キャッシュが破損しています。クリアしますか？",
     ),
     "cacheMaxSize": MessageLookupByLibrary.simpleMessage("キャッシュサイズ"),
+    "cacheReleased": MessageLookupByLibrary.simpleMessage("キャッシュを解放しました"),
     "cameraPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "QRコードをスキャンするには、システム設定でカメラへのアクセスを許可するか、アルバムからQRコード画像を選択してください。",
     ),
@@ -1219,6 +1225,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
       "Windows のスマート アプリ コントロールが、署名されていない TianjiCloudCore.exe をブロックしました。Windows セキュリティ → アプリとブラウザーの制御 → スマート アプリ コントロールの設定で「オフ」を選び、天机云を再起動してください。一度オフにすると、Windows を再インストールしない限り再度オンにはできません。",
     ),
+    "coreStartupFailure": MessageLookupByLibrary.simpleMessage("コアの起動に失敗しました"),
     "coreStatus": MessageLookupByLibrary.simpleMessage("コアの状態"),
     "country": MessageLookupByLibrary.simpleMessage("地域"),
     "crashDetected": MessageLookupByLibrary.simpleMessage("クラッシュを検出しました"),
@@ -1290,6 +1297,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "defaultSelected": MessageLookupByLibrary.simpleMessage("デフォルトの選択"),
     "defaultText": MessageLookupByLibrary.simpleMessage("デフォルト"),
+    "defaultTianjiUserAgent": MessageLookupByLibrary.simpleMessage(
+      "デフォルト（Tianji Cloud）",
+    ),
     "definitionNotMap": MessageLookupByLibrary.simpleMessage(
       "設定は name と type を含む YAML マッピングである必要があります",
     ),
@@ -1475,6 +1485,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("プロキシ経由"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("DNS クエリ"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage("DNS とリソース"),
+    "dnsRouteDirect": MessageLookupByLibrary.simpleMessage("国内は直接接続"),
+    "dnsRouteProxy": MessageLookupByLibrary.simpleMessage("プロキシ"),
+    "dnsRouteRejected": MessageLookupByLibrary.simpleMessage("ブロック済み"),
+    "dnsRouteResult": MessageLookupByLibrary.simpleMessage("ルート結果"),
     "dnsUpstream": MessageLookupByLibrary.simpleMessage("上流 DNS"),
     "docked": MessageLookupByLibrary.simpleMessage("固定"),
     "domain": MessageLookupByLibrary.simpleMessage("ドメイン"),
@@ -1524,6 +1538,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportLogs": MessageLookupByLibrary.simpleMessage("ログをエクスポート"),
     "exportShort": MessageLookupByLibrary.simpleMessage("エクスポート"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage("エクスポートが完了しました"),
+    "exportSupportReport": MessageLookupByLibrary.simpleMessage("サポート用レポートを出力"),
     "extend": MessageLookupByLibrary.simpleMessage("拡張"),
     "extendMode": MessageLookupByLibrary.simpleMessage("拡張モード"),
     "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
@@ -1615,6 +1630,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hashByInUser": MessageLookupByLibrary.simpleMessage("インバウンドユーザーでハッシュ"),
     "headerRewrite": MessageLookupByLibrary.simpleMessage("ヘッダー書き換え"),
     "healthCheck": MessageLookupByLibrary.simpleMessage("ヘルスチェック"),
+    "heapInUse": MessageLookupByLibrary.simpleMessage("使用中のヒープ"),
     "helperCorruptTip": MessageLookupByLibrary.simpleMessage(
       "Helper サービスが利用できないため、TUN モードを有効にできません。天机云を再インストールしてください。",
     ),
@@ -1740,6 +1756,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "installedFonts": MessageLookupByLibrary.simpleMessage("インストール済みのフォント"),
     "intelligentSelected": MessageLookupByLibrary.simpleMessage("スマート選択"),
     "intercept": MessageLookupByLibrary.simpleMessage("ブロック"),
+    "interfaceAndKernelCombined": MessageLookupByLibrary.simpleMessage("画面と合算"),
+    "interfaceMemory": MessageLookupByLibrary.simpleMessage("画面のメモリ"),
     "interfaceName": MessageLookupByLibrary.simpleMessage("インターフェース名"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "アウトバウンドインターフェース",
@@ -1827,6 +1845,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "keepAliveIntervalDesc": MessageLookupByLibrary.simpleMessage(
       "TCPキープアライブ間隔",
     ),
+    "kernelMemory": MessageLookupByLibrary.simpleMessage("コアのメモリ"),
     "key": MessageLookupByLibrary.simpleMessage("キー"),
     "ko": MessageLookupByLibrary.simpleMessage("韓国語"),
     "label": MessageLookupByLibrary.simpleMessage("ラベル"),
@@ -1894,6 +1913,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "matchCase": MessageLookupByLibrary.simpleMessage("大文字と小文字を区別"),
     "matchSourceIp": MessageLookupByLibrary.simpleMessage("送信元IPにマッチ"),
     "matchTarget": MessageLookupByLibrary.simpleMessage("MATCH-TARGET"),
+    "matchedRule": MessageLookupByLibrary.simpleMessage("一致したルール"),
     "matchedRules": MessageLookupByLibrary.simpleMessage("一致したルール"),
     "maxFailedTimes": MessageLookupByLibrary.simpleMessage("最大失敗回数"),
     "maxLengthTip": m77,
@@ -1920,6 +1940,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "messageTest": MessageLookupByLibrary.simpleMessage("メッセージテスト"),
     "messageTestTip": MessageLookupByLibrary.simpleMessage("これはメッセージです。"),
     "method": MessageLookupByLibrary.simpleMessage("メソッド"),
+    "mihomoCompatibleUserAgent": MessageLookupByLibrary.simpleMessage(
+      "Mihomo 互換",
+    ),
     "minimize": MessageLookupByLibrary.simpleMessage("最小化"),
     "minimizeOnExit": MessageLookupByLibrary.simpleMessage("終了時に最小化"),
     "minutes": MessageLookupByLibrary.simpleMessage("分"),
@@ -2335,6 +2358,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocolVersion": MessageLookupByLibrary.simpleMessage("プロトコルバージョン"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
+      "更新失敗、旧バージョンを使用",
+    ),
     "providerUrlTip": MessageLookupByLibrary.simpleMessage("リモートリソースのみ対応しています"),
     "providers": MessageLookupByLibrary.simpleMessage("外部リソース"),
     "proxies": MessageLookupByLibrary.simpleMessage("プロキシ"),
@@ -2384,6 +2410,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "新しい証明書が現在の証明書を置き換えます。天机云は可能な場合、現在の証明書をこのデバイスの信頼されたルートから削除します。現在の証明書を信頼している他のデバイスには、新しい証明書をインストールする必要があります。",
     ),
     "regex": MessageLookupByLibrary.simpleMessage("正規表現"),
+    "releaseCache": MessageLookupByLibrary.simpleMessage("キャッシュを解放"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("メモリを解放"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "メモリの解放に失敗しました",
@@ -2853,6 +2880,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpiryNoticeTitle": m129,
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage("サブスクリプション情報"),
     "subscriptionLink": MessageLookupByLibrary.simpleMessage("サブスクリプションリンク"),
+    "subscriptionUserAgent": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションの User-Agent",
+    ),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage("sudo のパスワードを入力"),
     "suspended": MessageLookupByLibrary.simpleMessage("一時停止中…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("プロファイルを切り替え"),

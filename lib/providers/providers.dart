@@ -1,5 +1,7 @@
 export 'action.dart';
 export 'app.dart';
+export 'core_startup_error.dart';
+export 'provider_update_failures.dart';
 export 'config.dart';
 export 'core.dart';
 export 'database.dart';

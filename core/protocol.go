@@ -61,6 +61,7 @@ const (
 	connectionCloseAllMethod CoreMethod = "connection.closeAll"
 	connectionResetMethod    CoreMethod = "connection.reset"
 	dnsClearCacheMethod      CoreMethod = "dns.clearCache"
+	dnsRouteMethod           CoreMethod = "dns.route"
 	networkChangedMethod     CoreMethod = "network.changed"
 
 	logStartMethod      CoreMethod = "log.start"
@@ -188,6 +189,16 @@ type PathParams struct {
 
 type NameParams struct {
 	Name string `json:"name"`
+}
+
+type DomainParams struct {
+	Domain string `json:"domain"`
+}
+
+type DnsRoute struct {
+	Route  string `json:"route"`
+	Target string `json:"target"`
+	Rule   string `json:"rule"`
 }
 
 type IDParams struct {

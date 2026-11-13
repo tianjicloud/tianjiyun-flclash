@@ -9,6 +9,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/editor.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/core.dart';
+import 'package:fl_clash/providers/provider_update_failures.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/proxies/providers.dart';
@@ -24,6 +25,7 @@ import '../helpers/glyph_finders.dart';
 import '../helpers/test_app.dart';
 import '../plugins/code_forge/support.dart' show initEditorNative;
 import '../helpers/host_scaffold.dart';
+import '../helpers/preferences.dart';
 
 class _MockCoreHandlerInterface extends Mock implements CoreHandlerInterface {}
 
@@ -74,7 +76,10 @@ void main() {
     home = Directory.systemTemp.createTempSync('flclash-providers-');
   });
 
-  setUp(() => reset(core));
+  setUp(() async {
+    reset(core);
+    await mockPreferences();
+  });
 
   tearDownAll(() {
     if (home.existsSync()) home.deleteSync(recursive: true);
@@ -86,8 +91,9 @@ void main() {
 
   ProviderContainer containerFor(
     WidgetTester tester,
-    List<ExternalProvider> providers,
-  ) {
+    List<ExternalProvider> providers, {
+    Map<String, Map<String, Object?>> failures = const {},
+  }) {
     const size = Size(1400, 1000);
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
@@ -97,6 +103,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
+        providerUpdateFailuresProvider.overrideWith((ref) async => failures),
       ],
     );
     addTearDown(container.dispose);
@@ -785,4 +792,29 @@ void main() {
 
     expect(find.byType(ActivityIndicator), findsNothing);
   });
+
+  testWidgets(
+    'a provider with a saved update failure shows the old version chip',
+    (tester) async {
+      final provider = _provider('old-version');
+      final container = containerFor(
+        tester,
+        [provider],
+        failures: {
+          'old-version': {
+            'time': '2026-11-13T00:00:00.000Z',
+            'reason': 'network unavailable',
+          },
+        },
+      );
+
+      await pump(tester, container);
+
+      expect(find.text('Update failed, using old version'), findsOneWidget);
+      expect(
+        find.byTooltip('network unavailable\n2026-11-13T00:00:00.000Z'),
+        findsOneWidget,
+      );
+    },
+  );
 }

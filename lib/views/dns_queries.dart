@@ -583,7 +583,7 @@ class DnsQueryItem extends StatelessWidget {
   }
 }
 
-class DnsQueryDetailView extends StatelessWidget {
+class DnsQueryDetailView extends ConsumerStatefulWidget {
   final DnsQuery dnsQuery;
   final bool business;
 
@@ -594,8 +594,21 @@ class DnsQueryDetailView extends StatelessWidget {
   });
 
   @override
+  ConsumerState<DnsQueryDetailView> createState() => _DnsQueryDetailViewState();
+}
+
+class _DnsQueryDetailViewState extends ConsumerState<DnsQueryDetailView> {
+  late final Future<DnsRoute?> _route = _loadRoute();
+
+  Future<DnsRoute?> _loadRoute() async {
+    if (ref.read(coreStatusProvider) != CoreStatus.connected) return null;
+    return ref.read(coreHandlerProvider).getDnsRoute(widget.dnsQuery.domain);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (business) return _buildBusinessDetail(context);
+    if (widget.business) return _buildBusinessDetail(context);
+    final dnsQuery = widget.dnsQuery;
     final appLocalizations = context.appLocalizations;
     final entries = [
       (appLocalizations.time, dnsQuery.time.showFull),
@@ -616,7 +629,7 @@ class DnsQueryDetailView extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
-            ).copyWith(bottom: 16, top: context.sectionsTopPadding),
+            ).copyWith(bottom: 16, top: context.appBarInset + 12),
             children: [
               _DnsQueryHeading(dnsQuery: dnsQuery),
               generateSection(
@@ -627,6 +640,7 @@ class DnsQueryDetailView extends StatelessWidget {
                       DetailRow.text(title: title, value: value),
                 ],
               ),
+              _routeResult(context),
               if (dnsQuery.error.isNotEmpty)
                 generateSection(
                   title: appLocalizations.error,
@@ -658,6 +672,7 @@ class DnsQueryDetailView extends StatelessWidget {
   }
 
   Widget _buildBusinessDetail(BuildContext context) {
+    final dnsQuery = widget.dnsQuery;
     final l = context.appLocalizations;
     final rows = <(String, String)>[
       (l.time, dnsQuery.time.showFull),
@@ -677,7 +692,7 @@ class DnsQueryDetailView extends StatelessWidget {
         ? context.colorScheme.errorContainer
         : BusinessPalette.connectedContainerFor(brightness);
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.fromLTRB(20, context.appBarInset + 12, 20, 20),
       children: [
         BusinessSettingsCard(
           title: '',
@@ -755,9 +770,56 @@ class DnsQueryDetailView extends StatelessWidget {
             ],
           ],
         ),
+        const SizedBox(height: 12),
+        _routeResult(context),
       ],
     );
   }
+
+  Widget _routeResult(BuildContext context) => FutureBuilder<DnsRoute?>(
+    future: _route,
+    builder: (context, snapshot) {
+      final result = snapshot.data;
+      if (result == null) return const SizedBox.shrink();
+      final l = context.appLocalizations;
+      final label = switch (result.route) {
+        'direct' => l.dnsRouteDirect,
+        'reject' => l.dnsRouteRejected,
+        _ => l.dnsRouteProxy,
+      };
+      final color = result.route == 'reject'
+          ? context.colorScheme.errorContainer
+          : BusinessPalette.connectedContainerFor(
+              context.colorScheme.brightness,
+            );
+      final foreground = result.route == 'reject'
+          ? context.colorScheme.onErrorContainer
+          : BusinessPalette.connectedForegroundFor(
+              context.colorScheme.brightness,
+            );
+      return BusinessSettingsCard(
+        title: l.dnsRouteResult,
+        items: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _DnsDetailBadge(
+                  label: label,
+                  color: color,
+                  foreground: foreground,
+                ),
+                if (result.rule.isNotEmpty)
+                  Text('${l.matchedRule}: ${result.rule}'),
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class _DnsDetailBadge extends StatelessWidget {

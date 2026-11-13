@@ -434,6 +434,16 @@ class ProxiesAction extends _$ProxiesAction {
       ref
           .read(providersProvider.notifier)
           .setProvider(await _core.getExternalProvider(provider.name));
+      await preferences.clearProviderUpdateFailure(provider.name);
+      ref.invalidate(providerUpdateFailuresProvider);
+    } catch (error) {
+      await preferences.recordProviderUpdateFailure(
+        provider.name,
+        DateTime.now(),
+        compactError(error),
+      );
+      ref.invalidate(providerUpdateFailuresProvider);
+      rethrow;
     } finally {
       if (operation != null) {
         ref

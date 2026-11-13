@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -6,7 +8,7 @@ import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessSecondaryButton;
 import 'package:fl_clash/views/dashboard/widgets/memory_info.dart'
-    show MemoryReader, MemorySnapshot, readMemorySnapshot;
+    show MemoryReader, MemorySnapshot;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +27,17 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
 
   Future<MemorySnapshot> _readMemory() async {
     if (widget.memoryReader case final reader?) return reader();
-    return readMemorySnapshot(ref);
+    final rss = ProcessInfo.currentRss;
+    final connected = ref.read(coreStatusProvider) == CoreStatus.connected;
+    final core = connected
+        ? await ref.read(coreHandlerProvider).getMemoryStats()
+        : null;
+    return MemorySnapshot(
+      app: rss,
+      core: core,
+      coreTotal: system.isAndroid ? 0 : (core?.rss ?? 0),
+      coreInProcess: system.isAndroid,
+    );
   }
 
   Future<void> _restart() async {
@@ -42,6 +54,19 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
       await ref.read(coreActionProvider.notifier).restartCore();
     } catch (error) {
       dialogs.showBanner(error.toString(), level: BannerLevel.error);
+    }
+  }
+
+  Future<void> _releaseCache() async {
+    try {
+      await ref.read(coreHandlerProvider).forceGc();
+      if (mounted) {
+        dialogs.showBanner(context.appLocalizations.cacheReleased);
+      }
+    } catch (error) {
+      if (mounted) {
+        dialogs.showBanner(error.toString(), level: BannerLevel.error);
+      }
     }
   }
 
@@ -113,13 +138,23 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
             const SizedBox(height: 16),
             BusinessSettingsCard(
               title: l10n.memoryInfo,
+              trailing: BusinessSecondaryButton(
+                label: l10n.releaseCache,
+                width: 132,
+                onPressed: running ? _releaseCache : null,
+              ),
               items: [
                 ListItem(
-                  title: Text(l10n.memoryInfo),
+                  title: Text(
+                    system.isAndroid
+                        ? l10n.interfaceAndKernelCombined
+                        : l10n.interfaceMemory,
+                  ),
                   trailing: FutureBuilder(
                     future: _memory,
                     builder: (context, snapshot) {
-                      final total = snapshot.data?.total;
+                      final memory = snapshot.data;
+                      final total = memory?.app;
                       return Text(
                         total == null
                             ? '—'
@@ -129,7 +164,41 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
                     },
                   ),
                 ),
+                if (running && !system.isAndroid)
+                  FutureBuilder(
+                    future: _memory,
+                    builder: (context, snapshot) {
+                      final core = snapshot.data?.core;
+                      return Column(
+                        children: [
+                          ListItem(
+                            title: Text(l10n.kernelMemory),
+                            trailing: Text(
+                              core == null
+                                  ? '—'
+                                  : '${core.rss.traffic.value} ${core.rss.traffic.unit}',
+                              style: BusinessText.metaValue(context),
+                            ),
+                          ),
+                          if (core != null)
+                            ListItem(
+                              title: Text(l10n.heapInUse),
+                              trailing: Text(
+                                '${core.heapInuse.traffic.value} ${core.heapInuse.traffic.unit}',
+                                style: BusinessText.metaValue(context),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
               ],
+              footer: system.isAndroid
+                  ? Text(
+                      l10n.androidSharedMemory,
+                      style: BusinessText.metaValue(context),
+                    )
+                  : null,
             ),
           ],
         ),

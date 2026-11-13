@@ -17,6 +17,8 @@ class InitErrorApp extends StatelessWidget {
   final StackTrace stack;
   final AsyncCallback onClearData;
   final AsyncCallback onExit;
+  final AsyncCallback? onAutoChangePort;
+  final AsyncCallback? onExportReport;
 
   const InitErrorApp({
     super.key,
@@ -24,6 +26,8 @@ class InitErrorApp extends StatelessWidget {
     required this.stack,
     required this.onClearData,
     required this.onExit,
+    this.onAutoChangePort,
+    this.onExportReport,
   });
 
   ThemeData _theme(Brightness brightness) {
@@ -53,6 +57,8 @@ class InitErrorApp extends StatelessWidget {
         stack: stack,
         onClearData: onClearData,
         onExit: onExit,
+        onAutoChangePort: onAutoChangePort,
+        onExportReport: onExportReport,
       ),
     );
   }
@@ -63,6 +69,8 @@ class InitErrorScreen extends StatefulWidget {
   final StackTrace stack;
   final AsyncCallback onClearData;
   final AsyncCallback onExit;
+  final AsyncCallback? onAutoChangePort;
+  final AsyncCallback? onExportReport;
 
   const InitErrorScreen({
     super.key,
@@ -70,13 +78,49 @@ class InitErrorScreen extends StatefulWidget {
     required this.stack,
     required this.onClearData,
     required this.onExit,
+    this.onAutoChangePort,
+    this.onExportReport,
   });
 
   @override
   State<InitErrorScreen> createState() => _InitErrorScreenState();
 }
 
+class ErrorPageBody extends StatefulWidget {
+  const ErrorPageBody({
+    super.key,
+    required this.error,
+    this.stack,
+    this.onClearData,
+    this.onExit,
+    this.onAutoChangePort,
+    this.onExportReport,
+  });
+
+  final Object error;
+  final StackTrace? stack;
+  final AsyncCallback? onClearData;
+  final AsyncCallback? onExit;
+  final AsyncCallback? onAutoChangePort;
+  final AsyncCallback? onExportReport;
+
+  @override
+  State<ErrorPageBody> createState() => _ErrorPageBodyState();
+}
+
 class _InitErrorScreenState extends State<InitErrorScreen> {
+  @override
+  Widget build(BuildContext context) => ErrorPageBody(
+    error: widget.error,
+    stack: widget.stack,
+    onClearData: widget.onClearData,
+    onExit: widget.onExit,
+    onAutoChangePort: widget.onAutoChangePort,
+    onExportReport: widget.onExportReport,
+  );
+}
+
+class _ErrorPageBodyState extends State<ErrorPageBody> {
   static const _maxContentWidth = 520.0;
 
   final _notice = ValueNotifier<({String text, bool visible})?>(null);
@@ -100,9 +144,10 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
   }
 
   Future<void> _copyDetails() async {
+    final stack = widget.stack;
     final text =
-        '=== ERROR ===\n${widget.error}\n\n'
-        '=== STACK TRACE ===\n${widget.stack}';
+        '=== ERROR ===\n${widget.error}'
+        '${stack == null ? '' : '\n\n=== STACK TRACE ===\n$stack'}';
     await Clipboard.setData(ClipboardData(text: text));
     if (!mounted) {
       return;
@@ -149,7 +194,7 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
       _isExiting = true;
     });
     try {
-      await widget.onClearData();
+      await widget.onClearData!();
     } catch (error) {
       if (!mounted) {
         return;
@@ -160,26 +205,25 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
       _showNotice(appLocalizations.clearDataFailed('$error'));
       return;
     }
-    await widget.onExit();
+    await widget.onExit!();
   }
 
   Future<void> _exit() async {
     setState(() {
       _isExiting = true;
     });
-    await widget.onExit();
+    await widget.onExit!();
   }
 
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     final errorText = widget.error.toString();
-    final portConflict =
-        errorText.contains('7890') &&
-        RegExp(
-          r'(address already in use|address.*in use|bind.*(failed|error)|cannot assign requested address)',
-          caseSensitive: false,
-        ).hasMatch(errorText);
+    final portConflict = RegExp(
+      r'(address already in use|address.*in use|bind.*(failed|error)|cannot assign requested address)',
+      caseSensitive: false,
+    ).hasMatch(errorText);
+    final knownPortConflict = portConflict && errorText.contains('7890');
     return Surface(
       color: context.colorScheme.brightness == Brightness.dark
           ? BusinessPalette.themePreviewDarkBackground
@@ -246,7 +290,7 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    portConflict
+                                    knownPortConflict
                                         ? appLocalizations
                                               .businessPortConflictTip
                                         : appLocalizations.initFailedTip,
@@ -257,7 +301,7 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
                                           ),
                                         ),
                                   ),
-                                  if (portConflict) ...[
+                                  if (knownPortConflict) ...[
                                     const SizedBox(height: 20),
                                     _PortSolutionsCard(
                                       title: appLocalizations
@@ -302,7 +346,8 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
                                       ),
                                     ),
                                   ),
-                                  if (_detailsExpanded) ...[
+                                  if (_detailsExpanded &&
+                                      widget.stack != null) ...[
                                     Text(
                                       appLocalizations.stackTrace,
                                       style: BusinessText.metaLabel(context)
@@ -329,32 +374,61 @@ class _InitErrorScreenState extends State<InitErrorScreen> {
                                     spacing: 8,
                                     runSpacing: 8,
                                     children: [
-                                      BusinessPrimaryButton(
-                                        label: appLocalizations
-                                            .businessCopyErrorInfo,
-                                        glyph: AppGlyphs.copy,
-                                        width: 176,
-                                        height: 40,
-                                        onPressed: _copyDetails,
-                                      ),
-                                      BusinessSecondaryButton(
-                                        label: appLocalizations.clearData,
-                                        width: 120,
-                                        height: 40,
-                                        labelColor:
-                                            BusinessPalette.errorForegroundFor(
-                                              context.colorScheme.brightness,
-                                            ),
-                                        onPressed: _isExiting
-                                            ? null
-                                            : _clearData,
-                                      ),
-                                      BusinessSecondaryButton(
-                                        label: appLocalizations.exit,
-                                        width: 88,
-                                        height: 40,
-                                        onPressed: _isExiting ? null : _exit,
-                                      ),
+                                      if (portConflict &&
+                                          widget.onAutoChangePort != null)
+                                        BusinessPrimaryButton(
+                                          label:
+                                              appLocalizations.autoChangePort,
+                                          width: 176,
+                                          height: 40,
+                                          onPressed: widget.onAutoChangePort,
+                                        ),
+                                      if (widget.onExportReport != null)
+                                        BusinessSecondaryButton(
+                                          label: appLocalizations
+                                              .exportSupportReport,
+                                          width: 176,
+                                          height: 40,
+                                          onPressed: widget.onExportReport,
+                                        ),
+                                      if (portConflict &&
+                                          widget.onAutoChangePort != null)
+                                        BusinessSecondaryButton(
+                                          label: appLocalizations
+                                              .businessCopyErrorInfo,
+                                          width: 176,
+                                          height: 40,
+                                          onPressed: _copyDetails,
+                                        )
+                                      else
+                                        BusinessPrimaryButton(
+                                          label: appLocalizations
+                                              .businessCopyErrorInfo,
+                                          glyph: AppGlyphs.copy,
+                                          width: 176,
+                                          height: 40,
+                                          onPressed: _copyDetails,
+                                        ),
+                                      if (widget.onClearData != null)
+                                        BusinessSecondaryButton(
+                                          label: appLocalizations.clearData,
+                                          width: 120,
+                                          height: 40,
+                                          labelColor:
+                                              BusinessPalette.errorForegroundFor(
+                                                context.colorScheme.brightness,
+                                              ),
+                                          onPressed: _isExiting
+                                              ? null
+                                              : _clearData,
+                                        ),
+                                      if (widget.onExit != null)
+                                        BusinessSecondaryButton(
+                                          label: appLocalizations.exit,
+                                          width: 88,
+                                          height: 40,
+                                          onPressed: _isExiting ? null : _exit,
+                                        ),
                                     ],
                                   ),
                                 ],

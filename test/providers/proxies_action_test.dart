@@ -23,6 +23,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../helpers/test_profiles.dart';
+import '../helpers/preferences.dart';
 
 class MockCoreHandlerInterface extends Mock implements CoreHandlerInterface {}
 
@@ -988,6 +989,38 @@ void main() {
 
       expect(container.read(isUpdatingProvider('provider_geo')), isFalse);
     });
+
+    test(
+      'persists the latest error and clears it after a successful update',
+      () async {
+        await mockPreferences();
+        when(() => core.updateExternalProvider('geo')).thenThrow(
+          const CoreMethodException(
+            code: 'core_error',
+            message: 'network down',
+          ),
+        );
+        final failed = buildContainer();
+        await expectLater(
+          actionOf(failed).updateProvider(_provider('geo')),
+          throwsA(isA<CoreMethodException>()),
+        );
+        expect(
+          (await preferences.getProviderUpdateFailures())['geo']?['reason'],
+          contains('network down'),
+        );
+
+        when(() => core.updateExternalProvider('geo')).thenAnswer((_) async {});
+        when(
+          () => core.getExternalProvider('geo'),
+        ).thenAnswer((_) async => _provider('geo', count: 2));
+        final recovered = buildContainer();
+        recovered.read(providersProvider.notifier).value = [_provider('geo')];
+        await actionOf(recovered).updateProvider(_provider('geo'));
+
+        expect(await preferences.getProviderUpdateFailures(), isEmpty);
+      },
+    );
   });
 
   group('sideLoadExternalProvider', () {

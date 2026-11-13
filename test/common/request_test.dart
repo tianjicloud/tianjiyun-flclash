@@ -58,6 +58,23 @@ class _PathAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 }
 
+class _RecordingAdapter implements HttpClientAdapter {
+  RequestOptions? options;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions requestOptions,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    options = requestOptions;
+    return ResponseBody.fromBytes([1, 2, 3], 200);
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -88,6 +105,22 @@ void main() {
       ),
     );
   });
+
+  test(
+    'getFileResponseForUrl sends the selected subscription User-Agent',
+    () async {
+      final request = Request();
+      final adapter = _RecordingAdapter();
+      request.clashDioForTesting.httpClientAdapter = adapter;
+
+      await request.getFileResponseForUrl(
+        'https://example.com/sub',
+        userAgent: 'mihomo/1.19.28',
+      );
+
+      expect(adapter.options?.headers['User-Agent'], 'mihomo/1.19.28');
+    },
+  );
 
   group('latestRelease', () {
     Request requestAnswering(Map<String, ResponseBody Function()> byHost) {

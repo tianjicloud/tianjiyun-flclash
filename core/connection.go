@@ -1,10 +1,53 @@
 package core
 
 import (
+	"strings"
+
 	"github.com/metacubex/mihomo/component/resolver"
+	C "github.com/metacubex/mihomo/constant"
 	"github.com/metacubex/mihomo/dns"
+	"github.com/metacubex/mihomo/tunnel"
 	"github.com/metacubex/mihomo/tunnel/statistic"
 )
+
+// A rule usually targets a group such as a direct group, so the verdict follows
+// each group's current pick down to the adapter that carries the traffic.
+func resolveRoute(target string, metadata *C.Metadata) string {
+	proxies := tunnel.Proxies()
+	proxy := proxies[target]
+	for depth := 0; proxy != nil && depth < 16; depth++ {
+		switch proxy.Type() {
+		case C.Direct:
+			return "direct"
+		case C.Reject, C.RejectDrop:
+			return "reject"
+		}
+		next := proxy.Unwrap(metadata, false)
+		if next == nil {
+			break
+		}
+		proxy = next
+	}
+	switch strings.ToUpper(target) {
+	case "DIRECT":
+		return "direct"
+	case "REJECT", "REJECT-DROP":
+		return "reject"
+	}
+	return "proxy"
+}
+
+func handleDnsRoute(params DomainParams) DnsRoute {
+	configMu.Lock()
+	defer configMu.Unlock()
+	metadata := &C.Metadata{Host: strings.TrimSuffix(params.Domain, ".")}
+	for _, rule := range tunnel.Rules() {
+		if matched, target := rule.Match(metadata, C.RuleMatchHelper{}); matched {
+			return DnsRoute{Route: resolveRoute(target, metadata), Target: target, Rule: rule.RuleType().String() + "," + rule.Payload()}
+		}
+	}
+	return DnsRoute{Route: "proxy", Target: "MATCH", Rule: "MATCH"}
+}
 
 func handleGetTraffic(params TrafficParams) Traffic {
 	up, down := statistic.DefaultManager.NowTraffic(params.OnlyProxy)

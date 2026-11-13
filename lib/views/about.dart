@@ -117,6 +117,12 @@ class AboutView extends ConsumerWidget {
       ),
       _buildBusinessLink(
         context,
+        title: appLocalizations.businessContactSupport,
+        subtitle: supportEmail,
+        onTap: () => dialogs.openUrl('mailto:$supportEmail'),
+      ),
+      _buildBusinessLink(
+        context,
         title: appLocalizations.project,
         subtitle: 'github.com/$repository',
         onTap: () => dialogs.openUrl('https://github.com/$repository'),
@@ -281,6 +287,12 @@ class AboutView extends ConsumerWidget {
               ),
               _buildLinkItem(
                 glyph: AppGlyphs.code,
+                title: appLocalizations.businessContactSupport,
+                url: 'mailto:$supportEmail',
+                label: supportEmail,
+              ),
+              _buildLinkItem(
+                glyph: AppGlyphs.code,
                 title: appLocalizations.project,
                 url: 'https://github.com/$repository',
                 label: 'github.com/$repository',
@@ -433,6 +445,18 @@ class AboutView extends ConsumerWidget {
                   ],
                 ),
                 onTap: () => dialogs.openUrl(statusPageUrl),
+              ),
+              ListItem(
+                title: Text(l10n.businessContactSupport),
+                trailing: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(supportEmail),
+                    SizedBox(width: 4),
+                    DisclosureIndicator(),
+                  ],
+                ),
+                onTap: () => dialogs.openUrl('mailto:$supportEmail'),
               ),
             ],
           ),

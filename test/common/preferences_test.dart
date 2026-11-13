@@ -140,6 +140,25 @@ void main() {
     expect(await preferences.isInit, isTrue);
   });
 
+  test('provider update failures persist and clear by name', () async {
+    final failedAt = DateTime.utc(2026, 11, 13);
+    await preferences.recordProviderUpdateFailure(
+      'proxy-set',
+      failedAt,
+      'network unavailable',
+    );
+    expect(await preferences.getProviderUpdateFailures(), {
+      'proxy-set': {
+        'time': failedAt.toIso8601String(),
+        'reason': 'network unavailable',
+      },
+    });
+
+    await preferences.clearProviderUpdateFailure('proxy-set');
+
+    expect(await preferences.getProviderUpdateFailures(), isEmpty);
+  });
+
   group('boot record', () {
     test('getBootRecord returns null when nothing is stored', () async {
       expect(await preferences.getBootRecord(), isNull);

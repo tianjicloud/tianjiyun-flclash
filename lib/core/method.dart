@@ -44,6 +44,7 @@ enum CoreMethod {
   connectionCloseAll('connection.closeAll'),
   connectionReset('connection.reset'),
   dnsClearCache('dns.clearCache'),
+  dnsRoute('dns.route'),
   networkChanged('network.changed'),
   logStart('log.start'),
   logStop('log.stop'),

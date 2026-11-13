@@ -232,6 +232,47 @@ class Preferences {
     await (await _store.value)?.setString('tianjiNodesCache', value);
   }
 
+  Future<Map<String, Map<String, Object?>>> getProviderUpdateFailures() async {
+    final store = await _store.value;
+    if (store == null) return {};
+    const prefix = 'providerUpdateFailure:';
+    final failures = <String, Map<String, Object?>>{};
+    for (final key in store.getKeys().where((key) => key.startsWith(prefix))) {
+      try {
+        final raw = store.getString(key);
+        if (raw == null) continue;
+        failures[key.substring(prefix.length)] = Map<String, Object?>.from(
+          json.decode(raw) as Map,
+        );
+      } catch (_) {
+        continue;
+      }
+    }
+    return failures;
+  }
+
+  Future<void> recordProviderUpdateFailure(
+    String name,
+    DateTime time,
+    String reason,
+  ) async {
+    final safeReason = redactReport(reason);
+    final summary = {
+      'time': time.toIso8601String(),
+      'reason': safeReason.length > 120
+          ? '${safeReason.substring(0, 117)}…'
+          : safeReason,
+    };
+    await (await _store.value)?.setString(
+      'providerUpdateFailure:$name',
+      json.encode(summary),
+    );
+  }
+
+  Future<void> clearProviderUpdateFailure(String name) async {
+    await (await _store.value)?.remove('providerUpdateFailure:$name');
+  }
+
   Future<void> clearPreferences() async {
     final sharedPreferencesIns = await _store.value;
     await sharedPreferencesIns?.clear();

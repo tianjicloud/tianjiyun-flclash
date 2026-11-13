@@ -14487,6 +14487,196 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Interface memory`
+  String get interfaceMemory {
+    return Intl.message(
+      'Interface memory',
+      name: 'interfaceMemory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kernel memory`
+  String get kernelMemory {
+    return Intl.message(
+      'Kernel memory',
+      name: 'kernelMemory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Heap in use`
+  String get heapInUse {
+    return Intl.message('Heap in use', name: 'heapInUse', desc: '', args: []);
+  }
+
+  /// `Release cache`
+  String get releaseCache {
+    return Intl.message(
+      'Release cache',
+      name: 'releaseCache',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cache released`
+  String get cacheReleased {
+    return Intl.message(
+      'Cache released',
+      name: 'cacheReleased',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Combined with interface memory`
+  String get interfaceAndKernelCombined {
+    return Intl.message(
+      'Combined with interface memory',
+      name: 'interfaceAndKernelCombined',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Android runs the kernel in the same process, so this is combined memory.`
+  String get androidSharedMemory {
+    return Intl.message(
+      'Android runs the kernel in the same process, so this is combined memory.',
+      name: 'androidSharedMemory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Route result`
+  String get dnsRouteResult {
+    return Intl.message(
+      'Route result',
+      name: 'dnsRouteResult',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Domestic direct`
+  String get dnsRouteDirect {
+    return Intl.message(
+      'Domestic direct',
+      name: 'dnsRouteDirect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Blocked`
+  String get dnsRouteRejected {
+    return Intl.message(
+      'Blocked',
+      name: 'dnsRouteRejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy`
+  String get dnsRouteProxy {
+    return Intl.message('Proxy', name: 'dnsRouteProxy', desc: '', args: []);
+  }
+
+  /// `Matched rule`
+  String get matchedRule {
+    return Intl.message(
+      'Matched rule',
+      name: 'matchedRule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription User-Agent`
+  String get subscriptionUserAgent {
+    return Intl.message(
+      'Subscription User-Agent',
+      name: 'subscriptionUserAgent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default (Tianji Cloud)`
+  String get defaultTianjiUserAgent {
+    return Intl.message(
+      'Default (Tianji Cloud)',
+      name: 'defaultTianjiUserAgent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mihomo compatible`
+  String get mihomoCompatibleUserAgent {
+    return Intl.message(
+      'Mihomo compatible',
+      name: 'mihomoCompatibleUserAgent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Core failed to start`
+  String get coreStartupFailure {
+    return Intl.message(
+      'Core failed to start',
+      name: 'coreStartupFailure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose an available port`
+  String get autoChangePort {
+    return Intl.message(
+      'Choose an available port',
+      name: 'autoChangePort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export support report`
+  String get exportSupportReport {
+    return Intl.message(
+      'Export support report',
+      name: 'exportSupportReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update failed, using old version`
+  String get providerUpdateFailedUsingOld {
+    return Intl.message(
+      'Update failed, using old version',
+      name: 'providerUpdateFailedUsingOld',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact support`
+  String get businessContactSupport {
+    return Intl.message(
+      'Contact support',
+      name: 'businessContactSupport',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

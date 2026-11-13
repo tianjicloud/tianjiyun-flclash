@@ -72,6 +72,10 @@ class Logs extends _$Logs with AutoDisposeNotifierMixin {
     res = await picker.saveFileWithPath(logFileName, tempFilePath) != null;
     return res;
   }
+
+  Future<bool> exportSupportReport(String error) async {
+    return exportSupportReportFile(error, value.list);
+  }
 }
 
 @Riverpod(keepAlive: true)

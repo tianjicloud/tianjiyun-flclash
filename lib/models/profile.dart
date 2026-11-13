@@ -76,6 +76,7 @@ abstract class Profile with _$Profile {
     @Default(true) bool autoUpdate,
     @Default(true) bool showSubscriptionInfo,
     @Default(true) bool subscriptionExpiryNotifications,
+    @Default(ProfileUserAgent.tianji) ProfileUserAgent subscriptionUserAgent,
     @Default({}) Map<String, String> selectedMap,
     @Default({}) Set<String> unfoldSet,
     @Default(ExtendType.standard) ExtendType extendType,
@@ -139,6 +140,13 @@ extension ProfilesExt on List<Profile> {
 }
 
 extension ProfileExtension on Profile {
+  String subscriptionUserAgentValue({
+    required String defaultUserAgent,
+    String mihomoVersion = mihomoFallbackVersion,
+  }) => subscriptionUserAgent == ProfileUserAgent.mihomo
+      ? 'mihomo/$mihomoVersion'
+      : defaultUserAgent;
+
   bool get realAutoUpdate => type == ProfileType.url && autoUpdate;
 
   String get realLabel => label.takeFirstValid([defaultLabel]);
@@ -185,8 +193,14 @@ extension ProfileExtension on Profile {
     return _getFile();
   }
 
-  Future<Profile> update({required ValidateConfig validate}) async {
-    final response = await request.getFileResponseForUrl(url);
+  Future<Profile> update({
+    required ValidateConfig validate,
+    String? userAgent,
+  }) async {
+    final response = await request.getFileResponseForUrl(
+      url,
+      userAgent: userAgent,
+    );
     final disposition = response.headers.value('content-disposition');
     final userinfo = response.headers.value('subscription-userinfo');
     return copyWith(

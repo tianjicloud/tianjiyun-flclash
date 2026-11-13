@@ -23,12 +23,14 @@ class CoreAction extends _$CoreAction {
   }
 
   Future<void> startCore() async {
+    ref.read(coreStartupErrorProvider.notifier).clear();
     ref.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
     try {
       final result = await startLifecycle();
       await _applyLifecycleResult(result);
     } catch (error) {
       ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
+      ref.read(coreStartupErrorProvider.notifier).record(error);
       dialogs.showBanner(error.toString(), level: BannerLevel.error);
     }
   }
@@ -109,6 +111,7 @@ class CoreAction extends _$CoreAction {
   }
 
   Future<bool> _runRestartWorker() async {
+    ref.read(coreStartupErrorProvider.notifier).clear();
     try {
       ref.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
       final result = await restartLifecycle();
@@ -132,8 +135,9 @@ class CoreAction extends _$CoreAction {
         appliedRevision = revision;
       }
       return applied;
-    } catch (_) {
+    } catch (error) {
       ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
+      ref.read(coreStartupErrorProvider.notifier).record(error);
       rethrow;
     } finally {
       _restartOperation = null;

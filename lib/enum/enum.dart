@@ -182,6 +182,8 @@ enum AccessSortType { none, name, time }
 
 enum ProfileType { file, url, custom }
 
+enum ProfileUserAgent { tianji, mihomo }
+
 enum ResultType {
   @JsonValue(0)
   success,

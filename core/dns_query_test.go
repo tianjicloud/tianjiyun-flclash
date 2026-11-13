@@ -8,13 +8,34 @@ import (
 	"testing"
 	"time"
 
+	"github.com/metacubex/mihomo/adapter"
+	"github.com/metacubex/mihomo/adapter/outbound"
 	"github.com/metacubex/mihomo/component/resolver"
+	C "github.com/metacubex/mihomo/constant"
 	"github.com/metacubex/mihomo/dns"
+	"github.com/metacubex/mihomo/rules/common"
+	"github.com/metacubex/mihomo/tunnel"
 	D "github.com/miekg/dns"
 )
 
 func dnsQuestion(name string, qtype uint16) D.Question {
 	return D.Question{Name: D.Fqdn(name), Qtype: qtype, Qclass: D.ClassINET}
+}
+
+func TestHandleDnsRouteUsesHostRules(t *testing.T) {
+	previous := tunnel.Rules()
+	tunnel.UpdateRules([]C.Rule{
+		common.NewDomain("example.com", "DIRECT"),
+	}, nil, nil)
+	t.Cleanup(func() { tunnel.UpdateRules(previous, nil, nil) })
+
+	result := handleDnsRoute(DomainParams{Domain: "example.com."})
+	if result.Route != "direct" || result.Target != "DIRECT" || result.Rule != "Domain,example.com" {
+		t.Fatalf("route = %+v", result)
+	}
+	if got := handleDnsRoute(DomainParams{Domain: "other.test"}); got.Route != "proxy" || got.Target != "MATCH" {
+		t.Fatalf("fallback route = %+v", got)
+	}
 }
 
 func TestNewDnsQueryFlattensAnswers(t *testing.T) {
@@ -104,5 +125,24 @@ func TestNewDnsQueryNamesUnknownTypes(t *testing.T) {
 
 	if query.Type != "TYPE65280" || query.Rcode != "NXDOMAIN" {
 		t.Fatalf("type = %q, rcode = %q", query.Type, query.Rcode)
+	}
+}
+
+func TestHandleDnsRouteFollowsTheTargetsAdapterNotItsName(t *testing.T) {
+	keepTunnel(t)
+	tunnel.UpdateProxies(map[string]C.Proxy{
+		"国内直连": adapter.NewProxy(outbound.NewDirectWithOption(outbound.DirectOption{Name: "国内直连"})),
+		"广告拦截": adapter.NewProxy(outbound.NewRejectWithOption(outbound.RejectOption{Name: "广告拦截"})),
+	}, nil)
+	tunnel.UpdateRules([]C.Rule{
+		common.NewDomain("cn.example", "国内直连"),
+		common.NewDomain("ads.example", "广告拦截"),
+	}, nil, nil)
+
+	if got := handleDnsRoute(DomainParams{Domain: "cn.example"}); got.Route != "direct" || got.Target != "国内直连" {
+		t.Fatalf("direct group route = %+v", got)
+	}
+	if got := handleDnsRoute(DomainParams{Domain: "ads.example"}); got.Route != "reject" {
+		t.Fatalf("reject group route = %+v", got)
 	}
 }

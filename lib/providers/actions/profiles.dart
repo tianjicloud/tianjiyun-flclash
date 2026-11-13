@@ -179,6 +179,7 @@ class ProfilesAction extends _$ProfilesAction {
       ref.read(profilesProvider.notifier).put(profile);
       final updated = await profile.update(
         validate: (path, key) => _core.validateProfile(path, key),
+        userAgent: _subscriptionUserAgent(profile),
       );
       // The download can take minutes; edits and deletes made meanwhile win.
       final latest = ref.read(profilesProvider).getProfile(profile.id);
@@ -449,8 +450,12 @@ class ProfilesAction extends _$ProfilesAction {
   Future<Profile> _download(Profile profile) {
     return profile.update(
       validate: (path, key) => _core.validateProfile(path, key),
+      userAgent: _subscriptionUserAgent(profile),
     );
   }
+
+  String _subscriptionUserAgent(Profile profile) =>
+      profile.subscriptionUserAgentValue(defaultUserAgent: globalState.ua);
 
   Future<Profile> _withAgeSecretKey(
     Profile profile,

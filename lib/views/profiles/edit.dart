@@ -40,6 +40,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   late bool _autoUpdate;
   late bool _showSubscriptionInfo;
   late bool _subscriptionExpiryNotifications;
+  late ProfileUserAgent _subscriptionUserAgent;
   Uint8List? _editedData;
   bool _attempted = false;
   bool _showAgeSecretKey = false;
@@ -70,6 +71,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     _showSubscriptionInfo = widget.profile.showSubscriptionInfo;
     _subscriptionExpiryNotifications =
         widget.profile.subscriptionExpiryNotifications;
+    _subscriptionUserAgent = widget.profile.subscriptionUserAgent;
     _autoUpdateDurationController = TextEditingController(
       text: widget.profile.autoUpdateDuration.inMinutes.toString(),
     );
@@ -156,6 +158,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       autoUpdate: _autoUpdate,
       showSubscriptionInfo: _showSubscriptionInfo,
       subscriptionExpiryNotifications: _subscriptionExpiryNotifications,
+      subscriptionUserAgent: _subscriptionUserAgent,
       autoUpdateDuration: interval != null && interval > 0
           ? Duration(minutes: interval)
           : current.autoUpdateDuration,
@@ -209,6 +212,19 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       _autoUpdate = value;
     });
   }
+
+  void _toggleSubscriptionUserAgent() {
+    setState(() {
+      _subscriptionUserAgent = _subscriptionUserAgent == ProfileUserAgent.tianji
+          ? ProfileUserAgent.mihomo
+          : ProfileUserAgent.tianji;
+    });
+  }
+
+  String _subscriptionUserAgentLabel(AppLocalizations l10n) =>
+      _subscriptionUserAgent == ProfileUserAgent.tianji
+      ? l10n.defaultTianjiUserAgent
+      : l10n.mihomoCompatibleUserAgent;
 
   Future<void> _handleSaveEdit(BuildContext context, Uint8List data) async {
     final issue = await globalState.safeRun(
@@ -367,6 +383,12 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
               controller: _urlController,
               invalid: issue?.field == _ProfileField.url,
               onChanged: _handleChanged,
+            ),
+          if (isUrl)
+            FormRow(
+              title: appLocalizations.subscriptionUserAgent,
+              trailing: Text(_subscriptionUserAgentLabel(appLocalizations)),
+              onPressed: _toggleSubscriptionUserAgent,
             ),
           _AgeSecretKeyField(controller: _ageSecretKeyController),
         ],
@@ -664,6 +686,12 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                           _handleChanged(value);
                         },
                       ),
+                      const SizedBox(height: 12),
+                      ListItem(
+                        title: Text(l10n.subscriptionUserAgent),
+                        trailing: Text(_subscriptionUserAgentLabel(l10n)),
+                        onTap: _toggleSubscriptionUserAgent,
+                      ),
                       const SizedBox(height: 20),
                       const Divider(),
                       _BusinessEditRow(
@@ -897,6 +925,11 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                   () => _subscriptionExpiryNotifications =
                       !_subscriptionExpiryNotifications,
                 ),
+              ),
+              ListItem(
+                title: Text(l10n.subscriptionUserAgent),
+                trailing: Text(_subscriptionUserAgentLabel(l10n)),
+                onTap: _toggleSubscriptionUserAgent,
               ),
             ],
           ),

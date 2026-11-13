@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
@@ -197,5 +198,31 @@ void main() {
     final saved = globalState.container.read(profilesProvider).single;
     expect(saved.autoUpdate, isFalse);
     expect(saved.autoUpdateDuration, profile.autoUpdateDuration);
+  });
+
+  testWidgets('subscription editor offers only the Tianji and Mihomo agents', (
+    tester,
+  ) async {
+    final profile = _urlProfile();
+    await pumpEditProfile(
+      tester,
+      profile: profile,
+      overrides: [
+        profilesProvider.overrideWith(() => TestProfiles([profile])),
+      ],
+    );
+
+    expect(find.text('Default (Tianji Cloud)'), findsOneWidget);
+    await tester.tap(find.text('Default (Tianji Cloud)'));
+    await tester.pump();
+    expect(find.text('Mihomo compatible'), findsOneWidget);
+    expect(find.text('Default (Tianji Cloud)'), findsNothing);
+    await tester.tap(find.byTooltip('Save'));
+    await tester.pump();
+
+    expect(
+      globalState.container.read(profilesProvider).single.subscriptionUserAgent,
+      ProfileUserAgent.mihomo,
+    );
   });
 }

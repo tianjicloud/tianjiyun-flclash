@@ -611,6 +611,18 @@ Map<String, dynamic> _$CoreMemoryStatsToJson(_CoreMemoryStats instance) =>
       'runtime-other': instance.runtimeOther,
     };
 
+_DnsRoute _$DnsRouteFromJson(Map<String, dynamic> json) => _DnsRoute(
+  route: json['route'] as String,
+  target: json['target'] as String,
+  rule: json['rule'] as String,
+);
+
+Map<String, dynamic> _$DnsRouteToJson(_DnsRoute instance) => <String, dynamic>{
+  'route': instance.route,
+  'target': instance.target,
+  'rule': instance.rule,
+};
+
 _ExternalProvider _$ExternalProviderFromJson(Map<String, dynamic> json) =>
     _ExternalProvider(
       name: json['name'] as String,

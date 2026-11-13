@@ -7,6 +7,7 @@ import 'package:fl_clash/models/profile.dart';
 
 const userPanelUrl = 'https://panel.tianjiyun.org';
 const statusPageUrl = 'https://status.tianjiyun.org';
+const supportEmail = 'business@tianjiyun.org';
 
 enum ImportFailure { expired, unreachable, empty, notSubscription, unknown }
 

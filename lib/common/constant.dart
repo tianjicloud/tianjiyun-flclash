@@ -110,6 +110,10 @@ const maxConcurrentIconLoads = 8;
 
 const renderThrottleDuration = Duration(milliseconds: 300);
 const defaultUpdateDuration = Duration(days: 1);
+// The built core reports mihomo's placeholder 1.10.0, and the subscription
+// server gates protocol features by this version; 1.19.28 is the mihomo build
+// it was verified against (tianjiv3 docs, Clash Mi 2026-10-15).
+const mihomoFallbackVersion = '1.19.28';
 const MMDB = 'GEOIP.metadb';
 const ASN = 'ASN.mmdb';
 const GEOIP = 'GEOIP.dat';

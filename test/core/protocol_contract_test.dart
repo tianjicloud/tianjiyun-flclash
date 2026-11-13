@@ -107,6 +107,11 @@ class _RecordingCoreHandler extends CoreHandlerInterface {
         'stack-inuse': 64,
         'runtime-other': 32,
       },
+      CoreMethod.dnsRoute => {
+        'route': 'direct',
+        'target': 'DIRECT',
+        'rule': 'DOMAIN,example.com',
+      },
       CoreMethod.proxySelect => {'message': '', 'changed': true},
       CoreMethod.ruleSetCompile => {'behavior': 'ipcidr', 'format': 'text'},
       CoreMethod.ruleSetDump => '/home/responses/2.yaml',
@@ -268,6 +273,11 @@ void main() {
     await handler.getTraffic(true);
     await handler.closeConnection('connection-1');
     await handler.updateGeoData('GeoIp');
+    final memory = await handler.getMemoryStats();
+    expect(memory.heapInuse, 1024);
+    await handler.forceGc();
+    final dnsRoute = await handler.getDnsRoute('example.com');
+    expect(dnsRoute.route, 'direct');
 
     for (final method in CoreMethod.values) {
       if (handler.calls[method] case final Object arguments) {
@@ -309,6 +319,9 @@ void main() {
     expect(handler.calls[CoreMethod.trafficCurrent], {'only-proxy': true});
     expect(handler.calls[CoreMethod.connectionClose], {'id': 'connection-1'});
     expect(handler.calls[CoreMethod.geoUpdate], {'type': 'GeoIp'});
+    expect(handler.calls[CoreMethod.coreMemory], isNull);
+    expect(handler.calls[CoreMethod.coreGc], isNull);
+    expect(handler.calls[CoreMethod.dnsRoute], {'domain': 'example.com'});
   });
 
   test('a list validation reads only the entries the Core refuses', () async {

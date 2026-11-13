@@ -438,6 +438,18 @@ abstract class CoreMemoryStats with _$CoreMemoryStats {
       _$CoreMemoryStatsFromJson(json);
 }
 
+@freezed
+abstract class DnsRoute with _$DnsRoute {
+  const factory DnsRoute({
+    required String route,
+    required String target,
+    required String rule,
+  }) = _DnsRoute;
+
+  factory DnsRoute.fromJson(Map<String, Object?> json) =>
+      _$DnsRouteFromJson(json);
+}
+
 extension CoreMemoryStatsExt on CoreMemoryStats {
   int get runtimeTotal => heapInuse + heapIdle + stackInuse + runtimeOther;
 }

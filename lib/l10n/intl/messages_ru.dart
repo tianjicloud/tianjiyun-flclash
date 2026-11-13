@@ -468,6 +468,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
       "Включите Tianji Yun в системных настройках",
     ),
+    "androidSharedMemory": MessageLookupByLibrary.simpleMessage(
+      "На Android ядро работает в процессе приложения, поэтому память объединена.",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("Ответы"),
     "app": MessageLookupByLibrary.simpleMessage("Приложение"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage(
@@ -493,6 +496,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "authorize": MessageLookupByLibrary.simpleMessage("Разрешить"),
     "authorized": MessageLookupByLibrary.simpleMessage("Разрешено"),
     "auto": MessageLookupByLibrary.simpleMessage("Авто"),
+    "autoChangePort": MessageLookupByLibrary.simpleMessage(
+      "Выбрать свободный порт",
+    ),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage(
       "Автопроверка обновлений",
     ),
@@ -637,6 +643,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "Подключено · Выход не проверен",
+    ),
+    "businessContactSupport": MessageLookupByLibrary.simpleMessage(
+      "Связаться с поддержкой",
     ),
     "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage(
       "Скопировать сведения об ошибке",
@@ -1297,6 +1306,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Кэш повреждён. Очистить его?",
     ),
     "cacheMaxSize": MessageLookupByLibrary.simpleMessage("Размер кэша"),
+    "cacheReleased": MessageLookupByLibrary.simpleMessage("Кэш освобождён"),
     "cameraPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Разрешите доступ к камере в системных настройках, чтобы сканировать QR-коды, или выберите изображение QR-кода из галереи.",
     ),
@@ -1484,6 +1494,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
       "Smart App Control в Windows заблокировал неподписанный TianjiCloudCore.exe. Откройте Безопасность Windows → Управление приложениями и браузером → Параметры Smart App Control, выберите «Выкл.» и снова запустите 天机云. Повторно включить Smart App Control без переустановки Windows нельзя.",
     ),
+    "coreStartupFailure": MessageLookupByLibrary.simpleMessage(
+      "Не удалось запустить ядро",
+    ),
     "coreStatus": MessageLookupByLibrary.simpleMessage("Статус ядра"),
     "country": MessageLookupByLibrary.simpleMessage("Регион"),
     "crashDetected": MessageLookupByLibrary.simpleMessage("Обнаружен сбой"),
@@ -1573,6 +1586,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выбор по умолчанию",
     ),
     "defaultText": MessageLookupByLibrary.simpleMessage("По умолчанию"),
+    "defaultTianjiUserAgent": MessageLookupByLibrary.simpleMessage(
+      "По умолчанию (Tianji Cloud)",
+    ),
     "definitionNotMap": MessageLookupByLibrary.simpleMessage(
       "Конфигурация должна быть YAML-словарём с полями name и type",
     ),
@@ -1798,6 +1814,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage(
       "DNS и ресурсы",
     ),
+    "dnsRouteDirect": MessageLookupByLibrary.simpleMessage(
+      "Прямое подключение внутри страны",
+    ),
+    "dnsRouteProxy": MessageLookupByLibrary.simpleMessage("Прокси"),
+    "dnsRouteRejected": MessageLookupByLibrary.simpleMessage("Заблокировано"),
+    "dnsRouteResult": MessageLookupByLibrary.simpleMessage(
+      "Результат маршрута",
+    ),
     "dnsUpstream": MessageLookupByLibrary.simpleMessage("Вышестоящий DNS"),
     "docked": MessageLookupByLibrary.simpleMessage("Закреплённая"),
     "domain": MessageLookupByLibrary.simpleMessage("Домен"),
@@ -1873,6 +1897,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportLogs": MessageLookupByLibrary.simpleMessage("Экспорт логов"),
     "exportShort": MessageLookupByLibrary.simpleMessage("Экспорт"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage("Экспорт выполнен"),
+    "exportSupportReport": MessageLookupByLibrary.simpleMessage(
+      "Экспортировать отчёт для поддержки",
+    ),
     "extend": MessageLookupByLibrary.simpleMessage("Расширение"),
     "extendMode": MessageLookupByLibrary.simpleMessage("Режим расширения"),
     "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
@@ -1986,6 +2013,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Перезапись заголовков",
     ),
     "healthCheck": MessageLookupByLibrary.simpleMessage("Проверка состояния"),
+    "heapInUse": MessageLookupByLibrary.simpleMessage("Занятая куча"),
     "helperCorruptTip": MessageLookupByLibrary.simpleMessage(
       "Служба Helper недоступна, поэтому TUN-режим включить нельзя. Переустановите 天机云.",
     ),
@@ -2126,6 +2154,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "intelligentSelected": MessageLookupByLibrary.simpleMessage("Умный выбор"),
     "intercept": MessageLookupByLibrary.simpleMessage("Блокировка"),
+    "interfaceAndKernelCombined": MessageLookupByLibrary.simpleMessage(
+      "Объединено с интерфейсом",
+    ),
+    "interfaceMemory": MessageLookupByLibrary.simpleMessage(
+      "Память интерфейса",
+    ),
     "interfaceName": MessageLookupByLibrary.simpleMessage("Имя интерфейса"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage(
       "Исходящий интерфейс",
@@ -2223,6 +2257,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "keepAliveIntervalDesc": MessageLookupByLibrary.simpleMessage(
       "Интервал TCP keep-alive",
     ),
+    "kernelMemory": MessageLookupByLibrary.simpleMessage("Память ядра"),
     "key": MessageLookupByLibrary.simpleMessage("Ключ"),
     "ko": MessageLookupByLibrary.simpleMessage("Корейский"),
     "label": MessageLookupByLibrary.simpleMessage("Метка"),
@@ -2308,6 +2343,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Сопоставлять IP источника",
     ),
     "matchTarget": MessageLookupByLibrary.simpleMessage("MATCH-TARGET"),
+    "matchedRule": MessageLookupByLibrary.simpleMessage("Совпавшее правило"),
     "matchedRules": MessageLookupByLibrary.simpleMessage("Сработавшие правила"),
     "maxFailedTimes": MessageLookupByLibrary.simpleMessage(
       "Макс. число неудач",
@@ -2350,6 +2386,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "messageTest": MessageLookupByLibrary.simpleMessage("Тест сообщения"),
     "messageTestTip": MessageLookupByLibrary.simpleMessage("Это сообщение."),
     "method": MessageLookupByLibrary.simpleMessage("Метод"),
+    "mihomoCompatibleUserAgent": MessageLookupByLibrary.simpleMessage(
+      "Совместимый с Mihomo",
+    ),
     "minimize": MessageLookupByLibrary.simpleMessage("Свернуть"),
     "minimizeOnExit": MessageLookupByLibrary.simpleMessage(
       "Сворачивать при выходе",
@@ -2854,6 +2893,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocolVersion": MessageLookupByLibrary.simpleMessage("Версия протокола"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
+      "Не удалось обновить, используется старая версия",
+    ),
     "providerUrlTip": MessageLookupByLibrary.simpleMessage(
       "Поддерживаются только удалённые ресурсы",
     ),
@@ -2911,6 +2953,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Новый сертификат заменит текущий; 天机云 по возможности удалит текущий из доверенных корневых сертификатов этого устройства. На каждое другое устройство, доверяющее текущему, нужно установить новый.",
     ),
     "regex": MessageLookupByLibrary.simpleMessage("Регулярное выражение"),
+    "releaseCache": MessageLookupByLibrary.simpleMessage("Освободить кэш"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("Освободить память"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось освободить память",
@@ -3472,6 +3515,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Информация о подписке",
     ),
     "subscriptionLink": MessageLookupByLibrary.simpleMessage("Ссылка подписки"),
+    "subscriptionUserAgent": MessageLookupByLibrary.simpleMessage(
+      "User-Agent подписки",
+    ),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Введите пароль для sudo",
     ),

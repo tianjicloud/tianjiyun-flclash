@@ -329,6 +329,14 @@ abstract class CoreHandlerInterface {
 
   Future<void> clearDnsCache() => _command(CoreMethod.dnsClearCache);
 
+  Future<DnsRoute> getDnsRoute(String domain) {
+    return _query(
+      CoreMethod.dnsRoute,
+      _model(DnsRoute.fromJson),
+      arguments: {'domain': domain},
+    );
+  }
+
   Future<void> reportNetworkChange() => _command(CoreMethod.networkChanged);
 
   Future<void> startLog() => _commandUnobserved(CoreMethod.logStart);

@@ -84,6 +84,33 @@ void main() {
     expect(find.byKey(const ValueKey('error-details-chevron')), findsOneWidget);
   });
 
+  testWidgets('the shared startup error body exposes port and report actions', (
+    tester,
+  ) async {
+    final actions = <String>[];
+    await tester.pumpWidget(
+      HostApp(
+        locale: const Locale('en'),
+        home: ErrorPageBody(
+          error: StateError(
+            'listen tcp 127.0.0.1:7890: bind: address already in use',
+          ),
+          onAutoChangePort: () async => actions.add('port'),
+          onExportReport: () async => actions.add('report'),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Choose an available port'), findsOneWidget);
+    expect(find.text('Export support report'), findsOneWidget);
+    expect(find.text('Clear data'), findsNothing);
+    expect(find.text('Exit'), findsNothing);
+    await tester.tap(find.text('Choose an available port'));
+    await tester.tap(find.text('Export support report'));
+    expect(actions, ['port', 'report']);
+  });
+
   testWidgets('the app shell follows the system locale', (tester) async {
     tester.platformDispatcher.localesTestValue = const [Locale('zh', 'CN')];
     addTearDown(tester.platformDispatcher.clearLocalesTestValue);

@@ -407,6 +407,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "alwaysOnVpnDescription": MessageLookupByLibrary.simpleMessage(
       "시스템 설정에서 천기운을 사용 설정하세요",
     ),
+    "androidSharedMemory": MessageLookupByLibrary.simpleMessage(
+      "Android에서는 코어와 앱이 같은 프로세스를 사용하므로 메모리를 합산해 표시합니다.",
+    ),
     "answers": MessageLookupByLibrary.simpleMessage("응답"),
     "app": MessageLookupByLibrary.simpleMessage("앱"),
     "appAccessControl": MessageLookupByLibrary.simpleMessage("앱 접근 제어"),
@@ -424,6 +427,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "authorize": MessageLookupByLibrary.simpleMessage("허용"),
     "authorized": MessageLookupByLibrary.simpleMessage("허용됨"),
     "auto": MessageLookupByLibrary.simpleMessage("자동"),
+    "autoChangePort": MessageLookupByLibrary.simpleMessage("사용 가능한 포트로 변경"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("업데이트 자동 확인"),
     "autoCloseConnections": MessageLookupByLibrary.simpleMessage("연결 자동 종료"),
     "autoInclude": MessageLookupByLibrary.simpleMessage("자동 포함"),
@@ -528,6 +532,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessConnectedUnverified": MessageLookupByLibrary.simpleMessage(
       "연결됨 · 출구 확인 안 됨",
     ),
+    "businessContactSupport": MessageLookupByLibrary.simpleMessage("고객 지원 문의"),
     "businessCopyErrorInfo": MessageLookupByLibrary.simpleMessage("오류 정보 복사"),
     "businessCurrent": MessageLookupByLibrary.simpleMessage("현재"),
     "businessCurrentExitIp": MessageLookupByLibrary.simpleMessage("현재 출구 IP"),
@@ -1071,6 +1076,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "캐시가 손상되었습니다. 지우시겠습니까?",
     ),
     "cacheMaxSize": MessageLookupByLibrary.simpleMessage("캐시 크기"),
+    "cacheReleased": MessageLookupByLibrary.simpleMessage("캐시를 해제했습니다"),
     "cameraPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "QR 코드를 스캔하려면 시스템 설정에서 카메라 접근을 허용하거나, 앨범에서 QR 코드 이미지를 선택하세요.",
     ),
@@ -1196,6 +1202,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "coreBlockedBySmartAppControlTip": MessageLookupByLibrary.simpleMessage(
       "서명되지 않아 Windows Smart App Control이 TianjiCloudCore.exe를 차단했습니다. Windows 보안 → 앱 및 브라우저 컨트롤 → Smart App Control 설정에서 끔을 선택한 후 天机云를 다시 시작하세요. Smart App Control은 Windows를 다시 설치하지 않으면 다시 켤 수 없습니다.",
     ),
+    "coreStartupFailure": MessageLookupByLibrary.simpleMessage("코어 시작 실패"),
     "coreStatus": MessageLookupByLibrary.simpleMessage("코어 상태"),
     "country": MessageLookupByLibrary.simpleMessage("지역"),
     "crashDetected": MessageLookupByLibrary.simpleMessage("비정상 종료 감지됨"),
@@ -1265,6 +1272,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "defaultSelected": MessageLookupByLibrary.simpleMessage("기본 선택"),
     "defaultText": MessageLookupByLibrary.simpleMessage("기본값"),
+    "defaultTianjiUserAgent": MessageLookupByLibrary.simpleMessage(
+      "기본값(Tianji Cloud)",
+    ),
     "definitionNotMap": MessageLookupByLibrary.simpleMessage(
       "구성은 이름과 유형이 있는 YAML 매핑이어야 합니다",
     ),
@@ -1452,6 +1462,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("프록시 경유"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("DNS 쿼리"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage("DNS 및 리소스"),
+    "dnsRouteDirect": MessageLookupByLibrary.simpleMessage("국내 직접 연결"),
+    "dnsRouteProxy": MessageLookupByLibrary.simpleMessage("프록시"),
+    "dnsRouteRejected": MessageLookupByLibrary.simpleMessage("차단됨"),
+    "dnsRouteResult": MessageLookupByLibrary.simpleMessage("라우팅 결과"),
     "dnsUpstream": MessageLookupByLibrary.simpleMessage("업스트림 DNS"),
     "docked": MessageLookupByLibrary.simpleMessage("고정"),
     "domain": MessageLookupByLibrary.simpleMessage("도메인"),
@@ -1501,6 +1515,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exportLogs": MessageLookupByLibrary.simpleMessage("로그 내보내기"),
     "exportShort": MessageLookupByLibrary.simpleMessage("내보내기"),
     "exportSuccess": MessageLookupByLibrary.simpleMessage("내보내기 완료"),
+    "exportSupportReport": MessageLookupByLibrary.simpleMessage(
+      "고객 지원용 보고서 내보내기",
+    ),
     "extend": MessageLookupByLibrary.simpleMessage("확장"),
     "extendMode": MessageLookupByLibrary.simpleMessage("확장 모드"),
     "extendOverridesScripts": MessageLookupByLibrary.simpleMessage(
@@ -1590,6 +1607,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hashByInUser": MessageLookupByLibrary.simpleMessage("인바운드 사용자별 해시"),
     "headerRewrite": MessageLookupByLibrary.simpleMessage("헤더 재작성"),
     "healthCheck": MessageLookupByLibrary.simpleMessage("상태 확인"),
+    "heapInUse": MessageLookupByLibrary.simpleMessage("사용 중인 힙"),
     "helperCorruptTip": MessageLookupByLibrary.simpleMessage(
       "헬퍼 서비스를 사용할 수 없어 TUN 모드를 켤 수 없습니다. 天机云를 다시 설치하여 복구하세요.",
     ),
@@ -1713,6 +1731,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "installedFonts": MessageLookupByLibrary.simpleMessage("설치된 글꼴"),
     "intelligentSelected": MessageLookupByLibrary.simpleMessage("스마트 선택"),
     "intercept": MessageLookupByLibrary.simpleMessage("차단"),
+    "interfaceAndKernelCombined": MessageLookupByLibrary.simpleMessage(
+      "인터페이스와 합산",
+    ),
+    "interfaceMemory": MessageLookupByLibrary.simpleMessage("인터페이스 메모리"),
     "interfaceName": MessageLookupByLibrary.simpleMessage("인터페이스 이름"),
     "interfaceNameMode": MessageLookupByLibrary.simpleMessage("아웃바운드 인터페이스"),
     "interfaceNameModeClear": MessageLookupByLibrary.simpleMessage("지정 안 함"),
@@ -1796,6 +1818,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "keepAliveIntervalDesc": MessageLookupByLibrary.simpleMessage(
       "TCP 킵얼라이브 간격",
     ),
+    "kernelMemory": MessageLookupByLibrary.simpleMessage("코어 메모리"),
     "key": MessageLookupByLibrary.simpleMessage("키"),
     "ko": MessageLookupByLibrary.simpleMessage("한국어"),
     "label": MessageLookupByLibrary.simpleMessage("레이블"),
@@ -1863,6 +1886,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "matchCase": MessageLookupByLibrary.simpleMessage("대/소문자 구분"),
     "matchSourceIp": MessageLookupByLibrary.simpleMessage("출발지 IP 일치"),
     "matchTarget": MessageLookupByLibrary.simpleMessage("MATCH-TARGET"),
+    "matchedRule": MessageLookupByLibrary.simpleMessage("일치한 규칙"),
     "matchedRules": MessageLookupByLibrary.simpleMessage("일치한 규칙"),
     "maxFailedTimes": MessageLookupByLibrary.simpleMessage("최대 실패 횟수"),
     "maxLengthTip": m77,
@@ -1889,6 +1913,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "messageTest": MessageLookupByLibrary.simpleMessage("메시지 테스트"),
     "messageTestTip": MessageLookupByLibrary.simpleMessage("이것은 메시지입니다."),
     "method": MessageLookupByLibrary.simpleMessage("메서드"),
+    "mihomoCompatibleUserAgent": MessageLookupByLibrary.simpleMessage(
+      "Mihomo 호환",
+    ),
     "minimize": MessageLookupByLibrary.simpleMessage("최소화"),
     "minimizeOnExit": MessageLookupByLibrary.simpleMessage("종료 시 최소화"),
     "minutes": MessageLookupByLibrary.simpleMessage("분"),
@@ -2298,6 +2325,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocolVersion": MessageLookupByLibrary.simpleMessage("프로토콜 버전"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
+      "업데이트 실패, 이전 버전 사용 중",
+    ),
     "providerUrlTip": MessageLookupByLibrary.simpleMessage("원격 공급자만 지원합니다"),
     "providers": MessageLookupByLibrary.simpleMessage("외부 리소스"),
     "proxies": MessageLookupByLibrary.simpleMessage("프록시"),
@@ -2345,6 +2375,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "새 인증서가 현재 인증서를 대체하며, 天机云는 가능한 경우 현재 인증서를 이 기기의 신뢰할 수 있는 루트에서 제거합니다. 현재 인증서를 신뢰하는 다른 모든 기기에는 새 인증서를 설치해야 합니다.",
     ),
     "regex": MessageLookupByLibrary.simpleMessage("정규식"),
+    "releaseCache": MessageLookupByLibrary.simpleMessage("캐시 해제"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("메모리 해제"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "메모리를 해제하지 못했습니다",
@@ -2806,6 +2837,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "subscriptionExpiryNoticeTitle": m129,
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage("구독 정보"),
     "subscriptionLink": MessageLookupByLibrary.simpleMessage("구독 링크"),
+    "subscriptionUserAgent": MessageLookupByLibrary.simpleMessage(
+      "구독 User-Agent",
+    ),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "sudo 비밀번호를 입력하세요",
     ),

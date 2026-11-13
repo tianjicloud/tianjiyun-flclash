@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -73,6 +75,32 @@ void main() {
 
       expect(profile.showSubscriptionInfo, isTrue);
       expect(profile.subscriptionExpiryNotifications, isTrue);
+      expect(profile.subscriptionUserAgent, ProfileUserAgent.tianji);
+      expect(
+        Profile.fromJson(
+          json.decode(json.encode(profile.toJson())) as Map<String, Object?>,
+        ).subscriptionUserAgent,
+        ProfileUserAgent.tianji,
+      );
+    });
+
+    test('subscription User-Agent is limited to Tianji and Mihomo', () {
+      final profile = Profile.normal(url: 'https://example.com/profile.yaml');
+
+      expect(
+        profile.subscriptionUserAgentValue(defaultUserAgent: 'tianji/1.0'),
+        'tianji/1.0',
+      );
+      final mihomo = profile.copyWith(
+        subscriptionUserAgent: ProfileUserAgent.mihomo,
+      );
+      expect(
+        mihomo.subscriptionUserAgentValue(
+          defaultUserAgent: 'tianji/1.0',
+          mihomoVersion: '1.19.28',
+        ),
+        'mihomo/1.19.28',
+      );
     });
   });
 

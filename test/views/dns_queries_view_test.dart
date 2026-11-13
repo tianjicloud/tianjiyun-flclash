@@ -339,6 +339,14 @@ void main() {
   });
 
   testWidgets('tapping a query opens its details', (tester) async {
+    container.read(coreStatusProvider.notifier).value = CoreStatus.connected;
+    when(() => core.getDnsRoute('alpha.test')).thenAnswer(
+      (_) async => const DnsRoute(
+        route: 'direct',
+        target: 'DIRECT',
+        rule: 'DOMAIN,alpha.test',
+      ),
+    );
     seedDnsQueries([
       _dnsQuery(
         'alpha.test',
@@ -352,12 +360,25 @@ void main() {
     await pumpDnsQueries(tester);
     expect(find.text('tls://1.1.1.1:853'), findsOneWidget);
     expect(find.text('12 ms'), findsOneWidget);
+    verifyNever(() => core.getDnsRoute(any()));
 
     await tester.tap(find.text('alpha.test'));
     await tester.pumpAndSettle();
 
     expect(find.text('DNS details'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('Domestic direct'), findsOneWidget);
+    expect(find.text('Matched rule: DOMAIN,alpha.test'), findsOneWidget);
     expect(find.text('Record type'), findsOneWidget);
+    final detail = find.byType(DnsQueryDetailView);
+    final domain = find.descendant(
+      of: detail,
+      matching: find.text('alpha.test'),
+    );
+    expect(
+      tester.getTopLeft(domain.last).dy,
+      lessThan(tester.getTopLeft(find.text('Domestic direct')).dy),
+    );
     Finder detailText(String text) => find.descendant(
       of: find.byType(DnsQueryDetailView),
       matching: find.text(text),

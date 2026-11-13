@@ -8132,6 +8132,282 @@ as int,
 
 
 /// @nodoc
+mixin _$DnsRoute {
+
+ String get route; String get target; String get rule;
+/// Create a copy of DnsRoute
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DnsRouteCopyWith<DnsRoute> get copyWith => _$DnsRouteCopyWithImpl<DnsRoute>(this as DnsRoute, _$identity);
+
+  /// Serializes this DnsRoute to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as DnsRoute;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DnsRoute&&(identical(other.route, _this.route) || other.route == _this.route)&&(identical(other.target, _this.target) || other.target == _this.target)&&(identical(other.rule, _this.rule) || other.rule == _this.rule));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+  final _this = this as DnsRoute;
+  return Object.hash(runtimeType,_this.route,_this.target,_this.rule);
+}
+
+@override
+String toString() {
+  final _this = this as DnsRoute;
+  return 'DnsRoute(route: ${_this.route}, target: ${_this.target}, rule: ${_this.rule})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DnsRouteCopyWith<$Res>  {
+  factory $DnsRouteCopyWith(DnsRoute value, $Res Function(DnsRoute) _then) = _$DnsRouteCopyWithImpl;
+@useResult
+$Res call({
+ String route, String target, String rule
+});
+
+
+
+
+}
+/// @nodoc
+class _$DnsRouteCopyWithImpl<$Res>
+    implements $DnsRouteCopyWith<$Res> {
+  _$DnsRouteCopyWithImpl(this._self, this._then);
+
+  final DnsRoute _self;
+  final $Res Function(DnsRoute) _then;
+
+/// Create a copy of DnsRoute
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? route = null,Object? target = null,Object? rule = null,}) {
+  return _then(DnsRoute(
+route: null == route ? _self.route : route // ignore: cast_nullable_to_non_nullable
+as String,target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
+as String,rule: null == rule ? _self.rule : rule // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [DnsRoute].
+extension DnsRoutePatterns on DnsRoute {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DnsRoute value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _DnsRoute() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DnsRoute value)  $default,){
+final _that = this;
+switch (_that) {
+case _DnsRoute():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DnsRoute value)?  $default,){
+final _that = this;
+switch (_that) {
+case _DnsRoute() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String route,  String target,  String rule)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _DnsRoute() when $default != null:
+return $default(_that.route,_that.target,_that.rule);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String route,  String target,  String rule)  $default,) {final _that = this;
+switch (_that) {
+case _DnsRoute():
+return $default(_that.route,_that.target,_that.rule);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String route,  String target,  String rule)?  $default,) {final _that = this;
+switch (_that) {
+case _DnsRoute() when $default != null:
+return $default(_that.route,_that.target,_that.rule);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _DnsRoute implements DnsRoute {
+  const _DnsRoute({required this.route, required this.target, required this.rule});
+  factory _DnsRoute.fromJson(Map<String, dynamic> json) => _$DnsRouteFromJson(json);
+
+@override final  String route;
+@override final  String target;
+@override final  String rule;
+
+/// Create a copy of DnsRoute
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DnsRouteCopyWith<_DnsRoute> get copyWith => __$DnsRouteCopyWithImpl<_DnsRoute>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$DnsRouteToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _DnsRoute&&(identical(other.route, route) || other.route == route)&&(identical(other.target, target) || other.target == target)&&(identical(other.rule, rule) || other.rule == rule));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+    return Object.hash(runtimeType,route,target,rule);
+}
+
+@override
+String toString() {
+    return 'DnsRoute(route: $route, target: $target, rule: $rule)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DnsRouteCopyWith<$Res> implements $DnsRouteCopyWith<$Res> {
+  factory _$DnsRouteCopyWith(_DnsRoute value, $Res Function(_DnsRoute) _then) = __$DnsRouteCopyWithImpl;
+@override @useResult
+$Res call({
+ String route, String target, String rule
+});
+
+
+
+
+}
+/// @nodoc
+class __$DnsRouteCopyWithImpl<$Res>
+    implements _$DnsRouteCopyWith<$Res> {
+  __$DnsRouteCopyWithImpl(this._self, this._then);
+
+  final _DnsRoute _self;
+  final $Res Function(_DnsRoute) _then;
+
+/// Create a copy of DnsRoute
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? route = null,Object? target = null,Object? rule = null,}) {
+  return _then(_DnsRoute(
+route: null == route ? _self.route : route // ignore: cast_nullable_to_non_nullable
+as String,target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
+as String,rule: null == rule ? _self.rule : rule // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
 mixin _$ExternalProvider {
 
  String get name; String get type; String? get path; int get count;@JsonKey(name: 'subscription-info', fromJson: subscriptionInfoFormCore) SubscriptionInfo? get subscriptionInfo;@JsonKey(name: 'vehicle-type') String get vehicleType;@JsonKey(name: 'update-at') DateTime get updateAt;

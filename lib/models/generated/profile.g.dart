@@ -46,6 +46,12 @@ _Profile _$ProfileFromJson(Map<String, dynamic> json) => _Profile(
   showSubscriptionInfo: json['showSubscriptionInfo'] as bool? ?? true,
   subscriptionExpiryNotifications:
       json['subscriptionExpiryNotifications'] as bool? ?? true,
+  subscriptionUserAgent:
+      $enumDecodeNullable(
+        _$ProfileUserAgentEnumMap,
+        json['subscriptionUserAgent'],
+      ) ??
+      ProfileUserAgent.tianji,
   selectedMap:
       (json['selectedMap'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as String),
@@ -80,6 +86,8 @@ Map<String, dynamic> _$ProfileToJson(_Profile instance) => <String, dynamic>{
   'autoUpdate': instance.autoUpdate,
   'showSubscriptionInfo': instance.showSubscriptionInfo,
   'subscriptionExpiryNotifications': instance.subscriptionExpiryNotifications,
+  'subscriptionUserAgent':
+      _$ProfileUserAgentEnumMap[instance.subscriptionUserAgent]!,
   'selectedMap': instance.selectedMap,
   'unfoldSet': instance.unfoldSet.toList(),
   'extendType': _$ExtendTypeEnumMap[instance.extendType]!,
@@ -93,6 +101,11 @@ const _$ProfileTypeEnumMap = {
   ProfileType.file: 'file',
   ProfileType.url: 'url',
   ProfileType.custom: 'custom',
+};
+
+const _$ProfileUserAgentEnumMap = {
+  ProfileUserAgent.tianji: 'tianji',
+  ProfileUserAgent.mihomo: 'mihomo',
 };
 
 const _$ExtendTypeEnumMap = {
