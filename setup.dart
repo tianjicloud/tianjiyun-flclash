@@ -221,7 +221,75 @@ Future<int> _package(
     stderr.write(utf8.decode(data));
   });
   final exitCode = await process.exitCode;
+  if (exitCode != 0) return exitCode;
+  if (platform == 'macos' && targets.split(',').contains('dmg')) {
+    return _repackDmgWithDmgbuild(rootDir);
+  }
   return exitCode;
+}
+
+/// flutter_distributor's appdmg writes the installer background as a legacy
+/// alias record that current Finder versions no longer resolve, so the DMG
+/// opens with a plain white background. Repackage the same .app with
+/// dmgbuild, which writes the background bookmark directly.
+Future<int> _repackDmgWithDmgbuild(String rootDir) async {
+  final productsDir = Directory(
+    p.join(rootDir, 'build', 'macos', 'Build', 'Products', 'Release'),
+  );
+  if (!productsDir.existsSync()) {
+    stderr.writeln('Cannot repackage DMG: no build products in $productsDir');
+    return 1;
+  }
+  final apps = productsDir
+      .listSync()
+      .where((e) => e is Directory && e.path.endsWith('.app'))
+      .toList();
+  final distDir = Directory(p.join(rootDir, 'dist'));
+  final dmgs = distDir
+      .listSync()
+      .where((e) => e is File && e.path.endsWith('.dmg'))
+      .cast<File>()
+      .toList();
+  if (apps.isEmpty || dmgs.isEmpty) {
+    stderr.writeln(
+      'Cannot repackage DMG: found ${apps.length} .app bundles and '
+      '${dmgs.length} .dmg files.',
+    );
+    return 1;
+  }
+  final settings = p.join(
+    rootDir,
+    'macos',
+    'packaging',
+    'dmg',
+    'dmgbuild_settings.py',
+  );
+  for (final dmg in dmgs) {
+    final tmp = File('${dmg.path}.repack.dmg');
+    final result = await Process.run(
+      'dmgbuild',
+      ['-s', settings, 'TianjiCloud', tmp.path],
+      environment: {
+        'TIANJI_APP_PATH': apps.first.path,
+        'TIANJI_BG_PATH': p.join(
+          rootDir,
+          'macos',
+          'packaging',
+          'dmg',
+          'background.png',
+        ),
+      },
+      includeParentEnvironment: true,
+    );
+    stdout.write(result.stdout);
+    if (result.exitCode != 0) {
+      stderr.write(result.stderr);
+      return result.exitCode;
+    }
+    tmp.renameSync(dmg.path);
+  }
+  stdout.writeln('Repackaged ${dmgs.length} DMG(s) with dmgbuild.');
+  return 0;
 }
 
 String _detectArch() {
@@ -257,10 +325,24 @@ Future<int> _ensureDependencies(String platform) async {
 Future<int> _ensureMacosDependencies() async {
   if (await _hasCommand('appdmg')) {
     stdout.writeln('appdmg already installed, skipping.');
+  } else {
+    stdout.writeln('Installing appdmg (DMG creator)...');
+    final result = await Process.run('npm', ['install', '-g', 'appdmg']);
+    if (result.exitCode != 0) {
+      stderr.write(result.stderr);
+      return result.exitCode;
+    }
+  }
+  if (await _hasCommand('dmgbuild')) {
+    stdout.writeln('dmgbuild already installed, skipping.');
     return 0;
   }
-  stdout.writeln('Installing appdmg (DMG creator)...');
-  final result = await Process.run('npm', ['install', '-g', 'appdmg']);
+  stdout.writeln('Installing dmgbuild (DMG repackager)...');
+  final result = await Process.run('pip3', [
+    'install',
+    '--break-system-packages',
+    'dmgbuild',
+  ]);
   if (result.exitCode != 0) {
     stderr.write(result.stderr);
   }
