@@ -680,7 +680,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nœud actuel"),
     "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
-      "Faites glisser les cartes pour les réordonner et appuyez sur le bouton de suppression. La connexion et les scènes restent en haut.",
+      "Faites glisser pour trier. Connexion et scènes restent en haut.",
     ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage(
       "Centre de données",
@@ -795,7 +795,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Redémarrer le cœur",
     ),
     "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
-      "Le cœur réseau n’a pas pu démarrer",
+      "Le service Tianji n’a pas pu démarrer",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
       "Durée d’exécution",
@@ -806,10 +806,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Le changement de ligne a échoué. Réessayez.",
     ),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
-      "La sélection manuelle est prioritaire : la ligne choisie devient la sortie. Son IP est vérifiée après le changement, avec la raison en cas d’écart.",
+      "La ligne choisie est vérifiée automatiquement.",
     ),
     "businessLineSelectionHintShort": MessageLookupByLibrary.simpleMessage(
-      "La ligne choisie devient la sortie ; son IP est vérifiée après le changement.",
+      "La ligne choisie est vérifiée automatiquement.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
       "Ligne par défaut",
@@ -1120,7 +1120,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Restaurer depuis un fichier ou WebDAV",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "Seule la ligne par défaut change. L’IA et le streaming conservent leurs règles, ainsi que les connexions directes et les blocages.",
+      "Seule la ligne par défaut change ; les autres règles restent identiques.",
     ),
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "Le routage intelligent est désactivé. Cette ligne par défaut n’est pas utilisée actuellement.",
@@ -1675,8 +1675,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Le mode développeur est activé.",
     ),
+    "diagnosticsCheckConnection": MessageLookupByLibrary.simpleMessage(
+      "Vérifiez la connexion et la ligne choisie, puis réessayez.",
+    ),
+    "diagnosticsCheckLine": MessageLookupByLibrary.simpleMessage(
+      "Vérifiez la ligne choisie et réessayez.",
+    ),
     "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("Activer TUN"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Non réussi"),
+    "diagnosticsImportSubscription": MessageLookupByLibrary.simpleMessage(
+      "Importez ou vérifiez votre abonnement.",
+    ),
     "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
       "Le trafic IPv6 est capturé par TUN et bloqué par le cœur.",
@@ -1699,12 +1708,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
       "Informations réseau IPv6 indisponibles.",
     ),
+    "diagnosticsLineCheck": MessageLookupByLibrary.simpleMessage(
+      "La ligne correspond à votre choix",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Réussi"),
+    "diagnosticsRestartService": MessageLookupByLibrary.simpleMessage(
+      "Redémarrez le service et réessayez.",
+    ),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Relancer"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Vérification de la sortie du chemin par défaut",
     ),
+    "diagnosticsServiceCheck": MessageLookupByLibrary.simpleMessage(
+      "Le service fonctionne",
+    ),
     "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Démarrer"),
+    "diagnosticsSubscriptionCheck": MessageLookupByLibrary.simpleMessage(
+      "L’abonnement est disponible",
+    ),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "Diagnostic rapide",
     ),
@@ -1713,6 +1734,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
       "Non vérifiable",
+    ),
+    "diagnosticsWebsiteCheck": MessageLookupByLibrary.simpleMessage(
+      "Les sites web sont accessibles",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Proxy de connexion"),
     "dialerProxyLoopStopped": m53,
@@ -1827,6 +1851,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage(
       "Nouvelle version disponible",
     ),
+    "dnsAnswerResults": MessageLookupByLibrary.simpleMessage("Résultats"),
     "dnsBlocked": MessageLookupByLibrary.simpleMessage("Bloqué"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("Cache DNS vidé"),
     "dnsExit": MessageLookupByLibrary.simpleMessage("Sortie DNS"),
@@ -1838,15 +1863,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sans cette entrée, TUN détourne toutes les requêtes DNS vers le port 53 (any:53).",
     ),
     "dnsHijacking": MessageLookupByLibrary.simpleMessage("Détournement DNS"),
+    "dnsIpv4": MessageLookupByLibrary.simpleMessage("IPv4"),
+    "dnsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "dnsMode": MessageLookupByLibrary.simpleMessage("Mode DNS"),
     "dnsOverrideDesc": MessageLookupByLibrary.simpleMessage(
       "Les entrées ajoutées ici remplacent le DNS de tous les profils URL et fichier ; tout ce qui n’est pas ajouté garde le réglage du profil. Les profils personnalisés définissent leur DNS dans leur contenu.",
     ),
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("Via proxy"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("Requêtes DNS"),
+    "dnsResolver": MessageLookupByLibrary.simpleMessage("Serveur DNS"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage(
       "DNS et ressources",
     ),
+    "dnsResponseDomainMissing": MessageLookupByLibrary.simpleMessage(
+      "Domaine introuvable",
+    ),
+    "dnsResponseRefused": MessageLookupByLibrary.simpleMessage(
+      "Requête refusée",
+    ),
+    "dnsResponseServerError": MessageLookupByLibrary.simpleMessage(
+      "Erreur du serveur",
+    ),
+    "dnsResponseSuccess": MessageLookupByLibrary.simpleMessage("Nom résolu"),
     "dnsRouteDirect": MessageLookupByLibrary.simpleMessage(
       "Connexion directe nationale",
     ),
@@ -2036,6 +2074,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "groupCount": m60,
     "groupCountUnit": MessageLookupByLibrary.simpleMessage("groupes"),
     "groupTimeoutCount": m61,
+    "groupTypeAutomatic": MessageLookupByLibrary.simpleMessage(
+      "Sélection automatique",
+    ),
+    "groupTypeFallback": MessageLookupByLibrary.simpleMessage("Basculement"),
+    "groupTypeLoadBalance": MessageLookupByLibrary.simpleMessage(
+      "Répartition de charge",
+    ),
+    "groupTypeManual": MessageLookupByLibrary.simpleMessage(
+      "Sélection manuelle",
+    ),
     "hasCacheChange": MessageLookupByLibrary.simpleMessage(
       "Mettre les modifications en cache ?",
     ),
@@ -2352,6 +2400,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Autorisation du réseau local refusée : la pile gvisor est utilisée, le LAN est inaccessible.",
     ),
     "localProxies": MessageLookupByLibrary.simpleMessage("Proxys locaux"),
+    "localProxyPort": MessageLookupByLibrary.simpleMessage("Port proxy local"),
     "locationPermission": MessageLookupByLibrary.simpleMessage(
       "Autorisation de localisation",
     ),
@@ -2930,7 +2979,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Afficher les informations du forfait sur l’accueil",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Le changement prend effet immédiatement ; en cas d’échec de l’analyse, la configuration actuelle est conservée.",
+      "Appliqué immédiatement ; le profil actuel reste en cas d’échec.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "S’applique uniquement à ce profil et prime sur les entrées de remplacement TUN des réglages réseau.",
@@ -2952,8 +3001,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocolVersion": MessageLookupByLibrary.simpleMessage(
       "Version du protocole",
     ),
+    "providerBuiltIn": MessageLookupByLibrary.simpleMessage("Intégré"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerLocalFile": MessageLookupByLibrary.simpleMessage("Fichier local"),
+    "providerOnlineSubscription": MessageLookupByLibrary.simpleMessage(
+      "Abonnement en ligne",
+    ),
     "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
       "Échec de la mise à jour, ancienne version utilisée",
     ),
@@ -3174,6 +3228,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "restartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Voulez-vous vraiment redémarrer le cœur ?",
     ),
+    "restartService": MessageLookupByLibrary.simpleMessage(
+      "Redémarrer le service",
+    ),
     "restore": MessageLookupByLibrary.simpleMessage("Restaurer"),
     "restoreAllData": MessageLookupByLibrary.simpleMessage(
       "Restaurer toutes les données",
@@ -3203,7 +3260,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ressources de routage",
     ),
     "routingResourcesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Détermine le trafic passant par le proxy ou en direct",
+      "Choisit les sites qui passent par le proxy ou se connectent directement.",
     ),
     "ru": MessageLookupByLibrary.simpleMessage("Russe"),
     "rule": MessageLookupByLibrary.simpleMessage("Règle"),
@@ -3465,6 +3522,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Scannez le code avec l\'appareil photo du téléphone, puis collez le lien dans la page qui s\'ouvre. Les deux appareils doivent être sur le même réseau.",
     ),
     "server": MessageLookupByLibrary.simpleMessage("Serveur"),
+    "service": MessageLookupByLibrary.simpleMessage("Service"),
     "serviceAbnormalCount": m124,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
       "Tout est disponible",
@@ -3482,6 +3540,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Échec de la vérification",
     ),
     "serviceManage": MessageLookupByLibrary.simpleMessage("Gérer les services"),
+    "serviceMemory": MessageLookupByLibrary.simpleMessage("Mémoire du service"),
     "serviceOriginalsOnly": MessageLookupByLibrary.simpleMessage(
       "Contenus originaux uniquement",
     ),
@@ -3492,7 +3551,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceShownOnDashboard": MessageLookupByLibrary.simpleMessage(
       "Affiché sur le tableau de bord",
     ),
-    "serviceStatus": MessageLookupByLibrary.simpleMessage("État des services"),
+    "serviceStatus": MessageLookupByLibrary.simpleMessage("État du service"),
     "serviceUnavailable": MessageLookupByLibrary.simpleMessage("Indisponible"),
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage(
       "Région non prise en charge",

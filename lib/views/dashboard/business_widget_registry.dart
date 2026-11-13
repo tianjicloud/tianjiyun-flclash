@@ -36,7 +36,6 @@ extension BusinessDashboardCardView on BusinessDashboardCard {
   String? description(BuildContext context) {
     final strings = context.appLocalizations;
     return switch (this) {
-      BusinessDashboardCard.monthlyTraffic ||
       BusinessDashboardCard.trafficSavings => strings.trafficStatsDesc,
       BusinessDashboardCard.proxyGroups => strings.proxyGroupsAfterStart,
       BusinessDashboardCard.connectionStats => strings.connectionStatsDesc,

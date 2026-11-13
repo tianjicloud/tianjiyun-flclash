@@ -146,10 +146,10 @@ class _BusinessProviderRow extends ConsumerWidget {
         .value?[provider.name];
     final action = ref.read(proxiesActionProvider.notifier);
     final type = provider.vehicleType.toLowerCase() == 'http'
-        ? 'http'
+        ? context.appLocalizations.providerOnlineSubscription
         : provider.path == null
-        ? 'inline'
-        : 'file';
+        ? context.appLocalizations.providerBuiltIn
+        : context.appLocalizations.providerLocalFile;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Row(

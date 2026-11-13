@@ -63,6 +63,7 @@ class _DiagnosticCheck {
     required this.result,
     this.detail,
     this.detailIsVerdict = false,
+    this.suggestion,
     this.onAction,
   });
 
@@ -70,6 +71,7 @@ class _DiagnosticCheck {
   final DiagnosticResult result;
   final String? detail;
   final bool detailIsVerdict;
+  final String? suggestion;
   final VoidCallback? onAction;
 }
 
@@ -232,7 +234,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
     final outboundFresh = outboundResult == DiagnosticResult.passed;
     final checks = <_DiagnosticCheck>[
       _DiagnosticCheck(
-        title: strings.core,
+        title: strings.diagnosticsServiceCheck,
         result: active && coreStatus == CoreStatus.connected
             ? DiagnosticResult.passed
             : active && coreStatus == CoreStatus.disconnected
@@ -243,16 +245,22 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
           (true, CoreStatus.disconnected) => strings.disconnected,
           _ => null,
         },
+        suggestion: active && coreStatus == CoreStatus.disconnected
+            ? strings.diagnosticsRestartService
+            : null,
       ),
       _DiagnosticCheck(
-        title: strings.profile,
+        title: strings.diagnosticsSubscriptionCheck,
         result: profile == null
             ? DiagnosticResult.failed
             : DiagnosticResult.passed,
         detail: profile?.realLabel,
+        suggestion: profile == null
+            ? strings.diagnosticsImportSubscription
+            : null,
       ),
       _DiagnosticCheck(
-        title: strings.diagnosticsSelection,
+        title: strings.diagnosticsLineCheck,
         result: active
             ? _selectionResult(selection)
             : DiagnosticResult.unverified,
@@ -273,14 +281,21 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
         detailIsVerdict:
             selection == SelectionVerdict.egressMismatch ||
             selection == SelectionVerdict.egressAnomaly,
+        suggestion:
+            active && _selectionResult(selection) == DiagnosticResult.failed
+            ? strings.diagnosticsCheckLine
+            : null,
       ),
       _DiagnosticCheck(
-        title: strings.outboundIp,
+        title: strings.diagnosticsWebsiteCheck,
         result: outboundResult,
         detail: outboundFresh
             ? outbound.value?.ip
             : outboundResult == DiagnosticResult.failed
             ? strings.serviceFailed
+            : null,
+        suggestion: outboundResult == DiagnosticResult.failed
+            ? strings.diagnosticsCheckConnection
             : null,
       ),
       _DiagnosticCheck(
@@ -477,6 +492,9 @@ _DiagnosticCheck _serviceCheck(
         : delay == null
         ? detail
         : '$detail · $delay ms',
+    suggestion: result == DiagnosticResult.failed
+        ? strings.diagnosticsCheckLine
+        : null,
   );
 }
 
@@ -657,13 +675,14 @@ class _DiagnosticRow extends StatelessWidget {
     };
     final action = check.onAction;
     final showDetail =
-        check.detail != null &&
-        check.detail != strings.servicePending &&
-        check.detail != status &&
-        (check.detailIsVerdict ||
-            check.result == DiagnosticResult.unverified ||
-            (check.result == DiagnosticResult.failed &&
-                check.title == strings.diagnosticsSelection));
+        check.suggestion != null ||
+        (check.detail != null &&
+            check.detail != strings.servicePending &&
+            check.detail != status &&
+            (check.detailIsVerdict ||
+                check.result == DiagnosticResult.unverified ||
+                (check.result == DiagnosticResult.failed &&
+                    check.title == strings.diagnosticsLineCheck)));
     final content = Row(
       crossAxisAlignment: mobile
           ? CrossAxisAlignment.center
@@ -693,7 +712,7 @@ class _DiagnosticRow extends StatelessWidget {
             check.detailIsVerdict
                 ? check.detail ?? status
                 : showDetail
-                ? '$status（${check.detail}）'
+                ? '$status（${[check.detail, check.suggestion].whereType<String>().join(' ')}）'
                 : status,
             textAlign: TextAlign.end,
             maxLines: 2,
@@ -741,7 +760,10 @@ class _DiagnosticRow extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 32),
                 child: Text(
-                  check.detail!,
+                  [
+                    check.detail,
+                    check.suggestion,
+                  ].whereType<String>().join(' '),
                   style: AppTextStyle.footnote
                       .of(context)
                       .copyWith(color: context.colorScheme.onSurfaceVariant),

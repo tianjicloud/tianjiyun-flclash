@@ -541,7 +541,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("現在のノード"),
     "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
-      "カードをドラッグして並べ替え、削除ボタンをタップします。接続とシーンは上部に固定されます。",
+      "ドラッグして並べ替え。接続とシーンは上部に固定。",
     ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("データセンター"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("速度測定"),
@@ -640,7 +640,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessIntercept": MessageLookupByLibrary.simpleMessage("ブロック"),
     "businessKernelRestart": MessageLookupByLibrary.simpleMessage("コアを再起動"),
     "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
-      "ネットワークコアを起動できませんでした",
+      "天机云サービスを起動できませんでした",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage("稼働時間"),
     "businessLegal": MessageLookupByLibrary.simpleMessage("法律情報"),
@@ -649,10 +649,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "回線の切り替えを完了できませんでした。再試行してください。",
     ),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
-      "手動選択が優先されます。選択した回線が出口になり、切替後に出口 IP を確認します。不一致の場合は理由を表示します。",
+      "選んだ回線を自動で確認します。",
     ),
     "businessLineSelectionHintShort": MessageLookupByLibrary.simpleMessage(
-      "選択した回線が出口になり、切替後に出口 IP を確認します。",
+      "選んだ回線を自動で確認します。",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage("既定の回線"),
     "businessLines": MessageLookupByLibrary.simpleMessage("回線"),
@@ -932,7 +932,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ファイルまたは WebDAV から復元",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "既定の回線のみ変更します。AI・動画などの個別ルール、直接接続、ブロックのルールは維持します。",
+      "既定の回線だけ変更し、他のルールはそのままです。",
     ),
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "スマートルーティングが無効のため、この既定の回線は現在適用されていません。",
@@ -1345,8 +1345,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "開発者モードが有効になりました。",
     ),
+    "diagnosticsCheckConnection": MessageLookupByLibrary.simpleMessage(
+      "接続と選択した回線を確認して再試行してください。",
+    ),
+    "diagnosticsCheckLine": MessageLookupByLibrary.simpleMessage(
+      "選択した回線を確認して再試行してください。",
+    ),
     "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("TUNを有効にする"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("未合格"),
+    "diagnosticsImportSubscription": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションを読み込むか確認してください。",
+    ),
     "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
       "IPv6トラフィックはTUNで捕捉され、コアで無効化されています。",
@@ -1369,15 +1378,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
       "IPv6ネットワーク情報を取得できません。",
     ),
+    "diagnosticsLineCheck": MessageLookupByLibrary.simpleMessage("選択した回線と一致"),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("成功"),
+    "diagnosticsRestartService": MessageLookupByLibrary.simpleMessage(
+      "サービスを再起動して再試行してください。",
+    ),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("再診断"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("既定経路の出口検証"),
+    "diagnosticsServiceCheck": MessageLookupByLibrary.simpleMessage("サービスは動作中"),
     "diagnosticsStart": MessageLookupByLibrary.simpleMessage("診断開始"),
+    "diagnosticsSubscriptionCheck": MessageLookupByLibrary.simpleMessage(
+      "サブスクリプションを利用可能",
+    ),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage("ワンクリック診断"),
     "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
       "DNS 出口、ブラウザーの WebRTC、NTP の検査は利用できません。",
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage("検出できず"),
+    "diagnosticsWebsiteCheck": MessageLookupByLibrary.simpleMessage(
+      "ウェブサイトを開けるか",
+    ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("ダイヤラープロキシ"),
     "dialerProxyLoopStopped": m53,
     "dialog": MessageLookupByLibrary.simpleMessage("ダイアログ"),
@@ -1473,6 +1493,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage(
       "新しいバージョンが見つかりました",
     ),
+    "dnsAnswerResults": MessageLookupByLibrary.simpleMessage("解析結果"),
     "dnsBlocked": MessageLookupByLibrary.simpleMessage("ブロック済み"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("DNSキャッシュをクリアしました"),
     "dnsExit": MessageLookupByLibrary.simpleMessage("DNS 出口"),
@@ -1482,13 +1503,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "追加しない場合、ポート 53 宛てのすべての DNS 問い合わせをハイジャックします（any:53）。",
     ),
     "dnsHijacking": MessageLookupByLibrary.simpleMessage("DNSハイジャック"),
+    "dnsIpv4": MessageLookupByLibrary.simpleMessage("IPv4"),
+    "dnsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "dnsMode": MessageLookupByLibrary.simpleMessage("DNSモード"),
     "dnsOverrideDesc": MessageLookupByLibrary.simpleMessage(
       "ここで追加した項目は、すべての URL・ファイルプロファイルの DNS を上書きします。追加していない項目はプロファイル自身の設定のままです。カスタムプロファイルの DNS はその内容で設定します。",
     ),
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("プロキシ経由"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("DNS クエリ"),
+    "dnsResolver": MessageLookupByLibrary.simpleMessage("DNSサーバー"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage("DNS とリソース"),
+    "dnsResponseDomainMissing": MessageLookupByLibrary.simpleMessage(
+      "ドメインが見つかりません",
+    ),
+    "dnsResponseRefused": MessageLookupByLibrary.simpleMessage("サーバー拒否"),
+    "dnsResponseServerError": MessageLookupByLibrary.simpleMessage("サーバーエラー"),
+    "dnsResponseSuccess": MessageLookupByLibrary.simpleMessage("解析成功"),
     "dnsRouteDirect": MessageLookupByLibrary.simpleMessage("国内は直接接続"),
     "dnsRouteProxy": MessageLookupByLibrary.simpleMessage("プロキシ"),
     "dnsRouteRejected": MessageLookupByLibrary.simpleMessage("ブロック済み"),
@@ -1630,6 +1660,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "groupCount": m60,
     "groupCountUnit": MessageLookupByLibrary.simpleMessage("個"),
     "groupTimeoutCount": m61,
+    "groupTypeAutomatic": MessageLookupByLibrary.simpleMessage("自動選択"),
+    "groupTypeFallback": MessageLookupByLibrary.simpleMessage("障害時に切替"),
+    "groupTypeLoadBalance": MessageLookupByLibrary.simpleMessage("負荷分散"),
+    "groupTypeManual": MessageLookupByLibrary.simpleMessage("手動選択"),
     "hasCacheChange": MessageLookupByLibrary.simpleMessage("変更をキャッシュしますか？"),
     "hashByInUser": MessageLookupByLibrary.simpleMessage("インバウンドユーザーでハッシュ"),
     "headerRewrite": MessageLookupByLibrary.simpleMessage("ヘッダー書き換え"),
@@ -1883,6 +1917,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ローカルネットワークの権限が拒否されたため gvisor スタックを使用します。LAN にはアクセスできません。",
     ),
     "localProxies": MessageLookupByLibrary.simpleMessage("ローカルプロキシ"),
+    "localProxyPort": MessageLookupByLibrary.simpleMessage("ローカルプロキシポート"),
     "locationPermission": MessageLookupByLibrary.simpleMessage("位置情報の権限"),
     "locationPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
       "位置情報の権限が拒否されたため、現在の Wi-Fi 名を取得できません。システム設定で位置情報の権限を手動で有効にしてください。",
@@ -2342,7 +2377,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("ホームにプラン情報を表示"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "切り替えはすぐに反映されます。解析に失敗した場合は現在の設定を維持します。",
+      "すぐ反映。読み込みに失敗した場合は現在の設定を保持します。",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "このプロファイルにのみ適用され、ネットワーク設定の TUN 上書き項目より優先されます。",
@@ -2360,8 +2395,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocol": MessageLookupByLibrary.simpleMessage("プロトコル"),
     "protocolParam": MessageLookupByLibrary.simpleMessage("プロトコルパラメータ"),
     "protocolVersion": MessageLookupByLibrary.simpleMessage("プロトコルバージョン"),
+    "providerBuiltIn": MessageLookupByLibrary.simpleMessage("内蔵"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerLocalFile": MessageLookupByLibrary.simpleMessage("ローカルファイル"),
+    "providerOnlineSubscription": MessageLookupByLibrary.simpleMessage(
+      "オンライン購読",
+    ),
     "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
       "更新失敗、旧バージョンを使用",
     ),
@@ -2540,6 +2580,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "responseHeaders": MessageLookupByLibrary.simpleMessage("レスポンスヘッダー"),
     "restart": MessageLookupByLibrary.simpleMessage("再起動"),
     "restartCoreTip": MessageLookupByLibrary.simpleMessage("コアを再起動してもよろしいですか？"),
+    "restartService": MessageLookupByLibrary.simpleMessage("サービスを再起動"),
     "restore": MessageLookupByLibrary.simpleMessage("復元"),
     "restoreAllData": MessageLookupByLibrary.simpleMessage("すべてのデータを復元"),
     "restoreOnlyConfig": MessageLookupByLibrary.simpleMessage("プロファイルのみ復元"),
@@ -2557,7 +2598,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ルーティングリソース",
     ),
     "routingResourcesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "プロキシ経由と直接接続する通信を決定します",
+      "プロキシ経由と直接接続するサイトを決めます。",
     ),
     "ru": MessageLookupByLibrary.simpleMessage("ロシア語"),
     "rule": MessageLookupByLibrary.simpleMessage("ルール"),
@@ -2783,6 +2824,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "スマートフォンのカメラでコードをスキャンし、開いたページにリンクを貼り付けてください。両方のデバイスを同じネットワークに接続する必要があります。",
     ),
     "server": MessageLookupByLibrary.simpleMessage("サーバー"),
+    "service": MessageLookupByLibrary.simpleMessage("サービス"),
     "serviceAbnormalCount": m124,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage("すべて利用可能"),
     "serviceAvailable": MessageLookupByLibrary.simpleMessage("利用可能"),
@@ -2794,13 +2836,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "serviceFailed": MessageLookupByLibrary.simpleMessage("検出に失敗しました"),
     "serviceManage": MessageLookupByLibrary.simpleMessage("サービスを管理"),
+    "serviceMemory": MessageLookupByLibrary.simpleMessage("サービスのメモリ"),
     "serviceOriginalsOnly": MessageLookupByLibrary.simpleMessage("オリジナル作品のみ"),
     "servicePending": MessageLookupByLibrary.simpleMessage("未検査"),
     "serviceRestricted": MessageLookupByLibrary.simpleMessage("アクセス制限"),
     "serviceShownOnDashboard": MessageLookupByLibrary.simpleMessage(
       "ダッシュボードに表示",
     ),
-    "serviceStatus": MessageLookupByLibrary.simpleMessage("サービスの状態"),
+    "serviceStatus": MessageLookupByLibrary.simpleMessage("サービス状態"),
     "serviceUnavailable": MessageLookupByLibrary.simpleMessage("利用不可"),
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage("対象外の地域"),
     "settingEntries": MessageLookupByLibrary.simpleMessage("設定項目"),

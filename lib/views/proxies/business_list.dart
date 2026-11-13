@@ -1,9 +1,11 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/ui/macos_style.dart';
 import 'package:fl_clash/core/residential.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/providers/dashboard_lines.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
@@ -29,9 +31,13 @@ class _BusinessProxyListState extends ConsumerState<BusinessProxyList> {
 
   @override
   Widget build(BuildContext context) {
-    final groups = ref.watch(
+    final allGroups = ref.watch(
       proxiesTabStateProvider.select((state) => state.groups),
     );
+    final profile = ref.watch(currentProfileProvider);
+    final groups = isTianjiSubscriptionProfile(profile)
+        ? allGroups.where((group) => !isInternalLineGroup(group)).toList()
+        : allGroups;
     final selectedGroup = ref.watch(
       proxiesTabStateProvider.select((state) => state.currentGroupName),
     );
@@ -165,9 +171,16 @@ class _BusinessGroupHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locked = group.name == tianjiResidentialRootName;
     final appLocalizations = context.appLocalizations;
+    final groupTypeLabel = switch (proxyGroupTypeOf(group.type.name)) {
+      GroupType.URLTest => appLocalizations.groupTypeAutomatic,
+      GroupType.Selector => appLocalizations.groupTypeManual,
+      GroupType.Fallback => appLocalizations.groupTypeFallback,
+      GroupType.LoadBalance => appLocalizations.groupTypeLoadBalance,
+      GroupType.Relay || null => '',
+    };
     final subtitle = locked
         ? appLocalizations.businessGroupLocked
-        : '${group.type == GroupType.URLTest ? appLocalizations.businessAutoTest : appLocalizations.businessManualSelect} · ${group.all.length} ${appLocalizations.businessLineCount}';
+        : '$groupTypeLabel · ${group.all.length} ${appLocalizations.businessLineCount}';
     final current = ref.watch(selectedProxyNameProvider(group.name));
     final delay = current == null
         ? null
@@ -198,7 +211,9 @@ class _BusinessGroupHeader extends ConsumerWidget {
                       size: 16,
                     ),
                     Text(
-                      _cleanBusinessGroupName(group.name),
+                      stripBusinessMultiplierSuffix(
+                        _cleanBusinessGroupName(group.name),
+                      ),
                       style: AppTextStyle.subheadline.of(
                         context,
                         emphasized: true,

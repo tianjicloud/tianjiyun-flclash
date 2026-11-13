@@ -46,6 +46,19 @@ void main() {
         now: '🇯🇵 Tokyo',
         all: [Proxy(name: '🇯🇵 Tokyo', type: 'ss')],
       ),
+      Group(name: '场景模式', type: GroupType.Selector, hidden: false),
+      Group(
+        name: '⚡ 自动选择',
+        type: GroupType.URLTest,
+        hidden: false,
+        all: [Proxy(name: '🇯🇵 Tokyo', type: 'ss')],
+      ),
+      Group(
+        name: '🇯🇵 Tokyo 1.5x',
+        type: GroupType.URLTest,
+        hidden: false,
+        all: [Proxy(name: '🇯🇵 Tokyo 1.5x', type: 'ss')],
+      ),
     ];
     final container = ProviderContainer(
       overrides: [
@@ -60,7 +73,7 @@ void main() {
     addTearDown(container.dispose);
     globalState.container = container;
     container.read(viewSizeProvider.notifier).value = const Size(1280, 900);
-    expect(container.read(proxiesTabStateProvider).groups, hasLength(2));
+    expect(container.read(proxiesTabStateProvider).groups, hasLength(5));
     expect(
       container.read(proxiesTabStateProvider).groups.first.all,
       hasLength(2),
@@ -86,8 +99,11 @@ void main() {
       BusinessProxiesView.list,
     );
     expect(find.byType(BusinessProxyList), findsOneWidget);
+    expect(find.text('场景模式'), findsNothing);
+    expect(find.text('⚡ 自动选择'), findsNothing);
+    expect(find.text('🇯🇵 Tokyo 1.5x'), findsNothing);
     expect(find.byType(ProxyCard), findsNWidgets(2));
-    expect(find.text('Tokyo'), findsNWidgets(2));
+    expect(find.text('Tokyo'), findsOneWidget);
     expect(find.text('ss'), findsNothing);
     expect(tester.getRect(find.byType(ProxyCard).first).height, closeTo(44, 1));
 

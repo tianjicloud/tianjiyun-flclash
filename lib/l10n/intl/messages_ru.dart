@@ -660,7 +660,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Текущий узел"),
     "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
-      "Перетаскивайте карточки для сортировки и нажимайте кнопку удаления. Подключение и сцены закреплены сверху.",
+      "Перетаскивайте карточки. Подключение и сцены остаются сверху.",
     ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("Дата-центр"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage(
@@ -773,7 +773,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Перезапустить ядро",
     ),
     "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
-      "Не удалось запустить сетевое ядро",
+      "Не удалось запустить сервис Tianji",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
       "Время работы",
@@ -786,10 +786,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Не удалось завершить переключение. Повторите попытку.",
     ),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
-      "Ручной выбор имеет приоритет: выбранная линия становится выходом. После переключения IP выхода проверяется; при несовпадении будет указана причина.",
+      "Выбранная линия проверяется автоматически.",
     ),
     "businessLineSelectionHintShort": MessageLookupByLibrary.simpleMessage(
-      "Выбранная линия станет выходом; после переключения проверим IP выхода.",
+      "Выбранная линия проверяется автоматически.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
       "Линия по умолчанию",
@@ -1109,7 +1109,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Восстановить из файла или WebDAV",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "Меняется только линия по умолчанию. Правила ИИ, стриминга, прямых соединений и блокировок сохраняются.",
+      "Меняется только линия по умолчанию, остальные правила прежние.",
     ),
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "Умная маршрутизация выключена. Эта линия по умолчанию сейчас не применяется.",
@@ -1642,10 +1642,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Режим разработчика включён.",
     ),
+    "diagnosticsCheckConnection": MessageLookupByLibrary.simpleMessage(
+      "Проверьте подключение и выбранную линию, затем повторите попытку.",
+    ),
+    "diagnosticsCheckLine": MessageLookupByLibrary.simpleMessage(
+      "Проверьте выбранную линию и повторите попытку.",
+    ),
     "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage(
       "Включить TUN",
     ),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Не пройдено"),
+    "diagnosticsImportSubscription": MessageLookupByLibrary.simpleMessage(
+      "Импортируйте подписку или проверьте её.",
+    ),
     "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
       "Трафик IPv6 перехватывается TUN и блокируется ядром.",
@@ -1668,12 +1677,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
       "Не удалось получить сведения о сети IPv6.",
     ),
+    "diagnosticsLineCheck": MessageLookupByLibrary.simpleMessage(
+      "Линия соответствует выбору",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Пройдено"),
+    "diagnosticsRestartService": MessageLookupByLibrary.simpleMessage(
+      "Перезапустите службу и повторите попытку.",
+    ),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Повторить"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Проверка выхода маршрута по умолчанию",
     ),
+    "diagnosticsServiceCheck": MessageLookupByLibrary.simpleMessage(
+      "Служба запущена",
+    ),
     "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Начать"),
+    "diagnosticsSubscriptionCheck": MessageLookupByLibrary.simpleMessage(
+      "Подписка доступна",
+    ),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "Быстрая диагностика",
     ),
@@ -1682,6 +1703,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
       "Не удалось проверить",
+    ),
+    "diagnosticsWebsiteCheck": MessageLookupByLibrary.simpleMessage(
+      "Открываются ли сайты",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage(
       "Прокси для подключения",
@@ -1800,6 +1824,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage(
       "Доступна новая версия",
     ),
+    "dnsAnswerResults": MessageLookupByLibrary.simpleMessage("Результаты"),
     "dnsBlocked": MessageLookupByLibrary.simpleMessage("Заблокировано"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("Кэш DNS очищен"),
     "dnsExit": MessageLookupByLibrary.simpleMessage("Выход DNS"),
@@ -1811,15 +1836,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Без этого параметра TUN перехватывает все DNS-запросы на порт 53 (any:53).",
     ),
     "dnsHijacking": MessageLookupByLibrary.simpleMessage("Перехват DNS"),
+    "dnsIpv4": MessageLookupByLibrary.simpleMessage("IPv4"),
+    "dnsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "dnsMode": MessageLookupByLibrary.simpleMessage("Режим DNS"),
     "dnsOverrideDesc": MessageLookupByLibrary.simpleMessage(
       "Добавленные здесь параметры заменяют DNS всех профилей из URL и файлов; остальные остаются такими, как в профиле. DNS пользовательского профиля задаётся в его содержимом.",
     ),
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("Через прокси"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("DNS-запросы"),
+    "dnsResolver": MessageLookupByLibrary.simpleMessage("DNS-сервер"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage(
       "DNS и ресурсы",
     ),
+    "dnsResponseDomainMissing": MessageLookupByLibrary.simpleMessage(
+      "Домен не найден",
+    ),
+    "dnsResponseRefused": MessageLookupByLibrary.simpleMessage(
+      "Сервер отклонил запрос",
+    ),
+    "dnsResponseServerError": MessageLookupByLibrary.simpleMessage(
+      "Ошибка сервера",
+    ),
+    "dnsResponseSuccess": MessageLookupByLibrary.simpleMessage("Имя разрешено"),
     "dnsRouteDirect": MessageLookupByLibrary.simpleMessage(
       "Прямое подключение внутри страны",
     ),
@@ -2009,6 +2047,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "groupCount": m60,
     "groupCountUnit": MessageLookupByLibrary.simpleMessage("групп"),
     "groupTimeoutCount": m61,
+    "groupTypeAutomatic": MessageLookupByLibrary.simpleMessage("Автовыбор"),
+    "groupTypeFallback": MessageLookupByLibrary.simpleMessage(
+      "Переключение при сбое",
+    ),
+    "groupTypeLoadBalance": MessageLookupByLibrary.simpleMessage(
+      "Балансировка нагрузки",
+    ),
+    "groupTypeManual": MessageLookupByLibrary.simpleMessage("Ручной выбор"),
     "hasCacheChange": MessageLookupByLibrary.simpleMessage(
       "Кэшировать изменения?",
     ),
@@ -2305,6 +2351,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Доступ к локальной сети запрещён: используется стек gvisor, локальная сеть недоступна.",
     ),
     "localProxies": MessageLookupByLibrary.simpleMessage("Локальные прокси"),
+    "localProxyPort": MessageLookupByLibrary.simpleMessage(
+      "Локальный порт прокси",
+    ),
     "locationPermission": MessageLookupByLibrary.simpleMessage(
       "Разрешение на геолокацию",
     ),
@@ -2879,7 +2928,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Показывать сведения о тарифе на главной",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Изменения применяются сразу; при ошибке разбора сохраняется текущая конфигурация.",
+      "Применяется сразу; при ошибке загрузки остаётся текущий профиль.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Действует только для этого профиля и имеет приоритет над переопределяемыми параметрами TUN в настройках сети.",
@@ -2897,8 +2946,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocol": MessageLookupByLibrary.simpleMessage("Протокол"),
     "protocolParam": MessageLookupByLibrary.simpleMessage("Параметр протокола"),
     "protocolVersion": MessageLookupByLibrary.simpleMessage("Версия протокола"),
+    "providerBuiltIn": MessageLookupByLibrary.simpleMessage("Встроенный"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerLocalFile": MessageLookupByLibrary.simpleMessage("Локальный файл"),
+    "providerOnlineSubscription": MessageLookupByLibrary.simpleMessage(
+      "Онлайн-подписка",
+    ),
     "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
       "Не удалось обновить, используется старая версия",
     ),
@@ -3105,6 +3159,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "restartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Вы уверены, что хотите перезапустить ядро?",
     ),
+    "restartService": MessageLookupByLibrary.simpleMessage(
+      "Перезапустить службу",
+    ),
     "restore": MessageLookupByLibrary.simpleMessage("Восстановить"),
     "restoreAllData": MessageLookupByLibrary.simpleMessage(
       "Восстановить все данные",
@@ -3136,7 +3193,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ресурсы маршрутизации",
     ),
     "routingResourcesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Определяет, какой трафик идет через прокси, а какой напрямую",
+      "Определяет, какие сайты идут через прокси, а какие подключаются напрямую.",
     ),
     "ru": MessageLookupByLibrary.simpleMessage("Русский"),
     "rule": MessageLookupByLibrary.simpleMessage("Правило"),
@@ -3396,6 +3453,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Отсканируйте код камерой телефона и вставьте ссылку на открывшейся странице. Оба устройства должны быть в одной сети.",
     ),
     "server": MessageLookupByLibrary.simpleMessage("Сервер"),
+    "service": MessageLookupByLibrary.simpleMessage("Служба"),
     "serviceAbnormalCount": m124,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage("Все доступны"),
     "serviceAvailable": MessageLookupByLibrary.simpleMessage("Доступен"),
@@ -3409,6 +3467,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceManage": MessageLookupByLibrary.simpleMessage(
       "Управление сервисами",
     ),
+    "serviceMemory": MessageLookupByLibrary.simpleMessage("Память службы"),
     "serviceOriginalsOnly": MessageLookupByLibrary.simpleMessage(
       "Только оригиналы",
     ),
@@ -3419,7 +3478,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceShownOnDashboard": MessageLookupByLibrary.simpleMessage(
       "Показан на панели",
     ),
-    "serviceStatus": MessageLookupByLibrary.simpleMessage("Состояние сервисов"),
+    "serviceStatus": MessageLookupByLibrary.simpleMessage("Состояние службы"),
     "serviceUnavailable": MessageLookupByLibrary.simpleMessage("Недоступен"),
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage(
       "Регион не поддерживается",

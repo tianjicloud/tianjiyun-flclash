@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/core/method.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -613,14 +614,20 @@ class _DnsQueryDetailViewState extends ConsumerState<DnsQueryDetailView> {
     final entries = [
       (appLocalizations.time, dnsQuery.time.showFull),
       (appLocalizations.domain, dnsQuery.domain),
-      (appLocalizations.recordType, dnsQuery.type),
+      (
+        appLocalizations.recordType,
+        _dnsRecordTypeLabel(appLocalizations, dnsQuery.type),
+      ),
       (appLocalizations.initiator, dnsQuery.initiator?.label ?? ''),
-      (appLocalizations.source, dnsQuery.upstream),
+      (appLocalizations.dnsResolver, dnsQuery.upstream),
       (
         appLocalizations.cache,
         dnsQuery.cached ? appLocalizations.yes : appLocalizations.no,
       ),
-      (appLocalizations.responseCode, dnsQuery.rcode),
+      (
+        appLocalizations.responseCode,
+        _dnsResponseLabel(appLocalizations, dnsQuery.rcode),
+      ),
       (appLocalizations.delay, '${dnsQuery.delay} ms'),
     ];
     return Column(
@@ -648,7 +655,7 @@ class _DnsQueryDetailViewState extends ConsumerState<DnsQueryDetailView> {
                 ),
               if (dnsQuery.answers.isNotEmpty)
                 generateSection(
-                  title: appLocalizations.answers,
+                  title: appLocalizations.dnsAnswerResults,
                   items: [
                     for (final answer in dnsQuery.answers)
                       DetailRow(title: answer, copyText: answer),
@@ -677,11 +684,12 @@ class _DnsQueryDetailViewState extends ConsumerState<DnsQueryDetailView> {
     final rows = <(String, String)>[
       (l.time, dnsQuery.time.showFull),
       (l.elapsed, '${dnsQuery.delay} ms'),
-      if (dnsQuery.upstream.isNotEmpty) (l.source, dnsQuery.upstream),
-      if (dnsQuery.rcode.isNotEmpty) (l.responseCode, dnsQuery.rcode),
+      if (dnsQuery.upstream.isNotEmpty) (l.dnsResolver, dnsQuery.upstream),
+      if (dnsQuery.rcode.isNotEmpty)
+        (l.responseCode, _dnsResponseLabel(l, dnsQuery.rcode)),
       if (dnsQuery.cached) (l.cache, l.yes),
-      for (var index = 0; index < dnsQuery.answers.length; index++)
-        ('${l.answers} ${index + 1}', dnsQuery.answers[index]),
+      if (dnsQuery.answers.isNotEmpty)
+        (l.dnsAnswerResults, dnsQuery.answers.join('\n')),
       if (dnsQuery.error.isNotEmpty) (l.error, dnsQuery.error),
     ];
     final brightness = context.colorScheme.brightness;
@@ -710,7 +718,7 @@ class _DnsQueryDetailViewState extends ConsumerState<DnsQueryDetailView> {
                     ),
                   ),
                   _DnsDetailBadge(
-                    label: dnsQuery.type,
+                    label: _dnsRecordTypeLabel(l, dnsQuery.type),
                     color: context.colorScheme.surfaceContainerHighest,
                     foreground: context.colorScheme.onSurfaceVariant,
                   ),
@@ -896,6 +904,24 @@ class _DnsQueryHeading extends StatelessWidget {
       ),
     );
   }
+}
+
+String _dnsRecordTypeLabel(AppLocalizations l10n, String type) =>
+    switch (type.toUpperCase()) {
+      'A' => l10n.dnsIpv4,
+      'AAAA' => l10n.dnsIpv6,
+      _ => type,
+    };
+
+String _dnsResponseLabel(AppLocalizations l10n, String code) {
+  final meaning = switch (dnsResponseMeaning(code)) {
+    DnsResponseMeaning.success => l10n.dnsResponseSuccess,
+    DnsResponseMeaning.domainMissing => l10n.dnsResponseDomainMissing,
+    DnsResponseMeaning.refused => l10n.dnsResponseRefused,
+    DnsResponseMeaning.serverError => l10n.dnsResponseServerError,
+    DnsResponseMeaning.other => '',
+  };
+  return meaning.isEmpty ? code : '$meaning · $code';
 }
 
 Future<void> _copy(BuildContext context, String text) async {

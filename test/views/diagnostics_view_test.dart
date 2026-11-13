@@ -160,7 +160,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Default route exit verification'), findsOneWidget);
+    expect(find.text('Line matches your choice'), findsOneWidget);
     expect(
       find.text('DNS exit, browser WebRTC and NTP checks are not available.'),
       findsNothing,

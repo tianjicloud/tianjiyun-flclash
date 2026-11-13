@@ -676,7 +676,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Nodo actual"),
     "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
-      "Arrastra las tarjetas para reordenarlas y pulsa el botón de eliminar. La conexión y las escenas permanecen arriba.",
+      "Arrastra para ordenar. Conexión y escenas quedan arriba.",
     ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage(
       "Centro de datos",
@@ -793,7 +793,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Reiniciar núcleo",
     ),
     "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
-      "No se pudo iniciar el núcleo de red",
+      "No se pudo iniciar el servicio de Tianji",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
       "Tiempo activo",
@@ -804,10 +804,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se pudo completar el cambio. Reinténtalo.",
     ),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
-      "La selección manual tiene prioridad: la línea elegida será la salida. Se comprobará su IP al cambiar y se indicará el motivo si no coincide.",
+      "La línea elegida se comprueba automáticamente.",
     ),
     "businessLineSelectionHintShort": MessageLookupByLibrary.simpleMessage(
-      "La línea elegida será la salida; su IP se comprobará al cambiar.",
+      "La línea elegida se comprueba automáticamente.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage(
       "Línea predeterminada",
@@ -1121,7 +1121,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Restaurar desde un archivo o WebDAV",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "Solo cambia la línea predeterminada. La IA y el streaming conservan sus reglas, al igual que las conexiones directas y los bloqueos.",
+      "Solo cambia la línea predeterminada; las demás reglas siguen igual.",
     ),
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "El enrutamiento inteligente no está activo. Esta línea predeterminada no se está usando.",
@@ -1660,8 +1660,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "El modo desarrollador está activado.",
     ),
+    "diagnosticsCheckConnection": MessageLookupByLibrary.simpleMessage(
+      "Revisa la conexión y la línea seleccionada; vuelve a intentarlo.",
+    ),
+    "diagnosticsCheckLine": MessageLookupByLibrary.simpleMessage(
+      "Revisa la línea seleccionada e inténtalo de nuevo.",
+    ),
     "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("Activar TUN"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("No superado"),
+    "diagnosticsImportSubscription": MessageLookupByLibrary.simpleMessage(
+      "Importa o revisa tu suscripción.",
+    ),
     "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
       "TUN captura el tráfico IPv6 y el núcleo lo bloquea.",
@@ -1684,12 +1693,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
       "No se pudo obtener la información de red IPv6.",
     ),
+    "diagnosticsLineCheck": MessageLookupByLibrary.simpleMessage(
+      "La línea coincide con tu elección",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Correcto"),
+    "diagnosticsRestartService": MessageLookupByLibrary.simpleMessage(
+      "Reinicia el servicio e inténtalo de nuevo.",
+    ),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Repetir"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Verificación de salida de la ruta predeterminada",
     ),
+    "diagnosticsServiceCheck": MessageLookupByLibrary.simpleMessage(
+      "El servicio está en ejecución",
+    ),
     "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Iniciar"),
+    "diagnosticsSubscriptionCheck": MessageLookupByLibrary.simpleMessage(
+      "La suscripción está disponible",
+    ),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "Diagnóstico rápido",
     ),
@@ -1698,6 +1719,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
       "No se pudo comprobar",
+    ),
+    "diagnosticsWebsiteCheck": MessageLookupByLibrary.simpleMessage(
+      "Se pueden abrir sitios web",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Proxy de marcación"),
     "dialerProxyLoopStopped": m53,
@@ -1812,6 +1836,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage(
       "Nueva versión disponible",
     ),
+    "dnsAnswerResults": MessageLookupByLibrary.simpleMessage("Resultados"),
     "dnsBlocked": MessageLookupByLibrary.simpleMessage("Bloqueado"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage(
       "Caché DNS borrada",
@@ -1825,14 +1850,29 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sin esta entrada, TUN secuestra todas las consultas DNS al puerto 53 (any:53).",
     ),
     "dnsHijacking": MessageLookupByLibrary.simpleMessage("Secuestro de DNS"),
+    "dnsIpv4": MessageLookupByLibrary.simpleMessage("IPv4"),
+    "dnsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "dnsMode": MessageLookupByLibrary.simpleMessage("Modo DNS"),
     "dnsOverrideDesc": MessageLookupByLibrary.simpleMessage(
       "Las entradas añadidas aquí sustituyen el DNS de todos los perfiles de URL y de archivo; lo que no añadas conserva el ajuste del propio perfil. Los perfiles personalizados definen su DNS en su contenido.",
     ),
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("Por proxy"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("Consultas DNS"),
+    "dnsResolver": MessageLookupByLibrary.simpleMessage("Servidor DNS"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage(
       "DNS y recursos",
+    ),
+    "dnsResponseDomainMissing": MessageLookupByLibrary.simpleMessage(
+      "Dominio no encontrado",
+    ),
+    "dnsResponseRefused": MessageLookupByLibrary.simpleMessage(
+      "Servidor rechazó la consulta",
+    ),
+    "dnsResponseServerError": MessageLookupByLibrary.simpleMessage(
+      "Error del servidor",
+    ),
+    "dnsResponseSuccess": MessageLookupByLibrary.simpleMessage(
+      "Dominio resuelto",
     ),
     "dnsRouteDirect": MessageLookupByLibrary.simpleMessage(
       "Conexión directa nacional",
@@ -2023,6 +2063,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "groupCount": m60,
     "groupCountUnit": MessageLookupByLibrary.simpleMessage("grupos"),
     "groupTimeoutCount": m61,
+    "groupTypeAutomatic": MessageLookupByLibrary.simpleMessage(
+      "Selección automática",
+    ),
+    "groupTypeFallback": MessageLookupByLibrary.simpleMessage(
+      "Cambio por fallo",
+    ),
+    "groupTypeLoadBalance": MessageLookupByLibrary.simpleMessage(
+      "Balanceo de carga",
+    ),
+    "groupTypeManual": MessageLookupByLibrary.simpleMessage("Selección manual"),
     "hasCacheChange": MessageLookupByLibrary.simpleMessage(
       "¿Guardar los cambios en la caché?",
     ),
@@ -2335,6 +2385,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Permiso de red local denegado: con la pila gvisor, la LAN no es accesible.",
     ),
     "localProxies": MessageLookupByLibrary.simpleMessage("Proxies locales"),
+    "localProxyPort": MessageLookupByLibrary.simpleMessage(
+      "Puerto proxy local",
+    ),
     "locationPermission": MessageLookupByLibrary.simpleMessage(
       "Permiso de ubicación",
     ),
@@ -2913,7 +2966,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Mostrar información del plan en inicio",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Los cambios se aplican al instante; si falla el análisis, se conserva la configuración actual.",
+      "Se aplica al instante; se conserva el perfil actual si falla la carga.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Se aplica solo a este perfil y tiene prioridad sobre las entradas de sobrescritura de TUN de los ajustes de red.",
@@ -2935,8 +2988,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocolVersion": MessageLookupByLibrary.simpleMessage(
       "Versión del protocolo",
     ),
+    "providerBuiltIn": MessageLookupByLibrary.simpleMessage("Integrado"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerLocalFile": MessageLookupByLibrary.simpleMessage("Archivo local"),
+    "providerOnlineSubscription": MessageLookupByLibrary.simpleMessage(
+      "Suscripción en línea",
+    ),
     "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
       "Error al actualizar, se usa la versión anterior",
     ),
@@ -3157,6 +3215,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "restartCoreTip": MessageLookupByLibrary.simpleMessage(
       "¿Seguro que quieres reiniciar el núcleo?",
     ),
+    "restartService": MessageLookupByLibrary.simpleMessage(
+      "Reiniciar servicio",
+    ),
     "restore": MessageLookupByLibrary.simpleMessage("Restaurar"),
     "restoreAllData": MessageLookupByLibrary.simpleMessage(
       "Restaurar todos los datos",
@@ -3190,7 +3251,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Recursos de enrutamiento",
     ),
     "routingResourcesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Decide qué tráfico usa el proxy o va directo",
+      "Decide qué sitios usan el proxy y cuáles se conectan directamente.",
     ),
     "ru": MessageLookupByLibrary.simpleMessage("Ruso"),
     "rule": MessageLookupByLibrary.simpleMessage("Regla"),
@@ -3452,6 +3513,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Escanea el código con la cámara del teléfono y pega el enlace en la página que se abre. Ambos dispositivos deben estar en la misma red.",
     ),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
+    "service": MessageLookupByLibrary.simpleMessage("Servicio"),
     "serviceAbnormalCount": m124,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
       "Todo disponible",
@@ -3468,6 +3530,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "serviceManage": MessageLookupByLibrary.simpleMessage(
       "Gestionar servicios",
+    ),
+    "serviceMemory": MessageLookupByLibrary.simpleMessage(
+      "Memoria del servicio",
     ),
     "serviceOriginalsOnly": MessageLookupByLibrary.simpleMessage(
       "Solo originales",

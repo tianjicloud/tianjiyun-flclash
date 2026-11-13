@@ -37,14 +37,19 @@ void main() {
         (index) => Proxy(name: 'Proxy $index', type: 'Direct'),
       ),
     );
+    final groups = [
+      const Group(name: '场景模式', type: GroupType.Selector, hidden: false),
+      const Group(name: '♻️ 自动选择', type: GroupType.URLTest, hidden: false),
+      group,
+    ];
     final container = ProviderContainer(
       overrides: [
         profilesProvider.overrideWith(() => TestProfiles([profile])),
         currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
         currentGroupsStateProvider.overrideWithValue(
-          GroupsState(value: [group]),
+          GroupsState(value: groups),
         ),
-        groupsProvider.overrideWithValue([group]),
+        groupsProvider.overrideWithValue(groups),
       ],
     );
     addTearDown(container.dispose);
@@ -64,16 +69,20 @@ void main() {
         .update((state) => state.copyWith(type: ProxiesType.list));
     await tester.pump();
 
+    expect(find.text('场景模式'), findsOneWidget);
+    expect(find.text('♻️ 自动选择'), findsOneWidget);
+    expect(find.text('Selector'), findsOneWidget);
+
     final barBottom = tester.getRect(find.byType(AppBar)).bottom;
     final contentTop = tester
-        .element(find.byType(ListHeader))
+        .element(find.byType(ListHeader).first)
         .contentTopPadding;
-    expect(tester.getRect(find.byType(ListHeader)).top, contentTop);
+    expect(tester.getRect(find.byType(ListHeader).first).top, contentTop);
 
     await tester.drag(find.byType(ProxyCard).first, const Offset(0, -300));
     await tester.pump();
 
-    expect(tester.getRect(find.byType(ListHeader)).top, contentTop);
+    expect(tester.getRect(find.byType(ListHeader).first).top, contentTop);
     expect(
       find
           .byType(ProxyCard)

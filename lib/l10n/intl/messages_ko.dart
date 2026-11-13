@@ -540,7 +540,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
     "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
-      "카드를 드래그해 순서를 바꾸고 삭제 버튼을 누르세요. 연결 및 장면 영역은 상단에 고정됩니다.",
+      "드래그해 정렬하세요. 연결과 장면은 상단에 고정됩니다.",
     ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("데이터센터"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage("속도 측정"),
@@ -635,7 +635,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessIntercept": MessageLookupByLibrary.simpleMessage("차단"),
     "businessKernelRestart": MessageLookupByLibrary.simpleMessage("코어 재시작"),
     "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
-      "네트워크 코어를 시작하지 못했습니다",
+      "天机云 서비스를 시작하지 못했습니다",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage("실행 시간"),
     "businessLegal": MessageLookupByLibrary.simpleMessage("법률 정보"),
@@ -644,10 +644,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "회선 전환을 완료하지 못했습니다. 다시 시도하세요.",
     ),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
-      "수동 선택이 우선합니다. 선택한 회선이 출구가 되며 전환 후 출구 IP를 확인합니다. 불일치하면 이유를 표시합니다.",
+      "선택한 회선을 자동으로 확인합니다.",
     ),
     "businessLineSelectionHintShort": MessageLookupByLibrary.simpleMessage(
-      "선택한 회선이 출구가 되며 전환 후 출구 IP를 확인합니다.",
+      "선택한 회선을 자동으로 확인합니다.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage("기본 회선"),
     "businessLines": MessageLookupByLibrary.simpleMessage("회선"),
@@ -919,7 +919,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "파일 또는 WebDAV에서 복원",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "기본 회선만 변경합니다. AI·스트리밍의 개별 규칙과 직접 연결·차단 규칙은 유지됩니다.",
+      "기본 회선만 바뀌며 다른 규칙은 그대로 유지됩니다.",
     ),
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "스마트 라우팅이 비활성화되어 이 기본 회선은 현재 적용되지 않습니다.",
@@ -1320,8 +1320,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "개발자 모드가 켜졌습니다.",
     ),
+    "diagnosticsCheckConnection": MessageLookupByLibrary.simpleMessage(
+      "연결과 선택한 회선을 확인한 뒤 재시도하세요.",
+    ),
+    "diagnosticsCheckLine": MessageLookupByLibrary.simpleMessage(
+      "선택한 회선을 확인한 뒤 재시도하세요.",
+    ),
     "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("TUN 켜기"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("통과하지 못함"),
+    "diagnosticsImportSubscription": MessageLookupByLibrary.simpleMessage(
+      "구독을 가져오거나 확인하세요.",
+    ),
     "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
       "TUN이 IPv6 트래픽을 받으며 코어에서 차단합니다.",
@@ -1344,15 +1353,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
       "IPv6 네트워크 정보를 가져올 수 없습니다.",
     ),
+    "diagnosticsLineCheck": MessageLookupByLibrary.simpleMessage(
+      "선택한 회선과 일치하는지",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("통과"),
+    "diagnosticsRestartService": MessageLookupByLibrary.simpleMessage(
+      "서비스를 다시 시작한 뒤 재시도하세요.",
+    ),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("다시 진단"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage("기본 경로 출구 검증"),
+    "diagnosticsServiceCheck": MessageLookupByLibrary.simpleMessage(
+      "서비스가 실행 중인지",
+    ),
     "diagnosticsStart": MessageLookupByLibrary.simpleMessage("진단 시작"),
+    "diagnosticsSubscriptionCheck": MessageLookupByLibrary.simpleMessage(
+      "구독을 사용할 수 있는지",
+    ),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage("원클릭 진단"),
     "diagnosticsUnavailableNotice": MessageLookupByLibrary.simpleMessage(
       "DNS 출구, 브라우저 WebRTC 및 NTP 검사는 제공되지 않습니다.",
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage("확인할 수 없음"),
+    "diagnosticsWebsiteCheck": MessageLookupByLibrary.simpleMessage(
+      "웹사이트를 열 수 있는지",
+    ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("다이얼러 프록시"),
     "dialerProxyLoopStopped": m53,
     "dialog": MessageLookupByLibrary.simpleMessage("대화상자"),
@@ -1450,6 +1474,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "disclaimerWarrantyTitle": MessageLookupByLibrary.simpleMessage("보증 부인"),
     "disconnected": MessageLookupByLibrary.simpleMessage("연결 끊김"),
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage("새 버전 발견"),
+    "dnsAnswerResults": MessageLookupByLibrary.simpleMessage("해석 결과"),
     "dnsBlocked": MessageLookupByLibrary.simpleMessage("차단됨"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage("DNS 캐시를 지웠습니다"),
     "dnsExit": MessageLookupByLibrary.simpleMessage("DNS 출구"),
@@ -1459,13 +1484,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "추가하지 않으면 53번 포트로 가는 모든 DNS 쿼리를 하이재킹합니다(any:53).",
     ),
     "dnsHijacking": MessageLookupByLibrary.simpleMessage("DNS 하이재킹"),
+    "dnsIpv4": MessageLookupByLibrary.simpleMessage("IPv4"),
+    "dnsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "dnsMode": MessageLookupByLibrary.simpleMessage("DNS 모드"),
     "dnsOverrideDesc": MessageLookupByLibrary.simpleMessage(
       "여기에 추가한 항목은 모든 URL 및 파일 프로필의 DNS를 대체합니다. 추가하지 않은 항목은 프로필 자체 설정을 유지합니다. 사용자 지정 프로필은 내용에서 DNS를 설정합니다.",
     ),
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("프록시 경유"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("DNS 쿼리"),
+    "dnsResolver": MessageLookupByLibrary.simpleMessage("DNS 서버"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage("DNS 및 리소스"),
+    "dnsResponseDomainMissing": MessageLookupByLibrary.simpleMessage(
+      "도메인을 찾을 수 없음",
+    ),
+    "dnsResponseRefused": MessageLookupByLibrary.simpleMessage("서버에서 거부"),
+    "dnsResponseServerError": MessageLookupByLibrary.simpleMessage("서버 오류"),
+    "dnsResponseSuccess": MessageLookupByLibrary.simpleMessage("이름 확인 성공"),
     "dnsRouteDirect": MessageLookupByLibrary.simpleMessage("국내 직접 연결"),
     "dnsRouteProxy": MessageLookupByLibrary.simpleMessage("프록시"),
     "dnsRouteRejected": MessageLookupByLibrary.simpleMessage("차단됨"),
@@ -1607,6 +1641,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "groupCount": m60,
     "groupCountUnit": MessageLookupByLibrary.simpleMessage("개"),
     "groupTimeoutCount": m61,
+    "groupTypeAutomatic": MessageLookupByLibrary.simpleMessage("자동 선택"),
+    "groupTypeFallback": MessageLookupByLibrary.simpleMessage("장애 시 전환"),
+    "groupTypeLoadBalance": MessageLookupByLibrary.simpleMessage("부하 분산"),
+    "groupTypeManual": MessageLookupByLibrary.simpleMessage("수동 선택"),
     "hasCacheChange": MessageLookupByLibrary.simpleMessage("변경 사항을 캐시하시겠습니까?"),
     "hashByInUser": MessageLookupByLibrary.simpleMessage("인바운드 사용자별 해시"),
     "headerRewrite": MessageLookupByLibrary.simpleMessage("헤더 재작성"),
@@ -1856,6 +1894,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "로컬 네트워크 권한이 거부되었습니다. gvisor 스택을 사용하므로 LAN에 연결할 수 없습니다.",
     ),
     "localProxies": MessageLookupByLibrary.simpleMessage("로컬 프록시"),
+    "localProxyPort": MessageLookupByLibrary.simpleMessage("로컬 프록시 포트"),
     "locationPermission": MessageLookupByLibrary.simpleMessage("위치 권한"),
     "locationPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
       "위치 권한이 거부되어 현재 Wi-Fi 이름을 읽을 수 없습니다. 시스템 설정에서 위치 권한을 직접 켜 주세요.",
@@ -2309,7 +2348,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("홈에 요금제 정보 표시"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "전환 내용은 즉시 적용됩니다. 파싱에 실패하면 현재 구성을 유지합니다.",
+      "즉시 적용됩니다. 불러오기에 실패하면 현재 설정을 유지합니다.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "이 프로필에만 적용되며 네트워크 설정의 TUN 덮어쓰기 항목보다 우선합니다.",
@@ -2327,8 +2366,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocol": MessageLookupByLibrary.simpleMessage("프로토콜"),
     "protocolParam": MessageLookupByLibrary.simpleMessage("프로토콜 매개변수"),
     "protocolVersion": MessageLookupByLibrary.simpleMessage("프로토콜 버전"),
+    "providerBuiltIn": MessageLookupByLibrary.simpleMessage("내장"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerLocalFile": MessageLookupByLibrary.simpleMessage("로컬 파일"),
+    "providerOnlineSubscription": MessageLookupByLibrary.simpleMessage(
+      "온라인 구독",
+    ),
     "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
       "업데이트 실패, 이전 버전 사용 중",
     ),
@@ -2507,6 +2551,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "responseHeaders": MessageLookupByLibrary.simpleMessage("응답 헤더"),
     "restart": MessageLookupByLibrary.simpleMessage("다시 시작"),
     "restartCoreTip": MessageLookupByLibrary.simpleMessage("코어를 다시 시작하시겠습니까?"),
+    "restartService": MessageLookupByLibrary.simpleMessage("서비스 다시 시작"),
     "restore": MessageLookupByLibrary.simpleMessage("복원"),
     "restoreAllData": MessageLookupByLibrary.simpleMessage("모든 데이터 복원"),
     "restoreOnlyConfig": MessageLookupByLibrary.simpleMessage("프로필만 복원"),
@@ -2522,7 +2567,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "routingMark": MessageLookupByLibrary.simpleMessage("라우팅 마크"),
     "routingResourcesDesktop": MessageLookupByLibrary.simpleMessage("라우팅 리소스"),
     "routingResourcesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "어떤 트래픽이 프록시를 거치거나 직접 연결할지 결정합니다",
+      "프록시를 사용할 사이트와 직접 연결할 사이트를 정합니다.",
     ),
     "ru": MessageLookupByLibrary.simpleMessage("러시아어"),
     "rule": MessageLookupByLibrary.simpleMessage("규칙"),
@@ -2740,6 +2785,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "휴대폰 카메라로 코드를 스캔한 뒤 열린 페이지에 링크를 붙여 넣으세요. 두 기기가 같은 네트워크에 연결되어 있어야 합니다.",
     ),
     "server": MessageLookupByLibrary.simpleMessage("서버"),
+    "service": MessageLookupByLibrary.simpleMessage("서비스"),
     "serviceAbnormalCount": m124,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage("모두 사용 가능"),
     "serviceAvailable": MessageLookupByLibrary.simpleMessage("사용 가능"),
@@ -2749,6 +2795,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceDisallowedIsp": MessageLookupByLibrary.simpleMessage("허용되지 않는 ISP"),
     "serviceFailed": MessageLookupByLibrary.simpleMessage("확인 실패"),
     "serviceManage": MessageLookupByLibrary.simpleMessage("서비스 관리"),
+    "serviceMemory": MessageLookupByLibrary.simpleMessage("서비스 메모리"),
     "serviceOriginalsOnly": MessageLookupByLibrary.simpleMessage("오리지널 콘텐츠만"),
     "servicePending": MessageLookupByLibrary.simpleMessage("확인 전"),
     "serviceRestricted": MessageLookupByLibrary.simpleMessage("접근 제한됨"),

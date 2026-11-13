@@ -10183,10 +10183,10 @@ class AppLocalizations {
     );
   }
 
-  /// `This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.`
+  /// `Only the default line changes; other routing stays the same.`
   String get businessRoutingDesc {
     return Intl.message(
-      'This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.',
+      'Only the default line changes; other routing stays the same.',
       name: 'businessRoutingDesc',
       desc: '',
       args: [],
@@ -11253,20 +11253,20 @@ class AppLocalizations {
     );
   }
 
-  /// `Manual selection takes priority: the selected line is the exit. After switching, the exit IP is checked and any mismatch includes its reason.`
+  /// `Your chosen line is checked automatically.`
   String get businessLineSelectionHint {
     return Intl.message(
-      'Manual selection takes priority: the selected line is the exit. After switching, the exit IP is checked and any mismatch includes its reason.',
+      'Your chosen line is checked automatically.',
       name: 'businessLineSelectionHint',
       desc: '',
       args: [],
     );
   }
 
-  /// `The selected line is the exit; its exit IP is checked after switching.`
+  /// `Your chosen line is checked automatically.`
   String get businessLineSelectionHintShort {
     return Intl.message(
-      'The selected line is the exit; its exit IP is checked after switching.',
+      'Your chosen line is checked automatically.',
       name: 'businessLineSelectionHintShort',
       desc: '',
       args: [],
@@ -11733,10 +11733,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Changes apply immediately; if parsing fails, the current configuration is kept.`
+  /// `Changes apply immediately; the current profile stays if loading fails.`
   String get profileSwitchNote {
     return Intl.message(
-      'Changes apply immediately; if parsing fails, the current configuration is kept.',
+      'Changes apply immediately; the current profile stays if loading fails.',
       name: 'profileSwitchNote',
       desc: '',
       args: [],
@@ -12323,10 +12323,10 @@ class AppLocalizations {
     );
   }
 
-  /// `The network core couldn't start`
+  /// `Tianji service couldn't start`
   String get businessKernelStartFailed {
     return Intl.message(
-      'The network core couldn\'t start',
+      'Tianji service couldn\'t start',
       name: 'businessKernelStartFailed',
       desc: '',
       args: [],
@@ -13593,10 +13593,10 @@ class AppLocalizations {
     return Intl.message('Blocked', name: 'dnsBlocked', desc: '', args: []);
   }
 
-  /// `Decides which traffic uses the proxy or goes direct`
+  /// `Chooses which sites use the proxy and which connect directly.`
   String get routingResourcesSubtitle {
     return Intl.message(
-      'Decides which traffic uses the proxy or goes direct',
+      'Chooses which sites use the proxy and which connect directly.',
       name: 'routingResourcesSubtitle',
       desc: '',
       args: [],
@@ -14478,10 +14478,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.`
+  /// `Drag to reorder cards. Connection and scenes stay at the top.`
   String get businessDashboardEditorHint {
     return Intl.message(
-      'Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.',
+      'Drag to reorder cards. Connection and scenes stay at the top.',
       name: 'businessDashboardEditorHint',
       desc: '',
       args: [],
@@ -14693,6 +14693,256 @@ class AppLocalizations {
     return Intl.message(
       'Contact support',
       name: 'businessContactSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service`
+  String get service {
+    return Intl.message('Service', name: 'service', desc: '', args: []);
+  }
+
+  /// `Restart service`
+  String get restartService {
+    return Intl.message(
+      'Restart service',
+      name: 'restartService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local proxy port`
+  String get localProxyPort {
+    return Intl.message(
+      'Local proxy port',
+      name: 'localProxyPort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service memory`
+  String get serviceMemory {
+    return Intl.message(
+      'Service memory',
+      name: 'serviceMemory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DNS server`
+  String get dnsResolver {
+    return Intl.message('DNS server', name: 'dnsResolver', desc: '', args: []);
+  }
+
+  /// `Results`
+  String get dnsAnswerResults {
+    return Intl.message(
+      'Results',
+      name: 'dnsAnswerResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv4`
+  String get dnsIpv4 {
+    return Intl.message('IPv4', name: 'dnsIpv4', desc: '', args: []);
+  }
+
+  /// `IPv6`
+  String get dnsIpv6 {
+    return Intl.message('IPv6', name: 'dnsIpv6', desc: '', args: []);
+  }
+
+  /// `Name resolved`
+  String get dnsResponseSuccess {
+    return Intl.message(
+      'Name resolved',
+      name: 'dnsResponseSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Domain not found`
+  String get dnsResponseDomainMissing {
+    return Intl.message(
+      'Domain not found',
+      name: 'dnsResponseDomainMissing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Server refused`
+  String get dnsResponseRefused {
+    return Intl.message(
+      'Server refused',
+      name: 'dnsResponseRefused',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Server error`
+  String get dnsResponseServerError {
+    return Intl.message(
+      'Server error',
+      name: 'dnsResponseServerError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Automatic selection`
+  String get groupTypeAutomatic {
+    return Intl.message(
+      'Automatic selection',
+      name: 'groupTypeAutomatic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manual selection`
+  String get groupTypeManual {
+    return Intl.message(
+      'Manual selection',
+      name: 'groupTypeManual',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failover`
+  String get groupTypeFallback {
+    return Intl.message(
+      'Failover',
+      name: 'groupTypeFallback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Load balancing`
+  String get groupTypeLoadBalance {
+    return Intl.message(
+      'Load balancing',
+      name: 'groupTypeLoadBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Online subscription`
+  String get providerOnlineSubscription {
+    return Intl.message(
+      'Online subscription',
+      name: 'providerOnlineSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local file`
+  String get providerLocalFile {
+    return Intl.message(
+      'Local file',
+      name: 'providerLocalFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Built in`
+  String get providerBuiltIn {
+    return Intl.message(
+      'Built in',
+      name: 'providerBuiltIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service is running`
+  String get diagnosticsServiceCheck {
+    return Intl.message(
+      'Service is running',
+      name: 'diagnosticsServiceCheck',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription is available`
+  String get diagnosticsSubscriptionCheck {
+    return Intl.message(
+      'Subscription is available',
+      name: 'diagnosticsSubscriptionCheck',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Line matches your choice`
+  String get diagnosticsLineCheck {
+    return Intl.message(
+      'Line matches your choice',
+      name: 'diagnosticsLineCheck',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Can websites open`
+  String get diagnosticsWebsiteCheck {
+    return Intl.message(
+      'Can websites open',
+      name: 'diagnosticsWebsiteCheck',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restart the service and try again.`
+  String get diagnosticsRestartService {
+    return Intl.message(
+      'Restart the service and try again.',
+      name: 'diagnosticsRestartService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import or check your subscription.`
+  String get diagnosticsImportSubscription {
+    return Intl.message(
+      'Import or check your subscription.',
+      name: 'diagnosticsImportSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check the selected line and try again.`
+  String get diagnosticsCheckLine {
+    return Intl.message(
+      'Check the selected line and try again.',
+      name: 'diagnosticsCheckLine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your connection and selected line, then retry.`
+  String get diagnosticsCheckConnection {
+    return Intl.message(
+      'Check your connection and selected line, then retry.',
+      name: 'diagnosticsCheckConnection',
       desc: '',
       args: [],
     );

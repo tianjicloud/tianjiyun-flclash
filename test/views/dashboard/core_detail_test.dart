@@ -13,7 +13,7 @@ import '../../helpers/test_app.dart';
 class _MockCoreHandler extends Mock implements CoreHandlerInterface {}
 
 void main() {
-  testWidgets('shows core status and the confirmed restart action', (
+  testWidgets('shows service status and the confirmed restart action', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -26,9 +26,9 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('Core status'), findsAtLeastNWidgets(1));
+    expect(find.text('Service status'), findsAtLeastNWidgets(1));
     expect(find.text('Not running'), findsOneWidget);
-    expect(find.text('Restart core'), findsOneWidget);
+    expect(find.text('Restart service'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -59,7 +59,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Interface memory'), findsOneWidget);
-    expect(find.text('Kernel memory'), findsOneWidget);
+    expect(find.text('Service memory'), findsOneWidget);
     expect(find.text('Heap in use'), findsOneWidget);
     await tester.tap(find.text('Release cache'));
     await tester.pump();

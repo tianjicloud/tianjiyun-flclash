@@ -78,14 +78,14 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
     final config = ref.watch(patchClashConfigProvider);
     final running = status == CoreStatus.connected;
     final ports = <(String, int)>[
-      (l10n.mixedPort, config.mixedPort),
+      (l10n.localProxyPort, config.mixedPort),
       (l10n.socksPort, config.socksPort),
       (l10n.redirPort, config.redirPort),
       (l10n.tproxyPort, config.tproxyPort),
     ].where((entry) => entry.$2 > 0).toList();
     return BusinessAppearance(
       child: Scaffold(
-        title: l10n.coreStatus,
+        title: l10n.serviceStatus,
         body: ListView(
           padding: EdgeInsets.fromLTRB(
             24,
@@ -95,15 +95,15 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
           ),
           children: [
             BusinessSettingsCard(
-              title: l10n.core,
+              title: l10n.service,
               trailing: BusinessSecondaryButton(
-                label: l10n.businessKernelRestart,
+                label: l10n.restartService,
                 width: 132,
                 onPressed: status == CoreStatus.connecting ? null : _restart,
               ),
               items: [
                 ListItem(
-                  title: Text(l10n.coreStatus),
+                  title: Text(l10n.serviceStatus),
                   trailing: Text(
                     running ? l10n.running : l10n.notRunning,
                     style: BusinessText.metaValue(context).copyWith(
@@ -155,10 +155,9 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
                     builder: (context, snapshot) {
                       final memory = snapshot.data;
                       final total = memory?.app;
+                      if (total == null) return const SizedBox.shrink();
                       return Text(
-                        total == null
-                            ? '—'
-                            : '${total.traffic.value} ${total.traffic.unit}',
+                        '${total.traffic.value} ${total.traffic.unit}',
                         style: BusinessText.metaValue(context),
                       );
                     },
@@ -169,25 +168,23 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
                     future: _memory,
                     builder: (context, snapshot) {
                       final core = snapshot.data?.core;
+                      if (core == null) return const SizedBox.shrink();
                       return Column(
                         children: [
                           ListItem(
-                            title: Text(l10n.kernelMemory),
+                            title: Text(l10n.serviceMemory),
                             trailing: Text(
-                              core == null
-                                  ? '—'
-                                  : '${core.rss.traffic.value} ${core.rss.traffic.unit}',
+                              '${core.rss.traffic.value} ${core.rss.traffic.unit}',
                               style: BusinessText.metaValue(context),
                             ),
                           ),
-                          if (core != null)
-                            ListItem(
-                              title: Text(l10n.heapInUse),
-                              trailing: Text(
-                                '${core.heapInuse.traffic.value} ${core.heapInuse.traffic.unit}',
-                                style: BusinessText.metaValue(context),
-                              ),
+                          ListItem(
+                            title: Text(l10n.heapInUse),
+                            trailing: Text(
+                              '${core.heapInuse.traffic.value} ${core.heapInuse.traffic.unit}',
+                              style: BusinessText.metaValue(context),
                             ),
+                          ),
                         ],
                       );
                     },

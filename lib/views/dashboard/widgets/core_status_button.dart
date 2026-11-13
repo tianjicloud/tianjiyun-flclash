@@ -108,7 +108,7 @@ class _CoreStatusButtonState extends ConsumerState<CoreStatusButton> {
       CoreStatus.disconnected => appLocalizations.notRunning,
     };
     return Tooltip(
-      message: appLocalizations.coreStatus,
+      message: appLocalizations.serviceStatus,
       child: FadeScaleBox(
         alignment: Alignment.centerRight,
         child: FilledButton.icon(
@@ -123,7 +123,7 @@ class _CoreStatusButtonState extends ConsumerState<CoreStatusButton> {
               ? ActivityIndicator(color: colorScheme.onSurfaceVariant)
               : const GlyphIcon(AppGlyphs.cpu, fill: 1),
           label: Text(
-            '${appLocalizations.coreStatus}\n$label',
+            '${appLocalizations.serviceStatus}\n$label',
             textAlign: TextAlign.center,
             style: AppTextStyle.caption2.of(context),
           ),

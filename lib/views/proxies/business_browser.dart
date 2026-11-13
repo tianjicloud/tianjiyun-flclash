@@ -3,10 +3,10 @@ import 'dart:math' as math;
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/core/residential.dart';
-import 'package:fl_clash/core/scene.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/providers/dashboard_lines.dart';
 import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/selection_check.dart';
 import 'package:fl_clash/providers/selection_verification.dart';
@@ -82,10 +82,9 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
     final allGroups = state.groups;
     final groups = [
       for (final group in allGroups)
-        if ((group.type == GroupType.Selector &&
-                group.name != sceneGroupName) ||
-            (group.type == GroupType.URLTest &&
-                group.name.trim().endsWith('自动选择')))
+        if ((group.type == GroupType.Selector ||
+                group.type == GroupType.URLTest) &&
+            !isInternalLineGroup(group))
           group,
     ];
     _pruneControllers(allGroups);
@@ -749,7 +748,9 @@ String _cleanGroupName(String name) {
           (runes[start] >= 0x1F000 && runes[start] <= 0x1FAFF))) {
     start++;
   }
-  return String.fromCharCodes(runes.skip(start)).trim();
+  return stripBusinessMultiplierSuffix(
+    String.fromCharCodes(runes.skip(start)).trim(),
+  );
 }
 
 String _cleanProxyName(String name) => _cleanGroupName(

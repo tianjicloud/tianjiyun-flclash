@@ -630,7 +630,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessCurrentLineState": m6,
     "businessCurrentNode": MessageLookupByLibrary.simpleMessage("Current node"),
     "businessDashboardEditorHint": MessageLookupByLibrary.simpleMessage(
-      "Drag cards to reorder and tap the remove button. The connection and scene areas stay at the top.",
+      "Drag to reorder cards. Connection and scenes stay at the top.",
     ),
     "businessDatacenter": MessageLookupByLibrary.simpleMessage("Datacenter"),
     "businessDelayTestShort": MessageLookupByLibrary.simpleMessage(
@@ -739,7 +739,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Restart core",
     ),
     "businessKernelStartFailed": MessageLookupByLibrary.simpleMessage(
-      "The network core couldn\'t start",
+      "Tianji service couldn\'t start",
     ),
     "businessKernelUptime": MessageLookupByLibrary.simpleMessage(
       "Running time",
@@ -750,10 +750,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Could not finish switching lines. Retry.",
     ),
     "businessLineSelectionHint": MessageLookupByLibrary.simpleMessage(
-      "Manual selection takes priority: the selected line is the exit. After switching, the exit IP is checked and any mismatch includes its reason.",
+      "Your chosen line is checked automatically.",
     ),
     "businessLineSelectionHintShort": MessageLookupByLibrary.simpleMessage(
-      "The selected line is the exit; its exit IP is checked after switching.",
+      "Your chosen line is checked automatically.",
     ),
     "businessLineTitle": MessageLookupByLibrary.simpleMessage("Default line"),
     "businessLines": MessageLookupByLibrary.simpleMessage("Lines"),
@@ -1059,7 +1059,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Restore from file or WebDAV",
     ),
     "businessRoutingDesc": MessageLookupByLibrary.simpleMessage(
-      "This changes only the default line. AI and streaming keep their own routing rules; direct and blocking rules stay unchanged.",
+      "Only the default line changes; other routing stays the same.",
     ),
     "businessRuleModeRequired": MessageLookupByLibrary.simpleMessage(
       "Smart routing is not active. This default line is not currently in effect.",
@@ -1576,8 +1576,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage(
       "Developer mode is enabled.",
     ),
+    "diagnosticsCheckConnection": MessageLookupByLibrary.simpleMessage(
+      "Check your connection and selected line, then retry.",
+    ),
+    "diagnosticsCheckLine": MessageLookupByLibrary.simpleMessage(
+      "Check the selected line and try again.",
+    ),
     "diagnosticsEnableTun": MessageLookupByLibrary.simpleMessage("Enable TUN"),
     "diagnosticsFailed": MessageLookupByLibrary.simpleMessage("Not passed"),
+    "diagnosticsImportSubscription": MessageLookupByLibrary.simpleMessage(
+      "Import or check your subscription.",
+    ),
     "diagnosticsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "diagnosticsIpv6Blocked": MessageLookupByLibrary.simpleMessage(
       "IPv6 traffic is captured by TUN and blocked by the core.",
@@ -1600,12 +1609,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "diagnosticsIpv6Unavailable": MessageLookupByLibrary.simpleMessage(
       "IPv6 network information is unavailable.",
     ),
+    "diagnosticsLineCheck": MessageLookupByLibrary.simpleMessage(
+      "Line matches your choice",
+    ),
     "diagnosticsPassed": MessageLookupByLibrary.simpleMessage("Passed"),
+    "diagnosticsRestartService": MessageLookupByLibrary.simpleMessage(
+      "Restart the service and try again.",
+    ),
     "diagnosticsRunAgain": MessageLookupByLibrary.simpleMessage("Run again"),
     "diagnosticsSelection": MessageLookupByLibrary.simpleMessage(
       "Default route exit verification",
     ),
+    "diagnosticsServiceCheck": MessageLookupByLibrary.simpleMessage(
+      "Service is running",
+    ),
     "diagnosticsStart": MessageLookupByLibrary.simpleMessage("Start"),
+    "diagnosticsSubscriptionCheck": MessageLookupByLibrary.simpleMessage(
+      "Subscription is available",
+    ),
     "diagnosticsTitle": MessageLookupByLibrary.simpleMessage(
       "One-click diagnostics",
     ),
@@ -1614,6 +1635,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "diagnosticsUnverified": MessageLookupByLibrary.simpleMessage(
       "Could not check",
+    ),
+    "diagnosticsWebsiteCheck": MessageLookupByLibrary.simpleMessage(
+      "Can websites open",
     ),
     "dialerProxy": MessageLookupByLibrary.simpleMessage("Dialer proxy"),
     "dialerProxyLoopStopped": m53,
@@ -1726,6 +1750,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discoverNewVersion": MessageLookupByLibrary.simpleMessage(
       "New version found",
     ),
+    "dnsAnswerResults": MessageLookupByLibrary.simpleMessage("Results"),
     "dnsBlocked": MessageLookupByLibrary.simpleMessage("Blocked"),
     "dnsCacheCleared": MessageLookupByLibrary.simpleMessage(
       "DNS cache cleared",
@@ -1739,15 +1764,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Without this entry, TUN hijacks every DNS query to port 53 (any:53).",
     ),
     "dnsHijacking": MessageLookupByLibrary.simpleMessage("DNS hijacking"),
+    "dnsIpv4": MessageLookupByLibrary.simpleMessage("IPv4"),
+    "dnsIpv6": MessageLookupByLibrary.simpleMessage("IPv6"),
     "dnsMode": MessageLookupByLibrary.simpleMessage("DNS mode"),
     "dnsOverrideDesc": MessageLookupByLibrary.simpleMessage(
       "Entries added here replace the DNS of every URL and file profile; anything not added keeps the profile\'s own setting. Custom profiles set their DNS in their content.",
     ),
     "dnsProxyRoute": MessageLookupByLibrary.simpleMessage("Proxy"),
     "dnsQueries": MessageLookupByLibrary.simpleMessage("DNS queries"),
+    "dnsResolver": MessageLookupByLibrary.simpleMessage("DNS server"),
     "dnsResourcesDesktop": MessageLookupByLibrary.simpleMessage(
       "DNS & Resources",
     ),
+    "dnsResponseDomainMissing": MessageLookupByLibrary.simpleMessage(
+      "Domain not found",
+    ),
+    "dnsResponseRefused": MessageLookupByLibrary.simpleMessage(
+      "Server refused",
+    ),
+    "dnsResponseServerError": MessageLookupByLibrary.simpleMessage(
+      "Server error",
+    ),
+    "dnsResponseSuccess": MessageLookupByLibrary.simpleMessage("Name resolved"),
     "dnsRouteDirect": MessageLookupByLibrary.simpleMessage("Domestic direct"),
     "dnsRouteProxy": MessageLookupByLibrary.simpleMessage("Proxy"),
     "dnsRouteRejected": MessageLookupByLibrary.simpleMessage("Blocked"),
@@ -1921,6 +1959,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "groupCount": m60,
     "groupCountUnit": MessageLookupByLibrary.simpleMessage("groups"),
     "groupTimeoutCount": m61,
+    "groupTypeAutomatic": MessageLookupByLibrary.simpleMessage(
+      "Automatic selection",
+    ),
+    "groupTypeFallback": MessageLookupByLibrary.simpleMessage("Failover"),
+    "groupTypeLoadBalance": MessageLookupByLibrary.simpleMessage(
+      "Load balancing",
+    ),
+    "groupTypeManual": MessageLookupByLibrary.simpleMessage("Manual selection"),
     "hasCacheChange": MessageLookupByLibrary.simpleMessage(
       "Cache the changes?",
     ),
@@ -2203,6 +2249,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Local network permission denied: using the gvisor stack, LAN is unreachable.",
     ),
     "localProxies": MessageLookupByLibrary.simpleMessage("Local proxies"),
+    "localProxyPort": MessageLookupByLibrary.simpleMessage("Local proxy port"),
     "locationPermission": MessageLookupByLibrary.simpleMessage(
       "Location permission",
     ),
@@ -2739,7 +2786,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Show plan information on home",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Changes apply immediately; if parsing fails, the current configuration is kept.",
+      "Changes apply immediately; the current profile stays if loading fails.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Applies to this profile only and takes precedence over the TUN override entries in the network settings.",
@@ -2757,8 +2804,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "protocol": MessageLookupByLibrary.simpleMessage("Protocol"),
     "protocolParam": MessageLookupByLibrary.simpleMessage("Protocol parameter"),
     "protocolVersion": MessageLookupByLibrary.simpleMessage("Protocol version"),
+    "providerBuiltIn": MessageLookupByLibrary.simpleMessage("Built in"),
     "providerCount": m109,
     "providerInUse": m110,
+    "providerLocalFile": MessageLookupByLibrary.simpleMessage("Local file"),
+    "providerOnlineSubscription": MessageLookupByLibrary.simpleMessage(
+      "Online subscription",
+    ),
     "providerUpdateFailedUsingOld": MessageLookupByLibrary.simpleMessage(
       "Update failed, using old version",
     ),
@@ -2967,6 +3019,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "restartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to restart the core?",
     ),
+    "restartService": MessageLookupByLibrary.simpleMessage("Restart service"),
     "restore": MessageLookupByLibrary.simpleMessage("Restore"),
     "restoreAllData": MessageLookupByLibrary.simpleMessage("Restore all data"),
     "restoreOnlyConfig": MessageLookupByLibrary.simpleMessage(
@@ -2992,7 +3045,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Routing resources",
     ),
     "routingResourcesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Decides which traffic uses the proxy or goes direct",
+      "Chooses which sites use the proxy and which connect directly.",
     ),
     "ru": MessageLookupByLibrary.simpleMessage("Russian"),
     "rule": MessageLookupByLibrary.simpleMessage("Rule"),
@@ -3240,6 +3293,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Scan the code with your phone\'s camera and paste the link on the page that opens. Both devices need to be on the same network.",
     ),
     "server": MessageLookupByLibrary.simpleMessage("Server"),
+    "service": MessageLookupByLibrary.simpleMessage("Service"),
     "serviceAbnormalCount": m124,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
       "All available",
@@ -3253,6 +3307,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "serviceFailed": MessageLookupByLibrary.simpleMessage("Check failed"),
     "serviceManage": MessageLookupByLibrary.simpleMessage("Manage services"),
+    "serviceMemory": MessageLookupByLibrary.simpleMessage("Service memory"),
     "serviceOriginalsOnly": MessageLookupByLibrary.simpleMessage(
       "Originals only",
     ),

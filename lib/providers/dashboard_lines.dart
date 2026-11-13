@@ -33,6 +33,7 @@ class DashboardLine {
 final _ratePatterns = [
   RegExp(r'倍率\s*(\d+(?:\.\d+)?)\s*[x×]?'),
   RegExp(r'(\d+(?:\.\d+)?)\s*[x×](?![0-9a-zA-Z])'),
+  RegExp(r'[x×]\s*(\d+(?:\.\d+)?)(?![0-9a-zA-Z])', caseSensitive: false),
 ];
 
 ({double rate, String name})? _rateOf(String name) {
@@ -50,7 +51,34 @@ final _ratePatterns = [
   return null;
 }
 
+String stripBusinessMultiplierSuffix(String name) => name
+    .replaceFirst(
+      RegExp(
+        r'\s*(?:(?:倍率\s*)?\d+(?:\.\d+)?\s*[x×]|[x×]\s*\d+(?:\.\d+)?)\s*$',
+        caseSensitive: false,
+      ),
+      '',
+    )
+    .trimRight();
+
 double? businessMultiplierFromName(String name) => _rateOf(name)?.rate;
+
+bool isInternalLineGroup(Group group) {
+  const internalNames = {
+    sceneGroupName,
+    sceneRootGroupName,
+    sceneDailyGroupName,
+    sceneAiGroupName,
+    sceneWatchGroupName,
+    sceneAiDomainGroupName,
+    sceneWatchDomainGroupName,
+    tianjiResidentialLockedGroupName,
+    '⚡ 自动选择',
+    '自动选择',
+  };
+  return internalNames.contains(group.name) ||
+      (group.type == GroupType.URLTest && group.all.length == 1);
+}
 
 Group? _hostOf(
   T Function<T>(ProviderListenable<T> provider) read,

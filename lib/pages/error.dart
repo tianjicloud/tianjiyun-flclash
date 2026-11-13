@@ -315,12 +315,11 @@ class _ErrorPageBodyState extends State<ErrorPageBody> {
                                     ),
                                   ],
                                   const SizedBox(height: 16),
-                                  _ErrorCodeRow(
-                                    text: _detailsExpanded
-                                        ? errorText
-                                        : errorText.split('\n').first,
-                                    expanded: _detailsExpanded,
-                                  ),
+                                  if (_detailsExpanded)
+                                    _ErrorCodeRow(
+                                      text: errorText,
+                                      expanded: true,
+                                    ),
                                   Align(
                                     alignment: AlignmentDirectional.centerStart,
                                     child: TextButton(
@@ -370,6 +369,18 @@ class _ErrorPageBodyState extends State<ErrorPageBody> {
                                     const SizedBox(height: 20),
                                   ] else
                                     const SizedBox(height: 12),
+                                  if (_detailsExpanded &&
+                                      widget.onClearData != null)
+                                    BusinessSecondaryButton(
+                                      label: appLocalizations.clearData,
+                                      width: 120,
+                                      height: 40,
+                                      labelColor:
+                                          BusinessPalette.errorForegroundFor(
+                                            context.colorScheme.brightness,
+                                          ),
+                                      onPressed: _isExiting ? null : _clearData,
+                                    ),
                                   Wrap(
                                     spacing: 8,
                                     runSpacing: 8,
@@ -408,19 +419,6 @@ class _ErrorPageBodyState extends State<ErrorPageBody> {
                                           width: 176,
                                           height: 40,
                                           onPressed: _copyDetails,
-                                        ),
-                                      if (widget.onClearData != null)
-                                        BusinessSecondaryButton(
-                                          label: appLocalizations.clearData,
-                                          width: 120,
-                                          height: 40,
-                                          labelColor:
-                                              BusinessPalette.errorForegroundFor(
-                                                context.colorScheme.brightness,
-                                              ),
-                                          onPressed: _isExiting
-                                              ? null
-                                              : _clearData,
                                         ),
                                       if (widget.onExit != null)
                                         BusinessSecondaryButton(

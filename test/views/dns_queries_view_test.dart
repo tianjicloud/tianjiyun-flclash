@@ -384,12 +384,12 @@ void main() {
       matching: find.text(text),
     );
     expect(find.text('Initiator'), findsOneWidget);
-    expect(detailText('Source'), findsOneWidget);
+    expect(detailText('DNS server'), findsOneWidget);
     expect(detailText('tls://1.1.1.1:853'), findsOneWidget);
     expect(detailText('Cache'), findsOneWidget);
     expect(detailText('Yes'), findsOneWidget);
     expect(detailText('12 ms'), findsOneWidget);
-    expect(find.text('Answers'), findsOneWidget);
+    expect(find.text('Results'), findsOneWidget);
     expect(find.text('edge.alpha.net'), findsOneWidget);
     expect(find.text('93.184.216.34'), findsOneWidget);
 

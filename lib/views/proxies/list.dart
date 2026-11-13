@@ -870,7 +870,7 @@ class _GroupActions extends StatelessWidget {
             )
           else
             Text(
-              groupType,
+              _groupTypeLabel(context, groupType),
               style: AppTextStyle.caption1
                   .of(context, emphasized: true)
                   .toLight,
@@ -890,3 +890,12 @@ class _GroupActions extends StatelessWidget {
     );
   }
 }
+
+String _groupTypeLabel(BuildContext context, String value) =>
+    switch (proxyGroupTypeOf(value)) {
+      GroupType.URLTest => context.appLocalizations.groupTypeAutomatic,
+      GroupType.Selector => context.appLocalizations.groupTypeManual,
+      GroupType.Fallback => context.appLocalizations.groupTypeFallback,
+      GroupType.LoadBalance => context.appLocalizations.groupTypeLoadBalance,
+      GroupType.Relay || null => '',
+    };

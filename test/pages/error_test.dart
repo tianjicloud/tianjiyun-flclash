@@ -31,7 +31,8 @@ void main() {
     await tester.pumpWidget(_screen());
     await tester.pump();
 
-    expect(find.text("The network core couldn't start"), findsOneWidget);
+    expect(find.text("Tianji service couldn't start"), findsOneWidget);
+    expect(find.text(StateError('boot failed').toString()), findsNothing);
     await tester.tap(find.text('Error details'));
     await tester.pump();
     expect(find.text('Error details'), findsOneWidget);
@@ -40,9 +41,18 @@ void main() {
     expect(
       find.text(StateError('boot failed').toString()),
       findsOneWidget,
-      reason: 'the raw error must stay readable when nothing else works',
+      reason: 'raw error text belongs inside the expanded details',
     );
     expect(find.text(_stack.toString()), findsOneWidget);
+  });
+
+  testWidgets('keeps clear data inside error details', (tester) async {
+    await tester.pumpWidget(_screen());
+    await tester.pump();
+    expect(find.text('Clear data'), findsNothing);
+    await tester.tap(find.text('Error details'));
+    await tester.pump();
+    expect(find.text('Clear data'), findsOneWidget);
   });
 
   testWidgets('renders in both brightness modes', (tester) async {
@@ -73,7 +83,7 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('网络内核没能启动'), findsOneWidget);
+    expect(find.text('天机云服务没能启动'), findsOneWidget);
     expect(
       find.text('端口 7890 已被其他程序占用，天机云无法监听。你的网络没有被改动，可以正常上网。'),
       findsOneWidget,
@@ -125,7 +135,7 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('网络内核没能启动'), findsOneWidget);
+    expect(find.text('天机云服务没能启动'), findsOneWidget);
   });
 
   testWidgets('copies the error and stack trace to the clipboard', (
@@ -180,6 +190,8 @@ void main() {
     );
     await tester.pump();
 
+    await tester.tap(find.text('Error details'));
+    await tester.pump();
     await tester.tap(find.text('Clear data'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Cancel'));
@@ -208,6 +220,8 @@ void main() {
     );
     await tester.pump();
 
+    await tester.tap(find.text('Error details'));
+    await tester.pump();
     await tester.tap(find.text('Clear data'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Confirm'));

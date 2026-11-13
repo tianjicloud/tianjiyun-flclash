@@ -122,19 +122,19 @@ void main() {
     }
 
     await pumpAt(const Size(1200, 800));
-    expect(find.text('Core status\nNot running'), findsOneWidget);
+    expect(find.text('Service status\nNot running'), findsOneWidget);
     expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
 
     await pumpAt(const Size(400, 800));
-    expect(find.text('Core status\nNot running'), findsOneWidget);
+    expect(find.text('Service status\nNot running'), findsOneWidget);
     expect(find.byType(FilledButton), findsOneWidget);
     expect(find.byGlyph(AppGlyphs.cpu), findsOneWidget);
-    expect(find.byTooltip('Core status'), findsOneWidget);
+    expect(find.byTooltip('Service status'), findsOneWidget);
 
     container.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
-    expect(find.text('Core status\nConnecting…'), findsOneWidget);
+    expect(find.text('Service status\nConnecting…'), findsOneWidget);
     expect(find.byType(FilledButton), findsOneWidget);
     expect(find.byType(ActivityIndicator), findsOneWidget);
   });

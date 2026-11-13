@@ -75,11 +75,14 @@ class ProxyCard extends ConsumerWidget {
   Measure get measure => globalState.measure;
 
   Widget _buildProxyNameText(BuildContext context) {
+    final name = businessStyle || businessList
+        ? stripBusinessMultiplierSuffix(proxy.name)
+        : proxy.name;
     if (type == ProxyCardType.compact) {
       return SizedBox(
         height: measure.textHeight(AppTextStyle.subheadline) * 1,
         child: EmojiText(
-          proxy.name,
+          name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyle.subheadline.of(context),
@@ -89,7 +92,7 @@ class ProxyCard extends ConsumerWidget {
       return SizedBox(
         height: measure.textHeight(AppTextStyle.subheadline) * 2,
         child: EmojiText(
-          proxy.name,
+          name,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyle.subheadline.of(context),
@@ -141,10 +144,7 @@ class ProxyCard extends ConsumerWidget {
             if (region.code case final code?) RegionCodeBadge(code: code),
             Expanded(
               child: EmojiText(
-                region.name.replaceAll(
-                  RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false),
-                  '',
-                ),
+                stripBusinessMultiplierSuffix(region.name),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: BusinessText.cardTitle(context),
@@ -205,10 +205,7 @@ class ProxyCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EmojiText(
-                region.name.replaceAll(
-                  RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false),
-                  '',
-                ),
+                stripBusinessMultiplierSuffix(region.name),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: BusinessText.linesNodeTitle(
@@ -286,10 +283,7 @@ class ProxyCard extends ConsumerWidget {
             if (region.code case final code?) RegionCodeBadge(code: code),
             Expanded(
               child: EmojiText(
-                region.name.replaceAll(
-                  RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false),
-                  '',
-                ),
+                stripBusinessMultiplierSuffix(region.name),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: BusinessText.linesNodeTitle(
@@ -665,8 +659,18 @@ class _ProxyDesc extends ConsumerWidget {
             ).select((state) => state.proxyName),
           )
         : proxy.name;
+    final type = isGroup
+        ? switch (proxyGroupTypeOf(proxy.type)) {
+            GroupType.URLTest => context.appLocalizations.groupTypeAutomatic,
+            GroupType.Selector => context.appLocalizations.groupTypeManual,
+            GroupType.Fallback => context.appLocalizations.groupTypeFallback,
+            GroupType.LoadBalance =>
+              context.appLocalizations.groupTypeLoadBalance,
+            GroupType.Relay || null => '',
+          }
+        : proxy.type;
     return EmojiText(
-      nodeName == proxy.name ? proxy.type : '${proxy.type}($nodeName)',
+      nodeName == proxy.name ? type : '$type($nodeName)',
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: style,
