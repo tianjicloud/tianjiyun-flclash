@@ -1,21 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960">
   <defs>
-    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#f3f8ff"/>
+    <linearGradient id="space" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b1f"/>
+      <stop offset=".55" stop-color="#101736"/>
+      <stop offset="1" stop-color="#1d1245"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#56a8ff"/>
-      <stop offset="1" stop-color="#1769d2"/>
+      <stop offset="0" stop-color="#3d5afe"/>
+      <stop offset="1" stop-color="#7c4dff"/>
     </linearGradient>
+    <radialGradient id="glowBlue" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#3d5afe" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#3d5afe" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowViolet" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#7c4dff" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#7c4dff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="stage" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".16"/>
+      <stop offset=".7" stop-color="#ffffff" stop-opacity=".07"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="1440" height="960" fill="url(#surface)"/>
-  <circle cx="720" cy="20" r="510" fill="#e8f2ff" opacity=".48"/>
-  <path d="M0 760C250 700 410 790 650 754s450-70 790 5v201H0Z" fill="#eaf3ff" opacity=".72"/>
-  <rect x="632" y="132" width="176" height="8" rx="4" fill="url(#accent)"/>
-  <text x="720" y="224" text-anchor="middle" fill="#15365f" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="54" font-weight="600">安装天机云</text>
-  <text x="720" y="278" text-anchor="middle" fill="#60758f" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="28">将左侧应用拖到右侧文件夹即可完成安装</text>
-  <circle cx="720" cy="620" r="68" fill="#ffffff" opacity=".72"/>
-  <path d="M626 620h146" fill="none" stroke="#3986e8" stroke-width="8" stroke-linecap="round"/>
-  <path d="m744 594 28 26-28 26" fill="none" stroke="#3986e8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="1440" height="960" fill="url(#space)"/>
+  <circle cx="720" cy="-140" r="560" fill="url(#glowBlue)"/>
+  <circle cx="1380" cy="920" r="520" fill="url(#glowViolet)"/>
+  <g fill="#ffffff">
+    <circle cx="120" cy="120" r="3" opacity=".7"/><circle cx="330" cy="70" r="2" opacity=".45"/>
+    <circle cx="560" cy="140" r="2.4" opacity=".55"/><circle cx="905" cy="80" r="3" opacity=".65"/>
+    <circle cx="1150" cy="150" r="2" opacity=".4"/><circle cx="1310" cy="300" r="2.6" opacity=".5"/>
+    <circle cx="90" cy="420" r="2.2" opacity=".4"/><circle cx="180" cy="830" r="2.6" opacity=".45"/>
+    <circle cx="480" cy="880" r="2" opacity=".35"/><circle cx="1010" cy="860" r="2.4" opacity=".45"/>
+    <circle cx="1240" cy="560" r="2" opacity=".35"/><circle cx="660" cy="330" r="1.8" opacity=".35"/>
+    <circle cx="790" cy="300" r="2.2" opacity=".3"/><circle cx="250" cy="250" r="1.8" opacity=".3"/>
+  </g>
+  <ellipse cx="720" cy="620" rx="660" ry="215" fill="none" stroke="#5f74ff" stroke-opacity=".28" stroke-width="2.5" transform="rotate(-4 720 620)"/>
+  <circle cx="400" cy="640" r="215" fill="url(#stage)"/>
+  <circle cx="1040" cy="640" r="215" fill="url(#stage)"/>
+  <rect x="648" y="118" width="144" height="9" rx="4.5" fill="url(#accent)"/>
+  <text x="720" y="212" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans CJK SC','PingFang SC',sans-serif" font-size="56" font-weight="600" letter-spacing="2">安装天机云</text>
+  <text x="720" y="268" text-anchor="middle" fill="#a9b8e8" font-family="'Noto Sans CJK SC','PingFang SC',sans-serif" font-size="27">将左侧应用拖到右侧文件夹即可完成安装</text>
+  <path d="M648 620h118" fill="none" stroke="#3d5afe" stroke-opacity=".35" stroke-width="17" stroke-linecap="round"/>
+  <path d="M648 620h118" fill="none" stroke="url(#accent)" stroke-width="10" stroke-linecap="round"/>
+  <path d="m742 592 30 28-30 28" fill="none" stroke="#7c4dff" stroke-opacity=".35" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m742 592 30 28-30 28" fill="none" stroke="url(#accent)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="720" y="892" text-anchor="middle" fill="#7e8cc0" font-family="'Noto Sans CJK SC','PingFang SC',sans-serif" font-size="22">安装完成后，在「启动台」或「应用程序」里打开天机云</text>
 </svg>
