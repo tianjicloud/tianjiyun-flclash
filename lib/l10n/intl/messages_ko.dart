@@ -966,6 +966,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessStackModeDescription": MessageLookupByLibrary.simpleMessage(
       "VPN에서 사용할 네트워크 스택을 선택합니다.",
     ),
+    "businessStartingService": MessageLookupByLibrary.simpleMessage(
+      "서비스 시작 중…",
+    ),
     "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "구독 자동 업데이트",
     ),
@@ -1065,6 +1068,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessWebDavBackup": MessageLookupByLibrary.simpleMessage("WebDAV 백업"),
     "businessWifiRulesCount": m26,
+    "businessWillUseLine": MessageLookupByLibrary.simpleMessage("사용할 회선"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("우회 도메인"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "우회 도메인은 시스템 프록시가 켜져 있을 때만 적용됩니다.",

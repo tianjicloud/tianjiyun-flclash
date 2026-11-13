@@ -157,7 +157,10 @@ class _QuickLineCard extends StatelessWidget {
       name: parsedRegion.name,
     );
     final meta = [
-      if (!mobile) line.type.toUpperCase(),
+      if (!mobile &&
+          !(MacOSStyle.of(context) &&
+              {'urltest', 'url-test'}.contains(line.type.toLowerCase())))
+        line.type.toUpperCase(),
       if (line.rate case final rate?)
         mobile
             ? '· ${rate.toStringAsFixed(1)}×'

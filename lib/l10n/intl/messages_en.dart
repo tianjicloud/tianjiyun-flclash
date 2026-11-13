@@ -1122,6 +1122,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessStackModeDescription": MessageLookupByLibrary.simpleMessage(
       "Choose the network stack used by the VPN.",
     ),
+    "businessStartingService": MessageLookupByLibrary.simpleMessage(
+      "Starting service…",
+    ),
     "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Subscription auto-update",
     ),
@@ -1245,6 +1248,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "WebDAV backup",
     ),
     "businessWifiRulesCount": m26,
+    "businessWillUseLine": MessageLookupByLibrary.simpleMessage("Will use"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Bypass domains"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Bypass domains apply only while the system proxy is on.",

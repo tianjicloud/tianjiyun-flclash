@@ -1185,6 +1185,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessStackModeDescription": MessageLookupByLibrary.simpleMessage(
       "Choisir la pile réseau utilisée par le VPN.",
     ),
+    "businessStartingService": MessageLookupByLibrary.simpleMessage(
+      "Démarrage du service…",
+    ),
     "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Mise à jour automatique de l’abonnement",
     ),
@@ -1314,6 +1317,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sauvegarde WebDAV",
     ),
     "businessWifiRulesCount": m26,
+    "businessWillUseLine": MessageLookupByLibrary.simpleMessage("Utilisera"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Domaines contournés"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Les domaines contournés ne s’appliquent que si le proxy système est activé.",

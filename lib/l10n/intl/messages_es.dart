@@ -1184,6 +1184,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessStackModeDescription": MessageLookupByLibrary.simpleMessage(
       "Elige la pila de red usada por la VPN.",
     ),
+    "businessStartingService": MessageLookupByLibrary.simpleMessage(
+      "Iniciando el servicio…",
+    ),
     "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Actualización automática de suscripción",
     ),
@@ -1307,6 +1310,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Copia de seguridad WebDAV",
     ),
     "businessWifiRulesCount": m26,
+    "businessWillUseLine": MessageLookupByLibrary.simpleMessage("Se usará"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Dominios excluidos"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Los dominios excluidos solo se aplican mientras el proxy del sistema esté activado.",

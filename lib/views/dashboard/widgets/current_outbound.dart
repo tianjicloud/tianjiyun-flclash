@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/common/tianji_api.dart';
+import 'package:fl_clash/core/traffic/model.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
 import 'package:fl_clash/features/ip_quality/labels.dart';
@@ -15,6 +16,7 @@ import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/ui/app_background.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
@@ -80,7 +82,10 @@ bool isVerifiedOutbound({
 
 /// The address the proxied traffic leaves by, next to the start button.
 class CurrentOutboundCard extends ConsumerStatefulWidget {
-  const CurrentOutboundCard({super.key});
+  const CurrentOutboundCard({super.key, this.onRetry, this.onAuthorize});
+
+  final VoidCallback? onRetry;
+  final VoidCallback? onAuthorize;
 
   @override
   ConsumerState<CurrentOutboundCard> createState() =>
@@ -188,8 +193,21 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         route: route,
         verdict: verdict,
       );
+      final delay =
+          line?.delay ??
+          (exitName == null
+              ? null
+              : ref.watch(delaysAtLastTestBatchProvider)[ref.watch(
+                  realTestUrlProvider(),
+                )]?[exitName]);
+      final macConnecting =
+          coreStatus == CoreStatus.connecting ||
+          (isStart &&
+              (coreStatus != CoreStatus.connected ||
+                  entry.phase == ProbePhase.probing));
       final ringColor = switch ((checking, failed, verdict)) {
-        _ when connectingStatus => BusinessPalette.blue,
+        _ when connectingStatus || (MacOSStyle.of(context) && macConnecting) =>
+          BusinessPalette.blue,
         _ when !isStart => const Color(0xFF98A2AD),
         _ when exitAbnormal => BusinessPalette.exitWarningForegroundFor(
           colorScheme.brightness,
@@ -211,7 +229,11 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         _ when phase == ProbePhase.probing => BusinessPalette.blue,
         _ => const Color(0xFF98A2AD),
       };
-      final statusText = density.isDesktop
+      final statusText = MacOSStyle.of(context) && macConnecting
+          ? coreStatus == CoreStatus.connected
+                ? appLocalizations.checkingExit
+                : appLocalizations.businessStartingService
+          : density.isDesktop
           ? switch (exitWarning) {
               BusinessExitWarningKind.probeFailed =>
                 appLocalizations.businessConnectedProbeFailed,
@@ -250,11 +272,14 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         enabled: hasProfile,
         running: isStart,
         suspended: suspended,
+        connecting: MacOSStyle.of(context) && macConnecting,
         pulseEnabled: density.isDesktop,
         ringColor: exitAbnormal ? null : ringColor,
         abnormal: exitAbnormal,
         showLabel: density.isDesktop,
-        idleLabel: density.isDesktop ? null : appLocalizations.start,
+        idleLabel: density.isDesktop
+            ? (MacOSStyle.of(context) ? appLocalizations.connection : null)
+            : appLocalizations.start,
       );
       final details = _BusinessHeroDetails(
         showStatus: density.isDesktop,
@@ -272,7 +297,23 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
         exitName: exitName,
         showSelection: showBusinessSelection,
       );
-      final content = density.isDesktop
+      final content = density.isDesktop && MacOSStyle.of(context)
+          ? _MacOSBusinessHero(
+              statusText: statusText,
+              warning: exitWarning,
+              connecting: macConnecting,
+              running: isStart,
+              toggle: toggle,
+              info: ipInfo,
+              quality: quality,
+              line: line,
+              exitName: exitName,
+              delay: delay,
+              runTime: ref.watch(runTimeProvider),
+              onRetry: widget.onRetry,
+              onAuthorize: widget.onAuthorize,
+            )
+          : density.isDesktop
           ? ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: MacOSMetrics.dashboardHeroMinHeight(
@@ -710,6 +751,211 @@ class _BusinessIdlePrompt extends ConsumerWidget {
           ).copyWith(color: context.colorScheme.onSurfaceVariant),
         ),
       ],
+    );
+  }
+}
+
+class _MacOSBusinessHero extends StatelessWidget {
+  const _MacOSBusinessHero({
+    required this.statusText,
+    required this.warning,
+    required this.connecting,
+    required this.running,
+    required this.toggle,
+    required this.info,
+    required this.quality,
+    required this.line,
+    required this.exitName,
+    required this.delay,
+    required this.runTime,
+    required this.onRetry,
+    required this.onAuthorize,
+  });
+
+  final String statusText;
+  final BusinessExitWarningKind? warning;
+  final bool connecting;
+  final bool running;
+  final Widget toggle;
+  final IpInfo? info;
+  final IpQuality? quality;
+  final DashboardLine? line;
+  final String? exitName;
+  final int? delay;
+  final int? runTime;
+  final VoidCallback? onRetry;
+  final VoidCallback? onAuthorize;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.appLocalizations;
+    final abnormal = warning != null;
+    final title = switch (warning) {
+      BusinessExitWarningKind.probeFailed =>
+        strings.businessExitProbeUnavailable,
+      BusinessExitWarningKind.tunUnauthorized => strings.businessExitMismatch,
+      null when connecting => strings.connecting,
+      null when running => strings.connected,
+      null => strings.businessNotConnected,
+    };
+    final subtitle = switch (warning) {
+      BusinessExitWarningKind.probeFailed =>
+        strings.businessExitProbeDescription,
+      BusinessExitWarningKind.tunUnauthorized =>
+        strings.businessExitTunDescription,
+      null when connecting => statusText,
+      null when running => [
+        if (info?.ip case final ip?)
+          Text(
+            ip,
+            style: BusinessText.heroIp(
+              context,
+              size: 20,
+            ).copyWith(color: context.colorScheme.onSurface),
+          ),
+        if (info?.countryCode case final code? when code.isNotEmpty)
+          RegionCodeBadge(code: code),
+        if (info?.fromTianji == true)
+          DashboardChip(label: strings.businessOrdinaryWebExit, large: false),
+        if (quality?.type == IpType.residential)
+          DashboardChip(
+            label: businessResidentialLabel(strings, desktop: true),
+            tone: DashboardChipTone.residential,
+            large: false,
+          ),
+        if ((exitName ?? line?.displayName) case final value?) ...[
+          Text(strings.businessCurrentLine),
+          EmojiText(value),
+        ],
+      ],
+      null => [
+        Text(strings.businessWillUseLine),
+        EmojiText(line?.displayName ?? strings.businessSmartRouting),
+      ],
+    };
+    final subtitleWidget = subtitle is List<Widget>
+        ? Wrap(
+            spacing: 10,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: subtitle,
+          )
+        : subtitle is Widget
+        ? subtitle
+        : Text(subtitle as String, style: BusinessText.metaLabel(context));
+    final action = switch (warning) {
+      BusinessExitWarningKind.probeFailed => onRetry,
+      BusinessExitWarningKind.tunUnauthorized => onAuthorize,
+      null => null,
+    };
+    final actionLabel = switch (warning) {
+      BusinessExitWarningKind.probeFailed => strings.selectionRecheck,
+      BusinessExitWarningKind.tunUnauthorized => strings.businessAuthorizeTun,
+      null => null,
+    };
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(26, 24, 26, 24),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimatedSwitcher(
+                  duration: context.motionDuration(commonDuration),
+                  child: Text(
+                    title,
+                    key: ValueKey(title),
+                    style: AppTextStyle.largeTitle.of(
+                      context,
+                      emphasized: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                DefaultTextStyle(
+                  style: AppTextStyle.body
+                      .of(context)
+                      .copyWith(color: context.colorScheme.onSurfaceVariant),
+                  child: subtitleWidget,
+                ),
+                if (abnormal && action != null && actionLabel != null) ...[
+                  const SizedBox(height: 16),
+                  FilledButton(onPressed: action, child: Text(actionLabel)),
+                ],
+                if (running && !connecting && !abnormal) ...[
+                  const SizedBox(height: 20),
+                  _MacOSMetricRow(delay: delay, runTime: runTime),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 28),
+          RepaintBoundary(child: toggle),
+        ],
+      ),
+    );
+  }
+}
+
+class _MacOSMetricRow extends ConsumerWidget {
+  const _MacOSMetricRow({required this.delay, required this.runTime});
+
+  final int? delay;
+  final int? runTime;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final speed = ref.watch(
+      trafficsProvider.select((state) => state.list.safeLast(const Traffic())),
+    );
+    final summary = ref.watch(trafficStatsProvider).summary;
+    return ValueListenableBuilder<TrafficSummary>(
+      valueListenable: summary,
+      builder: (context, value, _) {
+        final monthUsed =
+            value.month.mainlandDirect.total +
+            value.month.proxy.total +
+            value.month.otherDirect.total;
+        final metrics = <(String, String)>[
+          (
+            context.appLocalizations.download,
+            '${speed.down.traffic.value} ${speed.down.traffic.unit}/s',
+          ),
+          (
+            context.appLocalizations.upload,
+            '${speed.up.traffic.value} ${speed.up.traffic.unit}/s',
+          ),
+          if (delay case final value? when value >= 0)
+            (context.appLocalizations.delay, '$value ms'),
+          if (runTime case final value?)
+            (context.appLocalizations.runTime, getTimeText(value)),
+          (
+            context.appLocalizations.businessMonthTraffic,
+            dashboardTraffic(monthUsed),
+          ),
+        ];
+        return Wrap(
+          spacing: 28,
+          runSpacing: 10,
+          children: [
+            for (final (label, amount) in metrics)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 4,
+                children: [
+                  Text(label, style: DashboardText.label(context)),
+                  Text(
+                    amount,
+                    style: DashboardText.unit(
+                      context,
+                    ).copyWith(color: context.colorScheme.onSurface),
+                  ),
+                ],
+              ),
+          ],
+        );
+      },
     );
   }
 }
@@ -1688,6 +1934,7 @@ class _StartToggle extends ConsumerStatefulWidget {
     required this.enabled,
     required this.running,
     required this.suspended,
+    this.connecting,
     this.ringColor,
     this.abnormal = false,
     this.pulseEnabled = true,
@@ -1699,6 +1946,7 @@ class _StartToggle extends ConsumerStatefulWidget {
   final bool enabled;
   final bool running;
   final bool suspended;
+  final bool? connecting;
   final Color? ringColor;
   final bool abnormal;
   final bool pulseEnabled;
@@ -1751,6 +1999,16 @@ class _StartToggleState extends ConsumerState<_StartToggle>
   bool get _settled => !_controller.isAnimating && !_progress.isAnimating;
 
   void _syncPulse() {
+    final connecting =
+        MacOSStyle.of(context) &&
+        (widget.connecting ??
+            ref.read(coreStatusProvider) == CoreStatus.connecting);
+    if (connecting && !context.disableAnimations) {
+      if (!_pulseController.isAnimating) {
+        _pulseController.repeat(period: const Duration(milliseconds: 1400));
+      }
+      return;
+    }
     final idle =
         BusinessTheme.of(context) &&
         !MacOSStyle.of(context) &&
@@ -1827,8 +2085,10 @@ class _StartToggleState extends ConsumerState<_StartToggle>
         ? appLocalizations.stop
         : appLocalizations.start;
     if (BusinessTheme.of(context)) {
-      final connecting = ref.watch(coreStatusProvider) == CoreStatus.connecting;
-      if (!connecting && (oldConnecting)) _syncPulse();
+      final connecting =
+          widget.connecting ??
+          ref.watch(coreStatusProvider) == CoreStatus.connecting;
+      if (connecting != oldConnecting) _syncPulse();
       oldConnecting = connecting;
       final color = !enabled
           ? BusinessPalette.secondary
@@ -1841,6 +2101,10 @@ class _StartToggleState extends ConsumerState<_StartToggle>
           : BusinessPalette.accent;
       final label = connecting
           ? appLocalizations.connecting
+          : MacOSStyle.of(context) && widget.running
+          ? appLocalizations.trayDisconnect
+          : MacOSStyle.of(context) && !widget.running
+          ? appLocalizations.connection
           : widget.abnormal
           ? appLocalizations.businessConnectedAbnormal
           : widget.running && !widget.suspended
@@ -1875,7 +2139,9 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                           painter: OrbitPainter(
                             color: widget.ringColor ?? animatedColor ?? color,
                             primary: BusinessPalette.blue,
-                            idleCore: DashboardColors.of(context).card,
+                            idleCore: MacOSStyle.of(context) && !widget.running
+                                ? BusinessPalette.blue
+                                : DashboardColors.of(context).card,
                             idleStroke: colorScheme.outlineVariant.withValues(
                               alpha: 0.65,
                             ),
@@ -1887,8 +2153,12 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                             ),
                             focused: _focused,
                             running: widget.running && !widget.abnormal,
+                            loadingProgress: connecting
+                                ? _pulseController.value
+                                : null,
                             pulse:
-                                widget.pulseEnabled &&
+                                !connecting &&
+                                    widget.pulseEnabled &&
                                     _pulseController.isAnimating
                                 ? _pulseController.value
                                 : null,
@@ -1901,7 +2171,11 @@ class _StartToggleState extends ConsumerState<_StartToggle>
                                     ? AppGlyphs.wifiOff
                                     : AppGlyphs.power,
                                 size: size * 0.22,
-                                color: widget.abnormal
+                                color:
+                                    MacOSStyle.of(context) &&
+                                        (!widget.running || connecting)
+                                    ? colorScheme.onPrimary
+                                    : widget.abnormal
                                     ? BusinessPalette.exitWarningForegroundFor(
                                         colorScheme.brightness,
                                       )

@@ -1315,6 +1315,8 @@
   "businessNotConnected": "Non connecté",
   "businessTapToConnect": "Touchez pour vous connecter",
   "businessConnectVia": "Le trafic passera par « {line} »",
+  "businessWillUseLine": "Utilisera",
+  "businessStartingService": "Démarrage du service…",
   "businessVpnPermission": "Autorisez le VPN lors de la première connexion",
   "businessMonthUsed": "Utilisé ce mois-ci",
   "businessAiServices": "ChatGPT · Claude",

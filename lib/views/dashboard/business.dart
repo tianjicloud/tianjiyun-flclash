@@ -83,6 +83,29 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
                 )
               : mobile
               ? const _MobileBrandTitle()
+              : MacOSStyle.of(context)
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      appLocalizations.dashboard,
+                      style: BusinessText.pageTitle(context),
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      tooltip: appLocalizations.editDashboard,
+                      onPressed: () => _setEditing(true),
+                      style: ButtonStyle.from(
+                        minimumSize: const Size(28, 28),
+                        maximumSize: const Size(28, 28),
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: TapTargetSize.shrinkWrap,
+                      ),
+                      icon: const GlyphIcon(AppGlyphs.edit, size: 16),
+                    ),
+                  ],
+                )
               : Text(
                   appLocalizations.dashboard,
                   style: BusinessText.pageTitle(context),
@@ -94,7 +117,7 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
                   onPressed: () => _setEditing(false),
                 )
               : null,
-          iconActions: _editing
+          iconActions: _editing || MacOSStyle.of(context)
               ? const []
               : [
                   IconButtonData(
@@ -274,7 +297,7 @@ class _BusinessBody extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: warningKind == null ? 0 : gap,
                   children: [
-                    if (warningKind != null)
+                    if (warningKind != null && !MacOSStyle.of(context))
                       BusinessExitWarningBanner(
                         kind: warningKind,
                         onRetry: () => ref
@@ -308,7 +331,25 @@ class _BusinessBody extends ConsumerWidget {
                 children: [
                   if (density.isDesktop)
                     MacOSStyle.of(context)
-                        ? const RepaintBoundary(child: CurrentOutboundCard())
+                        ? RepaintBoundary(
+                            child: CurrentOutboundCard(
+                              onRetry: () => ref
+                                  .read(outboundIpProbeProvider.notifier)
+                                  .refresh(const [routedOutbound]),
+                              onAuthorize: () async {
+                                try {
+                                  await ref
+                                      .read(setupActionProvider.notifier)
+                                      .applyProfile(force: true);
+                                } catch (error) {
+                                  dialogs.showBanner(
+                                    error.toString(),
+                                    level: BannerLevel.error,
+                                  );
+                                }
+                              },
+                            ),
+                          )
                         : SizedBox(
                             height: 236 * scale,
                             child: const RepaintBoundary(
@@ -430,7 +471,7 @@ class _BusinessBody extends ConsumerWidget {
                         ),
                         child: controlBar,
                       ),
-                  ] else if (isDefaultLayout) ...[
+                  ] else if (isDefaultLayout && !density.isDesktop) ...[
                     if (needsTakeover)
                       Text(
                         context.appLocalizations.residentialCaptureOff,
@@ -497,7 +538,13 @@ class _BusinessBody extends ConsumerWidget {
                                     (!MacOSStyle.of(context) ||
                                         card !=
                                             BusinessDashboardCard
-                                                .residentialLines),
+                                                .residentialLines) &&
+                                    (!MacOSStyle.of(context) ||
+                                        coreConnected ||
+                                        !{
+                                          BusinessDashboardCard.networkSpeed,
+                                          BusinessDashboardCard.connectionStats,
+                                        }.contains(card)),
                               )
                               .toList();
                           return Wrap(

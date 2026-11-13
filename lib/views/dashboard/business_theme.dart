@@ -57,6 +57,7 @@ class OrbitPainter extends CustomPainter {
     required this.idlePlate,
     required this.focused,
     required this.running,
+    this.loadingProgress,
     this.pulse,
   });
 
@@ -68,6 +69,7 @@ class OrbitPainter extends CustomPainter {
   final Color idlePlate;
   final bool focused;
   final bool running;
+  final double? loadingProgress;
   final double? pulse;
 
   @override
@@ -106,11 +108,23 @@ class OrbitPainter extends CustomPainter {
           ..strokeWidth = 2,
       );
     }
-    final tick = Paint()
-      ..color = color.withValues(alpha: focused ? 0.96 : 0.78)
-      ..strokeWidth = math.max(1.2, radius * 0.022)
-      ..strokeCap = StrokeCap.round;
     for (var i = 0; i < 48; i++) {
+      final phase = loadingProgress == null
+          ? 1.0
+          : ((i / 48 - loadingProgress!) % 1 + 1) % 1;
+      final highlighted = loadingProgress != null && phase < 0.18;
+      final tick = Paint()
+        ..color = color.withValues(
+          alpha: loadingProgress == null
+              ? focused
+                    ? 0.96
+                    : 0.78
+              : highlighted
+              ? 0.62 + 0.38 * (1 - phase / 0.18)
+              : 0.08,
+        )
+        ..strokeWidth = math.max(1.2, radius * (highlighted ? 0.032 : 0.022))
+        ..strokeCap = StrokeCap.round;
       final angle = i * math.pi / 24 - math.pi / 2;
       final direction = Offset(math.cos(angle), math.sin(angle));
       canvas.drawLine(
@@ -188,5 +202,6 @@ class OrbitPainter extends CustomPainter {
       idleStroke != oldDelegate.idleStroke ||
       idleShadow != oldDelegate.idleShadow ||
       idlePlate != oldDelegate.idlePlate ||
-      pulse != oldDelegate.pulse;
+      pulse != oldDelegate.pulse ||
+      loadingProgress != oldDelegate.loadingProgress;
 }

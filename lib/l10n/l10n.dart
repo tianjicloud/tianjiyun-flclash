@@ -11098,6 +11098,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Will use`
+  String get businessWillUseLine {
+    return Intl.message(
+      'Will use',
+      name: 'businessWillUseLine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Starting service…`
+  String get businessStartingService {
+    return Intl.message(
+      'Starting service…',
+      name: 'businessStartingService',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Allow VPN permission on first connection`
   String get businessVpnPermission {
     return Intl.message(

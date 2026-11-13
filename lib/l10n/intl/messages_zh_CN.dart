@@ -884,6 +884,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessStackModeDescription": MessageLookupByLibrary.simpleMessage(
       "选择 VPN 使用的网络栈模式。",
     ),
+    "businessStartingService": MessageLookupByLibrary.simpleMessage("正在启动服务…"),
     "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "订阅自动更新",
     ),
@@ -971,6 +972,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessWebDavBackup": MessageLookupByLibrary.simpleMessage("WebDAV 备份"),
     "businessWifiRulesCount": m26,
+    "businessWillUseLine": MessageLookupByLibrary.simpleMessage("将使用"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("排除域名"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "排除域名仅在系统代理启用时生效。",

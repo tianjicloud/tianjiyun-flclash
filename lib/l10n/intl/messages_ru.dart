@@ -1174,6 +1174,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessStackModeDescription": MessageLookupByLibrary.simpleMessage(
       "Выберите сетевой стек VPN.",
     ),
+    "businessStartingService": MessageLookupByLibrary.simpleMessage(
+      "Запуск службы…",
+    ),
     "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "Автообновление подписки",
     ),
@@ -1293,6 +1296,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Резервная копия WebDAV",
     ),
     "businessWifiRulesCount": m26,
+    "businessWillUseLine": MessageLookupByLibrary.simpleMessage(
+      "Будет использоваться",
+    ),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("Исключённые домены"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "Исключённые домены действуют только при включённом системном прокси.",

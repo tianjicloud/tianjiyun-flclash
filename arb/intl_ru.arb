@@ -1315,6 +1315,8 @@
   "businessNotConnected": "Не подключено",
   "businessTapToConnect": "Нажмите, чтобы подключиться",
   "businessConnectVia": "Трафик пойдёт через «{line}»",
+  "businessWillUseLine": "Будет использоваться",
+  "businessStartingService": "Запуск службы…",
   "businessVpnPermission": "При первом подключении разрешите VPN",
   "businessMonthUsed": "Использовано за месяц",
   "businessAiServices": "ChatGPT · Claude",

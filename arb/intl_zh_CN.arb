@@ -1315,6 +1315,8 @@
   "businessNotConnected": "未连接",
   "businessTapToConnect": "轻点连接",
   "businessConnectVia": "将从「{line}」出去",
+  "businessWillUseLine": "将使用",
+  "businessStartingService": "正在启动服务…",
   "businessVpnPermission": "首次连接需要允许 VPN 权限",
   "businessMonthUsed": "本月已用",
   "businessAiServices": "ChatGPT · Claude",

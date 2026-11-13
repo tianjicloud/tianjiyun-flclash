@@ -1315,6 +1315,8 @@
   "businessNotConnected": "未接続",
   "businessTapToConnect": "タップして接続",
   "businessConnectVia": "「{line}」経由で接続します",
+  "businessWillUseLine": "使用する回線",
+  "businessStartingService": "サービスを起動中…",
   "businessVpnPermission": "初回接続時に VPN の許可が必要です",
   "businessMonthUsed": "今月の使用量",
   "businessAiServices": "ChatGPT · Claude",

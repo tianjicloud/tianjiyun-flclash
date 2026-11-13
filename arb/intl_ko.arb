@@ -1315,6 +1315,8 @@
   "businessNotConnected": "연결 안 됨",
   "businessTapToConnect": "탭하여 연결",
   "businessConnectVia": "“{line}”을(를) 통해 나갑니다",
+  "businessWillUseLine": "사용할 회선",
+  "businessStartingService": "서비스 시작 중…",
   "businessVpnPermission": "처음 연결할 때 VPN 권한을 허용해야 합니다",
   "businessMonthUsed": "이번 달 사용량",
   "businessAiServices": "ChatGPT · Claude",

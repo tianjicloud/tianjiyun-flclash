@@ -975,6 +975,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "businessStackModeDescription": MessageLookupByLibrary.simpleMessage(
       "VPN が使用するネットワークスタックを選択します。",
     ),
+    "businessStartingService": MessageLookupByLibrary.simpleMessage(
+      "サービスを起動中…",
+    ),
     "businessSubscriptionAutoUpdate": MessageLookupByLibrary.simpleMessage(
       "サブスクリプションの自動更新",
     ),
@@ -1078,6 +1081,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "WebDAV バックアップ",
     ),
     "businessWifiRulesCount": m26,
+    "businessWillUseLine": MessageLookupByLibrary.simpleMessage("使用する回線"),
     "bypassDomain": MessageLookupByLibrary.simpleMessage("除外ドメイン"),
     "bypassDomainDesc": MessageLookupByLibrary.simpleMessage(
       "除外ドメインはシステムプロキシが有効な場合のみ適用されます。",

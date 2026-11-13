@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:prism_ui/prism_ui.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
+import 'package:fl_clash/views/dashboard/business_exit_warning_banner.dart';
 import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/app_update.dart';
 import 'package:fl_clash/core/traffic/model.dart';
@@ -25,6 +26,7 @@ import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic.dart';
+import 'package:fl_clash/views/dashboard/widgets/quick_lines.dart';
 import 'package:fl_clash/views/about.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:fl_clash/views/dashboard/widgets/scene_bar.dart';
@@ -65,6 +67,19 @@ class _VerifiedIpProbe extends OutboundIpProbe {
         chains: ['Tokyo'],
       ),
     ),
+  });
+
+  @override
+  void watch(String target) {}
+
+  @override
+  void unwatch(String target) {}
+}
+
+class _FailedIpProbe extends OutboundIpProbe {
+  @override
+  RoutedProbeState<String, IpInfo> build() => const RoutedProbeState({
+    routedOutbound: ProbeEntry(phase: ProbePhase.failed),
   });
 
   @override
@@ -212,6 +227,132 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
   });
+
+  testWidgets('macOS disconnected home keeps quick lines and settings cards', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final macContainer = ProviderContainer(
+      parent: container,
+      overrides: [
+        isStartProvider.overrideWithValue(false),
+        coreStatusProvider.overrideWithBuild((_, _) => CoreStatus.disconnected),
+      ],
+    );
+    addTearDown(macContainer.dispose);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: macContainer,
+        child: TestApp(
+          locale: const Locale('zh', 'CN'),
+          theme: ThemeData(platform: TargetPlatform.macOS),
+          child: const BusinessDashboardView(platform: SupportPlatform.MacOS),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('未连接'), findsOneWidget);
+    expect(find.byType(QuickLines), findsOneWidget);
+    expect(find.text('URLTEST'), findsNothing);
+    expect(find.byType(BusinessExitWarningBanner), findsNothing);
+    expect(find.byType(TrafficSavingsCard), findsOneWidget);
+    expect(find.byType(ProfilesCard), findsOneWidget);
+    expect(find.byType(NetworkTakeoverBlock), findsWidgets);
+    expect(find.text('下载'), findsNothing);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  for (final scenario in [
+    (
+      name: 'connecting',
+      started: true,
+      status: CoreStatus.connecting,
+      probe: _IdleIpProbe.new,
+      title: '连接中…',
+      action: '连接中…',
+      subtitle: '正在启动服务…',
+    ),
+    (
+      name: 'connected',
+      started: true,
+      status: CoreStatus.connected,
+      probe: _VerifiedIpProbe.new,
+      title: '已连接',
+      action: '断开连接',
+      subtitle: '203.0.113.42',
+    ),
+    (
+      name: 'abnormal',
+      started: true,
+      status: CoreStatus.connected,
+      probe: _FailedIpProbe.new,
+      title: '暂时无法确认出口',
+      action: '重新检测',
+      subtitle: '出口检测没有返回结果，代理可能仍在工作。可以重新检测，或运行诊断查看原因。',
+    ),
+  ]) {
+    testWidgets('macOS ${scenario.name} home shows its state and action', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1280, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      final stateContainer = ProviderContainer(
+        parent: container,
+        overrides: [
+          isStartProvider.overrideWithValue(scenario.started),
+          coreStatusProvider.overrideWithBuild((_, _) => scenario.status),
+          runTimeProvider.overrideWithBuild((_, _) => 3600000),
+          outboundIpProbeProvider.overrideWith(scenario.probe),
+          ipQualityProvider('203.0.113.42').overrideWith(
+            (_) async => const IpQuality(
+              ip: '203.0.113.42',
+              source: IpQualitySource.ipApiCom,
+              type: IpType.residential,
+              organization: 'SoftBank',
+            ),
+          ),
+        ],
+      );
+      addTearDown(stateContainer.dispose);
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: stateContainer,
+          child: TestApp(
+            locale: const Locale('zh', 'CN'),
+            theme: ThemeData(platform: TargetPlatform.macOS),
+            child: const BusinessDashboardView(platform: SupportPlatform.MacOS),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(
+        find.text(scenario.title),
+        scenario.name == 'connecting' ? findsWidgets : findsOneWidget,
+      );
+      expect(find.text(scenario.action), findsWidgets);
+      expect(find.text(scenario.subtitle), findsWidgets);
+      expect(find.byType(BusinessExitWarningBanner), findsNothing);
+      expect(find.text('URLTEST'), findsNothing);
+      if (scenario.name == 'connected') {
+        expect(find.text('203.0.113.42'), findsOneWidget);
+        expect(find.text('下载'), findsOneWidget);
+        expect(find.text('上传'), findsOneWidget);
+        expect(find.text('本月流量'), findsWidgets);
+        expect(find.text('运行时长'), findsOneWidget);
+      } else {
+        expect(find.text('下载'), findsNothing);
+      }
+      if (scenario.name == 'abnormal') {
+        expect(find.text('暂时无法确认出口'), findsOneWidget);
+      }
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
 
   testWidgets('business dashboard uses saved card visibility and order', (
     tester,
