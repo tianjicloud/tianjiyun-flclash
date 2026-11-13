@@ -19,6 +19,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../helpers/test_app.dart';
 import '../helpers/host_scaffold.dart';
+import '../helpers/traffic_stats_store.dart';
 
 const _mobileSize = Size(400, 800);
 
@@ -54,6 +55,7 @@ Future<ProviderContainer> _pumpHome(
   addTearDown(tester.view.reset);
   final container = ProviderContainer(
     overrides: [
+      idleTrafficStatsOverride(),
       profilesProvider.overrideWithValue([
         const Profile(id: 1, autoUpdateDuration: Duration.zero),
       ]),

@@ -18,6 +18,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../helpers/test_app.dart';
 import '../../helpers/test_profiles.dart';
 import '../../helpers/host_scaffold.dart';
+import '../../helpers/traffic_stats_store.dart';
 
 class _MockCore extends Mock implements CoreHandlerInterface {}
 
@@ -54,7 +55,10 @@ void main() {
 
   setUp(() {
     container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+      overrides: [
+        idleTrafficStatsOverride(),
+        profilesProvider.overrideWith(TestProfiles.new),
+      ],
     );
     globalState.container = container;
     container.listen(appSettingProvider, (_, _) {});
@@ -161,6 +165,7 @@ void main() {
     );
     final connections = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         profilesProvider.overrideWith(TestProfiles.new),
         coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
         coreStatusProvider.overrideWithBuild((_, _) => CoreStatus.connected),

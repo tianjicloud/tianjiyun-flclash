@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_app.dart';
+import '../helpers/traffic_stats_store.dart';
 
 const _subscriptionUrl = 'https://sub1.tianjiyun.org/s/test_subscription_001';
 
@@ -53,6 +54,7 @@ List<NavigationItem> _items() => [
 ProviderContainer _container(Profile profile) {
   final container = ProviderContainer(
     overrides: [
+      idleTrafficStatsOverride(),
       profilesProvider.overrideWith(() => _TestProfiles([profile])),
       currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
       navigationItemsStateProvider.overrideWithValue(

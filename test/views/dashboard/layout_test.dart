@@ -1,4 +1,6 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/traffic/model.dart';
+import 'package:fl_clash/core/traffic/service.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../helpers/glyph_finders.dart';
 import '../../helpers/test_app.dart';
 import '../../helpers/test_profiles.dart';
+import '../../helpers/traffic_stats_store.dart';
 
 void main() {
   test('the window picks the density', () {
@@ -39,8 +42,24 @@ void main() {
   late ProviderContainer container;
 
   setUp(() {
+    // The real provider starts sampling timers once preferences load, which an
+    // earlier file in the same isolate has already done.
+    final stats = TrafficAccountingService(
+      store: MemoryTrafficStatsStore(),
+      readSnapshot: () async => const TrafficSnapshot(
+        version: 1,
+        epoch: 1,
+        mainlandDirect: TrafficBytes.zero,
+        proxy: TrafficBytes.zero,
+        otherDirect: TrafficBytes.zero,
+      ),
+    );
+    addTearDown(stats.dispose);
     container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+      overrides: [
+        profilesProvider.overrideWith(TestProfiles.new),
+        trafficStatsProvider.overrideWithValue(stats),
+      ],
     );
     globalState.container = container;
     container.listen(groupsProvider, (_, _) {});

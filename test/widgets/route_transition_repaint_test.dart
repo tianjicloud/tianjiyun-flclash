@@ -16,6 +16,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../helpers/host_scaffold.dart';
+import '../helpers/traffic_stats_store.dart';
 
 const _size = Size(400, 860);
 
@@ -49,6 +50,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         profilesProvider.overrideWithValue([
           const Profile(id: 1, autoUpdateDuration: Duration.zero),
         ]),

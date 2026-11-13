@@ -16,11 +16,14 @@ import 'package:mocktail/mocktail.dart';
 import '../helpers/test_app.dart';
 import 'package:prism_ui/prism_ui.dart';
 
+// A provider failing on state an earlier file left behind would otherwise
+// schedule retry timers that outlive the test.
+Duration? _noRetry(int retryCount, Object error) => null;
 void main() {
   late ProviderContainer container;
 
   setUp(() {
-    container = ProviderContainer();
+    container = ProviderContainer(retry: _noRetry);
     globalState.container = container;
   });
 
@@ -110,6 +113,7 @@ void main() {
       when(() => core.closeConnection(any())).thenAnswer((_) async {});
       container.dispose();
       container = ProviderContainer(
+        retry: _noRetry,
         overrides: [
           coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
         ],
@@ -152,6 +156,7 @@ void main() {
     ).thenAnswer((_) async => throw Exception('closed already'));
     container.dispose();
     container = ProviderContainer(
+      retry: _noRetry,
       overrides: [
         coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
       ],
@@ -220,6 +225,7 @@ void main() {
     final core = _MockCoreHandlerInterface();
     container.dispose();
     container = ProviderContainer(
+      retry: _noRetry,
       overrides: [
         coreHandlerProvider.overrideWithValue(CoreController.scoped(core)),
       ],

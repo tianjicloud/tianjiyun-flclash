@@ -15,6 +15,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart' show Override;
 
 import '../helpers/glyph_finders.dart';
 import '../helpers/test_app.dart';
+import '../helpers/traffic_stats_store.dart';
 
 void main() {
   testWidgets('back layers are consumed from inner to outer', (tester) async {
@@ -176,7 +177,9 @@ void main() {
   testWidgets('system back exits search without reaching the root fallback', (
     tester,
   ) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [idleTrafficStatsOverride()],
+    );
     addTearDown(container.dispose);
     globalState.container = container;
     var rootBackCount = 0;
@@ -246,7 +249,9 @@ void main() {
   testWidgets('inactive page scope exits the kept search layer', (
     tester,
   ) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [idleTrafficStatsOverride()],
+    );
     addTearDown(container.dispose);
     globalState.container = container;
     final isActive = ValueNotifier(true);
@@ -278,6 +283,7 @@ void main() {
   testWidgets('inactive page scope exits dashboard edit layer', (tester) async {
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _phoneView(tester),
         dashboardStateProvider.overrideWithValue(
           const DashboardState(dashboardWidgets: []),
@@ -315,7 +321,9 @@ void main() {
   });
 
   testWidgets('inactive page scope exits access search layer', (tester) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [idleTrafficStatsOverride()],
+    );
     addTearDown(container.dispose);
     globalState.container = container;
     final isActive = ValueNotifier(true);
@@ -349,6 +357,7 @@ void main() {
   ) async {
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _phoneView(tester),
         dashboardStateProvider.overrideWithValue(
           const DashboardState(dashboardWidgets: []),
@@ -381,6 +390,7 @@ void main() {
   testWidgets('system back keeps a card removed in edit mode', (tester) async {
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _phoneView(tester),
         dashboardStateProvider.overrideWithValue(
           const DashboardState(

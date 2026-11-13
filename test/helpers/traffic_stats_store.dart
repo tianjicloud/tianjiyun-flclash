@@ -1,4 +1,8 @@
+import 'package:fl_clash/core/traffic/model.dart';
+import 'package:fl_clash/core/traffic/service.dart';
 import 'package:fl_clash/core/traffic/store.dart';
+import 'package:fl_clash/providers/providers.dart';
+import 'package:riverpod/misc.dart' show Override;
 
 class MemoryTrafficStatsStore implements TrafficStatsStore {
   MemoryTrafficStatsStore([this.value]);
@@ -23,3 +27,19 @@ class MemoryTrafficStatsStore implements TrafficStatsStore {
     writes++;
   }
 }
+
+/// The real provider starts sampling timers as soon as preferences load, which
+/// another file in the same test isolate may already have done; a test that
+/// does not look at traffic overrides it with a service that never starts.
+Override idleTrafficStatsOverride() => trafficStatsProvider.overrideWithValue(
+  TrafficAccountingService(
+    store: MemoryTrafficStatsStore(),
+    readSnapshot: () async => const TrafficSnapshot(
+      version: 1,
+      epoch: 1,
+      mainlandDirect: TrafficBytes.zero,
+      proxy: TrafficBytes.zero,
+      otherDirect: TrafficBytes.zero,
+    ),
+  ),
+);

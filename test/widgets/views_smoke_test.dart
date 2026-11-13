@@ -36,6 +36,7 @@ import '../helpers/test_database_providers.dart';
 import '../helpers/test_profiles.dart';
 import '../helpers/host_scaffold.dart';
 import 'package:prism_ui/prism_ui.dart';
+import '../helpers/traffic_stats_store.dart';
 
 Finder _portField(String label) => find.descendant(
   of: find.widgetWithText(FormRow, label),
@@ -79,6 +80,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           profilesProvider.overrideWith(TestProfiles.new),
           scriptsProvider.overrideWith(TestScripts.new),
           globalRulesProvider.overrideWith(TestGlobalRules.new),
@@ -129,7 +131,10 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       final container = ProviderContainer(
-        overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+        overrides: [
+          idleTrafficStatsOverride(),
+          profilesProvider.overrideWith(TestProfiles.new),
+        ],
       );
       addTearDown(container.dispose);
       globalState.container = container;
@@ -168,7 +173,10 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     final container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+      overrides: [
+        idleTrafficStatsOverride(),
+        profilesProvider.overrideWith(TestProfiles.new),
+      ],
     );
     addTearDown(container.dispose);
     globalState.container = container;
@@ -211,7 +219,10 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     final container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+      overrides: [
+        idleTrafficStatsOverride(),
+        profilesProvider.overrideWith(TestProfiles.new),
+      ],
     );
     addTearDown(container.dispose);
     globalState.container = container;
@@ -251,7 +262,10 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     final container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+      overrides: [
+        idleTrafficStatsOverride(),
+        profilesProvider.overrideWith(TestProfiles.new),
+      ],
     );
     addTearDown(container.dispose);
     globalState.container = container;
@@ -307,6 +321,7 @@ void main() {
     );
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         profilesProvider.overrideWith(() => TestProfiles([profile])),
         currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
         currentGroupsStateProvider.overrideWithValue(
@@ -395,6 +410,7 @@ void main() {
     );
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         profilesProvider.overrideWith(() => TestProfiles([profile])),
         currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
         profileRulesProvider.overrideWith2((_) => _TestProfileRules(rules)),

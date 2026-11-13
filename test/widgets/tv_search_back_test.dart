@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/glyph_finders.dart';
 import '../helpers/test_app.dart';
+import '../helpers/traffic_stats_store.dart';
 
 void main() {
   testWidgets('desktop escape runs the back flow and exits search', (
@@ -22,6 +23,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         profilesProvider.overrideWithValue([
           const Profile(id: 1, autoUpdateDuration: Duration.zero),
         ]),
@@ -90,6 +92,7 @@ void main() {
     var closeCount = 0;
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         profilesProvider.overrideWithValue([
           const Profile(id: 1, autoUpdateDuration: Duration.zero),
         ]),

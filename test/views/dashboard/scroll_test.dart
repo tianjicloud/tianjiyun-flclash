@@ -8,13 +8,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_app.dart';
 import '../../helpers/test_profiles.dart';
+import '../../helpers/traffic_stats_store.dart';
 
 void main() {
   late ProviderContainer container;
 
   setUp(() {
     container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+      overrides: [
+        idleTrafficStatsOverride(),
+        profilesProvider.overrideWith(TestProfiles.new),
+      ],
     );
     globalState.container = container;
   });

@@ -23,6 +23,7 @@ import 'package:mocktail/mocktail.dart';
 import '../helpers/app_paths.dart';
 import '../helpers/test_app.dart';
 import '../helpers/test_profiles.dart';
+import '../helpers/traffic_stats_store.dart';
 
 class _MockCore extends Mock implements CoreHandlerInterface {}
 
@@ -57,6 +58,7 @@ void main() {
   }) {
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         profilesProvider.overrideWith(() => TestProfiles(profiles)),
         if (importer != null)
           profilesActionProvider.overrideWith(() => importer),

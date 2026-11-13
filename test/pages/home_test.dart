@@ -25,6 +25,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../helpers/glyph_finders.dart';
 import '../helpers/test_app.dart';
 import '../helpers/host_scaffold.dart';
+import '../helpers/traffic_stats_store.dart';
 
 Finder _glyph(Glyph glyph) => find.byGlyph(glyph);
 
@@ -48,6 +49,7 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
         final container = ProviderContainer(
           overrides: [
+            idleTrafficStatsOverride(),
             _dashboardProfileOverride,
             navigationItemsStateProvider.overrideWithValue(
               NavigationItemsState(
@@ -149,6 +151,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -197,7 +200,9 @@ void main() {
   testWidgets('the frame before the view size is known paints the page', (
     tester,
   ) async {
-    final container = ProviderContainer(overrides: [_dashboardProfileOverride]);
+    final container = ProviderContainer(
+      overrides: [idleTrafficStatsOverride(), _dashboardProfileOverride],
+    );
     addTearDown(container.dispose);
     globalState.container = container;
 
@@ -228,6 +233,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
@@ -345,6 +351,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -415,6 +422,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
@@ -465,6 +473,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
@@ -553,6 +562,7 @@ void main() {
       final profile = Profile.normal();
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           profilesProvider.overrideWith(() => _HomeTestProfiles([profile])),
           currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
           versionProvider.overrideWithBuild((_, _) => 15),
@@ -594,7 +604,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       final container = ProviderContainer(
-        overrides: [_dashboardProfileOverride],
+        overrides: [idleTrafficStatsOverride(), _dashboardProfileOverride],
       );
       addTearDown(container.dispose);
       globalState.container = container;
@@ -650,6 +660,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
@@ -782,6 +793,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -898,6 +910,7 @@ void main() {
     final profiles = item(AppGlyphs.profiles, PageLabel.profiles);
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWith(
           (ref) =>
@@ -961,6 +974,7 @@ void main() {
     final tools = item(AppGlyphs.tools, PageLabel.tools);
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWith(
           (ref) =>
@@ -1021,6 +1035,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1089,6 +1104,7 @@ void main() {
     double? inset;
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1148,6 +1164,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1216,6 +1233,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
@@ -1287,6 +1305,7 @@ void main() {
     final inits = <PageLabel>[];
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1347,6 +1366,7 @@ void main() {
     var query = '';
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1411,6 +1431,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1470,6 +1491,7 @@ void main() {
     var query = '';
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1542,6 +1564,7 @@ void main() {
     final results = <String?>[];
     final container = ProviderContainer(
       overrides: [
+        idleTrafficStatsOverride(),
         _dashboardProfileOverride,
         navigationItemsStateProvider.overrideWithValue(
           NavigationItemsState(
@@ -1620,6 +1643,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          idleTrafficStatsOverride(),
           _dashboardProfileOverride,
           navigationItemsStateProvider.overrideWithValue(
             NavigationItemsState(
