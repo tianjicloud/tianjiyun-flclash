@@ -28,9 +28,7 @@ class MemoryTrafficStatsStore implements TrafficStatsStore {
   }
 }
 
-/// The real provider starts sampling timers as soon as preferences load, which
-/// another file in the same test isolate may already have done; a test that
-/// does not look at traffic overrides it with a service that never starts.
+/// Never starts the sampling timers that outlive a test in a shared isolate.
 Override idleTrafficStatsOverride() => trafficStatsProvider.overrideWithValue(
   TrafficAccountingService(
     store: MemoryTrafficStatsStore(),
