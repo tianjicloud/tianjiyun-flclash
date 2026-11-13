@@ -282,7 +282,10 @@ class _BusinessBody extends ConsumerWidget {
       BusinessDashboardCard.aiAvailability => const BusinessAIStatusCard(),
       BusinessDashboardCard.networkSpeed => const NetworkSpeedCard(),
       BusinessDashboardCard.trafficSavings => const TrafficSavingsCard(),
-      BusinessDashboardCard.proxyGroups => const ProxyGroupsCard(),
+      BusinessDashboardCard.proxyGroups =>
+        density.isDesktop
+            ? const ProxyGroupsCard()
+            : SizedBox(height: 286 * scale, child: const ProxyGroupsCard()),
       BusinessDashboardCard.connectionStats => const ConnectionStatsCard(),
       BusinessDashboardCard.intranetIp => const IntranetIpCard(),
     };
@@ -555,13 +558,7 @@ class _BusinessBody extends ConsumerWidget {
                                     (!MacOSStyle.of(context) ||
                                         card !=
                                             BusinessDashboardCard
-                                                .residentialLines) &&
-                                    (!MacOSStyle.of(context) ||
-                                        coreConnected ||
-                                        !{
-                                          BusinessDashboardCard.networkSpeed,
-                                          BusinessDashboardCard.connectionStats,
-                                        }.contains(card)),
+                                                .residentialLines),
                               )
                               .toList();
                           return Wrap(
@@ -571,7 +568,20 @@ class _BusinessBody extends ConsumerWidget {
                               for (final card in gridCards)
                                 SizedBox(
                                   width: width,
-                                  child: configuredCard(card),
+                                  height: 260 * scale,
+                                  child: Visibility(
+                                    visible:
+                                        !MacOSStyle.of(context) ||
+                                        coreConnected ||
+                                        !{
+                                          BusinessDashboardCard.networkSpeed,
+                                          BusinessDashboardCard.connectionStats,
+                                        }.contains(card),
+                                    maintainAnimation: true,
+                                    maintainState: true,
+                                    maintainSize: true,
+                                    child: configuredCard(card),
+                                  ),
                                 ),
                             ],
                           );

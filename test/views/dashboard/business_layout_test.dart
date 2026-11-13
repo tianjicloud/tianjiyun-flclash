@@ -25,6 +25,9 @@ import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
 import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:fl_clash/views/dashboard/widgets/profiles.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart';
+import 'package:fl_clash/views/dashboard/widgets/core_status_button.dart';
+import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic.dart';
 import 'package:fl_clash/views/dashboard/widgets/quick_lines.dart';
 import 'package:fl_clash/views/about.dart';
@@ -178,6 +181,189 @@ void main() {
   tearDown(() {
     container.dispose();
     stats.dispose();
+  });
+
+  testWidgets('dashboard sections keep their rects as live state changes', (
+    tester,
+  ) async {
+    for (final (viewport, platform, targetPlatform) in [
+      (const Size(560, 3000), SupportPlatform.Android, TargetPlatform.android),
+      (const Size(1280, 3000), SupportPlatform.Windows, TargetPlatform.windows),
+      (const Size(1280, 3000), SupportPlatform.MacOS, TargetPlatform.macOS),
+    ]) {
+      tester.view.physicalSize = viewport;
+      tester.view.devicePixelRatio = 1;
+      final dashboard = ProviderContainer(
+        parent: container,
+        overrides: [
+          outboundIpProbeProvider.overrideWith(_VerifiedIpProbe.new),
+          coreStatusProvider.overrideWithBuild(
+            (_, _) => CoreStatus.disconnected,
+          ),
+          currentProfileProvider.overrideWithValue(
+            container.read(currentProfileProvider),
+          ),
+          networkSettingProvider.overrideWithBuild(
+            (_, _) => const NetworkProps(systemProxy: true),
+          ),
+          selectionCheckProvider.overrideWithBuild(
+            (_, _) => SelectionVerdict.untouched,
+          ),
+        ],
+      );
+      addTearDown(dashboard.dispose);
+      dashboard.read(runTimeProvider.notifier).value = 1000;
+      final testUrl = dashboard.read(realTestUrlProvider());
+      dashboard
+          .read(delayDataSourceProvider.notifier)
+          .setDelay(Delay(name: 'home-a', url: testUrl, value: 1));
+      dashboard
+          .read(outboundIpProbeProvider.notifier)
+          .state = const RoutedProbeState({
+        routedOutbound: ProbeEntry(
+          phase: ProbePhase.fresh,
+          value: IpInfo(ip: '1.1.1.1', countryCode: 'US'),
+        ),
+      });
+      dashboard
+          .read(appSettingProvider.notifier)
+          .update(
+            (state) => state.copyWith(
+              businessDashboardCards: BusinessDashboardCard.values,
+            ),
+          );
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: dashboard,
+          child: TestApp(
+            theme: ThemeData(platform: targetPlatform),
+            child: BusinessDashboardView(platform: platform),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      List<({String type, Rect rect})> dashboardRects() => [
+        for (final element in find.byType(DashboardCard).evaluate())
+          if (element.renderObject case final RenderBox box)
+            (
+              type: element.widget.runtimeType.toString(),
+              rect: box.localToGlobal(Offset.zero) & box.size,
+            ),
+        for (final finder in [
+          find.byType(CurrentOutboundCard),
+          find.byType(SceneBar),
+          find.byType(QuickLines),
+          find.byType(BusinessLineCard),
+          find.byType(CoreStatusButton),
+        ])
+          for (final element in finder.evaluate())
+            if (element.renderObject case final RenderBox box)
+              (
+                type: element.widget.runtimeType.toString(),
+                rect: box.localToGlobal(Offset.zero) & box.size,
+              ),
+        for (final element
+            in find
+                .byWidgetPredicate(
+                  (widget) => widget.runtimeType.toString() == '_ControlBar',
+                )
+                .evaluate())
+          if (element.renderObject case final RenderBox box)
+            (
+              type: element.widget.runtimeType.toString(),
+              rect: box.localToGlobal(Offset.zero) & box.size,
+            ),
+      ];
+
+      final initial = dashboardRects();
+      expect(initial, isNotEmpty);
+
+      dashboard
+          .read(trafficsProvider.notifier)
+          .addTraffic(const Traffic(up: 1, down: 1));
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard
+          .read(trafficsProvider.notifier)
+          .addTraffic(const Traffic(up: 999900000, down: 999900000));
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard.read(runTimeProvider.notifier).value = 3599999000;
+      await tester.pump();
+      expect(dashboardRects(), initial);
+      await tester.pump(const Duration(seconds: 1));
+
+      dashboard
+          .read(outboundIpProbeProvider.notifier)
+          .state = const RoutedProbeState({
+        routedOutbound: ProbeEntry(
+          phase: ProbePhase.fresh,
+          value: IpInfo(ip: '255.255.255.255', countryCode: 'US'),
+        ),
+      });
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard
+          .read(delayDataSourceProvider.notifier)
+          .setDelay(Delay(name: 'home-a', url: testUrl, value: 9999));
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard.read(coreStatusProvider.notifier).value = CoreStatus.connected;
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard.read(coreStatusProvider.notifier).value =
+          CoreStatus.disconnected;
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      dashboard
+          .read(outboundIpProbeProvider.notifier)
+          .state = const RoutedProbeState({
+        routedOutbound: ProbeEntry(phase: ProbePhase.failed),
+      });
+      await tester.pump();
+      expect(dashboardRects(), initial);
+
+      final tallRects = dashboardRects();
+      final pageScroll = find
+          .descendant(
+            of: find.byType(SingleChildScrollView).first,
+            matching: find.byType(Scrollable),
+          )
+          .first;
+      final scrollable = tester.state<ScrollableState>(pageScroll);
+      expect(scrollable.position.maxScrollExtent, 0);
+      tester.view.physicalSize = Size(viewport.width, 900);
+      await tester.pump();
+      await tester.pump();
+      expect(scrollable.position.maxScrollExtent, greaterThan(0));
+      final shortRects = dashboardRects();
+      expect(shortRects.length, tallRects.length);
+      for (var index = 0; index < tallRects.length; index++) {
+        expect(shortRects[index].type, tallRects[index].type);
+        expect(shortRects[index].rect.left, tallRects[index].rect.left);
+        expect(shortRects[index].rect.width, tallRects[index].rect.width);
+      }
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+    }
+    addTearDown(tester.view.reset);
   });
 
   testWidgets('verified dashboard pill keeps the connected label', (

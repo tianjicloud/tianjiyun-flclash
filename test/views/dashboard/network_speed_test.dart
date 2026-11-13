@@ -121,7 +121,7 @@ void main() {
     await teardownCard(tester);
   });
 
-  testWidgets('a phone tile grows rather than clip a scaled up total', (
+  testWidgets('a phone tile keeps its reserved dimensions at scaled text', (
     tester,
   ) async {
     tester.platformDispatcher.textScaleFactorTestValue = 2;
@@ -130,7 +130,7 @@ void main() {
     await pumpCard(tester, const NetworkSpeedCard());
 
     final rect = tester.getRect(tileOf('Upload'));
-    expect(rect.height, greaterThan(rect.width / 1.45 + 1));
+    expect(rect.height, closeTo(rect.width / 1.45, 1));
     final total = tester.getRect(find.textContaining('Total').first);
     expect(total.bottom, lessThanOrEqualTo(rect.bottom));
     expect(tester.takeException(), isNull);

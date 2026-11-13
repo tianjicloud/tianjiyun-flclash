@@ -54,21 +54,28 @@ class _Figure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: show.value,
-            style: DashboardText.figure(context, style),
-          ),
-          TextSpan(
-            text: ' $unit',
-            style: DashboardText.unit(context, unitStyle),
-          ),
-        ],
+    final scale = DashboardDensityScope.scaleOf(context);
+    return SizedBox(
+      width: double.infinity,
+      height: style.leading * scale,
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: show.value,
+              style: DashboardText.figure(context, style),
+            ),
+            TextSpan(
+              text: ' $unit',
+              style: DashboardText.unit(context, unitStyle),
+            ),
+          ],
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+        style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
       ),
-      maxLines: 1,
-      overflow: TextOverflow.clip,
     );
   }
 }
@@ -178,10 +185,15 @@ class SpeedCard extends ConsumerWidget {
                   unitStyle: AppTextStyle.subheadline,
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  appLocalizations.trafficTotal(dashboardTraffic(total)),
-                  maxLines: 1,
-                  style: DashboardText.label(context),
+                SizedBox(
+                  width: double.infinity,
+                  height: AppTextStyle.footnote.leading * scale,
+                  child: Text(
+                    appLocalizations.trafficTotal(dashboardTraffic(total)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: DashboardText.label(context),
+                  ),
                 ),
               ],
             ),
@@ -230,8 +242,7 @@ class NetworkSpeedCard extends ConsumerWidget {
   }
 }
 
-/// Keeps one shape at every width, growing only when the text needs more. The
-/// chart fills the tile under the title row, behind the figure and the total.
+/// The chart fills the tile under the title row, behind the figure and total.
 class _SpeedTile extends StatelessWidget {
   const _SpeedTile({
     required this.direction,
@@ -309,13 +320,19 @@ class _SpeedTile extends StatelessWidget {
                       style: AppTextStyle.title1,
                       unitStyle: AppTextStyle.footnote,
                     ),
-                    Text(
-                      context.appLocalizations.trafficTotal(
-                        dashboardTraffic(total),
+                    SizedBox(
+                      width: double.infinity,
+                      height:
+                          AppTextStyle.footnote.leading *
+                          DashboardDensityScope.scaleOf(context),
+                      child: Text(
+                        context.appLocalizations.trafficTotal(
+                          dashboardTraffic(total),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: DashboardText.label(context),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: DashboardText.label(context),
                     ),
                   ],
                 ),

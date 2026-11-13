@@ -265,8 +265,6 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
       final toggle = _StartToggle(
         size: density.isDesktop
             ? MacOSMetrics.dashboardPowerSize(context, fallback: 184)
-            : isStart
-            ? 164
             : 180,
         enabled: hasProfile,
         running: isStart,
@@ -359,33 +357,55 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                     centered: true,
                   ),
                 ),
-                SizedBox(height: isStart ? 6 : 12),
-                Center(child: toggle),
-                if (isStart) ...[
-                  const SizedBox(height: 10),
-                  _MobileConnectedSummary(
-                    info: ipInfo,
-                    failed: failed,
-                    loading: loading,
-                    active: active,
-                    quality: quality,
-                    line: line,
-                    onRefresh: () => _refresh(ipInfo?.ip),
+                const SizedBox(height: 6),
+                SizedBox(
+                  height: 380,
+                  child: Column(
+                    mainAxisAlignment: isStart
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.center,
+                    children: [
+                      Center(child: toggle),
+                      const SizedBox(height: 10),
+                      if (isStart)
+                        SizedBox(
+                          height: 190,
+                          child: _MobileConnectedSummary(
+                            info: ipInfo,
+                            failed: failed,
+                            loading: loading,
+                            active: active,
+                            quality: quality,
+                            line: line,
+                            onRefresh: () => _refresh(ipInfo?.ip),
+                          ),
+                        )
+                      else
+                        const _BusinessIdlePrompt(),
+                    ],
                   ),
-                ] else ...[
-                  const SizedBox(height: 12),
-                  const _BusinessIdlePrompt(),
-                ],
-                if (showBusinessSelection) ...[
-                  const SizedBox(height: 12),
-                  const SelectionNotice(),
-                ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 56,
+                  child: ClipRect(
+                    child: Visibility(
+                      visible: showBusinessSelection,
+                      maintainAnimation: true,
+                      maintainSize: true,
+                      maintainState: true,
+                      child: const SingleChildScrollView(
+                        child: SelectionNotice(),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
       final businessContent = density.isDesktop
           ? content
           : ConstrainedBox(
-              constraints: BoxConstraints(minHeight: isStart ? 336 : 311),
+              constraints: const BoxConstraints(minHeight: 410),
               child: content,
             );
       return DashboardCard(
@@ -411,12 +431,7 @@ class _CurrentOutboundCardState extends ConsumerState<CurrentOutboundCard>
                       MacOSStyle.of(context) ? 16 : 26,
                       MacOSStyle.of(context) ? 8 : 13,
                     )
-                  : EdgeInsetsDirectional.fromSTEB(
-                      20,
-                      isStart ? 18 : 22,
-                      20,
-                      18,
-                    ),
+                  : const EdgeInsetsDirectional.fromSTEB(20, 22, 20, 18),
               child: businessContent,
             ),
           ],
@@ -851,47 +866,50 @@ class _MacOSBusinessHero extends StatelessWidget {
       BusinessExitWarningKind.tunUnauthorized => strings.businessAuthorizeTun,
       null => null,
     };
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(26, 24, 26, 24),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AnimatedSwitcher(
-                  duration: context.motionDuration(commonDuration),
-                  child: Text(
-                    title,
-                    key: ValueKey(title),
-                    style: AppTextStyle.largeTitle.of(
-                      context,
-                      emphasized: true,
+    return SizedBox(
+      height: 300,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(26, 24, 26, 24),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AnimatedSwitcher(
+                    duration: context.motionDuration(commonDuration),
+                    child: Text(
+                      title,
+                      key: ValueKey(title),
+                      style: AppTextStyle.largeTitle.of(
+                        context,
+                        emphasized: true,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                DefaultTextStyle(
-                  style: AppTextStyle.body
-                      .of(context)
-                      .copyWith(color: context.colorScheme.onSurfaceVariant),
-                  child: subtitleWidget,
-                ),
-                if (abnormal && action != null && actionLabel != null) ...[
-                  const SizedBox(height: 16),
-                  FilledButton(onPressed: action, child: Text(actionLabel)),
+                  const SizedBox(height: 8),
+                  DefaultTextStyle(
+                    style: AppTextStyle.body
+                        .of(context)
+                        .copyWith(color: context.colorScheme.onSurfaceVariant),
+                    child: subtitleWidget,
+                  ),
+                  if (abnormal && action != null && actionLabel != null) ...[
+                    const SizedBox(height: 16),
+                    FilledButton(onPressed: action, child: Text(actionLabel)),
+                  ],
+                  if (running && !connecting && !abnormal) ...[
+                    const SizedBox(height: 20),
+                    _MacOSMetricRow(delay: delay, runTime: runTime),
+                  ],
                 ],
-                if (running && !connecting && !abnormal) ...[
-                  const SizedBox(height: 20),
-                  _MacOSMetricRow(delay: delay, runTime: runTime),
-                ],
-              ],
+              ),
             ),
-          ),
-          const SizedBox(width: 28),
-          RepaintBoundary(child: toggle),
-        ],
+            const SizedBox(width: 28),
+            RepaintBoundary(child: toggle),
+          ],
+        ),
       ),
     );
   }
@@ -917,28 +935,32 @@ class _MacOSMetricRow extends ConsumerWidget {
         context.appLocalizations.upload,
         '${speed.up.traffic.value} ${speed.up.traffic.unit}/s',
       ),
-      if (delay case final value? when value >= 0)
-        (context.appLocalizations.delay, '$value ms'),
-      if (runTime case final value?)
-        (context.appLocalizations.runTime, getTimeText(value)),
+      (context.appLocalizations.delay, delay == null ? '—' : '$delay ms'),
+      (
+        context.appLocalizations.runTime,
+        runTime == null ? '—' : getTimeText(runTime!),
+      ),
     ];
-    return Wrap(
-      spacing: 28,
-      runSpacing: 10,
+    return Row(
       children: [
         for (final (label, amount) in metrics)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 4,
-            children: [
-              Text(label, style: DashboardText.label(context)),
-              Text(
-                amount,
-                style: DashboardText.unit(
-                  context,
-                ).copyWith(color: context.colorScheme.onSurface),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 4,
+              children: [
+                Text(label, style: DashboardText.label(context)),
+                Text(
+                  amount,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: DashboardText.unit(context).copyWith(
+                    color: context.colorScheme.onSurface,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ],
+            ),
           ),
       ],
     );
@@ -1014,15 +1036,17 @@ class _BusinessHeroDetails extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        status!,
-        SizedBox(height: compact ? 6 : 10),
-        ip,
-        SizedBox(height: compact ? 8 : 12),
-        chips,
-        SizedBox(height: compact ? 10 : 14),
+        SizedBox(height: 24, child: status!),
+        const SizedBox(height: 6),
+        SizedBox(height: 70, child: ip),
+        SizedBox(height: 24, child: ClipRect(child: chips)),
+        const SizedBox(height: 6),
         if (showSelection) ...[
           const SizedBox(height: 8),
-          const SelectionNotice(),
+          const SizedBox(
+            height: 44,
+            child: SingleChildScrollView(child: SelectionNotice()),
+          ),
         ] else
           LayoutBuilder(
             builder: (context, constraints) {
@@ -1183,6 +1207,7 @@ class _MobileMetric extends StatelessWidget {
             color: active
                 ? color ?? context.colorScheme.onSurface
                 : context.colorScheme.onSurfaceVariant,
+            fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
       ),
@@ -1290,7 +1315,7 @@ class _BusinessChips extends StatelessWidget {
     final quality = this.quality;
     final business = BusinessTheme.of(context);
     if (info == null && quality == null && !loading) {
-      return const SizedBox.shrink();
+      return SizedBox(height: large ? 28 : 24);
     }
     final code = info?.countryCode;
     final city = info?.fromTianji == true ? null : info?.city;
@@ -1359,11 +1384,18 @@ class _BusinessChips extends StatelessWidget {
           large: large,
         ),
     ];
-    return Wrap(
-      alignment: business && large ? WrapAlignment.center : WrapAlignment.start,
-      spacing: 6,
-      runSpacing: 6,
-      children: chips,
+    return SizedBox(
+      height: large ? 28 : 24,
+      child: ClipRect(
+        child: Wrap(
+          alignment: business && large
+              ? WrapAlignment.center
+              : WrapAlignment.start,
+          spacing: 6,
+          runSpacing: 6,
+          children: chips,
+        ),
+      ),
     );
   }
 }
@@ -1588,7 +1620,10 @@ class _IpText extends ConsumerWidget {
     final hideIp = ref.watch(
       appSettingProvider.select((state) => state.hideIp),
     );
-    return DashboardFitText(hideIp ? _ipMask : ip, style: style);
+    return DashboardFitText(
+      hideIp ? _ipMask : ip,
+      style: style.copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
+    );
   }
 }
 
@@ -1865,7 +1900,10 @@ class _CellText extends StatelessWidget {
       text,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: _cellStyle(context).copyWith(color: color),
+      style: _cellStyle(context).copyWith(
+        color: color,
+        fontFeatures: const [FontFeature.tabularFigures()],
+      ),
     );
   }
 }
@@ -1880,7 +1918,9 @@ class _SpeedText extends StatelessWidget {
     '${value.value} ${value.unit}/s',
     maxLines: 1,
     overflow: TextOverflow.ellipsis,
-    style: BusinessText.heroSpeed(context),
+    style: BusinessText.heroSpeed(
+      context,
+    ).copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
   );
 }
 

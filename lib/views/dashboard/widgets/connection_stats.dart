@@ -81,10 +81,10 @@ class _Count extends StatelessWidget {
     return Text(
       dashboardCount(count),
       maxLines: 1,
-      style: DashboardText.figure(
-        context,
-        AppTextStyle.title2,
-      ).copyWith(letterSpacing: 0),
+      style: DashboardText.figure(context, AppTextStyle.title2).copyWith(
+        letterSpacing: 0,
+        fontFeatures: const [FontFeature.tabularFigures()],
+      ),
     );
   }
 }

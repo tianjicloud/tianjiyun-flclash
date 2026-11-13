@@ -966,12 +966,16 @@ void main() {
       DashboardDensity? density,
       bool glass = false,
       bool business = false,
+      TargetPlatform? targetPlatform,
     }) async {
       globalState.container = container;
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
           child: TestApp(
+            theme: targetPlatform == null
+                ? null
+                : ThemeData(platform: targetPlatform),
             child: LiquidGlassScope(
               enabled: glass,
               child: business
@@ -996,6 +1000,86 @@ void main() {
       );
       await tester.pump();
     }
+
+    testWidgets('live dashboard values keep the hero card rect fixed', (
+      tester,
+    ) async {
+      for (final (viewport, density, platform) in [
+        (const Size(390, 900), DashboardDensity.mobile, TargetPlatform.android),
+        (
+          const Size(1280, 900),
+          DashboardDensity.standard,
+          TargetPlatform.windows,
+        ),
+        (
+          const Size(1280, 900),
+          DashboardDensity.standard,
+          TargetPlatform.macOS,
+        ),
+      ]) {
+        tester.view.physicalSize = viewport;
+        tester.view.devicePixelRatio = 1;
+        container = containerWith();
+        await pumpCard(
+          tester,
+          business: true,
+          density: density,
+          targetPlatform: platform,
+        );
+
+        Rect cardRect() {
+          final box = tester.renderObject<RenderBox>(
+            find
+                .descendant(
+                  of: find.byType(CurrentOutboundCard),
+                  matching: find.byType(DashboardCard),
+                )
+                .first,
+          );
+          return box.localToGlobal(Offset.zero) & box.size;
+        }
+
+        final initial = cardRect();
+        final probe = container.read(outboundIpProbeProvider.notifier);
+        final traffic = container.read(trafficsProvider.notifier);
+        final runtime = container.read(runTimeProvider.notifier);
+        runtime.value = 1;
+        traffic.addTraffic(const Traffic(up: 1, down: 1));
+        await tester.pump();
+        expect(cardRect(), initial);
+
+        runtime.value = 445567000;
+        traffic.addTraffic(const Traffic(up: 999900000, down: 999900000));
+        probe.state = const RoutedProbeState({
+          routedOutbound: ProbeEntry(
+            phase: ProbePhase.fresh,
+            value: IpInfo(ip: '255.255.255.255', countryCode: 'US'),
+          ),
+        });
+        await tester.pump();
+        expect(cardRect(), initial);
+
+        for (final status in [
+          CoreStatus.connecting,
+          CoreStatus.connected,
+          CoreStatus.disconnected,
+        ]) {
+          container.read(coreStatusProvider.notifier).value = status;
+          await tester.pump();
+          expect(cardRect(), initial);
+        }
+        probe.state = const RoutedProbeState({
+          routedOutbound: ProbeEntry(phase: ProbePhase.failed),
+        });
+        await tester.pump();
+        expect(cardRect(), initial);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+      }
+      container = containerWith();
+      addTearDown(tester.view.reset);
+    });
 
     Finder startButton() =>
         find.byWidgetPredicate((widget) => widget is PressRegion).last;
