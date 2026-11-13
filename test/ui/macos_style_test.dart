@@ -71,7 +71,7 @@ void main() {
                 );
                 expect(
                   MacOSMetrics.cardPadding(context, fallback),
-                  macOS ? const EdgeInsets.all(12) : fallback,
+                  macOS ? const EdgeInsets.all(16) : fallback,
                 );
                 expect(
                   MacOSMetrics.buttonHeight(context, fallback: 40),
@@ -91,7 +91,7 @@ void main() {
                 );
                 expect(
                   MacOSMetrics.listRowHeight(context, fallback: 48),
-                  macOS ? 26 : 48,
+                  macOS ? 34 : 48,
                 );
                 expect(
                   MacOSMetrics.sidebarRowHeight(context, fallback: 40),
@@ -99,7 +99,43 @@ void main() {
                 );
                 expect(
                   MacOSMetrics.pageMargin(context, fallback: 16),
-                  macOS ? 20 : 16,
+                  macOS ? 24 : 16,
+                );
+                expect(
+                  MacOSMetrics.switchTrailingInset(context, fallback: 0),
+                  macOS ? 4 : 0,
+                );
+                expect(
+                  MacOSMetrics.sidebarSectionGap(context, fallback: 4),
+                  macOS ? 12 : 4,
+                );
+                expect(
+                  MacOSMetrics.pageContentInset(context, fallback: 16),
+                  macOS ? 24 : 16,
+                );
+                expect(
+                  MacOSMetrics.pageHeaderHeight(context, fallback: 56),
+                  macOS ? 44 : 56,
+                );
+                expect(
+                  MacOSMetrics.pageHeaderContentGap(context, fallback: 12),
+                  macOS ? 20 : 12,
+                );
+                expect(
+                  MacOSMetrics.narrowPageWidth(context, fallback: 900),
+                  macOS ? 680 : 900,
+                );
+                expect(
+                  MacOSMetrics.cardGap(context, fallback: 16),
+                  macOS ? 12 : 16,
+                );
+                expect(
+                  MacOSMetrics.singleLineRowHeight(context, fallback: 40),
+                  macOS ? 34 : 40,
+                );
+                expect(
+                  MacOSMetrics.doubleLineRowHeight(context, fallback: 40),
+                  macOS ? 48 : 40,
                 );
                 return const SizedBox();
               },

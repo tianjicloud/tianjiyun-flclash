@@ -440,6 +440,11 @@ class _ClashProvidersViewState extends ConsumerState<ClashProvidersView> {
           .where((provider) => provider.type == 'Proxy')
           .toList(growable: false);
       return Scaffold(
+        businessTitleInset: MacOSStyle.of(context),
+        headerMaxWidth: MacOSMetrics.narrowPageWidth(
+          context,
+          fallback: double.infinity,
+        ),
         title: appLocalizations.businessProvidersTitle,
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -504,26 +509,44 @@ class _ClashProvidersViewState extends ConsumerState<ClashProvidersView> {
                     ],
                   );
             final cards = [?proxyCard, ?ruleCard];
-            return SingleChildScrollView(
-              padding: EdgeInsets.only(
-                left: 20,
-                top: context.sectionsTopPadding + 14,
-                right: 20,
-                bottom: 20 + context.bottomInset,
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MacOSMetrics.narrowPageWidth(
+                    context,
+                    fallback: constraints.maxWidth,
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(
+                    MacOSMetrics.pageContentInset(context, fallback: 20),
+                    MacOSMetrics.pageHeaderContentGap(
+                          context,
+                          fallback: context.sectionsTopPadding + 14,
+                        ) +
+                        MacOSMetrics.cardTitleGap(context, fallback: 0),
+                    MacOSMetrics.pageContentInset(context, fallback: 20),
+                    20 + context.bottomInset,
+                  ),
+                  child:
+                      MacOSStyle.of(context) ||
+                          constraints.maxWidth < 900 ||
+                          cards.length < 2
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          spacing: MacOSMetrics.cardGap(context, fallback: 16),
+                          children: cards,
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 16,
+                          children: [
+                            for (final card in cards) Expanded(child: card),
+                          ],
+                        ),
+                ),
               ),
-              child: constraints.maxWidth >= 900 && cards.length > 1
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 16,
-                      children: [
-                        for (final card in cards) Expanded(child: card),
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      spacing: 16,
-                      children: cards,
-                    ),
             );
           },
         ),

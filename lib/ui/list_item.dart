@@ -259,10 +259,9 @@ class ListItem<T> extends StatelessWidget {
       padding: padding,
       horizontalTitleGap: horizontalTitleGap,
       minVerticalPadding: minVerticalPadding,
-      minHeight: MacOSMetrics.listRowHeight(
-        context,
-        fallback: minTileHeight ?? listRowMinHeight,
-      ),
+      minHeight:
+          minTileHeight ??
+          MacOSMetrics.listRowHeight(context, fallback: listRowMinHeight),
       alignment: alignment,
     );
     if (onTap == null) {
@@ -397,25 +396,30 @@ class ListItem<T> extends StatelessWidget {
               : () {
                   toggleAction.onChanged!(!toggleAction.value);
                 },
-          trailing: SizedBox(
-            width: MacOSMetrics.switchWidth(
-              context,
-              fallback: Switch.trackWidth,
+          trailing: Padding(
+            padding: EdgeInsetsDirectional.only(
+              end: MacOSMetrics.switchTrailingInset(context, fallback: 0),
             ),
-            height: MacOSMetrics.switchHeight(
-              context,
-              fallback: Switch.trackHeight,
-            ),
-            child: Transform.scale(
-              scale:
-                  MacOSMetrics.switchWidth(
-                    context,
-                    fallback: Switch.trackWidth,
-                  ) /
-                  Switch.trackWidth,
-              child: Switch(
-                value: toggleAction.value,
-                onChanged: toggleAction.onChanged,
+            child: SizedBox(
+              width: MacOSMetrics.switchWidth(
+                context,
+                fallback: Switch.trackWidth,
+              ),
+              height: MacOSMetrics.switchHeight(
+                context,
+                fallback: Switch.trackHeight,
+              ),
+              child: Transform.scale(
+                scale:
+                    MacOSMetrics.switchWidth(
+                      context,
+                      fallback: Switch.trackWidth,
+                    ) /
+                    Switch.trackWidth,
+                child: Switch(
+                  value: toggleAction.value,
+                  onChanged: toggleAction.onChanged,
+                ),
               ),
             ),
           ),

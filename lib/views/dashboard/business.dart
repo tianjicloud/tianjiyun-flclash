@@ -73,6 +73,9 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
       child: Builder(
         builder: (context) => Scaffold(
           businessTitleInset: !mobile,
+          backAction: _editing && MacOSStyle.of(context)
+              ? () => _setEditing(false)
+              : null,
           backgroundColor: DashboardColors.of(context).page,
           opaqueAppBar: context.colorScheme.brightness == Brightness.light,
           title: _editing ? appLocalizations.editDashboard : null,
@@ -127,7 +130,19 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
                   ),
                 ],
           actions: [
-            if (!_editing && mobile) ...[
+            if (_editing && MacOSStyle.of(context))
+              BusinessSecondaryButton(
+                label: appLocalizations.reset,
+                width: 64,
+                onPressed: () => ref
+                    .read(appSettingProvider.notifier)
+                    .update(
+                      (state) => state.copyWith(
+                        businessDashboardCards: defaultBusinessDashboardCards,
+                      ),
+                    ),
+              )
+            else if (!_editing && mobile) ...[
               const _MobileNotice(),
               const UpdateStatusButton(),
             ] else if (!_editing) ...[

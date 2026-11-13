@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:prism_ui/prism_ui.dart' show ElasticPress, Theme;
+import 'package:prism_ui/prism_ui.dart'
+    show BuildContextExtension, ElasticPress, Theme;
 
 class MacOSTextScaler extends TextScaler {
   const MacOSTextScaler(this.userScale);
@@ -106,12 +107,60 @@ class MacOSPressFeedback extends StatelessWidget {
 }
 
 abstract final class MacOSMetrics {
+  static double pageContentInset(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 24 : fallback;
+  static double pageHeaderHeight(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 44 : fallback;
+  static double pageHeaderTopInset(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 13 : fallback;
+  static double pageHeaderContentGap(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 20 : fallback;
+  static double pageContentTop(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context)
+      ? context.appBarInset + pageHeaderContentGap(context, fallback: fallback)
+      : fallback;
+  static double narrowPageWidth(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 680 : fallback;
+  static double cardGap(BuildContext context, {required double fallback}) =>
+      MacOSStyle.of(context) ? 12 : fallback;
+  static double cardTitleGap(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 8 : fallback;
+  static double singleLineRowHeight(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 34 : fallback;
+  static double doubleLineRowHeight(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 48 : fallback;
+  static double sidebarSectionGap(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 12 : fallback;
+  static double switchTrailingInset(
+    BuildContext context, {
+    required double fallback,
+  }) => MacOSStyle.of(context) ? 4 : fallback;
   static double cardRadius(BuildContext context, {required double fallback}) =>
       MacOSStyle.of(context) ? 9 : fallback;
   static EdgeInsets cardPadding(
     BuildContext context,
     EdgeInsetsGeometry fallback,
-  ) => (MacOSStyle.of(context) ? const EdgeInsets.all(12) : fallback).resolve(
+  ) => (MacOSStyle.of(context) ? const EdgeInsets.all(16) : fallback).resolve(
     Directionality.of(context),
   );
   static EdgeInsets compactCardPadding(
@@ -149,7 +198,7 @@ abstract final class MacOSMetrics {
     required double appBarInset,
     required double fallback,
   }) => MacOSStyle.of(context)
-      ? (appBarInset - 2).clamp(0, double.infinity).toDouble()
+      ? appBarInset + pageHeaderContentGap(context, fallback: fallback)
       : fallback;
   static double switchWidth(BuildContext context, {required double fallback}) =>
       MacOSStyle.of(context) ? 32 : fallback;
@@ -168,7 +217,7 @@ abstract final class MacOSMetrics {
   static double listRowHeight(
     BuildContext context, {
     required double fallback,
-  }) => MacOSStyle.of(context) ? 26 : fallback;
+  }) => MacOSStyle.of(context) ? 34 : fallback;
   static double proxyGroupHeaderHeight(
     BuildContext context, {
     required double fallback,
@@ -182,5 +231,5 @@ abstract final class MacOSMetrics {
     required double fallback,
   }) => MacOSStyle.of(context) ? 16 : fallback;
   static double pageMargin(BuildContext context, {required double fallback}) =>
-      MacOSStyle.of(context) ? 20 : fallback;
+      MacOSStyle.of(context) ? 24 : fallback;
 }

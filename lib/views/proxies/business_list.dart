@@ -96,8 +96,16 @@ class _BusinessProxyListState extends ConsumerState<BusinessProxyList> {
                               }),
                             )
                           : Padding(
-                              padding: const EdgeInsetsDirectional.only(
-                                start: 34,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                34,
+                                index > 0 && items[index - 1].proxy == null
+                                    ? MacOSMetrics.cardTitleGap(
+                                        context,
+                                        fallback: 0,
+                                      )
+                                    : 0,
+                                0,
+                                0,
                               ),
                               child: Theme(
                                 data: Theme.of(context).copyWith(

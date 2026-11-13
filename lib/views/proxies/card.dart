@@ -272,7 +272,7 @@ class ProxyCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: MacOSMetrics.listRowHeight(context, fallback: 44),
+            height: MacOSMetrics.singleLineRowHeight(context, fallback: 30),
             child: Row(
               spacing: 10,
               children: [
@@ -292,18 +292,27 @@ class ProxyCard extends ConsumerWidget {
               ],
             ),
           ),
-          if (multiplier case final value?)
-            Padding(
+          SizedBox(
+            height: 14,
+            child: Padding(
               padding: EdgeInsetsDirectional.only(
                 start: region.code == null ? 0 : 42,
               ),
-              child: Text(
-                context.appLocalizations.businessMultiplier(value),
-                style: AppTextStyle.caption1
-                    .of(context)
-                    .copyWith(color: context.colorScheme.onSurfaceVariant),
-              ),
+              child: multiplier == null
+                  ? null
+                  : Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        context.appLocalizations.businessMultiplier(multiplier),
+                        style: AppTextStyle.caption1
+                            .of(context)
+                            .copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                    ),
             ),
+          ),
         ],
       );
     }

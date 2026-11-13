@@ -440,6 +440,7 @@ class GeneralView extends ConsumerWidget {
               ),
             ],
           ),
+          SizedBox(height: MacOSMetrics.cardGap(context, fallback: 0)),
           if (!MacOSStyle.of(context)) ...[
             const SizedBox(height: 14),
             BusinessSettingsCard(

@@ -171,6 +171,14 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
                     child: _buildMobileFeedSelector(context),
                   ),
+                if (pinned &&
+                    isBusiness &&
+                    MacOSStyle.of(context) &&
+                    _feed == RequestFeed.live)
+                  ValueListenableBuilder<TrackerInfosState>(
+                    valueListenable: _live,
+                    builder: (context, _, _) => _buildLiveSummary(context, 28),
+                  ),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -187,7 +195,9 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                     child: body!,
                   ),
                 ),
-                if (_feed == RequestFeed.live && (pinned || !isBusiness))
+                if (_feed == RequestFeed.live &&
+                    (pinned || !isBusiness) &&
+                    !(pinned && isBusiness && MacOSStyle.of(context)))
                   ValueListenableBuilder<TrackerInfosState>(
                     valueListenable: _live,
                     builder: (context, _, _) => _buildLiveSummary(

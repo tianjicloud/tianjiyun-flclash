@@ -85,119 +85,203 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
     ].where((entry) => entry.$2 > 0).toList();
     return BusinessAppearance(
       child: Scaffold(
+        businessTitleInset: MacOSStyle.of(context),
+        headerMaxWidth: MacOSMetrics.narrowPageWidth(
+          context,
+          fallback: double.infinity,
+        ),
         title: l10n.serviceStatus,
-        body: ListView(
-          padding: EdgeInsets.fromLTRB(
-            24,
-            context.contentTopPadding,
-            24,
-            24 + context.bottomInset,
+        body: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MacOSMetrics.narrowPageWidth(
+                context,
+                fallback: double.infinity,
+              ),
+            ),
+            child: ListView(
+              padding: EdgeInsets.fromLTRB(
+                MacOSMetrics.pageContentInset(context, fallback: 24),
+                MacOSMetrics.pageContentTop(
+                  context,
+                  fallback: context.contentTopPadding,
+                ),
+                MacOSMetrics.pageContentInset(context, fallback: 24),
+                24 + context.bottomInset,
+              ),
+              children: [
+                BusinessSettingsCard(
+                  key: MacOSStyle.of(context)
+                      ? const ValueKey('macos-service-status-first-card')
+                      : null,
+                  title: l10n.service,
+                  trailing: BusinessSecondaryButton(
+                    label: l10n.restartService,
+                    width: 132,
+                    onPressed: status == CoreStatus.connecting
+                        ? null
+                        : _restart,
+                  ),
+                  items: [
+                    ListItem(
+                      title: Text(l10n.serviceStatus),
+                      trailing: Text(
+                        running ? l10n.running : l10n.notRunning,
+                        style: BusinessText.metaValue(context).copyWith(
+                          color: running
+                              ? BusinessPalette.connectedForegroundFor(
+                                  context.colorScheme.brightness,
+                                )
+                              : BusinessPalette.disconnectedForegroundFor(
+                                  context.colorScheme.brightness,
+                                ),
+                        ),
+                      ),
+                    ),
+                    if (runtime != null)
+                      ListItem(
+                        title: Text(l10n.businessKernelUptime),
+                        trailing: Text(
+                          _formatRuntime(runtime),
+                          style: BusinessText.metaValue(context),
+                        ),
+                      ),
+                    for (final port in ports)
+                      ListItem(
+                        title: Text(port.$1),
+                        trailing: Text(
+                          '127.0.0.1:${port.$2}',
+                          style: BusinessText.metaValue(context),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                BusinessSettingsCard(
+                  title: l10n.memoryInfo,
+                  trailing: BusinessSecondaryButton(
+                    label: l10n.releaseCache,
+                    width: 132,
+                    onPressed: running ? _releaseCache : null,
+                  ),
+                  items: [
+                    if (MacOSStyle.of(context))
+                      FutureBuilder(
+                        future: _memory,
+                        builder: (context, snapshot) {
+                          final memory = snapshot.data;
+                          final rows = <Widget>[
+                            if (memory?.app case final app?)
+                              ListItem(
+                                title: Text(
+                                  system.isAndroid
+                                      ? l10n.interfaceAndKernelCombined
+                                      : l10n.interfaceMemory,
+                                ),
+                                trailing: Text(
+                                  '${app.traffic.value} ${app.traffic.unit}',
+                                  style: BusinessText.metaValue(context),
+                                ),
+                              ),
+                            if (running && !system.isAndroid)
+                              if (memory?.core case final core?) ...[
+                                ListItem(
+                                  title: Text(l10n.serviceMemory),
+                                  trailing: Text(
+                                    '${core.rss.traffic.value} ${core.rss.traffic.unit}',
+                                    style: BusinessText.metaValue(context),
+                                  ),
+                                ),
+                                ListItem(
+                                  title: Text(l10n.heapInUse),
+                                  trailing: Text(
+                                    '${core.heapInuse.traffic.value} ${core.heapInuse.traffic.unit}',
+                                    style: BusinessText.metaValue(context),
+                                  ),
+                                ),
+                              ],
+                          ];
+                          return Column(
+                            children: [
+                              for (
+                                var index = 0;
+                                index < rows.length;
+                                index++
+                              ) ...[
+                                if (index > 0)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 18,
+                                    ),
+                                    child: ColoredBox(
+                                      color: Divider.colorOf(context),
+                                      child: const SizedBox(height: 1),
+                                    ),
+                                  ),
+                                rows[index],
+                              ],
+                            ],
+                          );
+                        },
+                      )
+                    else ...[
+                      ListItem(
+                        title: Text(
+                          system.isAndroid
+                              ? l10n.interfaceAndKernelCombined
+                              : l10n.interfaceMemory,
+                        ),
+                        trailing: FutureBuilder(
+                          future: _memory,
+                          builder: (context, snapshot) {
+                            final memory = snapshot.data;
+                            final total = memory?.app;
+                            if (total == null) return const SizedBox.shrink();
+                            return Text(
+                              '${total.traffic.value} ${total.traffic.unit}',
+                              style: BusinessText.metaValue(context),
+                            );
+                          },
+                        ),
+                      ),
+                      if (running && !system.isAndroid)
+                        FutureBuilder(
+                          future: _memory,
+                          builder: (context, snapshot) {
+                            final core = snapshot.data?.core;
+                            if (core == null) return const SizedBox.shrink();
+                            return Column(
+                              children: [
+                                ListItem(
+                                  title: Text(l10n.serviceMemory),
+                                  trailing: Text(
+                                    '${core.rss.traffic.value} ${core.rss.traffic.unit}',
+                                    style: BusinessText.metaValue(context),
+                                  ),
+                                ),
+                                ListItem(
+                                  title: Text(l10n.heapInUse),
+                                  trailing: Text(
+                                    '${core.heapInuse.traffic.value} ${core.heapInuse.traffic.unit}',
+                                    style: BusinessText.metaValue(context),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                    ],
+                  ],
+                  footer: system.isAndroid
+                      ? Text(
+                          l10n.androidSharedMemory,
+                          style: BusinessText.metaValue(context),
+                        )
+                      : null,
+                ),
+              ],
+            ),
           ),
-          children: [
-            BusinessSettingsCard(
-              title: l10n.service,
-              trailing: BusinessSecondaryButton(
-                label: l10n.restartService,
-                width: 132,
-                onPressed: status == CoreStatus.connecting ? null : _restart,
-              ),
-              items: [
-                ListItem(
-                  title: Text(l10n.serviceStatus),
-                  trailing: Text(
-                    running ? l10n.running : l10n.notRunning,
-                    style: BusinessText.metaValue(context).copyWith(
-                      color: running
-                          ? BusinessPalette.connectedForegroundFor(
-                              context.colorScheme.brightness,
-                            )
-                          : BusinessPalette.disconnectedForegroundFor(
-                              context.colorScheme.brightness,
-                            ),
-                    ),
-                  ),
-                ),
-                if (runtime != null)
-                  ListItem(
-                    title: Text(l10n.businessKernelUptime),
-                    trailing: Text(
-                      _formatRuntime(runtime),
-                      style: BusinessText.metaValue(context),
-                    ),
-                  ),
-                for (final port in ports)
-                  ListItem(
-                    title: Text(port.$1),
-                    trailing: Text(
-                      '127.0.0.1:${port.$2}',
-                      style: BusinessText.metaValue(context),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            BusinessSettingsCard(
-              title: l10n.memoryInfo,
-              trailing: BusinessSecondaryButton(
-                label: l10n.releaseCache,
-                width: 132,
-                onPressed: running ? _releaseCache : null,
-              ),
-              items: [
-                ListItem(
-                  title: Text(
-                    system.isAndroid
-                        ? l10n.interfaceAndKernelCombined
-                        : l10n.interfaceMemory,
-                  ),
-                  trailing: FutureBuilder(
-                    future: _memory,
-                    builder: (context, snapshot) {
-                      final memory = snapshot.data;
-                      final total = memory?.app;
-                      if (total == null) return const SizedBox.shrink();
-                      return Text(
-                        '${total.traffic.value} ${total.traffic.unit}',
-                        style: BusinessText.metaValue(context),
-                      );
-                    },
-                  ),
-                ),
-                if (running && !system.isAndroid)
-                  FutureBuilder(
-                    future: _memory,
-                    builder: (context, snapshot) {
-                      final core = snapshot.data?.core;
-                      if (core == null) return const SizedBox.shrink();
-                      return Column(
-                        children: [
-                          ListItem(
-                            title: Text(l10n.serviceMemory),
-                            trailing: Text(
-                              '${core.rss.traffic.value} ${core.rss.traffic.unit}',
-                              style: BusinessText.metaValue(context),
-                            ),
-                          ),
-                          ListItem(
-                            title: Text(l10n.heapInUse),
-                            trailing: Text(
-                              '${core.heapInuse.traffic.value} ${core.heapInuse.traffic.unit}',
-                              style: BusinessText.metaValue(context),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-              ],
-              footer: system.isAndroid
-                  ? Text(
-                      l10n.androidSharedMemory,
-                      style: BusinessText.metaValue(context),
-                    )
-                  : null,
-            ),
-          ],
         ),
       ),
     );

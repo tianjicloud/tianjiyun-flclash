@@ -160,6 +160,29 @@ class _LogsViewState extends ConsumerState<LogsView>
         return LayoutBuilder(
           builder: (context, constraints) {
             if (!system.isDesktop || constraints.maxWidth < 1000) {
+              if (MacOSStyle.of(context)) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MacOSMetrics.pageContentInset(
+                          context,
+                          fallback: 16,
+                        ),
+                        vertical: 8,
+                      ),
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text(
+                          appLocalizations.itemsCount(logs.length),
+                          style: BusinessText.metaLabel(context),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: feed),
+                  ],
+                );
+              }
               return feed;
             }
             return Padding(
@@ -180,7 +203,7 @@ class _LogsViewState extends ConsumerState<LogsView>
                       onRun: () => refreshDiagnostics(ref),
                     ),
                   ),
-                  Expanded(child: _logCard(context, feed)),
+                  Expanded(child: _logCard(context, feed, logs.length)),
                 ],
               ),
             );
@@ -190,7 +213,7 @@ class _LogsViewState extends ConsumerState<LogsView>
     );
   }
 
-  Widget _logCard(BuildContext context, Widget feed) {
+  Widget _logCard(BuildContext context, Widget feed, int count) {
     final appLocalizations = context.appLocalizations;
     return Card(
       radius: MacOSMetrics.cardRadius(context, fallback: AppCorner.xl),
@@ -201,6 +224,12 @@ class _LogsViewState extends ConsumerState<LogsView>
             padding: const EdgeInsetsDirectional.fromSTEB(16, 10, 12, 10),
             child: Row(
               children: [
+                if (MacOSStyle.of(context))
+                  Text(
+                    appLocalizations.itemsCount(count),
+                    style: BusinessText.metaLabel(context),
+                  ),
+                if (MacOSStyle.of(context)) const SizedBox(width: 8),
                 BusinessSegmented<bool>(
                   height: MacOSMetrics.segmentedHeight(context, fallback: 30),
                   items: [

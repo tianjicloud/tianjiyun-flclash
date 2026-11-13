@@ -503,6 +503,11 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                             weight: FontWeight.w700,
                           ),
                         )
+                      : MacOSStyle.of(context)
+                      ? Text(
+                          appLocalizations.businessProfileEditTitle,
+                          style: BusinessText.pageTitle(context),
+                        )
                       : Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -546,7 +551,10 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                         ]
                 : null,
             businessTitleInset: businessEdit && !mobileView,
-            showLeading: !businessEdit || mobileView,
+            showLeading: !businessEdit || mobileView || MacOSStyle.of(context),
+            backAction: businessEdit && !mobileView && MacOSStyle.of(context)
+                ? () => Navigator.of(context).maybePop()
+                : null,
             confirmationAction: businessEdit
                 ? null
                 : IconButtonData(

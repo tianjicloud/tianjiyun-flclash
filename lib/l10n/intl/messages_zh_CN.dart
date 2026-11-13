@@ -2765,6 +2765,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "zzAutoUpdateHours": m137,
     "zzAutoUpdateIntervalLabel": m138,
     "zzExpiryDate": m139,
+    "zzMacProfileImportHint": MessageLookupByLibrary.simpleMessage(
+      "也可以从剪贴板或本地文件导入",
+    ),
     "zzProfileBasedOnOverrides": m140,
     "zzProfileExpiredDays": m141,
     "zzProfileImportHint": m142,

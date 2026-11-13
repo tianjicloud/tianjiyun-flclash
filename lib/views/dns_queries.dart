@@ -159,6 +159,7 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
         }
         final pinned = !ViewScope.isMobileOf(context);
         return Scaffold(
+          businessTitleInset: pinned && MacOSStyle.of(context),
           title: PageLabel.dns.label,
           searchState: AppBarSearchState(onSearch: _listController.search),
           keywords: _filters.keywordsOf(pinned: pinned),
@@ -170,7 +171,30 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
               onPressed: _clearDnsCache,
             ),
           ],
-          body: body!,
+          body: !widget.desktopPanel && MacOSStyle.of(context)
+              ? Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                        24,
+                        8,
+                        24,
+                        4,
+                      ),
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text(
+                          appLocalizations.itemsCount(
+                            _filters.apply(_listController.value.list).length,
+                          ),
+                          style: BusinessText.metaLabel(context),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: body!),
+                  ],
+                )
+              : body!,
         );
       },
     );
@@ -234,7 +258,9 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
                     physics: _physics,
                     controller: _scrollController,
                     padding: EdgeInsets.only(
-                      top: context.contentTopPadding,
+                      top: MacOSStyle.of(context)
+                          ? 0
+                          : context.contentTopPadding,
                       bottom: 16 + context.bottomInset,
                     ),
                     items: dnsQueries,
@@ -280,6 +306,13 @@ class _DnsQueriesViewState extends ConsumerState<DnsQueriesView>
                       emphasized: true,
                     ),
                   ),
+                  if (MacOSStyle.of(context)) ...[
+                    const SizedBox(width: 8),
+                    Text(
+                      context.appLocalizations.itemsCount(dnsQueries.length),
+                      style: BusinessText.metaLabel(context),
+                    ),
+                  ],
                   const Spacer(),
                   BusinessSegmented<DnsQueryInitiator?>(
                     height: 30,
@@ -346,9 +379,20 @@ void _showDnsQueryDetail(BuildContext context, DnsQuery dnsQuery) {
   final business = BusinessTheme.of(context) && system.isDesktop;
   showSheet<void>(
     context: context,
-    builder: (_) => Scaffold(
+    builder: (sheetContext) => Scaffold(
       body: DnsQueryDetailView(dnsQuery: dnsQuery, business: business),
       title: context.appLocalizations.details('DNS'),
+      businessTitleInset: business && MacOSStyle.of(sheetContext),
+      headerMaxWidth: business && MacOSStyle.of(sheetContext)
+          ? MacOSMetrics.narrowPageWidth(
+              sheetContext,
+              fallback: double.infinity,
+            )
+          : null,
+      backAction: business && MacOSStyle.of(sheetContext)
+          ? () => Navigator.of(sheetContext).maybePop()
+          : null,
+      preferBackButton: business && MacOSStyle.of(sheetContext),
     ),
   );
 }
@@ -699,88 +743,104 @@ class _DnsQueryDetailViewState extends ConsumerState<DnsQueryDetailView> {
     final statusBackground = dnsQuery.isFailed
         ? context.colorScheme.errorContainer
         : BusinessPalette.connectedContainerFor(brightness);
-    return ListView(
-      padding: EdgeInsets.fromLTRB(20, context.appBarInset + 12, 20, 20),
-      children: [
-        BusinessSettingsCard(
-          title: '',
-          items: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 4, 18, 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      dnsQuery.domain,
-                      style: BusinessText.customEditorTitle(context)
-                          .toJetBrainsMono
-                          .copyWith(color: context.colorScheme.onSurface),
-                    ),
-                  ),
-                  _DnsDetailBadge(
-                    label: _dnsRecordTypeLabel(l, dnsQuery.type),
-                    color: context.colorScheme.surfaceContainerHighest,
-                    foreground: context.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 8),
-                  _DnsDetailBadge(
-                    label: dnsQuery.isFailed
-                        ? l.businessDnsFailed
-                        : l.businessDnsSucceeded,
-                    color: statusBackground,
-                    foreground: statusColor,
-                  ),
-                ],
-              ),
-            ),
-            for (var index = 0; index < rows.length; index++) ...[
-              if (index > 0)
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MacOSMetrics.narrowPageWidth(
+            context,
+            fallback: double.infinity,
+          ),
+        ),
+        child: ListView(
+          padding: EdgeInsets.fromLTRB(
+            MacOSMetrics.pageContentInset(context, fallback: 20),
+            context.appBarInset + 12,
+            MacOSMetrics.pageContentInset(context, fallback: 20),
+            20,
+          ),
+          children: [
+            BusinessSettingsCard(
+              title: '',
+              items: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: ColoredBox(
-                    color: context.colorScheme.outlineVariant.withValues(
-                      alpha: 0.45,
-                    ),
-                    child: const SizedBox(height: 1),
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 12,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        rows[index].$1,
-                        style: BusinessText.metaLabel(
-                          context,
-                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Flexible(
-                      child: SelectableText(
-                        rows[index].$2,
-                        textAlign: TextAlign.end,
-                        style: BusinessText.customRuleContent(context).copyWith(
-                          color: rows[index].$1 == l.error
-                              ? context.colorScheme.error
-                              : context.colorScheme.onSurface,
+                  padding: const EdgeInsets.fromLTRB(18, 4, 18, 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          dnsQuery.domain,
+                          style: BusinessText.customEditorTitle(context)
+                              .toJetBrainsMono
+                              .copyWith(color: context.colorScheme.onSurface),
                         ),
                       ),
-                    ),
-                  ],
+                      _DnsDetailBadge(
+                        label: _dnsRecordTypeLabel(l, dnsQuery.type),
+                        color: context.colorScheme.surfaceContainerHighest,
+                        foreground: context.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 8),
+                      _DnsDetailBadge(
+                        label: dnsQuery.isFailed
+                            ? l.businessDnsFailed
+                            : l.businessDnsSucceeded,
+                        color: statusBackground,
+                        foreground: statusColor,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                for (var index = 0; index < rows.length; index++) ...[
+                  if (index > 0)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: ColoredBox(
+                        color: context.colorScheme.outlineVariant.withValues(
+                          alpha: 0.45,
+                        ),
+                        child: const SizedBox(height: 1),
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            rows[index].$1,
+                            style: BusinessText.metaLabel(context).copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Flexible(
+                          child: SelectableText(
+                            rows[index].$2,
+                            textAlign: TextAlign.end,
+                            style: BusinessText.customRuleContent(context)
+                                .copyWith(
+                                  color: rows[index].$1 == l.error
+                                      ? context.colorScheme.error
+                                      : context.colorScheme.onSurface,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 12),
+            _routeResult(context),
           ],
         ),
-        const SizedBox(height: 12),
-        _routeResult(context),
-      ],
+      ),
     );
   }
 

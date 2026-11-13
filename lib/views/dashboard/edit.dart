@@ -20,7 +20,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'layout.dart';
 import 'style.dart';
 import 'widget_registry.dart';
-import 'package:prism_ui/prism_ui.dart';
 
 const _rowHeight = 64.0;
 const _rowGap = 8.0;
@@ -141,14 +140,15 @@ class BusinessDashboardEditor extends ConsumerWidget {
               shown,
               addableCards,
             ],
-            Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: BusinessSecondaryButton(
-                label: strings.reset,
-                width: 132,
-                onPressed: () => _save(ref, defaultBusinessDashboardCards),
+            if (!MacOSStyle.of(context))
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: BusinessSecondaryButton(
+                  label: strings.reset,
+                  width: 132,
+                  onPressed: () => _save(ref, defaultBusinessDashboardCards),
+                ),
               ),
-            ),
           ],
         );
       },
@@ -170,7 +170,9 @@ class _BusinessFixedRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedBox(
     decoration: ShapeDecoration(
-      color: context.colorScheme.surfaceContainerLow,
+      color: MacOSStyle.of(context)
+          ? context.colorScheme.surface
+          : context.colorScheme.surfaceContainerLow,
       shape: AppShape.all(BusinessPalette.cardRadius),
     ),
     child: Padding(
@@ -193,7 +195,22 @@ class _BusinessFixedRow extends StatelessWidget {
               ],
             ),
           ),
-          Text(context.appLocalizations.docked),
+          if (MacOSStyle.of(context))
+            DecoratedBox(
+              decoration: ShapeDecoration(
+                color: context.colorScheme.surfaceContainerHighest,
+                shape: AppShape.full,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                child: Text(
+                  context.appLocalizations.docked,
+                  style: BusinessText.metaLabel(context),
+                ),
+              ),
+            )
+          else
+            Text(context.appLocalizations.docked),
         ],
       ),
     ),

@@ -580,7 +580,7 @@ class _BusinessSettingsLayoutState
     return Padding(
       padding: EdgeInsets.fromLTRB(
         MacOSMetrics.pageMargin(context, fallback: 29),
-        MacOSStyle.of(context) ? 28 : 50,
+        MacOSStyle.of(context) ? 12 : 50,
         MacOSMetrics.pageMargin(context, fallback: 24),
         20,
       ),

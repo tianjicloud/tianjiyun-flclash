@@ -90,49 +90,59 @@ class DiagnosticsView extends ConsumerWidget {
     final hasResult = _hasDiagnosticResult(ref);
     return Scaffold(
       title: context.appLocalizations.diagnosticsTitle,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: MacOSMetrics.pageMargin(context, fallback: 16),
-              ).copyWith(top: context.sectionsTopPadding, bottom: 16),
-              child: DiagnosticsPanel(
-                onRun: () => refreshDiagnostics(ref),
-                isLoading: isLoading,
-                showRunButton: false,
-                mobileLayout: ViewScope.isMobileOf(context),
-              ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MacOSMetrics.narrowPageWidth(
+              context,
+              fallback: double.infinity,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              MacOSMetrics.pageMargin(context, fallback: 16),
-              8,
-              MacOSMetrics.pageMargin(context, fallback: 16),
-              16 + context.bottomInset,
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              height: MacOSMetrics.buttonHeight(context, fallback: 50),
-              child: FilledButton(
-                onPressed: isLoading ? null : () => refreshDiagnostics(ref),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 8,
-                  children: [
-                    if (isLoading) const ActivityIndicator(),
-                    Text(
-                      hasResult
-                          ? context.appLocalizations.diagnosticsRunAgain
-                          : context.appLocalizations.diagnosticsStart,
-                    ),
-                  ],
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MacOSMetrics.pageMargin(context, fallback: 16),
+                  ).copyWith(top: context.sectionsTopPadding, bottom: 16),
+                  child: DiagnosticsPanel(
+                    onRun: () => refreshDiagnostics(ref),
+                    isLoading: isLoading,
+                    showRunButton: false,
+                    mobileLayout: ViewScope.isMobileOf(context),
+                  ),
                 ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  MacOSMetrics.pageMargin(context, fallback: 16),
+                  8,
+                  MacOSMetrics.pageMargin(context, fallback: 16),
+                  16 + context.bottomInset,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: MacOSMetrics.buttonHeight(context, fallback: 50),
+                  child: FilledButton(
+                    onPressed: isLoading ? null : () => refreshDiagnostics(ref),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 8,
+                      children: [
+                        if (isLoading) const ActivityIndicator(),
+                        Text(
+                          hasResult
+                              ? context.appLocalizations.diagnosticsRunAgain
+                              : context.appLocalizations.diagnosticsStart,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -345,35 +355,69 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
         .where((check) => check.result == DiagnosticResult.failed)
         .length;
     final unverified = checks.length - passed - failed;
-    final counts = Row(
-      spacing: 8,
-      children: [
-        Expanded(
-          child: _DiagnosticCount(
-            value: passed,
-            label: strings.diagnosticsPassed,
-            result: DiagnosticResult.passed,
-            mobile: widget.mobileLayout,
-          ),
-        ),
-        Expanded(
-          child: _DiagnosticCount(
-            value: failed,
-            label: strings.diagnosticsFailed,
-            result: DiagnosticResult.failed,
-            mobile: widget.mobileLayout,
-          ),
-        ),
-        Expanded(
-          child: _DiagnosticCount(
-            value: unverified,
-            label: strings.diagnosticsUnverified,
-            result: DiagnosticResult.unverified,
-            mobile: widget.mobileLayout,
-          ),
-        ),
-      ],
-    );
+    final counts = MacOSStyle.of(context) && !widget.mobileLayout
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              spacing: 12,
+              children: [
+                for (final (value, label, result) in [
+                  (failed, strings.diagnosticsFailed, DiagnosticResult.failed),
+                  (passed, strings.diagnosticsPassed, DiagnosticResult.passed),
+                  (
+                    unverified,
+                    strings.diagnosticsUnverified,
+                    DiagnosticResult.unverified,
+                  ),
+                ])
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '$value ',
+                          style: BusinessText.metaValue(
+                            context,
+                          ).copyWith(color: _resultColor(context, result)),
+                        ),
+                        TextSpan(
+                          text: label,
+                          style: BusinessText.metaLabel(context),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          )
+        : Row(
+            spacing: 8,
+            children: [
+              Expanded(
+                child: _DiagnosticCount(
+                  value: passed,
+                  label: strings.diagnosticsPassed,
+                  result: DiagnosticResult.passed,
+                  mobile: widget.mobileLayout,
+                ),
+              ),
+              Expanded(
+                child: _DiagnosticCount(
+                  value: failed,
+                  label: strings.diagnosticsFailed,
+                  result: DiagnosticResult.failed,
+                  mobile: widget.mobileLayout,
+                ),
+              ),
+              Expanded(
+                child: _DiagnosticCount(
+                  value: unverified,
+                  label: strings.diagnosticsUnverified,
+                  result: DiagnosticResult.unverified,
+                  mobile: widget.mobileLayout,
+                ),
+              ),
+            ],
+          );
     if (widget.mobileLayout) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

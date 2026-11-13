@@ -50,7 +50,33 @@ void showTrackerInfoDetail(
           onClose: onClose,
           isBusiness: business,
         );
-        return business ? detail : Scaffold(body: detail, title: title);
+        if (!business) return Scaffold(body: detail, title: title);
+        final macOS = MacOSStyle.of(sheetContext);
+        return Scaffold(
+          body: macOS
+              ? Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MacOSMetrics.narrowPageWidth(
+                        sheetContext,
+                        fallback: double.infinity,
+                      ),
+                    ),
+                    child: detail,
+                  ),
+                )
+              : detail,
+          title: title,
+          businessTitleInset: macOS,
+          headerMaxWidth: macOS
+              ? MacOSMetrics.narrowPageWidth(
+                  sheetContext,
+                  fallback: double.infinity,
+                )
+              : null,
+          backAction: macOS ? () => sheetContext.safeNestedPop() : null,
+          preferBackButton: macOS,
+        );
       },
     ),
   );
@@ -597,19 +623,20 @@ class _BusinessTrackerInfoDetailView extends ConsumerWidget {
             ],
           ),
         ),
-        SizedBox.square(
-          dimension: 32,
-          child: IconButton(
-            tooltip: context.appLocalizations.close,
-            padding: EdgeInsets.zero,
-            onPressed: context.safeNestedPop,
-            icon: GlyphIcon(AppGlyphs.close, color: secondary, size: 16),
-            style: ButtonStyle.from(
-              shape: AppShape.circle,
-              backgroundColor: context.colorScheme.surfaceContainerHigh,
+        if (!MacOSStyle.of(context))
+          SizedBox.square(
+            dimension: 32,
+            child: IconButton(
+              tooltip: context.appLocalizations.close,
+              padding: EdgeInsets.zero,
+              onPressed: context.safeNestedPop,
+              icon: GlyphIcon(AppGlyphs.close, color: secondary, size: 16),
+              style: ButtonStyle.from(
+                shape: AppShape.circle,
+                backgroundColor: context.colorScheme.surfaceContainerHigh,
+              ),
             ),
           ),
-        ),
       ],
     );
   }

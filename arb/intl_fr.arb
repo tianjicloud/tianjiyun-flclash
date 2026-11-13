@@ -1425,6 +1425,7 @@
   "zzProfileImportedOn": "Fichier local · importé le {date}",
   "zzProfileBasedOnOverrides": "Basé sur l’abonnement actuel · {count} règles de remplacement",
   "zzProfileImportHint": "Vous pouvez aussi coller un lien du presse-papiers, choisir un fichier YAML local ou ouvrir {scheme} dans un navigateur pour importer un lien.",
+  "zzMacProfileImportHint": "Vous pouvez aussi importer depuis le presse-papiers ou un fichier local.",
   "@zzProfileExpiredDays": {
     "placeholders": {
       "count": {}

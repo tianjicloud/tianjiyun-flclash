@@ -3065,6 +3065,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "zzAutoUpdateHours": m137,
     "zzAutoUpdateIntervalLabel": m138,
     "zzExpiryDate": m139,
+    "zzMacProfileImportHint": MessageLookupByLibrary.simpleMessage(
+      "클립보드나 로컬 파일에서도 가져올 수 있습니다.",
+    ),
     "zzProfileBasedOnOverrides": m140,
     "zzProfileExpiredDays": m141,
     "zzProfileImportHint": m142,

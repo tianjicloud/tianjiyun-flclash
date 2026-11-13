@@ -141,20 +141,31 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
                     const SizedBox(width: 8),
                   ],
                   AddProfileMenu(
-                    builder: (open) =>
-                        switch ((businessDesktop, businessMobile)) {
-                          (true, _) => BusinessPrimaryButton(
-                            label: '＋ ${appLocalizations.importSubscription}',
-                            width: _scaledControlWidth(context, 126),
-                            onPressed: open,
-                          ),
-                          (_, true) => _MobileImportButton(onPressed: open),
-                          _ => IconButton(
-                            tooltip: appLocalizations.addProfile,
-                            onPressed: open,
-                            icon: const GlyphIcon(AppGlyphs.addCircle),
-                          ),
-                        },
+                    builder: (open) => switch ((
+                      businessDesktop,
+                      businessMobile,
+                    )) {
+                      (true, _) =>
+                        MacOSStyle.of(context)
+                            ? BusinessSecondaryButton(
+                                label:
+                                    '＋ ${appLocalizations.importSubscription}',
+                                width: _scaledControlWidth(context, 126),
+                                onPressed: open,
+                              )
+                            : BusinessPrimaryButton(
+                                label:
+                                    '＋ ${appLocalizations.importSubscription}',
+                                width: _scaledControlWidth(context, 126),
+                                onPressed: open,
+                              ),
+                      (_, true) => _MobileImportButton(onPressed: open),
+                      _ => IconButton(
+                        tooltip: appLocalizations.addProfile,
+                        onPressed: open,
+                        icon: const GlyphIcon(AppGlyphs.addCircle),
+                      ),
+                    },
                   ),
                 ],
           body: NullStatusSwitcher(
@@ -346,7 +357,14 @@ class _BusinessProfilesList extends ConsumerWidget {
     return CustomScrollView(
       key: profilesStoreKey,
       slivers: [
-        SliverToBoxAdapter(child: SizedBox(height: context.contentTopPadding)),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: MacOSMetrics.pageContentTop(
+              context,
+              fallback: context.contentTopPadding,
+            ),
+          ),
+        ),
         if (current != null)
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: horizontalInset),
@@ -449,7 +467,6 @@ class _BusinessOtherProfilesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.appLocalizations;
-    final colorScheme = context.colorScheme;
     return Card(
       radius: BusinessPalette.cardRadius,
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
@@ -464,18 +481,20 @@ class _BusinessOtherProfilesCard extends StatelessWidget {
               ),
               if (!mobile) ...[
                 const Spacer(),
-                Flexible(
-                  child: Text(
-                    l10n.profileSwitchNote,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                    style: BusinessText.metaLabel(
-                      context,
-                    ).copyWith(color: colorScheme.onSurfaceVariant),
+                if (!MacOSStyle.of(context)) ...[
+                  Flexible(
+                    child: Text(
+                      l10n.profileSwitchNote,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: BusinessText.metaLabel(
+                        context,
+                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
+                  const SizedBox(width: 12),
+                ],
                 BusinessSecondaryButton(
                   label: l10n.sort,
                   width: _scaledControlWidth(context, 60),
@@ -564,9 +583,9 @@ class _BusinessOtherProfileRow extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final expired = _expired;
     final custom = profile.type == ProfileType.custom;
-    return ListItem(
-      minTileHeight: 65,
-      minVerticalPadding: 0,
+    final row = ListItem(
+      minTileHeight: MacOSMetrics.doubleLineRowHeight(context, fallback: 65),
+      minVerticalPadding: MacOSStyle.of(context) ? 7 : 0,
       padding: EdgeInsets.zero,
       leading: DecoratedBox(
         decoration: ShapeDecoration(
@@ -574,7 +593,7 @@ class _BusinessOtherProfileRow extends StatelessWidget {
           shape: AppShape.all(_businessProfileIconRadius),
         ),
         child: SizedBox.square(
-          dimension: 36,
+          dimension: MacOSStyle.of(context) ? 32 : 36,
           child: Center(
             child: GlyphIcon(
               _glyph,
@@ -621,6 +640,13 @@ class _BusinessOtherProfileRow extends StatelessWidget {
       ),
       onTap: custom ? () => _edit(context) : () => onSwitch(profile.id),
     );
+    return MacOSStyle.of(context)
+        ? Padding(
+            key: const ValueKey('macos-subscription-other-row'),
+            padding: const EdgeInsets.symmetric(vertical: 7),
+            child: row,
+          )
+        : row;
   }
 }
 
@@ -637,8 +663,11 @@ class _BusinessImportHintCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.appLocalizations;
     final colorScheme = context.colorScheme;
+    final macOS = MacOSStyle.of(context);
     const scheme = 'tianji://';
-    final hint = l10n.zzProfileImportHint(scheme);
+    final hint = macOS
+        ? l10n.zzMacProfileImportHint
+        : l10n.zzProfileImportHint(scheme);
     final schemeStart = hint.indexOf(scheme);
     final schemeEnd = schemeStart + scheme.length;
     final textStyle = BusinessText.actionLabel(
@@ -655,20 +684,30 @@ class _BusinessImportHintCard extends StatelessWidget {
           spacing: 12,
           children: [
             Expanded(
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    if (schemeStart > 0)
-                      TextSpan(text: hint.substring(0, schemeStart)),
-                    TextSpan(text: scheme, style: textStyle.toJetBrainsMono),
-                    if (schemeEnd < hint.length)
-                      TextSpan(text: hint.substring(schemeEnd)),
-                  ],
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: textStyle,
-              ),
+              child: macOS
+                  ? Text(
+                      hint,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: textStyle,
+                    )
+                  : Text.rich(
+                      TextSpan(
+                        children: [
+                          if (schemeStart > 0)
+                            TextSpan(text: hint.substring(0, schemeStart)),
+                          TextSpan(
+                            text: scheme,
+                            style: textStyle.toJetBrainsMono,
+                          ),
+                          if (schemeEnd < hint.length)
+                            TextSpan(text: hint.substring(schemeEnd)),
+                        ],
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: textStyle,
+                    ),
             ),
             BusinessSecondaryButton(
               label: l10n.pasteFromClipboardImport,
@@ -934,6 +973,9 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
     return ContextMenuRegion(
       menuItems: isUpdating ? null : action._menuItems(context, ref),
       child: Card(
+        key: MacOSStyle.of(context)
+            ? const ValueKey('macos-subscription-primary-card')
+            : null,
         radius: MacOSMetrics.cardRadius(
           context,
           fallback: BusinessPalette.cardRadius,
@@ -1186,6 +1228,9 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                   spacing: 10,
                   children: [
                     Flexible(
+                      fit: MacOSStyle.of(context)
+                          ? FlexFit.tight
+                          : FlexFit.loose,
                       child: Text(
                         profile.realLabel,
                         maxLines: 1,
@@ -1215,6 +1260,32 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    if (MacOSStyle.of(context)) ...[
+                      BusinessPrimaryButton(
+                        label: l10n.immediateUpdate,
+                        width: 120,
+                        onPressed: isUpdating
+                            ? null
+                            : () => action.updateProfile(ref),
+                      ),
+                      PopupAnchor(
+                        targetBuilder: (open) => IconButton(
+                          tooltip: l10n.more,
+                          onPressed: open,
+                          icon: const GlyphIcon(AppGlyphs.more),
+                        ),
+                        popupBuilder: (_) => PopupMenu(
+                          items: [
+                            PopupMenuItem(
+                              glyph: AppGlyphs.openExternal,
+                              label: l10n.renewUpgrade,
+                              onPressed: () => dialogs.openUrl(userPanelUrl),
+                            ),
+                            ...action._menuItems(context, ref),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 if (maskedUrl != null) ...[
@@ -1329,42 +1400,44 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
               ],
             ),
           ),
-          SizedBox(
-            width: 1,
-            child: ColoredBox(color: Divider.colorOf(context)),
-          ),
-          SizedBox(
-            width: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 8,
-              children: [
-                BusinessPrimaryButton(
-                  label: l10n.renewUpgrade,
-                  width: 200,
-                  onPressed: () => dialogs.openUrl(userPanelUrl),
-                ),
-                BusinessSecondaryButton(
-                  label: l10n.immediateUpdate,
-                  width: 200,
-                  onPressed: isUpdating
-                      ? null
-                      : () => action.updateProfile(ref),
-                ),
-                BusinessSecondaryButton(
-                  label: l10n.copySubscriptionLink,
-                  width: 200,
-                  onPressed: () => action._handleCopyLink(context),
-                ),
-                BusinessSecondaryButton(
-                  label: l10n.edit,
-                  width: 200,
-                  onPressed: () => action._handleEdit(context),
-                ),
-              ],
+          if (!MacOSStyle.of(context)) ...[
+            SizedBox(
+              width: 1,
+              child: ColoredBox(color: Divider.colorOf(context)),
             ),
-          ),
+            SizedBox(
+              width: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 8,
+                children: [
+                  BusinessPrimaryButton(
+                    label: l10n.renewUpgrade,
+                    width: 200,
+                    onPressed: () => dialogs.openUrl(userPanelUrl),
+                  ),
+                  BusinessSecondaryButton(
+                    label: l10n.immediateUpdate,
+                    width: 200,
+                    onPressed: isUpdating
+                        ? null
+                        : () => action.updateProfile(ref),
+                  ),
+                  BusinessSecondaryButton(
+                    label: l10n.copySubscriptionLink,
+                    width: 200,
+                    onPressed: () => action._handleCopyLink(context),
+                  ),
+                  BusinessSecondaryButton(
+                    label: l10n.edit,
+                    width: 200,
+                    onPressed: () => action._handleEdit(context),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

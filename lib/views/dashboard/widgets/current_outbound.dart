@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/common/tianji_api.dart';
-import 'package:fl_clash/core/traffic/model.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
 import 'package:fl_clash/features/ip_quality/labels.dart';
@@ -909,53 +908,39 @@ class _MacOSMetricRow extends ConsumerWidget {
     final speed = ref.watch(
       trafficsProvider.select((state) => state.list.safeLast(const Traffic())),
     );
-    final summary = ref.watch(trafficStatsProvider).summary;
-    return ValueListenableBuilder<TrafficSummary>(
-      valueListenable: summary,
-      builder: (context, value, _) {
-        final monthUsed =
-            value.month.mainlandDirect.total +
-            value.month.proxy.total +
-            value.month.otherDirect.total;
-        final metrics = <(String, String)>[
-          (
-            context.appLocalizations.download,
-            '${speed.down.traffic.value} ${speed.down.traffic.unit}/s',
-          ),
-          (
-            context.appLocalizations.upload,
-            '${speed.up.traffic.value} ${speed.up.traffic.unit}/s',
-          ),
-          if (delay case final value? when value >= 0)
-            (context.appLocalizations.delay, '$value ms'),
-          if (runTime case final value?)
-            (context.appLocalizations.runTime, getTimeText(value)),
-          (
-            context.appLocalizations.businessMonthTraffic,
-            dashboardTraffic(monthUsed),
-          ),
-        ];
-        return Wrap(
-          spacing: 28,
-          runSpacing: 10,
-          children: [
-            for (final (label, amount) in metrics)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 4,
-                children: [
-                  Text(label, style: DashboardText.label(context)),
-                  Text(
-                    amount,
-                    style: DashboardText.unit(
-                      context,
-                    ).copyWith(color: context.colorScheme.onSurface),
-                  ),
-                ],
+    final metrics = <(String, String)>[
+      (
+        context.appLocalizations.download,
+        '${speed.down.traffic.value} ${speed.down.traffic.unit}/s',
+      ),
+      (
+        context.appLocalizations.upload,
+        '${speed.up.traffic.value} ${speed.up.traffic.unit}/s',
+      ),
+      if (delay case final value? when value >= 0)
+        (context.appLocalizations.delay, '$value ms'),
+      if (runTime case final value?)
+        (context.appLocalizations.runTime, getTimeText(value)),
+    ];
+    return Wrap(
+      spacing: 28,
+      runSpacing: 10,
+      children: [
+        for (final (label, amount) in metrics)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 4,
+            children: [
+              Text(label, style: DashboardText.label(context)),
+              Text(
+                amount,
+                style: DashboardText.unit(
+                  context,
+                ).copyWith(color: context.colorScheme.onSurface),
               ),
-          ],
-        );
-      },
+            ],
+          ),
+      ],
     );
   }
 }

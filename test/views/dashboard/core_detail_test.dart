@@ -6,13 +6,41 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prism_ui/prism_ui.dart' show AppBar, ThemeData;
 
 import '../../helpers/test_app.dart';
 
 class _MockCoreHandler extends Mock implements CoreHandlerInterface {}
 
 void main() {
+  testWidgets('macOS service card starts after the page header', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      TestApp(
+        wrapInProviderScope: true,
+        theme: ThemeData(platform: TargetPlatform.macOS),
+        child: CoreDetailView(
+          memoryReader: () async => const MemorySnapshot(app: 64 * 1024 * 1024),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final headerBottom = tester.getRect(find.byType(AppBar).first).bottom;
+    final firstCardTop = tester
+        .getRect(find.byKey(const ValueKey('macos-service-status-first-card')))
+        .top;
+    expect(firstCardTop, greaterThanOrEqualTo(headerBottom));
+  });
+
   testWidgets('shows service status and the confirmed restart action', (
     tester,
   ) async {

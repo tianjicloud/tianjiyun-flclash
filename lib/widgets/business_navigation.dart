@@ -123,6 +123,12 @@ class BusinessNavigationSidebar extends ConsumerWidget {
                   ),
                 ),
                 if (macOS) ...[
+                  SizedBox(
+                    height: MacOSMetrics.sidebarSectionGap(
+                      context,
+                      fallback: 4,
+                    ),
+                  ),
                   _MacSidebarFooter(
                     profile: profile,
                     onSettings: () {
@@ -232,7 +238,12 @@ class _MacSidebarFooter extends StatelessWidget {
             math.max(0, expiry.difference(DateTime.now()).inDays),
           );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 4, 2, 0),
+      padding: EdgeInsets.fromLTRB(
+        10,
+        MacOSMetrics.sidebarSectionGap(context, fallback: 4),
+        2,
+        0,
+      ),
       child: Row(
         children: [
           const BusinessBrandMark(size: 28),
@@ -328,7 +339,7 @@ class _BusinessSidebarItem extends StatelessWidget {
                         child: DecoratedBox(
                           decoration: ShapeDecoration(
                             color: macOS && !dark
-                                ? Colors.white
+                                ? context.colorScheme.surfaceContainerLow
                                 : dark
                                 ? BusinessPalette.sidebarDarkBackground
                                 : BusinessPalette.sidebarSelection,
@@ -390,6 +401,20 @@ class _BusinessSidebarItem extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if (selected && macOS)
+                      PositionedDirectional(
+                        start: 2,
+                        child: SizedBox(
+                          width: 2,
+                          height: 14,
+                          child: DecoratedBox(
+                            decoration: ShapeDecoration(
+                              color: context.colorScheme.primary,
+                              shape: AppShape.full,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),

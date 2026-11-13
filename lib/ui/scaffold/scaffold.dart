@@ -54,6 +54,7 @@ class Scaffold extends StatefulWidget {
   final String? title;
   final Widget? titleWidget;
   final bool businessTitleInset;
+  final double? headerMaxWidth;
   final bool showLeading;
   final List<PopupMenuItem> titleMenuItems;
   final bool isLoading;
@@ -84,6 +85,7 @@ class Scaffold extends StatefulWidget {
   final ValueListenable<List<ScaffoldKeyword>>? keywords;
   final bool? resizeToAvoidBottomInset;
   final VoidCallback? backAction;
+  final bool preferBackButton;
 
   /// Puts the toggle of the sort mode in the bar.
   final bool canSort;
@@ -96,10 +98,12 @@ class Scaffold extends StatefulWidget {
     this.title,
     this.titleWidget,
     this.businessTitleInset = false,
+    this.headerMaxWidth,
     this.showLeading = true,
     this.titleMenuItems = const [],
     this.actions,
     this.backAction,
+    this.preferBackButton = false,
     this.isLoading = false,
     this.searchState,
     this.searchActions = const [],
@@ -521,6 +525,12 @@ class ScaffoldState extends State<Scaffold>
       if (pop.atFoot) {
         return null;
       }
+      if (widget.preferBackButton) {
+        return _buildPopButton(
+          useCloseIcon: false,
+          onPressed: backAction ?? () => Navigator.of(context).pop(),
+        );
+      }
       return _buildPopButton(
         useCloseIcon: pop.useCloseIcon,
         onPressed: pop.useCloseIcon
@@ -805,7 +815,11 @@ class ScaffoldState extends State<Scaffold>
             : leading;
         final appBar = AppBar(
           clipBehavior: Clip.none,
-          toolbarHeight: isCompact ? sheetToolbarHeight : null,
+          toolbarHeight: isCompact
+              ? sheetToolbarHeight
+              : MacOSStyle.of(context) && widget.businessTitleInset
+              ? MacOSMetrics.pageHeaderHeight(context, fallback: 56)
+              : null,
           centerTitle: isCompact,
           titleTextStyle: compactTitle
               ? AppTextStyle.headline.of(context)
@@ -849,12 +863,41 @@ class ScaffoldState extends State<Scaffold>
                 ),
           ],
         );
-        return _buildAppBarWrap(appBar, barSearch: barSearch);
+        final maxWidth = widget.headerMaxWidth;
+        final header = maxWidth == null
+            ? appBar
+            : Center(
+                child: SizedBox(
+                  width: math.min(maxWidth, MediaQuery.sizeOf(context).width),
+                  child: appBar,
+                ),
+              );
+        final pageHeader =
+            MacOSStyle.of(context) && widget.businessTitleInset && !isCompact
+            ? Padding(
+                padding: EdgeInsets.only(
+                  top: MacOSMetrics.pageHeaderTopInset(context, fallback: 0),
+                ),
+                child: header,
+              )
+            : header;
+        return _buildAppBarWrap(pageHeader, barSearch: barSearch);
       },
     );
-    if (!widget.opaqueAppBar || !_scrolledUnder) return bar;
+    final preferredSize = Size.fromHeight(
+      MacOSStyle.of(context) && widget.businessTitleInset
+          ? MacOSMetrics.pageHeaderTopInset(context, fallback: 0) +
+                MacOSMetrics.pageHeaderHeight(
+                  context,
+                  fallback: bar.preferredSize.height,
+                )
+          : bar.preferredSize.height,
+    );
+    if (!widget.opaqueAppBar || !_scrolledUnder) {
+      return PreferredSize(preferredSize: preferredSize, child: bar);
+    }
     return PreferredSize(
-      preferredSize: bar.preferredSize,
+      preferredSize: preferredSize,
       child: DecoratedBox(
         key: const ValueKey('opaque-app-bar'),
         decoration: BoxDecoration(

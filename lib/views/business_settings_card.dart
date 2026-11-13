@@ -75,7 +75,7 @@ class BusinessSettingsCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: MacOSMetrics.cardTitleGap(context, fallback: 8)),
           ],
           MacOSStyle.of(context)
               ? ListItemInsets(
