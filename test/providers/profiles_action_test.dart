@@ -3,7 +3,10 @@ import 'dart:typed_data';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:drift/native.dart';
+import 'package:drift/drift.dart' show driftRuntimeOptions;
 import 'package:cross_file/cross_file.dart';
+import 'package:fl_clash/database/database.dart' as db;
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -321,6 +324,66 @@ void main() {
       expect(
         await tester.runAsync(
           () async => (await after.first.file).readAsString(),
+        ),
+        contains('REJECT'),
+      );
+      expect(
+        find.text(currentAppLocalizations.profileAlreadyExistsUpdated),
+        findsOne,
+      );
+    });
+
+    testWidgets('a recovered row with the same URL is updated in place', (
+      tester,
+    ) async {
+      final previousDatabase = db.database;
+      final previousWarningSetting =
+          driftRuntimeOptions.dontWarnAboutMultipleDatabases;
+      driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
+      final damagedDatabase = db.Database(NativeDatabase.memory());
+      db.database = damagedDatabase;
+      addTearDown(() async {
+        db.database = previousDatabase;
+        driftRuntimeOptions.dontWarnAboutMultipleDatabases =
+            previousWarningSetting;
+        await damagedDatabase.close();
+      });
+      await damagedDatabase.profilesDao.query().get();
+      await damagedDatabase.customStatement('''
+        INSERT INTO profiles (
+          id, type, label, current_group_name, url, age_secret_key,
+          last_update_date, extend_type, script_id, match_target,
+          auto_update_duration_millis, subscription_info, auto_update,
+          selected_map, unfold_set, "order", overrides
+        ) VALUES (
+          90, 'url', 'Previously hidden', NULL, '$link', NULL,
+          NULL, 'legacy-extend-type', NULL, NULL, 3600000, NULL,
+          1, '{}', '[]', 7, NULL
+        )
+      ''');
+      final recovered =
+          (await damagedDatabase.profilesDao.query().get()).single;
+      await pumpHost(tester);
+      (container.read(profilesProvider.notifier) as TestProfiles).replace([
+        recovered,
+      ]);
+
+      downloadBody = 'proxies: []\nrules: [MATCH,REJECT]\n';
+      await tester.runAsync(
+        () => container
+            .read(profilesActionProvider.notifier)
+            .addProfileFromLink(link),
+      );
+      await tester.pumpAndSettle();
+
+      final state = container.read(profilesProvider);
+      expect(state, hasLength(1));
+      expect(state.single.id, 90);
+      expect(state.single.order, 7);
+      expect((await damagedDatabase.profilesDao.query().get()).single.id, 90);
+      expect(
+        await tester.runAsync(
+          () async => (await state.single.file).readAsString(),
         ),
         contains('REJECT'),
       );

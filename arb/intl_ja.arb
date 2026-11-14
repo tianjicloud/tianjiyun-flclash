@@ -1838,5 +1838,11 @@
       "failed": {},
       "reason": {}
     }
+  },
+  "unreadableProfileRows": "{count} 件の設定を読み取れなかったため、スキップしました。",
+  "@unreadableProfileRows": {
+    "placeholders": {
+      "count": {}
+    }
   }
 }

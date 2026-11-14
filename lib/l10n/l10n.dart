@@ -15057,6 +15057,16 @@ class AppLocalizations {
       args: [success, updated, failed, reason],
     );
   }
+
+  /// `There are {count} unreadable profiles; they were skipped.`
+  String unreadableProfileRows(Object count) {
+    return Intl.message(
+      'There are $count unreadable profiles; they were skipped.',
+      name: 'unreadableProfileRows',
+      desc: '',
+      args: [count],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

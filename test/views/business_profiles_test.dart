@@ -135,6 +135,44 @@ _subscriptionContentGeometry(WidgetTester tester, {required bool macOS}) {
 }
 
 void main() {
+  testWidgets('profiles page reports rows the database could not read', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final profile = Profile.normal(
+      label: 'Visible',
+      url: 'https://example.test',
+    );
+    final container = ProviderContainer(
+      overrides: [
+        viewModeProvider.overrideWithValue(ViewMode.desktop),
+        profilesProvider.overrideWith(() => TestProfiles([profile])),
+        unreadableProfileRowsProvider.overrideWith((ref) => Stream.value(2)),
+      ],
+    );
+    addTearDown(container.dispose);
+    globalState.container = container;
+    container.read(viewSizeProvider.notifier).value = const Size(1280, 800);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          homeBuilder: (child) => HostScaffold(body: child),
+          child: const ProfilesView(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final l10n = tester.element(find.byType(ProfilesView)).appLocalizations;
+    expect(find.text(l10n.unreadableProfileRows(2)), findsOneWidget);
+    expect(find.text('Visible'), findsOneWidget);
+  });
+
   testWidgets('desktop profile leaves unknown quota and expiry unknown', (
     tester,
   ) async {

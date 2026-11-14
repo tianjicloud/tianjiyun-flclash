@@ -48,6 +48,40 @@ final class ProfilesStreamProvider
 
 String _$profilesStreamHash() => r'ea944e081294567f0f63286e95e4e66cdc650383';
 
+@ProviderFor(unreadableProfileRows)
+final unreadableProfileRowsProvider = UnreadableProfileRowsProvider._();
+
+final class UnreadableProfileRowsProvider
+    extends $FunctionalProvider<AsyncValue<int>, int, Stream<int>>
+    with $FutureModifier<int>, $StreamProvider<int> {
+  UnreadableProfileRowsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'unreadableProfileRowsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$unreadableProfileRowsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<int> create(Ref ref) {
+    return unreadableProfileRows(ref);
+  }
+}
+
+String _$unreadableProfileRowsHash() =>
+    r'e2c028336b83eb5e3c959dfd8860a24f8919f4e3';
+
 @ProviderFor(customGroupNames)
 final customGroupNamesProvider = CustomGroupNamesProvider._();
 

@@ -308,30 +308,32 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m133(transport) => "${transport} 请求头";
 
-  static String m134(label) => "${label}必须为URL";
+  static String m134(count) => "有 ${count} 个配置无法读取，已跳过。";
 
-  static String m135(date) => "有效期至 ${date}";
+  static String m135(label) => "${label}必须为URL";
 
-  static String m136(count) => "${count} 年前";
+  static String m136(date) => "有效期至 ${date}";
 
   static String m137(count) => "${count} 年前";
 
-  static String m138(hours) => "每 ${hours} 小时自动更新";
+  static String m138(count) => "${count} 年前";
 
-  static String m139(count, unit) => "每${count} ${unit}自动更新";
+  static String m139(hours) => "每 ${hours} 小时自动更新";
 
-  static String m140(date) => "${date} 到期";
+  static String m140(count, unit) => "每${count} ${unit}自动更新";
 
-  static String m141(count) => "基于当前订阅 · ${count} 条覆写规则";
+  static String m141(date) => "${date} 到期";
 
-  static String m142(count) => "订阅链接 · 已过期 ${count} 天";
+  static String m142(count) => "基于当前订阅 · ${count} 条覆写规则";
 
-  static String m143(scheme) =>
+  static String m143(count) => "订阅链接 · 已过期 ${count} 天";
+
+  static String m144(scheme) =>
       "还可以：从剪贴板粘贴链接、选择本地 YAML 文件，或在浏览器打开 ${scheme} 导入链接";
 
-  static String m144(date) => "本地文件 · ${date} 导入";
+  static String m145(date) => "本地文件 · ${date} 导入";
 
-  static String m145(quota) => "共 ${quota}";
+  static String m146(quota) => "共 ${quota}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2728,6 +2730,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unmaximize": MessageLookupByLibrary.simpleMessage("向下还原"),
     "unnamed": MessageLookupByLibrary.simpleMessage("未命名"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("取消置顶"),
+    "unreadableProfileRows": m134,
     "update": MessageLookupByLibrary.simpleMessage("更新"),
     "updateAll": MessageLookupByLibrary.simpleMessage("更新全部"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage("无法下载更新。"),
@@ -2749,14 +2752,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBandwidth": MessageLookupByLibrary.simpleMessage("上行带宽"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("URL 重写"),
-    "urlTip": m134,
+    "urlTip": m135,
     "useHosts": MessageLookupByLibrary.simpleMessage("使用Hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("使用系统Hosts"),
     "usedShort": MessageLookupByLibrary.simpleMessage("已用"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("已用流量"),
     "userAgent": MessageLookupByLibrary.simpleMessage("用户代理"),
     "username": MessageLookupByLibrary.simpleMessage("用户名"),
-    "validUntil": m135,
+    "validUntil": m136,
     "value": MessageLookupByLibrary.simpleMessage("值"),
     "view": MessageLookupByLibrary.simpleMessage("查看"),
     "viewAll": MessageLookupByLibrary.simpleMessage("查看全部"),
@@ -2772,23 +2775,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "写入系统会同时设置系统时钟，Android 上不生效。",
     ),
-    "yearsAgo": m136,
-    "yearsAgoShort": m137,
+    "yearsAgo": m137,
+    "yearsAgoShort": m138,
     "yes": MessageLookupByLibrary.simpleMessage("是"),
     "zhCN": MessageLookupByLibrary.simpleMessage("中文简体"),
-    "zzAutoUpdateHours": m138,
-    "zzAutoUpdateIntervalLabel": m139,
-    "zzExpiryDate": m140,
-    "zzProfileBasedOnOverrides": m141,
-    "zzProfileExpiredDays": m142,
-    "zzProfileImportHint": m143,
-    "zzProfileImportedOn": m144,
+    "zzAutoUpdateHours": m139,
+    "zzAutoUpdateIntervalLabel": m140,
+    "zzExpiryDate": m141,
+    "zzProfileBasedOnOverrides": m142,
+    "zzProfileExpiredDays": m143,
+    "zzProfileImportHint": m144,
+    "zzProfileImportedOn": m145,
     "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("剪贴板"),
     "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("本地文件"),
     "zzQuickScan": MessageLookupByLibrary.simpleMessage("扫码"),
     "zzRemaining": MessageLookupByLibrary.simpleMessage("剩余"),
     "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("天"),
     "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage("续费 / 升级"),
-    "zzTotalQuota": m145,
+    "zzTotalQuota": m146,
   };
 }

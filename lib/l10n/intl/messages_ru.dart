@@ -348,33 +348,36 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m133(transport) => "Заголовки ${transport}";
 
-  static String m134(label) => "Значение «${label}» должно быть URL";
+  static String m134(count) =>
+      "Не удалось прочитать профилей: ${count}; они пропущены.";
 
-  static String m135(date) => "Действителен до ${date}";
+  static String m135(label) => "Значение «${label}» должно быть URL";
 
-  static String m136(count) =>
-      "${Intl.plural(count, one: '${count} год назад', few: '${count} года назад', many: '${count} лет назад', other: '${count} года назад')}";
+  static String m136(date) => "Действителен до ${date}";
 
   static String m137(count) =>
+      "${Intl.plural(count, one: '${count} год назад', few: '${count} года назад', many: '${count} лет назад', other: '${count} года назад')}";
+
+  static String m138(count) =>
       "${Intl.plural(count, one: '${count} г. назад', few: '${count} г. назад', many: '${count} л. назад', other: '${count} г. назад')}";
 
-  static String m138(hours) => "автообновление каждые ${hours} ч";
+  static String m139(hours) => "автообновление каждые ${hours} ч";
 
-  static String m139(count, unit) => "Автообновление каждые ${count} ${unit}";
+  static String m140(count, unit) => "Автообновление каждые ${count} ${unit}";
 
-  static String m140(date) => "Истекает ${date}";
+  static String m141(date) => "Истекает ${date}";
 
-  static String m141(count) =>
+  static String m142(count) =>
       "На основе текущей подписки · правил переопределения: ${count}";
 
-  static String m142(count) => "Ссылка подписки · истекла ${count} дн. назад";
+  static String m143(count) => "Ссылка подписки · истекла ${count} дн. назад";
 
-  static String m143(scheme) =>
+  static String m144(scheme) =>
       "Можно вставить ссылку из буфера обмена, выбрать локальный YAML-файл или открыть ${scheme} в браузере для импорта ссылки.";
 
-  static String m144(date) => "Локальный файл · импортирован ${date}";
+  static String m145(date) => "Локальный файл · импортирован ${date}";
 
-  static String m145(quota) => "Всего ${quota}";
+  static String m146(quota) => "Всего ${quota}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3746,6 +3749,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unmaximize": MessageLookupByLibrary.simpleMessage("Свернуть в окно"),
     "unnamed": MessageLookupByLibrary.simpleMessage("Без названия"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("Открепить окно"),
+    "unreadableProfileRows": m134,
     "update": MessageLookupByLibrary.simpleMessage("Обновить"),
     "updateAll": MessageLookupByLibrary.simpleMessage("Обновить все"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
@@ -3775,7 +3779,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBandwidth": MessageLookupByLibrary.simpleMessage("Скорость отдачи"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("Перезапись URL"),
-    "urlTip": m134,
+    "urlTip": m135,
     "useHosts": MessageLookupByLibrary.simpleMessage("Использовать hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage(
       "Использовать системный hosts",
@@ -3786,7 +3790,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
-    "validUntil": m135,
+    "validUntil": m136,
     "value": MessageLookupByLibrary.simpleMessage("Значение"),
     "view": MessageLookupByLibrary.simpleMessage("Просмотр"),
     "viewAll": MessageLookupByLibrary.simpleMessage("Показать всё"),
@@ -3808,17 +3812,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "«Записывать в систему» также устанавливает системные часы; Android это игнорирует.",
     ),
-    "yearsAgo": m136,
-    "yearsAgoShort": m137,
+    "yearsAgo": m137,
+    "yearsAgoShort": m138,
     "yes": MessageLookupByLibrary.simpleMessage("Да"),
     "zhCN": MessageLookupByLibrary.simpleMessage("Упрощённый китайский"),
-    "zzAutoUpdateHours": m138,
-    "zzAutoUpdateIntervalLabel": m139,
-    "zzExpiryDate": m140,
-    "zzProfileBasedOnOverrides": m141,
-    "zzProfileExpiredDays": m142,
-    "zzProfileImportHint": m143,
-    "zzProfileImportedOn": m144,
+    "zzAutoUpdateHours": m139,
+    "zzAutoUpdateIntervalLabel": m140,
+    "zzExpiryDate": m141,
+    "zzProfileBasedOnOverrides": m142,
+    "zzProfileExpiredDays": m143,
+    "zzProfileImportHint": m144,
+    "zzProfileImportedOn": m145,
     "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("Буфер обмена"),
     "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("Локальный файл"),
     "zzQuickScan": MessageLookupByLibrary.simpleMessage("Сканировать"),
@@ -3827,6 +3831,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage(
       "Продлить / улучшить",
     ),
-    "zzTotalQuota": m145,
+    "zzTotalQuota": m146,
   };
 }

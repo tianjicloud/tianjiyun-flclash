@@ -560,6 +560,7 @@ extension TableInfoExt<Tbl extends Table, Row> on TableInfo<Tbl, Row> {
     R Function(Row row) read, {
     Expression<bool> Function(Tbl tbl)? where,
     List<OrderingTerm Function(Tbl tbl)> orderBy = const [],
+    void Function(int count)? onSkippedRows,
   }) {
     final query = selectOnly()..addColumns($columns);
     if (where != null) {
@@ -568,6 +569,24 @@ extension TableInfoExt<Tbl extends Table, Row> on TableInfo<Tbl, Row> {
     query.orderBy([for (final term in orderBy) term(asDslTable)]);
     return _NonNullSelectable(
       query.map((row) => _readRow(row.rawData.data, read)),
+      onSkippedRows: onSkippedRows,
+    );
+  }
+
+  Selectable<R> readableRaw<R extends Object>(
+    R? Function(Map<String, Object?> row) read, {
+    Expression<bool> Function(Tbl tbl)? where,
+    List<OrderingTerm Function(Tbl tbl)> orderBy = const [],
+    void Function(int count)? onSkippedRows,
+  }) {
+    final query = selectOnly()..addColumns($columns);
+    if (where != null) {
+      query.where(where(asDslTable));
+    }
+    query.orderBy([for (final term in orderBy) term(asDslTable)]);
+    return _NonNullSelectable(
+      query.map((row) => _readRawRow(row.rawData.data, read)),
+      onSkippedRows: onSkippedRows,
     );
   }
 
@@ -577,6 +596,21 @@ extension TableInfoExt<Tbl extends Table, Row> on TableInfo<Tbl, Row> {
   ) {
     try {
       return read(map(data, tablePrefix: aliasedName) as Row);
+    } catch (error) {
+      commonPrint.log(
+        'Skipped unreadable $actualTableName row: ${compactError(error)}',
+        logLevel: LogLevel.warning,
+      );
+      return null;
+    }
+  }
+
+  R? _readRawRow<R extends Object>(
+    Map<String, Object?> data,
+    R? Function(Map<String, Object?> row) read,
+  ) {
+    try {
+      return read(data);
     } catch (error) {
       commonPrint.log(
         'Skipped unreadable $actualTableName row: ${compactError(error)}',
@@ -596,16 +630,21 @@ extension TableInfoExt<Tbl extends Table, Row> on TableInfo<Tbl, Row> {
 }
 
 class _NonNullSelectable<T extends Object> extends Selectable<T> {
-  _NonNullSelectable(this._source);
+  _NonNullSelectable(this._source, {this.onSkippedRows});
 
   final Selectable<T?> _source;
+  final void Function(int count)? onSkippedRows;
+
+  List<T> _keepReadable(List<T?> rows) {
+    onSkippedRows?.call(rows.where((row) => row == null).length);
+    return rows.nonNulls.toList();
+  }
 
   @override
-  Future<List<T>> get() async => (await _source.get()).nonNulls.toList();
+  Future<List<T>> get() async => _keepReadable(await _source.get());
 
   @override
-  Stream<List<T>> watch() =>
-      _source.watch().map((rows) => rows.nonNulls.toList());
+  Stream<List<T>> watch() => _source.watch().map(_keepReadable);
 }
 
 extension SimpleSelectStatementExt<T extends HasResultSet, D>

@@ -354,35 +354,37 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m133(transport) => "Encabezados ${transport}";
 
-  static String m134(label) => "${label} debe ser una URL";
+  static String m134(count) => "Hay ${count} perfiles ilegibles; se omitieron.";
 
-  static String m135(date) => "Válido hasta el ${date}";
+  static String m135(label) => "${label} debe ser una URL";
 
-  static String m136(count) =>
-      "${Intl.plural(count, one: 'hace 1 año', other: 'hace ${count} años')}";
+  static String m136(date) => "Válido hasta el ${date}";
 
   static String m137(count) =>
+      "${Intl.plural(count, one: 'hace 1 año', other: 'hace ${count} años')}";
+
+  static String m138(count) =>
       "${Intl.plural(count, other: 'hace ${count} a')}";
 
-  static String m138(hours) => "actualización automática cada ${hours} horas";
+  static String m139(hours) => "actualización automática cada ${hours} horas";
 
-  static String m139(count, unit) =>
+  static String m140(count, unit) =>
       "Actualización automática cada ${count} ${unit}";
 
-  static String m140(date) => "Vence ${date}";
-
-  static String m141(count) =>
-      "Basado en la suscripción actual · ${count} reglas sobrescritas";
+  static String m141(date) => "Vence ${date}";
 
   static String m142(count) =>
+      "Basado en la suscripción actual · ${count} reglas sobrescritas";
+
+  static String m143(count) =>
       "Enlace de suscripción · caducó hace ${count} días";
 
-  static String m143(scheme) =>
+  static String m144(scheme) =>
       "También puedes pegar un enlace del portapapeles, elegir un archivo YAML local o abrir ${scheme} en el navegador para importar un enlace.";
 
-  static String m144(date) => "Archivo local · importado el ${date}";
+  static String m145(date) => "Archivo local · importado el ${date}";
 
-  static String m145(quota) => "Total ${quota}";
+  static String m146(quota) => "Total ${quota}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3816,6 +3818,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unmaximize": MessageLookupByLibrary.simpleMessage("Restaurar tamaño"),
     "unnamed": MessageLookupByLibrary.simpleMessage("Sin nombre"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("Desfijar ventana"),
+    "unreadableProfileRows": m134,
     "update": MessageLookupByLibrary.simpleMessage("Actualizar"),
     "updateAll": MessageLookupByLibrary.simpleMessage("Actualizar todo"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
@@ -3847,7 +3850,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("Reescritura de URL"),
-    "urlTip": m134,
+    "urlTip": m135,
     "useHosts": MessageLookupByLibrary.simpleMessage("Usar hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage(
       "Usar hosts del sistema",
@@ -3856,7 +3859,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "usedTraffic": MessageLookupByLibrary.simpleMessage("Tráfico usado"),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("Usuario"),
-    "validUntil": m135,
+    "validUntil": m136,
     "value": MessageLookupByLibrary.simpleMessage("Valor"),
     "view": MessageLookupByLibrary.simpleMessage("Ver"),
     "viewAll": MessageLookupByLibrary.simpleMessage("Ver todo"),
@@ -3876,17 +3879,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "Escribir en el sistema también ajusta el reloj del sistema; Android lo ignora.",
     ),
-    "yearsAgo": m136,
-    "yearsAgoShort": m137,
+    "yearsAgo": m137,
+    "yearsAgoShort": m138,
     "yes": MessageLookupByLibrary.simpleMessage("Sí"),
     "zhCN": MessageLookupByLibrary.simpleMessage("Chino simplificado"),
-    "zzAutoUpdateHours": m138,
-    "zzAutoUpdateIntervalLabel": m139,
-    "zzExpiryDate": m140,
-    "zzProfileBasedOnOverrides": m141,
-    "zzProfileExpiredDays": m142,
-    "zzProfileImportHint": m143,
-    "zzProfileImportedOn": m144,
+    "zzAutoUpdateHours": m139,
+    "zzAutoUpdateIntervalLabel": m140,
+    "zzExpiryDate": m141,
+    "zzProfileBasedOnOverrides": m142,
+    "zzProfileExpiredDays": m143,
+    "zzProfileImportHint": m144,
+    "zzProfileImportedOn": m145,
     "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("Portapapeles"),
     "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("Archivo local"),
     "zzQuickScan": MessageLookupByLibrary.simpleMessage("Escanear"),
@@ -3895,6 +3898,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage(
       "Renovar / mejorar",
     ),
-    "zzTotalQuota": m145,
+    "zzTotalQuota": m146,
   };
 }

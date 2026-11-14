@@ -91,13 +91,169 @@ class SubscriptionInfoConverter
 class ProfilesDao extends DatabaseAccessor<Database> with _$ProfilesDaoMixin {
   ProfilesDao(super.attachedDatabase);
 
+  final _unreadableRows = StreamController<int>.broadcast(sync: true);
+  var _unreadableRowCount = 0;
+
+  Stream<int> watchUnreadableRows() async* {
+    yield _unreadableRowCount;
+    yield* _unreadableRows.stream;
+  }
+
+  void _setUnreadableRowCount(int count) {
+    if (count == _unreadableRowCount) return;
+    _unreadableRowCount = count;
+    _unreadableRows.add(count);
+  }
+
   Selectable<Profile> query() {
-    return profiles.readable(
-      (row) => row.toProfile(),
+    return profiles.readableRaw(
+      _readProfile,
       orderBy: [
         (t) => OrderingTerm(expression: t.order, nulls: NullsOrder.last),
         (t) => OrderingTerm.asc(t.id),
       ],
+      onSkippedRows: _setUnreadableRowCount,
+    );
+  }
+
+  Profile? _readProfile(Map<String, Object?> row) {
+    Object? raw(String column) {
+      final prefixed = '${profiles.aliasedName}.$column';
+      return row.containsKey(prefixed) ? row[prefixed] : row[column];
+    }
+
+    T? field<T extends Object>(
+      String name,
+      T? Function(Object? value) decode, {
+      T? fallback,
+    }) {
+      try {
+        return decode(raw(name)) ?? fallback;
+      } catch (error) {
+        commonPrint.log(
+          'Unreadable profiles.$name; using its fallback: '
+          '${compactError(error)}',
+          logLevel: LogLevel.warning,
+        );
+        return fallback;
+      }
+    }
+
+    final id = field<int>(
+      'id',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.int, value),
+    );
+    final type = field<ProfileType>('type', (value) {
+      final name = attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        value,
+      );
+      return name == null ? null : ProfileType.values.byName(name);
+    });
+    final label = field<String>(
+      'label',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.string, value),
+    );
+    final url = field<String>(
+      'url',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.string, value),
+    );
+    if (id == null || type == null || label == null || url == null) {
+      commonPrint.log(
+        'Skipped unreadable profiles row: required identity field missing',
+        logLevel: LogLevel.warning,
+      );
+      return null;
+    }
+
+    final extendType = field<ExtendType>('extend_type', (value) {
+      final name = attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        value,
+      );
+      return name == null ? null : ExtendType.values.byName(name);
+    }, fallback: ExtendType.standard);
+    final autoUpdateDurationMillis = field<int>(
+      'auto_update_duration_millis',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.int, value),
+      fallback: defaultUpdateDuration.inMilliseconds,
+    );
+    final autoUpdate = field<bool>(
+      'auto_update',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.bool, value),
+      fallback: true,
+    );
+    final selectedMap = field<Map<String, String>>(
+      'selected_map',
+      (value) => const StringMapConverter().fromSql(
+        attachedDatabase.typeMapping.read(DriftSqlType.string, value)!,
+      ),
+      fallback: const {},
+    );
+    final unfoldSet = field<Set<String>>(
+      'unfold_set',
+      (value) => const StringSetConverter().fromSql(
+        attachedDatabase.typeMapping.read(DriftSqlType.string, value)!,
+      ),
+      fallback: const {},
+    );
+    final currentGroupName = field<String>(
+      'current_group_name',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.string, value),
+    );
+    final ageSecretKey = field<String>(
+      'age_secret_key',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.string, value),
+    );
+    final lastUpdateDate = field<DateTime>(
+      'last_update_date',
+      (value) =>
+          attachedDatabase.typeMapping.read(DriftSqlType.dateTime, value),
+    );
+    final scriptId = field<int>(
+      'script_id',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.int, value),
+    );
+    final matchTarget = field<String>(
+      'match_target',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.string, value),
+    );
+    final order = field<int>(
+      'order',
+      (value) => attachedDatabase.typeMapping.read(DriftSqlType.int, value),
+    );
+    final subscriptionInfo = field<SubscriptionInfo>(
+      'subscription_info',
+      (value) => const SubscriptionInfoConverter().fromSql(
+        attachedDatabase.typeMapping.read(DriftSqlType.string, value),
+      ),
+    );
+    final overrides = field<ProfileOverrides>(
+      'overrides',
+      (value) => const ProfileOverridesConverter().fromSql(
+        attachedDatabase.typeMapping.read(DriftSqlType.string, value),
+      ),
+      fallback: const ProfileOverrides(),
+    );
+
+    return Profile(
+      id: id,
+      type: type,
+      label: label,
+      currentGroupName: currentGroupName,
+      url: url,
+      ageSecretKey: ageSecretKey ?? '',
+      lastUpdateDate: lastUpdateDate,
+      autoUpdateDuration: Duration(milliseconds: autoUpdateDurationMillis!),
+      subscriptionInfo: subscriptionInfo,
+      autoUpdate: autoUpdate!,
+      selectedMap: selectedMap!,
+      unfoldSet: unfoldSet!,
+      extendType: extendType!,
+      scriptId: scriptId,
+      matchTarget: matchTarget,
+      order: order,
+      overrides: overrides ?? const ProfileOverrides(),
     );
   }
 
@@ -143,7 +299,7 @@ class ProfilesDao extends DatabaseAccessor<Database> with _$ProfilesDaoMixin {
   }
 
   Future<Profile?> get(int id) => profiles
-      .readable((row) => row.toProfile(), where: (t) => t.id.equals(id))
+      .readableRaw(_readProfile, where: (t) => t.id.equals(id))
       .getSingleOrNull();
 
   Selectable<String> fileNames() => ids().map((id) => '$id.yaml');

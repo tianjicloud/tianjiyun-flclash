@@ -313,30 +313,32 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m133(transport) => "${transport} リクエストヘッダー";
 
-  static String m134(label) => "${label}はURLである必要があります";
+  static String m134(count) => "${count} 件の設定を読み取れなかったため、スキップしました。";
 
-  static String m135(date) => "有効期限 ${date}";
+  static String m135(label) => "${label}はURLである必要があります";
 
-  static String m136(count) => "${count} 年前";
+  static String m136(date) => "有効期限 ${date}";
 
   static String m137(count) => "${count} 年前";
 
-  static String m138(hours) => "${hours} 時間ごとに自動更新";
+  static String m138(count) => "${count} 年前";
 
-  static String m139(count, unit) => "${count}${unit}ごとに自動更新";
+  static String m139(hours) => "${hours} 時間ごとに自動更新";
 
-  static String m140(date) => "${date} に期限切れ";
+  static String m140(count, unit) => "${count}${unit}ごとに自動更新";
 
-  static String m141(count) => "現在のサブスクリプションを基に · 上書きルール${count}件";
+  static String m141(date) => "${date} に期限切れ";
 
-  static String m142(count) => "サブスクリプションリンク · ${count}日前に期限切れ";
+  static String m142(count) => "現在のサブスクリプションを基に · 上書きルール${count}件";
 
-  static String m143(scheme) =>
+  static String m143(count) => "サブスクリプションリンク · ${count}日前に期限切れ";
+
+  static String m144(scheme) =>
       "クリップボードからリンクを貼り付けるか、ローカル YAML ファイルを選択するか、ブラウザーで ${scheme} を開いてリンクをインポートできます。";
 
-  static String m144(date) => "ローカルファイル · ${date}にインポート";
+  static String m145(date) => "ローカルファイル · ${date}にインポート";
 
-  static String m145(quota) => "合計 ${quota}";
+  static String m146(quota) => "合計 ${quota}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3059,6 +3061,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unmaximize": MessageLookupByLibrary.simpleMessage("元に戻す"),
     "unnamed": MessageLookupByLibrary.simpleMessage("名称未設定"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("固定を解除"),
+    "unreadableProfileRows": m134,
     "update": MessageLookupByLibrary.simpleMessage("更新"),
     "updateAll": MessageLookupByLibrary.simpleMessage("すべて更新"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
@@ -3088,14 +3091,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBandwidth": MessageLookupByLibrary.simpleMessage("アップロード帯域幅"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("URL 書き換え"),
-    "urlTip": m134,
+    "urlTip": m135,
     "useHosts": MessageLookupByLibrary.simpleMessage("Hostsを使用"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("システムのHostsを使用"),
     "usedShort": MessageLookupByLibrary.simpleMessage("使用済み"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("使用済みトラフィック"),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("ユーザー名"),
-    "validUntil": m135,
+    "validUntil": m136,
     "value": MessageLookupByLibrary.simpleMessage("値"),
     "view": MessageLookupByLibrary.simpleMessage("表示"),
     "viewAll": MessageLookupByLibrary.simpleMessage("すべて表示"),
@@ -3111,23 +3114,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "システムに書き込むを有効にするとシステムクロックも設定します。Android では無視されます。",
     ),
-    "yearsAgo": m136,
-    "yearsAgoShort": m137,
+    "yearsAgo": m137,
+    "yearsAgoShort": m138,
     "yes": MessageLookupByLibrary.simpleMessage("はい"),
     "zhCN": MessageLookupByLibrary.simpleMessage("簡体字中国語"),
-    "zzAutoUpdateHours": m138,
-    "zzAutoUpdateIntervalLabel": m139,
-    "zzExpiryDate": m140,
-    "zzProfileBasedOnOverrides": m141,
-    "zzProfileExpiredDays": m142,
-    "zzProfileImportHint": m143,
-    "zzProfileImportedOn": m144,
+    "zzAutoUpdateHours": m139,
+    "zzAutoUpdateIntervalLabel": m140,
+    "zzExpiryDate": m141,
+    "zzProfileBasedOnOverrides": m142,
+    "zzProfileExpiredDays": m143,
+    "zzProfileImportHint": m144,
+    "zzProfileImportedOn": m145,
     "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("クリップボード"),
     "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("ローカルファイル"),
     "zzQuickScan": MessageLookupByLibrary.simpleMessage("スキャン"),
     "zzRemaining": MessageLookupByLibrary.simpleMessage("残り"),
     "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("日"),
     "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage("更新 / アップグレード"),
-    "zzTotalQuota": m145,
+    "zzTotalQuota": m146,
   };
 }

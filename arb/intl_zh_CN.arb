@@ -1838,5 +1838,11 @@
       "failed": {},
       "reason": {}
     }
+  },
+  "unreadableProfileRows": "有 {count} 个配置无法读取，已跳过。",
+  "@unreadableProfileRows": {
+    "placeholders": {
+      "count": {}
+    }
   }
 }

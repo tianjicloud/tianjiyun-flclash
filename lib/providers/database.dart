@@ -133,6 +133,11 @@ Stream<List<Profile>> profilesStream(Ref ref) {
 }
 
 @riverpod
+Stream<int> unreadableProfileRows(Ref ref) {
+  return database.profilesDao.watchUnreadableRows();
+}
+
+@riverpod
 Stream<Set<String>> customGroupNames(Ref ref) {
   return database.proxyGroupsDao.names().watch().map(Set.of);
 }

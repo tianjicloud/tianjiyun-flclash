@@ -1838,5 +1838,11 @@
       "failed": {},
       "reason": {}
     }
+  },
+  "unreadableProfileRows": "Не удалось прочитать профилей: {count}; они пропущены.",
+  "@unreadableProfileRows": {
+    "placeholders": {
+      "count": {}
+    }
   }
 }

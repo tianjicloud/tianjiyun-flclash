@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:drift/native.dart';
+import 'package:fl_clash/common/common.dart';
 // `Profiles`, `Scripts` and `ProxyGroups` name both a drift table and a
 // notifier, so the schema side is imported behind a prefix.
 import 'package:fl_clash/database/database.dart' as db;
@@ -116,6 +117,85 @@ void main() {
     });
 
     List<Profile> read() => container.read(profilesProvider);
+
+    Future<void> insertRawProfile({
+      int id = 100,
+      String type = 'url',
+      String label = 'Raw',
+      String url = 'https://example.test/config',
+      String extendType = 'standard',
+      String duration = '3600000',
+      String lastUpdateDate = 'NULL',
+      String scriptId = 'NULL',
+      String order = 'NULL',
+      String selectedMap = '{}',
+      String unfoldSet = '[]',
+      String subscriptionInfo = 'null',
+      String overrides = 'null',
+    }) => testDatabase.customStatement('''
+      INSERT INTO profiles (
+        id, type, label, current_group_name, url, age_secret_key,
+        last_update_date, extend_type, script_id, match_target,
+        auto_update_duration_millis, subscription_info, auto_update,
+        selected_map, unfold_set, "order", overrides
+      ) VALUES (
+        $id, '$type', '$label', NULL, '$url', NULL,
+        $lastUpdateDate, '$extendType', $scriptId, NULL, $duration,
+        '$subscriptionInfo', 1, '$selectedMap', '$unfoldSet', $order,
+        '$overrides'
+      )
+    ''');
+
+    test('bad optional columns fall back without hiding the profile', () async {
+      await insertRawProfile(
+        extendType: 'legacy-script',
+        duration: "'not-an-int'",
+        selectedMap: 'not-json',
+        unfoldSet: '{}',
+        subscriptionInfo: '{bad-json',
+        overrides: '{bad-json',
+      );
+      final raw = await testDatabase
+          .customSelect('SELECT * FROM profiles')
+          .getSingle();
+      expect(raw.data, containsPair('selected_map', 'not-json'));
+
+      final rows = await testDatabase.profilesDao.query().get();
+
+      expect(rows.single.id, 100);
+      expect(rows.single.extendType, ExtendType.standard);
+      expect(rows.single.autoUpdateDuration, defaultUpdateDuration);
+      expect(rows.single.selectedMap, isEmpty);
+      expect(rows.single.unfoldSet, isEmpty);
+      expect(rows.single.subscriptionInfo, isNull);
+      expect(rows.single.overrides, const ProfileOverrides());
+    });
+
+    test('bad required profile type is counted as unreadable', () async {
+      await insertRawProfile(type: 'legacy-url-type');
+
+      expect(await testDatabase.profilesDao.query().get(), isEmpty);
+      expect(await testDatabase.profilesDao.watchUnreadableRows().first, 1);
+    });
+
+    test(
+      'bad nullable scalar columns fall back without hiding the profile',
+      () async {
+        await insertRawProfile(
+          id: 101,
+          lastUpdateDate: "'not-a-date'",
+          scriptId: "'not-an-int'",
+          order: "'not-an-int'",
+        );
+
+        final rows = await testDatabase.profilesDao.query().get();
+
+        expect(rows.single.id, 101);
+        expect(rows.single.lastUpdateDate, isNull);
+        expect(rows.single.scriptId, isNull);
+        expect(rows.single.order, isNull);
+      },
+    );
 
     test('put persists the row and the stream echoes it back', () async {
       notifier.put(profile(1, label: 'First'));

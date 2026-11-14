@@ -117,6 +117,8 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
         final appLocalizations = context.appLocalizations;
         final isLoading = ref.watch(loadingProvider(LoadingTag.profiles));
         final state = ref.watch(profilesStateProvider);
+        final unreadableRows =
+            ref.watch(unreadableProfileRowsProvider).value ?? 0;
         final business = isTianjiSubscriptionProfile(
           ref.watch(currentProfileProvider),
         );
@@ -173,32 +175,48 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
                     },
                   ),
                 ],
-          body: NullStatusSwitcher(
-            isEmpty: state.profiles.isEmpty,
-            nullStatus: NullStatus(
-              label: appLocalizations.nullTip(appLocalizations.profiles),
-              description: appLocalizations.nullProfileDesc,
-              illustration: NullStatusIllustration.profile,
-              action: AddProfileMenu(
-                builder: (open) => TonalButton(
-                  size: TonalButtonSize.bar,
-                  glyph: AppGlyphs.addCircle,
-                  label: appLocalizations.addProfile,
-                  onPressed: open,
+          body: Column(
+            children: [
+              if (unreadableRows > 0)
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    appLocalizations.unreadableProfileRows(unreadableRows),
+                    style: AppTextStyle.footnote
+                        .of(context)
+                        .copyWith(color: context.colorScheme.error),
+                  ),
+                ),
+              Expanded(
+                child: NullStatusSwitcher(
+                  isEmpty: state.profiles.isEmpty,
+                  nullStatus: NullStatus(
+                    label: appLocalizations.nullTip(appLocalizations.profiles),
+                    description: appLocalizations.nullProfileDesc,
+                    illustration: NullStatusIllustration.profile,
+                    action: AddProfileMenu(
+                      builder: (open) => TonalButton(
+                        size: TonalButtonSize.bar,
+                        glyph: AppGlyphs.addCircle,
+                        label: appLocalizations.addProfile,
+                        onPressed: open,
+                      ),
+                    ),
+                  ),
+                  child: !picker && business
+                      ? _BusinessProfilesList(
+                          profiles: state.profiles,
+                          currentProfileId: state.currentProfileId,
+                        )
+                      : _ProfilesGrid(
+                          profiles: state.profiles,
+                          currentProfileId: state.currentProfileId,
+                          spacing: spacing,
+                          revealsSelected: !picker,
+                        ),
                 ),
               ),
-            ),
-            child: !picker && business
-                ? _BusinessProfilesList(
-                    profiles: state.profiles,
-                    currentProfileId: state.currentProfileId,
-                  )
-                : _ProfilesGrid(
-                    profiles: state.profiles,
-                    currentProfileId: state.currentProfileId,
-                    spacing: spacing,
-                    revealsSelected: !picker,
-                  ),
+            ],
           ),
         );
       },

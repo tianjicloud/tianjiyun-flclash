@@ -1838,5 +1838,11 @@
       "failed": {},
       "reason": {}
     }
+  },
+  "unreadableProfileRows": "Hay {count} perfiles ilegibles; se omitieron.",
+  "@unreadableProfileRows": {
+    "placeholders": {
+      "count": {}
+    }
   }
 }

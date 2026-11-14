@@ -320,30 +320,32 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m133(transport) => "${transport} 요청 헤더";
 
-  static String m134(label) => "${label}은(는) URL이어야 합니다";
+  static String m134(count) => "읽을 수 없는 프로필 ${count}개를 건너뛰었습니다.";
 
-  static String m135(date) => "${date}까지 유효";
+  static String m135(label) => "${label}은(는) URL이어야 합니다";
 
-  static String m136(count) => "${Intl.plural(count, other: '${count}년 전')}";
+  static String m136(date) => "${date}까지 유효";
 
   static String m137(count) => "${Intl.plural(count, other: '${count}년 전')}";
 
-  static String m138(hours) => "${hours}시간마다 자동 업데이트";
+  static String m138(count) => "${Intl.plural(count, other: '${count}년 전')}";
 
-  static String m139(count, unit) => "${count}${unit}마다 자동 업데이트";
+  static String m139(hours) => "${hours}시간마다 자동 업데이트";
 
-  static String m140(date) => "${date} 만료";
+  static String m140(count, unit) => "${count}${unit}마다 자동 업데이트";
 
-  static String m141(count) => "현재 구독 기반 · 재정의 규칙 ${count}개";
+  static String m141(date) => "${date} 만료";
 
-  static String m142(count) => "구독 링크 · ${count}일 전에 만료";
+  static String m142(count) => "현재 구독 기반 · 재정의 규칙 ${count}개";
 
-  static String m143(scheme) =>
+  static String m143(count) => "구독 링크 · ${count}일 전에 만료";
+
+  static String m144(scheme) =>
       "클립보드에서 링크를 붙여넣거나 로컬 YAML 파일을 선택하거나 브라우저에서 ${scheme}를 열어 링크를 가져올 수 있습니다.";
 
-  static String m144(date) => "로컬 파일 · ${date} 가져옴";
+  static String m145(date) => "로컬 파일 · ${date} 가져옴";
 
-  static String m145(quota) => "총 ${quota}";
+  static String m146(quota) => "총 ${quota}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3022,6 +3024,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unmaximize": MessageLookupByLibrary.simpleMessage("이전 크기로 복원"),
     "unnamed": MessageLookupByLibrary.simpleMessage("이름 없음"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("창 고정 해제"),
+    "unreadableProfileRows": m134,
     "update": MessageLookupByLibrary.simpleMessage("업데이트"),
     "updateAll": MessageLookupByLibrary.simpleMessage("모두 업데이트"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
@@ -3049,14 +3052,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBandwidth": MessageLookupByLibrary.simpleMessage("업로드 대역폭"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("URL 재작성"),
-    "urlTip": m134,
+    "urlTip": m135,
     "useHosts": MessageLookupByLibrary.simpleMessage("hosts 사용"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("시스템 hosts 사용"),
     "usedShort": MessageLookupByLibrary.simpleMessage("사용"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("사용한 트래픽"),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("사용자 이름"),
-    "validUntil": m135,
+    "validUntil": m136,
     "value": MessageLookupByLibrary.simpleMessage("값"),
     "view": MessageLookupByLibrary.simpleMessage("보기"),
     "viewAll": MessageLookupByLibrary.simpleMessage("모두 보기"),
@@ -3072,23 +3075,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "시스템에 기록하면 시스템 시계도 설정합니다. Android에서는 무시됩니다.",
     ),
-    "yearsAgo": m136,
-    "yearsAgoShort": m137,
+    "yearsAgo": m137,
+    "yearsAgoShort": m138,
     "yes": MessageLookupByLibrary.simpleMessage("예"),
     "zhCN": MessageLookupByLibrary.simpleMessage("중국어 간체"),
-    "zzAutoUpdateHours": m138,
-    "zzAutoUpdateIntervalLabel": m139,
-    "zzExpiryDate": m140,
-    "zzProfileBasedOnOverrides": m141,
-    "zzProfileExpiredDays": m142,
-    "zzProfileImportHint": m143,
-    "zzProfileImportedOn": m144,
+    "zzAutoUpdateHours": m139,
+    "zzAutoUpdateIntervalLabel": m140,
+    "zzExpiryDate": m141,
+    "zzProfileBasedOnOverrides": m142,
+    "zzProfileExpiredDays": m143,
+    "zzProfileImportHint": m144,
+    "zzProfileImportedOn": m145,
     "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("클립보드"),
     "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("로컬 파일"),
     "zzQuickScan": MessageLookupByLibrary.simpleMessage("스캔"),
     "zzRemaining": MessageLookupByLibrary.simpleMessage("남은 기간"),
     "zzRemainingDayUnit": MessageLookupByLibrary.simpleMessage("일"),
     "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage("갱신 / 업그레이드"),
-    "zzTotalQuota": m145,
+    "zzTotalQuota": m146,
   };
 }

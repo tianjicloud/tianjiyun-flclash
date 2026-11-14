@@ -347,32 +347,35 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m133(transport) => "${transport} Headers";
 
-  static String m134(label) => "${label} must be a URL";
+  static String m134(count) =>
+      "There are ${count} unreadable profiles; they were skipped.";
 
-  static String m135(date) => "Valid until ${date}";
+  static String m135(label) => "${label} must be a URL";
 
-  static String m136(count) =>
+  static String m136(date) => "Valid until ${date}";
+
+  static String m137(count) =>
       "${Intl.plural(count, one: '1 year ago', other: '${count} years ago')}";
 
-  static String m137(count) => "${Intl.plural(count, other: '${count}y ago')}";
+  static String m138(count) => "${Intl.plural(count, other: '${count}y ago')}";
 
-  static String m138(hours) => "every ${hours} hours auto update";
+  static String m139(hours) => "every ${hours} hours auto update";
 
-  static String m139(count, unit) => "Auto update every ${count} ${unit}";
+  static String m140(count, unit) => "Auto update every ${count} ${unit}";
 
-  static String m140(date) => "Expires ${date}";
+  static String m141(date) => "Expires ${date}";
 
-  static String m141(count) =>
+  static String m142(count) =>
       "Based on current subscription · ${count} override rules";
 
-  static String m142(count) => "Subscription link · expired ${count} days ago";
+  static String m143(count) => "Subscription link · expired ${count} days ago";
 
-  static String m143(scheme) =>
+  static String m144(scheme) =>
       "You can also paste a link from clipboard, choose a local YAML file, or open ${scheme} in a browser to import a link.";
 
-  static String m144(date) => "Local file · imported ${date}";
+  static String m145(date) => "Local file · imported ${date}";
 
-  static String m145(quota) => "Total ${quota}";
+  static String m146(quota) => "Total ${quota}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3572,6 +3575,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unmaximize": MessageLookupByLibrary.simpleMessage("Restore down"),
     "unnamed": MessageLookupByLibrary.simpleMessage("Unnamed"),
     "unpinWindow": MessageLookupByLibrary.simpleMessage("Unpin window"),
+    "unreadableProfileRows": m134,
     "update": MessageLookupByLibrary.simpleMessage("Update"),
     "updateAll": MessageLookupByLibrary.simpleMessage("Update all"),
     "updateDownloadFailed": MessageLookupByLibrary.simpleMessage(
@@ -3601,14 +3605,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBandwidth": MessageLookupByLibrary.simpleMessage("Upload bandwidth"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlRewrite": MessageLookupByLibrary.simpleMessage("URL rewrite"),
-    "urlTip": m134,
+    "urlTip": m135,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "usedShort": MessageLookupByLibrary.simpleMessage("used"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("Used traffic"),
     "userAgent": MessageLookupByLibrary.simpleMessage("User-Agent"),
     "username": MessageLookupByLibrary.simpleMessage("Username"),
-    "validUntil": m135,
+    "validUntil": m136,
     "value": MessageLookupByLibrary.simpleMessage("Value"),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
@@ -3626,17 +3630,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(
       "Write to system also sets the system clock; Android ignores it.",
     ),
-    "yearsAgo": m136,
-    "yearsAgoShort": m137,
+    "yearsAgo": m137,
+    "yearsAgoShort": m138,
     "yes": MessageLookupByLibrary.simpleMessage("Yes"),
     "zhCN": MessageLookupByLibrary.simpleMessage("Simplified Chinese"),
-    "zzAutoUpdateHours": m138,
-    "zzAutoUpdateIntervalLabel": m139,
-    "zzExpiryDate": m140,
-    "zzProfileBasedOnOverrides": m141,
-    "zzProfileExpiredDays": m142,
-    "zzProfileImportHint": m143,
-    "zzProfileImportedOn": m144,
+    "zzAutoUpdateHours": m139,
+    "zzAutoUpdateIntervalLabel": m140,
+    "zzExpiryDate": m141,
+    "zzProfileBasedOnOverrides": m142,
+    "zzProfileExpiredDays": m143,
+    "zzProfileImportHint": m144,
+    "zzProfileImportedOn": m145,
     "zzQuickClipboard": MessageLookupByLibrary.simpleMessage("Clipboard"),
     "zzQuickLocalFile": MessageLookupByLibrary.simpleMessage("Local file"),
     "zzQuickScan": MessageLookupByLibrary.simpleMessage("Scan"),
@@ -3645,6 +3649,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "zzRenewUpgradeShort": MessageLookupByLibrary.simpleMessage(
       "Renew / upgrade",
     ),
-    "zzTotalQuota": m145,
+    "zzTotalQuota": m146,
   };
 }
