@@ -1224,6 +1224,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "시작 버튼이 있어 제거할 수 없습니다",
     ),
+    "currentProfileLabel": MessageLookupByLibrary.simpleMessage("현재"),
     "currentUsage": MessageLookupByLibrary.simpleMessage("이번 기간 사용량"),
     "custom": MessageLookupByLibrary.simpleMessage("사용자 지정"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("프록시 추가"),
@@ -2373,7 +2374,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("홈에 요금제 정보 표시"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "즉시 적용됩니다. 불러오기에 실패하면 현재 설정을 유지합니다.",
+      "전환하면 연결이 다시 설정됩니다. 실패하면 현재 프로필이 유지됩니다.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "이 프로필에만 적용되며 네트워크 설정의 TUN 덮어쓰기 항목보다 우선합니다.",

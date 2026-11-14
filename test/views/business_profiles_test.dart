@@ -5,6 +5,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/profiles/profiles.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prism_ui/prism_ui.dart' show AppBar, Card, ThemeData;
@@ -135,6 +136,71 @@ _subscriptionContentGeometry(WidgetTester tester, {required bool macOS}) {
 }
 
 void main() {
+  testWidgets('desktop profile switch waits for panel confirmation', (
+    tester,
+  ) async {
+    await _pumpBusinessProfiles(tester, const Size(1280, 900));
+    final l10n = currentAppLocalizations;
+    final profiles = globalState.container.read(profilesProvider);
+    final currentId = profiles.first.id;
+    final backupId = profiles.last.id;
+    final otherSwitch = find.ancestor(
+      of: find.text(l10n.switchProfileShort),
+      matching: find.byType(BusinessSecondaryButton),
+    );
+    await tester.tap(otherSwitch.first);
+    await tester.pumpAndSettle();
+
+    expect(globalState.container.read(currentProfileIdProvider), currentId);
+    expect(find.text(l10n.switchProfile), findsOneWidget);
+    expect(find.text('Backup'), findsNWidgets(2));
+    expect(find.text(l10n.profileSwitchNote), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.text(l10n.switchProfileShort).last);
+    await tester.pumpAndSettle();
+    expect(globalState.container.read(currentProfileIdProvider), backupId);
+    expect(find.text(l10n.switchProfile), findsNothing);
+  });
+
+  testWidgets(
+    'desktop profile switch panel cancels and dismisses with escape',
+    (tester) async {
+      await _pumpBusinessProfiles(tester, const Size(820, 600));
+      final l10n = currentAppLocalizations;
+      final currentId = globalState.container.read(currentProfileIdProvider);
+      final switchButton = find.ancestor(
+        of: find.text(l10n.switchProfileShort),
+        matching: find.byType(BusinessSecondaryButton),
+      );
+      await tester.tap(switchButton.first);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.text(l10n.cancel));
+      await tester.pumpAndSettle();
+      expect(globalState.container.read(currentProfileIdProvider), currentId);
+
+      await tester.tap(switchButton.first);
+      await tester.pumpAndSettle();
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pumpAndSettle();
+      expect(globalState.container.read(currentProfileIdProvider), currentId);
+    },
+  );
+
+  testWidgets('mobile profile switch remains immediate', (tester) async {
+    await _pumpBusinessProfiles(tester, const Size(390, 844), mobile: true);
+    final l10n = currentAppLocalizations;
+    final profiles = globalState.container.read(profilesProvider);
+    await tester.tap(find.text('Backup'));
+    await tester.pumpAndSettle();
+    expect(
+      globalState.container.read(currentProfileIdProvider),
+      profiles.last.id,
+    );
+    expect(find.text(l10n.switchProfile), findsNothing);
+  });
+
   testWidgets('profiles page reports rows the database could not read', (
     tester,
   ) async {

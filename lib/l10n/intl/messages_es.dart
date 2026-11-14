@@ -1538,6 +1538,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Contiene el botón de inicio y no se puede quitar",
     ),
+    "currentProfileLabel": MessageLookupByLibrary.simpleMessage("Actual"),
     "currentUsage": MessageLookupByLibrary.simpleMessage("Uso del periodo"),
     "custom": MessageLookupByLibrary.simpleMessage("Personalizado"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("Añadir proxy"),
@@ -2997,7 +2998,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Mostrar información del plan en inicio",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Se aplica al instante; se conserva el perfil actual si falla la carga.",
+      "Al cambiar, se restablecerá la conexión. Si falla, se conservará el perfil actual.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Se aplica solo a este perfil y tiene prioridad sobre las entradas de sobrescritura de TUN de los ajustes de red.",

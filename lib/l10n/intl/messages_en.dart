@@ -1457,6 +1457,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Holds the start button and can\'t be removed",
     ),
+    "currentProfileLabel": MessageLookupByLibrary.simpleMessage("Current"),
     "currentUsage": MessageLookupByLibrary.simpleMessage("Current usage"),
     "custom": MessageLookupByLibrary.simpleMessage("Custom"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("Add proxy"),
@@ -2816,7 +2817,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Show plan information on home",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Changes apply immediately; the current profile stays if loading fails.",
+      "Switching rebuilds the connection. If it fails, the current profile stays.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Applies to this profile only and takes precedence over the TUN override entries in the network settings.",

@@ -427,26 +427,38 @@ class _CustomProfileViewState extends ConsumerState<CustomProfileView> {
         ),
       };
       if (!canShowEditor) return content;
+      final surfaceLevel = SurfaceLevel.floatingOf(context.colorScheme);
       return Row(
         children: [
           Expanded(child: content),
           SizedBox(
-            width: 1,
-            child: ColoredBox(color: context.colorScheme.outlineVariant),
-          ),
-          SizedBox(
-            width: 390,
+            width: 414,
             child: Padding(
-              padding: const EdgeInsets.all(20),
-              child:
-                  _activeEditor ??
-                  Center(
-                    child: Text(
-                      context.appLocalizations.customEditorPanelEmpty,
-                      textAlign: TextAlign.center,
-                      style: context.listSubtitleStyle,
-                    ),
+              padding: const EdgeInsets.all(12),
+              child: SurfaceScope(
+                level: surfaceLevel,
+                child: Surface(
+                  color: surfaceLevel.colorOf(context.colorScheme),
+                  shape: AppShape.all(AppCorner.xxl),
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 3,
+                  shadowColor: context.colorScheme.shadow.withValues(
+                    alpha: 0.16,
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child:
+                        _activeEditor ??
+                        Center(
+                          child: Text(
+                            context.appLocalizations.customEditorPanelEmpty,
+                            textAlign: TextAlign.center,
+                            style: context.listSubtitleStyle,
+                          ),
+                        ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],

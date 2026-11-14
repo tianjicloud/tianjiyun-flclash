@@ -1247,6 +1247,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "起動ボタンがあるため削除できません",
     ),
+    "currentProfileLabel": MessageLookupByLibrary.simpleMessage("現在"),
     "currentUsage": MessageLookupByLibrary.simpleMessage("今月の使用量"),
     "custom": MessageLookupByLibrary.simpleMessage("カスタム"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("プロキシを追加"),
@@ -2404,7 +2405,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("ホームにプラン情報を表示"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "すぐ反映。読み込みに失敗した場合は現在の設定を保持します。",
+      "切り替えると接続が再確立されます。失敗した場合は現在の設定を保持します。",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "このプロファイルにのみ適用され、ネットワーク設定の TUN 上書き項目より優先されます。",

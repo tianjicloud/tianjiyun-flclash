@@ -433,7 +433,15 @@ class _BusinessProfilesList extends ConsumerWidget {
                 currentProfileId: currentProfileId,
                 mobile: false,
                 onSwitch: (profileId) {
-                  ref.read(currentProfileIdProvider.notifier).value = profileId;
+                  if (profileId == null) return;
+                  _showProfileSwitchPanel(
+                    context,
+                    profiles,
+                    currentProfileId,
+                    profileId,
+                    (id) =>
+                        ref.read(currentProfileIdProvider.notifier).value = id,
+                  );
                 },
                 onSort: () => _showProfileSort(context, profiles),
               ),
@@ -467,6 +475,31 @@ class _BusinessProfilesList extends ConsumerWidget {
 }
 
 const _businessProfileIconRadius = 10.0;
+
+bool _profileExpired(Profile profile) {
+  final expiry = profile.subscriptionInfo?.expireDate;
+  return profile.type == ProfileType.url &&
+      expiry != null &&
+      expiry.isBefore(DateTime.now());
+}
+
+String _businessProfileSubtitle(BuildContext context, Profile profile) {
+  final l10n = context.appLocalizations;
+  if (profile.type == ProfileType.url && _profileExpired(profile)) {
+    return l10n.zzProfileExpiredDays(
+      DateTime.now().difference(profile.subscriptionInfo!.expireDate!).inDays,
+    );
+  }
+  return switch (profile.type) {
+    ProfileType.url => l10n.subscriptionLink,
+    ProfileType.file => l10n.zzProfileImportedOn(
+      profile.lastUpdateDate?.show ?? '',
+    ),
+    ProfileType.custom => l10n.zzProfileBasedOnOverrides(
+      profile.overrides.proxyProviders.length,
+    ),
+  };
+}
 
 class _BusinessOtherProfilesCard extends StatelessWidget {
   const _BusinessOtherProfilesCard({
@@ -502,22 +535,7 @@ class _BusinessOtherProfilesCard extends StatelessWidget {
                 style: BusinessText.cardTitle(context),
               ),
               if (!mobile) ...[
-                if (MacOSStyle.of(context))
-                  const Spacer()
-                else ...[
-                  Expanded(
-                    child: Text(
-                      l10n.profileSwitchNote,
-                      textAlign: TextAlign.end,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: BusinessText.metaLabel(
-                        context,
-                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                ],
+                const Spacer(),
                 BusinessSecondaryButton(
                   label: l10n.sort,
                   width: _scaledControlWidth(context, 60),
@@ -559,33 +577,6 @@ class _BusinessOtherProfileRow extends StatelessWidget {
   final bool mobile;
   final ValueChanged<int?> onSwitch;
 
-  bool get _expired {
-    final expiry = profile.subscriptionInfo?.expireDate;
-    return profile.type == ProfileType.url &&
-        expiry != null &&
-        expiry.isBefore(DateTime.now());
-  }
-
-  String _subtitle(BuildContext context) {
-    final l10n = context.appLocalizations;
-    return switch (profile.type) {
-      ProfileType.url =>
-        _expired
-            ? l10n.zzProfileExpiredDays(
-                DateTime.now()
-                    .difference(profile.subscriptionInfo!.expireDate!)
-                    .inDays,
-              )
-            : l10n.subscriptionLink,
-      ProfileType.file => l10n.zzProfileImportedOn(
-        profile.lastUpdateDate?.show ?? '',
-      ),
-      ProfileType.custom => l10n.zzProfileBasedOnOverrides(
-        profile.overrides.proxyProviders.length,
-      ),
-    };
-  }
-
   Glyph get _glyph => switch (profile.type) {
     ProfileType.url => AppGlyphs.link,
     ProfileType.file => AppGlyphs.importFile,
@@ -604,7 +595,7 @@ class _BusinessOtherProfileRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.appLocalizations;
     final colorScheme = context.colorScheme;
-    final expired = _expired;
+    final expired = _profileExpired(profile);
     final custom = profile.type == ProfileType.custom;
     final row = ListItem(
       minTileHeight: MacOSMetrics.doubleLineRowHeight(context, fallback: 65),
@@ -633,7 +624,7 @@ class _BusinessOtherProfileRow extends StatelessWidget {
         style: BusinessText.cardTitle(context),
       ),
       subtitle: Text(
-        _subtitle(context),
+        _businessProfileSubtitle(context, profile),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: BusinessText.metaLabel(
@@ -671,6 +662,316 @@ class _BusinessOtherProfileRow extends StatelessWidget {
           )
         : row;
   }
+}
+
+void _showProfileSwitchPanel(
+  BuildContext context,
+  List<Profile> profiles,
+  int? currentProfileId,
+  int? selectedId,
+  ValueChanged<int> onConfirm,
+) {
+  Navigator.of(context).push<void>(
+    PageRouteBuilder<void>(
+      opaque: false,
+      barrierDismissible: true,
+      barrierColor: const Color(0x52000000),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          _ProfileSwitchPanel(
+            profiles: profiles,
+            currentProfileId: currentProfileId,
+            initialProfileId: selectedId,
+            onConfirm: onConfirm,
+          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (context.disableAnimations) return child;
+        final curve = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+        );
+        return FadeTransition(
+          opacity: curve,
+          child: SlideTransition(
+            position: Tween(
+              begin: const Offset(0.12, 0),
+              end: Offset.zero,
+            ).animate(curve),
+            child: child,
+          ),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 220),
+      reverseTransitionDuration: const Duration(milliseconds: 160),
+    ),
+  );
+}
+
+class _ProfileSwitchPanel extends StatefulWidget {
+  const _ProfileSwitchPanel({
+    required this.profiles,
+    required this.currentProfileId,
+    required this.initialProfileId,
+    required this.onConfirm,
+  });
+
+  final List<Profile> profiles;
+  final int? currentProfileId;
+  final int? initialProfileId;
+  final ValueChanged<int> onConfirm;
+
+  @override
+  State<_ProfileSwitchPanel> createState() => _ProfileSwitchPanelState();
+}
+
+class _ProfileSwitchPanelState extends State<_ProfileSwitchPanel> {
+  late int? selectedId = widget.initialProfileId;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.appLocalizations;
+    final ordered = [
+      ...widget.profiles.where(
+        (profile) => profile.id == widget.currentProfileId,
+      ),
+      ...widget.profiles.where(
+        (profile) => profile.id != widget.currentProfileId,
+      ),
+    ];
+    final width = (MediaQuery.sizeOf(context).width - 24).clamp(0.0, 390.0);
+    final surfaceLevel = SurfaceLevel.floatingOf(context.colorScheme);
+    return Focus(
+      autofocus: true,
+      child: Shortcuts(
+        shortcuts: const {
+          SingleActivator(LogicalKeyboardKey.escape): _DismissPanelIntent(),
+        },
+        child: Actions(
+          actions: {
+            _DismissPanelIntent: CallbackAction<_DismissPanelIntent>(
+              onInvoke: (_) {
+                Navigator.of(context).pop();
+                return null;
+              },
+            ),
+          },
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: Navigator.of(context).pop,
+                  child: const SizedBox.expand(),
+                ),
+              ),
+              Positioned.fill(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SurfaceScope(
+                      level: surfaceLevel,
+                      child: Surface(
+                        color: surfaceLevel.colorOf(context.colorScheme),
+                        shape: AppShape.all(AppCorner.xxl),
+                        clipBehavior: Clip.antiAlias,
+                        elevation: 3,
+                        shadowColor: context.colorScheme.shadow.withValues(
+                          alpha: 0.16,
+                        ),
+                        child: SizedBox(
+                          width: width,
+                          height: double.infinity,
+                          child: SafeArea(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    24,
+                                    20,
+                                    16,
+                                    16,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          l10n.switchProfile,
+                                          style: BusinessText.cardTitle(
+                                            context,
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        tooltip: l10n.close,
+                                        onPressed: Navigator.of(context).pop,
+                                        icon: const GlyphIcon(AppGlyphs.close),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: PrismListView(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    itemCount: ordered.length,
+                                    gap: 4,
+                                    estimatedItemExtent: 72,
+                                    itemBuilder: (context, index) {
+                                      final profile = ordered[index];
+                                      final isCurrent =
+                                          profile.id == widget.currentProfileId;
+                                      final expired = _profileExpired(profile);
+                                      final selected = selectedId == profile.id;
+                                      final row = ListItem(
+                                        minTileHeight: 68,
+                                        leading: isCurrent
+                                            ? const SizedBox.square(
+                                                dimension: 20,
+                                              )
+                                            : _ProfileSwitchRadio(
+                                                selected: selected,
+                                              ),
+                                        title: Text(
+                                          profile.realLabel,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          _businessProfileSubtitle(
+                                            context,
+                                            profile,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          spacing: 8,
+                                          children: [
+                                            if (expired)
+                                              DashboardChip(
+                                                label: l10n.expiredStatus,
+                                                tone: DashboardChipTone.warn,
+                                              ),
+                                            if (isCurrent)
+                                              Text(l10n.currentProfileLabel),
+                                          ],
+                                        ),
+                                        onTap: isCurrent
+                                            ? null
+                                            : () => setState(
+                                                () => selectedId = profile.id,
+                                              ),
+                                      );
+                                      return isCurrent
+                                          ? Semantics(
+                                              enabled: false,
+                                              child: Opacity(
+                                                opacity: 0.55,
+                                                child: row,
+                                              ),
+                                            )
+                                          : row;
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        l10n.profileSwitchNote,
+                                        style: BusinessText.metaLabel(context)
+                                            .copyWith(
+                                              color: context
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          BusinessSecondaryButton(
+                                            label: l10n.cancel,
+                                            width: 84,
+                                            onPressed: Navigator.of(
+                                              context,
+                                            ).pop,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          BusinessPrimaryButton(
+                                            label: l10n.switchProfileShort,
+                                            width: 84,
+                                            onPressed:
+                                                selectedId == null ||
+                                                    selectedId ==
+                                                        widget.currentProfileId
+                                                ? null
+                                                : () {
+                                                    widget.onConfirm(
+                                                      selectedId!,
+                                                    );
+                                                    dialogs.showBanner(
+                                                      l10n.applied,
+                                                      level:
+                                                          BannerLevel.success,
+                                                    );
+                                                    Navigator.of(context).pop();
+                                                  },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileSwitchRadio extends StatelessWidget {
+  const _ProfileSwitchRadio({required this.selected});
+
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    selected: selected,
+    child: SizedBox.square(
+      dimension: 20,
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: selected ? context.colorScheme.primary : null,
+          shape: AppShape.full.copyWith(
+            side: selected
+                ? BorderSide.none
+                : BorderSide(color: context.colorScheme.outline),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+class _DismissPanelIntent extends Intent {
+  const _DismissPanelIntent();
 }
 
 class _BusinessImportHintCard extends StatelessWidget {

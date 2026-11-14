@@ -1110,6 +1110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "creationTime": MessageLookupByLibrary.simpleMessage("创建时间"),
     "currentExpiry": MessageLookupByLibrary.simpleMessage("到期"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage("含启动键，不可移除"),
+    "currentProfileLabel": MessageLookupByLibrary.simpleMessage("当前"),
     "currentUsage": MessageLookupByLibrary.simpleMessage("本期已用"),
     "custom": MessageLookupByLibrary.simpleMessage("自定义"),
     "customAddProxy": MessageLookupByLibrary.simpleMessage("添加代理"),
@@ -2145,7 +2146,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "profileShowPlanInfo": MessageLookupByLibrary.simpleMessage("在首页显示套餐信息"),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "切换后立即生效，失败时保留当前配置。",
+      "切换后连接会重新建立，失败时保留当前配置。",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "仅作用于当前配置，并优先于网络设置中的虚拟网卡覆写项。",

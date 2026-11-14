@@ -1521,6 +1521,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Содержит кнопку запуска, удалить нельзя",
     ),
+    "currentProfileLabel": MessageLookupByLibrary.simpleMessage("Текущий"),
     "currentUsage": MessageLookupByLibrary.simpleMessage(
       "Использовано за период",
     ),
@@ -2960,7 +2961,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Показывать сведения о тарифе на главной",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Применяется сразу; при ошибке загрузки остаётся текущий профиль.",
+      "При переключении соединение будет восстановлено. При ошибке текущий профиль сохранится.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "Действует только для этого профиля и имеет приоритет над переопределяемыми параметрами TUN в настройках сети.",

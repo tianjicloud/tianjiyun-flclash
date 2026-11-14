@@ -1551,6 +1551,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Contient le bouton de démarrage et ne peut pas être retiré",
     ),
+    "currentProfileLabel": MessageLookupByLibrary.simpleMessage("Actuel"),
     "currentUsage": MessageLookupByLibrary.simpleMessage(
       "Utilisé sur la période",
     ),
@@ -3010,7 +3011,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Afficher les informations du forfait sur l’accueil",
     ),
     "profileSwitchNote": MessageLookupByLibrary.simpleMessage(
-      "Appliqué immédiatement ; le profil actuel reste en cas d’échec.",
+      "Le changement rétablit la connexion. En cas d’échec, le profil actuel est conservé.",
     ),
     "profileTunSettingsDesc": MessageLookupByLibrary.simpleMessage(
       "S’applique uniquement à ce profil et prime sur les entrées de remplacement TUN des réglages réseau.",

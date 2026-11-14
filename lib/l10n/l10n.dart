@@ -11733,10 +11733,20 @@ class AppLocalizations {
     );
   }
 
-  /// `Changes apply immediately; the current profile stays if loading fails.`
+  /// `Current`
+  String get currentProfileLabel {
+    return Intl.message(
+      'Current',
+      name: 'currentProfileLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switching rebuilds the connection. If it fails, the current profile stays.`
   String get profileSwitchNote {
     return Intl.message(
-      'Changes apply immediately; the current profile stays if loading fails.',
+      'Switching rebuilds the connection. If it fails, the current profile stays.',
       name: 'profileSwitchNote',
       desc: '',
       args: [],
