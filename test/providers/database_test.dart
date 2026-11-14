@@ -168,6 +168,45 @@ void main() {
       expect(scoped.read(profilesProvider).map((item) => item.id), [1, 2]);
     });
 
+    test(
+      'rapid puts survive a stream read-back while writes are queued',
+      () async {
+        final rows = StreamController<List<Profile>>();
+        addTearDown(rows.close);
+        final scoped = ProviderContainer(
+          overrides: [profilesStreamProvider.overrideWith((_) => rows.stream)],
+        );
+        addTearDown(scoped.dispose);
+        scoped.listen(profilesProvider, (_, _) {});
+        rows.add(const []);
+        await pumpEventQueue();
+        final landing = Completer<void>();
+        final held = testDatabase.transaction(() => landing.future);
+        for (final id in [1, 2, 3, 4, 5]) {
+          scoped
+              .read(profilesProvider.notifier)
+              .put(profile(id, label: 'Profile $id'));
+        }
+        rows.add([profile(99, label: 'Stale read-back')]);
+        await pumpEventQueue();
+        expect(scoped.read(profilesProvider).map((item) => item.id), [
+          1,
+          2,
+          3,
+          4,
+          5,
+        ]);
+        landing.complete();
+        await held;
+        await pumpEventQueue();
+
+        expect(
+          (await testDatabase.profilesDao.query().get()).map((item) => item.id),
+          [1, 2, 3, 4, 5],
+        );
+      },
+    );
+
     test('a new profile sorts last before and after its write lands', () async {
       notifier.put(profile(1, label: 'First'));
       await pumpEventQueue();
@@ -310,6 +349,29 @@ void main() {
       await failure;
       expect(read().map((item) => item.id), [1], reason: 'rolled back');
     });
+
+    test(
+      'a failed queued put does not roll back the later successful put',
+      () async {
+        await testDatabase.customStatement('''
+        CREATE TRIGGER fail_profile_one BEFORE INSERT ON profiles
+        WHEN NEW.id = 1 BEGIN SELECT RAISE(ABORT, 'first write fails'); END
+      ''');
+        final failure = captureWriteFailure(() {
+          notifier.put(profile(1, label: 'Fails'));
+          notifier.put(profile(2, label: 'Succeeds'));
+        });
+
+        await failure;
+        await pumpEventQueue();
+
+        expect(read().map((item) => item.id), [2]);
+        expect(
+          (await testDatabase.profilesDao.query().get()).map((item) => item.id),
+          [2],
+        );
+      },
+    );
 
     test('del awaits the write and rethrows after rolling back', () async {
       notifier.put(profile(1, label: 'Kept'));

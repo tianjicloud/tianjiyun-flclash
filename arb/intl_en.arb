@@ -1827,5 +1827,16 @@
   "menuWindow": "Window",
   "menuHelp": "Help",
   "menuContactSupport": "Contact Support",
-  "menuRecheckExit": "Recheck exit"
+  "menuRecheckExit": "Recheck exit",
+  "profileImportSuccess": "Profile imported",
+  "profileAlreadyExistsUpdated": "This subscription already exists and was updated",
+  "profileBatchImportSummary": "Imported {success} profile(s), updated {updated}, failed {failed}. First failure: {reason}",
+  "@profileBatchImportSummary": {
+    "placeholders": {
+      "success": {},
+      "updated": {},
+      "failed": {},
+      "reason": {}
+    }
+  }
 }

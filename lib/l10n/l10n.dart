@@ -15022,6 +15022,41 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Profile imported`
+  String get profileImportSuccess {
+    return Intl.message(
+      'Profile imported',
+      name: 'profileImportSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This subscription already exists and was updated`
+  String get profileAlreadyExistsUpdated {
+    return Intl.message(
+      'This subscription already exists and was updated',
+      name: 'profileAlreadyExistsUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Imported {success} profile(s), updated {updated}, failed {failed}. First failure: {reason}`
+  String profileBatchImportSummary(
+    Object success,
+    Object updated,
+    Object failed,
+    Object reason,
+  ) {
+    return Intl.message(
+      'Imported $success profile(s), updated $updated, failed $failed. First failure: $reason',
+      name: 'profileBatchImportSummary',
+      desc: '',
+      args: [success, updated, failed, reason],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

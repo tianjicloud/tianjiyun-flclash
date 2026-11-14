@@ -1827,5 +1827,16 @@
   "menuWindow": "윈도우",
   "menuHelp": "도움말",
   "menuContactSupport": "고객 지원 문의",
-  "menuRecheckExit": "출구 다시 확인"
+  "menuRecheckExit": "출구 다시 확인",
+  "profileImportSuccess": "프로필을 가져왔습니다",
+  "profileAlreadyExistsUpdated": "이 구독은 이미 있어 업데이트했습니다",
+  "profileBatchImportSummary": "가져옴 {success}개, 업데이트 {updated}개, 실패 {failed}개. 첫 실패 원인: {reason}",
+  "@profileBatchImportSummary": {
+    "placeholders": {
+      "success": {},
+      "updated": {},
+      "failed": {},
+      "reason": {}
+    }
+  }
 }

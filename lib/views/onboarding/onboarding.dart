@@ -979,11 +979,11 @@ class _BusinessFailedMobileView extends ConsumerWidget {
               l10n.onboardingFailureNotSubscriptionDescription,
             ImportFailure.unknown => l10n.onboardingFailureUnknownDescription,
           };
-    void retry() {
+    Future<void> retry() async {
       if (url == null) {
         ref.read(onboardingProvider.notifier).welcome();
       } else {
-        unawaited(_importUrl(ref, url!));
+        await _importUrl(ref, url!);
       }
     }
 

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/features/form/form.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/scan.dart';
 import 'package:fl_clash/plugins/app.dart';
@@ -43,15 +44,13 @@ class AddProfileMenu extends ConsumerWidget {
     if (request == null || !context.mounted) return;
     switch (request.source) {
       case ProfileAddSource.link:
-        unawaited(
-          profilesAction.addProfileFromLink(
-            request.url,
-            label: request.label,
-            ageSecretKey: request.ageSecretKey,
-          ),
+        await profilesAction.addProfileFromLink(
+          request.url,
+          label: request.label,
+          ageSecretKey: request.ageSecretKey,
         );
       case ProfileAddSource.file:
-        unawaited(profilesAction.addProfileFormFile());
+        await profilesAction.addProfileFormFile();
       case ProfileAddSource.custom:
         _toAddCustom(context, ref);
     }
@@ -73,10 +72,6 @@ class AddProfileMenu extends ConsumerWidget {
         }
         return null;
       },
-      existingUrls: {
-        for (final profile in ref.read(profilesProvider))
-          if (profile.url.isNotEmpty) profile.url,
-      },
       withAgeSecretKey: true,
     );
     if (res == null) {
@@ -85,19 +80,15 @@ class AddProfileMenu extends ConsumerWidget {
     final profilesAction = ref.read(profilesActionProvider.notifier);
     switch (res) {
       case [final single]:
-        unawaited(
-          profilesAction.addProfileFromLink(
-            single.url,
-            label: single.label,
-            ageSecretKey: single.ageSecretKey,
-          ),
+        await profilesAction.addProfileFromLink(
+          single.url,
+          label: single.label,
+          ageSecretKey: single.ageSecretKey,
         );
       default:
-        unawaited(
-          profilesAction.addProfilesFromLinks([
-            for (final item in res) item.url,
-          ]),
-        );
+        await profilesAction.addProfilesFromLinks([
+          for (final item in res) item.url,
+        ]);
     }
   }
 
@@ -127,7 +118,7 @@ class AddProfileMenu extends ConsumerWidget {
       confirmText: appLocalizations.import,
     );
     if (confirmed == true) {
-      unawaited(profilesAction.addProfileFromLink(link));
+      await profilesAction.addProfileFromLink(link);
     }
   }
 
@@ -187,40 +178,85 @@ Future<void> showBusinessProfileAddDialog(
   ProfileAddSource source = ProfileAddSource.link,
   String? url,
 }) async {
-  final request = await dialogs.showCommonDialog<_ProfileAddRequest>(
-    context: context,
-    child: _BusinessProfileAddForm(source: source, url: url),
-  );
-  if (request == null || !context.mounted) return;
   final action = ref.read(profilesActionProvider.notifier);
-  switch (request.source) {
-    case ProfileAddSource.link:
-      unawaited(
-        action.addProfileFromLink(
-          request.url,
-          label: request.label,
-          ageSecretKey: request.ageSecretKey,
-          autoUpdateDuration: request.autoUpdateDuration,
-        ),
-      );
-    case ProfileAddSource.file:
-      unawaited(action.addProfileFormFile());
-    case ProfileAddSource.custom:
-      final id = action.addCustomProfile(context.appLocalizations.unnamed);
-      unawaited(
-        BaseNavigator.push(
-          context,
-          CustomProfileView(profileId: id, isNew: true),
-        ),
-      );
-  }
+  await dialogs.showCommonDialog<void>(
+    context: context,
+    child: _BusinessProfileAddForm(
+      source: source,
+      url: url,
+      onSubmit: (request) async {
+        switch (request.source) {
+          case ProfileAddSource.link:
+            final alreadyExists = ref
+                .read(profilesProvider)
+                .any(
+                  (profile) =>
+                      profile.type == ProfileType.url &&
+                      profile.url.trim() == request.url.trim(),
+                );
+            var cancelled = false;
+            final error = await action.addProfileFromLink(
+              request.url,
+              label: request.label,
+              ageSecretKey: request.ageSecretKey,
+              autoUpdateDuration: request.autoUpdateDuration,
+              keepDialogOpen: true,
+              onCancelled: () => cancelled = true,
+            );
+            return (
+              error: error,
+              updated: alreadyExists && error == null,
+              cancelled: cancelled,
+              showFeedback: true,
+            );
+          case ProfileAddSource.file:
+            var cancelled = false;
+            final error = await action.addProfileFormFile(
+              keepDialogOpen: true,
+              onCancelled: () => cancelled = true,
+            );
+            return (
+              error: error,
+              updated: false,
+              cancelled: cancelled,
+              showFeedback: true,
+            );
+          case ProfileAddSource.custom:
+            final id = action.addCustomProfile(
+              context.appLocalizations.unnamed,
+            );
+            unawaited(
+              BaseNavigator.push(
+                context,
+                CustomProfileView(profileId: id, isNew: true),
+              ),
+            );
+            return (
+              error: null,
+              updated: false,
+              cancelled: false,
+              showFeedback: false,
+            );
+        }
+      },
+    ),
+  );
 }
 
 class _BusinessProfileAddForm extends StatefulWidget {
-  const _BusinessProfileAddForm({required this.source, this.url});
+  const _BusinessProfileAddForm({
+    required this.source,
+    required this.onSubmit,
+    this.url,
+  });
 
   final ProfileAddSource source;
   final String? url;
+  final Future<
+    ({String? error, bool updated, bool cancelled, bool showFeedback})
+  >
+  Function(_ProfileAddRequest request)
+  onSubmit;
 
   @override
   State<_BusinessProfileAddForm> createState() =>
@@ -235,6 +271,8 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
   var _updateInterval = const Duration(hours: 6);
   var _attempted = false;
   var _showMoreOptions = false;
+  var _submitting = false;
+  String? _submitError;
 
   @override
   void dispose() {
@@ -244,14 +282,19 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
+    if (_submitting) return;
     final value = _url.text.trim();
     if (_source == ProfileAddSource.link &&
         (value.isEmpty || (!value.isUrl && !value.isShareLink))) {
       setState(() => _attempted = true);
       return;
     }
-    Navigator.of(context).pop(
+    setState(() {
+      _submitting = true;
+      _submitError = null;
+    });
+    final result = await widget.onSubmit(
       _ProfileAddRequest(
         source: _source,
         url: value,
@@ -260,14 +303,34 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
         autoUpdateDuration: _updateInterval,
       ),
     );
+    if (!mounted) return;
+    if (result.error != null) {
+      setState(() {
+        _submitting = false;
+        _submitError = result.error;
+      });
+      return;
+    }
+    if (result.cancelled) {
+      setState(() => _submitting = false);
+      return;
+    }
+    setState(() => _submitting = false);
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
+    Navigator.of(context).pop();
+    if (!result.showFeedback) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      dialogs.showBanner(
+        result.updated
+            ? currentAppLocalizations.profileAlreadyExistsUpdated
+            : currentAppLocalizations.profileImportSuccess,
+      );
+    });
   }
 
   void _choose(ProfileAddSource source) {
-    if (source == ProfileAddSource.link) {
-      setState(() => _source = source);
-      return;
-    }
-    Navigator.of(context).pop(_ProfileAddRequest(source: source));
+    setState(() => _source = source);
   }
 
   Widget _input(
@@ -410,7 +473,9 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
                       button: true,
                       label: l10n.close,
                       child: GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
+                        onTap: _submitting
+                            ? null
+                            : () => Navigator.of(context).pop(),
                         child: DecoratedBox(
                           decoration: ShapeDecoration(
                             color: scheme.surfaceContainerHigh,
@@ -624,6 +689,8 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
                       hint: l10n.optional,
                       secret: true,
                     ),
+                  if (_submitError case final error?)
+                    Text(error, style: TextStyle(color: scheme.error)),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
@@ -645,16 +712,20 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
                       label: l10n.cancel,
                       width: 84,
                       height: 36,
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: _submitting
+                          ? null
+                          : () => Navigator.of(context).pop(),
                     ),
                     BusinessPrimaryButton(
-                      label: l10n.businessProfileAddSubmit,
+                      label: _submitting
+                          ? l10n.loading
+                          : l10n.businessProfileAddSubmit,
                       width: _submitWidth(
                         context,
                         l10n.businessProfileAddSubmit,
                       ),
                       height: 36,
-                      onPressed: _submit,
+                      onPressed: _submitting ? null : _submit,
                     ),
                   ],
                 ),
@@ -670,15 +741,13 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
 Future<void> addProfileFromQrCode(BuildContext context, WidgetRef ref) async {
   final profilesAction = ref.read(profilesActionProvider.notifier);
   if (system.isDesktop) {
-    unawaited(profilesAction.addProfileFormQrCode());
+    await profilesAction.addProfileFormQrCode();
     return;
   }
   final url = await BaseNavigator.push(context, const ScanPage());
   if (url == null) return;
   if (context.mounted) await whenRouteUncovered(context);
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    unawaited(profilesAction.addProfileFromLink(url));
-  });
+  await profilesAction.addProfileFromLink(url);
 }
 
 enum ProfileAddSource { link, file, custom }

@@ -914,7 +914,7 @@ Future<void> _importClipboard(BuildContext context, WidgetRef ref) async {
     );
     return;
   }
-  unawaited(ref.read(profilesActionProvider.notifier).addProfileFromLink(url));
+  await ref.read(profilesActionProvider.notifier).addProfileFromLink(url);
 }
 
 class _BusinessSubscriptionCard extends ConsumerWidget {

@@ -114,9 +114,7 @@ class ApplicationState extends ConsumerState<Application> {
         ),
       );
       if (res != true) return;
-      unawaited(
-        ref.read(profilesActionProvider.notifier).addProfileFromLink(url),
-      );
+      await ref.read(profilesActionProvider.notifier).addProfileFromLink(url);
     });
   }
 

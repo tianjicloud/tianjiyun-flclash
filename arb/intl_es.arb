@@ -1827,5 +1827,16 @@
   "menuWindow": "Ventana",
   "menuHelp": "Ayuda",
   "menuContactSupport": "Contactar con soporte",
-  "menuRecheckExit": "Volver a comprobar la salida"
+  "menuRecheckExit": "Volver a comprobar la salida",
+  "profileImportSuccess": "Perfil importado",
+  "profileAlreadyExistsUpdated": "Esta suscripción ya existe y se ha actualizado",
+  "profileBatchImportSummary": "Importados: {success}, actualizados: {updated}, errores: {failed}. Primer error: {reason}",
+  "@profileBatchImportSummary": {
+    "placeholders": {
+      "success": {},
+      "updated": {},
+      "failed": {},
+      "reason": {}
+    }
+  }
 }

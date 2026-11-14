@@ -1827,5 +1827,16 @@
   "menuWindow": "ウインドウ",
   "menuHelp": "ヘルプ",
   "menuContactSupport": "お問い合わせ",
-  "menuRecheckExit": "出口を再確認"
+  "menuRecheckExit": "出口を再確認",
+  "profileImportSuccess": "プロファイルをインポートしました",
+  "profileAlreadyExistsUpdated": "このサブスクリプションは既に存在するため更新しました",
+  "profileBatchImportSummary": "インポート {success} 件、更新 {updated} 件、失敗 {failed} 件。最初の失敗理由: {reason}",
+  "@profileBatchImportSummary": {
+    "placeholders": {
+      "success": {},
+      "updated": {},
+      "failed": {},
+      "reason": {}
+    }
+  }
 }

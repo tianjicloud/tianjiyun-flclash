@@ -1827,5 +1827,16 @@
   "menuWindow": "Окно",
   "menuHelp": "Справка",
   "menuContactSupport": "Связаться с поддержкой",
-  "menuRecheckExit": "Повторно проверить выход"
+  "menuRecheckExit": "Повторно проверить выход",
+  "profileImportSuccess": "Профиль импортирован",
+  "profileAlreadyExistsUpdated": "Эта подписка уже существует и была обновлена",
+  "profileBatchImportSummary": "Импортировано: {success}, обновлено: {updated}, ошибок: {failed}. Первая ошибка: {reason}",
+  "@profileBatchImportSummary": {
+    "placeholders": {
+      "success": {},
+      "updated": {},
+      "failed": {},
+      "reason": {}
+    }
+  }
 }

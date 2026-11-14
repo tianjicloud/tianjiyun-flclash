@@ -33,6 +33,10 @@ void main() {
         overrides: [
           currentProfileIdProvider.overrideWithBuild((_, _) => null),
           profilesProvider.overrideWith(() => TestProfiles([original])),
+          profileDownloaderProvider.overrideWith(
+            (ref) =>
+                (profile) async => throw StateError('download failed'),
+          ),
         ],
       );
       addTearDown(container.dispose);

@@ -1,5 +1,21 @@
 part of '../action.dart';
 
+typedef ProfileDownloader = Future<Profile> Function(Profile profile);
+typedef ProfileFilePicker = Future<PlatformFile?> Function();
+
+final profileDownloaderProvider = Provider<ProfileDownloader>((ref) {
+  return (profile) => profile.update(
+    validate: ref.read(coreHandlerProvider).validateProfile,
+    userAgent: profile.subscriptionUserAgentValue(
+      defaultUserAgent: globalState.ua,
+    ),
+  );
+});
+
+final profileFilePickerProvider = Provider<ProfileFilePicker>(
+  (ref) => picker.pickerFile,
+);
+
 @Riverpod(keepAlive: true)
 class ProfilesAction extends _$ProfilesAction {
   CoreController get _core => ref.read(coreHandlerProvider);
@@ -98,6 +114,13 @@ class ProfilesAction extends _$ProfilesAction {
     ref.read(currentProfileIdProvider.notifier).value = profile.id;
   }
 
+  Future<void> _putImportedProfile(Profile profile) async {
+    await ref.read(profilesProvider.notifier).putAndWait(profile);
+    if (ref.read(currentProfileIdProvider) == null) {
+      ref.read(currentProfileIdProvider.notifier).value = profile.id;
+    }
+  }
+
   Future<List<Profile>> providerUsers(Profile profile) async {
     if (profile.type == ProfileType.custom) {
       return const [];
@@ -177,10 +200,7 @@ class ProfilesAction extends _$ProfilesAction {
         : null;
     try {
       ref.read(profilesProvider.notifier).put(profile);
-      final updated = await profile.update(
-        validate: (path, key) => _core.validateProfile(path, key),
-        userAgent: _subscriptionUserAgent(profile),
-      );
+      final updated = await _download(profile);
       // The download can take minutes; edits and deletes made meanwhile win.
       final latest = ref.read(profilesProvider).getProfile(profile.id);
       if (latest == null) {
@@ -219,25 +239,50 @@ class ProfilesAction extends _$ProfilesAction {
     }
   }
 
-  Future<void> addProfileFormFile() async {
-    final platformFile = await globalState.safeRun(picker.pickerFile);
-    if (platformFile == null) return;
-    final bytes = await platformFile.readBytes();
-    globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    ref.read(currentPageLabelProvider.notifier).toProfiles();
-    final profile = await globalState.loadingRun(
-      tag: LoadingTag.profiles,
-      () => _withAgeSecretKey(
-        Profile.normal(label: platformFile.name),
-        (profile) => profile.saveFile(
-          bytes,
-          validate: (path, key) => _core.validateProfile(path, key),
-        ),
-      ),
-      title: currentAppLocalizations.addProfile,
-    );
-    if (profile != null) {
-      putProfile(profile);
+  Future<String?> addProfileFormFile({
+    bool keepDialogOpen = false,
+    FutureOr<void> Function()? onCancelled,
+  }) async {
+    try {
+      final platformFile = await ref.read(profileFilePickerProvider)();
+      if (platformFile == null) {
+        await onCancelled?.call();
+        return null;
+      }
+      final bytes = await platformFile.readBytes();
+      final loading = ref.read(loadingProvider(LoadingTag.profiles).notifier);
+      loading.start();
+      try {
+        final profile = await _withAgeSecretKey(
+          Profile.normal(label: platformFile.name),
+          (profile) => profile.saveFile(
+            bytes,
+            validate: (path, key) => _core.validateProfile(path, key),
+          ),
+        );
+        await _putImportedProfile(profile);
+        if (!keepDialogOpen) {
+          globalState.navigatorKey.currentState?.popUntil(
+            (route) => route.isFirst,
+          );
+          ref.read(currentPageLabelProvider.notifier).toProfiles();
+        }
+        if (!keepDialogOpen) {
+          dialogs.showBanner(currentAppLocalizations.profileImportSuccess);
+        }
+        return null;
+      } finally {
+        await loading.stop();
+      }
+    } on AgeSecretKeyRequiredException {
+      await onCancelled?.call();
+      return null;
+    } catch (error) {
+      final message = userFacingErrorMessage(error, currentAppLocalizations);
+      if (!keepDialogOpen) {
+        dialogs.showBanner(message, level: BannerLevel.error);
+      }
+      return message;
     }
   }
 
@@ -383,32 +428,73 @@ class ProfilesAction extends _$ProfilesAction {
     ref.read(currentPageLabelProvider.notifier).value = PageLabel.profiles;
   }
 
-  Future<void> addProfileFromLink(
+  Future<String?> addProfileFromLink(
     String link, {
     String? label,
     String ageSecretKey = '',
     Duration? autoUpdateDuration,
+    bool keepDialogOpen = false,
+    FutureOr<void> Function()? onCancelled,
   }) async {
-    _showProfiles();
-    final profile = await globalState.loadingRun(
-      tag: LoadingTag.profiles,
-      () => link.isShareLink
-          ? _fromShareLinks(Profile.normal(label: label), [link])
-          : _withAgeSecretKey(
-              Profile.normal(
-                label: label,
-                url: link,
-              ).copyWith(ageSecretKey: ageSecretKey),
+    if (!keepDialogOpen) _showProfiles();
+    final loading = ref.read(loadingProvider(LoadingTag.profiles).notifier);
+    loading.start();
+    try {
+      final normalizedLink = link.trim();
+      final existing = normalizedLink.isShareLink
+          ? null
+          : ref
+                .read(profilesProvider)
+                .where(
+                  (profile) =>
+                      profile.type == ProfileType.url &&
+                      profile.url.trim() == normalizedLink,
+                )
+                .firstOrNull;
+      if (existing != null) {
+        await updateProfile(existing, showLoading: true);
+        if (ref.read(profilesProvider).getProfile(existing.id)
+            case final updated?) {
+          await database.profiles.put(updated.toCompanion());
+        }
+        if (ref.read(currentProfileIdProvider) == null) {
+          ref.read(currentProfileIdProvider.notifier).value = existing.id;
+        }
+        if (!keepDialogOpen) {
+          dialogs.showBanner(
+            currentAppLocalizations.profileAlreadyExistsUpdated,
+          );
+        }
+        return null;
+      }
+      final profile = Profile.normal(label: label, url: normalizedLink);
+      final updated = normalizedLink.isShareLink
+          ? await _fromShareLinks(Profile.normal(label: label), [
+              normalizedLink,
+            ])
+          : await _withAgeSecretKey(
+              profile.copyWith(ageSecretKey: ageSecretKey),
               _download,
-            ),
-      title: currentAppLocalizations.addProfile,
-    );
-    if (profile != null) {
-      putProfile(
-        autoUpdateDuration == null
-            ? profile
-            : profile.copyWith(autoUpdateDuration: autoUpdateDuration),
-      );
+            );
+      final result = autoUpdateDuration == null
+          ? updated
+          : updated.copyWith(autoUpdateDuration: autoUpdateDuration);
+      await _putImportedProfile(result);
+      if (!keepDialogOpen) {
+        dialogs.showBanner(currentAppLocalizations.profileImportSuccess);
+      }
+      return null;
+    } on AgeSecretKeyRequiredException {
+      await onCancelled?.call();
+      return null;
+    } catch (error) {
+      final message = userFacingErrorMessage(error, currentAppLocalizations);
+      if (!keepDialogOpen) {
+        dialogs.showBanner(message, level: BannerLevel.error);
+      }
+      return message;
+    } finally {
+      await loading.stop();
     }
   }
 
@@ -420,22 +506,64 @@ class ProfilesAction extends _$ProfilesAction {
       for (final link in links)
         if (link.isShareLink) link,
     ];
-    await globalState.batchRun(
-      [
-        for (final link in links)
-          if (!link.isShareLink)
-            (profile: Profile.normal(url: link), shareLinks: const <String>[])
-          else if (link == shareLinks.first)
-            (profile: Profile.normal(), shareLinks: shareLinks),
-      ],
-      (item) async => putProfile(
-        await (item.shareLinks.isEmpty
-            ? _download(item.profile)
-            : _fromShareLinks(item.profile, item.shareLinks)),
+    var succeeded = 0;
+    var updated = 0;
+    var failed = 0;
+    String? firstFailure;
+    final items = <({String link, List<String> shareLinks})>[
+      for (final link in links)
+        if (!link.isShareLink)
+          (link: link, shareLinks: const [])
+        else if (link == shareLinks.first)
+          (link: link, shareLinks: shareLinks),
+    ];
+    for (final item in items) {
+      final normalizedLink = item.link.trim();
+      final existing = item.shareLinks.isEmpty
+          ? ref
+                .read(profilesProvider)
+                .where(
+                  (profile) =>
+                      profile.type == ProfileType.url &&
+                      profile.url.trim() == normalizedLink,
+                )
+                .firstOrNull
+          : null;
+      final loading = ref.read(loadingProvider(LoadingTag.profiles).notifier);
+      loading.start();
+      try {
+        if (existing != null) {
+          await updateProfile(existing, showLoading: true);
+          if (ref.read(profilesProvider).getProfile(existing.id)
+              case final updated?) {
+            await database.profiles.put(updated.toCompanion());
+          }
+          if (ref.read(currentProfileIdProvider) == null) {
+            ref.read(currentProfileIdProvider.notifier).value = existing.id;
+          }
+          updated++;
+        } else {
+          final profile = item.shareLinks.isEmpty
+              ? await _download(Profile.normal(url: normalizedLink))
+              : await _fromShareLinks(Profile.normal(), item.shareLinks);
+          await _putImportedProfile(profile);
+          succeeded++;
+        }
+      } catch (error) {
+        failed++;
+        firstFailure ??= userFacingErrorMessage(error, currentAppLocalizations);
+      } finally {
+        await loading.stop();
+      }
+    }
+    dialogs.showBanner(
+      currentAppLocalizations.profileBatchImportSummary(
+        succeeded,
+        updated,
+        failed,
+        firstFailure ?? currentAppLocalizations.none,
       ),
-      label: (item) => item.shareLinks.firstOrNull ?? item.profile.url,
-      concurrency: maxConcurrentImports,
-      tag: LoadingTag.profiles,
+      level: failed > 0 ? BannerLevel.error : BannerLevel.success,
     );
   }
 
@@ -443,19 +571,12 @@ class ProfilesAction extends _$ProfilesAction {
   /// the profile list, so the onboarding flow owns the whole interaction.
   Future<Profile> importForOnboarding(String url) async {
     final profile = await _download(Profile.normal(url: url));
-    putProfile(profile);
+    await _putImportedProfile(profile);
     return profile;
   }
 
-  Future<Profile> _download(Profile profile) {
-    return profile.update(
-      validate: (path, key) => _core.validateProfile(path, key),
-      userAgent: _subscriptionUserAgent(profile),
-    );
-  }
-
-  String _subscriptionUserAgent(Profile profile) =>
-      profile.subscriptionUserAgentValue(defaultUserAgent: globalState.ua);
+  Future<Profile> _download(Profile profile) =>
+      ref.read(profileDownloaderProvider)(profile);
 
   Future<Profile> _withAgeSecretKey(
     Profile profile,
@@ -506,7 +627,7 @@ class ProfilesAction extends _$ProfilesAction {
   Future<void> addProfileFormQrCode() async {
     final url = await globalState.safeRun(picker.pickerConfigQRCode);
     if (url == null) return;
-    unawaited(addProfileFromLink(url));
+    await addProfileFromLink(url);
   }
 
   Future<void> clearEffect(int profileId) async {

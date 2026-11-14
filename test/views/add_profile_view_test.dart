@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/models/models.dart';
@@ -21,19 +23,42 @@ class _RecordingProfilesAction extends ProfilesAction {
   final ageSecretKeys = <String>[];
 
   @override
-  Future<void> addProfileFromLink(
+  Future<String?> addProfileFromLink(
     String link, {
     String? label,
     String ageSecretKey = '',
     Duration? autoUpdateDuration,
+    bool keepDialogOpen = false,
+    FutureOr<void> Function()? onCancelled,
   }) async {
     singles.add(link);
     ageSecretKeys.add(ageSecretKey);
+    return null;
   }
 
   @override
   Future<void> addProfilesFromLinks(List<String> links) async =>
       batches.add(links);
+}
+
+class _DialogProfilesAction extends ProfilesAction {
+  _DialogProfilesAction({this.error});
+
+  final String? error;
+
+  @override
+  Future<String?> addProfileFromLink(
+    String link, {
+    String? label,
+    String ageSecretKey = '',
+    Duration? autoUpdateDuration,
+    bool keepDialogOpen = false,
+    FutureOr<void> Function()? onCancelled,
+  }) async {
+    if (error != null) return error;
+    ref.read(profilesProvider.notifier).put(Profile.normal(url: link));
+    return null;
+  }
 }
 
 Finder _field(String title) => find.descendant(
@@ -86,6 +111,80 @@ Future<void> _openMenu(WidgetTester tester, ProviderContainer container) async {
 }
 
 void main() {
+  testWidgets('business add closes after a successful submit', (tester) async {
+    final container = _containerFor(
+      tester,
+      profilesAction: _DialogProfilesAction(),
+    );
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: HostApp(
+          navigatorKey: globalState.navigatorKey,
+          builder: (context, child) => wrapAppScopes(context, child!),
+          home: HostScaffold(
+            body: Consumer(
+              builder: (context, ref, child) => TextButton(
+                onPressed: () => showBusinessProfileAddDialog(context, ref),
+                child: const Text('open business add'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open business add'));
+    await tester.pumpAndSettle();
+    final l10n = currentAppLocalizations;
+    await tester.enterText(
+      find.byType(TextField).first,
+      'https://example.com/a',
+    );
+    await tester.tap(find.text(l10n.businessProfileAddSubmit));
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.businessProfileAddTitle), findsNothing);
+    expect(find.text(l10n.profileImportSuccess), findsOne);
+    expect(container.read(profilesProvider), hasLength(1));
+  });
+
+  testWidgets('business add stays open and displays a failed import reason', (
+    tester,
+  ) async {
+    const reason = 'download rejected';
+    final action = _DialogProfilesAction(error: reason);
+    final container = _containerFor(tester, profilesAction: action);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          child: HostScaffold(
+            body: Consumer(
+              builder: (context, ref, child) => TextButton(
+                onPressed: () => showBusinessProfileAddDialog(context, ref),
+                child: const Text('open business add'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open business add'));
+    await tester.pumpAndSettle();
+    final l10n = currentAppLocalizations;
+    await tester.enterText(
+      find.byType(TextField).first,
+      'https://example.com/a',
+    );
+    await tester.tap(find.text(l10n.businessProfileAddSubmit));
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.businessProfileAddTitle), findsOne);
+    expect(find.text(reason), findsOne);
+    expect(container.read(profilesProvider), isEmpty);
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('offers the QR code, add form, and batch import', (tester) async {
     final container = _containerFor(tester);
 
@@ -98,7 +197,7 @@ void main() {
     expect(tester.takeException(), null);
   });
 
-  testWidgets('a batch link import skips existing profiles and adds the rest', (
+  testWidgets('a batch link import passes existing links for in-place update', (
     tester,
   ) async {
     final action = _RecordingProfilesAction();
@@ -124,7 +223,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(action.batches, [
-      ['https://example.com/a', 'https://example.com/b'],
+      [
+        'https://example.com/a',
+        'https://example.com/old',
+        'https://example.com/b',
+      ],
     ]);
     expect(tester.takeException(), null);
   });

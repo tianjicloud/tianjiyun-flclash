@@ -1827,5 +1827,16 @@
   "menuWindow": "窗口",
   "menuHelp": "帮助",
   "menuContactSupport": "联系客服",
-  "menuRecheckExit": "重新检测出口"
+  "menuRecheckExit": "重新检测出口",
+  "profileImportSuccess": "配置已导入",
+  "profileAlreadyExistsUpdated": "该订阅已存在，已更新",
+  "profileBatchImportSummary": "导入成功 {success} 个，更新 {updated} 个，失败 {failed} 个。首个失败原因：{reason}",
+  "@profileBatchImportSummary": {
+    "placeholders": {
+      "success": {},
+      "updated": {},
+      "failed": {},
+      "reason": {}
+    }
+  }
 }

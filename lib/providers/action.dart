@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' show CancelToken, DioException;
+import 'package:file_picker/file_picker.dart';
 import 'package:fl_clash/common/app_data.dart';
 import 'package:fl_clash/common/default_line.dart';
 import 'package:fl_clash/common/boot_guard.dart';

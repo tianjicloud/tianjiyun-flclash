@@ -247,6 +247,14 @@ class Profiles extends _$Profiles {
     );
   }
 
+  Future<void> putAndWait(Profile profile) async {
+    put(profile);
+    await _serial(() async {
+      final latest = state.getProfile(profile.id);
+      if (latest != null) await database.profiles.put(latest.toCompanion());
+    });
+  }
+
   /// Applies the changes [body] returns to the state too, so a put landing
   /// before the rows read back writes them rather than the profile as it was.
   Future<void> rewriteCustom(
