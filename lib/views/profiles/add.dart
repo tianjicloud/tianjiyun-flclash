@@ -454,7 +454,7 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
                               ],
                             ),
                             child: SizedBox(
-                              height: 72,
+                              height: 60,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
@@ -466,20 +466,24 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
                                   children: [
                                     Text(
                                       title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: BusinessText.cardTitle(context),
                                     ),
-                                    Text(
-                                      description,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style:
-                                          AppTextStyle.custom(
-                                            context,
-                                            size: 12,
-                                            leading: 15,
-                                          ).copyWith(
-                                            color: scheme.onSurfaceVariant,
-                                          ),
+                                    Expanded(
+                                      child: Text(
+                                        description,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style:
+                                            AppTextStyle.custom(
+                                              context,
+                                              size: 12,
+                                              leading: 15,
+                                            ).copyWith(
+                                              color: scheme.onSurfaceVariant,
+                                            ),
+                                      ),
                                     ),
                                   ],
                                 ),
