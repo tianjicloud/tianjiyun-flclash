@@ -60,6 +60,99 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('desktop subscription keeps import actions in the add form', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1400, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final profile = Profile.normal(
+      label: 'Plan',
+      url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+    );
+    final container = ProviderContainer(
+      overrides: [
+        viewModeProvider.overrideWithValue(ViewMode.desktop),
+        profilesProvider.overrideWith(() => TestProfiles([profile])),
+        currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
+      ],
+    );
+    addTearDown(container.dispose);
+    globalState.container = container;
+    container.read(viewSizeProvider.notifier).value = const Size(1400, 1000);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          homeBuilder: (child) => HostScaffold(body: child),
+          child: const ProfilesView(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final l10n = tester.element(find.byType(ProfilesView)).appLocalizations;
+    expect(find.textContaining('tianji://'), findsOneWidget);
+    expect(find.text(l10n.pasteFromClipboardImport), findsNothing);
+    expect(find.text(l10n.chooseFile), findsNothing);
+
+    await tester.tap(find.text('＋ ${l10n.importSubscription}'));
+    await tester.pumpAndSettle();
+    for (final source in [
+      l10n.businessProfileAddLinkDescription,
+      l10n.businessProfileAddFileDescription,
+      l10n.businessProfileAddCustomDescription,
+    ]) {
+      expect(find.text(source), findsOneWidget);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('desktop subscription add form fits an 820 by 600 window', (
+    tester,
+  ) async {
+    const size = Size(820, 600);
+    tester.view.physicalSize = size;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final profile = Profile.normal(
+      label: 'Plan',
+      url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+    );
+    final container = ProviderContainer(
+      overrides: [
+        viewModeProvider.overrideWithValue(ViewMode.desktop),
+        profilesProvider.overrideWith(() => TestProfiles([profile])),
+        currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
+      ],
+    );
+    addTearDown(container.dispose);
+    globalState.container = container;
+    container.read(viewSizeProvider.notifier).value = size;
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          homeBuilder: (child) => HostScaffold(body: child),
+          child: const ProfilesView(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final l10n = tester.element(find.byType(ProfilesView)).appLocalizations;
+    await tester.tap(find.text('＋ ${l10n.importSubscription}'));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('macOS subscription actions stay in the overflow menu', (
     tester,
   ) async {

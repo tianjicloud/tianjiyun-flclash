@@ -1425,7 +1425,6 @@
   "zzProfileImportedOn": "Archivo local · importado el {date}",
   "zzProfileBasedOnOverrides": "Basado en la suscripción actual · {count} reglas sobrescritas",
   "zzProfileImportHint": "También puedes pegar un enlace del portapapeles, elegir un archivo YAML local o abrir {scheme} en el navegador para importar un enlace.",
-  "zzMacProfileImportHint": "También puedes importar desde el portapapeles o un archivo local.",
   "@zzProfileExpiredDays": {
     "placeholders": {
       "count": {}

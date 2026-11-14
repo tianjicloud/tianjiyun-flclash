@@ -1425,7 +1425,6 @@
   "zzProfileImportedOn": "로컬 파일 · {date} 가져옴",
   "zzProfileBasedOnOverrides": "현재 구독 기반 · 재정의 규칙 {count}개",
   "zzProfileImportHint": "클립보드에서 링크를 붙여넣거나 로컬 YAML 파일을 선택하거나 브라우저에서 {scheme}를 열어 링크를 가져올 수 있습니다.",
-  "zzMacProfileImportHint": "클립보드나 로컬 파일에서도 가져올 수 있습니다.",
   "@zzProfileExpiredDays": {
     "placeholders": {
       "count": {}

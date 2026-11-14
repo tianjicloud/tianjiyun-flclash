@@ -430,16 +430,7 @@ class _BusinessProfilesList extends ConsumerWidget {
                           .addProfileFormFile(),
                     ),
                   )
-                : _BusinessImportHintCard(
-                    onClipboardImport: () => _importClipboard(context, ref),
-                    onChooseFile: () => unawaited(
-                      showBusinessProfileAddDialog(
-                        context,
-                        ref,
-                        source: ProfileAddSource.file,
-                      ),
-                    ),
-                  ),
+                : const _BusinessImportHintCard(),
           ),
         ),
       ],
@@ -651,23 +642,14 @@ class _BusinessOtherProfileRow extends StatelessWidget {
 }
 
 class _BusinessImportHintCard extends StatelessWidget {
-  const _BusinessImportHintCard({
-    required this.onClipboardImport,
-    required this.onChooseFile,
-  });
-
-  final VoidCallback onClipboardImport;
-  final VoidCallback onChooseFile;
+  const _BusinessImportHintCard();
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.appLocalizations;
     final colorScheme = context.colorScheme;
-    final macOS = MacOSStyle.of(context);
     const scheme = 'tianji://';
-    final hint = macOS
-        ? l10n.zzMacProfileImportHint
-        : l10n.zzProfileImportHint(scheme);
+    final hint = l10n.zzProfileImportHint(scheme);
     final schemeStart = hint.indexOf(scheme);
     final schemeEnd = schemeStart + scheme.length;
     final textStyle = BusinessText.actionLabel(
@@ -680,46 +662,19 @@ class _BusinessImportHintCard extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Row(
-          spacing: 12,
-          children: [
-            Expanded(
-              child: macOS
-                  ? Text(
-                      hint,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: textStyle,
-                    )
-                  : Text.rich(
-                      TextSpan(
-                        children: [
-                          if (schemeStart > 0)
-                            TextSpan(text: hint.substring(0, schemeStart)),
-                          TextSpan(
-                            text: scheme,
-                            style: textStyle.toJetBrainsMono,
-                          ),
-                          if (schemeEnd < hint.length)
-                            TextSpan(text: hint.substring(schemeEnd)),
-                        ],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: textStyle,
-                    ),
-            ),
-            BusinessSecondaryButton(
-              label: l10n.pasteFromClipboardImport,
-              width: _scaledControlWidth(context, 112),
-              onPressed: onClipboardImport,
-            ),
-            BusinessSecondaryButton(
-              label: l10n.chooseFile,
-              width: _scaledControlWidth(context, 86),
-              onPressed: onChooseFile,
-            ),
-          ],
+        child: Text.rich(
+          TextSpan(
+            children: [
+              if (schemeStart > 0)
+                TextSpan(text: hint.substring(0, schemeStart)),
+              TextSpan(text: scheme, style: textStyle.toJetBrainsMono),
+              if (schemeEnd < hint.length)
+                TextSpan(text: hint.substring(schemeEnd)),
+            ],
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: textStyle,
         ),
       ),
     );

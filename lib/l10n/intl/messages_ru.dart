@@ -3805,9 +3805,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "zzAutoUpdateHours": m137,
     "zzAutoUpdateIntervalLabel": m138,
     "zzExpiryDate": m139,
-    "zzMacProfileImportHint": MessageLookupByLibrary.simpleMessage(
-      "Также можно импортировать из буфера обмена или локального файла.",
-    ),
     "zzProfileBasedOnOverrides": m140,
     "zzProfileExpiredDays": m141,
     "zzProfileImportHint": m142,

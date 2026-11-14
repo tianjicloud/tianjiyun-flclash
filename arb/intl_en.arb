@@ -1425,7 +1425,6 @@
   "zzProfileImportedOn": "Local file · imported {date}",
   "zzProfileBasedOnOverrides": "Based on current subscription · {count} override rules",
   "zzProfileImportHint": "You can also paste a link from clipboard, choose a local YAML file, or open {scheme} in a browser to import a link.",
-  "zzMacProfileImportHint": "You can also import from the clipboard or a local file.",
   "@zzProfileExpiredDays": {
     "placeholders": {
       "count": {}

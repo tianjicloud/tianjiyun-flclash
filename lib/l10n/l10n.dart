@@ -11808,16 +11808,6 @@ class AppLocalizations {
     );
   }
 
-  /// `You can also import from the clipboard or a local file.`
-  String get zzMacProfileImportHint {
-    return Intl.message(
-      'You can also import from the clipboard or a local file.',
-      name: 'zzMacProfileImportHint',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `every {hours} hours auto update`
   String zzAutoUpdateHours(Object hours) {
     return Intl.message(

@@ -1425,7 +1425,6 @@
   "zzProfileImportedOn": "ローカルファイル · {date}にインポート",
   "zzProfileBasedOnOverrides": "現在のサブスクリプションを基に · 上書きルール{count}件",
   "zzProfileImportHint": "クリップボードからリンクを貼り付けるか、ローカル YAML ファイルを選択するか、ブラウザーで {scheme} を開いてリンクをインポートできます。",
-  "zzMacProfileImportHint": "クリップボードまたはローカルファイルからもインポートできます。",
   "@zzProfileExpiredDays": {
     "placeholders": {
       "count": {}

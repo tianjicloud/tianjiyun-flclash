@@ -1425,7 +1425,6 @@
   "zzProfileImportedOn": "本地文件 · {date} 导入",
   "zzProfileBasedOnOverrides": "基于当前订阅 · {count} 条覆写规则",
   "zzProfileImportHint": "还可以：从剪贴板粘贴链接、选择本地 YAML 文件，或在浏览器打开 {scheme} 导入链接",
-  "zzMacProfileImportHint": "也可以从剪贴板或本地文件导入",
   "@zzProfileExpiredDays": {
     "placeholders": {
       "count": {}

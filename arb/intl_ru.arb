@@ -1425,7 +1425,6 @@
   "zzProfileImportedOn": "Локальный файл · импортирован {date}",
   "zzProfileBasedOnOverrides": "На основе текущей подписки · правил переопределения: {count}",
   "zzProfileImportHint": "Можно вставить ссылку из буфера обмена, выбрать локальный YAML-файл или открыть {scheme} в браузере для импорта ссылки.",
-  "zzMacProfileImportHint": "Также можно импортировать из буфера обмена или локального файла.",
   "@zzProfileExpiredDays": {
     "placeholders": {
       "count": {}
