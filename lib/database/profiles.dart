@@ -99,6 +99,8 @@ class ProfilesDao extends DatabaseAccessor<Database> with _$ProfilesDaoMixin {
     yield* _unreadableRows.stream;
   }
 
+  Future<void> dispose() => _unreadableRows.close();
+
   void _setUnreadableRowCount(int count) {
     if (count == _unreadableRowCount) return;
     _unreadableRowCount = count;

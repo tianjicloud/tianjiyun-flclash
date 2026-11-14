@@ -58,6 +58,12 @@ class Database extends _$Database {
   @override
   int get schemaVersion => 23;
 
+  @override
+  Future<void> close() async {
+    await profilesDao.dispose();
+    await super.close();
+  }
+
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
       final databaseFile = File(await appPath.databasePath);
