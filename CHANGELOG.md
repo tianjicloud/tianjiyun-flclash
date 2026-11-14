@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.26 (2026-11-14)
+
+**Bug Fixes**
+
+- **profiles** Keep profiles whose rows have a bad optional column (56b7876)
+- **profiles** Finish every import with a saved profile or an error (8fd4624)
+- **profiles** Align the subscription page cards' content (c1a39c9)
+- **profiles** Leave one import entry on the desktop subscription page (d32d02d)
+- **profiles** Stop the business add form source cards overflowing (73d7cde)
+
 ## v0.9.25 (2026-11-14)
 
 Internal improvements only.
