@@ -502,14 +502,15 @@ class _BusinessOtherProfilesCard extends StatelessWidget {
                 style: BusinessText.cardTitle(context),
               ),
               if (!mobile) ...[
-                const Spacer(),
-                if (!MacOSStyle.of(context)) ...[
-                  Flexible(
+                if (MacOSStyle.of(context))
+                  const Spacer()
+                else ...[
+                  Expanded(
                     child: Text(
                       l10n.profileSwitchNote,
+                      textAlign: TextAlign.end,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
                       style: BusinessText.metaLabel(
                         context,
                       ).copyWith(color: context.colorScheme.onSurfaceVariant),
