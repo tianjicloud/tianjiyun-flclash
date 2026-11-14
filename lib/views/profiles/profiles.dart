@@ -34,6 +34,11 @@ const _infoGap = 4.0;
 double _scaledControlWidth(BuildContext context, double width) =>
     width * MediaQuery.textScalerOf(context).scale(1);
 
+double _businessSubscriptionContentInset(
+  BuildContext context, {
+  required bool mobile,
+}) => MacOSMetrics.cardPadding(context, EdgeInsets.all(mobile ? 16 : 26)).left;
+
 double get _profileItemHeight {
   final measure = globalState.measure;
   return measure.textHeight(AppTextStyle.headline) +
@@ -377,7 +382,12 @@ class _BusinessProfilesList extends ConsumerWidget {
           ),
         if (others.isNotEmpty && mobile) ...[
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+            padding: EdgeInsets.fromLTRB(
+              horizontalInset,
+              16,
+              horizontalInset,
+              0,
+            ),
             sliver: SliverToBoxAdapter(
               child: _BusinessOtherProfilesCard(
                 profiles: others,
@@ -395,7 +405,7 @@ class _BusinessProfilesList extends ConsumerWidget {
           SliverPadding(
             padding: EdgeInsets.fromLTRB(
               horizontalInset,
-              24,
+              16,
               horizontalInset,
               0,
             ),
@@ -416,7 +426,7 @@ class _BusinessProfilesList extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.fromLTRB(
               horizontalInset,
-              14,
+              mobile ? 14 : 16,
               horizontalInset,
               20 + context.bottomInset,
             ),
@@ -460,7 +470,10 @@ class _BusinessOtherProfilesCard extends StatelessWidget {
     final l10n = context.appLocalizations;
     return Card(
       radius: BusinessPalette.cardRadius,
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+      padding: EdgeInsets.symmetric(
+        horizontal: _businessSubscriptionContentInset(context, mobile: mobile),
+        vertical: 12,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -661,7 +674,10 @@ class _BusinessImportHintCard extends StatelessWidget {
         shape: AppShape.all(BusinessPalette.cardRadius),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: EdgeInsets.symmetric(
+          horizontal: _businessSubscriptionContentInset(context, mobile: false),
+          vertical: 16,
+        ),
         child: Text.rich(
           TextSpan(
             children: [
@@ -935,9 +951,8 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
           context,
           fallback: BusinessPalette.cardRadius,
         ),
-        padding: MacOSMetrics.cardPadding(
-          context,
-          EdgeInsets.all(mobile ? 16 : 26),
+        padding: EdgeInsets.all(
+          _businessSubscriptionContentInset(context, mobile: mobile),
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {

@@ -7,11 +7,132 @@ import 'package:fl_clash/views/profiles/profiles.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prism_ui/prism_ui.dart' show AppBar, ThemeData;
+import 'package:prism_ui/prism_ui.dart' show AppBar, Card, ThemeData;
+import 'package:fl_clash/views/dashboard/widgets/card.dart'
+    show BusinessSecondaryButton;
 
 import '../helpers/host_scaffold.dart';
 import '../helpers/test_app.dart';
 import '../helpers/test_profiles.dart';
+
+Future<void> _pumpBusinessProfiles(
+  WidgetTester tester,
+  Size size, {
+  bool macOS = false,
+  bool mobile = false,
+}) async {
+  tester.view.physicalSize = size;
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  final profile = Profile.normal(
+    label: 'Plan',
+    url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+  );
+  final container = ProviderContainer(
+    overrides: [
+      viewModeProvider.overrideWithValue(
+        mobile ? ViewMode.mobile : ViewMode.desktop,
+      ),
+      profilesProvider.overrideWith(
+        () => TestProfiles([
+          profile,
+          Profile.normal(
+            label: 'Backup',
+            url: 'https://example.com/profile.yaml',
+          ),
+        ]),
+      ),
+      currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
+    ],
+  );
+  addTearDown(container.dispose);
+  globalState.container = container;
+  container.read(viewSizeProvider.notifier).value = size;
+
+  await tester.pumpWidget(
+    UncontrolledProviderScope(
+      container: container,
+      child: TestApp(
+        theme: ThemeData(
+          platform: mobile
+              ? TargetPlatform.android
+              : macOS
+              ? TargetPlatform.macOS
+              : TargetPlatform.windows,
+        ),
+        homeBuilder: (child) => HostScaffold(body: child),
+        child: const ProfilesView(),
+      ),
+    ),
+  );
+  await tester.pump();
+  await tester.pump();
+}
+
+({List<double> left, List<double> right, List<double> gaps})
+_subscriptionContentGeometry(WidgetTester tester, {required bool macOS}) {
+  final l10n = currentAppLocalizations;
+  final primaryTitle = find.text('Plan', findRichText: true);
+  final otherTitle = find.text(l10n.otherProfilesTitle);
+  final hintText = find.byWidgetPredicate(
+    (widget) =>
+        widget is Text &&
+        (widget.textSpan?.toPlainText().contains('tianji://') ?? false),
+  );
+  final primaryCard = find
+      .ancestor(of: primaryTitle, matching: find.byType(Card))
+      .first;
+  final otherCard = find
+      .ancestor(of: otherTitle, matching: find.byType(Card))
+      .first;
+  final hintCard = find
+      .ancestor(
+        of: hintText,
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is DecoratedBox && widget.decoration is ShapeDecoration,
+        ),
+      )
+      .first;
+  final hintPadding = find
+      .ancestor(of: hintText, matching: find.byType(Padding))
+      .first;
+  final hintPaddingData = tester.widget<Padding>(hintPadding);
+  final primaryTail = macOS
+      ? find.descendant(of: primaryCard, matching: find.byTooltip(l10n.more))
+      : find.ancestor(
+          of: find.text(l10n.edit),
+          matching: find.byType(BusinessSecondaryButton),
+        );
+  final otherTail = macOS
+      ? find.ancestor(
+          of: find.text(l10n.switchProfileShort),
+          matching: find.byType(BusinessSecondaryButton),
+        )
+      : find.ancestor(
+          of: find.text(l10n.sort),
+          matching: find.byType(BusinessSecondaryButton),
+        );
+  final primaryRect = tester.getRect(primaryCard);
+  final otherRect = tester.getRect(otherCard);
+  final hintRect = tester.getRect(hintCard);
+
+  return (
+    left: [
+      tester.getTopLeft(primaryTitle).dx,
+      tester.getTopLeft(otherTitle).dx,
+      tester.getTopLeft(hintText).dx,
+    ],
+    right: [
+      tester.getRect(primaryTail.first).right,
+      tester.getRect(otherTail.first).right,
+      hintRect.right - hintPaddingData.padding.horizontal / 2,
+    ],
+    gaps: [otherRect.top - primaryRect.bottom, hintRect.top - otherRect.bottom],
+  );
+}
 
 void main() {
   testWidgets('desktop profile leaves unknown quota and expiry unknown', (
@@ -56,6 +177,68 @@ void main() {
         tester.element(find.byType(ProfilesView)).appLocalizations.infiniteTime,
       ),
       findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Windows subscription content geometry', (tester) async {
+    await _pumpBusinessProfiles(tester, const Size(1280, 900));
+    final geometry = _subscriptionContentGeometry(tester, macOS: false);
+    expect(geometry.left[1], closeTo(geometry.left[0], 0.5));
+    expect(geometry.left[2], closeTo(geometry.left[0], 0.5));
+    expect(geometry.right[1], closeTo(geometry.right[0], 0.5));
+    expect(geometry.right[2], closeTo(geometry.right[0], 0.5));
+    expect(geometry.gaps, [16, 16]);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('macOS subscription content geometry', (tester) async {
+    await _pumpBusinessProfiles(tester, const Size(1280, 900), macOS: true);
+    final geometry = _subscriptionContentGeometry(tester, macOS: true);
+    expect(geometry.left[1], closeTo(geometry.left[0], 0.5));
+    expect(geometry.left[2], closeTo(geometry.left[0], 0.5));
+    expect(geometry.right[1], closeTo(geometry.right[0], 0.5));
+    expect(geometry.right[2], closeTo(geometry.right[0], 0.5));
+    expect(geometry.gaps, [16, 16]);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('desktop subscription content aligns at 820 pixels', (
+    tester,
+  ) async {
+    await _pumpBusinessProfiles(tester, const Size(820, 900));
+    final l10n = currentAppLocalizations;
+    final primaryTitle = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text &&
+          (widget.data == 'Plan' ||
+              (widget.textSpan?.toPlainText().startsWith('Plan') ?? false)),
+    );
+    final otherTitle = find.text(l10n.otherProfilesTitle);
+    final hintText = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text &&
+          (widget.textSpan?.toPlainText().contains('tianji://') ?? false),
+    );
+    final primaryLeft = tester.getTopLeft(primaryTitle).dx;
+    expect(tester.getTopLeft(otherTitle).dx, closeTo(primaryLeft, 0.5));
+    expect(tester.getTopLeft(hintText).dx, closeTo(primaryLeft, 0.5));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('mobile subscription cards align their titles', (tester) async {
+    await _pumpBusinessProfiles(tester, const Size(390, 844), mobile: true);
+    final l10n = currentAppLocalizations;
+    final primaryTitle = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text &&
+          (widget.data == 'Plan' ||
+              (widget.textSpan?.toPlainText().startsWith('Plan') ?? false)),
+    );
+    final otherTitle = find.text(l10n.otherProfilesTitle);
+    expect(
+      tester.getTopLeft(otherTitle).dx,
+      closeTo(tester.getTopLeft(primaryTitle).dx, 0.5),
     );
     expect(tester.takeException(), isNull);
   });
