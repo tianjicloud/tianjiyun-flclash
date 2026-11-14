@@ -105,6 +105,8 @@ class ListItem<T> extends StatelessWidget {
   final double? horizontalTitleGap;
   final double minVerticalPadding;
   final double? minTileHeight;
+  final RoundedSuperellipseBorder? interactionShape;
+  final bool showsHover;
   final void Function()? onTap;
 
   const ListItem({
@@ -119,6 +121,8 @@ class ListItem<T> extends StatelessWidget {
     this.minTileHeight,
     this.minVerticalPadding = listRowVerticalPadding,
     this.alignment = ListRowAlignment.center,
+    this.interactionShape,
+    this.showsHover = true,
   }) : _action = const _DefaultAction();
 
   ListItem.open({
@@ -135,6 +139,8 @@ class ListItem<T> extends StatelessWidget {
     this.minTileHeight,
     this.minVerticalPadding = listRowVerticalPadding,
     this.alignment = ListRowAlignment.center,
+    this.interactionShape,
+    this.showsHover = true,
   }) : _action = _OpenAction(
          widget: widget,
          onChanged: onChanged,
@@ -156,6 +162,8 @@ class ListItem<T> extends StatelessWidget {
     this.minTileHeight,
     this.minVerticalPadding = listRowVerticalPadding,
     this.alignment = ListRowAlignment.center,
+    this.interactionShape,
+    this.showsHover = true,
   }) : _action = _OptionsAction<T>(
          options: options,
          value: value,
@@ -184,6 +192,8 @@ class ListItem<T> extends StatelessWidget {
     this.minTileHeight,
     this.minVerticalPadding = listRowVerticalPadding,
     this.alignment = ListRowAlignment.center,
+    this.interactionShape,
+    this.showsHover = true,
   }) : _action = _InputAction(
          title: dialogTitle,
          value: value,
@@ -208,6 +218,8 @@ class ListItem<T> extends StatelessWidget {
     this.minTileHeight,
     this.minVerticalPadding = listRowVerticalPadding,
     this.alignment = ListRowAlignment.center,
+    this.interactionShape,
+    this.showsHover = true,
   }) : _action = _CheckboxAction(value: value, onChanged: onChanged),
        trailing = null,
        onTap = null;
@@ -224,6 +236,8 @@ class ListItem<T> extends StatelessWidget {
     this.minTileHeight,
     this.minVerticalPadding = listRowVerticalPadding,
     this.alignment = ListRowAlignment.center,
+    this.interactionShape,
+    this.showsHover = true,
   }) : _action = _ToggleAction(value: value, onChanged: onChanged),
        trailing = null,
        onTap = null;
@@ -269,7 +283,8 @@ class ListItem<T> extends StatelessWidget {
     }
     return PressSurface(
       fill: Colors.transparent,
-      shape: AppShape.all(AppCorner.none),
+      shape: interactionShape ?? AppShape.all(AppCorner.none),
+      showsHover: showsHover,
       onPressed: onTap,
       child: row,
     );

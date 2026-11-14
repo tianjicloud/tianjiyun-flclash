@@ -601,6 +601,8 @@ class _BusinessOtherProfileRow extends StatelessWidget {
       minTileHeight: MacOSMetrics.doubleLineRowHeight(context, fallback: 65),
       minVerticalPadding: MacOSStyle.of(context) ? 7 : 0,
       padding: EdgeInsets.zero,
+      interactionShape: mobile ? null : AppShape.xl,
+      showsHover: mobile,
       leading: DecoratedBox(
         decoration: ShapeDecoration(
           color: colorScheme.surfaceContainerHigh,
@@ -654,13 +656,64 @@ class _BusinessOtherProfileRow extends StatelessWidget {
       ),
       onTap: custom ? () => _edit(context) : () => onSwitch(profile.id),
     );
+    final interactiveRow = mobile ? row : _BusinessProfileRowHover(child: row);
     return MacOSStyle.of(context)
         ? Padding(
             key: const ValueKey('macos-subscription-other-row'),
             padding: const EdgeInsets.symmetric(vertical: 7),
-            child: row,
+            child: interactiveRow,
           )
-        : row;
+        : interactiveRow;
+  }
+}
+
+class _BusinessProfileRowHover extends StatefulWidget {
+  const _BusinessProfileRowHover({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_BusinessProfileRowHover> createState() =>
+      _BusinessProfileRowHoverState();
+}
+
+class _BusinessProfileRowHoverState extends State<_BusinessProfileRowHover> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: -8,
+            right: -8,
+            top: 2,
+            bottom: 2,
+            child: IgnorePointer(
+              child: AnimatedContainer(
+                key: const ValueKey('business-profile-row-hover'),
+                duration: context.motionDuration(
+                  const Duration(milliseconds: 180),
+                ),
+                decoration: ShapeDecoration(
+                  color: _hovered
+                      ? colorScheme.onSurface.withValues(alpha: 0.04)
+                      : const Color(0x00000000),
+                  shape: AppShape.xl,
+                ),
+                child: const SizedBox.expand(),
+              ),
+            ),
+          ),
+          widget.child,
+        ],
+      ),
+    );
   }
 }
 

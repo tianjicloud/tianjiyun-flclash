@@ -3,12 +3,15 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/ui/list_item.dart';
 import 'package:fl_clash/views/profiles/profiles.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prism_ui/prism_ui.dart' show AppBar, Card, ThemeData;
+import 'package:flutter/widgets.dart';
+import 'package:prism_ui/press_surface.dart' show PressSurface;
+import 'package:prism_ui/prism_ui.dart' show AppBar, AppShape, Card, ThemeData;
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessSecondaryButton;
 
@@ -328,6 +331,43 @@ void main() {
     expect(tester.getTopLeft(otherTitle).dx, closeTo(primaryLeft, 0.5));
     expect(tester.getTopLeft(hintText).dx, closeTo(primaryLeft, 0.5));
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('other profile hover uses an expanded superellipse', (
+    tester,
+  ) async {
+    await _pumpBusinessProfiles(tester, const Size(1280, 900));
+    final title = find.text('Backup', findRichText: true).first;
+    final card = find.ancestor(of: title, matching: find.byType(Card)).first;
+    final contentRect = tester.getRect(
+      find.ancestor(of: title, matching: find.byType(ListItem)).first,
+    );
+    final profileRowSurface = find.ancestor(
+      of: title,
+      matching: find.byWidgetPredicate(
+        (widget) => widget is PressSurface && widget.shape == AppShape.xl,
+      ),
+    );
+    expect(profileRowSurface, findsOneWidget);
+    expect(tester.widget<PressSurface>(profileRowSurface).shape, AppShape.xl);
+
+    final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await gesture.addPointer(location: tester.getCenter(title));
+    await gesture.moveTo(tester.getCenter(title));
+    await tester.pumpAndSettle();
+    final hover = find.byKey(const ValueKey('business-profile-row-hover'));
+    final hoverDecoration = tester.widget<AnimatedContainer>(hover).decoration;
+    expect(hoverDecoration, isA<ShapeDecoration>());
+    final shapeDecoration = hoverDecoration! as ShapeDecoration;
+    expect(shapeDecoration.shape, AppShape.xl);
+    expect(shapeDecoration.color, isNot(const Color(0x00000000)));
+    expect(tester.getRect(hover).width, greaterThan(contentRect.width));
+    expect(
+      tester.getRect(card).contains(tester.getRect(hover).topLeft),
+      isTrue,
+    );
+    expect(tester.takeException(), isNull);
+    await gesture.removePointer();
   });
 
   testWidgets('mobile subscription cards align their titles', (tester) async {
