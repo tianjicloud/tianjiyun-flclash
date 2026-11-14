@@ -2,6 +2,44 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.27",
+      "tag": "v0.9.27",
+      "date": "2026-11-15",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "0257510",
+              "scope": "profiles",
+              "text": "Confirm a profile switch in a side panel on desktop"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "01ce8ab",
+              "scope": "profiles",
+              "text": "Round the other profiles row hover"
+            },
+            {
+              "id": "8f546b9",
+              "scope": "database",
+              "text": "Close the unreadable profiles stream with the database"
+            },
+            {
+              "id": "04cc7af",
+              "scope": "profiles",
+              "text": "Right-align the other profiles hint and sort button"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.26",
       "tag": "v0.9.26",
       "date": "2026-11-14",

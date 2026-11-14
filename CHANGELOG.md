@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.9.27 (2026-11-15)
+
+**Features**
+
+- **profiles** Confirm a profile switch in a side panel on desktop (0257510)
+
+**Bug Fixes**
+
+- **profiles** Round the other profiles row hover (01ce8ab)
+- **database** Close the unreadable profiles stream with the database (8f546b9)
+- **profiles** Right-align the other profiles hint and sort button (04cc7af)
+
 ## v0.9.26 (2026-11-14)
 
 **Bug Fixes**
