@@ -5,12 +5,24 @@ import 'package:dio/dio.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/residential.dart';
 import 'package:fl_clash/common/tianji_api.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/tianji_nodes.g.dart';
+
+final _entryPoolId = RegExp(r'^[A-Za-z0-9_-]{1,32}$');
+final _entryPoolGroupIndexes = Expando<_EntryPoolGroupIndex>();
+
+class _EntryPoolGroupIndex {
+  const _EntryPoolGroupIndex(this.parents, this.ambiguous);
+
+  final Map<String, Group> parents;
+  final Set<String> ambiguous;
+}
 
 @Riverpod(keepAlive: true)
 bool tianjiApiEnabled(Ref ref) =>
@@ -126,7 +138,64 @@ class TianjiNodeCatalog extends _$TianjiNodeCatalog {
 TianjiNode? tianjiNode(Ref ref, String name) {
   if (!ref.watch(tianjiApiEnabledProvider)) return null;
   ref.watch(tianjiNodeCatalogProvider);
-  return ref.read(tianjiNodeCatalogProvider.notifier).nodeFor(name);
+  final catalog = ref.read(tianjiNodeCatalogProvider.notifier);
+  final exact = catalog.nodeFor(name);
+  if (exact != null) return exact;
+  return _entryPoolParentNode(name, ref.watch(groupsProvider), catalog.nodeFor);
+}
+
+TianjiNode? _entryPoolParentNode(
+  String name,
+  List<Group> groups,
+  TianjiNode? Function(String) nodeFor,
+) {
+  final separator = name.lastIndexOf(' / ');
+  if (separator < 0 || !_entryPoolId.hasMatch(name.substring(separator + 3))) {
+    return null;
+  }
+  final parentName = name.substring(0, separator);
+  final index = _entryPoolGroupIndexes[groups] ??= _buildEntryPoolGroupIndex(
+    groups,
+  );
+  if (index.ambiguous.contains(name)) return null;
+  final parent = index.parents[name];
+  if (parent == null || parent.name != parentName) return null;
+  return nodeFor(parentName);
+}
+
+_EntryPoolGroupIndex _buildEntryPoolGroupIndex(List<Group> groups) {
+  final parents = <String, Group>{};
+  final ambiguous = <String>{};
+  for (final group in groups) {
+    if (group.type != GroupType.URLTest ||
+        group.all.length < 2 ||
+        group.all.length > 8) {
+      continue;
+    }
+    final prefix = '${group.name} / ';
+    final ids = <String>{};
+    final memberNames = <String>[];
+    var complete = true;
+    for (final member in group.all) {
+      if (!member.name.startsWith(prefix)) {
+        complete = false;
+        break;
+      }
+      final id = member.name.substring(prefix.length);
+      if (!_entryPoolId.hasMatch(id) || !ids.add(id)) {
+        complete = false;
+        break;
+      }
+      memberNames.add(member.name);
+    }
+    if (complete) {
+      for (final memberName in memberNames) {
+        if (parents.containsKey(memberName)) ambiguous.add(memberName);
+        parents[memberName] = group;
+      }
+    }
+  }
+  return _EntryPoolGroupIndex(parents, ambiguous);
 }
 
 @riverpod

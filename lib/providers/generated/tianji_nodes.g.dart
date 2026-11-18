@@ -151,7 +151,7 @@ final class TianjiNodeProvider
   }
 }
 
-String _$tianjiNodeHash() => r'91bfbe5ad6843cec92dfc64d6fbdf7d6adae5860';
+String _$tianjiNodeHash() => r'6a3cc7dee27da93318e6e7045039b8ecb41f3ac1';
 
 final class TianjiNodeFamily extends $Family
     with $FunctionalFamilyOverride<TianjiNode?, String> {

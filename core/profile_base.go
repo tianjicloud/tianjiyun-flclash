@@ -156,6 +156,20 @@ func mergeProfileBase(base *SetupBase) (*yaml.Node, error) {
 	if retag {
 		retagShortIDs(root)
 	}
+	if (bytes.Contains(buf, []byte(entryPoolKey)) || strings.Contains(base.Overlay, entryPoolKey)) && containsEntryPoolKey(root) {
+		if err := validateEntryPoolDocument(root); err != nil {
+			return nil, err
+		}
+		if !hasProxyEntryPool(root) {
+			return nil, errorsEntryPool("must be declared on a proxy")
+		}
+		if entryPoolKeyOutsideProxy(root) {
+			return nil, errorsEntryPool("pool configuration is unsupported outside proxies")
+		}
+		if _, err := expandEntryPoolDocument(root); err != nil {
+			return nil, err
+		}
+	}
 	return &yaml.Node{Kind: yaml.DocumentNode, Content: []*yaml.Node{root}}, nil
 }
 
