@@ -107,11 +107,25 @@ func loadConfigWithBase(base *SetupBase, configPath string) (*config.Config, err
 	if err := document.Decode(raw); err != nil {
 		return nil, err
 	}
-	if err := writeConfigDocument(configPath, document); err != nil {
-		return nil, err
-	}
 	cfg, err := config.ParseRawConfig(raw)
 	if err != nil {
+		return nil, err
+	}
+	if _, statErr := os.Stat(configPath); statErr == nil {
+		original, readErr := os.ReadFile(configPath)
+		if readErr != nil {
+			closeUnappliedConfig(cfg)
+			return nil, readErr
+		}
+		if bytes.HasPrefix(original, []byte(ageEncryptedHeader)) {
+			return withPlatformLimits(cfg), nil
+		}
+	} else if !errors.Is(statErr, os.ErrNotExist) {
+		closeUnappliedConfig(cfg)
+		return nil, statErr
+	}
+	if err := writeConfigDocument(configPath, document); err != nil {
+		closeUnappliedConfig(cfg)
 		return nil, err
 	}
 	return withPlatformLimits(cfg), nil
@@ -124,6 +138,10 @@ func mergeProfileBase(base *SetupBase) (*yaml.Node, error) {
 	}
 	if buf, err = age.DecryptBytes(buf); err != nil {
 		return nil, fmt.Errorf("decrypt config error: %w", err)
+	}
+	buf, _, err = expandTianjiEntryPools(buf)
+	if err != nil {
+		return nil, err
 	}
 	retag := bytes.Contains(buf, []byte("short-id"))
 	var profileDocument, overlayDocument yaml.Node
@@ -155,6 +173,20 @@ func mergeProfileBase(base *SetupBase) (*yaml.Node, error) {
 	}
 	if retag {
 		retagShortIDs(root)
+	}
+	if (bytes.Contains(buf, []byte(entryPoolKey)) || strings.Contains(base.Overlay, entryPoolKey)) && containsEntryPoolKey(root) {
+		if err := validateEntryPoolDocument(root); err != nil {
+			return nil, err
+		}
+		if !hasProxyEntryPool(root) {
+			return nil, errorsEntryPool("must be declared on a proxy")
+		}
+		if entryPoolKeyOutsideProxy(root) {
+			return nil, errorsEntryPool("pool configuration is unsupported outside proxies")
+		}
+		if _, err := expandEntryPoolDocument(root); err != nil {
+			return nil, err
+		}
 	}
 	return &yaml.Node{Kind: yaml.DocumentNode, Content: []*yaml.Node{root}}, nil
 }

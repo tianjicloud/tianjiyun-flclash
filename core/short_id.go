@@ -3,6 +3,7 @@ package core
 import (
 	"bytes"
 
+	"github.com/metacubex/mihomo/component/age"
 	"github.com/metacubex/mihomo/config"
 	"go.yaml.in/yaml/v3"
 )
@@ -10,6 +11,17 @@ import (
 // mihomo decodes an unquoted REALITY short-id as a YAML number (0123 is 83, 00
 // is 0); the scalar keeps its literal text, so retagging it restores the id.
 func unmarshalRawConfig(buf []byte) (*config.RawConfig, error) {
+	encrypted := bytes.HasPrefix(buf, []byte(ageEncryptedHeader))
+	if expanded, changed, err := expandTianjiEntryPools(buf); err != nil {
+		return nil, err
+	} else if changed {
+		buf = expanded
+	} else if encrypted {
+		buf, err = age.DecryptBytes(expanded)
+		if err != nil {
+			return nil, err
+		}
+	}
 	if !bytes.Contains(buf, []byte("short-id")) {
 		return config.UnmarshalRawConfig(buf)
 	}

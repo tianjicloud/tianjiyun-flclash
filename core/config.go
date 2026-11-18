@@ -1,6 +1,7 @@
 package core
 
 import (
+	"bytes"
 	"errors"
 	"os"
 	"path/filepath"
@@ -24,6 +25,7 @@ import (
 	LC "github.com/metacubex/mihomo/listener/config"
 	"github.com/metacubex/mihomo/log"
 	"github.com/metacubex/mihomo/tunnel"
+	"go.yaml.in/yaml/v3"
 )
 
 var (
@@ -109,11 +111,66 @@ func loadConfig(path string) (*config.Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	expanded, changed, err := expandTianjiEntryPools(buf)
+	if err != nil {
+		return nil, err
+	}
+	if changed {
+		if bytes.HasPrefix(buf, []byte(ageEncryptedHeader)) {
+			return loadExpandedConfig(path, expanded, false)
+		}
+		return loadExpandedConfig(path, expanded, true)
+	}
+	if bytes.HasPrefix(buf, []byte(ageEncryptedHeader)) {
+		buf = expanded
+	}
 	cfg, err := executor.ParseWithBytes(buf)
 	if err != nil {
 		return nil, err
 	}
 	return withPlatformLimits(cfg), nil
+}
+
+func loadExpandedConfig(path string, expanded []byte, persist bool) (*config.Config, error) {
+	var document yaml.Node
+	if err := yaml.Unmarshal(expanded, &document); err != nil {
+		return nil, err
+	}
+	retagShortIDs(&document)
+	raw := config.DefaultRawConfig()
+	if err := document.Decode(raw); err != nil {
+		return nil, err
+	}
+	cfg, err := config.ParseRawConfig(raw)
+	if err != nil {
+		return nil, err
+	}
+	if persist {
+		if err := writeConfigDocument(path, &document); err != nil {
+			closeUnappliedConfig(cfg)
+			return nil, err
+		}
+	}
+	return withPlatformLimits(cfg), nil
+}
+
+func closeUnappliedConfig(cfg *config.Config) {
+	for _, proxy := range cfg.Proxies {
+		_ = proxy.Close()
+	}
+	for _, listener := range cfg.Listeners {
+		_ = listener.Close()
+	}
+	for _, item := range cfg.Providers {
+		if closer, ok := item.(interface{ Close() error }); ok {
+			_ = closer.Close()
+		}
+	}
+	for _, item := range cfg.RuleProviders {
+		if closer, ok := item.(interface{ Close() error }); ok {
+			_ = closer.Close()
+		}
+	}
 }
 
 func withPlatformLimits(cfg *config.Config) *config.Config {
