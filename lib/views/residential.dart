@@ -15,6 +15,7 @@ import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
 import 'package:fl_clash/views/dashboard/widgets/segmented.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -113,6 +114,7 @@ class _ResidentialViewState extends ConsumerState<ResidentialView> {
                       value: policy.active
                           ? _displayName(policy.selectedExit ?? '')
                           : l10n.residentialSubscriptionPolicy,
+                      scrollValue: policy.active,
                     ),
                   ),
                   Expanded(
@@ -209,44 +211,63 @@ class _ResidentialViewState extends ConsumerState<ResidentialView> {
                       },
                     ),
             ),
-            if (selected != null) ...[
-              const SizedBox(height: 12),
-              Card(
-                radius: MacOSMetrics.cardRadius(
-                  context,
-                  fallback: AppCorner.xl,
-                ),
-                padding: MacOSMetrics.cardPadding(
-                  context,
-                  const EdgeInsets.all(18),
-                ),
-                child: Row(
-                  spacing: 20,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.residentialPageExplanation,
-                        style: AppTextStyle.footnote
-                            .of(context)
-                            .copyWith(
-                              color: context.colorScheme.onSurfaceVariant,
+            AnimatedSize(
+              alignment: Alignment.topCenter,
+              duration: context.motionDuration(commonDuration),
+              curve: Curves.easeOut,
+              child: selected == null
+                  ? const SizedBox.shrink()
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Card(
+                        radius: MacOSMetrics.cardRadius(
+                          context,
+                          fallback: AppCorner.xl,
+                        ),
+                        padding: MacOSMetrics.cardPadding(
+                          context,
+                          const EdgeInsets.all(18),
+                        ),
+                        child: Row(
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                l10n.residentialPageExplanation,
+                                style: AppTextStyle.footnote
+                                    .of(context)
+                                    .copyWith(
+                                      color:
+                                          context.colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
                             ),
+                            FilledButton(
+                              style: ButtonStyle.from(
+                                fixedSize: Size(
+                                  _exitButtonWidth(context, choices),
+                                  MacOSMetrics.buttonHeight(
+                                    context,
+                                    fallback: 44,
+                                  ),
+                                ),
+                              ),
+                              onPressed: applying
+                                  ? null
+                                  : () => unawaited(
+                                      ref
+                                          .read(
+                                            residentialActionProvider.notifier,
+                                          )
+                                          .select(selected),
+                                    ),
+                              child: Text(l10n.residentialUseExit(selected)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    FilledButton(
-                      onPressed: applying
-                          ? null
-                          : () => unawaited(
-                              ref
-                                  .read(residentialActionProvider.notifier)
-                                  .select(selected),
-                            ),
-                      child: Text(l10n.residentialUseExit(selected)),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ],
         ),
       ),
@@ -260,12 +281,14 @@ class _SummaryValue extends StatelessWidget {
     required this.value,
     this.detail,
     this.monospace = false,
+    this.scrollValue = false,
   });
 
   final String label;
   final String value;
   final String? detail;
   final bool monospace;
+  final bool scrollValue;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -278,25 +301,27 @@ class _SummaryValue extends StatelessWidget {
             .copyWith(color: context.colorScheme.onSurfaceVariant),
       ),
       const SizedBox(height: 4),
-      Text(
+      MarqueeText(
         value,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        scrollWhen: scrollValue,
         style: monospace
             ? AppTextStyle.title2.of(context, emphasized: true).toJetBrainsMono
             : AppTextStyle.title2.of(context, emphasized: true),
       ),
-      if (detail != null && detail!.isNotEmpty) ...[
-        const SizedBox(height: 2),
-        Text(
-          detail!,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyle.caption1
-              .of(context)
-              .copyWith(color: context.colorScheme.onSurfaceVariant),
-        ),
-      ],
+      const SizedBox(height: 2),
+      SizedBox(
+        height: AppTextStyle.caption1.of(context).height ?? 16,
+        child: detail != null && detail!.isNotEmpty
+            ? Text(
+                detail!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.caption1
+                    .of(context)
+                    .copyWith(color: context.colorScheme.onSurfaceVariant),
+              )
+            : null,
+      ),
     ],
   );
 }
@@ -317,18 +342,43 @@ class _StatusBadge extends StatelessWidget {
     ),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      child: Text(
-        label,
-        style: AppTextStyle.caption1
-            .of(context, emphasized: true)
-            .copyWith(
-              color: verified
-                  ? DashboardColors.of(context).ok
-                  : context.colorScheme.onSurfaceVariant,
-            ),
+      child: SizedBox(
+        width: _statusBadgeWidth(context),
+        child: Text(
+          label,
+          maxLines: 1,
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyle.caption1
+              .of(context, emphasized: true)
+              .copyWith(
+                color: verified
+                    ? DashboardColors.of(context).ok
+                    : context.colorScheme.onSurfaceVariant,
+              ),
+        ),
       ),
     ),
   );
+}
+
+double _statusBadgeWidth(BuildContext context) {
+  final l10n = context.appLocalizations;
+  final style = AppTextStyle.caption1.of(context, emphasized: true);
+  final painter = TextPainter(
+    maxLines: 1,
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  );
+  var width = 0.0;
+  for (final verdict in SelectionVerdict.values) {
+    final label = _selectionStatus(l10n, verdict);
+    painter.text = TextSpan(text: label, style: style);
+    painter.layout();
+    if (painter.width > width) width = painter.width;
+  }
+  painter.dispose();
+  return width;
 }
 
 class _ExitChoiceCard extends ConsumerWidget {
@@ -402,16 +452,23 @@ class _ExitChoiceCard extends ConsumerWidget {
             const SizedBox(height: 14),
             Row(
               children: [
-                Text(
-                  phase == DelayTestPhase.running ||
-                          phase == DelayTestPhase.queued
-                      ? '…'
-                      : delay != null && delay > 0
-                      ? '$delay ms'
-                      : '—',
-                  style: AppTextStyle.subheadline
-                      .of(context, emphasized: true)
-                      .copyWith(color: latencyColor),
+                SizedBox(
+                  width: _residentialDelayWidth(context),
+                  child: Text(
+                    phase == DelayTestPhase.running ||
+                            phase == DelayTestPhase.queued
+                        ? '…'
+                        : delay != null && delay > 0
+                        ? '$delay ms'
+                        : '—',
+                    maxLines: 1,
+                    textAlign: TextAlign.end,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.subheadline
+                        .of(context, emphasized: true)
+                        .toTabular
+                        .copyWith(color: latencyColor),
+                  ),
                 ),
                 if (current) ...[
                   const SizedBox(width: 8),
@@ -429,6 +486,41 @@ class _ExitChoiceCard extends ConsumerWidget {
       ),
     );
   }
+}
+
+double _residentialDelayWidth(BuildContext context) {
+  final style = AppTextStyle.subheadline
+      .of(context, emphasized: true)
+      .toTabular;
+  final painter = TextPainter(
+    text: TextSpan(text: '9999 ms', style: style),
+    maxLines: 1,
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  )..layout();
+  final width = painter.width;
+  painter.dispose();
+  return width;
+}
+
+double _exitButtonWidth(BuildContext context, List<String> choices) {
+  final style = AppTextStyle.body.of(context);
+  final painter = TextPainter(
+    maxLines: 1,
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  );
+  var width = 0.0;
+  for (final name in choices) {
+    painter.text = TextSpan(
+      text: context.appLocalizations.residentialUseExit(name),
+      style: style,
+    );
+    painter.layout();
+    if (painter.width > width) width = painter.width;
+  }
+  painter.dispose();
+  return width + 32;
 }
 
 class _MetaChip extends StatelessWidget {

@@ -8,6 +8,7 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/business_style.dart';
 import 'package:fl_clash/ui/region_code_badge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -124,7 +125,11 @@ class ProxyCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildBusinessContent(BuildContext context, TianjiNode? node) {
+  Widget _buildBusinessContent(
+    BuildContext context,
+    TianjiNode? node, {
+    required bool selected,
+  }) {
     final region = _businessName();
     final multiplier =
         node?.multiplier?.toString() ??
@@ -143,10 +148,10 @@ class ProxyCard extends ConsumerWidget {
           children: [
             if (region.code case final code?) RegionCodeBadge(code: code),
             Expanded(
-              child: EmojiText(
+              child: MarqueeText(
                 stripBusinessMultiplierSuffix(region.name),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                scrollWhen: businessMobile ? selected : true,
+                hoverToScroll: !businessMobile,
                 style: BusinessText.cardTitle(context),
               ),
             ),
@@ -278,10 +283,10 @@ class ProxyCard extends ConsumerWidget {
               children: [
                 if (region.code case final code?) RegionCodeBadge(code: code),
                 Expanded(
-                  child: EmojiText(
+                  child: MarqueeText(
                     stripBusinessMultiplierSuffix(region.name),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    scrollWhen: selected || businessList,
+                    hoverToScroll: businessList,
                     style: BusinessText.linesNodeTitle(
                       context,
                       emphasized: selected,
@@ -534,7 +539,7 @@ class ProxyCard extends ConsumerWidget {
                     ),
                   ]
                 : businessStyle
-                ? [_buildBusinessContent(context, node)]
+                ? [_buildBusinessContent(context, node, selected: inUse)]
                 : [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -613,7 +618,7 @@ class _BusinessDelayText extends ConsumerWidget {
       (DelayTestPhase.running || DelayTestPhase.queued, _) => '…',
       (_, null) => '—',
       (_, final value?) when value > 0 => '$value ms',
-      _ => context.appLocalizations.businessDelayTimeout,
+      _ => delay == null ? '—' : context.appLocalizations.businessDelayTimeout,
     };
     final running =
         phase == DelayTestPhase.running || phase == DelayTestPhase.queued;
@@ -627,14 +632,11 @@ class _BusinessDelayText extends ConsumerWidget {
       maxLines: 1,
       textAlign: MacOSStyle.of(context) ? TextAlign.end : null,
       overflow: TextOverflow.ellipsis,
-      style: MacOSStyle.of(context) ? style.toJetBrainsMono : style,
+      style: (MacOSStyle.of(context) ? style.toJetBrainsMono : style).toTabular,
     );
-    if (!MacOSStyle.of(context)) {
-      return value;
-    }
     return RepaintBoundary(
       child: SizedBox(
-        width: 72,
+        width: _businessDelayWidth(context),
         child: AnimatedSwitcher(
           duration: context.motionDuration(fadeTabDuration),
           switchInCurve: Curves.easeOut,
@@ -648,6 +650,52 @@ class _BusinessDelayText extends ConsumerWidget {
       ),
     );
   }
+}
+
+double _businessDelayWidth(BuildContext context) {
+  final delayStyle = BusinessText.cardDelay(context);
+  final timeoutStyle = AppTextStyle.footnote
+      .of(context, emphasized: true)
+      .toTabular;
+  final labels = [
+    ('9999 ms', delayStyle),
+    (context.appLocalizations.businessDelayTimeout, timeoutStyle),
+    ('9999 ms', delayStyle.toJetBrainsMono),
+    (
+      context.appLocalizations.businessDelayTimeout,
+      timeoutStyle.toJetBrainsMono,
+    ),
+  ];
+  var width = 0.0;
+  for (final (label, style) in labels) {
+    final painter = TextPainter(
+      text: TextSpan(text: label, style: style),
+      maxLines: 1,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    if (painter.width > width) width = painter.width;
+    painter.dispose();
+  }
+  return width;
+}
+
+double _delayTextWidth(BuildContext context, Measure measure) {
+  final style = AppTextStyle.caption2.of(context, emphasized: true).toTabular;
+  final labels = ['9999 ms', context.appLocalizations.timeout];
+  var width = 0.0;
+  for (final label in labels) {
+    final painter = TextPainter(
+      text: TextSpan(text: label, style: style),
+      maxLines: 1,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    if (painter.width > width) width = painter.width;
+    painter.dispose();
+  }
+  final iconSize = measure.textHeight(AppTextStyle.caption2);
+  return width > iconSize ? width : iconSize;
 }
 
 class _BusinessRadio extends StatelessWidget {
@@ -849,6 +897,7 @@ class _DelayTextState extends ConsumerState<_DelayText> {
       child: Focus(
         focusNode: _focusNode,
         child: SizedBox(
+          width: _delayTextWidth(context, measure),
           height: measure.textHeight(AppTextStyle.caption2),
           child: FadeBox(
             alignment: widget.alignment,
@@ -889,6 +938,7 @@ class _DelayTextState extends ConsumerState<_DelayText> {
                         maxLines: 1,
                         style: AppTextStyle.caption2
                             .of(context, emphasized: true)
+                            .toTabular
                             .copyWith(
                               overflow: TextOverflow.ellipsis,
                               color: context.colorScheme.delayColor(delay),

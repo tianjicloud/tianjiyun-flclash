@@ -784,21 +784,26 @@ class _GroupSummary extends ConsumerWidget {
           style: AppTextStyle.callout.of(context, emphasized: true),
         ),
         const SizedBox(height: 2),
-        if (health != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Text(
-              context.appLocalizations.proxyAvailability(
-                health.available,
-                health.total,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyle.caption2.of(context).toLight,
-            ),
-          )
-        else
-          Flexible(flex: 1, child: _SelectedProxyName(groupName: group.name)),
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: SizedBox(
+            height: AppTextStyle.caption2.of(context).height ?? 16,
+            child: health != null
+                ? Text(
+                    context.appLocalizations.proxyAvailability(
+                      health.available,
+                      health.total,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.caption2.of(context).toLight,
+                  )
+                : Align(
+                    alignment: Alignment.centerLeft,
+                    child: _SelectedProxyName(groupName: group.name),
+                  ),
+          ),
+        ),
       ],
     );
   }

@@ -17,6 +17,7 @@ import 'package:fl_clash/views/dashboard/business.dart'
     show showResidentialExitSheet;
 import 'package:fl_clash/views/proxies/tab.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -187,16 +188,25 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                         ),
                         const SizedBox(height: 8),
                         Expanded(child: content),
-                        if (ref.watch(isStartProvider)) ...[
-                          const SizedBox(height: 12),
-                          _VerificationCard(
-                            verdict: ref.watch(selectionCheckProvider),
-                            selectedName: _cleanProxyName(
-                              selectedProxyName ?? '',
-                            ),
-                          ),
-                          SizedBox(height: 88 + context.bottomInset),
-                        ],
+                        AnimatedSize(
+                          alignment: Alignment.topCenter,
+                          duration: context.motionDuration(commonDuration),
+                          curve: Curves.easeOut,
+                          child: ref.watch(isStartProvider)
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 12,
+                                    bottom: 88 + context.bottomInset,
+                                  ),
+                                  child: _VerificationCard(
+                                    verdict: ref.watch(selectionCheckProvider),
+                                    selectedName: _cleanProxyName(
+                                      selectedProxyName ?? '',
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
                       ],
                     ),
                   ),
@@ -267,8 +277,8 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (selected != null &&
-                                  (!macOS || selectedProxyName != null))
+                              if (selected != null ||
+                                  (selectedProxyName?.isNotEmpty ?? false))
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(
                                     4,
@@ -279,51 +289,75 @@ class _BusinessProxyBrowserState extends ConsumerState<BusinessProxyBrowser> {
                                   child: Row(
                                     spacing: 12,
                                     children: [
-                                      Text(
-                                        _cleanGroupName(selected.name),
-                                        style: AppTextStyle.title3.of(
-                                          context,
-                                          emphasized: true,
+                                      if (selected != null)
+                                        MarqueeText(
+                                          _cleanGroupName(selected.name),
+                                          scrollWhen: true,
+                                          style: AppTextStyle.title3.of(
+                                            context,
+                                            emphasized: true,
+                                          ),
                                         ),
-                                      ),
                                       if (selectedProxyName case final name?
                                           when name.isNotEmpty)
                                         Expanded(
-                                          child: Text(
-                                            context.appLocalizations
-                                                .businessCurrentLineState(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: MarqueeText(
                                                   _currentProxyLabel(name),
-                                                  _verdictSummary(
-                                                    ref.watch(
-                                                      selectionCheckProvider,
+                                                  scrollWhen: true,
+                                                  style: AppTextStyle.footnote
+                                                      .of(context)
+                                                      .copyWith(
+                                                        color: context
+                                                            .colorScheme
+                                                            .onSurfaceVariant,
+                                                      ),
+                                                ),
+                                              ),
+                                              Text(
+                                                ' · ${_verdictSummary(ref.watch(selectionCheckProvider), context)}',
+                                                style: AppTextStyle.footnote
+                                                    .of(context)
+                                                    .copyWith(
+                                                      color: context
+                                                          .colorScheme
+                                                          .onSurfaceVariant,
                                                     ),
-                                                    context,
-                                                  ),
-                                                ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppTextStyle.footnote
-                                                .of(context)
-                                                .copyWith(
-                                                  color: context
-                                                      .colorScheme
-                                                      .onSurfaceVariant,
-                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                     ],
                                   ),
                                 ),
                               Expanded(child: content),
-                              if (!macOS && ref.watch(isStartProvider)) ...[
-                                const SizedBox(height: 12),
-                                _VerificationCard(
-                                  verdict: ref.watch(selectionCheckProvider),
-                                  selectedName: _cleanProxyName(
-                                    selectedProxyName ?? '',
+                              if (!macOS)
+                                AnimatedSize(
+                                  alignment: Alignment.topCenter,
+                                  duration: context.motionDuration(
+                                    commonDuration,
+                                  ),
+                                  curve: Curves.easeOut,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      if (ref.watch(isStartProvider)) ...[
+                                        const SizedBox(height: 12),
+                                        _VerificationCard(
+                                          verdict: ref.watch(
+                                            selectionCheckProvider,
+                                          ),
+                                          selectedName: _cleanProxyName(
+                                            selectedProxyName ?? '',
+                                          ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
-                              ],
                             ],
                           ),
                         ),
@@ -393,10 +427,10 @@ class _GroupChoice extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: EmojiText(
+                      child: MarqueeText(
                         _cleanGroupName(group.name),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        scrollWhen: selected,
+                        hoverToScroll: true,
                         style: AppTextStyle.subheadline
                             .of(context, emphasized: selected)
                             .copyWith(
@@ -480,7 +514,7 @@ class _MobileGroupChip extends StatelessWidget {
                   Text(
                     _cleanGroupName(group.name),
                     style: AppTextStyle.caption1
-                        .of(context, emphasized: selected)
+                        .of(context)
                         .copyWith(
                           color: selected
                               ? BusinessPalette.onBlue

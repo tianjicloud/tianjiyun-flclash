@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
+import 'package:prism_ui/prism_ui.dart';
 
 class MarqueeText extends StatefulWidget {
   const MarqueeText(
@@ -10,14 +11,12 @@ class MarqueeText extends StatefulWidget {
     this.style,
     this.scrollWhen = false,
     this.hoverToScroll = false,
-    this.textAlign = TextAlign.start,
   });
 
   final String text;
   final TextStyle? style;
   final bool scrollWhen;
   final bool hoverToScroll;
-  final TextAlign textAlign;
 
   @override
   State<MarqueeText> createState() => _MarqueeTextState();
@@ -116,19 +115,15 @@ class _MarqueeTextState extends State<MarqueeText>
   @override
   Widget build(BuildContext context) {
     final direction = Directionality.of(context);
-    final scaler = MediaQuery.textScalerOf(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         final finite = constraints.maxWidth.isFinite;
         final width = constraints.maxWidth;
-        final painter = TextPainter(
-          text: TextSpan(text: widget.text, style: widget.style),
-          textDirection: direction,
-          textScaler: scaler,
-          maxLines: 1,
-        )..layout();
-        final textWidth = painter.width;
-        painter.dispose();
+        final textWidth = EmojiText.widthOf(
+          context,
+          widget.text,
+          DefaultTextStyle.of(context).style.merge(widget.style),
+        );
         final overflow = finite
             ? (textWidth - width).clamp(0, double.infinity).toDouble()
             : 0.0;
@@ -136,14 +131,7 @@ class _MarqueeTextState extends State<MarqueeText>
 
         Widget child;
         if (overflow == 0) {
-          child = Text(
-            widget.text,
-            maxLines: 1,
-            softWrap: false,
-            style: widget.style,
-            textAlign: widget.textAlign,
-            overflow: TextOverflow.clip,
-          );
+          child = EmojiText(widget.text, maxLines: 1, style: widget.style);
         } else if (!widget.scrollWhen || (widget.hoverToScroll && !_hovered)) {
           child = ShaderMask(
             blendMode: ui.BlendMode.dstIn,
@@ -165,44 +153,29 @@ class _MarqueeTextState extends State<MarqueeText>
                 stops: [0, stop, 1],
               ).createShader(bounds);
             },
-            child: Text(
-              widget.text,
-              maxLines: 1,
-              softWrap: false,
-              style: widget.style,
-              textAlign: widget.textAlign,
-              overflow: TextOverflow.clip,
-            ),
+            child: _clippedLine(EmojiText(widget.text, style: widget.style)),
           );
         } else {
           child = RepaintBoundary(
-            child: ClipRect(
-              child: ShaderMask(
-                blendMode: ui.BlendMode.dstIn,
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [
-                    Color(0x00000000),
-                    Color(0xff000000),
-                    Color(0xff000000),
-                    Color(0x00000000),
-                  ],
-                  stops: [0, 0.08, 0.92, 1],
-                ).createShader(bounds),
-                child: AnimatedBuilder(
+            child: ShaderMask(
+              blendMode: ui.BlendMode.dstIn,
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [
+                  Color(0x00000000),
+                  Color(0xff000000),
+                  Color(0xff000000),
+                  Color(0x00000000),
+                ],
+                stops: [0, 0.08, 0.92, 1],
+              ).createShader(bounds),
+              child: _clippedLine(
+                AnimatedBuilder(
                   animation: _controller ?? kAlwaysDismissedAnimation,
                   builder: (context, text) => Transform.translate(
                     offset: Offset(-overflow * (_position?.value ?? 0), 0),
                     child: text,
                   ),
-                  child: SizedBox(
-                    width: textWidth,
-                    child: Text(
-                      widget.text,
-                      maxLines: 1,
-                      softWrap: false,
-                      style: widget.style,
-                    ),
-                  ),
+                  child: EmojiText(widget.text, style: widget.style),
                 ),
               ),
             ),
@@ -231,4 +204,11 @@ class _MarqueeTextState extends State<MarqueeText>
       },
     );
   }
+
+  Widget _clippedLine(Widget line) => UnconstrainedBox(
+    constrainedAxis: Axis.vertical,
+    alignment: AlignmentDirectional.centerStart,
+    clipBehavior: Clip.hardEdge,
+    child: line,
+  );
 }

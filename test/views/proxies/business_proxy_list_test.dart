@@ -8,12 +8,160 @@ import 'package:fl_clash/views/proxies/proxies.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:prism_ui/prism_ui.dart';
 
 import '../../helpers/host_scaffold.dart';
 import '../../helpers/test_app.dart';
 import '../../helpers/test_profiles.dart';
 
 void main() {
+  for (final platform in [
+    TargetPlatform.windows,
+    TargetPlatform.macOS,
+    TargetPlatform.android,
+  ]) {
+    testWidgets('business delay keeps its row rect on $platform', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1280, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final profile =
+          Profile.normal(
+            url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+          ).copyWith(
+            currentGroupName: 'Japan',
+            selectedMap: const {'Japan': 'Tokyo'},
+          );
+      const proxy = Proxy(name: 'Tokyo', type: 'ss');
+      const groups = [
+        Group(
+          name: 'Japan',
+          type: GroupType.Selector,
+          hidden: false,
+          now: 'Tokyo',
+          all: [proxy],
+        ),
+      ];
+      final container = ProviderContainer(
+        overrides: [
+          profilesProvider.overrideWith(() => TestProfiles([profile])),
+          currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
+          currentGroupsStateProvider.overrideWithValue(
+            const GroupsState(value: groups),
+          ),
+          groupsProvider.overrideWithValue(groups),
+          proxiesTabStateProvider.overrideWithValue(
+            const ProxiesTabState(
+              groups: groups,
+              currentGroupName: 'Japan',
+              proxyCardType: ProxyCardType.compact,
+            ),
+          ),
+          patchClashConfigProvider.overrideWithBuild(
+            (_, _) => const PatchClashConfig(testUrl: ''),
+          ),
+          tianjiNodeProvider(
+            'Tokyo',
+          ).overrideWithValue(const TianjiNode(name: 'Tokyo', multiplier: 0.5)),
+        ],
+      );
+      addTearDown(container.dispose);
+      globalState.container = container;
+      container.read(viewSizeProvider.notifier).value = const Size(1280, 900);
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: TestApp(
+            theme: ThemeData(platform: platform),
+            homeBuilder: _host,
+            child: const BusinessProxyList(),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.text('—'), findsOneWidget);
+      final card = find.byType(ProxyCard);
+      expect(card, findsOneWidget);
+      final rowRect = tester.getRect(card);
+      expect(find.text('Rate 0.5×'), findsOneWidget);
+      container
+          .read(delayDataSourceProvider.notifier)
+          .setDelay(const Delay(name: 'Tokyo', url: '', value: 85));
+      await tester.pump();
+      expect(find.text('85 ms'), findsOneWidget);
+      expect(tester.getRect(card), rowRect);
+      expect(find.text('Rate 0.5×'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('localized timeout delay fits at text scale 1.6', (tester) async {
+    tester.view.physicalSize = const Size(1280, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final profile = Profile.normal(
+      url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+    ).copyWith(currentGroupName: 'Japan');
+    const proxy = Proxy(name: 'Tokyo', type: 'ss');
+    const groups = [
+      Group(
+        name: 'Japan',
+        type: GroupType.Selector,
+        hidden: false,
+        all: [proxy],
+      ),
+    ];
+    final container = ProviderContainer(
+      overrides: [
+        profilesProvider.overrideWith(() => TestProfiles([profile])),
+        currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
+        currentGroupsStateProvider.overrideWithValue(
+          const GroupsState(value: groups),
+        ),
+        groupsProvider.overrideWithValue(groups),
+        proxiesTabStateProvider.overrideWithValue(
+          const ProxiesTabState(
+            groups: groups,
+            currentGroupName: 'Japan',
+            proxyCardType: ProxyCardType.compact,
+          ),
+        ),
+        patchClashConfigProvider.overrideWithBuild(
+          (_, _) => const PatchClashConfig(testUrl: ''),
+        ),
+        tianjiNodeProvider(
+          'Tokyo',
+        ).overrideWithValue(const TianjiNode(name: 'Tokyo')),
+      ],
+    );
+    addTearDown(container.dispose);
+    globalState.container = container;
+    container.read(viewSizeProvider.notifier).value = const Size(1280, 900);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(1.6)),
+          child: TestApp(
+            locale: Locale('ru'),
+            homeBuilder: _host,
+            child: BusinessProxyList(),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    container
+        .read(delayDataSourceProvider.notifier)
+        .setDelay(const Delay(name: 'Tokyo', url: '', value: -1));
+    await tester.pump();
+    expect(find.byType(ProxyCard), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('business view preference switches and persists list mode', (
     tester,
   ) async {

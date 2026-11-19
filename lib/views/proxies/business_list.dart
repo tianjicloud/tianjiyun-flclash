@@ -14,6 +14,7 @@ import 'package:fl_clash/views/dashboard/style.dart' show DashboardColors;
 import 'package:fl_clash/views/dashboard/business.dart'
     show showResidentialExitSheet;
 import 'package:fl_clash/views/proxies/card.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prism_ui/prism_ui.dart';
@@ -218,10 +219,12 @@ class _BusinessGroupHeader extends ConsumerWidget {
                           : AppGlyphs.chevronForward,
                       size: 16,
                     ),
-                    Text(
+                    MarqueeText(
                       stripBusinessMultiplierSuffix(
                         _cleanBusinessGroupName(group.name),
                       ),
+                      scrollWhen: selected,
+                      hoverToScroll: true,
                       style: AppTextStyle.subheadline.of(
                         context,
                         emphasized: true,
@@ -249,9 +252,8 @@ class _BusinessGroupHeader extends ConsumerWidget {
                     .copyWith(color: context.colorScheme.onSurfaceVariant),
               ),
               _CurrentProxyPill(
-                name: automatic && delay != null && delay > 0
-                    ? '${_cleanBusinessProxyName(current)} · $delay ms'
-                    : _cleanBusinessProxyName(current),
+                name: _cleanBusinessProxyName(current),
+                delay: automatic && delay != null && delay > 0 ? delay : null,
                 automatic: automatic,
               ),
             ],
@@ -294,9 +296,14 @@ String _cleanBusinessProxyName(String name) => _cleanBusinessGroupName(
 ).replaceAll(RegExp(r'\s*\d+(?:\.\d+)?x\b', caseSensitive: false), '');
 
 class _CurrentProxyPill extends StatelessWidget {
-  const _CurrentProxyPill({required this.name, required this.automatic});
+  const _CurrentProxyPill({
+    required this.name,
+    required this.delay,
+    required this.automatic,
+  });
 
   final String name;
+  final int? delay;
   final bool automatic;
 
   @override
@@ -307,13 +314,36 @@ class _CurrentProxyPill extends StatelessWidget {
     ),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      child: Text(
-        name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppTextStyle.caption1
-            .of(context)
-            .copyWith(color: _pillColors(context).$2),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyle.caption1
+                  .of(context)
+                  .copyWith(color: _pillColors(context).$2),
+            ),
+          ),
+          if (automatic) ...[
+            const Text(' · '),
+            SizedBox(
+              width: _delaySlotWidth(context),
+              child: Text(
+                delay == null ? '' : '$delay ms',
+                maxLines: 1,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.caption1
+                    .of(context)
+                    .toTabular
+                    .copyWith(color: _pillColors(context).$2),
+              ),
+            ),
+          ],
+        ],
       ),
     ),
   );
@@ -328,5 +358,18 @@ class _CurrentProxyPill extends StatelessWidget {
       BusinessPalette.residentialChip,
       BusinessPalette.residentialChipText,
     );
+  }
+
+  double _delaySlotWidth(BuildContext context) {
+    final style = AppTextStyle.caption1.of(context).toTabular;
+    final painter = TextPainter(
+      text: TextSpan(text: '9999 ms', style: style),
+      maxLines: 1,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    final width = painter.width;
+    painter.dispose();
+    return width;
   }
 }

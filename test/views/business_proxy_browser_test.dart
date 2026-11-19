@@ -63,6 +63,12 @@ void main() {
           hidden: false,
           all: [Proxy(name: '🇺🇸 Los Angeles 01', type: 'vmess')],
         ),
+        const Group(
+          name: '🇨🇦 Canada',
+          type: GroupType.Selector,
+          hidden: false,
+          all: [Proxy(name: '🇨🇦 Toronto 01', type: 'ss')],
+        ),
       ];
       final container = ProviderContainer(
         overrides: [
@@ -119,15 +125,30 @@ void main() {
       expect(find.text('JP'), findsOneWidget);
       expect(find.text('Tokyo 01'), findsOneWidget);
       expect(tester.takeException(), isNull);
-
-      final firstCard = find.byType(ProxyCard).first;
-      expect(tester.getRect(firstCard).width, lessThanOrEqualTo(390));
       final localization = tester
           .element(find.byType(ProxiesView))
           .appLocalizations;
+      expect(find.text(localization.businessRecheck), findsNothing);
+
+      final rightChip = find.text('Canada');
+      expect(rightChip, findsOneWidget);
+      final rightChipRect = tester.getRect(rightChip);
+      await tester.tap(find.text('US').first);
+      await tester.pump();
+      expect(tester.getRect(rightChip), rightChipRect);
+
+      container.read(runTimeProvider.notifier).value = 1;
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      await tester.pumpAndSettle();
+      expect(find.text(localization.businessRecheck), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      final firstCard = find.byType(ProxyCard).first;
+      expect(tester.getRect(firstCard).width, lessThanOrEqualTo(390));
       await tester.tap(find.byTooltip(localization.delayTest));
       await tester.pump();
-      expect(_RecordingProxiesAction.groupsTested, ['🇯🇵 Japan']);
+      expect(_RecordingProxiesAction.groupsTested, ['🇺🇸 US']);
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pump(const Duration(seconds: 1));
     },
@@ -146,7 +167,11 @@ void main() {
         name: '🇯🇵 Japan',
         type: GroupType.Selector,
         hidden: false,
-        all: [Proxy(name: '🇯🇵 Tokyo', type: 'ss')],
+        now: '🇯🇵 Tokyo',
+        all: [
+          Proxy(name: '🇯🇵 Tokyo', type: 'ss'),
+          Proxy(name: '🇯🇵 Osaka', type: 'ss'),
+        ],
       ),
       const Group(
         name: tianjiResidentialRootName,
@@ -196,8 +221,15 @@ void main() {
       find.byWidgetPredicate(
         (widget) => widget is ProxyCard && widget.businessList,
       ),
-      findsOneWidget,
+      findsNWidgets(2),
     );
+    final firstLine = find.byType(ProxyCard).first;
+    expect(find.byType(ProxyCard), findsNWidgets(2));
+    expect(firstLine, findsOneWidget);
+    final initialTop = tester.getRect(firstLine).top;
+    await tester.tap(find.byType(ProxyCard).last);
+    await tester.pump();
+    expect(tester.getRect(firstLine).top, initialTop);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump(const Duration(seconds: 1));

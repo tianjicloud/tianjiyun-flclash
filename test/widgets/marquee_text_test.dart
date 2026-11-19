@@ -1,7 +1,9 @@
 import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:prism_ui/prism_ui.dart';
 
 void main() {
   testWidgets('fits without creating a ticker', (tester) async {
@@ -157,6 +159,42 @@ void main() {
     final initial = tester.getRect(text);
     await tester.pump(const Duration(seconds: 3));
     expect(tester.getRect(text), initial);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a long name stays on one line and keeps its emoji font', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: EmojiFont(
+          family: 'Emoji',
+          pattern: '🇯🇵',
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: SizedBox(
+              width: 80,
+              child: MarqueeText(
+                '🇯🇵 Tokyo premium residential line',
+                style: TextStyle(fontSize: 14, height: 1),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    final paragraph = tester.renderObject<RenderParagraph>(
+      find.byType(RichText),
+    );
+    expect(paragraph.size.height, 14);
+    final families = <String?>[];
+    paragraph.text.visitChildren((span) {
+      families.add(span.style?.fontFamily);
+      return true;
+    });
+    expect(families, contains('Emoji'));
+    expect(tester.getSize(find.byType(MarqueeText)).width, 80);
     expect(tester.takeException(), isNull);
   });
 }
