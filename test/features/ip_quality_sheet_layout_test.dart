@@ -23,8 +23,14 @@ void main() {
         overrides: [
           ipQualityProvider.overrideWith(
             (_, _) async => throw const IpQualityLookupException([
-              (source: IpQualitySource.ipApiCom, status: IpQualitySourceStatus.failed),
-              (source: IpQualitySource.identMe, status: IpQualitySourceStatus.timeout),
+              (
+                source: IpQualitySource.ipApiCom,
+                status: IpQualitySourceStatus.failed,
+              ),
+              (
+                source: IpQualitySource.identMe,
+                status: IpQualitySourceStatus.timeout,
+              ),
             ]),
           ),
         ],
