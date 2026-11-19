@@ -7,10 +7,10 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/widgets/quick_lines.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prism_ui/prism_ui.dart';
 
 import '../../helpers/host_scaffold.dart';
 import '../../helpers/test_app.dart';
@@ -194,12 +194,12 @@ void main() {
       for (final name in _names) {
         expect(find.byTooltip(name), findsOneWidget, reason: name);
       }
-      final long = tester.widget<EmojiText>(
+      final long = tester.widget<MarqueeText>(
         find.byWidgetPredicate(
-          (widget) => widget is EmojiText && widget.text.contains('超长线路名称'),
+          (widget) => widget is MarqueeText && widget.text.contains('超长线路名称'),
         ),
       );
-      expect(long.maxLines, 1);
+      expect(long.text, contains('超长线路名称'));
 
       final first = tester.getTopLeft(find.byTooltip(_names[0]));
       final second = tester.getTopLeft(find.byTooltip(_names[1]));

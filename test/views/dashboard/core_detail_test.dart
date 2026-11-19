@@ -5,8 +5,10 @@ import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/ui/list_item.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prism_ui/prism_ui.dart' show AppBar, ThemeData;
 
@@ -57,6 +59,33 @@ void main() {
     expect(find.text('Service status'), findsAtLeastNWidgets(1));
     expect(find.text('Not running'), findsOneWidget);
     expect(find.text('Restart service'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('runtime row keeps its rect when the value arrives', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      TestApp(
+        wrapInProviderScope: true,
+        child: CoreDetailView(
+          memoryReader: () async => const MemorySnapshot(app: 64 * 1024 * 1024),
+        ),
+      ),
+    );
+    await tester.pump();
+    final row = find.ancestor(
+      of: find.text('Running time'),
+      matching: find.byType(ListItem),
+    );
+    expect(row, findsOneWidget);
+    final rect = tester.getRect(row);
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(CoreDetailView)),
+    );
+    container.read(runTimeProvider.notifier).value = 1000;
+    await tester.pump();
+    expect(tester.getRect(row), rect);
     expect(tester.takeException(), isNull);
   });
 

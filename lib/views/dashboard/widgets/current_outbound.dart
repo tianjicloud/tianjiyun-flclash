@@ -22,6 +22,7 @@ import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/line_data.dart';
 import 'package:fl_clash/views/dashboard/probe_start_hold.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -839,12 +840,15 @@ class _MacOSBusinessHero extends StatelessWidget {
           ),
         if ((exitName ?? line?.displayName) case final value?) ...[
           Text(strings.businessCurrentLine),
-          EmojiText(value),
+          MarqueeText(value, scrollWhen: true),
         ],
       ],
       null => [
         Text(strings.businessWillUseLine),
-        EmojiText(line?.displayName ?? strings.businessSmartRouting),
+        MarqueeText(
+          line?.displayName ?? strings.businessSmartRouting,
+          scrollWhen: true,
+        ),
       ],
     };
     final subtitleWidget = subtitle is List<Widget>
@@ -1054,10 +1058,9 @@ class _BusinessHeroDetails extends ConsumerWidget {
                 _Cell(
                   label: context.appLocalizations.businessCurrentLine,
                   value: switch (exitName ?? line?.displayName) {
-                    final exit? => EmojiText(
+                    final exit? => MarqueeText(
                       exit,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      scrollWhen: true,
                       style: BusinessText.heroMetaValue(context),
                     ),
                     _ => const _Placeholder(),

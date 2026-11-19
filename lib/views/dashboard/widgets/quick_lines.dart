@@ -10,6 +10,7 @@ import 'package:fl_clash/ui/ui.dart';
 import 'package:fl_clash/views/dashboard/line_data.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,6 +27,7 @@ class QuickLines extends ConsumerWidget {
     if (lines.length < 2) return const SizedBox.shrink();
     final density = DashboardDensityScope.of(context);
     final connected = ref.watch(isStartProvider) && !ref.watch(suspendProvider);
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
     final header = Row(
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
@@ -95,7 +97,8 @@ class QuickLines extends ConsumerWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             if (density.isDesktop) {
-              return IntrinsicHeight(
+              return SizedBox(
+                height: (density.isCompact ? 72 : 92) * textScale,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 14,
@@ -111,7 +114,8 @@ class QuickLines extends ConsumerWidget {
               spacing: 10,
               children: [
                 for (var index = 0; index < cards.length; index += 2)
-                  IntrinsicHeight(
+                  SizedBox(
+                    height: 96 * textScale,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       spacing: 10,
@@ -171,11 +175,12 @@ class _QuickLineCard extends StatelessWidget {
             : '· ${context.appLocalizations.businessSelected}',
     ].join(mobile ? ' ' : ' · ');
     final compact = density.isCompact;
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
     final cardHeight = mobile
-        ? 66.0
+        ? 96.0 * textScale
         : compact
-        ? 72.0
-        : 92.0;
+        ? 72.0 * textScale
+        : 92.0 * textScale;
     final card = DashboardCard(
       onTap: onTap,
       semanticLabel: line.name,
@@ -216,99 +221,113 @@ class _QuickLineCard extends StatelessWidget {
                 Expanded(
                   child: Tooltip(
                     message: line.name,
-                    child: EmojiText(
+                    child: MarqueeText(
                       mobile ? regionName.name : line.displayName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: BusinessText.quickName(
                         context,
                         mobile: mobile,
                         compact: compact,
                       ),
+                      scrollWhen: mobile || !MacOSStyle.of(context),
+                      hoverToScroll: !mobile,
                     ),
                   ),
                 ),
-                if (!mobile && delay != null && delay >= 0)
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '$delay',
-                          style: BusinessText.quickDelay(
-                            context,
-                            mobile: mobile,
-                            compact: compact,
-                          ).copyWith(color: delayColor),
-                        ),
-                        TextSpan(
-                          text: ' ms',
-                          style:
-                              BusinessText.quickUnit(
-                                context,
-                                mobile: mobile,
-                                compact: compact,
-                              ).copyWith(
-                                color: context.colorScheme.onSurfaceVariant,
-                              ),
-                        ),
-                      ],
-                    ),
-                    maxLines: 1,
-                  )
-                else if (!mobile && delay != null)
-                  GlyphIcon(
-                    AppGlyphs.warning,
-                    size: 14,
-                    color: colorScheme.error,
+                if (!mobile)
+                  SizedBox(
+                    width: 72,
+                    child: delay != null && delay >= 0
+                        ? Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '$delay',
+                                  style: BusinessText.quickDelay(
+                                    context,
+                                    mobile: mobile,
+                                    compact: compact,
+                                  ).copyWith(color: delayColor),
+                                ),
+                                TextSpan(
+                                  text: ' ms',
+                                  style:
+                                      BusinessText.quickUnit(
+                                        context,
+                                        mobile: mobile,
+                                        compact: compact,
+                                      ).copyWith(
+                                        color: context
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                              ],
+                            ),
+                            maxLines: 1,
+                          )
+                        : delay != null
+                        ? GlyphIcon(
+                            AppGlyphs.warning,
+                            size: 14,
+                            color: colorScheme.error,
+                          )
+                        : const SizedBox.shrink(),
                   ),
               ],
             ),
             if (mobile)
               Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 spacing: 6,
                 children: [
-                  if (delay != null && delay >= 0)
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: '$delay',
-                            style: BusinessText.quickLineDelay(
-                              context,
-                            ).copyWith(color: delayColor),
-                          ),
-                          TextSpan(
-                            text: ' ms',
-                            style: BusinessText.quickLineDelay(context)
+                  SizedBox(
+                    width: 72,
+                    child: delay != null && delay >= 0
+                        ? Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '$delay',
+                                  style: BusinessText.quickLineDelay(
+                                    context,
+                                  ).copyWith(color: delayColor),
+                                ),
+                                TextSpan(
+                                  text: ' ms',
+                                  style: BusinessText.quickLineDelay(context)
+                                      .copyWith(
+                                        color: context
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : delay != null
+                        ? GlyphIcon(
+                            AppGlyphs.warning,
+                            size: 14,
+                            color: colorScheme.error,
+                          )
+                        : Text(
+                            context.appLocalizations.servicePending,
+                            style: BusinessText.quickMetaMobile(context)
                                 .copyWith(
                                   color: context.colorScheme.onSurfaceVariant,
                                 ),
                           ),
-                        ],
-                      ),
-                    )
-                  else if (delay != null)
-                    GlyphIcon(
-                      AppGlyphs.warning,
-                      size: 14,
-                      color: colorScheme.error,
-                    )
-                  else
-                    Text(
-                      context.appLocalizations.servicePending,
-                      style: BusinessText.quickMetaMobile(
-                        context,
-                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
-                    ),
+                  ),
                   if (meta.isNotEmpty)
-                    Text(
-                      meta,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: BusinessText.quickMetaMobile(
-                        context,
-                      ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                    Expanded(
+                      child: Text(
+                        meta,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BusinessText.quickMetaMobile(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
                     ),
                 ],
               )
@@ -327,7 +346,7 @@ class _QuickLineCard extends StatelessWidget {
         ),
       ),
     );
-    return card;
+    return SizedBox(height: cardHeight, child: card);
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/layout.dart';
+import 'package:fl_clash/views/dashboard/widgets/card.dart';
 import 'package:fl_clash/views/dashboard/widgets/update_status.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,12 +69,15 @@ void main() {
       find.byType(LinearProgressIndicator),
     );
     expect(bar.value, 0.25);
+    final card = find.byType(DashboardCard);
+    final cardRect = tester.getRect(card);
 
     download.value = const UpdateReady('v0.9.3', '/update/FlClash.apk');
     await tester.pump();
 
     expect(find.text('Update ready'), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsNothing);
+    expect(tester.getRect(card), cardRect);
     expect(tester.takeException(), isNull);
   });
 
@@ -120,4 +124,64 @@ void main() {
 
     expect(find.text('Downloading update'), findsOneWidget);
   });
+
+  testWidgets(
+    'update button keeps its width across progress and ready states',
+    (tester) async {
+      for (final (size, platform, density) in [
+        (const Size(560, 900), TargetPlatform.android, DashboardDensity.mobile),
+        (
+          const Size(1280, 900),
+          TargetPlatform.windows,
+          DashboardDensity.standard,
+        ),
+        (
+          const Size(1280, 900),
+          TargetPlatform.macOS,
+          DashboardDensity.standard,
+        ),
+      ]) {
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1;
+        final downloads = container.read(updateDownloadStateProvider.notifier);
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: TestApp(
+              theme: ThemeData(platform: platform),
+              child: HostScaffold(
+                body: Align(
+                  alignment: Alignment.topRight,
+                  child: DashboardDensityScope(
+                    density: density,
+                    scale: 1,
+                    child: const UpdateStatusButton(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        final values = [
+          const UpdateDownloading('v1', received: 5, total: 100),
+          const UpdateDownloading('v1', received: 45, total: 100),
+          const UpdateDownloading('v1', received: 100, total: 100),
+          const UpdateReady('v1', '/update.apk'),
+        ];
+        double? width;
+        for (final value in values) {
+          downloads.value = value;
+          await tester.pump();
+          await tester.pump(commonDuration);
+          final button = find.byType(UpdateStatusButton);
+          expect(button, findsOneWidget);
+          width ??= tester.getRect(button).width;
+          expect(tester.getRect(button).width, width);
+          expect(tester.takeException(), isNull);
+        }
+        expect(find.text('Update ready'), findsOneWidget);
+      }
+      addTearDown(tester.view.reset);
+    },
+  );
 }

@@ -107,6 +107,28 @@ class _CoreStatusButtonState extends ConsumerState<CoreStatusButton> {
       CoreStatus.connected => appLocalizations.running,
       CoreStatus.disconnected => appLocalizations.notRunning,
     };
+    final buttonLabels = [
+      appLocalizations.connecting,
+      appLocalizations.running,
+      appLocalizations.notRunning,
+    ];
+    final labelStyle = AppTextStyle.caption2.of(context);
+    final labelWidth = buttonLabels
+        .map((value) {
+          final painter = TextPainter(
+            text: TextSpan(
+              text: '${appLocalizations.serviceStatus}\n$value',
+              style: labelStyle,
+            ),
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+            maxLines: 2,
+          )..layout();
+          final width = painter.width;
+          painter.dispose();
+          return width;
+        })
+        .reduce((a, b) => a > b ? a : b);
     return Tooltip(
       message: appLocalizations.serviceStatus,
       child: FadeScaleBox(
@@ -119,13 +141,29 @@ class _CoreStatusButtonState extends ConsumerState<CoreStatusButton> {
             foregroundColor: colorScheme.onSurfaceVariant,
             pressLook: PressLook.none,
           ),
-          icon: coreStatus == CoreStatus.connecting
-              ? ActivityIndicator(color: colorScheme.onSurfaceVariant)
-              : const GlyphIcon(AppGlyphs.cpu, fill: 1),
-          label: Text(
-            '${appLocalizations.serviceStatus}\n$label',
-            textAlign: TextAlign.center,
-            style: AppTextStyle.caption2.of(context),
+          icon: SizedBox.square(
+            dimension: 18,
+            child: Center(
+              child: coreStatus == CoreStatus.connecting
+                  ? ActivityIndicator(color: colorScheme.onSurfaceVariant)
+                  : const GlyphIcon(AppGlyphs.cpu, fill: 1),
+            ),
+          ),
+          label: SizedBox(
+            width: labelWidth,
+            child: AnimatedSwitcher(
+              duration: context.motionDuration(commonDuration),
+              layoutBuilder: (current, previous) => Stack(
+                alignment: Alignment.center,
+                children: [...previous, ?current],
+              ),
+              child: Text(
+                '${appLocalizations.serviceStatus}\n$label',
+                key: ValueKey(label),
+                textAlign: TextAlign.center,
+                style: labelStyle,
+              ),
+            ),
           ),
         ),
       ),

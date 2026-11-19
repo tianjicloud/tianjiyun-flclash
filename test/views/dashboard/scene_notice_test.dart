@@ -38,7 +38,8 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: const TestApp(
-          child: Center(
+          child: Align(
+            alignment: Alignment.topCenter,
             child: SizedBox(width: 320, child: SceneUnavailableCard()),
           ),
         ),
@@ -46,9 +47,16 @@ void main() {
     );
     await tester.pump();
     expect(tester.getSize(find.byType(SceneUnavailableCard)).height, 40);
+    final beforeClose = tester.getRect(find.byType(SceneUnavailableCard));
     await tester.tap(find.byTooltip('Close'));
     await tester.pump();
     expect(find.byTooltip('Close'), findsNothing);
+    await tester.pump(const Duration(milliseconds: 100));
+    final closing = tester.getRect(find.byType(SceneUnavailableCard));
+    expect(closing.top, beforeClose.top);
+    expect(closing.height, inExclusiveRange(0, 40));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(SceneUnavailableCard)).height, 0);
     final saved = container.read(currentProfileProvider)!.overrides;
     expect(
       ProfileOverrides.fromJson(

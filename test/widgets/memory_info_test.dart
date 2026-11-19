@@ -104,6 +104,49 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets('memory legend items keep their rects as values grow', (
+    tester,
+  ) async {
+    var appMemory = 103284736;
+    Future<MemorySnapshot> readMemory() async =>
+        MemorySnapshot(app: appMemory, coreTotal: 32 * 1024 * 1024);
+    await tester.pumpWidget(
+      TestApp(
+        wrapInProviderScope: true,
+        child: SizedBox(
+          width: 340,
+          height: 176,
+          child: DashboardDensityScope(
+            density: DashboardDensity.standard,
+            scale: 1,
+            child: MemoryInfo(memoryReader: readMemory),
+          ),
+        ),
+        homeBuilder: (child) => HostScaffold(body: Center(child: child)),
+      ),
+    );
+    await tester.pump();
+    final appRow = find.byKey(const ValueKey('memory-legend-App'));
+    final coreRow = find.byKey(const ValueKey('memory-legend-Core'));
+    final appRect = tester.getRect(appRow);
+    final coreRect = tester.getRect(coreRow);
+    for (final (bytes, expected) in [
+      (106954752, '102 MB'),
+      (1181116006, '1.1 GB'),
+    ]) {
+      appMemory = bytes;
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pump();
+      expect(
+        find.descendant(of: appRow, matching: find.text(expected)),
+        findsOneWidget,
+      );
+      expect(tester.getRect(appRow), appRect);
+      expect(tester.getRect(coreRow), coreRect);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('a phone MemoryInfo splits the total like the desktop one', (
     tester,
   ) async {

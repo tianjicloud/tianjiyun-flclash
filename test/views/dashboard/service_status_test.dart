@@ -165,6 +165,8 @@ void main() {
     await tester.pumpWidget(app(settings: only([ServiceTarget.google])));
     await tester.pump();
     await tester.pump(commonDuration);
+    await tester.pump(commonDuration);
+    await tester.pump(commonDuration);
     expect(find.byType(SkeletonText), findsOneWidget);
 
     completion.complete([
@@ -1060,6 +1062,55 @@ void main() {
     completion.complete([_item('google', ServiceProbeStatus.failed)]);
     await tester.pumpAndSettle();
     expect(tester.getCenter(find.text('Check failed')).dy, checking);
+  });
+
+  testWidgets('AI status pill keeps its rect through probe states', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const TestApp(
+        wrapInProviderScope: true,
+        child: SizedBox(width: 600, child: BusinessAIStatusStrip()),
+      ),
+    );
+    await tester.pump();
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(BusinessAIStatusStrip)),
+    );
+    final pill = find.byKey(const ValueKey('ai-status-pill-chatgpt'));
+    Rect pillRect() => tester.getRect(pill);
+    final initial = pillRect();
+    container.read(runTimeProvider.notifier).value = 1;
+    await tester.pump();
+    final status = container.read(serviceStatusProvider.notifier);
+    status.state = const RoutedProbeState({
+      ServiceTarget.chatgpt: ProbeEntry(phase: ProbePhase.probing),
+    });
+    await tester.pump();
+    expect(pillRect(), initial);
+    status.state = const RoutedProbeState({
+      ServiceTarget.chatgpt: ProbeEntry(phase: ProbePhase.fresh),
+    });
+    await tester.pump();
+    expect(pillRect(), initial);
+    status.state = const RoutedProbeState({
+      ServiceTarget.chatgpt: ProbeEntry(
+        phase: ProbePhase.fresh,
+        value: ServiceCheck(ServiceProbeStatus.available, delay: 123),
+      ),
+    });
+    await tester.pump();
+    expect(find.text('123 ms'), findsOneWidget);
+    expect(pillRect(), initial);
+    status.state = const RoutedProbeState({
+      ServiceTarget.chatgpt: ProbeEntry(
+        phase: ProbePhase.fresh,
+        value: ServiceCheck(ServiceProbeStatus.unavailable),
+      ),
+    });
+    await tester.pump();
+    expect(pillRect(), initial);
+    expect(tester.takeException(), isNull);
   });
 
   ProviderContainer containerOf(WidgetTester tester) =>

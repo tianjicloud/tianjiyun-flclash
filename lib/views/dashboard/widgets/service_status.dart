@@ -281,17 +281,21 @@ class _BusinessAIStatusStripState extends ConsumerState<BusinessAIStatusStrip>
                       : context.colorScheme.onSurfaceVariant,
                 ),
               ),
-              if (checkedAt != null)
-                Text(
-                  context.appLocalizations.businessCheckedAt(
-                    DateFormat('HH:mm').format(checkedAt),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: BusinessText.mobileCardHeading(
-                    context,
-                  ).copyWith(color: context.colorScheme.onSurfaceVariant),
-                ),
+              SizedBox(
+                height: 16,
+                child: checkedAt == null
+                    ? const SizedBox.expand()
+                    : Text(
+                        context.appLocalizations.businessCheckedAt(
+                          DateFormat('HH:mm').format(checkedAt),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BusinessText.mobileCardHeading(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+              ),
             ],
           ),
         ),
@@ -327,6 +331,11 @@ class _AIStatusPill extends ConsumerWidget {
     final colors = DashboardColors.of(context);
     final running = ref.watch(isStartProvider);
     final suspended = ref.watch(suspendProvider);
+    final delay = switch (service.check) {
+      ServiceCheck(status: ServiceProbeStatus.available, delay: final value?) =>
+        value,
+      _ => null,
+    };
     final (label, tone) = !running
         ? (
             context.appLocalizations.servicePending,
@@ -334,46 +343,98 @@ class _AIStatusPill extends ConsumerWidget {
           )
         : suspended
         ? (context.appLocalizations.suspended, colors.warn)
+        : delay != null
+        ? ('$delay ms', context.colorScheme.onSurfaceVariant)
         : _statusOf(context, service.check, service.phase);
     final background = Color.alphaBlend(
       tone.withValues(alpha: 0.1),
       colors.card,
     );
+    final possibleLabels = [
+      context.appLocalizations.servicePending,
+      context.appLocalizations.loading,
+      context.appLocalizations.suspended,
+      '9999 ms',
+      for (final status in ServiceProbeStatus.values)
+        _statusLabel(context, status),
+    ];
     return LayoutBuilder(
       builder: (context, constraints) {
         final fullLabel = '${target.label}: $label';
+        final style = DashboardText.label(context);
+        final labelWidth = possibleLabels
+            .map((value) {
+              final painter = TextPainter(
+                text: TextSpan(text: value, style: style),
+                textDirection: Directionality.of(context),
+                textScaler: MediaQuery.textScalerOf(context),
+                maxLines: 1,
+              )..layout();
+              final width = painter.width;
+              painter.dispose();
+              return width;
+            })
+            .reduce((a, b) => a > b ? a : b);
+        final targetPainter = TextPainter(
+          text: TextSpan(text: target.label, style: style),
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout();
+        final targetWidth = targetPainter.width;
+        targetPainter.dispose();
+        final naturalWidth = labelWidth + targetWidth + 31;
+        final width = naturalWidth.clamp(0, constraints.maxWidth);
+        final actualLabelWidth = (width - targetWidth - 31).clamp(
+          0,
+          labelWidth,
+        );
         return Tooltip(
           message: fullLabel,
           child: Semantics(
             label: fullLabel,
-            child: Container(
-              constraints: BoxConstraints(maxWidth: constraints.maxWidth),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: ShapeDecoration(
-                color: background,
-                shape: AppShape.full,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 5,
-                children: [
-                  Flexible(
-                    child: Text(
-                      target.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: DashboardText.label(context),
+            child: SizedBox(
+              width: width.clamp(0, constraints.maxWidth).toDouble(),
+              child: Container(
+                key: ValueKey('ai-status-pill-${target.id}'),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: ShapeDecoration(
+                  color: background,
+                  shape: AppShape.full,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  spacing: 5,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        target.label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: DashboardText.label(context),
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: DashboardText.label(context).copyWith(color: tone),
+                    SizedBox(
+                      width: actualLabelWidth.toDouble(),
+                      child: AnimatedSwitcher(
+                        duration: context.motionDuration(commonDuration),
+                        layoutBuilder: (current, previous) => Stack(
+                          alignment: AlignmentDirectional.centerStart,
+                          children: [...previous, ?current],
+                        ),
+                        child: Text(
+                          label,
+                          key: ValueKey(label),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: style.copyWith(color: tone),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

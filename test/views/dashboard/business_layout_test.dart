@@ -20,6 +20,7 @@ import 'package:fl_clash/providers/routed_probe.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/dashboard/business.dart';
 import 'package:fl_clash/views/dashboard/edit.dart';
+import 'package:fl_clash/views/dashboard/layout.dart';
 import 'package:fl_clash/views/config/advanced.dart';
 import 'package:fl_clash/views/dashboard/widgets/network_takeover.dart';
 import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
@@ -28,6 +29,7 @@ import 'package:fl_clash/views/dashboard/widgets/traffic_savings.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart';
 import 'package:fl_clash/views/dashboard/widgets/core_status_button.dart';
 import 'package:fl_clash/views/dashboard/widgets/current_outbound.dart';
+import 'package:fl_clash/views/dashboard/widgets/memory_info.dart';
 import 'package:fl_clash/views/dashboard/widgets/traffic.dart';
 import 'package:fl_clash/views/dashboard/widgets/quick_lines.dart';
 import 'package:fl_clash/views/about.dart';
@@ -132,13 +134,14 @@ void main() {
         tianjiApiEnabledProvider.overrideWithValue(false),
         commonActionProvider.overrideWith(() => updateAction),
         profilesProvider.overrideWith(
-          () => TestProfiles(const [
+          () => TestProfiles([
             Profile(
               id: 1,
               type: ProfileType.url,
               label: 'Tianji',
               url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
-              autoUpdateDuration: Duration(days: 1),
+              lastUpdateDate: DateTime(2026, 11, 19),
+              autoUpdateDuration: const Duration(days: 1),
             ),
           ]),
         ),
@@ -258,6 +261,10 @@ void main() {
           find.byType(QuickLines),
           find.byType(BusinessLineCard),
           find.byType(CoreStatusButton),
+          find.byType(MemoryInfo),
+          find.byType(ServiceStatusCard),
+          if (platform != SupportPlatform.Android)
+            find.textContaining('Subscription updated', findRichText: true),
         ])
           for (final element in finder.evaluate())
             if (element.renderObject case final RenderBox box)
@@ -280,6 +287,37 @@ void main() {
 
       final initial = dashboardRects();
       expect(initial, isNotEmpty);
+      Rect? subscriptionRect;
+      if (platform != SupportPlatform.Android) {
+        final subscription = find.textContaining(
+          'Subscription updated',
+          findRichText: true,
+        );
+        expect(subscription, findsOneWidget);
+        subscriptionRect = tester.getRect(subscription);
+        void expectSubscriptionRect() {
+          expect(subscription, findsOneWidget);
+          expect(tester.getRect(subscription), subscriptionRect);
+        }
+
+        expectSubscriptionRect();
+      }
+      dashboard.read(sceneActionProvider.notifier).state =
+          const SceneApplyState(profileId: 1, applying: true);
+      await tester.pump();
+      expect(dashboardRects(), initial);
+      dashboard.read(sceneActionProvider.notifier).state =
+          const SceneApplyState(profileId: 1);
+      await tester.pump();
+      expect(dashboardRects(), initial);
+      if (platform != SupportPlatform.Android) {
+        final subscription = find.textContaining(
+          'Subscription updated',
+          findRichText: true,
+        );
+        expect(subscription, findsOneWidget);
+        expect(tester.getRect(subscription), subscriptionRect);
+      }
 
       dashboard
           .read(trafficsProvider.notifier)
@@ -318,8 +356,28 @@ void main() {
       dashboard.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
       await tester.pump();
       expect(dashboardRects(), initial);
+      if (platform != SupportPlatform.Android) {
+        final subscription = find.textContaining(
+          'Subscription updated',
+          findRichText: true,
+        );
+        expect(subscription, findsOneWidget);
+        expect(tester.getRect(subscription), subscriptionRect);
+      }
 
       dashboard.read(coreStatusProvider.notifier).value = CoreStatus.connected;
+      await tester.pump();
+      expect(dashboardRects(), initial);
+      if (platform != SupportPlatform.Android) {
+        final subscription = find.textContaining(
+          'Subscription updated',
+          findRichText: true,
+        );
+        expect(subscription, findsOneWidget);
+        expect(tester.getRect(subscription), subscriptionRect);
+      }
+
+      dashboard.read(runTimeProvider.notifier).value = 1000;
       await tester.pump();
       expect(dashboardRects(), initial);
 
@@ -331,6 +389,14 @@ void main() {
           CoreStatus.disconnected;
       await tester.pump();
       expect(dashboardRects(), initial);
+      if (platform != SupportPlatform.Android) {
+        final subscription = find.textContaining(
+          'Subscription updated',
+          findRichText: true,
+        );
+        expect(subscription, findsOneWidget);
+        expect(tester.getRect(subscription), subscriptionRect);
+      }
 
       dashboard
           .read(outboundIpProbeProvider.notifier)
@@ -366,10 +432,77 @@ void main() {
     addTearDown(tester.view.reset);
   });
 
-  testWidgets('verified dashboard pill keeps the connected label', (
+  testWidgets('desktop status capsule keeps its rect in English and Russian', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    container.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
+    container.read(runTimeProvider.notifier).value = null;
+    for (final locale in [const Locale('en'), const Locale('ru')]) {
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: TestApp(
+            locale: locale,
+            child: const SizedBox(
+              width: 520,
+              child: DashboardDensityScope(
+                density: DashboardDensity.standard,
+                scale: 1,
+                child: DesktopBarStatus(),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      Rect capsuleRect() =>
+          tester.getRect(find.byKey(const ValueKey('desktop-bar-status-pill')));
+      final initial = capsuleRect();
+      container.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
+      await tester.pump();
+      expect(capsuleRect(), initial);
+      container.read(runTimeProvider.notifier).value = 1;
+      container.read(coreStatusProvider.notifier).value = CoreStatus.connected;
+      await tester.pump();
+      expect(capsuleRect(), initial);
+      container.read(networkSettingProvider.notifier).value =
+          const NetworkProps(systemProxy: true);
+      container.read(routeTrackerProvider.notifier).state = const RouteState(
+        coreEpoch: 1,
+        routeVersion: 1,
+        hostEpoch: 1,
+        proxied: true,
+        synced: true,
+        live: true,
+      );
+      container.read(selectionCheckProvider.notifier).state =
+          SelectionVerdict.consistent;
+      container
+          .read(outboundIpProbeProvider.notifier)
+          .state = const RoutedProbeState({
+        routedOutbound: ProbeEntry(
+          phase: ProbePhase.fresh,
+          value: IpInfo(ip: '203.0.113.1', countryCode: 'US'),
+        ),
+      });
+      await tester.pump();
+      expect(capsuleRect(), initial);
+      container.read(coreStatusProvider.notifier).value =
+          CoreStatus.disconnected;
+      container.read(runTimeProvider.notifier).value = null;
+      await tester.pump();
+      expect(capsuleRect(), initial);
+      expect(tester.takeException(), isNull);
+    }
+  });
+
+  testWidgets('verified dashboard pill keeps the connected label', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 3000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     final verifiedContainer = ProviderContainer(

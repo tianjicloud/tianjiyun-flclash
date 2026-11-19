@@ -146,7 +146,7 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
               const _MobileNotice(),
               const UpdateStatusButton(),
             ] else if (!_editing) ...[
-              const _DesktopBarStatus(),
+              const DesktopBarStatus(),
               const UpdateStatusButton(),
             ],
           ],
@@ -682,8 +682,9 @@ class _MobileBrandTitle extends StatelessWidget {
 
 /// The bar's real state on desktop: the subscription's own update time and
 /// the run state, as the design's top row shows them.
-class _DesktopBarStatus extends ConsumerWidget {
-  const _DesktopBarStatus();
+@visibleForTesting
+class DesktopBarStatus extends ConsumerWidget {
+  const DesktopBarStatus();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -717,6 +718,36 @@ class _DesktopBarStatus extends ConsumerWidget {
         ? DashboardColors.of(context).ok
         : context.colorScheme.onSurfaceVariant;
     final dashboardColors = DashboardColors.of(context);
+    final statusLabels = [
+      strings.connecting,
+      strings.running,
+      strings.notRunning,
+      strings.suspended,
+      strings.businessExitVerified,
+    ];
+    final statusStyle = BusinessText.metaLabel(context);
+    final statusWidth = statusLabels
+        .map((label) {
+          final painter = TextPainter(
+            text: TextSpan(text: label, style: statusStyle),
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+            maxLines: 1,
+          )..layout();
+          final width = painter.width;
+          painter.dispose();
+          return width;
+        })
+        .reduce((a, b) => a > b ? a : b);
+    final status = verified
+        ? strings.businessExitVerified
+        : connecting
+        ? strings.connecting
+        : suspended
+        ? strings.suspended
+        : running
+        ? strings.running
+        : strings.notRunning;
     return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: 12,
@@ -730,40 +761,48 @@ class _DesktopBarStatus extends ConsumerWidget {
               context,
             ).copyWith(color: context.colorScheme.onSurfaceVariant),
           ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-          decoration: ShapeDecoration(
-            color: verified
-                ? dashboardColors.okContainer
-                : dashboardColors.tone,
-            shape: AppShape.full,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 6,
-            children: [
-              if (verified)
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: ShapeDecoration(
-                    color: dashboardColors.ok,
-                    shape: AppShape.circle,
+        SizedBox(
+          width: statusWidth + 36,
+          child: Container(
+            key: const ValueKey('desktop-bar-status-pill'),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            decoration: ShapeDecoration(
+              color: verified
+                  ? dashboardColors.okContainer
+                  : dashboardColors.tone,
+              shape: AppShape.full,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 6,
+              children: [
+                SizedBox.square(
+                  dimension: 6,
+                  child: verified
+                      ? Container(
+                          decoration: ShapeDecoration(
+                            color: dashboardColors.ok,
+                            shape: AppShape.circle,
+                          ),
+                        )
+                      : null,
+                ),
+                AnimatedSwitcher(
+                  duration: context.motionDuration(commonDuration),
+                  layoutBuilder: (current, previous) => Stack(
+                    alignment: Alignment.center,
+                    children: [...previous, ?current],
+                  ),
+                  child: Text(
+                    status,
+                    key: ValueKey(status),
+                    style: statusStyle.copyWith(color: tone),
+                    maxLines: 1,
+                    softWrap: false,
                   ),
                 ),
-              Text(
-                verified
-                    ? strings.businessExitVerified
-                    : connecting
-                    ? strings.connecting
-                    : suspended
-                    ? strings.suspended
-                    : running
-                    ? strings.running
-                    : strings.notRunning,
-                style: BusinessText.metaLabel(context).copyWith(color: tone),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

@@ -266,6 +266,7 @@ class _MemorySummary extends StatelessWidget {
           children: [
             for (final part in parts)
               Row(
+                key: ValueKey('memory-legend-${part.label}'),
                 mainAxisSize: MainAxisSize.min,
                 spacing: 6,
                 children: [
@@ -277,11 +278,17 @@ class _MemorySummary extends StatelessWidget {
                     child: const SizedBox.square(dimension: 8),
                   ),
                   Text(part.label, style: DashboardText.label(context)),
-                  Text(
-                    '${part.bytes.traffic.value} ${part.bytes.traffic.unit}',
-                    style: AppTextStyle.footnote
-                        .of(context, emphasized: true)
-                        .toTabular,
+                  SizedBox(
+                    width: 76,
+                    child: Text(
+                      '${part.bytes.traffic.value} ${part.bytes.traffic.unit}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: AppTextStyle.footnote
+                          .of(context, emphasized: true)
+                          .toTabular,
+                    ),
                   ),
                 ],
               ),

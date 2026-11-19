@@ -144,28 +144,31 @@ class _UpdateStatusCard extends ConsumerWidget {
               ),
             ],
           ),
-          switch (download) {
-            final UpdateDownloading progress => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 8,
-              children: [
-                LinearProgressIndicator(
-                  minHeight: 4,
-                  value: progress.total > 0
-                      ? progress.received / progress.total
-                      : null,
-                ),
-                Text(
-                  _progressText(progress),
-                  style: DashboardText.label(context),
-                ),
-              ],
-            ),
-            UpdateReady() => Text(
-              _readyTip(appLocalizations),
-              style: DashboardText.label(context),
-            ),
-          },
+          SizedBox(
+            height: 44,
+            child: switch (download) {
+              final UpdateDownloading progress => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 8,
+                children: [
+                  LinearProgressIndicator(
+                    minHeight: 4,
+                    value: progress.total > 0
+                        ? progress.received / progress.total
+                        : null,
+                  ),
+                  Text(
+                    _progressText(progress),
+                    style: DashboardText.label(context),
+                  ),
+                ],
+              ),
+              UpdateReady() => Text(
+                _readyTip(appLocalizations),
+                style: DashboardText.label(context),
+              ),
+            },
+          ),
         ],
       ),
     );
@@ -216,6 +219,20 @@ class UpdateStatusButton extends ConsumerWidget {
       UpdateDownloading(:final received, :final total) =>
         total > 0 ? '${received * 100 ~/ total}%' : received.traffic.show,
     };
+    final labelStyle = AppTextStyle.subheadline.of(context).toTabular;
+    final labelWidth = [appLocalizations.updateReady, '100%', '999.9 PB']
+        .map((value) {
+          final painter = TextPainter(
+            text: TextSpan(text: value, style: labelStyle),
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+            maxLines: 1,
+          )..layout();
+          final width = painter.width;
+          painter.dispose();
+          return width;
+        })
+        .reduce((a, b) => a > b ? a : b);
     return FadeScaleBox(
       alignment: Alignment.centerRight,
       child: download == null
@@ -246,7 +263,24 @@ class UpdateStatusButton extends ConsumerWidget {
                     AppTextStyle.subheadline,
                   ),
                 ),
-                label: Text(label),
+                label: SizedBox(
+                  width: labelWidth,
+                  child: AnimatedSwitcher(
+                    duration: context.motionDuration(commonDuration),
+                    layoutBuilder: (current, previous) => Stack(
+                      alignment: Alignment.center,
+                      children: [...previous, ?current],
+                    ),
+                    child: Text(
+                      label,
+                      key: ValueKey(label),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: labelStyle,
+                    ),
+                  ),
+                ),
               ),
             ),
     );

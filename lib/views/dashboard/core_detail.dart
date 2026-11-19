@@ -138,14 +138,13 @@ class _CoreDetailViewState extends ConsumerState<CoreDetailView> {
                         ),
                       ),
                     ),
-                    if (runtime != null)
-                      ListItem(
-                        title: Text(l10n.businessKernelUptime),
-                        trailing: Text(
-                          _formatRuntime(runtime),
-                          style: BusinessText.metaValue(context),
-                        ),
+                    ListItem(
+                      title: Text(l10n.businessKernelUptime),
+                      trailing: Text(
+                        runtime == null ? '—' : _formatRuntime(runtime),
+                        style: BusinessText.metaValue(context).toTabular,
                       ),
+                    ),
                     for (final port in ports)
                       ListItem(
                         title: Text(port.$1),

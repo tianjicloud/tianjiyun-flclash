@@ -75,28 +75,33 @@ class SceneBar extends ConsumerWidget {
         spacing: 8,
         children: [
           SizedBox(width: double.infinity, child: segment),
-          if (failed || applying || policy.suspended)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: policy.suspended && !failed && !applying
-                  ? Tooltip(
-                      message: context.appLocalizations.residentialExitLocked,
-                      child: Text(
-                        context.appLocalizations.sceneSuspended,
-                        style: BusinessText.sceneNote(
-                          context,
-                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
-                      ),
-                    )
-                  : Text(
-                      note,
-                      style: BusinessText.sceneNote(context).copyWith(
-                        color: failed
-                            ? context.colorScheme.error
-                            : context.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-            ),
+          SizedBox(
+            height: BusinessText.sceneNote(context).height,
+            child: (failed || applying || policy.suspended)
+                ? Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: policy.suspended && !failed && !applying
+                        ? Tooltip(
+                            message:
+                                context.appLocalizations.residentialExitLocked,
+                            child: Text(
+                              context.appLocalizations.sceneSuspended,
+                              style: BusinessText.sceneNote(context).copyWith(
+                                color: context.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            note,
+                            style: BusinessText.sceneNote(context).copyWith(
+                              color: failed
+                                  ? context.colorScheme.error
+                                  : context.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                  )
+                : const SizedBox.expand(),
+          ),
         ],
       );
     }
@@ -220,54 +225,62 @@ class SceneUnavailableCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(currentProfileProvider);
-    if (profile?.overrides.sceneNoticeDismissed == true ||
-        ref.watch(scenePolicyProvider).available) {
-      return const SizedBox.shrink();
-    }
+    final visible =
+        profile?.overrides.sceneNoticeDismissed != true &&
+        !ref.watch(scenePolicyProvider).available;
     final strings = context.appLocalizations;
-    return SizedBox(
-      height: 40,
-      child: Row(
-        spacing: 8,
-        children: [
-          GlyphIcon(
-            AppGlyphs.sliders,
-            size: 16,
-            color: context.colorScheme.onSurfaceVariant,
-          ),
-          Expanded(
-            child: Tooltip(
-              message: strings.sceneUnavailableDesc,
-              child: Text(
-                strings.sceneUnavailable,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: DashboardText.label(
-                  context,
-                ).copyWith(color: context.colorScheme.onSurfaceVariant),
-              ),
-            ),
-          ),
-          IconButton(
-            tooltip: strings.close,
-            icon: const GlyphIcon(AppGlyphs.close, size: 16),
-            onPressed: profile == null
-                ? null
-                : () {
-                    final current = ref.read(currentProfileProvider);
-                    if (current == null || current.id != profile.id) return;
-                    ref
-                        .read(profilesProvider.notifier)
-                        .put(
-                          current.copyWith(
-                            overrides: current.overrides.copyWith(
-                              sceneNoticeDismissed: true,
-                            ),
-                          ),
-                        );
-                  },
-          ),
-        ],
+    return AnimatedSize(
+      duration: context.motionDuration(commonDuration),
+      curve: Curves.easeOut,
+      alignment: Alignment.topCenter,
+      child: SizedBox(
+        height: visible ? 40 : 0,
+        child: visible
+            ? Row(
+                spacing: 8,
+                children: [
+                  GlyphIcon(
+                    AppGlyphs.sliders,
+                    size: 16,
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                  Expanded(
+                    child: Tooltip(
+                      message: strings.sceneUnavailableDesc,
+                      child: Text(
+                        strings.sceneUnavailable,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: DashboardText.label(
+                          context,
+                        ).copyWith(color: context.colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: strings.close,
+                    icon: const GlyphIcon(AppGlyphs.close, size: 16),
+                    onPressed: profile == null
+                        ? null
+                        : () {
+                            final current = ref.read(currentProfileProvider);
+                            if (current == null || current.id != profile.id) {
+                              return;
+                            }
+                            ref
+                                .read(profilesProvider.notifier)
+                                .put(
+                                  current.copyWith(
+                                    overrides: current.overrides.copyWith(
+                                      sceneNoticeDismissed: true,
+                                    ),
+                                  ),
+                                );
+                          },
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }
