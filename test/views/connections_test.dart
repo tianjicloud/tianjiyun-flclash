@@ -20,6 +20,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../helpers/test_app.dart';
 import '../helpers/test_profiles.dart';
+import '../helpers/host_scaffold.dart';
 
 class MockCoreHandlerInterface extends Mock implements CoreHandlerInterface {}
 
@@ -88,8 +89,9 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const TestApp(
-          child: RequestsView(initialFeed: RequestFeed.live),
+        child: TestApp(
+          homeBuilder: (child) => HostScaffold(body: child),
+          child: const RequestsView(initialFeed: RequestFeed.live),
         ),
       ),
     );
@@ -253,7 +255,7 @@ void main() {
       'Uploaded',
       'Duration',
     ]) {
-      expect(find.text(label), findsOneWidget);
+      expect(find.text(label), findsWidgets);
     }
     expect(find.byType(TrackerInfoTableRow), findsNWidgets(2));
     expect(find.byType(Divider), findsNothing);

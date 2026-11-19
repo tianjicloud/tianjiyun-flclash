@@ -124,17 +124,22 @@ class DiagnosticsView extends ConsumerWidget {
                   width: double.infinity,
                   height: MacOSMetrics.buttonHeight(context, fallback: 50),
                   child: FilledButton(
+                    key: const ValueKey('diagnosticsRunButton'),
                     onPressed: isLoading ? null : () => refreshDiagnostics(ref),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 8,
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        if (isLoading) const ActivityIndicator(),
                         Text(
                           hasResult
                               ? context.appLocalizations.diagnosticsRunAgain
                               : context.appLocalizations.diagnosticsStart,
+                          key: const ValueKey('diagnosticsRunButtonLabel'),
                         ),
+                        if (isLoading)
+                          const PositionedDirectional(
+                            start: 16,
+                            child: ActivityIndicator(),
+                          ),
                       ],
                     ),
                   ),
@@ -359,7 +364,7 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
         ? Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
-              spacing: 12,
+              spacing: 10,
               children: [
                 for (final (value, label, result) in [
                   (failed, strings.diagnosticsFailed, DiagnosticResult.failed),
@@ -430,7 +435,11 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
             child: Column(
               children: [
                 for (var index = 0; index < checks.length; index++) ...[
-                  _DiagnosticRow(check: checks[index], mobile: true),
+                  _DiagnosticRow(
+                    key: ValueKey('diagnostic-row:${checks[index].title}'),
+                    check: checks[index],
+                    mobile: true,
+                  ),
                   if (index < checks.length - 1) const Divider(height: 1),
                 ],
               ],
@@ -476,7 +485,11 @@ class _DiagnosticsPanelState extends ConsumerState<DiagnosticsPanel> {
           const SizedBox(height: 14),
           counts,
           const SizedBox(height: 10),
-          for (final check in checks) _DiagnosticRow(check: check),
+          for (final check in checks)
+            _DiagnosticRow(
+              key: ValueKey('diagnostic-row:${check.title}'),
+              check: check,
+            ),
           if (dnsDetail.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text(
@@ -698,7 +711,7 @@ class _DiagnosticCount extends StatelessWidget {
 }
 
 class _DiagnosticRow extends StatelessWidget {
-  const _DiagnosticRow({required this.check, this.mobile = false});
+  const _DiagnosticRow({super.key, required this.check, this.mobile = false});
 
   final _DiagnosticCheck check;
   final bool mobile;
@@ -750,20 +763,24 @@ class _DiagnosticRow extends StatelessWidget {
             style: BusinessText.diagnosticsCheckTitle(context, mobile: mobile),
           ),
         ),
-        Expanded(
-          flex: 3,
-          child: Text(
-            check.detailIsVerdict
-                ? check.detail ?? status
-                : showDetail
-                ? '$status（${[check.detail, check.suggestion].whereType<String>().join(' ')}）'
-                : status,
-            textAlign: TextAlign.end,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: BusinessText.metaLabel(context).copyWith(color: color),
+        if (!mobile)
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              height: _twoLineHeight(context, BusinessText.metaLabel(context)),
+              child: Text(
+                check.detailIsVerdict
+                    ? check.detail ?? status
+                    : showDetail
+                    ? '$status（${[check.detail, check.suggestion].whereType<String>().join(' ')}）'
+                    : status,
+                textAlign: TextAlign.end,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: BusinessText.metaLabel(context).copyWith(color: color),
+              ),
+            ),
           ),
-        ),
       ],
     );
     if (mobile) {
@@ -800,19 +817,31 @@ class _DiagnosticRow extends StatelessWidget {
           spacing: 4,
           children: [
             row,
-            if (showDetail)
-              Padding(
-                padding: const EdgeInsets.only(left: 32),
-                child: Text(
-                  [
-                    check.detail,
-                    check.suggestion,
-                  ].whereType<String>().join(' '),
-                  style: AppTextStyle.footnote
-                      .of(context)
-                      .copyWith(color: context.colorScheme.onSurfaceVariant),
-                ),
+            AnimatedSize(
+              duration: context.motionDuration(
+                const Duration(milliseconds: 180),
               ),
+              curve: Curves.easeOut,
+              alignment: Alignment.topCenter,
+              child: showDetail
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 32),
+                      child: Text(
+                        [
+                          check.detail,
+                          check.suggestion,
+                        ].whereType<String>().join(' '),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.footnote
+                            .of(context)
+                            .copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
             if (action != null)
               Align(
                 alignment: AlignmentDirectional.centerStart,
@@ -844,6 +873,18 @@ class _DiagnosticRow extends StatelessWidget {
           : content,
     );
   }
+}
+
+double _twoLineHeight(BuildContext context, TextStyle style) {
+  final painter = TextPainter(
+    text: TextSpan(text: 'A\nA', style: style),
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+    maxLines: 2,
+  )..layout();
+  final height = painter.height;
+  painter.dispose();
+  return height;
 }
 
 Color _resultColor(BuildContext context, DiagnosticResult result) =>

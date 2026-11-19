@@ -39,6 +39,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     with RouteMotionHoldMixin<RequestsView> {
   final _recent = TrackerInfoListController();
   final _live = TrackerInfoListController();
+  var _filterChipOrder = <RecordFilter>[];
   final _liveFeed = GlobalKey<_LiveFeedState>();
   late final _filters = trackerInfoFilterController(ref, 'requests');
   late var _feed =
@@ -227,7 +228,6 @@ class _RequestsViewState extends ConsumerState<RequestsView>
   }
 
   Widget _buildBusinessMobileControls(BuildContext context) {
-    final options = _filters.options.value;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
       child: Column(
@@ -256,13 +256,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
               onSelected: _selectFeed,
             ),
           ),
-          _filterBar(
-            context,
-            options[RecordFacetKind.network] ?? const [],
-            options[RecordFacetKind.rule] ?? const [],
-            options[RecordFacetKind.proxy] ?? const [],
-            mobile: true,
-          ),
+          _filterBar(context, mobile: true),
         ],
       ),
     );
@@ -289,27 +283,37 @@ class _RequestsViewState extends ConsumerState<RequestsView>
   };
 
   Widget _buildTitleWidget(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      spacing: 12,
-      children: [
-        Text(
-          context.appLocalizations.connections,
-          style: AppTextStyle.pageTitle.of(context, emphasized: true),
-        ),
-        ValueListenableBuilder<TrackerInfosState>(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final selector = ValueListenableBuilder<TrackerInfosState>(
           valueListenable: _live,
           builder: (context, state, _) {
             final count = state.trackerInfos.length;
             return _RequestFeedSelector(
+              maxWidth: constraints.maxWidth - 160,
               value: _feed,
               liveLabel: '${context.appLocalizations.liveConnections} · $count',
               recentLabel: context.appLocalizations.recentRequests,
               onChanged: _selectFeed,
             );
           },
-        ),
-      ],
+        );
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12,
+          children: [
+            Flexible(
+              child: Text(
+                context.appLocalizations.connections,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.pageTitle.of(context, emphasized: true),
+              ),
+            ),
+            selector,
+          ],
+        );
+      },
     );
   }
 
@@ -317,10 +321,6 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     BuildContext context, {
     required double horizontalInset,
   }) {
-    final options = _filters.options.value;
-    final networkOptions = options[RecordFacetKind.network] ?? const <String>[];
-    final ruleOptions = options[RecordFacetKind.rule] ?? const <String>[];
-    final proxyOptions = options[RecordFacetKind.proxy] ?? const <String>[];
     return LayoutBuilder(
       builder: (context, constraints) => Padding(
         padding: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 10),
@@ -330,11 +330,9 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                 spacing: 8,
                 children: [
                   _searchField(context, width: double.infinity),
-                  _filterBar(
-                    context,
-                    networkOptions,
-                    ruleOptions,
-                    proxyOptions,
+                  SizedBox(
+                    height: MacOSMetrics.chipHeight(context, fallback: 30),
+                    child: _filterBar(context),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -357,14 +355,7 @@ class _RequestsViewState extends ConsumerState<RequestsView>
                 spacing: 8,
                 children: [
                   _searchField(context, width: 280),
-                  Expanded(
-                    child: _filterBar(
-                      context,
-                      networkOptions,
-                      ruleOptions,
-                      proxyOptions,
-                    ),
-                  ),
+                  Expanded(child: _filterBar(context)),
                   Text(
                     context.appLocalizations.groupBy,
                     style: AppTextStyle.footnote
@@ -392,65 +383,60 @@ class _RequestsViewState extends ConsumerState<RequestsView>
     );
   }
 
-  Widget _filterBar(
-    BuildContext context,
-    List<String> networkOptions,
-    List<String> ruleOptions,
-    List<String> proxyOptions, {
-    bool mobile = false,
-  }) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: ValueListenableBuilder<RecordFilterState>(
-        valueListenable: _filters,
-        builder: (context, state, _) => Row(
-          spacing: 6,
-          children: [
-            _filterChip(
-              context.appLocalizations.all,
-              selected: state.filters.isEmpty,
-              mobile: mobile,
-              onPressed: () {
-                for (final filter in [..._filters.filters]) {
-                  _filters.remove(filter);
-                }
-              },
+  Widget _filterBar(BuildContext context, {bool mobile = false}) {
+    final options = _filters.options.value;
+    final current = [
+      for (final kind in [
+        RecordFacetKind.network,
+        RecordFacetKind.rule,
+        RecordFacetKind.proxy,
+      ])
+        for (final value in options[kind] ?? const <String>[])
+          RecordFilter(kind, value),
+    ];
+    _filterChipOrder = [
+      for (final filter in _filterChipOrder)
+        if (current.contains(filter)) filter,
+      for (final filter in current)
+        if (!_filterChipOrder.contains(filter)) filter,
+    ];
+    return ValueListenableBuilder<RecordFilterState>(
+      valueListenable: _filters,
+      builder: (context, state, _) {
+        return SingleChildScrollView(
+          controller: sheetScrollController(context),
+          scrollDirection: Axis.horizontal,
+          child: IntrinsicWidth(
+            child: Row(
+              spacing: 4,
+              children: [
+                _filterChip(
+                  context.appLocalizations.all,
+                  key: const ValueKey('requestsFilterAll'),
+                  selected: state.filters.isEmpty,
+                  mobile: mobile,
+                  onPressed: () {
+                    for (final filter in [..._filters.filters]) {
+                      _filters.remove(filter);
+                    }
+                  },
+                ),
+                for (final filter in _filterChipOrder)
+                  _filterChip(
+                    _filters.facetOf(filter.kind)?.label(filter.value) ??
+                        filter.value,
+                    key: ValueKey(
+                      'requestsFilter${filter.kind.name}:${filter.value}',
+                    ),
+                    selected: state.filters.contains(filter),
+                    mobile: mobile,
+                    onPressed: () => _filters.toggle(filter),
+                  ),
+              ],
             ),
-            for (final network in networkOptions)
-              _filterChip(
-                _filters.facetOf(RecordFacetKind.network)?.label(network) ??
-                    network,
-                selected: state.filters.contains(
-                  RecordFilter(RecordFacetKind.network, network),
-                ),
-                mobile: mobile,
-                onPressed: () => _filters.toggle(
-                  RecordFilter(RecordFacetKind.network, network),
-                ),
-              ),
-            for (final rule in ruleOptions)
-              _filterChip(
-                _filters.facetOf(RecordFacetKind.rule)?.label(rule) ?? rule,
-                selected: state.filters.contains(
-                  RecordFilter(RecordFacetKind.rule, rule),
-                ),
-                mobile: mobile,
-                onPressed: () =>
-                    _filters.toggle(RecordFilter(RecordFacetKind.rule, rule)),
-              ),
-            for (final proxy in proxyOptions)
-              _filterChip(
-                _filters.facetOf(RecordFacetKind.proxy)?.label(proxy) ?? proxy,
-                selected: state.filters.contains(
-                  RecordFilter(RecordFacetKind.proxy, proxy),
-                ),
-                mobile: mobile,
-                onPressed: () =>
-                    _filters.toggle(RecordFilter(RecordFacetKind.proxy, proxy)),
-              ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -461,12 +447,14 @@ class _RequestsViewState extends ConsumerState<RequestsView>
 
   Widget _filterChip(
     String label, {
+    required Key key,
     required bool selected,
     required VoidCallback onPressed,
     bool mobile = false,
   }) {
     final colorScheme = context.colorScheme;
     return PressSurface(
+      key: key,
       fill: selected
           ? colorScheme.onSurface
           : context.raisedSurfaceLevel.colorOf(colorScheme),
@@ -497,6 +485,49 @@ class _RequestsViewState extends ConsumerState<RequestsView>
       download += connection.downloadSpeed ?? 0;
       upload += connection.uploadSpeed ?? 0;
     }
+    final strings = context.appLocalizations;
+    final style = AppTextStyle.footnote
+        .of(context)
+        .toTabular
+        .copyWith(color: context.colorScheme.onSurfaceVariant);
+    double measure(String value) {
+      final painter = TextPainter(
+        text: TextSpan(text: value, style: style),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+      )..layout();
+      final width = painter.width;
+      painter.dispose();
+      return width;
+    }
+
+    final countWidth = measure('99999');
+    final trafficWidth = [
+      '1023.9KB/s',
+      '1023.9MB/s',
+      '1023.9GB/s',
+    ].map(measure).reduce((left, right) => left > right ? left : right);
+    Widget label(String key, String value) => Flexible(
+      child: Text(
+        key: ValueKey(key),
+        value,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style,
+      ),
+    );
+    Widget slot(String key, String value, double width) => SizedBox(
+      key: ValueKey(key),
+      width: width,
+      child: Text(
+        value,
+        maxLines: 1,
+        textAlign: TextAlign.end,
+        overflow: TextOverflow.fade,
+        softWrap: false,
+        style: style,
+      ),
+    );
     return Padding(
       padding: EdgeInsets.fromLTRB(
         horizontalInset,
@@ -506,15 +537,26 @@ class _RequestsViewState extends ConsumerState<RequestsView>
       ),
       child: Align(
         alignment: AlignmentDirectional.centerStart,
-        child: Text(
-          context.appLocalizations.connectionSummary(
-            connections.length,
-            '${trackerTrafficText(download)}/s',
-            '${trackerTrafficText(upload)}/s',
-          ),
-          style: AppTextStyle.footnote
-              .of(context)
-              .copyWith(color: context.colorScheme.onSurfaceVariant),
+        child: Row(
+          key: const ValueKey('requestsLiveSummary'),
+          mainAxisSize: MainAxisSize.max,
+          spacing: 0,
+          children: [
+            label('requestsSummaryConnectionsLabel', strings.connections),
+            slot('requestsSummaryCount', '${connections.length}', countWidth),
+            label('requestsSummaryDownloadLabel', strings.download),
+            slot(
+              'requestsSummaryDownload',
+              '${trackerTrafficText(download)}/s',
+              trafficWidth,
+            ),
+            label('requestsSummaryUploadLabel', strings.upload),
+            slot(
+              'requestsSummaryUpload',
+              '${trackerTrafficText(upload)}/s',
+              trafficWidth,
+            ),
+          ],
         ),
       ),
     );
@@ -541,12 +583,14 @@ class _RequestsViewState extends ConsumerState<RequestsView>
 }
 
 class _RequestFeedSelector extends StatelessWidget {
+  final double maxWidth;
   final RequestFeed value;
   final String liveLabel;
   final String recentLabel;
   final ValueChanged<RequestFeed> onChanged;
 
   const _RequestFeedSelector({
+    required this.maxWidth,
     required this.value,
     required this.liveLabel,
     required this.recentLabel,
@@ -555,15 +599,39 @@ class _RequestFeedSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BusinessSegmented<RequestFeed>(
-      selected: value,
-      height: 28,
-      items: [
-        BusinessSegment(value: RequestFeed.live, label: liveLabel),
-        BusinessSegment(value: RequestFeed.recent, label: recentLabel),
-      ],
-      onSelected: onChanged,
-      key: const ValueKey('requestFeedSelector'),
+    final style = BusinessText.segment(context);
+    final labels = [
+      liveLabel.replaceFirst(RegExp(r'\d+$'), '9999'),
+      recentLabel,
+    ];
+    final widths = [
+      for (final label in labels)
+        TextPainter(
+          text: TextSpan(text: label, style: style),
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout(),
+    ];
+    final width =
+        widths.fold<double>(0, (sum, painter) {
+          final next = sum + painter.width + 18;
+          painter.dispose();
+          return next;
+        }) +
+        12;
+    return SizedBox(
+      width: width.clamp(0, maxWidth),
+      child: BusinessSegmented<RequestFeed>(
+        selected: value,
+        height: 28,
+        items: [
+          BusinessSegment(value: RequestFeed.live, label: liveLabel),
+          BusinessSegment(value: RequestFeed.recent, label: recentLabel),
+        ],
+        expand: true,
+        onSelected: onChanged,
+        key: const ValueKey('requestFeedSelector'),
+      ),
     );
   }
 }

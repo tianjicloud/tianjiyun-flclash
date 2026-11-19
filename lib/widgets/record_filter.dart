@@ -34,6 +34,7 @@ class RecordFilterController<T> extends ValueNotifier<RecordFilterState> {
   // value comes or goes, leaves the bar and its chips alone.
   final _keywords = ValueNotifier<List<ScaffoldKeyword>>(const []);
   final _pinnedKeywords = ValueNotifier<List<ScaffoldKeyword>>(const []);
+  final _optionOrder = <RecordFacetKind, List<String>>{};
   final options = ValueNotifier<RecordFacetOptions>(const {});
 
   RecordFilterController({
@@ -149,7 +150,15 @@ class RecordFilterController<T> extends ValueNotifier<RecordFilterState> {
         ],
       );
       if (values.isNotEmpty) {
-        next[facet.kind] = values;
+        final previous = _optionOrder[facet.kind] ?? const <String>[];
+        final ordered = [
+          for (final value in previous)
+            if (values.contains(value)) value,
+          for (final value in values)
+            if (!previous.contains(value)) value,
+        ];
+        _optionOrder[facet.kind] = ordered;
+        next[facet.kind] = ordered;
       }
     }
     if (!_optionsEquality.equals(next, options.value)) {

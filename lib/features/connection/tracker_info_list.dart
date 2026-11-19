@@ -360,18 +360,29 @@ class _TrackerInfoGroupedListState
       download += trackerInfo.downloadSpeed ?? 0;
     }
     final color = context.colorScheme.onSurfaceVariant;
+    final style = AppTextStyle.caption1.of(context).toTabular;
     WidgetSpan arrow(Glyph glyph) => WidgetSpan(
       alignment: PlaceholderAlignment.middle,
       child: GlyphIcon(glyph, size: 12, color: color),
     );
-    return Text.rich(
-      TextSpan(
-        children: [
-          arrow(AppGlyphs.arrowUp),
-          TextSpan(text: ' ${upload.traffic.show}/s   '),
-          arrow(AppGlyphs.arrowDown),
-          TextSpan(text: ' ${download.traffic.show}/s'),
-        ],
+    return SizedBox(
+      key: const ValueKey('trackerInfoGroupSpeedSlot'),
+      width: recordSpeedSlotWidth(context),
+      child: Align(
+        alignment: AlignmentDirectional.centerEnd,
+        child: Text.rich(
+          TextSpan(
+            children: [
+              arrow(AppGlyphs.arrowUp),
+              TextSpan(text: ' ${upload.traffic.show}/s   '),
+              arrow(AppGlyphs.arrowDown),
+              TextSpan(text: ' ${download.traffic.show}/s'),
+            ],
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: style,
+        ),
       ),
     );
   }

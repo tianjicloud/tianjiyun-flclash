@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/business_style.dart';
@@ -225,62 +226,73 @@ class _LogsViewState extends ConsumerState<LogsView>
             child: Row(
               children: [
                 if (MacOSStyle.of(context))
-                  Text(
-                    appLocalizations.itemsCount(count),
-                    style: BusinessText.metaLabel(context),
+                  SizedBox(
+                    width: _logCountWidth(context, appLocalizations),
+                    child: Text(
+                      appLocalizations.itemsCount(count),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: BusinessText.metaLabel(context).toTabular,
+                    ),
                   ),
                 if (MacOSStyle.of(context)) const SizedBox(width: 8),
-                BusinessSegmented<bool>(
-                  height: MacOSMetrics.segmentedHeight(context, fallback: 30),
-                  items: [
-                    BusinessSegment(
-                      value: false,
-                      label: appLocalizations.logsRunning,
-                    ),
-                    BusinessSegment(
-                      value: true,
-                      label: appLocalizations.dnsQueries,
-                    ),
-                  ],
-                  selected: _showDns,
-                  onSelected: (value) {
-                    if (value) {
-                      BaseNavigator.push(context, const DnsQueriesView());
-                    }
-                    setState(() => _showDns = value);
-                  },
+                Expanded(
+                  child: BusinessSegmented<bool>(
+                    key: const ValueKey('logsDnsSegment'),
+                    height: MacOSMetrics.segmentedHeight(context, fallback: 30),
+                    expand: true,
+                    items: [
+                      BusinessSegment(
+                        value: false,
+                        label: appLocalizations.logsRunning,
+                      ),
+                      BusinessSegment(
+                        value: true,
+                        label: appLocalizations.dnsQueries,
+                      ),
+                    ],
+                    selected: _showDns,
+                    onSelected: (value) {
+                      if (value) {
+                        BaseNavigator.push(context, const DnsQueriesView());
+                      }
+                      setState(() => _showDns = value);
+                    },
+                  ),
                 ),
-                const Spacer(),
-                BusinessSegmented<LogLevel?>(
-                  height: MacOSMetrics.segmentedHeight(context, fallback: 30),
-                  items: [
-                    BusinessSegment(value: null, label: appLocalizations.all),
-                    BusinessSegment(
-                      value: LogLevel.info,
-                      label: appLocalizations.logFilterInfo,
-                    ),
-                    BusinessSegment(
-                      value: LogLevel.warning,
-                      label: appLocalizations.logFilterWarning,
-                    ),
-                    BusinessSegment(
-                      value: LogLevel.error,
-                      label: appLocalizations.logFilterError,
-                    ),
-                  ],
-                  selected: _selectedLevel,
-                  onSelected: (level) {
-                    for (final item in LogLevel.values) {
-                      _filters.remove(
-                        RecordFilter(RecordFacetKind.level, item.name),
-                      );
-                    }
-                    if (level != null) {
-                      _filters.add(
-                        RecordFilter(RecordFacetKind.level, level.name),
-                      );
-                    }
-                  },
+                Expanded(
+                  child: BusinessSegmented<LogLevel?>(
+                    height: MacOSMetrics.segmentedHeight(context, fallback: 30),
+                    expand: true,
+                    items: [
+                      BusinessSegment(value: null, label: appLocalizations.all),
+                      BusinessSegment(
+                        value: LogLevel.info,
+                        label: appLocalizations.logFilterInfo,
+                      ),
+                      BusinessSegment(
+                        value: LogLevel.warning,
+                        label: appLocalizations.logFilterWarning,
+                      ),
+                      BusinessSegment(
+                        value: LogLevel.error,
+                        label: appLocalizations.logFilterError,
+                      ),
+                    ],
+                    selected: _selectedLevel,
+                    onSelected: (level) {
+                      for (final item in LogLevel.values) {
+                        _filters.remove(
+                          RecordFilter(RecordFacetKind.level, item.name),
+                        );
+                      }
+                      if (level != null) {
+                        _filters.add(
+                          RecordFilter(RecordFacetKind.level, level.name),
+                        );
+                      }
+                    },
+                  ),
                 ),
                 const SizedBox(width: 4),
                 BusinessSecondaryButton(
@@ -354,6 +366,18 @@ class _LogsViewState extends ConsumerState<LogsView>
       ),
     );
   }
+}
+
+double _logCountWidth(BuildContext context, AppLocalizations strings) {
+  final style = BusinessText.metaLabel(context).toTabular;
+  final painter = TextPainter(
+    text: TextSpan(text: strings.itemsCount(999999), style: style),
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  )..layout();
+  final width = painter.width;
+  painter.dispose();
+  return width;
 }
 
 class LogItem extends StatelessWidget {

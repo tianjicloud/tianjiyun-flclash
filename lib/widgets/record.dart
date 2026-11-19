@@ -4,6 +4,24 @@ import 'package:fl_clash/ui/ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+double recordSpeedSlotWidth(BuildContext context) {
+  final style = AppTextStyle.caption1.of(context).toTabular;
+  var maximum = 0.0;
+  for (final unit in ['KB/s', 'MB/s', 'GB/s']) {
+    final painter = TextPainter(
+      text: TextSpan(
+        style: style,
+        children: [TextSpan(text: '↑ 1023.9$unit   ↓ 1023.9$unit')],
+      ),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    maximum = maximum < painter.width ? painter.width : maximum;
+    painter.dispose();
+  }
+  return maximum;
+}
+
 class RecordTextStyles {
   final TextStyle title;
   final TextStyle primary;
@@ -90,23 +108,37 @@ class RecordHeader extends StatelessWidget {
           .of(context)
           .toTabular
           .copyWith(color: context.colorScheme.onSurfaceVariant),
-      child: SizedBox(
-        width: double.infinity,
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 12,
-          runSpacing: 4,
-          children: [
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 8,
-              runSpacing: 4,
-              children: children,
-            ),
-            ?trailing,
-          ],
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final preferredWidth = recordSpeedSlotWidth(context);
+          final width =
+              constraints.maxWidth.isFinite &&
+                  constraints.maxWidth < preferredWidth * 2 + 12
+              ? constraints.maxWidth / 2
+              : preferredWidth;
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 12,
+            children: [
+              Expanded(
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: children,
+                ),
+              ),
+              if (trailing != null)
+                SizedBox(
+                  width: width,
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: trailing,
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

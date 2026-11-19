@@ -6,7 +6,9 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/connection/requests.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +18,7 @@ import '../helpers/glyph_finders.dart';
 import '../helpers/scrollbar.dart';
 import '../helpers/test_app.dart';
 import '../helpers/test_profiles.dart';
+import '../helpers/host_scaffold.dart';
 
 const _tableSize = Size(1400, 1000);
 const _listSize = Size(600, 1000);
@@ -93,6 +96,38 @@ void main() {
       ),
     );
     await tester.pump();
+    await tester.pump();
+  }
+
+  Future<void> pumpLiveRequests(
+    WidgetTester tester, {
+    required Size size,
+    required Future<List<TrackerInfo>> Function() reader,
+  }) async {
+    container.read(viewSizeProvider.notifier).update((_) => size);
+    tester.view.physicalSize = size;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: TestApp(
+          homeBuilder: (child) => HostScaffold(body: child),
+          child: RequestsView(
+            initialFeed: RequestFeed.live,
+            connectionsReader: reader,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump();
+  }
+
+  Future<void> refreshLiveRequests(WidgetTester tester) async {
+    await tester.pump(const Duration(seconds: 1));
     await tester.pump();
   }
 
@@ -705,20 +740,226 @@ void main() {
 
   testWidgets('the feed selector switches feeds at any width', (tester) async {
     seedRequests([_tracker(id: 'a', host: 'alpha.test')]);
-    final bar = find.byType(AppBar);
-
-    for (final size in const [_tableSize, Size(390, 800), Size(340, 800)]) {
-      await pumpRequests(tester, size: size);
+    for (final size in const [_tableSize, Size(390, 800), Size(600, 800)]) {
+      container.read(viewSizeProvider.notifier).update((_) => size);
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: TestApp(
+            homeBuilder: (child) =>
+                HostScaffold(body: BusinessTheme(child: child)),
+            child: RequestsView(
+              initialFeed: RequestFeed.recent,
+              connectionsReader: () async => const [],
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
       final desktop = size == _tableSize;
-      final liveLabel = desktop ? 'Live connections' : 'Running';
+      final liveLabel = desktop ? 'Live connections' : 'Live';
+      final selector = find.byKey(const ValueKey('requestFeedSelector'));
+      expect(selector, findsOneWidget);
       await tester.tap(find.textContaining(liveLabel).last);
       await tester.pumpAndSettle();
-      expect(
-        find.descendant(of: bar, matching: find.textContaining(liveLabel)),
-        findsOneWidget,
-      );
+      expect(selector, findsOneWidget);
       await teardownView(tester);
     }
+  });
+
+  testWidgets(
+    'desktop request title keeps its segments fixed as live count grows',
+    (tester) async {
+      final originalPlatform = debugDefaultTargetPlatformOverride;
+      addTearDown(() => debugDefaultTargetPlatformOverride = originalPlatform);
+      for (final platform in [TargetPlatform.windows, TargetPlatform.macOS]) {
+        debugDefaultTargetPlatformOverride = platform;
+        var count = 1;
+        Future<List<TrackerInfo>> reader() async => [
+          for (var index = 0; index < count; index++)
+            _tracker(id: 'title-$index'),
+        ];
+        await pumpLiveRequests(tester, size: _tableSize, reader: reader);
+        final recent = find.text('Recent requests');
+        final title = find.text('Connections').last;
+        expect(recent, findsOneWidget);
+        expect(title, findsOneWidget);
+        final recentRect = tester.getRect(recent);
+        final titleRect = tester.getRect(title);
+        for (final nextCount in [12, 1234]) {
+          count = nextCount;
+          await refreshLiveRequests(tester);
+          expect(recent, findsOneWidget);
+          expect(title, findsOneWidget);
+          expect(tester.getRect(recent), recentRect);
+          expect(tester.getRect(title), titleRect);
+        }
+        await teardownView(tester);
+      }
+      debugDefaultTargetPlatformOverride = originalPlatform;
+    },
+  );
+
+  testWidgets(
+    'live summary slots keep their rects as counts and traffic grow',
+    (tester) async {
+      final originalPlatform = debugDefaultTargetPlatformOverride;
+      addTearDown(() => debugDefaultTargetPlatformOverride = originalPlatform);
+      for (final (platform, size) in [
+        (TargetPlatform.android, const Size(360, 800)),
+        (TargetPlatform.windows, _tableSize),
+      ]) {
+        debugDefaultTargetPlatformOverride = platform;
+        container.read(viewSizeProvider.notifier).update((_) => size);
+        var count = 1;
+        var speed = 0;
+        Future<List<TrackerInfo>> reader() async => [
+          for (var index = 0; index < count; index++)
+            _tracker(
+              id: 'summary-$index',
+            ).copyWith(downloadSpeed: speed, uploadSpeed: speed),
+        ];
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: TestApp(
+              homeBuilder: (child) => HostScaffold(body: child),
+              child: RequestsView(
+                initialFeed: RequestFeed.live,
+                connectionsReader: reader,
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        await tester.pump();
+        final summary = find.byKey(const ValueKey('requestsLiveSummary'));
+        final countSlot = find.byKey(const ValueKey('requestsSummaryCount'));
+        final downloadSlot = find.byKey(
+          const ValueKey('requestsSummaryDownload'),
+        );
+        final uploadSlot = find.byKey(const ValueKey('requestsSummaryUpload'));
+        expect(summary, findsOneWidget);
+        expect(countSlot, findsOneWidget);
+        expect(downloadSlot, findsOneWidget);
+        expect(uploadSlot, findsOneWidget);
+        final summaryRect = tester.getRect(summary);
+        final rects = [
+          tester.getRect(countSlot),
+          tester.getRect(downloadSlot),
+          tester.getRect(uploadSlot),
+        ];
+        count = 999;
+        speed = 1048471142;
+        await refreshLiveRequests(tester);
+        expect(summary, findsOneWidget);
+        expect(countSlot, findsOneWidget);
+        expect(downloadSlot, findsOneWidget);
+        expect(uploadSlot, findsOneWidget);
+        expect(tester.getRect(summary), summaryRect);
+        expect(
+          [countSlot, downloadSlot, uploadSlot].map(tester.getRect),
+          rects,
+        );
+        await teardownView(tester);
+      }
+      debugDefaultTargetPlatformOverride = originalPlatform;
+    },
+  );
+
+  testWidgets('new filter chips append without moving existing chips', (
+    tester,
+  ) async {
+    var includeNew = false;
+    Future<List<TrackerInfo>> reader() async => [
+      _tracker(id: 'filter-old'),
+      if (includeNew)
+        _tracker(
+          id: 'filter-new',
+          network: 'udp',
+          host: 'new.example',
+        ).copyWith(rule: 'DOMAIN-SUFFIX'),
+    ];
+    await pumpLiveRequests(tester, size: _tableSize, reader: reader);
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pump();
+    final tcp = find.byKey(const ValueKey('requestsFilternetwork:tcp'));
+    final domain = find.byKey(const ValueKey('requestsFilterrule:DOMAIN'));
+    final allChip = find.byKey(const ValueKey('requestsFilterAll'));
+    expect(tcp, findsOneWidget);
+    expect(domain, findsOneWidget);
+    expect(allChip, findsOneWidget);
+    final allChipRect = tester.getRect(allChip);
+    final tcpRect = tester.getRect(tcp);
+    final domainRect = tester.getRect(domain.first);
+    includeNew = true;
+    await refreshLiveRequests(tester);
+    expect(tcp, findsOneWidget);
+    expect(domain, findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('requestsFilternetwork:udp')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('requestsFilterrule:DOMAIN-SUFFIX')),
+      findsOneWidget,
+    );
+    expect(
+      tester
+          .getRect(find.byKey(const ValueKey('requestsFilternetwork:udp')))
+          .left,
+      greaterThan(tester.getRect(tcp).left),
+    );
+    expect(tester.getRect(tcp), tcpRect);
+    expect(tester.getRect(domain.first), domainRect);
+    expect(tester.getRect(allChip), allChipRect);
+    await teardownView(tester);
+  });
+
+  testWidgets('group header keeps its label and speed slot rects stable', (
+    tester,
+  ) async {
+    var speed = 0;
+    Future<List<TrackerInfo>> reader() async => [
+      _tracker(
+        id: 'group-speed',
+      ).copyWith(uploadSpeed: speed, downloadSpeed: speed),
+    ];
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(
+            recordGroupings: {...state.recordGroupings, 'requests': 'app'},
+          ),
+        );
+    await pumpLiveRequests(tester, size: _tableSize, reader: reader);
+    final label = find.byWidgetPredicate(
+      (widget) => widget is CollapsibleHeader && widget.label == 'curl',
+    );
+    final slot = find.byKey(const ValueKey('trackerInfoGroupSpeedSlot'));
+    expect(label, findsOneWidget);
+    expect(slot, findsOneWidget);
+    final labelRect = tester.getRect(label);
+    final slotRect = tester.getRect(slot);
+    for (final nextSpeed in [12600, 1048471142]) {
+      speed = nextSpeed;
+      await refreshLiveRequests(tester);
+      expect(label, findsOneWidget);
+      expect(slot, findsOneWidget);
+      expect(tester.getRect(label), labelRect);
+      expect(tester.getRect(slot), slotRect);
+    }
+    await teardownView(tester);
   });
 
   group('a refresh builds only what changed', () {

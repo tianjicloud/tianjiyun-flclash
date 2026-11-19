@@ -8,6 +8,7 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessSecondaryButton;
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -198,6 +199,8 @@ class TrackerInfoItem extends ConsumerWidget {
             ),
           ],
         ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       children: [
         Text(trackerInfo.start.getLastUpdateTimeDesc(context, compact: true)),
@@ -216,20 +219,19 @@ class _TrackerInfoBody extends StatelessWidget {
 
   Widget _buildTitle(BuildContext context, RecordTextStyles styles) {
     final metadata = trackerInfo.metadata;
-    final title = Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: _endpointText(trackerInfo.title, metadata.destinationPort),
+    final title = Row(
+      children: [
+        Expanded(
+          child: MarqueeText(
+            _endpointText(trackerInfo.title, metadata.destinationPort),
             style: styles.title,
+            scrollWhen: system.isDesktop,
+            hoverToScroll: system.isDesktop,
           ),
-          if (metadata.host.isNotEmpty && metadata.destinationIP.isNotEmpty)
-            TextSpan(
-              text: '  ${metadata.destinationIP}',
-              style: styles.secondary,
-            ),
-        ],
-      ),
+        ),
+        if (metadata.host.isNotEmpty && metadata.destinationIP.isNotEmpty)
+          Text('  ${metadata.destinationIP}', style: styles.secondary),
+      ],
     );
     final process = metadata.process;
     if (!showIcon || process.isEmpty) {

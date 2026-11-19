@@ -1,14 +1,66 @@
 import 'package:fl_clash/common/service_probe.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/outbound_ip.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/providers/routed_probe.dart';
+import 'package:fl_clash/providers/service_status.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/diagnostics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_app.dart';
 import '../helpers/test_profiles.dart';
+
+class _MutableServices extends ServiceStatus {
+  @override
+  RoutedProbeState<ServiceTarget, ServiceCheck> build() =>
+      const RoutedProbeState();
+
+  @override
+  void watch(ServiceTarget target) {}
+
+  @override
+  void unwatch(ServiceTarget target) {}
+
+  void setPhase(ServiceTarget target, ProbePhase phase) {
+    state = RoutedProbeState({
+      ...state.entries,
+      target: ProbeEntry(
+        phase: phase,
+        value: phase == ProbePhase.fresh
+            ? const ServiceCheck(ServiceProbeStatus.available, delay: 85)
+            : null,
+      ),
+    });
+  }
+}
+
+class _MutableOutbound extends OutboundIpProbe {
+  @override
+  RoutedProbeState<String, IpInfo> build() => const RoutedProbeState();
+
+  @override
+  void watch(String target) {}
+
+  @override
+  void unwatch(String target) {}
+
+  @override
+  void refresh(Iterable<String> targets) {}
+
+  void setPhase(ProbePhase phase) {
+    state = RoutedProbeState({
+      ...state.entries,
+      routedOutbound: ProbeEntry(
+        phase: phase,
+        value: phase == ProbePhase.fresh ? const IpInfo(ip: '192.0.2.1') : null,
+      ),
+    });
+  }
+}
 
 void main() {
   test(
@@ -167,4 +219,114 @@ void main() {
     );
     expect(find.text('Start'), findsOneWidget);
   });
+
+  testWidgets(
+    'diagnostic rows and run label keep their rects while checks finish',
+    (tester) async {
+      final previousPlatform = debugDefaultTargetPlatformOverride;
+      addTearDown(() => debugDefaultTargetPlatformOverride = previousPlatform);
+      for (final (platform, size) in [
+        (TargetPlatform.windows, const Size(1400, 1600)),
+        (TargetPlatform.android, const Size(390, 2800)),
+      ]) {
+        debugDefaultTargetPlatformOverride = platform;
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1;
+        final container = ProviderContainer(
+          overrides: [
+            profilesProvider.overrideWith(TestProfiles.new),
+            serviceStatusProvider.overrideWith(_MutableServices.new),
+            outboundIpProbeProvider.overrideWith(_MutableOutbound.new),
+            globalIpv6Provider.overrideWith((ref) async => false),
+          ],
+        );
+        container.read(viewSizeProvider.notifier).update((_) => size);
+        globalState.container = container;
+        for (final target in [
+          ServiceTarget.chatgpt,
+          ServiceTarget.claude,
+          ServiceTarget.gemini,
+        ]) {
+          (container.read(serviceStatusProvider.notifier) as _MutableServices)
+              .setPhase(target, ProbePhase.probing);
+        }
+        (container.read(outboundIpProbeProvider.notifier) as _MutableOutbound)
+            .setPhase(ProbePhase.probing);
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: const TestApp(child: DiagnosticsView()),
+          ),
+        );
+        await tester.pump();
+        final rows = find.byWidgetPredicate(
+          (widget) =>
+              widget.key is ValueKey<String> &&
+              (widget.key! as ValueKey<String>).value.startsWith(
+                'diagnostic-row:',
+              ),
+        );
+        final runLabel = find.byKey(
+          const ValueKey('diagnosticsRunButtonLabel'),
+        );
+        expect(rows, findsNWidgets(8));
+        expect(runLabel, findsOneWidget);
+        var rowRects = [
+          for (final row in rows.evaluate())
+            tester.getRect(find.byWidget(row.widget)),
+        ];
+        final buttonLabelRect = tester.getRect(runLabel);
+
+        for (final target in [
+          ServiceTarget.chatgpt,
+          ServiceTarget.claude,
+          ServiceTarget.gemini,
+        ]) {
+          (container.read(serviceStatusProvider.notifier) as _MutableServices)
+              .setPhase(target, ProbePhase.fresh);
+          await tester.pump();
+          expect(rows, findsNWidgets(8));
+          expect(runLabel, findsOneWidget);
+          expect(tester.getRect(runLabel), buttonLabelRect);
+          if (platform == TargetPlatform.windows) {
+            expect([
+              for (final row in rows.evaluate())
+                tester.getRect(find.byWidget(row.widget)),
+            ], rowRects);
+          } else {
+            await tester.pump(const Duration(milliseconds: 250));
+            expect(tester.takeException(), isNull);
+            final completedRects = [
+              for (final row in rows.evaluate())
+                tester.getRect(find.byWidget(row.widget)),
+            ];
+            expect(completedRects.take(4), rowRects.take(4));
+            rowRects = completedRects;
+          }
+        }
+        (container.read(outboundIpProbeProvider.notifier) as _MutableOutbound)
+            .setPhase(ProbePhase.fresh);
+        await tester.pump();
+        expect(rows, findsNWidgets(8));
+        final finalRects = [
+          for (final row in rows.evaluate())
+            tester.getRect(find.byWidget(row.widget)),
+        ];
+        if (platform == TargetPlatform.windows) {
+          expect(finalRects, rowRects);
+        } else {
+          expect(finalRects.take(4), rowRects.take(4));
+        }
+        expect(runLabel, findsOneWidget);
+        expect(tester.getRect(runLabel), buttonLabelRect);
+        expect(tester.takeException(), isNull);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        container.dispose();
+      }
+      debugDefaultTargetPlatformOverride = previousPlatform;
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    },
+  );
 }

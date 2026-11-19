@@ -5,6 +5,8 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_app.dart';
@@ -42,6 +44,86 @@ TrackerInfo _tracker({
 }
 
 void main() {
+  testWidgets('live record speed keeps its header slot on each layout', (
+    tester,
+  ) async {
+    const viewports = {
+      TargetPlatform.android: Size(390, 800),
+      TargetPlatform.windows: Size(640, 700),
+      TargetPlatform.macOS: Size(1200, 800),
+    };
+    for (final locale in [const Locale('en'), const Locale('ru')]) {
+      for (final entry in viewports.entries) {
+        debugDefaultTargetPlatformOverride = entry.key;
+        tester.view.physicalSize = entry.value;
+        tester.view.devicePixelRatio = 1;
+        await tester.pumpWidget(
+          TestApp(
+            locale: locale,
+            homeBuilder: (child) => HostScaffold(body: child),
+            child: const RecordHeader(
+              trailing: Text('0B/s'),
+              children: [Text('10:00'), Text('TCP')],
+            ),
+          ),
+        );
+        expect(find.text('0B/s'), findsOneWidget);
+        final before = tester.getRect(find.byType(RecordHeader));
+        await tester.pumpWidget(
+          TestApp(
+            locale: locale,
+            homeBuilder: (child) => HostScaffold(body: child),
+            child: const RecordHeader(
+              trailing: Text('999.9MB/s'),
+              children: [Text('10:00'), Text('TCP')],
+            ),
+          ),
+        );
+        expect(find.text('999.9MB/s'), findsOneWidget);
+        expect(tester.getRect(find.byType(RecordHeader)), before);
+        expect(tester.takeException(), isNull);
+      }
+    }
+    debugDefaultTargetPlatformOverride = null;
+    tester.view.resetPhysicalSize();
+    tester.view.resetDevicePixelRatio();
+  });
+
+  testWidgets('record speed slot fits two maximum live traffic values', (
+    tester,
+  ) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+    tester.view.physicalSize = const Size(1000, 700);
+    tester.view.devicePixelRatio = 1;
+    await tester.pumpWidget(
+      TestApp(
+        homeBuilder: (child) => HostScaffold(body: child),
+        child: const RecordHeader(
+          trailing: Text.rich(
+            TextSpan(text: '↑ 1023.9MB/s   ↓ 1023.9MB/s'),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          children: [Text('10:00'), Text('TCP')],
+        ),
+      ),
+    );
+    final paragraphFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text &&
+          widget.textSpan?.toPlainText() == '↑ 1023.9MB/s   ↓ 1023.9MB/s',
+    );
+    expect(paragraphFinder, findsOneWidget);
+    final paragraph = tester.renderObject<RenderParagraph>(paragraphFinder);
+    expect(paragraph.didExceedMaxLines, isFalse);
+    expect(find.textContaining('…'), findsNothing);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+    debugDefaultTargetPlatformOverride = null;
+    tester.view.resetPhysicalSize();
+    tester.view.resetDevicePixelRatio();
+  });
+
   testWidgets('TrackerInfoDetailView renders formatted connection fields', (
     tester,
   ) async {
@@ -171,7 +253,8 @@ void main() {
     final node = tester.getCenter(find.text('Node'));
     expect(rule.dx, lessThan(group.dx));
     expect(group.dx, lessThan(node.dx));
-    expect(find.text('example.com:443  5.6.7.8'), findsOneWidget);
+    expect(find.text('example.com:443'), findsOneWidget);
+    expect(find.text('  5.6.7.8'), findsOneWidget);
     expect(find.text('chrome(1000)  ·  1.2.3.4:8080'), findsOneWidget);
     expect(tester.takeException(), isNull);
 

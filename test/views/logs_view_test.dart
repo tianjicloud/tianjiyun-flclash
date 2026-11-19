@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -150,6 +151,51 @@ void main() {
     final item = tester.getRect(find.byType(LogItem));
     expect(item.height, 34);
     expect(find.text('short'), findsOneWidget);
+  });
+
+  testWidgets('macOS log count changes leave the running selector in place', (
+    tester,
+  ) async {
+    final previousPlatform = debugDefaultTargetPlatformOverride;
+    addTearDown(() => debugDefaultTargetPlatformOverride = previousPlatform);
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    tester.view.physicalSize = const Size(1200, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    container = ProviderContainer();
+    addTearDown(container.dispose);
+    globalState.container = container;
+    final notifier = container.read(logsProvider.notifier);
+    notifier.value = FixedList<Log>(100000, list: seedLogs().take(9).toList());
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(child: LogsView()),
+      ),
+    );
+    final selector = find.byKey(const ValueKey('logsDnsSegment'));
+    expect(selector, findsOneWidget);
+    expect(find.text('9 items'), findsOneWidget);
+    final selectorRect = tester.getRect(selector);
+
+    notifier.value = FixedList<Log>(
+      100000,
+      list: List.generate(
+        99998,
+        (index) => Log(payload: 'log $index', dateTime: '2024-01-01 12:00:00'),
+      ),
+    );
+    notifier.add(const Log(payload: 'last', dateTime: '2024-01-01 12:00:00'));
+    await tester.pump(const Duration(milliseconds: 301));
+    await tester.pump();
+
+    expect(selector, findsOneWidget);
+    expect(find.text('99999 items'), findsOneWidget);
+    expect(tester.getRect(selector), selectorRect);
+    expect(tester.takeException(), isNull);
+    debugDefaultTargetPlatformOverride = previousPlatform;
   });
 
   testWidgets('tapping the level reports it for filtering', (tester) async {
