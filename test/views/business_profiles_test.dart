@@ -14,6 +14,7 @@ import 'package:prism_ui/press_surface.dart' show PressSurface;
 import 'package:prism_ui/prism_ui.dart' show AppBar, AppShape, Card, ThemeData;
 import 'package:fl_clash/views/dashboard/widgets/card.dart'
     show BusinessSecondaryButton;
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 
 import '../helpers/host_scaffold.dart';
 import '../helpers/test_app.dart';
@@ -24,6 +25,7 @@ Future<void> _pumpBusinessProfiles(
   Size size, {
   bool macOS = false,
   bool mobile = false,
+  Locale locale = const Locale('en'),
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -59,6 +61,7 @@ Future<void> _pumpBusinessProfiles(
     UncontrolledProviderScope(
       container: container,
       child: TestApp(
+        locale: locale,
         theme: ThemeData(
           platform: mobile
               ? TargetPlatform.android
@@ -67,7 +70,7 @@ Future<void> _pumpBusinessProfiles(
               : TargetPlatform.windows,
         ),
         homeBuilder: (child) => HostScaffold(body: child),
-        child: const ProfilesView(),
+        child: const BusinessTheme(child: ProfilesView()),
       ),
     ),
   );
@@ -203,6 +206,74 @@ void main() {
     );
     expect(find.text(l10n.switchProfile), findsNothing);
   });
+
+  for (final platform in [
+    (
+      name: 'Windows',
+      target: TargetPlatform.windows,
+      size: const Size(1280, 900),
+    ),
+    (name: 'macOS', target: TargetPlatform.macOS, size: const Size(1280, 900)),
+    (
+      name: 'Android',
+      target: TargetPlatform.android,
+      size: const Size(390, 844),
+    ),
+  ]) {
+    for (final locale in [const Locale('en'), const Locale('ru')]) {
+      testWidgets(
+        '${platform.name} subscription update keeps button and card rects (${locale.languageCode})',
+        (tester) async {
+          await _pumpBusinessProfiles(
+            tester,
+            platform.size,
+            macOS: platform.target == TargetPlatform.macOS,
+            mobile: platform.target == TargetPlatform.android,
+            locale: locale,
+          );
+          final container = globalState.container;
+          final profile = container.read(profilesProvider).first;
+          final actionLabel = currentAppLocalizations.immediateUpdate;
+          final card = platform.target == TargetPlatform.macOS
+              ? find.byKey(const ValueKey('macos-subscription-primary-card'))
+              : find
+                    .ancestor(
+                      of: find.text('Plan', findRichText: true),
+                      matching: find.byType(Card),
+                    )
+                    .first;
+          expect(card, findsOneWidget);
+          final cardRect = tester.getRect(card);
+          final actionText = find.text(actionLabel);
+          expect(actionText, findsWidgets);
+          final actionRect = tester.getRect(actionText.first);
+          final slot = find.byKey(const ValueKey('subscription-update-slot'));
+          final slotRect = slot.evaluate().isEmpty
+              ? null
+              : tester.getRect(slot);
+          final operation = container
+              .read(updatingKeysProvider.notifier)
+              .start(profile.updatingKey);
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 180));
+          final duringCardRect = tester.getRect(card);
+          expect(duringCardRect.size, cardRect.size);
+          expect(tester.getRect(actionText.first), actionRect);
+          if (slotRect != null) expect(tester.getRect(slot), slotRect);
+          container
+              .read(updatingKeysProvider.notifier)
+              .stop(profile.updatingKey, operation);
+          await tester.pumpAndSettle();
+          if (slotRect != null) {
+            expect(slot, findsOneWidget);
+            expect(tester.getRect(slot), slotRect);
+          }
+          expect(tester.getRect(card).size, cardRect.size);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
 
   testWidgets('profiles page reports rows the database could not read', (
     tester,

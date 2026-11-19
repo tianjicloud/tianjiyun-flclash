@@ -11,6 +11,7 @@ import 'package:fl_clash/ui/business_brand_mark.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/macos_style.dart';
 import 'package:fl_clash/views/dashboard/style.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -58,6 +59,7 @@ class BusinessNavigationSidebar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(currentProfileProvider);
+    final mobile = ref.watch(isMobileViewProvider);
     final dark = context.colorScheme.brightness == Brightness.dark;
     final macOS = MacOSStyle.of(context);
     final hasWallpaper = AppBackgroundScope.hasImage(context);
@@ -139,7 +141,7 @@ class BusinessNavigationSidebar extends ConsumerWidget {
                     },
                   ),
                 ] else if (profile != null)
-                  _SubscriptionSummary(profile: profile),
+                  _SubscriptionSummary(profile: profile, mobile: mobile),
               ] else ...[
                 Expanded(
                   child: FocusTraversalGroup(
@@ -432,9 +434,10 @@ class _BusinessSidebarItem extends StatelessWidget {
 }
 
 class _SubscriptionSummary extends StatelessWidget {
-  const _SubscriptionSummary({required this.profile});
+  const _SubscriptionSummary({required this.profile, required this.mobile});
 
   final Profile profile;
+  final bool mobile;
 
   @override
   Widget build(BuildContext context) {
@@ -475,17 +478,17 @@ class _SubscriptionSummary extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                MarqueeText(
                   profile.realLabel,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  scrollWhen: !mobile,
+                  hoverToScroll: !mobile,
                   style: BusinessText.sidebarAccount(context).copyWith(
                     color: dark
                         ? BusinessPalette.sidebarDarkSelected
                         : BusinessPalette.deep,
                   ),
                 ),
-                Text(
+                MarqueeText(
                   usage == null
                       ? remaining
                       : '$remaining · ${context.appLocalizations.businessUsagePercent((usage * 100).round())}',
@@ -494,6 +497,8 @@ class _SubscriptionSummary extends StatelessWidget {
                         ? BusinessPalette.sidebarDarkSecondary
                         : BusinessPalette.secondary,
                   ),
+                  scrollWhen: !mobile,
+                  hoverToScroll: !mobile,
                 ),
                 if (usage != null)
                   SizedBox(

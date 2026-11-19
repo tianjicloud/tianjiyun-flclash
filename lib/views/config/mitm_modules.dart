@@ -351,18 +351,21 @@ class _MitmModuleRow extends ConsumerWidget {
                   : appLocalizations.local,
               style: context.listCaptionStyle,
             ),
-            trailing: Padding(
-              padding: const EdgeInsetsDirectional.only(end: 8),
-              child: isUpdating
-                  ? const Padding(
-                      padding: EdgeInsetsDirectional.only(end: 8),
-                      child: ActivityIndicator(size: 24),
-                    )
-                  : Switch(
-                      value: module.enabled,
-                      onChanged: (value) =>
-                          setMitmModuleEnabled(ref, module, value),
-                    ),
+            trailing: SizedBox(
+              width: 56,
+              height: 40,
+              child: Center(
+                child: isUpdating
+                    ? const SizedBox.square(
+                        dimension: 40,
+                        child: Center(child: ActivityIndicator(size: 20)),
+                      )
+                    : Switch(
+                        value: module.enabled,
+                        onChanged: (value) =>
+                            setMitmModuleEnabled(ref, module, value),
+                      ),
+              ),
             ),
             onPressed: () =>
                 BaseNavigator.push(context, MitmModuleView(id: module.id)),
@@ -738,7 +741,13 @@ class _MitmModuleLinesView extends StatelessWidget {
                       ? null
                       : Text(issue, style: noteStyle),
                   invalid: !notes && issue != null,
-                  trailing: running ? const ActivityIndicator(size: 24) : null,
+                  trailing: AnimatedSize(
+                    alignment: Alignment.centerRight,
+                    duration: context.motionDuration(commonDuration),
+                    child: running
+                        ? const ActivityIndicator(size: 24)
+                        : const SizedBox.shrink(),
+                  ),
                 ),
               ),
             ),

@@ -1919,33 +1919,39 @@ class _TunSettingsView extends ConsumerWidget {
             ],
           ),
         ),
-        if (isUnauthorized)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: BusinessExitWarningBanner(
-              kind: BusinessExitWarningKind.tunUnauthorized,
-              onRetry: () {},
-              onAuthorize: () async {
-                try {
-                  await ref
-                      .read(setupActionProvider.notifier)
-                      .applyProfile(force: true);
-                } catch (error) {
-                  dialogs.showBanner(
-                    error.toString(),
-                    level: BannerLevel.error,
-                  );
-                }
-              },
-              onDiagnostics: () => Navigator.of(context).push(
-                MacOSPagedSheetRoute(
-                  macOS: MacOSStyle.of(context),
-                  reducedMotion: context.disableAnimations,
-                  builder: (_) => const DiagnosticsView(),
-                ),
-              ),
-            ),
-          ),
+        AnimatedSize(
+          key: const ValueKey('tun-unauthorized-slot'),
+          alignment: Alignment.topCenter,
+          duration: context.motionDuration(commonDuration),
+          child: isUnauthorized
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: BusinessExitWarningBanner(
+                    kind: BusinessExitWarningKind.tunUnauthorized,
+                    onRetry: () {},
+                    onAuthorize: () async {
+                      try {
+                        await ref
+                            .read(setupActionProvider.notifier)
+                            .applyProfile(force: true);
+                      } catch (error) {
+                        dialogs.showBanner(
+                          error.toString(),
+                          level: BannerLevel.error,
+                        );
+                      }
+                    },
+                    onDiagnostics: () => Navigator.of(context).push(
+                      MacOSPagedSheetRoute(
+                        macOS: MacOSStyle.of(context),
+                        reducedMotion: context.disableAnimations,
+                        builder: (_) => const DiagnosticsView(),
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
         BusinessSettingsCard(
           title: l10n.businessTunTakeoverMode,
           items: [
@@ -1978,34 +1984,51 @@ class _TunSettingsView extends ConsumerWidget {
                   style: AppTextStyle.footnote.of(context).toJetBrainsMono,
                 ),
               ),
-              if (mtuOverride != null)
-                ListItem(
-                  title: Text(l10n.businessTunMtu),
-                  trailing: Text(
-                    '$mtuOverride',
-                    style: AppTextStyle.footnote.of(context).toJetBrainsMono,
-                  ),
-                ),
-              if (profile != null && excludedRoutes != null)
-                ListItem.open(
-                  title: Text(l10n.businessTunExcludedRoutes),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '${excludedRoutes.length} ${l10n.businessTunRouteCount}',
+              AnimatedSize(
+                alignment: Alignment.topCenter,
+                duration: context.motionDuration(commonDuration),
+                child: mtuOverride == null
+                    ? const SizedBox.shrink()
+                    : ListItem(
+                        title: Text(l10n.businessTunMtu),
+                        trailing: Text(
+                          '$mtuOverride',
+                          style: AppTextStyle.footnote
+                              .of(context)
+                              .toJetBrainsMono,
+                        ),
                       ),
-                      const SizedBox(width: 4),
-                      const DisclosureIndicator(),
-                    ],
-                  ),
-                  widget: TunView(profile.id),
-                ),
-              if (profile != null && excludedRoutes == null)
-                _BusinessManageRow(
-                  title: l10n.businessOverrideSettings,
-                  page: TunView(profile.id),
-                ),
+              ),
+              AnimatedSize(
+                alignment: Alignment.topCenter,
+                duration: context.motionDuration(commonDuration),
+                child: profile != null && excludedRoutes != null
+                    ? ListItem.open(
+                        title: Text(l10n.businessTunExcludedRoutes),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              '${excludedRoutes.length} ${l10n.businessTunRouteCount}',
+                            ),
+                            const SizedBox(width: 4),
+                            const DisclosureIndicator(),
+                          ],
+                        ),
+                        widget: TunView(profile.id),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              AnimatedSize(
+                alignment: Alignment.topCenter,
+                duration: context.motionDuration(commonDuration),
+                child: profile != null && excludedRoutes == null
+                    ? _BusinessManageRow(
+                        title: l10n.businessOverrideSettings,
+                        page: TunView(profile.id),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ],
           ],
         ),

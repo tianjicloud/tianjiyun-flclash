@@ -422,6 +422,27 @@ void main() {
       );
     });
 
+    testWidgets('selecting an editor tab keeps following tabs in place', (
+      tester,
+    ) async {
+      await pumpCustom(tester);
+      final l = currentAppLocalizations;
+      final nextTab = find.text(l.proxyGroup);
+      final rulesTab = find.text(l.rule);
+      expect(nextTab, findsOneWidget);
+      expect(rulesTab, findsOneWidget);
+      final nextBefore = tester.getRect(nextTab);
+      final rulesBefore = tester.getRect(rulesTab);
+
+      await tester.tap(nextTab);
+      await tester.pumpAndSettle();
+
+      expect(nextTab, findsOneWidget);
+      expect(rulesTab, findsOneWidget);
+      expect(tester.getRect(nextTab), nextBefore);
+      expect(tester.getRect(rulesTab), rulesBefore);
+    });
+
     testWidgets('counts the providers its groups name on a tile', (
       tester,
     ) async {

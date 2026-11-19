@@ -441,197 +441,121 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
     ];
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600),
-        child: DecoratedBox(
-          decoration: ShapeDecoration(
-            color: scheme.surface,
-            shape: AppShape.all(AppCorner.xxl),
-            shadows: const [
-              BoxShadow(
-                color: BusinessPalette.searchShadow,
-                blurRadius: 28,
-                offset: Offset(0, 12),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 18,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.businessProfileAddTitle,
-                        style: BusinessText.subscriptionTitle(context),
-                      ),
-                    ),
-                    Semantics(
-                      button: true,
-                      label: l10n.close,
-                      child: GestureDetector(
-                        onTap: _submitting
-                            ? null
-                            : () => Navigator.of(context).pop(),
-                        child: DecoratedBox(
-                          decoration: ShapeDecoration(
-                            color: scheme.surfaceContainerHigh,
-                            shape: AppShape.all(AppCorner.full),
-                          ),
-                          child: const SizedBox.square(
-                            dimension: 32,
-                            child: Center(
-                              child: GlyphIcon(AppGlyphs.close, size: 14),
-                            ),
-                          ),
+        constraints: BoxConstraints(
+          maxWidth: 600,
+          maxHeight: MediaQuery.sizeOf(context).height - 48,
+        ),
+        child: SingleChildScrollView(
+          child: DecoratedBox(
+            key: const ValueKey('business-profile-add-dialog'),
+            decoration: ShapeDecoration(
+              color: scheme.surface,
+              shape: AppShape.all(AppCorner.xxl),
+              shadows: const [
+                BoxShadow(
+                  color: BusinessPalette.searchShadow,
+                  blurRadius: 28,
+                  offset: Offset(0, 12),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(28),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 18,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.businessProfileAddTitle,
+                          style: BusinessText.subscriptionTitle(context),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  spacing: 10,
-                  children: [
-                    for (final (source, title, description) in sources)
-                      Expanded(
+                      Semantics(
+                        button: true,
+                        label: l10n.close,
                         child: GestureDetector(
-                          onTap: () => _choose(source),
+                          onTap: _submitting
+                              ? null
+                              : () => Navigator.of(context).pop(),
                           child: DecoratedBox(
                             decoration: ShapeDecoration(
-                              color: scheme.surfaceContainerLow,
-                              shape: AppShape.all(AppCorner.lg).copyWith(
-                                side: BorderSide(
-                                  color: _source == source
-                                      ? BusinessPalette.blue
-                                      : scheme.outlineVariant,
-                                  width: _source == source ? 2 : 0.5,
-                                ),
-                              ),
-                              shadows: const [
-                                BoxShadow(
-                                  color: BusinessPalette.searchShadow,
-                                  blurRadius: 8,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
+                              color: scheme.surfaceContainerHigh,
+                              shape: AppShape.all(AppCorner.full),
                             ),
-                            child: SizedBox(
-                              height: 60,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: BusinessText.cardTitle(context),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        description,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style:
-                                            AppTextStyle.custom(
-                                              context,
-                                              size: 12,
-                                              leading: 15,
-                                            ).copyWith(
-                                              color: scheme.onSurfaceVariant,
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                            child: const SizedBox.square(
+                              dimension: 32,
+                              child: Center(
+                                child: GlyphIcon(AppGlyphs.close, size: 14),
                               ),
                             ),
                           ),
                         ),
                       ),
-                  ],
-                ),
-                if (_source == ProfileAddSource.link) ...[
-                  _input(
-                    l10n.businessProfileAddUrlLabel,
-                    _url,
-                    hint: l10n.businessProfileAddUrlHint,
-                    mono: true,
+                    ],
                   ),
-                  if (widget.url != null &&
-                      isTianjiSubscriptionProfile(
-                        Profile.normal(url: widget.url!),
-                      ))
-                    Text(
-                      l10n.businessProfileAddClipboardRecognized,
-                      style: BusinessText.quickMeta(
-                        context,
-                      ).copyWith(color: scheme.onSurfaceVariant),
-                    ),
-                  if (issue != null)
-                    Text(issue, style: TextStyle(color: scheme.error)),
-                  _input(
-                    l10n.businessProfileAddNameLabel,
-                    _name,
-                    hint: l10n.businessProfileAddNameHint,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 6,
+                  Row(
+                    spacing: 10,
                     children: [
-                      Text(
-                        l10n.businessProfileAddAutoUpdate,
-                        style: AppTextStyle.custom(
-                          context,
-                          size: 13,
-                          leading: 16,
-                          weight: FontWeight.w600,
-                        ).copyWith(color: scheme.onSurface),
-                      ),
-                      PopupAnchor(
-                        targetBuilder: (open) => Semantics(
-                          button: true,
+                      for (final (source, title, description) in sources)
+                        Expanded(
                           child: GestureDetector(
-                            onTap: open,
+                            onTap: () => _choose(source),
                             child: DecoratedBox(
                               decoration: ShapeDecoration(
-                                color: scheme.surface,
-                                shape: AppShape.input.copyWith(
-                                  borderSide: BorderSide(
-                                    color: scheme.outlineVariant,
-                                    width: 1,
+                                color: scheme.surfaceContainerLow,
+                                shape: AppShape.all(AppCorner.lg).copyWith(
+                                  side: BorderSide(
+                                    color: _source == source
+                                        ? BusinessPalette.blue
+                                        : scheme.outlineVariant,
+                                    width: _source == source ? 2 : 0.5,
                                   ),
                                 ),
+                                shadows: const [
+                                  BoxShadow(
+                                    color: BusinessPalette.searchShadow,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
                               ),
                               child: SizedBox(
-                                height: 44,
+                                height: 60,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 12,
+                                    vertical: 8,
                                   ),
-                                  child: Row(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                      Text(
+                                        title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: BusinessText.cardTitle(context),
+                                      ),
                                       Expanded(
                                         child: Text(
-                                          l10n.zzAutoUpdateHours(
-                                            _updateInterval.inHours,
-                                          ),
-                                          style: AppTextStyle.custom(
-                                            context,
-                                            size: 14,
-                                            leading: 18,
-                                          ),
+                                          description,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style:
+                                              AppTextStyle.custom(
+                                                context,
+                                                size: 12,
+                                                leading: 15,
+                                              ).copyWith(
+                                                color: scheme.onSurfaceVariant,
+                                              ),
                                         ),
                                       ),
-                                      const GlyphIcon(AppGlyphs.chevronDown),
                                     ],
                                   ),
                                 ),
@@ -639,97 +563,213 @@ class _BusinessProfileAddFormState extends State<_BusinessProfileAddForm> {
                             ),
                           ),
                         ),
-                        popupBuilder: (_) => PopupMenu(
-                          items: [
-                            for (final hours in [6, 12, 24, 48])
-                              PopupMenuItem(
-                                label: l10n.zzAutoUpdateHours(hours),
-                                onPressed: () => setState(
-                                  () =>
-                                      _updateInterval = Duration(hours: hours),
+                    ],
+                  ),
+                  AnimatedSize(
+                    alignment: Alignment.topCenter,
+                    duration: context.motionDuration(commonDuration),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: 18,
+                      children: [
+                        if (_source == ProfileAddSource.link) ...[
+                          _input(
+                            l10n.businessProfileAddUrlLabel,
+                            _url,
+                            hint: l10n.businessProfileAddUrlHint,
+                            mono: true,
+                          ),
+                          if (widget.url != null &&
+                              isTianjiSubscriptionProfile(
+                                Profile.normal(url: widget.url!),
+                              ))
+                            Text(
+                              l10n.businessProfileAddClipboardRecognized,
+                              style: BusinessText.quickMeta(
+                                context,
+                              ).copyWith(color: scheme.onSurfaceVariant),
+                            ),
+                          if (issue != null)
+                            Text(issue, style: TextStyle(color: scheme.error)),
+                          _input(
+                            l10n.businessProfileAddNameLabel,
+                            _name,
+                            hint: l10n.businessProfileAddNameHint,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 6,
+                            children: [
+                              Text(
+                                l10n.businessProfileAddAutoUpdate,
+                                style: AppTextStyle.custom(
+                                  context,
+                                  size: 13,
+                                  leading: 16,
+                                  weight: FontWeight.w600,
+                                ).copyWith(color: scheme.onSurface),
+                              ),
+                              PopupAnchor(
+                                targetBuilder: (open) => Semantics(
+                                  button: true,
+                                  child: GestureDetector(
+                                    onTap: open,
+                                    child: DecoratedBox(
+                                      decoration: ShapeDecoration(
+                                        color: scheme.surface,
+                                        shape: AppShape.input.copyWith(
+                                          borderSide: BorderSide(
+                                            color: scheme.outlineVariant,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: SizedBox(
+                                        height: 44,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  l10n.zzAutoUpdateHours(
+                                                    _updateInterval.inHours,
+                                                  ),
+                                                  style: AppTextStyle.custom(
+                                                    context,
+                                                    size: 14,
+                                                    leading: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                              const GlyphIcon(
+                                                AppGlyphs.chevronDown,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                popupBuilder: (_) => PopupMenu(
+                                  items: [
+                                    for (final hours in [6, 12, 24, 48])
+                                      PopupMenuItem(
+                                        label: l10n.zzAutoUpdateHours(hours),
+                                        onPressed: () => setState(
+                                          () => _updateInterval = Duration(
+                                            hours: hours,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
                               ),
-                          ],
+                            ],
+                          ),
+                          Semantics(
+                            button: true,
+                            child: GestureDetector(
+                              onTap: () => setState(
+                                () => _showMoreOptions = !_showMoreOptions,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 6,
+                                children: [
+                                  Text(
+                                    l10n.businessProfileAddMoreOptions,
+                                    style: AppTextStyle.custom(
+                                      context,
+                                      size: 13,
+                                      leading: 16,
+                                    ).copyWith(color: scheme.onSurfaceVariant),
+                                  ),
+                                  GlyphIcon(
+                                    _showMoreOptions
+                                        ? AppGlyphs.chevronUp
+                                        : AppGlyphs.chevronDown,
+                                    size: 14,
+                                    color: scheme.onSurfaceVariant,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          AnimatedSize(
+                            key: const ValueKey(
+                              'business-profile-add-more-options-size',
+                            ),
+                            alignment: Alignment.topCenter,
+                            duration: context.motionDuration(commonDuration),
+                            child: _showMoreOptions
+                                ? _input(
+                                    l10n.ageSecretKey,
+                                    _key,
+                                    hint: l10n.optional,
+                                    secret: true,
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                          AnimatedSize(
+                            key: const ValueKey(
+                              'business-profile-add-submit-error-size',
+                            ),
+                            alignment: Alignment.topCenter,
+                            duration: context.motionDuration(commonDuration),
+                            child: _submitError == null
+                                ? const SizedBox.shrink()
+                                : Text(
+                                    _submitError!,
+                                    style: TextStyle(color: scheme.error),
+                                  ),
+                          ),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
+                            decoration: ShapeDecoration(
+                              color: scheme.surfaceContainerLow,
+                              shape: AppShape.all(AppCorner.md),
+                            ),
+                            child: Text(
+                              l10n.businessProfileAddValidationNote,
+                              style: BusinessText.quickMeta(context),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 10,
+                    children: [
+                      BusinessSecondaryButton(
+                        label: l10n.cancel,
+                        width: 84,
+                        height: 36,
+                        onPressed: _submitting
+                            ? null
+                            : () => Navigator.of(context).pop(),
+                      ),
+                      BusinessPrimaryButton(
+                        label: _submitting
+                            ? l10n.loading
+                            : l10n.businessProfileAddSubmit,
+                        width: _submitWidth(
+                          context,
+                          l10n.businessProfileAddSubmit,
                         ),
+                        height: 36,
+                        onPressed: _submitting ? null : _submit,
                       ),
                     ],
                   ),
-                  Semantics(
-                    button: true,
-                    child: GestureDetector(
-                      onTap: () =>
-                          setState(() => _showMoreOptions = !_showMoreOptions),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 6,
-                        children: [
-                          Text(
-                            l10n.businessProfileAddMoreOptions,
-                            style: AppTextStyle.custom(
-                              context,
-                              size: 13,
-                              leading: 16,
-                            ).copyWith(color: scheme.onSurfaceVariant),
-                          ),
-                          GlyphIcon(
-                            _showMoreOptions
-                                ? AppGlyphs.chevronUp
-                                : AppGlyphs.chevronDown,
-                            size: 14,
-                            color: scheme.onSurfaceVariant,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (_showMoreOptions)
-                    _input(
-                      l10n.ageSecretKey,
-                      _key,
-                      hint: l10n.optional,
-                      secret: true,
-                    ),
-                  if (_submitError case final error?)
-                    Text(error, style: TextStyle(color: scheme.error)),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: ShapeDecoration(
-                      color: scheme.surfaceContainerLow,
-                      shape: AppShape.all(AppCorner.md),
-                    ),
-                    child: Text(
-                      l10n.businessProfileAddValidationNote,
-                      style: BusinessText.quickMeta(context),
-                    ),
-                  ),
                 ],
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  spacing: 10,
-                  children: [
-                    BusinessSecondaryButton(
-                      label: l10n.cancel,
-                      width: 84,
-                      height: 36,
-                      onPressed: _submitting
-                          ? null
-                          : () => Navigator.of(context).pop(),
-                    ),
-                    BusinessPrimaryButton(
-                      label: _submitting
-                          ? l10n.loading
-                          : l10n.businessProfileAddSubmit,
-                      width: _submitWidth(
-                        context,
-                        l10n.businessProfileAddSubmit,
-                      ),
-                      height: 36,
-                      onPressed: _submitting ? null : _submit,
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -918,7 +958,13 @@ class _ProfileAddFormState extends State<_ProfileAddForm> {
             ],
           ),
         ],
-        if (urlIssue != null) ErrorBanner(message: urlIssue),
+        AnimatedSize(
+          alignment: Alignment.topCenter,
+          duration: context.motionDuration(commonDuration),
+          child: urlIssue == null
+              ? const SizedBox.shrink()
+              : ErrorBanner(message: urlIssue),
+        ),
       ],
     );
   }

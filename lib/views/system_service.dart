@@ -216,17 +216,28 @@ class _SystemServiceViewState extends ConsumerState<SystemServiceView> {
                         tapTargetSize: TapTargetSize.shrinkWrap,
                       ),
                     ),
-                    if (status != HelperServiceStatus.running) ...[
-                      const SizedBox(height: 8),
-                      BusinessPrimaryButton(
-                        label: status == HelperServiceStatus.notReady
-                            ? l10n.systemServiceInstall
-                            : l10n.systemServiceRepair,
-                        width: 104,
-                        glyph: AppGlyphs.wrench,
-                        onPressed: _installing || _loading ? null : _install,
-                      ),
-                    ],
+                    AnimatedSize(
+                      alignment: Alignment.topCenter,
+                      duration: context.motionDuration(commonDuration),
+                      child: status != HelperServiceStatus.running
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                const SizedBox(height: 8),
+                                BusinessPrimaryButton(
+                                  label: status == HelperServiceStatus.notReady
+                                      ? l10n.systemServiceInstall
+                                      : l10n.systemServiceRepair,
+                                  width: 104,
+                                  glyph: AppGlyphs.wrench,
+                                  onPressed: _installing || _loading
+                                      ? null
+                                      : _install,
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
+                    ),
                   ],
                 ),
               ],

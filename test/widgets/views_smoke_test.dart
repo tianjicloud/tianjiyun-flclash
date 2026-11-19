@@ -26,6 +26,7 @@ import 'package:fl_clash/views/profiles/custom/rules.dart';
 import 'package:fl_clash/views/proxies/list.dart';
 import 'package:fl_clash/views/proxies/tab.dart';
 import 'package:fl_clash/views/theme.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/views/views.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,6 +45,54 @@ Finder _portField(String label) => find.descendant(
 );
 
 void main() {
+  testWidgets('TUN unauthorized banner animates its gap into place', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1400, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final profile = Profile.normal(
+      label: 'Tianji plan',
+      url: 'https://sub1.tianjiyun.org/s/test_subscription_001',
+    );
+    final container = ProviderContainer(
+      overrides: [
+        idleTrafficStatsOverride(),
+        viewModeProvider.overrideWithValue(ViewMode.desktop),
+        profilesProvider.overrideWith(() => TestProfiles([profile])),
+        currentProfileIdProvider.overrideWithBuild((_, _) => profile.id),
+        initProvider.overrideWithBuild((_, _) => true),
+      ],
+    );
+    addTearDown(container.dispose);
+    globalState.container = container;
+    container
+        .read(viewSizeProvider.notifier)
+        .update((_) => const Size(1400, 1000));
+    container.read(macOSSettingsSelectionProvider.notifier).select('tun');
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(child: BusinessTheme(child: ToolsView())),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final bannerSlot = find.byKey(const ValueKey('tun-unauthorized-slot'));
+    expect(bannerSlot, findsOneWidget);
+    final before = tester.getRect(bannerSlot).height;
+    container.read(patchClashConfigProvider.notifier).state =
+        const PatchClashConfig(tun: Tun(enable: true));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(bannerSlot, findsOneWidget);
+    final middle = tester.getRect(bannerSlot).height;
+    await tester.pumpAndSettle();
+    expect(middle, greaterThan(before));
+    expect(middle, lessThan(tester.getRect(bannerSlot).height));
+    expect(tester.takeException(), isNull);
+  });
+
   final cases = <String, Widget>{
     'dashboard': const DashboardView(),
     'proxies': const ProxiesView(),

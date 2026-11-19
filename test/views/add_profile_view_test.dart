@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/features/form/form.dart';
@@ -8,6 +9,7 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/database.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/views/profiles/add.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -184,6 +186,118 @@ void main() {
     expect(container.read(profilesProvider), isEmpty);
     await tester.pumpWidget(const SizedBox());
   });
+
+  for (final locale in [const Locale('en'), const Locale('ru')]) {
+    testWidgets(
+      'business add source and option changes animate dialog height (${locale.languageCode})',
+      (tester) async {
+        final container = _containerFor(
+          tester,
+          profilesAction: _DialogProfilesAction(error: 'submit rejected'),
+        );
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: TestApp(
+              locale: locale,
+              child: HostScaffold(
+                body: BusinessTheme(
+                  child: Consumer(
+                    builder: (context, ref, child) => TextButton(
+                      onPressed: () =>
+                          showBusinessProfileAddDialog(context, ref),
+                      child: const Text('open business add'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.text('open business add'));
+        await tester.pumpAndSettle();
+        final dialog = find.byKey(
+          const ValueKey('business-profile-add-dialog'),
+        );
+        expect(dialog, findsOneWidget);
+        Future<void> expectAnimatedHeight(
+          Future<void> Function() change, {
+          Finder? target,
+        }) async {
+          final measured = target ?? dialog;
+          final before = tester.getRect(measured).height;
+          await change();
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 150));
+          final middle = tester.getRect(measured).height;
+          await tester.pumpAndSettle();
+          final after = tester.getRect(measured).height;
+          expect(middle, greaterThan(math.min(before, after)));
+          expect(middle, lessThan(math.max(before, after)));
+          expect(tester.takeException(), isNull);
+        }
+
+        expect(
+          find.text(currentAppLocalizations.businessProfileAddFileTitle),
+          findsOneWidget,
+        );
+        await expectAnimatedHeight(() async {
+          await tester.tap(
+            find.text(currentAppLocalizations.businessProfileAddFileTitle),
+          );
+        });
+        await expectAnimatedHeight(() async {
+          await tester.tap(
+            find.text(currentAppLocalizations.businessProfileAddLinkTitle),
+          );
+        });
+        await expectAnimatedHeight(() async {
+          await tester.tap(
+            find.text(currentAppLocalizations.businessProfileAddSubmit),
+          );
+        });
+        expect(find.byType(TextField), findsWidgets);
+        await tester.tap(
+          find.bySemanticsLabel(currentAppLocalizations.close).last,
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('open business add'));
+        await tester.pumpAndSettle();
+        await expectAnimatedHeight(
+          () async {
+            await tester.tap(
+              find.text(currentAppLocalizations.businessProfileAddMoreOptions),
+            );
+          },
+          target: find.byKey(
+            const ValueKey('business-profile-add-more-options-size'),
+          ),
+        );
+        expect(find.text(currentAppLocalizations.ageSecretKey), findsOneWidget);
+        await tester.tap(
+          find.bySemanticsLabel(currentAppLocalizations.close).last,
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('open business add'));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+          find.byType(TextField).first,
+          'https://example.com/sub',
+        );
+        await expectAnimatedHeight(
+          () async {
+            await tester.tap(
+              find.text(currentAppLocalizations.businessProfileAddSubmit),
+            );
+          },
+          target: find.byKey(
+            const ValueKey('business-profile-add-submit-error-size'),
+          ),
+        );
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+  }
 
   testWidgets('offers the QR code, add form, and batch import', (tester) async {
     final container = _containerFor(tester);

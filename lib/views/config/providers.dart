@@ -618,6 +618,9 @@ class _BusinessProxyProviderItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.appLocalizations;
     final updating = ref.watch(isUpdatingProvider(provider.updatingKey));
+    final failure = ref
+        .watch(providerUpdateFailuresProvider)
+        .value?[provider.name];
     final action = ref.read(proxiesActionProvider.notifier);
     final type = provider.vehicleType.toLowerCase() == 'http'
         ? 'http'
@@ -661,28 +664,64 @@ class _BusinessProxyProviderItem extends ConsumerWidget {
                     ],
                   ],
                 ),
+                AnimatedSize(
+                  alignment: Alignment.topLeft,
+                  duration: context.motionDuration(commonDuration),
+                  child: failure == null
+                      ? const SizedBox.shrink()
+                      : Tooltip(
+                          message: [
+                            failure['reason'] as String? ?? '',
+                            failure['time'] as String? ?? '',
+                          ].where((value) => value.isNotEmpty).join('\n'),
+                          child: DecoratedBox(
+                            decoration: ShapeDecoration(
+                              color: context.colorScheme.errorContainer,
+                              shape: AppShape.all(AppCorner.sm),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 7,
+                                vertical: 3,
+                              ),
+                              child: Text(
+                                l.providerUpdateFailedUsingOld,
+                                style: BusinessText.metaLabel(context).copyWith(
+                                  color: context.colorScheme.onErrorContainer,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
               ],
             ),
           ),
           const SizedBox(width: 10),
-          if (updating)
-            const ActivityIndicator()
-          else
-            BusinessSecondaryButton(
-              label: l.update,
-              width: 64,
-              height: 30,
-              onPressed: provider.vehicleType == 'HTTP'
-                  ? () async {
-                      await globalState.safeRun(
-                        () =>
-                            action.updateProvider(provider, showLoading: true),
-                        silence: false,
-                      );
-                      action.updateGroupsDebounce();
-                    }
-                  : null,
-            ),
+          SizedBox(
+            key: ValueKey('config-provider-update-${provider.name}'),
+            width: 64,
+            height: 30,
+            child: updating
+                ? const Center(child: ActivityIndicator(size: 20))
+                : BusinessSecondaryButton(
+                    label: l.update,
+                    width: 64,
+                    height: 30,
+                    onPressed: provider.vehicleType == 'HTTP'
+                        ? () async {
+                            await globalState.safeRun(
+                              () => action.updateProvider(
+                                provider,
+                                showLoading: true,
+                              ),
+                              silence: false,
+                            );
+                            action.updateGroupsDebounce();
+                          }
+                        : null,
+                  ),
+          ),
         ],
       ),
     );

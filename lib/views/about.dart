@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi' show Abi;
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -386,16 +387,52 @@ class AboutView extends ConsumerWidget {
                       .of(context)
                       .copyWith(color: context.colorScheme.onSurfaceVariant),
                 ),
-                trailing: updateLabel == null
-                    ? null
-                    : Text(
-                        updateLabel,
-                        style: AppTextStyle.caption1
-                            .of(context)
-                            .copyWith(
-                              color: context.colorScheme.onSurfaceVariant,
-                            ),
+                trailing: Builder(
+                  builder: (context) {
+                    final style = AppTextStyle.caption1
+                        .of(context)
+                        .copyWith(color: context.colorScheme.onSurfaceVariant);
+                    final widths =
+                        [
+                          l10n.updateReady,
+                          l10n.downloadingUpdate,
+                          l10n.loading,
+                        ].map((label) {
+                          final painter = TextPainter(
+                            text: TextSpan(text: label, style: style),
+                            textDirection: Directionality.of(context),
+                            textScaler: MediaQuery.textScalerOf(context),
+                            locale: Localizations.maybeLocaleOf(context),
+                            maxLines: 1,
+                          )..layout();
+                          final width = painter.width;
+                          painter.dispose();
+                          return width;
+                        });
+                    return SizedBox(
+                      key: const ValueKey('about-update-status-slot'),
+                      width: widths.reduce(math.max),
+                      height: style.height,
+                      child: AnimatedSwitcher(
+                        duration: context.motionDuration(commonDuration),
+                        layoutBuilder: (current, previous) => Stack(
+                          alignment: AlignmentDirectional.centerEnd,
+                          children: [...previous, ?current],
+                        ),
+                        child: updateLabel == null
+                            ? const SizedBox.shrink(key: ValueKey('empty'))
+                            : Text(
+                                updateLabel,
+                                key: ValueKey(updateLabel),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+                                style: style,
+                              ),
                       ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

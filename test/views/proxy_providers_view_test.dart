@@ -13,6 +13,8 @@ import 'package:fl_clash/providers/provider_update_failures.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/views/proxies/providers.dart';
+import 'package:fl_clash/views/config/providers.dart';
+import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -454,6 +456,92 @@ void main() {
 
     expect(find.byType(ActivityIndicator), findsOne);
     expect(find.byType(PopupMenu), findsNothing);
+  });
+
+  testWidgets('provider update slot keeps its rect and failure fits', (
+    tester,
+  ) async {
+    final provider = _provider('http-rect');
+    final failures = <String, Map<String, Object?>>{};
+    final container = containerFor(tester, [provider], failures: failures);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(child: BusinessTheme(child: _ProvidersSection())),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final slot = find.byKey(ValueKey('proxy-provider-update-${provider.name}'));
+    expect(slot, findsOneWidget);
+    final before = tester.getRect(slot);
+    final operation = container
+        .read(updatingKeysProvider.notifier)
+        .start(provider.updatingKey);
+    await tester.pump();
+    final spinner = find.descendant(
+      of: slot,
+      matching: find.byType(ActivityIndicator),
+    );
+    expect(spinner, findsOneWidget);
+    expect(tester.getRect(slot), before);
+    container
+        .read(updatingKeysProvider.notifier)
+        .stop(provider.updatingKey, operation);
+    await tester.pumpAndSettle();
+    expect(slot, findsOneWidget);
+    expect(tester.getRect(slot), before);
+    failures[provider.name] = {'reason': 'fetch failed', 'time': 'now'};
+    container.invalidate(providerUpdateFailuresProvider);
+    await tester.pumpAndSettle();
+    expect(
+      find.text(currentAppLocalizations.providerUpdateFailedUsingOld),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('config provider update slot and failure keep layout stable', (
+    tester,
+  ) async {
+    final provider = _provider('config-rect');
+    final failures = <String, Map<String, Object?>>{};
+    final container = containerFor(tester, [provider], failures: failures);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const TestApp(child: BusinessTheme(child: ClashProvidersView())),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final slot = find.byKey(
+      ValueKey('config-provider-update-${provider.name}'),
+    );
+    expect(slot, findsOneWidget);
+    final before = tester.getRect(slot);
+    final operation = container
+        .read(updatingKeysProvider.notifier)
+        .start(provider.updatingKey);
+    await tester.pump();
+    final spinner = find.descendant(
+      of: slot,
+      matching: find.byType(ActivityIndicator),
+    );
+    expect(spinner, findsOneWidget);
+    expect(tester.getRect(slot), before);
+    container
+        .read(updatingKeysProvider.notifier)
+        .stop(provider.updatingKey, operation);
+    await tester.pumpAndSettle();
+    expect(slot, findsOneWidget);
+    expect(tester.getRect(slot), before);
+    failures[provider.name] = {'reason': 'fetch failed', 'time': 'now'};
+    container.invalidate(providerUpdateFailuresProvider);
+    await tester.pumpAndSettle();
+    expect(
+      find.text(currentAppLocalizations.providerUpdateFailedUsingOld),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('keeps loading state for virtualized offscreen rows', (

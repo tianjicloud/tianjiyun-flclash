@@ -181,29 +181,39 @@ class _BusinessProviderRow extends ConsumerWidget {
                 if (provider.updateAt.millisecondsSinceEpoch > 0)
                   LastUpdateTimeText(lastUpdateDate: provider.updateAt),
                 if (failure != null)
-                  _ProviderUpdateFailureChip(failure: failure),
+                  AnimatedSize(
+                    alignment: Alignment.topCenter,
+                    duration: context.motionDuration(commonDuration),
+                    child: _ProviderUpdateFailureChip(failure: failure),
+                  ),
               ],
             ),
           ),
           const SizedBox(width: 10),
-          if (updating)
-            const ActivityIndicator()
-          else
-            BusinessSecondaryButton(
-              label: context.appLocalizations.update,
-              width: 64,
-              height: 30,
-              onPressed: provider.vehicleType == 'HTTP'
-                  ? () async {
-                      await globalState.safeRun(
-                        () =>
-                            action.updateProvider(provider, showLoading: true),
-                        silence: false,
-                      );
-                      action.updateGroupsDebounce();
-                    }
-                  : null,
-            ),
+          SizedBox(
+            key: ValueKey('proxy-provider-update-${provider.name}'),
+            width: 64,
+            height: 30,
+            child: updating
+                ? const Center(child: ActivityIndicator(size: 20))
+                : BusinessSecondaryButton(
+                    label: context.appLocalizations.update,
+                    width: 64,
+                    height: 30,
+                    onPressed: provider.vehicleType == 'HTTP'
+                        ? () async {
+                            await globalState.safeRun(
+                              () => action.updateProvider(
+                                provider,
+                                showLoading: true,
+                              ),
+                              silence: false,
+                            );
+                            action.updateGroupsDebounce();
+                          }
+                        : null,
+                  ),
+          ),
         ],
       ),
     );
@@ -458,7 +468,12 @@ class _ExternalProviderItem extends StatelessWidget {
               _ => appLocalizations.rulesCount(count, count.compact),
             }),
           },
-          if (failure != null) _ProviderUpdateFailureChip(failure: failure!),
+          if (failure != null)
+            AnimatedSize(
+              alignment: Alignment.topCenter,
+              duration: context.motionDuration(commonDuration),
+              child: _ProviderUpdateFailureChip(failure: failure!),
+            ),
         ],
       ),
       trailing: AnimatedSwitcher(

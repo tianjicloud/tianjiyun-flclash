@@ -1,4 +1,5 @@
 import 'package:fl_clash/core/desktop/helper_client.dart';
+import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/views/system_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -54,5 +55,28 @@ void main() {
 
     expect(find.textContaining('异常'), findsOneWidget);
     expect(find.textContaining('futureReadiness'), findsOneWidget);
+  });
+
+  testWidgets('the install action disappears after readiness changes', (
+    tester,
+  ) async {
+    var readiness = 'notReady';
+    await tester.pumpWidget(
+      TestApp(
+        locale: const Locale('zh', 'CN'),
+        wrapInProviderScope: true,
+        child: SystemServiceView(readinessNameReader: () async => readiness),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final l10n = tester
+        .element(find.byType(SystemServiceView))
+        .appLocalizations;
+    expect(find.text(l10n.systemServiceInstall), findsOneWidget);
+    readiness = 'ready';
+    await tester.tap(find.byTooltip(l10n.systemServiceRefresh));
+    await tester.pumpAndSettle();
+    expect(find.text(l10n.systemServiceInstall), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }

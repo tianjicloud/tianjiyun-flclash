@@ -104,16 +104,19 @@ class _IpQualityDetail extends ConsumerWidget {
               copyText: ip,
               value: IpQualityText(ip: ip),
             ),
-            if (failed)
-              DetailRow(
-                title: localizations.ipType,
-                value: Text(
-                  localizations.ipQualityFailed,
-                  style: TextStyle(color: context.colorScheme.error),
-                ),
-              )
-            else
-              ..._qualityRows(context, quality),
+            AnimatedSize(
+              alignment: Alignment.topCenter,
+              duration: context.motionDuration(commonDuration),
+              child: failed
+                  ? DetailRow(
+                      title: localizations.ipType,
+                      value: Text(
+                        localizations.ipQualityFailed,
+                        style: TextStyle(color: context.colorScheme.error),
+                      ),
+                    )
+                  : Column(children: _qualityRows(context, quality)),
+            ),
           ],
         ),
         if (!failed)
@@ -121,17 +124,22 @@ class _IpQualityDetail extends ConsumerWidget {
             title: localizations.network,
             items: _networkRows(context, quality),
           ),
-        if (failed && error is IpQualityLookupException)
-          generateSection(
-            title: localizations.ipQualitySources,
-            items: [
-              for (final failure in error.failures)
-                DetailRow(
-                  title: failure.source.label,
-                  value: Text(failure.status.label(context)),
-                ),
-            ],
-          ),
+        AnimatedSize(
+          alignment: Alignment.topCenter,
+          duration: context.motionDuration(commonDuration),
+          child: failed && error is IpQualityLookupException
+              ? generateSection(
+                  title: localizations.ipQualitySources,
+                  items: [
+                    for (final failure in error.failures)
+                      DetailRow(
+                        title: failure.source.label,
+                        value: Text(failure.status.label(context)),
+                      ),
+                  ],
+                )
+              : const SizedBox.shrink(),
+        ),
         generateSection(
           title: localizations.other,
           items: const [_HideIpItem()],

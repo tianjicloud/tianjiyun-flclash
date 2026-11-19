@@ -17,6 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prism_ui/loading.dart';
+import 'package:prism_ui/prism_ui.dart' show DecorationListItem;
 import 'package:prism_ui/switch.dart';
 
 import '../helpers/test_app.dart';
@@ -132,6 +133,54 @@ void main() {
     final modules = await stored();
     expect(modules.first.enabled, isFalse);
     expect(modules.last.enabled, isFalse);
+  });
+
+  testWidgets('module switch and spinner keep the same trailing rect', (
+    tester,
+  ) async {
+    await pump(tester, const MitmModulesView());
+    final row = find.ancestor(
+      of: find.text(_remote.name),
+      matching: find.byType(DecorationListItem),
+    );
+    expect(row, findsOneWidget);
+    final switchFinder = find.descendant(
+      of: row,
+      matching: find.byType(Switch),
+    );
+    expect(switchFinder, findsOneWidget);
+    final switchSlot = find.ancestor(
+      of: switchFinder,
+      matching: find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.width == 56,
+      ),
+    );
+    expect(switchSlot, findsOneWidget);
+    final switchRect = tester.getRect(switchSlot);
+    final operation = container
+        .read(updatingKeysProvider.notifier)
+        .start(_remote.updatingKey);
+    await tester.pump();
+    final spinner = find.descendant(
+      of: row,
+      matching: find.byType(ActivityIndicator),
+    );
+    expect(spinner, findsOneWidget);
+    final slot = find.ancestor(
+      of: spinner,
+      matching: find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.width == 56,
+      ),
+    );
+    expect(slot, findsOneWidget);
+    expect(tester.getRect(slot), switchRect);
+    container
+        .read(updatingKeysProvider.notifier)
+        .stop(_remote.updatingKey, operation);
+    await tester.pumpAndSettle();
+    expect(find.byType(Switch), findsWidgets);
+    expect(tester.takeException(), isNull);
+    expect(tester.getRect(switchSlot), switchRect);
   });
 
   testWidgets('a module with scripts asks before it turns on', (tester) async {

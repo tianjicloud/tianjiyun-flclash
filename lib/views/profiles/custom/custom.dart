@@ -90,7 +90,7 @@ class _EditorTabButton extends StatelessWidget {
                     style:
                         BusinessText.customEditorTab(
                           context,
-                          selected: selected,
+                          selected: false,
                         ).copyWith(
                           color: selected
                               ? BusinessPalette.blue

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/l10n_labels.dart';
+import 'package:fl_clash/common/app_update.dart';
 import 'package:fl_clash/common/request.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/form/form.dart';
@@ -316,6 +317,42 @@ void main() {
     expect(find.text('The app is already up to date'), findsOneWidget);
     expect(tester.takeException(), null);
   });
+
+  for (final locale in [const Locale('en'), const Locale('ru')]) {
+    testWidgets(
+      'business about status preserves trailing rect across labels (${locale.languageCode})',
+      (tester) async {
+        final container = _containerFor(
+          tester,
+          size: const Size(390, 844),
+          overrides: [viewModeProvider.overrideWithValue(ViewMode.mobile)],
+        );
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: TestApp(
+              locale: locale,
+              child: const AboutView(business: true),
+            ),
+          ),
+        );
+        await tester.pump();
+        final slot = find.byKey(const ValueKey('about-update-status-slot'));
+        expect(slot, findsOneWidget);
+        final before = tester.getRect(slot);
+        container.read(updateDownloadStateProvider.notifier).value =
+            const UpdateDownloading('v1');
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(slot, findsOneWidget);
+        expect(tester.getRect(slot), before);
+        await tester.pumpAndSettle();
+        expect(slot, findsOneWidget);
+        expect(tester.getRect(slot), before);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('scripts view lists scripts and offers the add menu', (
     tester,

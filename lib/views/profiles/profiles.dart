@@ -23,6 +23,7 @@ import 'package:fl_clash/views/dashboard/widgets/card.dart'
         DashboardChipTone;
 import 'package:fl_clash/views/dashboard/business_theme.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:fl_clash/widgets/marquee_text.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1070,32 +1071,6 @@ class _BusinessImportHintCard extends StatelessWidget {
   }
 }
 
-class _BusinessConnectedChip extends StatelessWidget {
-  const _BusinessConnectedChip({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final brightness = context.colorScheme.brightness;
-    return DecoratedBox(
-      decoration: ShapeDecoration(
-        color: BusinessPalette.connectedContainerFor(brightness),
-        shape: AppShape.full,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-        child: Text(
-          label,
-          style: BusinessText.heroStatus(
-            context,
-          ).copyWith(color: BusinessPalette.connectedForegroundFor(brightness)),
-        ),
-      ),
-    );
-  }
-}
-
 class _MobileSubscriptionMetric extends StatelessWidget {
   const _MobileSubscriptionMetric({
     required this.label,
@@ -1397,20 +1372,9 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
         Row(
           children: [
             Expanded(
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(text: profile.realLabel),
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: _BusinessConnectedChip(label: l10n.inUse),
-                      ),
-                    ),
-                  ],
-                ),
-                maxLines: 2,
+              child: MarqueeText(
+                profile.realLabel,
+                scrollWhen: false,
                 style: BusinessText.mobileSubscriptionTitle(context),
               ),
             ),
@@ -1574,11 +1538,14 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                       fit: MacOSStyle.of(context)
                           ? FlexFit.tight
                           : FlexFit.loose,
-                      child: Text(
-                        profile.realLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: BusinessText.subscriptionTitle(context),
+                      child: SizedBox(
+                        height: BusinessText.subscriptionTitle(context).height,
+                        child: MarqueeText(
+                          profile.realLabel,
+                          scrollWhen: true,
+                          hoverToScroll: true,
+                          style: BusinessText.subscriptionTitle(context),
+                        ),
                       ),
                     ),
                     DecoratedBox(
@@ -1709,22 +1676,33 @@ class _BusinessSubscriptionCard extends ConsumerWidget {
                                 .copyWith(color: colorScheme.onSurfaceVariant),
                           ),
                           const SizedBox(height: 4),
-                          AnimatedSwitcher(
-                            duration: context.motionDuration(commonDuration),
-                            child: isUpdating
-                                ? const ActivityIndicator(
-                                    key: ValueKey('updating'),
-                                    size: 24,
-                                  )
-                                : LastUpdateTimeText(
-                                    key: const ValueKey('lastUpdate'),
-                                    lastUpdateDate: profile.lastUpdateDate,
-                                    style:
-                                        BusinessText.subscriptionSecondaryValue(
-                                          context,
-                                        ),
-                                    compact: true,
-                                  ),
+                          SizedBox(
+                            key: const ValueKey('subscription-update-slot'),
+                            width: 88,
+                            height: BusinessText.subscriptionSecondaryValue(
+                              context,
+                            ).height,
+                            child: AnimatedSwitcher(
+                              duration: context.motionDuration(commonDuration),
+                              layoutBuilder: (current, previous) => Stack(
+                                alignment: AlignmentDirectional.centerStart,
+                                children: [...previous, ?current],
+                              ),
+                              child: isUpdating
+                                  ? const ActivityIndicator(
+                                      key: ValueKey('updating'),
+                                      size: 20,
+                                    )
+                                  : LastUpdateTimeText(
+                                      key: const ValueKey('lastUpdate'),
+                                      lastUpdateDate: profile.lastUpdateDate,
+                                      style:
+                                          BusinessText.subscriptionSecondaryValue(
+                                            context,
+                                          ),
+                                      compact: true,
+                                    ),
+                            ),
                           ),
                           if (intervalLabel != null)
                             Text(
@@ -2261,6 +2239,7 @@ class _ReorderableProfilesSheetState
       ProfileType.custom => (AppGlyphs.sliders, l.custom),
     };
     final isCurrent = profile.id == currentProfileId;
+    final mobile = ref.read(isMobileViewProvider);
     return ReorderDragStartListener(
       key: Key(profile.id.toString()),
       index: index,
@@ -2304,10 +2283,10 @@ class _ReorderableProfilesSheetState
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          MarqueeText(
                             profile.realLabel,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                            scrollWhen: !mobile,
+                            hoverToScroll: !mobile,
                             style: BusinessText.cardTitle(context),
                           ),
                           Text(
