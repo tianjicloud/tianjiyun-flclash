@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.9.28 (2026-11-19)
+
+**Features**
+
+- **core** Pick the fastest of a proxy's entry IPs (1bb81cb)
+
+**Bug Fixes**
+
+- **profiles** Keep subscription, import and settings layouts still (4074c5c)
+- **connection** Keep live connection, log and diagnostics rows still (1fc95b3)
+- **proxies** Keep line rows and the residential page still while tests run (59f5b42)
+- **dashboard** Keep the home and top bar still while states and values change (5c1506b)
+
 ## v0.9.27 (2026-11-15)
 
 **Features**

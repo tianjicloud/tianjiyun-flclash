@@ -2,6 +2,49 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.9.28",
+      "tag": "v0.9.28",
+      "date": "2026-11-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "1bb81cb",
+              "scope": "core",
+              "text": "Pick the fastest of a proxy's entry IPs"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "4074c5c",
+              "scope": "profiles",
+              "text": "Keep subscription, import and settings layouts still"
+            },
+            {
+              "id": "1fc95b3",
+              "scope": "connection",
+              "text": "Keep live connection, log and diagnostics rows still"
+            },
+            {
+              "id": "59f5b42",
+              "scope": "proxies",
+              "text": "Keep line rows and the residential page still while tests run"
+            },
+            {
+              "id": "5c1506b",
+              "scope": "dashboard",
+              "text": "Keep the home and top bar still while states and values change"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.27",
       "tag": "v0.9.27",
       "date": "2026-11-15",
